@@ -4,4 +4,4 @@ unless you know how to avoid corrupting the repository.
 
 Visit http://subversion.apache.org/ for more information.
 
-ddddttt
+ddddtttËÑË÷
