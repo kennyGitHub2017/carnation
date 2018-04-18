@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>支付结果 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css"
+	href="$!webPath/resources/shop/yugou/css/yunGo.css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm")
+$!httpInclude.include("/nav1.htm")
+<div class="main clearfix">
+  <div class="payfor_box">
+    <ul class="payfor_box_ul">
+      <li>订单编号：<i>$!{obj.orderId}</i></li>
+      <li>应付金额：<b>¥$!{all_price}</b></li>
+      #if($!obj.orderStatus==0)
+      #set($status="已取消")
+      #end
+      #if($!obj.orderStatus==10)
+      #set($status="待付款")
+      #end
+      #if($!obj.orderStatus==18)
+      #set($status="待付现金")
+      #end
+      #if($!obj.orderStatus==20)
+      #set($status="付款成功")
+      #end
+      #if($!obj.orderStatus==30)
+      #set($status="已发货")        
+      #end                
+      #if($!obj.orderStatus==40)
+      #set($status="已收货")
+      #end
+      #if($!obj.orderStatus==50)
+      #set($status="已完成,已评价")                                              
+      #end
+      #if($!obj.orderStatus==60)
+      #set($status="已结束")                                              
+      #end
+      <li>支付情况：<em>$!status</em></li>
+    </ul>
+    <span class="payfor_back">#if($!obj.orderStatus==10)<a href="$!webPath/order_pay_view.htm?id=$!obj.id" class="btn btn-blue"><i>返回重新支付</i></a> #end 
+    <a href="$!webPath/buyer/order_view.htm?id=$!obj.id" class="btn btn-blue"><i>查看订单信息</i></a>
+    </span> </div>
+ </div>
+ <div class="yungoBg">
+			<div class="yg_main">
+				<div class="order_info_yg">
+					<span class="icon_gou"></span>
+					<div class="info">
+						<div class="info_success" style="margin-top: 10px;">订单支付成功</div>
+						<div class="order_no"></div>
+						<div class="order_prize"><span>你本次获得BV值:</span><span class="prize">100</span></div>
+					</div>
+				</div>
+				<div class="jiaoyiInfo">
+					交易详情
+				</div>
+				<div class="white">
+					<table class="info_table" cellspacing="0px">
+						<tr>
+							<td class="left">商品</td><td style="width: 778px;">精选专区商品</td>
+						</tr>
+						<tr>
+							<td class="left">交易单号</td><td>12222222222</td>
+						</tr>
+						<tr>
+							<td class="left">成交时间</td><td>2016-10-31 10:00:00</td>
+						</tr>
+						<tr>
+							<td class="left">支付方式</td><td>重消+现金</td>
+						</tr>
+						<tr>
+							<td class="left">交易状态</td><td style="border-bottom: solid 1px #d5d5d5;">待发货</td>
+						</tr>
+					</table>
+					<a href="#" class="returnShop">返回商城</a>
+				</div>
+
+			</div>
+		</div>
+ 
+   $!httpInclude.include("/footer.htm")
+</body>
+</html>

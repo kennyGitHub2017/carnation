@@ -1,0 +1,28 @@
+﻿<div class="cainlike">猜你喜欢</div>
+<div style="">
+	<div id="Marquee_x" style="margin-top: 0rem;">
+		<ul>
+			<li>
+			#foreach($goods in $your_like_goods)
+				#if($!goods.goodsMainPhotoPath)
+						#set($img="$!{goods.goodsMainPhotoPath}") 
+				#else
+						#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+				#end 
+				#set($goods_url="$!webPath/goods_$!{goods.id}.htm")
+				#if($!config.secondDomainOpen && $!goods.goodsType==1 &&
+						$!goods.goodsStore.storeSecondDomain!="")
+				#set($goods_url="http://$!{goods.goodsStore.storeSecondDomain}.$!{domainPath}/goods_$!{goods.id}.htm")
+				#end
+				<div>
+					<a href="$!goods_url">
+					<img data-original="$!{img}_140x140" alt="" /> <span class="lun-title">$!goods.goodsName</span>
+					<span class="lun-price">¥ <span>$!{goods.goodsShowPrice}</span>
+					</span>
+					</a>
+				</div>
+				 #end
+			</li>
+		</ul>
+	</div>
+</div>

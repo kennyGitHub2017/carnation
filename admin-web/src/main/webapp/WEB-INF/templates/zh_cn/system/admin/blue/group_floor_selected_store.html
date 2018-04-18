@@ -1,0 +1,8 @@
+	    #foreach($obj in $goods_list)
+	  	#if($!obj.storeLogoPath)              
+	   	#set($img="$!{obj.storeLogoPath}")
+	    #else
+	    #set($img="$!config.goodsImage.path")
+	    #end
+	 	<ul ondblclick="jQuery(this).remove();" class="floor_pro" style=" margin-left:23px;" goods_id="$!obj.id"><li class="floor_pro_img"><img src="$!{img}" width="100" height="100" /></li><li></li><li class="floor_pro_name" style="height:35px">$!obj.storeName</li></ul>
+		#end

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<title>商户详情</title>
+	<!--标准mui.css-->
+	<link rel="stylesheet" href="$!webPath/resources/o2o_mobile/css/mui.min.css">
+	<link rel="stylesheet" href="$!webPath/resources/o2o_mobile/css/reset.css">
+	<!--App自定义的css-->
+		<style type="text/css">
+			.mui-preview-image.mui-fullscreen {
+				position: fixed;
+				z-index: 20;
+				background-color: #000;
+			}
+			.mui-preview-header,
+			.mui-preview-footer {
+				position: absolute;
+				width: 100%;
+				left: 0;
+				z-index: 10;
+			}
+			.mui-preview-header {
+				height: 44px;
+				top: 0;
+			}
+			.mui-preview-footer {
+				height: 50px;
+				bottom: 0px;
+			}
+			.mui-preview-header .mui-preview-indicator {
+				display: block;
+				line-height: 25px;
+				color: #fff;
+				text-align: center;
+				margin: 15px auto 4;
+				width: 70px;
+				background-color: rgba(0, 0, 0, 0.4);
+				border-radius: 12px;
+				font-size: 16px;
+			}
+			.mui-preview-image {
+				display: none;
+				-webkit-animation-duration: 0.5s;
+				animation-duration: 0.5s;
+				-webkit-animation-fill-mode: both;
+				animation-fill-mode: both;
+			}
+			.mui-preview-image.mui-preview-in {
+				-webkit-animation-name: fadeIn;
+				animation-name: fadeIn;
+			}
+			.mui-preview-image.mui-preview-out {
+				background: none;
+				-webkit-animation-name: fadeOut;
+				animation-name: fadeOut;
+			}
+			.mui-preview-image.mui-preview-out .mui-preview-header,
+			.mui-preview-image.mui-preview-out .mui-preview-footer {
+				display: none;
+			}
+			.mui-zoom-scroller {
+				position: absolute;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				justify-content: center;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				-webkit-backface-visibility: hidden;
+			}
+			.mui-zoom {
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+			}
+			.mui-slider .mui-slider-group .mui-slider-item img {
+				width: auto;
+				height: auto;
+				max-width: 100%;
+				max-height: 100%;
+			}
+			.mui-android-4-1 .mui-slider .mui-slider-group .mui-slider-item img {
+				width: 100%;
+			}
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-slider-group .mui-slider-item {
+				display: inline-table;
+			}
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-zoom-scroller img {
+				display: table-cell;
+				vertical-align: middle;
+			}
+			.mui-preview-loading {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				display: none;
+			}
+			.mui-preview-loading.mui-active {
+				display: block;
+			}
+			.mui-preview-loading .mui-spinner-white {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -25px;
+				margin-top: -25px;
+				height: 50px;
+				width: 50px;
+			}
+			.mui-preview-image img.mui-transitioning {
+				-webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
+				transition: transform 0.5s ease, opacity 0.5s ease;
+			}
+			@-webkit-keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@-webkit-keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			@keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			p img {
+				max-width: 100%;
+				height: auto;
+			}
+			html,body{background:#fff;margin-bottom:1.44rem;}
+		</style>
+	<script>
+		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+		document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+	</script>
+</head>
+<body>
+	<div class="server_detail_img">
+		<img data-original="${obj.groupAccPath}" alt="">
+		<a class="server_collect" href="javascript:;"></a>
+	</div>
+	<div class="commercialtenant_tit">
+		<span class="tit">$!{obj.ggName}</span>
+		<span class="commerstar">
+			 <p class="star"><span class="rate_score">
+			 <em data-width="5.0分"></em></span>
+			 <span class="star_num">5.0分</span></p>
+		</span>
+	</div>
+	<div class="server_content commercialtenant" >
+		<ul>
+			<li class="address">
+				<div class="merchantaddress">
+					<span>$!store.storeAddress</span>
+					<span></span>
+					<span class="orientation">110.9km</span>
+				</div>
+				<a class="merchant_call" href="javascript:;"><!-- 调用电话 --></a>
+			</li>
+			<a href="javascript:;" class="appdown_a">
+				<li class="appclient">
+					<span class="appclient_tit">APP专享</span>
+					<span class="appclient_down">云尚商户端</span>
+				</li>
+			</a>
+			<li class="discount">
+				<span class="paythebill">买单</span>
+				<span>9折</span>
+			</li>
+		</ul>
+	</div>
+	<div class="commercialtenant_goods">
+		<ul>
+			<li class="goods_list">
+				<div class="commercialtenant_goods_tit">代金券</div>
+			</li>
+			#foreach($packagesList in $packages)
+				<li>
+					<img class="commercialtenant_goods_img" data-original="$packagesList.groupAccPath" alt="">
+					<div class="commercialtenant_goods_info">
+						<span class="tit">$packagesList.ggName</span>
+						<span class="price">$packagesList.groupPrice<span></span></span>
+						<span class="sold_number">已售$packagesList.selledCount</span>
+					</div>
+				</li>
+			#end
+		</ul>
+	</div>
+
+	<div class="commercialtenant_goods">
+		<ul>
+			<li  class="goods_list">
+				<div class="commercialtenant_goods_tit combo">套餐</div>
+			</li>
+			
+				#foreach($goodsList in $cashs)
+				<li>
+					<img class="commercialtenant_goods_img" data-original="./img/serverdetail.png" alt="">
+					<div class="commercialtenant_goods_info">
+						<span class="tit">$goodsList.ggName</span>
+						<span class="price">¥<span>$goodsList.groupPrice</span></span>
+						<span class="sold_number">已售$goodsList.selledCount</span>
+					</div>
+				</li>
+				#end
+
+		</ul>
+	</div>
+
+	<div class="evaluate">
+		<div class="evaluate_num">评价（8）</div>
+		<div class="hue-list-item">
+			<div class="hue-list-content">
+				<div class="flex1">
+					<img data-original="./img/headportrait.png" alt="">
+				</div>
+				<div class="flexright commercial_flexright">
+					<div class="user_mes">
+						<span class="username commercial_user">d***伤</span>
+						<span class="pub-time commercial_pub-time">2017-07-28</span>
+					</div>
+					<div class="user_mes">
+						<span class="username grade commercial_grade">评分</span>
+						<p class="star"><span class="rate_score"><em data-width="4.5"></em></span><span class="star_num"></span></p>
+					</div>
+					<div class="comment-text">
+						<p class="hue-ellipsis">我是外地的，朋友生日想送朋友这份礼物，联系到了卖家后卖家的态度很好，之前一直很担心这产品大家第卅浪费掉了啦啊说的是科技扶贫的时间啊可怜的风大家快撒了，都快撒肌肤拉萨，阿凡达结束啦，多看大家扫时刻大幅拉升，的撒娇佛教我啃饭，阿斯顿见的撒娇分类上的纠纷我玩，收到垃圾死了。</p>
+					</div>
+					<div class="pic-wrapper mui-content-padded aaa">
+						<img data-original="./img/serverdetail.png" data-preview-src="" data-preview-group="1">
+					</div>
+				</div>
+
+			</div>
+
+			<div class="hue-list-content">
+				<div class="flex1">
+					<img data-original="./img/headportrait.png" alt="">
+				</div>
+				<div class="flexright commercial_flexright">
+					<div class="user_mes">
+						<span class="username commercial_user">d***伤</span>
+						<span class="pub-time commercial_pub-time">2017-07-28</span>
+					</div>
+					<div class="user_mes">
+						<span class="username grade commercial_grade">评分</span>
+						<p class="star"><span class="rate_score"><em data-width="4.5"></em></span><span class="star_num"></span></p>
+					</div>
+					<div class="comment-text">
+						<p class="hue-ellipsis">我是外地的，朋友生日想送朋友这份礼物，联系到了卖家后卖家的态度很好，之前一直很担心这产品大家第卅浪费掉了啦啊说的是科技扶贫的时间啊可怜的风大家快撒了，都快撒肌肤拉萨，阿凡达结束啦，多看大家扫时刻大幅拉升，的撒娇佛教我啃饭，阿斯顿见的撒娇分类上的纠纷我玩，收到垃圾死了。</p>
+					</div>
+					<div class="pic-wrapper mui-content-padded aaa">
+						<img data-original="./img/serverdetail.png" data-preview-src="" data-preview-group="2">
+						<img data-original="./img/serverdetail.png" data-preview-src="" data-preview-group="2">
+						<img data-original="./img/serverdetail.png" data-preview-src="" data-preview-group="2">
+					</div>
+				</div>
+
+			</div>
+			<a class="evaluate_list" href="javascript:;">查看更多评价</a>
+		</div>
+	</div>
+	<div class="synopsis">
+			<div class="synopsis_tit">简介</div>
+			<p class="synopsis_mes">
+			$!{store.storeInfo}
+			</p>
+	</div>
+
+
+	<div class="downapp_hint">
+		<img class="logo" src="$!webPath/resources/o2o_mobile/img/yunsunlogo.png" alt="">
+		<span class="logo_span">云生活 尚品质 健康与众不同</span>
+		<a href="javascript:;" class="downapp">下载APP</a>
+	</div>
+	
+	<script src="$!webPath/resources/o2o_mobile/js/jquery-2.0.0.min.js"></script>
+	<script src="$!webPath/resources/o2o_mobile/js/mui.min.js"></script>
+	<script src="$!webPath/resources/o2o_mobile/js/mui.zoom.js"></script>
+	<script src="$!webPath/resources/o2o_mobile/js/mui.previewimage.js"></script>
+	<script src="$!webPath/resources/o2o_mobile/js/jquery.lazyload.js"></script>
+	
+	<script>
+	$('img').lazyload();
+	mui.previewImage();
+	</script>
+</body>
+</html>

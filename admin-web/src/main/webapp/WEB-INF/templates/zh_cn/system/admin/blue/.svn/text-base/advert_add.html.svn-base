@@ -1,0 +1,411 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!webPath/resources/style/common/css/jquery.bigcolorpicker.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.bigcolorpicker.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.viewpic.js?v=1"></script>
+<script>
+jQuery(document).ready(function(){
+	#if($!obj.areaId)
+		provinceOnchange();
+	#end
+	
+	 jQuery("#logoShow").mouseover(function() {
+	        jQuery("#logoImg").css('display', 'block');
+	    }).mouseout(function() {
+	        jQuery("#logoImg").css('display', 'none');
+	    });
+	 
+	jQuery("#bg_color").bigColorpicker(function(el,color){
+		jQuery(el).val(color);
+	});
+	
+	jQuery("#ad_type1").change(function(){
+		var val=jQuery(this).val();
+		if(val==5||val==6){
+			$("#advert_area").show();
+		}else{
+			$("#advert_area").hide();
+		}
+	});
+	$.validator.addMethod(
+	    "startTimelessThenEndTime",
+	    function(value, element, des){
+	        /*var dotPos = value.indexOf('.');
+	        return value > 0 && dotPos < 0 && (dotPos > 0 && value.substring(dotPos + 1) <= 2);*/
+	        var end = $(element).val().replace(/-/g, "");
+	        var start = $(des).val().replace(/-/g, "");
+	        if(start && end){
+	        	return parseInt(end) > parseInt(start);
+	        }
+	        return true;
+	    },
+	    "结束时间必须大于开始时间"
+	);
+  jQuery("#theForm").validate({
+    rules:{
+	 adTitle:{required:true},
+	 adApId:{required:true},
+	 #if(!$!obj.adImgPath)
+ 	 advertImg:{required:true},
+ 	 #end
+	 adText:{required:true},
+	 strAdBeginDate:{required:true},
+	 strAdEndDate:{required:true, startTimelessThenEndTime: "#ad_begin_time"},
+	 adSlideSequence:{required:true},
+	 adUrl:{required:true},
+	 adType:{required:true},
+	 },
+    messages:{
+	 adTitle:{required:"广告标题不能为空"},
+	 adApId:{required:"广告位置不能为空"},
+	 #if(!$!obj.adImgPath)
+ 	 advertImg:{required:"图片不能为空"},
+ 	 #end
+	 adText:{required:"广告描述不能为空"},
+	 strAdBeginDate:{required:"开始时间不能为空"},
+	 strAdEndDate:{required:"结束时间不能为空"},
+	 adSlideSequence:{required:"幻灯片序号不能为空"},
+	 adUrl:{required:"链接不能为空"},
+	 adType:{required:"广告类型不能为空"}
+	},
+	errorPlacement: function(error, element) { 
+		if(element.attr('name')=='advertImg') {
+			error.appendTo(element.parent("span").parent("span").next("span"))
+		}else{
+			error.appendTo(element.parent("span"));
+		}
+	} 
+  });
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+  //
+  jQuery("#logoShow").mouseover(function(){
+	    jQuery("#logoImg").css('display','block');
+   }).mouseout(function(){
+		jQuery("#logoImg").css('display','none');
+	});
+  //
+  jQuery('#ad_begin_time').attr("readyonly","readyonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#ad_end_time').attr("readyonly","readyonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  
+  jQuery("#ad_ap_id").change(function(){
+     var ap_type=jQuery(this).find('option:selected').attr("ap_type");
+	 if(ap_type=="text"){
+	   jQuery("#advert_text").show();
+	   jQuery("#advert_img").hide();
+	   jQuery("#advert_bg_color").hide();
+	   jQuery("#advert_slide").hide();
+	 }
+	 if(ap_type=="slide"){
+	   jQuery("#advert_img").show();
+	   jQuery("#advert_slide").show();
+	   jQuery("#advert_bg_color").hide();
+	   jQuery("#advert_text").hide();
+	 }
+	 if(ap_type=="img"||ap_type=="scroll"){
+	   jQuery("#advert_img").show();
+	   jQuery("#advert_text").hide();
+	   jQuery("#advert_bg_color").hide();
+	   jQuery("#advert_slide").hide();
+	 }
+	 if(ap_type=="bg_slide"){
+	   jQuery("#advert_img").show();
+	   jQuery("#advert_bg_color").show();
+	   jQuery("#advert_slide").show();
+	   jQuery("#advert_text").hide();
+	 }
+  });
+  
+  jQuery("#nativeTypeId").val("$!obj.nativeType");
+  jQuery("#ad_type").val("$!obj.adType"); 
+  
+   #if($!obj.apType=="text")
+	   jQuery("#advert_text").show();
+	   jQuery("#advert_img").hide();
+	   jQuery("#advert_slide").hide();
+   #end
+    #if($!obj.apType=="slide"||$!obj.apType=="bg_slide")
+	   jQuery("#advert_slide").show();
+	#end
+	 #if($!obj.apType=="bg_slide")
+	   jQuery("#advert_bg_color").show();
+	#end
+	#if($!obj.apType=="slide"||$!obj.apType=="img"||$!obj.apType=="scroll"||$!obj.apType=="bg_slide")
+	   jQuery("#advert_img").show();
+	   jQuery("#advert_text").hide();
+	#end
+
+});
+
+
+function provinceOnchange(){
+	var options='<option value="">请选择...</option>';
+	jQuery.ajax({type:'POST',
+				url:'$!webPath/admin/get_city_by_province.htm',
+				data:{"parentId":jQuery("#province").val()},
+				success:function(data){
+					var list = jQuery.parseJSON(data);
+					jQuery.each(list,function(index,obj){
+						
+			 			#if($!obj.areaId)
+							if($!obj.areaId==obj.id){
+								options+='<option selected="selected" value="'+obj.id+'">'+obj.areaName+'</option>';
+							}else {
+								options+='<option value="'+obj.id+'">'+obj.areaName+'</option>';
+							}
+						#else
+								options+='<option value="'+obj.id+'">'+obj.areaName+'</option>';
+							#end
+					}); 
+					jQuery("#city").html(options);
+				}
+	});	
+}
+
+
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">广告管理</h1>
+   <div class="nav_list">
+<ul>
+ <li> <a href="$!webPath/admin/advert_list.htm"><b>所有广告</b></a></li>
+ #if(${sec.anyGranted("ROLE_ADVERT_ADMIN_CHECK")})
+  <li> <a href="$!webPath/admin/advert_list_audit.htm" ><b>未审核广告</b></a></li>
+  #end
+  <li> <a href="$!webPath/admin/advert_add.htm" #if(!$!edit) class="this" #end><b>新增广告</b></a></li>
+  <li> <a href="$!webPath/admin/adv_pos_list.htm"><b>所有广告位</b></a></li>
+  <li><a href="$!webPath/admin/adv_pos_add.htm" ><b>新增广告位</b></a></li>#if($!edit)
+  <li> <a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+	   #end
+ </ul>
+       </div>
+  <form action="$!webPath/admin/advert_save.htm" method="post" enctype="multipart/form-data" id="theForm">
+  #if($!edit)
+  	
+  #else
+<!--   <input type="hidden" name="adType" 
+    #if($!invitationAdvertFlag)
+  	  value="$!adTypeInfomation"
+    #elseif($!informationFlag)
+  	  value="$!adTypeJg" 
+    #elseif($!goodsFlag)
+  	  value="$!adTypeGoods" 
+    #end
+  /> -->
+  #end
+  <div class="edit">
+  <div class="editul setcont">
+    #if($!invitationAdvertFlag || $!informationFlag || $!goodsFlag)
+  	<ul class="set1" id="advert_title">
+      <li class="setcont_bg">原标题</li>
+      <li><span class="webname">
+      #if(!$!goods.goodsTitle)
+      	#if($!edit)
+	        $!originalTitle
+	   	#else
+	   		#if($!invitationAdvertFlag)
+	  	 		$!circleInvitation.title
+	   		#elseif($!informationFlag)
+	  	 		$!information.title
+	  	 	#elseif($!goodsFlag)
+	  	 		$!goods.goodsName
+	   		#end
+   		#end
+   	#else
+   		$!goods.goodsTitle
+   	#end
+        </span></li>
+    </ul>
+    #end
+    <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>广告名称</li>
+      <li><span class="webname">
+        <input name="adTitle" type="text" id="ad_title" value="$!obj.adTitle" />
+        </span></li>
+    </ul>
+    <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>广告位置</li>
+      <li><span>
+        <select name="adApId" id="ad_ap_id" >
+          <option value="">请选择所属广告位...</option>
+          #foreach($ap in $aps)
+<<<<<<< .mine
+          <option value="$!ap.id" ap_type="$!ap.apType" #if($!ap.id==$!cbmId) selected #end >$!{ap.apTitle}($!{ap.apWidth}*$!{ap.apHeight})</option>
+=======
+          <option value="$!ap.id" ap_type="$!ap.apType" #if($!ap.apCode.equals($!apCode)==true) selected="selected" #end  #if($!ap.id==$!obj.adApId) selected="selected" #end >$!{ap.apTitle}($!{ap.apWidth}*$!{ap.apHeight})</option>
+>>>>>>> .r13289
+          #end
+        </select>
+        </span></li>
+    </ul>
+    <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>开始时间</li>
+      <li><span class="webname">
+        <input name="strAdBeginDate" type="text" id="ad_begin_time" value="$!CommUtil.formatShortDate($!obj.adBeginTime)" />
+        </span></li>
+    </ul>
+    <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>结束时间</li>
+      <li><span class="webname">
+        <input name="strAdEndDate" type="text" id="ad_end_time" value="$!CommUtil.formatShortDate($!obj.adEndTime)" />
+        </span></li>
+    </ul>
+	<ul class="set1" id="advert_img" style="display:none;">
+		<li class="setcont_bg"><strong class="sred">*</strong>广告图片：</li>
+		<li>
+		<span class="webname">
+		  <span class="eidt_li_a" style="position:relative; width:50px; height:22px; line-height:22px;margin-top: 3px; color:#333; border:1px solid #ccc; padding:2px 5px; border-radius:3px;">选择图片
+		    <input type="file" id="advertImg" onchange="changePic('advertImg')" style="opacity: 0;top:0;left:1px;position:absolute; z-index:100;width:60px; " name="advertImg" />
+		  </span> 
+		</span>
+		<span class="preview"> 
+			#if($!edit) <a id="imgPriview" href="$!obj.adImgPath" target="_blank"> #end
+			<img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> 
+			#if($!edit) </a> #end
+		</span>
+		#if($!obj.adImgPath)
+		#set($img=$!imageTools.queryImg($!obj.adImgPath))
+		<div class="bigimgpre" id="logoImg" style="display:none; left:270px;"><img src="$!obj.adImgPath"  width="200" height="200" id="thumbnailimg"/> </div>
+		#end
+		<div class="pic-view"><img id="preview" alt="" name="pic" /></div>
+		</li>
+	 </ul>
+     <ul class="set1" id="advert_text" >
+      <li class="setcont_bg"><strong class="sred">*</strong>广告描述：</li>
+      <li><span class="webname">
+			<textarea name="adText" cols="4" rows="6" id="ad_Text" style="width:320px; height:70px; padding:5px;">$!obj.adText</textarea>
+        </span></li>
+    </ul>
+    <ul class="set1" id="advert_bg_color" style="display:none;">
+      <li class="setcont_bg">背景色</li>
+      <li>
+        <span class="webname">
+        	<input name="bgColor" type="text" id="bg_color" value="$!obj.bgColor" />
+        </span>
+        <span id="nothis">
+	        <strong class="q"></strong><strong class="w">
+	        当选择背景幻灯时，可以设置与广告图片色调一致的背景色</strong>
+	        <strong class="c"></strong>
+        </span>
+      </li>
+    </ul>
+    <ul class="set1" id="advert_url">
+      <li class="setcont_bg"><strong class="sred">*</strong>广告链接</li>
+      <li><span class="webname">
+        <input name="adUrl" type="text" id="ad_url"
+        #if($!invitationAdvertFlag)
+        	value="$!circleInvitationId" readonly="readonly"
+        #elseif($!informationFlag)
+        	value="$!informationId" readonly="readonly"
+        #elseif($!goodsFlag)
+        	value="$!goodsId" readonly="readonly"
+        #else
+        	value="$!obj.adUrl" #if($!edit)  #end
+        #end        
+        />
+        </span></li>
+    </ul>
+    
+    <ul class="set1" id="advert_url">
+      <li class="setcont_bg"><strong class="sred">*</strong>广告类型</li>
+		<li>
+	      	<span class="webname">     
+				<select name="adType" id="ad_type1" >  
+			        <option value="1" #if($!obj.adType == '1') selected="selected" #end>1:帖子（链接)</option>
+			        <option value="2"  #if($!obj.adType == '2') selected="selected" #end>2:商品</option>
+			        <option value="3"  #if($!obj.adType == '3') selected="selected" #end>3:商户</option>
+			        <option value="4"  #if($!obj.adType == '4') selected="selected" #end>4:资讯（链接）</option>
+			        <option value="5"  #if($!obj.adType == '5') selected="selected" #end>5:服务商户</option>
+			        <option value="6"  #if($!obj.adType == '6') selected="selected" #end>6:服务</option>
+			        <option value="8"  #if($!obj.adType == '8') selected="selected" #end #if($!apCode == 'INDEX_POPULAR_RECOMMEND') selected="selected" #end>8:卷皮商品</option>
+			        
+			      </select>
+	        </span>
+		</li>
+    </ul>
+    
+    <ul class="set1" id="advert_area" #if($!obj.adType == '5'||$!obj.adType == '6') #else  style="display:none" #end >
+    	<li class="setcont_bg">地区</li>
+    	<li>	    
+	        <span>
+		        <select name="province" id="province" onchange="provinceOnchange();" style="width: 200px">
+		        	<option value="">请选择...</option>
+		        	#foreach($p in $provinces)
+		        	<option value="$!p.id" #if($!provinceId == $!p.id) selected="selected" #end>$!p.areaName</option>
+		        	#end
+		        </select>
+		    </span>
+		    <span>
+		    	<select name="areaId" id="city" style="width: 200px">
+		    		<option value="">请选择...</option>
+		        </select>
+		    </span> 
+	    </li>
+    </ul>
+    
+    <ul class="set1" id="advert_url">
+      <li class="setcont_bg"><strong class="sred">*</strong>广告显示类型</li>
+      <li><span class="webname">
+      	<select name="nativeType" id="nativeTypeId">
+          <!-- 	<option value="">请选择显示类型</option> selected = "selected"-->
+             <option value="1" >Html5显示页面</option>
+             <option value="2" >App原生显示页面</option>
+         </select>
+        </span>
+      </li>
+    </ul>
+    
+    <ul class="set1" id="advert_slide" style="display:none;">
+      <li class="setcont_bg">
+      <strong class="sred">*</strong>
+      幻灯片序号</li>
+      <li><span class="webname">
+        <input name="adSlideSequence" type="text" id="ad_slide_sequence" value="$!obj.adSlideSequence" />
+        </span></li>
+    </ul>
+  </div>
+  </div>
+  <div class="submit">
+    <span class="pad120">
+	    <input name="" type="submit" value="提交" style="cursor:pointer;" />
+	    <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/advert_add.htm" />
+	    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/advert_list.htm" />
+	    <input name="id" type="hidden" id="id" value="$!obj.id" />
+	    <!-- <input name="ad_type" type="hidden" id="ad_type" value="$!obj.adType"/> -->
+    </span>
+  </div>
+  </form>
+</div>
+</body>
+</html>

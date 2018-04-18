@@ -1,0 +1,61 @@
+﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>系统提示 - $!config.title -</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/index2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+</head>
+<body>
+$!httpInclude.include("/seller/top.htm")
+
+<div class="main clearfix">
+<div class="seller_center">
+  $!httpInclude.include("/seller/nav.htm?op=groupgoods")
+  <div class="seller_right">
+  	<div class="seller_position"><span><b><a href="$!webPath/seller/index.htm">商家中心</a></b>><b>提现管理</b></span></div>
+  	<div class="seller_list_title">
+          <ul class="seller_title_ul">
+          	<li class="this"><a href="$!webPath/seller/seller_cash.htm">提现申请</a></li>
+	        <li ><a href="$!webPath/seller/seller_cash_list.htm">提现列表</a></li>
+          </ul>
+    </div>
+	  <div class="index" style="height:300px;">
+	    <div style="height:280px;border:1px solid #fff;overflow:hidden; margin-left:auto; margin-right:auto; margin-top:10px;">
+	      <div style="font-size:16px; color:#666666;margin-top:181px; padding-left:40%;">
+	      <span style="">
+	      <img src="$!webPath/resources/style/common/images/icon/ti-error.png" />
+	      </span>
+	      <span style=" padding-top:10px; line-height:30px;display: block;margin-left:-52px;">$!{op_title}！</span>
+	      </div>
+	    </div>
+	  </div>
+  </div>	  
+</div>  
+  #if($!url)
+<script>
+	  var count=3;
+	  window.setInterval(go,1000);
+	  function go(){
+	    count--;
+	    if(count==0) window.location.href="$!url";
+	  }
+	</script>
+    #end
+</div>
+
+ $!httpInclude.include("/footer.htm")
+</body>
+</html>

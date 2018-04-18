@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+	<bean id="ordersAutoReceivingJob" class="com.sinco.carnation.job.OrdersAutoReceivingJob"
+		scope="singleton">
+		<property name="orderFormService" ref="orderFormService"></property>
+	</bean>
+
+	<bean id="orderAutoReviewJob" class="com.sinco.carnation.job.OrderAutoReviewJob"
+		scope="singleton">
+		<property name="orderFormService" ref="orderFormService"></property>
+		<property name="evaluateService" ref="evaluateService"></property>
+		<property name="orderFormTools" ref="orderFormTools"></property>
+	</bean>
+
+	<task:scheduled-tasks scheduler="rebate-job">
+		<task:scheduled ref="ordersAutoReceivingJob" method="executeJob"
+			cron="0 0 0/1 * * ?" />
+		<task:scheduled ref="orderAutoReviewJob" method="executeJob"
+			cron="0 0 0/1 * * ?" />
+	</task:scheduled-tasks>
+	<task:scheduler id="rebate-job" />
+
+</beans>

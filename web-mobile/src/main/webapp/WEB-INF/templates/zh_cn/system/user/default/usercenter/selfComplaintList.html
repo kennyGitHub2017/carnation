@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>我的投诉 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}" />
+<meta name="copyright" content="$!{config.copyRight}" />
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#status").val("$!vo.status");
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm")
+$!httpInclude.include("/nav1.htm")
+<div class="main clearfix">
+  <div class="usercenter"> $!httpInclude.include("/buyer/nav.htm?op=groupComplaint")
+    <div class="usercenter_right">
+      <div class="myorder">
+        <h4><span class="myorder_fright"></span><strong>我的投诉</strong></h4>
+      </div>
+      <form action="$!webPath/group/selfComplaintList.htm" method="post" id="ListForm">
+        <div class="user_list">
+          <div class="user_list_title"> <span class="user_title_sp">
+            <select name="status" id="status">
+              <option value="">选择投诉状态</option>
+              <option value="1">处理中</option>
+              <option value="3">已完成</option>
+            </select>
+            <input name="" type="submit" value="搜索" class="user_sear_btn" />
+            </span>
+            <ul class="user_title_ul">
+              <li><i></i><a href="$!webPath/group/complaintList.htm">服务投诉列表</a></li>
+              <li class="this"><i></i><a href="$!webPath/group/selfComplaintList.htm">我的投诉</a></li>
+            </ul>
+          </div>
+          #if($!objs.size()>0)
+          <div class="user_list_box">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="user_order_table">
+              <tr>
+                <th width="20%">投诉人</th>
+                <th width="20%">被投诉商户</th>
+                <th width="20%">被投服务名称</th>
+                <th width="15%">投诉时间</th>
+                <th width="10%">投诉状态</th>
+                <th>操作</th>
+              </tr>
+              #foreach($obj in $objs)
+                #set($map = $!orderFormTools.queryGroupInfo("$!obj.groupInfo"))
+                #set($goods_id = "$!{map.get('goods_id')}")	
+                #set($goods_name = "$!{map.get('goods_name')}")	
+              <tr>
+                <td align="center">$!obj.nickname</td>
+                <td align="center">$!obj.storeName</td>
+                <td align="center">$goods_name</td>
+                <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+                #if($!obj.status==1)
+                #set($status="处理中")
+                #end
+                #if($!obj.status==3)
+                #set($status="已处理")
+                #end
+                <td align="center">$!status</td>
+                <td align="center"><span>
+                  <a href="$!webPath/group/complaintDetails.htm?orderId=$!obj.ofId"  style="color:#03F;margin-right:5px">详细</a>
+                </span></td>
+              </tr>
+              #end
+            </table>
+          </div>
+          <div class="fenye">
+            <div class="user_list_page"><span class="user_page_sp">
+              <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+              $!gotoPageFormHTML</span> </div>
+          </div>
+          #else
+          <div class="nothing">
+            <div class="nothing_left"><img src="$!webPath/resources/style/system/front/default/images/nothing.png" /></div>
+            <div class="nothing_right">您目前还没有投诉记录！</div>
+          </div>
+          #end </div>
+      </form>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

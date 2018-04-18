@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.aio.mapper.AioDataMapper">
+	<resultMap id="cholResultMap" type="com.sinco.carnation.aio.model.Chol">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="did" property="did" jdbcType="VARCHAR" />
+		<result column="sync_time" property="syncTime" jdbcType="TIMESTAMP" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="ctype" property="ctype" jdbcType="VARCHAR" />
+		<result column="chol" property="chol" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="ecgResultMap" type="com.sinco.carnation.aio.model.Ecg">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="did" property="did" jdbcType="VARCHAR" />
+		<result column="sync_time" property="syncTime" jdbcType="TIMESTAMP" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="ctype" property="ctype" jdbcType="VARCHAR" />
+		<result column="rr" property="rr" jdbcType="VARCHAR" />
+		<result column="p_r" property="pR" jdbcType="VARCHAR" />
+		<result column="qrs" property="qrs" jdbcType="VARCHAR" />
+		<result column="qt" property="qt" jdbcType="VARCHAR" />
+		<result column="qtc" property="qtc" jdbcType="VARCHAR" />
+		<result column="p_axis" property="pAxis" jdbcType="VARCHAR" />
+		<result column="qrs_axis" property="qrsAxis" jdbcType="VARCHAR" />
+		<result column="t_axis" property="tAxis" jdbcType="VARCHAR" />
+		<result column="rv5" property="rv5" jdbcType="VARCHAR" />
+		<result column="svl" property="svl" jdbcType="VARCHAR" />
+		<result column="rv5_svl" property="rv5Svl" jdbcType="VARCHAR" />
+		<result column="hr" property="hr" jdbcType="VARCHAR" />
+		<result column="analysis_code" property="analysisCode"
+			jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="gluResultMap" type="com.sinco.carnation.aio.model.Glu">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="did" property="did" jdbcType="VARCHAR" />
+		<result column="sync_time" property="syncTime" jdbcType="TIMESTAMP" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="ctype" property="ctype" jdbcType="VARCHAR" />
+		<result column="glu" property="glu" jdbcType="VARCHAR" />
+		<result column="flag" property="flag" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="spoResultMap" type="com.sinco.carnation.aio.model.Spo">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="did" property="did" jdbcType="VARCHAR" />
+		<result column="sync_time" property="syncTime" jdbcType="TIMESTAMP" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="ctype" property="ctype" jdbcType="VARCHAR" />
+		<result column="spo" property="spo" jdbcType="VARCHAR" />
+		<result column="pr" property="pr" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="sysDiaResultMap" type="com.sinco.carnation.aio.model.SysDia">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="did" property="did" jdbcType="VARCHAR" />
+		<result column="sync_time" property="syncTime" jdbcType="TIMESTAMP" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="ctype" property="ctype" jdbcType="VARCHAR" />
+		<result column="sysDia" property="sysDia" jdbcType="VARCHAR" />
+		<result column="pr" property="pr" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="tpResultMap" type="com.sinco.carnation.aio.model.Tp">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="did" property="did" jdbcType="VARCHAR" />
+		<result column="sync_time" property="syncTime" jdbcType="TIMESTAMP" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="ctype" property="ctype" jdbcType="VARCHAR" />
+		<result column="tp" property="tp" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="uaResultMap" type="com.sinco.carnation.aio.model.Ua">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="did" property="did" jdbcType="VARCHAR" />
+		<result column="sync_time" property="syncTime" jdbcType="TIMESTAMP" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="ctype" property="ctype" jdbcType="VARCHAR" />
+		<result column="ua" property="ua" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="userLogResultMap" type="com.sinco.carnation.aio.model.AioUserLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="did" property="did" jdbcType="VARCHAR" />
+		<result column="sync_time" property="syncTime" jdbcType="TIMESTAMP" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="ctype" property="ctype" jdbcType="VARCHAR" />
+		<result column="subject" property="subject" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="aioDataMap" type="com.sinco.carnation.aio.bo.AioDataBO">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="subject" property="subject" jdbcType="VARCHAR" />
+		<result column="time" property="time" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="tpBOMap" type="com.sinco.carnation.aio.bo.TpBO"
+		extends="tpResultMap">
+		<result column="login_name" property="mobile" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="spoBOMap" type="com.sinco.carnation.aio.bo.SpoBO"
+		extends="spoResultMap">
+		<result column="login_name" property="mobile" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="cholBOMap" type="com.sinco.carnation.aio.bo.CholBO"
+		extends="cholResultMap">
+		<result column="login_name" property="mobile" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ecgBOMap" type="com.sinco.carnation.aio.bo.EcgBO"
+		extends="ecgResultMap">
+		<result column="login_name" property="mobile" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="gluBOMap" type="com.sinco.carnation.aio.bo.GluBO"
+		extends="gluResultMap">
+		<result column="login_name" property="mobile" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="sysDiaBOMap" type="com.sinco.carnation.aio.bo.SysDiaBO"
+		extends="sysDiaResultMap">
+		<result column="login_name" property="mobile" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="uaBOMap" type="com.sinco.carnation.aio.bo.UaBO"
+		extends="sysDiaResultMap">
+		<result column="login_name" property="mobile" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="chol_Column">
+		id,did,sync_time,id_card,ctype,chol,time
+	</sql>
+	<sql id="ecg_Column">
+		id,did,sync_time,id_card,ctype,rr,p_r,qrs,qt,qtc,p_axis,
+		qrs_axis,t_axis,rv5,svl,rv5_svl,hr,analysis_code,time
+	</sql>
+	<sql id="glu_Column">
+		id,did,sync_time,id_card,ctype,glu,flag,time
+	</sql>
+	<sql id="spo_Column">
+		id,did,sync_time,id_card,ctype,spo,pr,time
+	</sql>
+	<sql id="sysDia_Column">
+		id,did,sync_time,id_card,ctype,sys_dia,pr,time
+	</sql>
+	<sql id="tp_Column">
+		id,did,sync_time,id_card,ctype,tp,time
+	</sql>
+	<sql id="ua_Column">
+		id,did,sync_time,id_card,ctype,ua,time
+	</sql>
+	<sql id="user_log_Column">
+		id,did,sync_time,id_card,ctype,subject,time
+	</sql>
+
+
+	<select id="queryCholToTimePeriod" resultMap="cholResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="chol_Column" />
+		FROM
+		sc_chol
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{startDate},'%Y-%m-%d')
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{endDate},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="queryEcgToTimePeriod" resultMap="ecgResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="ecg_Column" />
+		FROM
+		sc_ecg
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{startDate},'%Y-%m-%d')
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{endDate},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="queryGluToTimePeriod" resultMap="gluResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="glu_Column" />
+		FROM
+		sc_glu
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{startDate},'%Y-%m-%d')
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{endDate},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="querySpoToTimePeriod" resultMap="spoResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="spo_Column" />
+		FROM
+		sc_spo
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{startDate},'%Y-%m-%d')
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{endDate},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="querySysDiaToTimePeriod" resultMap="sysDiaResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="sysDia_Column" />
+		FROM
+		sc_sys_dia
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{startDate},'%Y-%m-%d')
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{endDate},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="queryTpToTimePeriod" resultMap="tpResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="tp_Column" />
+		FROM
+		sc_tp
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{startDate},'%Y-%m-%d')
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{endDate},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="queryUaToTimePeriod" resultMap="uaResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="ua_Column" />
+		FROM
+		sc_ua
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{startDate},'%Y-%m-%d')
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{endDate},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+
+	<select id="queryChol" resultMap="cholResultMap" parameterType="map">
+		SELECT
+		<include refid="chol_Column" />
+		FROM
+		sc_chol
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="time != null and time != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') =
+				DATE_FORMAT(#{time},'%Y-%m-%d')
+			</if>
+
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="queryEcg" resultMap="ecgResultMap" parameterType="map">
+		SELECT
+		<include refid="ecg_Column" />
+		FROM
+		sc_ecg
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="time != null and time != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') =
+				DATE_FORMAT(#{time},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="queryGlu" resultMap="gluResultMap" parameterType="map">
+		SELECT
+		<include refid="glu_Column" />
+		FROM
+		sc_glu
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="time != null and time != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') =
+				DATE_FORMAT(#{time},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="querySpo" resultMap="spoResultMap" parameterType="map">
+		SELECT
+		<include refid="spo_Column" />
+		FROM
+		sc_spo
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="time != null and time != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') =
+				DATE_FORMAT(#{time},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="querySysDia" resultMap="sysDiaResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="sysDia_Column" />
+		FROM
+		sc_sys_dia
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="time != null and time != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') =
+				DATE_FORMAT(#{time},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="queryTp" resultMap="tpResultMap" parameterType="map">
+		SELECT
+		<include refid="tp_Column" />
+		FROM
+		sc_tp
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="time != null and time != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') =
+				DATE_FORMAT(#{time},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="queryUa" resultMap="uaResultMap" parameterType="map">
+		SELECT
+		<include refid="ua_Column" />
+		FROM
+		sc_ua
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="idCard != null and idCard != ''">
+				id_card = #{idCard}
+			</if>
+			<if test="time != null and time != ''">
+				AND DATE_FORMAT(time,'%Y-%m-%d') =
+				DATE_FORMAT(#{time},'%Y-%m-%d')
+			</if>
+		</trim>
+		group by time,id_card
+		order by time desc
+	</select>
+
+	<select id="getLatestDataByUserLog" resultMap="userLogResultMap"
+		parameterType="String">
+		SELECT
+		<include refid="user_log_Column" />
+		FROM
+		sc_user_log
+		where id_card = #{idCard}
+		order by time desc limit 1
+	</select>
+
+	<select id="getAioDataList" resultMap="aioDataMap">
+
+		SELECT
+		l.id,l.id_card,a.login_name,l.time,l.subject
+		FROM
+		carnation.sc_user_log
+		l
+		left join sc_aio_binding b on l.id_card =
+		b.id_card
+		left join
+		sys_user_account a on a.uid = b.uid
+		group by l.time
+		order by l.id
+	</select>
+
+	<select id="getTpListToPc" resultMap="tpBOMap">
+		SELECT id,id_card,login_name,time,tp FROM(
+		SELECT
+		t.id,t.id_card,a.login_name,t.time,t.tp
+		FROM
+		carnation.sc_tp t
+		left join
+		sc_aio_binding b on t.id_card =
+		b.id_card
+		left join
+		sys_user_account a on
+		a.uid = b.uid
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="vo.idCard != null and vo.idCard != ''">
+				t.id_card = #{vo.idCard}
+			</if>
+			<if test="vo.startTime != null and vo.startTime != ''">
+				AND DATE_FORMAT(t.time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.startTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(t.time,'%Y-%m-%d') <![CDATA[ <=]]>
+				DATE_FORMAT(#{vo.endTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.mobile != null and vo.mobile != ''">
+				AND a.login_name = #{vo.mobile}
+			</if>
+		</trim>
+		group by t.id
+		order by t.id) as tp group by time,id_card
+	</select>
+
+	<select id="getSpoListToPc" resultMap="spoBOMap">
+		SELECT id,id_card,login_name,time,spo,pr FROM(
+		SELECT
+		s.id,s.id_card,a.login_name,s.time,s.spo,s.pr
+		FROM
+		carnation.sc_spo s
+		left join sc_aio_binding b on s.id_card =
+		b.id_card
+		left join
+		sys_user_account a on a.uid = b.uid
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="vo.idCard != null and vo.idCard != ''">
+				s.id_card = #{vo.idCard}
+			</if>
+			<if test="vo.startTime != null and vo.startTime != ''">
+				AND DATE_FORMAT(s.time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.startTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(s.time,'%Y-%m-%d') <![CDATA[ <=]]>
+				DATE_FORMAT(#{vo.endTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.mobile != null and vo.mobile != ''">
+				AND a.login_name = #{vo.mobile}
+			</if>
+		</trim>
+		group by s.id
+		order by s.id) as spo group by time,id_card
+	</select>
+
+	<select id="getCholListToPc" resultMap="cholBOMap">
+		SELECT id,id_card,login_name,time,chol FROM(
+		SELECT
+		c.id,c.id_card,a.login_name,c.time,c.chol
+		FROM
+		carnation.sc_chol
+		c
+		left
+		join sc_aio_binding b on c.id_card =
+		b.id_card
+		left join
+		sys_user_account a on a.uid = b.uid
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="vo.idCard != null and vo.idCard != ''">
+				c.id_card = #{vo.idCard}
+			</if>
+			<if test="vo.startTime != null and vo.startTime != ''">
+				AND DATE_FORMAT(c.time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.startTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(c.time,'%Y-%m-%d') <![CDATA[ <=]]>
+				DATE_FORMAT(#{vo.endTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.mobile != null and vo.mobile != ''">
+				AND a.login_name = #{vo.mobile}
+			</if>
+		</trim>
+		group by c.id
+		order by c.id) as chol group by time,id_card
+	</select>
+
+	<select id="getEcgListToPc" resultMap="ecgBOMap">
+		SELECT id,id_card,login_name,time,
+		rr,p_r,qrs,qt,qtc,p_axis,
+		qrs_axis,t_axis,rv5,svl,rv5_svl,hr,analysis_code FROM(
+		SELECT
+		e.id,e.id_card,a.login_name,e.time,
+		e.rr,e.p_r,e.qrs,e.qt,e.qtc,e.p_axis,
+		e.qrs_axis,e.t_axis,e.rv5,e.svl,e.rv5_svl,e.hr,e.analysis_code
+		FROM
+		carnation.sc_ecg e
+		left join sc_aio_binding b on e.id_card =
+		b.id_card
+		left join
+		sys_user_account a on a.uid = b.uid
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="vo.idCard != null and vo.idCard != ''">
+				e.id_card = #{vo.idCard}
+			</if>
+			<if test="vo.startTime != null and vo.startTime != ''">
+				AND DATE_FORMAT(e.time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.startTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(e.time,'%Y-%m-%d') <![CDATA[ <=]]>
+				DATE_FORMAT(#{vo.endTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.mobile != null and vo.mobile != ''">
+				AND a.login_name = #{vo.mobile}
+			</if>
+		</trim>
+		group by e.id
+		order by e.id) as ecg group by time,id_card
+	</select>
+
+	<select id="getGluListToPc" resultMap="gluBOMap">
+		SELECT id,id_card,login_name,time,glu,flag FROM(
+		SELECT
+		g.id,g.id_card,a.login_name,g.time,g.glu,g.flag
+		FROM
+		carnation.sc_glu g
+		left join sc_aio_binding b on g.id_card =
+		b.id_card
+		left join
+		sys_user_account a on a.uid = b.uid
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="vo.idCard != null and vo.idCard != ''">
+				g.id_card = #{vo.idCard}
+			</if>
+			<if test="vo.startTime != null and vo.startTime != ''">
+				AND DATE_FORMAT(g.time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.startTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(g.time,'%Y-%m-%d') <![CDATA[ <=]]>
+				DATE_FORMAT(#{vo.endTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.mobile != null and vo.mobile != ''">
+				AND a.login_name = #{vo.mobile}
+			</if>
+		</trim>
+		group by g.id
+		order by g.id) as glu group by time,id_card
+	</select>
+
+	<select id="getSysDiaListToPc" resultMap="sysDiaBOMap">
+		SELECT id,id_card,login_name,time,sys_dia,pr FROM(
+		SELECT
+		sd.id,sd.id_card,a.login_name,sd.time,sd.sys_dia,sd.pr
+		FROM
+		carnation.sc_sys_dia sd
+		left join sc_aio_binding b on sd.id_card =
+		b.id_card
+		left join
+		sys_user_account a on a.uid = b.uid
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="vo.idCard != null and vo.idCard != ''">
+				sd.id_card = #{vo.idCard}
+			</if>
+			<if test="vo.startTime != null and vo.startTime != ''">
+				AND DATE_FORMAT(sd.time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.startTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(sd.time,'%Y-%m-%d') <![CDATA[ <=]]>
+				DATE_FORMAT(#{vo.endTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.mobile != null and vo.mobile != ''">
+				AND a.login_name = #{vo.mobile}
+			</if>
+		</trim>
+		group by sd.id
+		order by sd.id) as dia group by time,id_card
+	</select>
+
+	<select id="getUaListToPc" resultMap="uaBOMap">
+		SELECT id,id_card,login_name,time,ua FROM(
+		SELECT
+		u.id,u.id_card,a.login_name,u.time,u.ua
+		FROM
+		carnation.sc_ua u
+		left join
+		sc_aio_binding b on u.id_card =
+		b.id_card
+		left join
+		sys_user_account a on
+		a.uid = b.uid
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="vo.idCard != null and vo.idCard != ''">
+				u.id_card = #{vo.idCard}
+			</if>
+			<if test="vo.startTime != null and vo.startTime != ''">
+				AND DATE_FORMAT(u.time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.startTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(u.time,'%Y-%m-%d') <![CDATA[ <=]]>
+				DATE_FORMAT(#{vo.endTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.mobile != null and vo.mobile != ''">
+				AND a.login_name = #{vo.mobile}
+			</if>
+		</trim>
+		group by u.id
+		order by u.id) as ua group by time,id_card
+	</select>
+
+</mapper>

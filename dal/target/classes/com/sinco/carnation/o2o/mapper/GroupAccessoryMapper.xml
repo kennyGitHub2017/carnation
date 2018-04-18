@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.o2o.mapper.GroupAccessoryMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.o2o.model.GroupAccessory">
+		<id column="accessory_id" property="accessoryId" jdbcType="BIGINT" />
+		<id column="group_goods_id" property="groupGoodsId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.o2o.bo.GroupAccessoryBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		accessory_id, group_goods_id
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.o2o.model.GroupAccessoryExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from o2o_group_accessory
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from
+		o2o_group_accessory
+		where accessory_id = #{accessoryId,jdbcType=BIGINT}
+		and group_goods_id = #{groupGoodsId,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.o2o.model.GroupAccessoryExample">
+		delete from o2o_group_accessory
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.o2o.model.GroupAccessory">
+		insert into
+		o2o_group_accessory (accessory_id, group_goods_id)
+		values
+		(#{accessoryId,jdbcType=BIGINT}, #{groupGoodsId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.o2o.model.GroupAccessory">
+		insert into o2o_group_accessory
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="accessoryId != null">
+				accessory_id,
+			</if>
+			<if test="groupGoodsId != null">
+				group_goods_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="accessoryId != null">
+				#{accessoryId,jdbcType=BIGINT},
+			</if>
+			<if test="groupGoodsId != null">
+				#{groupGoodsId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.o2o.model.GroupAccessoryExample"
+		resultType="java.lang.Integer">
+		select count(*) from o2o_group_accessory
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update o2o_group_accessory
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.accessoryId != null">
+				accessory_id = #{record.accessoryId,jdbcType=BIGINT},
+			</if>
+			<if test="record.groupGoodsId != null">
+				group_goods_id = #{record.groupGoodsId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update o2o_group_accessory
+		set accessory_id =
+		#{record.accessoryId,jdbcType=BIGINT},
+		group_goods_id =
+		#{record.groupGoodsId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+</mapper>

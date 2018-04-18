@@ -1,0 +1,846 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.store.mapper.StoreApplyInfoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.store.model.StoreApplyInfo">
+		<id column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="license_address" property="licenseAddress"
+			jdbcType="VARCHAR" />
+		<result column="license_business_scope" property="licenseBusinessScope"
+			jdbcType="VARCHAR" />
+		<result column="license_c_address" property="licenseCAddress"
+			jdbcType="VARCHAR" />
+		<result column="license_c_contact" property="licenseCContact"
+			jdbcType="VARCHAR" />
+		<result column="license_c_telephone" property="licenseCTelephone"
+			jdbcType="VARCHAR" />
+		<result column="license_end_date" property="licenseEndDate"
+			jdbcType="TIMESTAMP" />
+		<result column="license_establish_date" property="licenseEstablishDate"
+			jdbcType="TIMESTAMP" />
+		<result column="license_legal_id_Card" property="licenseLegalIdCard"
+			jdbcType="VARCHAR" />
+		<result column="license_legal_name" property="licenseLegalName"
+			jdbcType="VARCHAR" />
+		<result column="license_num" property="licenseNum" jdbcType="VARCHAR" />
+		<result column="license_reg_capital" property="licenseRegCapital"
+			jdbcType="VARCHAR" />
+		<result column="license_start_date" property="licenseStartDate"
+			jdbcType="TIMESTAMP" />
+		<result column="tax_code" property="taxCode" jdbcType="VARCHAR" />
+		<result column="tax_type" property="taxType" jdbcType="VARCHAR" />
+		<result column="tax_type_code" property="taxTypeCode" jdbcType="VARCHAR" />
+		<result column="license_area_id" property="licenseAreaId"
+			jdbcType="BIGINT" />
+		<result column="license_c_area_id" property="licenseCAreaId"
+			jdbcType="BIGINT" />
+		<result column="license_image_path" property="licenseImagePath"
+			jdbcType="VARCHAR" />
+		<result column="license_legal_idCard_image_path" property="licenseLegalIdcardImagePath"
+			jdbcType="VARCHAR" />
+		<result column="organization_image_path" property="organizationImagePath"
+			jdbcType="VARCHAR" />
+		<result column="tax_general_card_path" property="taxGeneralCardPath"
+			jdbcType="VARCHAR" />
+		<result column="tax_reg_card_path" property="taxRegCardPath"
+			jdbcType="VARCHAR" />
+		<result column="license_legal_id_card_front_path" property="licenseLegalIdCardFrontPath"
+			jdbcType="VARCHAR" />
+		<result column="license_legal_id_card_back_path" property="licenseLegalIdCardBackPath"
+			jdbcType="VARCHAR" />
+		<result column="license_legal_id_card_reach_path" property="licenseLegalIdCardReachPath"
+			jdbcType="VARCHAR" />
+		<result column="bank_card_front_path" property="bankCardFrontPath"
+			jdbcType="VARCHAR" />
+		<result column="bank_card_back_path" property="bankCardBackPath"
+			jdbcType="VARCHAR" />
+		<result column="business_place_photo_path" property="businessPlacePhotoPath"
+			jdbcType="VARCHAR" />
+		<result column="other_photo_path" property="otherPhotoPath"
+			jdbcType="VARCHAR" />
+		<result column="industry" property="industry" jdbcType="VARCHAR" />
+		<result column="license_c_desc" property="licenseCDesc"
+			jdbcType="VARCHAR" />
+		<result column="fail_reseaon" property="failReseaon" jdbcType="VARCHAR" />
+		<result column="inviter_number" property="inviterNumber"
+			jdbcType="VARCHAR" />
+		<result column="operate_number" property="operateNumber"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.store.bo.StoreApplyInfoBO"
+		extends="BaseResultMap" />
+	<resultMap type="com.sinco.carnation.store.bo.StoreApplyInfoBO"
+		id="StoreApplyInfoMap" extends="BaseResultMap">
+		<result column="area_id" property="areaId" jdbcType="BIGINT" />
+		<result column="group_main_id" property="groupMainId" jdbcType="BIGINT" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="group_detail_info" property="groupDetailInfo"
+			jdbcType="VARCHAR" />
+		<result column="store_address" property="storeAddress"
+			jdbcType="VARCHAR" />
+		<result column="store_telephone" property="storeTelephone"
+			jdbcType="VARCHAR" />
+		<result column="license_c_mobile" property="licenseCMobile"
+			jdbcType="VARCHAR" />
+		<result column="commission_rebate" property="commissionRebate"
+			jdbcType="DECIMAL" />
+		<result column="bank_account_name" property="bankAccountName"
+			jdbcType="VARCHAR" />
+		<result column="bank_c_account" property="bankCAccount"
+			jdbcType="VARCHAR" />
+		<result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+		<result column="is_eepay" property="isEepay" jdbcType="BIT" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="store_lat" property="storeLat" jdbcType="DECIMAL" />
+		<result column="store_lon" property="storeLon" jdbcType="DECIMAL" />
+		<result column="group_discount" property="groupDiscount"
+			jdbcType="DECIMAL" />
+		<result column="bank_area_id" property="bankAreaId" jdbcType="BIGINT" />
+		<result column="store_ower_card" property="cartCode" jdbcType="VARCHAR" />
+		<result column="license_c_name" property="licensecName"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		store_id, add_Time, license_address, license_business_scope, license_c_address,
+		license_c_contact,
+		license_c_telephone, license_end_date, license_establish_date, license_legal_id_Card,
+		license_legal_name, license_num, license_reg_capital,
+		license_start_date, tax_code,
+		tax_type, tax_type_code, license_area_id, license_c_area_id,
+		license_image_path,
+		license_legal_idCard_image_path, organization_image_path, tax_general_card_path,
+		tax_reg_card_path, license_legal_id_card_front_path, license_legal_id_card_back_path,
+		license_legal_id_card_reach_path, bank_card_front_path,
+		bank_card_back_path, business_place_photo_path,
+		other_photo_path, industry, license_c_desc, fail_reseaon, inviter_number,
+		operate_number
+	</sql>
+
+	<select id="queryStoreApplyInfo" resultMap="StoreApplyInfoMap">
+		SELECT
+		s.license_c_name,s.bank_area_id,s.store_ower_card,s.group_discount,s.store_lon,s.store_lat,s.id
+		store_id,s.area_id,s.group_main_id,s.store_name,s.group_detail_info,s.store_address,s.store_telephone
+		,s.license_c_mobile,s.commission_rebate,s.bank_account_name,s.bank_c_account,s.bank_name,s.is_eepay,a.*
+		FROM shop_store s LEFT JOIN shop_store_apply_info a on s.id=a.store_id
+		WHERE s.id=#{storeId}
+	</select>
+
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.store.model.StoreApplyInfoExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_store_apply_info
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_store_apply_info
+		where store_id = #{storeId,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_store_apply_info
+		where store_id = #{storeId,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.store.model.StoreApplyInfoExample">
+		delete from shop_store_apply_info
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.store.model.StoreApplyInfo">
+		insert into shop_store_apply_info (store_id, add_Time,
+		license_address,
+		license_business_scope, license_c_address,
+		license_c_contact, license_c_telephone, license_end_date,
+		license_establish_date, license_legal_id_Card,
+		license_legal_name, license_num, license_reg_capital,
+		license_start_date, tax_code, tax_type,
+		tax_type_code, license_area_id, license_c_area_id,
+		license_image_path, license_legal_idCard_image_path,
+		organization_image_path, tax_general_card_path,
+		tax_reg_card_path, license_legal_id_card_front_path,
+		license_legal_id_card_back_path, license_legal_id_card_reach_path,
+		bank_card_front_path, bank_card_back_path, business_place_photo_path,
+		other_photo_path, industry, license_c_desc,
+		fail_reseaon, inviter_number, operate_number
+		)
+		values (#{storeId,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{licenseAddress,jdbcType=VARCHAR},
+		#{licenseBusinessScope,jdbcType=VARCHAR},
+		#{licenseCAddress,jdbcType=VARCHAR},
+		#{licenseCContact,jdbcType=VARCHAR},
+		#{licenseCTelephone,jdbcType=VARCHAR},
+		#{licenseEndDate,jdbcType=TIMESTAMP},
+		#{licenseEstablishDate,jdbcType=TIMESTAMP},
+		#{licenseLegalIdCard,jdbcType=VARCHAR},
+		#{licenseLegalName,jdbcType=VARCHAR}, #{licenseNum,jdbcType=VARCHAR},
+		#{licenseRegCapital,jdbcType=VARCHAR},
+		#{licenseStartDate,jdbcType=TIMESTAMP}, #{taxCode,jdbcType=VARCHAR},
+		#{taxType,jdbcType=VARCHAR},
+		#{taxTypeCode,jdbcType=VARCHAR}, #{licenseAreaId,jdbcType=BIGINT}, #{licenseCAreaId,jdbcType=BIGINT},
+		#{licenseImagePath,jdbcType=VARCHAR},
+		#{licenseLegalIdcardImagePath,jdbcType=VARCHAR},
+		#{organizationImagePath,jdbcType=VARCHAR},
+		#{taxGeneralCardPath,jdbcType=VARCHAR},
+		#{taxRegCardPath,jdbcType=VARCHAR},
+		#{licenseLegalIdCardFrontPath,jdbcType=VARCHAR},
+		#{licenseLegalIdCardBackPath,jdbcType=VARCHAR},
+		#{licenseLegalIdCardReachPath,jdbcType=VARCHAR},
+		#{bankCardFrontPath,jdbcType=VARCHAR},
+		#{bankCardBackPath,jdbcType=VARCHAR},
+		#{businessPlacePhotoPath,jdbcType=VARCHAR},
+		#{otherPhotoPath,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR},
+		#{licenseCDesc,jdbcType=VARCHAR},
+		#{failReseaon,jdbcType=VARCHAR}, #{inviterNumber,jdbcType=VARCHAR}, #{operateNumber,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.store.model.StoreApplyInfo">
+		insert into shop_store_apply_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="licenseAddress != null">
+				license_address,
+			</if>
+			<if test="licenseBusinessScope != null">
+				license_business_scope,
+			</if>
+			<if test="licenseCAddress != null">
+				license_c_address,
+			</if>
+			<if test="licenseCContact != null">
+				license_c_contact,
+			</if>
+			<if test="licenseCTelephone != null">
+				license_c_telephone,
+			</if>
+			<if test="licenseEndDate != null">
+				license_end_date,
+			</if>
+			<if test="licenseEstablishDate != null">
+				license_establish_date,
+			</if>
+			<if test="licenseLegalIdCard != null">
+				license_legal_id_Card,
+			</if>
+			<if test="licenseLegalName != null">
+				license_legal_name,
+			</if>
+			<if test="licenseNum != null">
+				license_num,
+			</if>
+			<if test="licenseRegCapital != null">
+				license_reg_capital,
+			</if>
+			<if test="licenseStartDate != null">
+				license_start_date,
+			</if>
+			<if test="taxCode != null">
+				tax_code,
+			</if>
+			<if test="taxType != null">
+				tax_type,
+			</if>
+			<if test="taxTypeCode != null">
+				tax_type_code,
+			</if>
+			<if test="licenseAreaId != null">
+				license_area_id,
+			</if>
+			<if test="licenseCAreaId != null">
+				license_c_area_id,
+			</if>
+			<if test="licenseImagePath != null">
+				license_image_path,
+			</if>
+			<if test="licenseLegalIdcardImagePath != null">
+				license_legal_idCard_image_path,
+			</if>
+			<if test="organizationImagePath != null">
+				organization_image_path,
+			</if>
+			<if test="taxGeneralCardPath != null">
+				tax_general_card_path,
+			</if>
+			<if test="taxRegCardPath != null">
+				tax_reg_card_path,
+			</if>
+			<if test="licenseLegalIdCardFrontPath != null">
+				license_legal_id_card_front_path,
+			</if>
+			<if test="licenseLegalIdCardBackPath != null">
+				license_legal_id_card_back_path,
+			</if>
+			<if test="licenseLegalIdCardReachPath != null">
+				license_legal_id_card_reach_path,
+			</if>
+			<if test="bankCardFrontPath != null">
+				bank_card_front_path,
+			</if>
+			<if test="bankCardBackPath != null">
+				bank_card_back_path,
+			</if>
+			<if test="businessPlacePhotoPath != null">
+				business_place_photo_path,
+			</if>
+			<if test="otherPhotoPath != null">
+				other_photo_path,
+			</if>
+			<if test="industry != null">
+				industry,
+			</if>
+			<if test="licenseCDesc != null">
+				license_c_desc,
+			</if>
+			<if test="failReseaon != null">
+				fail_reseaon,
+			</if>
+			<if test="inviterNumber != null">
+				inviter_number,
+			</if>
+			<if test="operateNumber != null">
+				operate_number,
+			</if>
+			<if test="licenseCEmail != null">
+				license_c_email,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="licenseAddress != null">
+				#{licenseAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseBusinessScope != null">
+				#{licenseBusinessScope,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseCAddress != null">
+				#{licenseCAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseCContact != null">
+				#{licenseCContact,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseCTelephone != null">
+				#{licenseCTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseEndDate != null">
+				#{licenseEndDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="licenseEstablishDate != null">
+				#{licenseEstablishDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="licenseLegalIdCard != null">
+				#{licenseLegalIdCard,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseLegalName != null">
+				#{licenseLegalName,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseNum != null">
+				#{licenseNum,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseRegCapital != null">
+				#{licenseRegCapital,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseStartDate != null">
+				#{licenseStartDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="taxCode != null">
+				#{taxCode,jdbcType=VARCHAR},
+			</if>
+			<if test="taxType != null">
+				#{taxType,jdbcType=VARCHAR},
+			</if>
+			<if test="taxTypeCode != null">
+				#{taxTypeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseAreaId != null">
+				#{licenseAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="licenseCAreaId != null">
+				#{licenseCAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="licenseImagePath != null">
+				#{licenseImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseLegalIdcardImagePath != null">
+				#{licenseLegalIdcardImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="organizationImagePath != null">
+				#{organizationImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="taxGeneralCardPath != null">
+				#{taxGeneralCardPath,jdbcType=VARCHAR},
+			</if>
+			<if test="taxRegCardPath != null">
+				#{taxRegCardPath,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseLegalIdCardFrontPath != null">
+				#{licenseLegalIdCardFrontPath,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseLegalIdCardBackPath != null">
+				#{licenseLegalIdCardBackPath,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseLegalIdCardReachPath != null">
+				#{licenseLegalIdCardReachPath,jdbcType=VARCHAR},
+			</if>
+			<if test="bankCardFrontPath != null">
+				#{bankCardFrontPath,jdbcType=VARCHAR},
+			</if>
+			<if test="bankCardBackPath != null">
+				#{bankCardBackPath,jdbcType=VARCHAR},
+			</if>
+			<if test="businessPlacePhotoPath != null">
+				#{businessPlacePhotoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="otherPhotoPath != null">
+				#{otherPhotoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="industry != null">
+				#{industry,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseCDesc != null">
+				#{licenseCDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="failReseaon != null">
+				#{failReseaon,jdbcType=VARCHAR},
+			</if>
+			<if test="inviterNumber != null">
+				#{inviterNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="operateNumber != null">
+				#{operateNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseCEmail != null">
+				#{licenseCEmail,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.store.model.StoreApplyInfoExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_store_apply_info
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_store_apply_info
+		<set>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.licenseAddress != null">
+				license_address = #{record.licenseAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseBusinessScope != null">
+				license_business_scope =
+				#{record.licenseBusinessScope,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseCAddress != null">
+				license_c_address = #{record.licenseCAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseCContact != null">
+				license_c_contact = #{record.licenseCContact,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseCTelephone != null">
+				license_c_telephone = #{record.licenseCTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseEndDate != null">
+				license_end_date = #{record.licenseEndDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.licenseEstablishDate != null">
+				license_establish_date =
+				#{record.licenseEstablishDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.licenseLegalIdCard != null">
+				license_legal_id_Card =
+				#{record.licenseLegalIdCard,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseLegalName != null">
+				license_legal_name = #{record.licenseLegalName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseNum != null">
+				license_num = #{record.licenseNum,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseRegCapital != null">
+				license_reg_capital = #{record.licenseRegCapital,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseStartDate != null">
+				license_start_date = #{record.licenseStartDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.taxCode != null">
+				tax_code = #{record.taxCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.taxType != null">
+				tax_type = #{record.taxType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.taxTypeCode != null">
+				tax_type_code = #{record.taxTypeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseAreaId != null">
+				license_area_id = #{record.licenseAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="record.licenseCAreaId != null">
+				license_c_area_id = #{record.licenseCAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="record.licenseImagePath != null">
+				license_image_path = #{record.licenseImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseLegalIdcardImagePath != null">
+				license_legal_idCard_image_path =
+				#{record.licenseLegalIdcardImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.organizationImagePath != null">
+				organization_image_path =
+				#{record.organizationImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.taxGeneralCardPath != null">
+				tax_general_card_path =
+				#{record.taxGeneralCardPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.taxRegCardPath != null">
+				tax_reg_card_path = #{record.taxRegCardPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseLegalIdCardFrontPath != null">
+				license_legal_id_card_front_path =
+				#{record.licenseLegalIdCardFrontPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseLegalIdCardBackPath != null">
+				license_legal_id_card_back_path =
+				#{record.licenseLegalIdCardBackPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseLegalIdCardReachPath != null">
+				license_legal_id_card_reach_path =
+				#{record.licenseLegalIdCardReachPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.bankCardFrontPath != null">
+				bank_card_front_path = #{record.bankCardFrontPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.bankCardBackPath != null">
+				bank_card_back_path = #{record.bankCardBackPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.businessPlacePhotoPath != null">
+				business_place_photo_path =
+				#{record.businessPlacePhotoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.otherPhotoPath != null">
+				other_photo_path = #{record.otherPhotoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.industry != null">
+				industry = #{record.industry,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseCDesc != null">
+				license_c_desc = #{record.licenseCDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.failReseaon != null">
+				fail_reseaon = #{record.failReseaon,jdbcType=VARCHAR},
+			</if>
+			<if test="record.inviterNumber != null">
+				inviter_number = #{record.inviterNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="record.operateNumber != null">
+				operate_number = #{record.operateNumber,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_store_apply_info
+		set store_id = #{record.storeId,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		license_address = #{record.licenseAddress,jdbcType=VARCHAR},
+		license_business_scope = #{record.licenseBusinessScope,jdbcType=VARCHAR},
+		license_c_address = #{record.licenseCAddress,jdbcType=VARCHAR},
+		license_c_contact = #{record.licenseCContact,jdbcType=VARCHAR},
+		license_c_telephone = #{record.licenseCTelephone,jdbcType=VARCHAR},
+		license_end_date = #{record.licenseEndDate,jdbcType=TIMESTAMP},
+		license_establish_date = #{record.licenseEstablishDate,jdbcType=TIMESTAMP},
+		license_legal_id_Card = #{record.licenseLegalIdCard,jdbcType=VARCHAR},
+		license_legal_name = #{record.licenseLegalName,jdbcType=VARCHAR},
+		license_num = #{record.licenseNum,jdbcType=VARCHAR},
+		license_reg_capital = #{record.licenseRegCapital,jdbcType=VARCHAR},
+		license_start_date = #{record.licenseStartDate,jdbcType=TIMESTAMP},
+		tax_code = #{record.taxCode,jdbcType=VARCHAR},
+		tax_type = #{record.taxType,jdbcType=VARCHAR},
+		tax_type_code = #{record.taxTypeCode,jdbcType=VARCHAR},
+		license_area_id = #{record.licenseAreaId,jdbcType=BIGINT},
+		license_c_area_id = #{record.licenseCAreaId,jdbcType=BIGINT},
+		license_image_path = #{record.licenseImagePath,jdbcType=VARCHAR},
+		license_legal_idCard_image_path =
+		#{record.licenseLegalIdcardImagePath,jdbcType=VARCHAR},
+		organization_image_path =
+		#{record.organizationImagePath,jdbcType=VARCHAR},
+		tax_general_card_path = #{record.taxGeneralCardPath,jdbcType=VARCHAR},
+		tax_reg_card_path = #{record.taxRegCardPath,jdbcType=VARCHAR},
+		license_legal_id_card_front_path =
+		#{record.licenseLegalIdCardFrontPath,jdbcType=VARCHAR},
+		license_legal_id_card_back_path =
+		#{record.licenseLegalIdCardBackPath,jdbcType=VARCHAR},
+		license_legal_id_card_reach_path =
+		#{record.licenseLegalIdCardReachPath,jdbcType=VARCHAR},
+		bank_card_front_path = #{record.bankCardFrontPath,jdbcType=VARCHAR},
+		bank_card_back_path = #{record.bankCardBackPath,jdbcType=VARCHAR},
+		business_place_photo_path =
+		#{record.businessPlacePhotoPath,jdbcType=VARCHAR},
+		other_photo_path = #{record.otherPhotoPath,jdbcType=VARCHAR},
+		industry = #{record.industry,jdbcType=VARCHAR},
+		license_c_desc = #{record.licenseCDesc,jdbcType=VARCHAR},
+		fail_reseaon = #{record.failReseaon,jdbcType=VARCHAR},
+		inviter_number = #{record.inviterNumber,jdbcType=VARCHAR},
+		operate_number = #{record.operateNumber,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.store.model.StoreApplyInfo">
+		update shop_store_apply_info
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="licenseAddress != null">
+				license_address = #{licenseAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseBusinessScope != null">
+				license_business_scope = #{licenseBusinessScope,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseCAddress != null">
+				license_c_address = #{licenseCAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseCContact != null">
+				license_c_contact = #{licenseCContact,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseCTelephone != null">
+				license_c_telephone = #{licenseCTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseEndDate != null">
+				license_end_date = #{licenseEndDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="licenseEstablishDate != null">
+				license_establish_date = #{licenseEstablishDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="licenseLegalIdCard != null">
+				license_legal_id_Card = #{licenseLegalIdCard,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseLegalName != null">
+				license_legal_name = #{licenseLegalName,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseNum != null">
+				license_num = #{licenseNum,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseRegCapital != null">
+				license_reg_capital = #{licenseRegCapital,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseStartDate != null">
+				license_start_date = #{licenseStartDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="taxCode != null">
+				tax_code = #{taxCode,jdbcType=VARCHAR},
+			</if>
+			<if test="taxType != null">
+				tax_type = #{taxType,jdbcType=VARCHAR},
+			</if>
+			<if test="taxTypeCode != null">
+				tax_type_code = #{taxTypeCode,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseAreaId != null">
+				license_area_id = #{licenseAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="licenseCAreaId != null">
+				license_c_area_id = #{licenseCAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="licenseImagePath != null">
+				license_image_path = #{licenseImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseLegalIdcardImagePath != null">
+				license_legal_idCard_image_path =
+				#{licenseLegalIdcardImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="organizationImagePath != null">
+				organization_image_path = #{organizationImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="taxGeneralCardPath != null">
+				tax_general_card_path = #{taxGeneralCardPath,jdbcType=VARCHAR},
+			</if>
+			<if test="taxRegCardPath != null">
+				tax_reg_card_path = #{taxRegCardPath,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseLegalIdCardFrontPath != null">
+				license_legal_id_card_front_path =
+				#{licenseLegalIdCardFrontPath,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseLegalIdCardBackPath != null">
+				license_legal_id_card_back_path =
+				#{licenseLegalIdCardBackPath,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseLegalIdCardReachPath != null">
+				license_legal_id_card_reach_path =
+				#{licenseLegalIdCardReachPath,jdbcType=VARCHAR},
+			</if>
+			<if test="bankCardFrontPath != null">
+				bank_card_front_path = #{bankCardFrontPath,jdbcType=VARCHAR},
+			</if>
+			<if test="bankCardBackPath != null">
+				bank_card_back_path = #{bankCardBackPath,jdbcType=VARCHAR},
+			</if>
+			<if test="businessPlacePhotoPath != null">
+				business_place_photo_path =
+				#{businessPlacePhotoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="otherPhotoPath != null">
+				other_photo_path = #{otherPhotoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="industry != null">
+				industry = #{industry,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseCDesc != null">
+				license_c_desc = #{licenseCDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="failReseaon != null">
+				fail_reseaon = #{failReseaon,jdbcType=VARCHAR},
+			</if>
+			<if test="inviterNumber != null">
+				inviter_number = #{inviterNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="operateNumber != null">
+				operate_number = #{operateNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseCEmail != null ">
+				license_c_email = #{licenseCEmail,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where store_id = #{storeId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.store.model.StoreApplyInfo">
+		update shop_store_apply_info
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		license_address = #{licenseAddress,jdbcType=VARCHAR},
+		license_business_scope = #{licenseBusinessScope,jdbcType=VARCHAR},
+		license_c_address = #{licenseCAddress,jdbcType=VARCHAR},
+		license_c_contact = #{licenseCContact,jdbcType=VARCHAR},
+		license_c_telephone = #{licenseCTelephone,jdbcType=VARCHAR},
+		license_end_date = #{licenseEndDate,jdbcType=TIMESTAMP},
+		license_establish_date = #{licenseEstablishDate,jdbcType=TIMESTAMP},
+		license_legal_id_Card = #{licenseLegalIdCard,jdbcType=VARCHAR},
+		license_legal_name = #{licenseLegalName,jdbcType=VARCHAR},
+		license_num = #{licenseNum,jdbcType=VARCHAR},
+		license_reg_capital = #{licenseRegCapital,jdbcType=VARCHAR},
+		license_start_date = #{licenseStartDate,jdbcType=TIMESTAMP},
+		tax_code = #{taxCode,jdbcType=VARCHAR},
+		tax_type = #{taxType,jdbcType=VARCHAR},
+		tax_type_code = #{taxTypeCode,jdbcType=VARCHAR},
+		license_area_id = #{licenseAreaId,jdbcType=BIGINT},
+		license_c_area_id = #{licenseCAreaId,jdbcType=BIGINT},
+		license_image_path = #{licenseImagePath,jdbcType=VARCHAR},
+		license_legal_idCard_image_path =
+		#{licenseLegalIdcardImagePath,jdbcType=VARCHAR},
+		organization_image_path = #{organizationImagePath,jdbcType=VARCHAR},
+		tax_general_card_path = #{taxGeneralCardPath,jdbcType=VARCHAR},
+		tax_reg_card_path = #{taxRegCardPath,jdbcType=VARCHAR},
+		license_legal_id_card_front_path =
+		#{licenseLegalIdCardFrontPath,jdbcType=VARCHAR},
+		license_legal_id_card_back_path =
+		#{licenseLegalIdCardBackPath,jdbcType=VARCHAR},
+		license_legal_id_card_reach_path =
+		#{licenseLegalIdCardReachPath,jdbcType=VARCHAR},
+		bank_card_front_path = #{bankCardFrontPath,jdbcType=VARCHAR},
+		bank_card_back_path = #{bankCardBackPath,jdbcType=VARCHAR},
+		business_place_photo_path = #{businessPlacePhotoPath,jdbcType=VARCHAR},
+		other_photo_path = #{otherPhotoPath,jdbcType=VARCHAR},
+		industry = #{industry,jdbcType=VARCHAR},
+		license_c_desc = #{licenseCDesc,jdbcType=VARCHAR},
+		fail_reseaon = #{failReseaon,jdbcType=VARCHAR},
+		inviter_number = #{inviterNumber,jdbcType=VARCHAR},
+		operate_number = #{operateNumber,jdbcType=VARCHAR}
+		where store_id = #{storeId,jdbcType=BIGINT}
+	</update>
+</mapper>

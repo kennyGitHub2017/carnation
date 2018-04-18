@@ -1,0 +1,740 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">   
+ #macro ( genericTree $somelist ) #foreach ( $some in
+$somelist )
+<option value="$!some.id">#if($!some.level>0) #foreach($count
+	in [0..$!some.level])&nbsp;&nbsp;&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) #end #end
+<link
+	href="$!webPath/resources/style/system/front/default/css/seller_apply.css"
+	type="text/css" rel="stylesheet" />
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type="text/css" rel="stylesheet">
+	<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+	<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+	<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+	<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+	<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+	<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+	<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+
+
+	<script>
+		function store_info() {
+			window.location.href = "$!webPath/admin/store_edit.htm?id=$!store.id";
+		}
+
+		function storeApprove() {
+			var val = $('input:radio[name="storeStauts"]:checked').val();
+			if (val == null) {
+				alert("请选择审核结果!");
+				return false;
+			}
+
+			if (val == '6') {
+				var reseaon = $('#failReseaon_id').val();
+				if (reseaon == null || reseaon == '') {
+					alert("请填写不通过原因!");
+					return false;
+				}
+			}
+			$("#form_id").submit();
+
+		}
+		
+		jQuery(document).ready(function(){
+			$("img").each(function(){
+				var t=+new Date();
+				var _src=$(this).attr("src");
+				$(this).attr("src",_src+"?v="+t);
+			});
+			
+			#if($!vo.gcMainId)
+				$('#gc_main_id').val($!vo.gcMainId);
+			#end
+			});
+	</script>
+	
+</head>
+<body>
+	<div class="cont">
+		<h1 class="seth">店铺管理</h1>
+		<div class="nav_list">
+
+			<ul>
+				<li><a href="$!webPath/admin/store_listCheck.htm"><b>管理</b></a></li>
+				<li><a href="javascript:void(0)" class="this"><b>申请信息</b></a></li>
+			</ul>
+		</div>
+		<input name="id" type="hidden" id="id" value="$!obj.id" /> <input
+			name="currentPage" type="hidden" id="currentPage"
+			value="$!currentPage" /> <input name="list_url" type="hidden"
+			id="list_url" value="$!webPath/admin/store_listCheck.htm" /> <input
+			name="add_url" type="hidden" id="add_url"
+			value="$!webPath/admin/store_add.htm" />
+		<div class="edit">
+
+			<div class="editul setcont">
+				<form method="post" id="thenForm" autocomplete="off" action="">
+					<div class="reputh">入驻联系人信息</div>
+					<ul class="set1">
+						<li class="setcont_bg">店铺名称：</li>
+						<li><input type="text" class="webname"
+							value="$!store.storeName" name="storeName" /></li>
+					</ul>
+					<ul class="set1">
+					
+<!-- 						<li class="setcont_bg">主营类目：</li> -->
+<!-- 						<li><span class="webname">#if($!groupClass_main.className!="")$!groupClass_main.className#else暂未填写#end</span></li> -->
+						
+						<li class="setcont_bg">主营类目：</li>
+						<li><select style="width:136px;"
+								name="gcMainId" id="gc_main_id">
+									<option value="0">请选择...</option> #foreach($gc in $gcs)
+									<option value="$!gc.id">$!gc.className</option> #end
+							</select>
+						</li>
+						
+					</ul>
+					<!-- <ul class="set1">
+				        <li  class="setcont_bg">详细类目：</li>
+				        <li>
+				        	<span class="webname">
+				        		#if($groupClassDetail.isEmpty() || $groupClassDetail.size() == 0)
+									暂未填写
+				                #else
+				                    #foreach($gc in $groupClassDetail)
+				                       $!gc.gcName&nbsp;&nbsp;&nbsp;&nbsp;    
+				                    #end
+				                #end    
+				        	</span>
+				        </li>
+				    </ul> -->
+					<!-- <ul class="set1">
+						<li class="setcont_bg">入驻联系人姓名：</li>
+						<li><input type="text" class="webname"
+							value="$!store.licenseCContact" name="licenseCContact" /></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">入驻联系人电话：</li>
+						<li><input type="text" class="webname"
+							value="$!store.licenseCMobile" name="licenseCMobile" /></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">联系人邮箱：</li>
+						<li><input type="text" class="webname"
+							value="$!store.licenseCEmail" name="licenseCEmail" /></li>
+					</ul> -->
+					<ul class="set1">
+						<li class="setcont_bg">推荐运营商：</li>
+						<li><input type="text" class="webname"
+							value="$!store.operatorCode" name="operatorCode" /></li>
+					</ul>
+
+					<div class="reputh">营业执照信息</div>
+
+					<!-- <ul class="set1">
+						<li class="setcont_bg">公司名称：</li>
+						<li><input type="text" class="webname"
+							value="$!store.licenseCName" name="licenseCName" /></li>
+					</ul>
+
+					<ul class="set1">
+						<li class="setcont_bg">法人姓名：</li>
+						<li><input type="text" class="webname"
+							value="$!store.licenseLegalName" name="licenseLegalName" /></li>
+					</ul>
+
+					<ul class="set1">
+						<li class="setcont_bg">法人身份证号：</li>
+						<li><input type="text" class="webname"
+							value="$!store.licenseLegalIdCard" name="licenseLegalIdCard" /></li>
+					</ul>
+
+
+
+					<ul class="set1">
+						<li class="setcont_bg">公司经营范围：</li>
+						<li><span class="webname">$!store.licenseBusinessScope</span></li>
+					</ul>
+ -->
+
+
+					<ul class="set1">
+						<li class="setcont_bg">法人身份证正面：</li>
+						<!--  <li><span class="webname"><img src="$!store.licenseLegalIdCardFrontPath" width="100" height="60"/></span></li> -->
+						<li>
+							<span class="webname">
+								<div class="upload-box">
+									<span class="setable_img2" id="id_card_front_views">
+										#if($!store.licenseLegalIdCardFrontPath) 
+										<b class="setable_b J_uploadView"> 
+											<a target="_blank" href="$!store.licenseLegalIdCardFrontPath" class="J_viewLink">
+												<img width="100" height="60" src="$!store.licenseLegalIdCardFrontPath" class="J_viewPic">查看  
+											</a> 
+											<!--&nbsp; | &nbsp; <a onclick="image_del(this,'premises')" href="javascript:void(0);" 
+											wid="$!store.licenseLegalIdCardFrontPath">删除</a> -->
+										</b> 
+										#end
+									</span> 
+								</div>
+							</span>
+							<span class="upload_button"> 
+								<span class="upload_button_up"> 
+									<input style="cursor: pointer;" name="id_card_front_file" id="id_card_front_file" mark="id_card_front" type="file">
+								</span>
+								<span class="upload_button_b">
+									<a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a>
+								</span>
+							</span>
+							<b class="settedtab_b" id="premises_loader" style="display: none"> 
+								<img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+							</b>
+							<input value="$!store.licenseLegalIdCardFrontPath" name="licenseLegalIdCardFrontPath" id="id_card_front" type="hidden">
+						</li>
+					</ul>
+
+					<ul class="set1">
+						<li class="setcont_bg">法人身份证反面：</li>
+						<li>
+							<span class="webname">
+								<div class="upload-box">
+									<span class="setable_img2" id="id_card_reverse_views">
+										#if($!store.licenseLegalIdCardBackPath) 
+										<b class="setable_b J_uploadView"> 
+											<a target="_blank" href="$!store.licenseLegalIdCardBackPath" class="J_viewLink">
+												<img width="100" height="60" src="$!store.licenseLegalIdCardBackPath" class="J_viewPic">查看  
+											</a>
+											<!--&nbsp; | &nbsp; <a onclick="image_del(this,'premises')" href="javascript:void(0);" 
+												wid="$!store.licenseLegalIdCardFrontPath">删除</a> -->
+										</b> 
+										#end
+									</span>
+								</div>
+							</span>
+							<span class="upload_button"> 
+								<span class="upload_button_up">
+									<input style="cursor: pointer;" name="id_card_reverse_file"
+											id="id_card_reverse_file" mark="id_card_reverse" type="file"></span>
+										<span class="upload_button_b"><a
+											href="javascript:void(0)"><img
+												src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+									</span> 
+									<b class="settedtab_b" id="premises_loader"
+										style="display: none"> <img
+										src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif"></b>
+									<input value="$!store.licenseLegalIdCardBackPath" name="licenseLegalIdCardBackPath" id="id_card_reverse" type="hidden">
+						</li>
+					</ul>
+
+					<ul class="set1">
+						<li class="setcont_bg">授权书/商标证书：</li>
+						<li><span class="webname">
+								<div class="upload-box">
+									<span class="setable_img2" id="organization_imagePath_views">
+										#if($!store.organizationImagePath) <b
+										class="setable_b J_uploadView"> <a target="_blank"
+											href="$!store.organizationImagePath" class="J_viewLink">
+												<img width="100" height="60"
+												src="$!store.organizationImagePath" class="J_viewPic">
+													查看  </a> &nbsp; <!--| &nbsp; <a onclick="image_del(this,'premises')" href="javascript:void(0);" 
+								wid="$!store.licenseLegalIdCardFrontPath">删除</a> --></b> #end
+									</span> 
+								</div>
+						</span>
+						<span class="upload_button"> <span
+										class="upload_button_up"><input
+											style="cursor: pointer;" name="organization_imagePath_file"
+											id="organization_imagePath_file"
+											mark="organization_imagePath" type="file"></span> <span
+										class="upload_button_b"><a href="javascript:void(0)"><img
+												src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+									</span> <b class="settedtab_b" id="premises_loader"
+										style="display: none"> <img
+										src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif"></b>
+									<input value="$!store.organizationImagePath"
+										name="organizationImagePath" id="organization_imagePath" type="hidden"></li>
+					</ul>
+
+					<ul class="set1">
+						<li class="setcont_bg">营业执照：</li>
+						<li><span class="webname">
+								<div class="upload-box">
+									<span class="setable_img2" id="license_views">
+										#if($!store.licenseImagePath) <b
+										class="setable_b J_uploadView"> <a target="_blank"
+											href="$!store.licenseImagePath" class="J_viewLink"> <img
+												width="100" height="60" src="$!store.licenseImagePath"
+												class="J_viewPic"> 查看  </a> <!--&nbsp; | &nbsp; <a onclick="image_del(this,'premises')" href="javascript:void(0);" 
+								wid="$!store.licenseLegalIdCardFrontPath">删除</a> --></b> #end
+									</span> 
+								</div>
+						</span>
+						<span class="upload_button"> <span
+										class="upload_button_up"><input
+											style="cursor: pointer;" name="license_file"
+											id="license_file" mark="license" type="file"></span> <span
+										class="upload_button_b"><a href="javascript:void(0)"><img
+												src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+									</span> <b class="settedtab_b" id="premises_loader"
+										style="display: none"> <img
+										src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif"></b>
+									<input value="$!store.licenseImagePath" name="licenseImagePath"
+										id="license" type="hidden"></li>
+					</ul>
+
+					<input type="hidden" name="storeId" value="$!store.id" />
+
+					<ul class="set1" >
+						<li class="setcont_bg">其它照片：</li>
+						<li>
+							<span class="webname"> 
+								<span class="setable_img2" id="other_views"> 
+									
+									#foreach ($element in $!store.otherPhotoPath.split(";"))
+										
+											<b class="setable_b J_uploadView"> 
+												<img src="$element" width="100" height="60" /> 
+												<a target="_blank" href="$element">查看</a> 
+												<a onclick="image_del(this,'other')" href="javascript:void(0);" wid="$element">删除</a>
+											</b>
+										
+									#end
+								</span>
+							</span> 
+							<span class="upload_button"> 
+								<span class="upload_button_up">
+									<input style="cursor: pointer;" name="other_file" id="other_file" mark="other" type="file" multiple="multiple">
+								</span> 
+								<span class="upload_button_b">
+									<a href="javascript:void(0)">
+										<img src="$!webPath/resources/style/system/front/default/images/upload.png">
+									</a>
+								</span>
+							</span> 
+							<b class="settedtab_b" id="other_loader" style="display: none">
+									<img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+							</b> 
+							<input autoconplete="off" value="$!store.otherPhotoPath" name="otherPhotoPath" id="other" type="hidden">
+						</li>
+					</ul>
+
+					<ul class="set1">
+						<li class="setcont_bg"></li>
+						<li>
+							<div class="submit">
+								<span class="pad120"><input name="save" type="button"
+									value="资料保存" onclick="formSubmit()" /></span>
+							</div>
+						</li>
+					</ul>
+
+				</form>
+
+				<div class="reputh">提交审核</div>
+
+				<form action="$!webPath/admin/store_approve.htm" id="form_id"
+					method="post">
+					<ul class="set1">
+						<li class="setcont_bg">是否通过：</li>
+						<li><input type="radio" id="pass" name="storeStauts"
+							value="15">通过</input> <input type="radio" id="no_pass"
+							name="storeStauts" value="6">不通过</input></li>
+					</ul>
+					<script>
+					#if($!store.storeStatus == 15)
+						$("#pass").attr("checked", "checked");
+					#else
+						$("#no_pass").attr("checked", "checked");
+					#end
+					</script>
+					<ul class="set1">
+						<li class="setcont_bg">店铺类型：</li>
+						<li><span> <select name="gradeId" id="" onchange="">
+									#foreach($!grade in $grades)
+									<option value="$!grade.id" #if($!grade.id==$!vo.gradeId)
+										selected="selected" #end>$!grade.gradeName</option> #end
+							</select>
+						</span> <span style="color: red;">默认都是旗舰店！</span></li>
+					</ul>
+
+					<ul class="set1">
+						<li class="setcont_bg">不通过原因：</li>
+						<li><textarea rows="10" id="failReseaon_id" cols="60"
+								value="" name="failReseaon">$!store.failReseaon</textarea></li>
+					</ul>
+
+					<input type="hidden" name="storeId" value="$!store.id" />
+			</div>
+
+		</div>
+
+		<div class="submit">
+			<span class="pad120"><input name="save" type="button"
+				value="审核提交" onclick="storeApprove()" /></span>
+		</div>
+		</form>
+
+	</div>
+
+
+	<script>
+		jQuery(":file[mark]")
+				.live(
+						"change",
+						function() {
+							var that = jQuery(this), mark = that.attr("mark");
+							var eid = this.id, views = jQuery("#" + mark
+									+ "_views"), loader = jQuery("#" + mark
+									+ "_loader"), viewHtml = "", input = jQuery("#"
+									+ mark);
+							if ("other" == mark) {
+								if (input.val() != null
+										&& input.val().split(";").length >= 5) {
+									alert("其它附最多上传5个！");
+									return;
+								}
+							}
+
+							loader.show();
+							//alert('$!webPath/admin/image_save.htm?mark='+mark);
+
+							jQuery
+									.ajaxFileUpload({
+										url : '$!webPath/admin/image_save.htm?mark='
+												+ mark + "&storeId=$!store.id",
+										fileElementId : [ eid ],
+										fileFilter : ".jpg,.gif,.png",
+										fileSize : 1048576,
+										dataType : "json",
+										success : function(data) {
+											if (data.path) {
+												loader.hide();
+												that.val('');
+												var imgPath = data.path+"?v="+new Date().getTime();
+												viewHtml = '<b class="setable_b J_uploadView">\
+                                    <a class="J_viewLink" href="' + imgPath + '" target="_blank">\
+                                    <img class="J_viewPic" src="' + imgPath + '" height="60" width="100">\
+                                    查看</a> &nbsp; | &nbsp; <a wid="'
+														+ data.path
+														+ '" href="javascript:void(0);" onclick="image_del(this,\''
+														+ mark
+														+ '\')">删除</a>\
+                                </b>';
+												if (that.attr("multiple")) {
+													views.append(viewHtml);
+													if (input.val() != null
+															&& input.val().length > 0) {
+														input.val(input.val()
+																+ ";"
+																+ data.path);
+													} else {
+														input.val(imgPath);//data.path
+													}
+												} else {
+													views.html(viewHtml);
+													input.val(imgPath);//data.path
+													console.log(imgPath);
+												}
+												that.val("");
+											}
+										}
+									});
+
+						});
+
+		function image_del(o, mark) {
+			if (confirm("是否删除此图片？")) {
+				var views = jQuery("#" + mark + "_views");
+				var input = jQuery("#" + mark);
+				var file = jQuery("#" + mark + "_file");
+				var that = jQuery(o);
+				if (views.children().length == 1) {
+					views.html("");
+					input.val("");
+				} else {
+					that.parent().remove();
+					input.val((function() {
+						var value = "";
+						views.find("a[wid]").each(function() {
+							value += ($(this).attr("wid") + ";");
+						});
+						if (value != "") {
+							value = value.substring(0, value.length - 1);
+						}
+						return value;
+					}()));
+				}
+			}
+		}
+
+		/* 资料保存 */
+		function formSubmit() {
+			$("#thenForm").attr('action', '$webPath/admin/supplier_save.htm');
+			$("#thenForm").submit();
+		}
+		/* 资料验证 */
+		function validate() {
+			jQuery("#thenForm").validate({
+				errorPlacement : function(error, element) {
+					console.log(error);
+					if (element.attr("name") == "groupDetailInfo") {
+						error.html(error.html() + "<br/>");
+						error.appendTo("#groupDetailInfo");
+					}
+				},
+				ignore : "",
+				rules : {
+					licenseLegalName : {
+						required : true,
+						maxlength : 20
+					},
+					otherPhotoPath : {
+						required : true,
+					},
+					licenseEmail : {
+						required : true,
+						email : true
+					},
+					licenseCname : {
+						required : true,
+						maxlength : 20
+					},
+					licenseLegalIdCard : {
+						required : true,
+						maxlength : 50
+					},
+					storeName : {
+						required : true,
+						maxlength : 20
+					},
+					licenseCName : {
+						required : true,
+						maxlength : 50
+					},
+					licenseCContact : {
+						required : true,
+					},
+					storeOwerCard : {
+						required : true,
+						isIdCardNo : true
+					},
+					industry : {
+						required : true,
+						maxlength : 50
+					},
+					licenseBusinessScope : {
+						required : true,
+						maxlength : 200
+					},
+					licenseCDesc : {
+						required : true,
+						maxlength : 1000
+					},
+					groupMainId : {
+						required : true
+					},
+					groupDetailInfo : {
+						required : true,
+					},
+					areaId : {
+						required : true
+					},
+					storeLat : {
+						required : true
+					},
+					storeAddress : {
+						required : true
+					},
+					storeTelephone : {
+						required : true,
+						isTel : true
+					},
+					licenseCMobile : {
+						required : true,
+						isMobile : true
+					},
+					//			             inviterNumber: {
+					//			             	maxlength:20
+					//			             },
+					commissionRebate_show : {
+						required : true,
+						verify : true,
+						max : 99
+					},
+					groupDiscount_show : {
+						required : true,
+						verify : true,
+						max : 99
+					},
+					bankAccountName : {
+						required : true,
+						maxlength : 20
+					},
+					bankCAccount : {
+						required : true,
+						maxlength : 50
+					},
+					bankName : {
+						required : true,
+						maxlength : 50
+					},
+					isEepay : {
+						required : true
+					},
+					bankAreaId : {
+						required : true
+					},
+
+					licenseLegalIdCardFrontPath : {
+						required : true,
+					},
+					licenseLegalIdCardBackPath : {
+						required : true
+					},
+					licenseLegalIdCardReachPath : {
+						required : "#isEepay1:checked"
+					},
+					bankCardFrontPath : {
+						required : true
+					},
+					bankCardBackPath : {
+						required : true
+					},
+					licenseImagePath : {
+						required : true
+					},
+					businessPlacePhotoPath : {
+						required : "#isEepay1:checked"
+					},
+					agree : {
+						required : true
+					}
+				},
+				messages : {
+					storeName : {
+						required : "商户名称不能为空",
+						maxlength : "商户名称不能大于20个字符"
+					},
+					licenseCName : {
+						required : "商户全名不能为空",
+						maxlength : "商户全名不能大于50个字符"
+					},
+					storeOwerCard : {
+						required : "身份证不能为空",
+						isIdCardNo : "身份证格式错误"
+					},
+
+					industry : {
+						required : "行业不能为空",
+						maxlength : "行业不能大于50个字符"
+					},
+					licenseBusinessScope : {
+						required : "经营范围不能为空",
+						maxlength : "经营范围不能大于200个字符"
+					},
+					licenseCDesc : {
+						required : "公司简介不能为空",
+						maxlength : "公司简介不能大于1000个字符"
+					},
+					groupMainId : {
+						required : "主营类目不能为空"
+					},
+					groupDetailInfo : {
+						required : "详细类目最少选择一项"
+					},
+					areaId : {
+						required : "所在地区不能为空"
+					},
+					storeLat : {
+						required : "请标识具体位置"
+					},
+					storeAddress : {
+						required : "详细地址不能为空"
+					},
+					storeTelephone : {
+						required : "详细地址不能为空",
+						isTel : "请填写正确的电话号码"
+					},
+					licenseCMobile : {
+						required : "详细地址不能为空",
+						isMobile : "请填写正确的手机号码"
+					},
+					//			             inviterNumber: {
+					//			                 maxlength:"所属身份及编号不能大于20个字符"
+					//			             },
+					commissionRebate : {
+						required : "返佣比例不能为空",
+						verify : "请填写正确的返佣比例",
+						max : "返佣比例请小于100"
+					},
+					groupDiscount : {
+						required : "折扣不能为空",
+						verify : "请填写正确的折扣",
+						max : "折扣请小于100"
+					},
+					bankAccountName : {
+						required : "结算账户名不能为空",
+						maxlength : "结算账户名不能大于20个字符"
+					},
+					bankCAccount : {
+						required : "结算账号不能为空",
+						maxlength : "结算账号不能大于50个字符"
+					},
+					bankName : {
+						required : "开户行不能为空",
+						maxlength : "开户行不能大于50个字符"
+					},
+					isEepay : {
+						required : "请选择是否安装POS机"
+					},
+					bankAreaId : {
+						required : "开户行所在地不能为空"
+					},
+					operateNumber : {
+						maxlength : "隶属运营商编码不能大于30个字符",
+						remote : "商户所在地不存在该运营商编码"
+					},
+					licenseLegalIdCardFrontPath : {
+						required : "请上传法人身份证正面照"
+					},
+					licenseLegalIdCardBackPath : {
+						required : "请上传法人身份证反面照"
+					},
+					licenseLegalIdCardReachPath : {
+						required : "请上传法人手持身份证正面照"
+					},
+					bankCardFrontPath : {
+						required : "请上银行卡正面照"
+					},
+					bankCardBackPath : {
+						required : "请上银行卡反面照"
+					},
+					licenseImagePath : {
+						required : "请上营业执照"
+					},
+					businessPlacePhotoPath : {
+						required : "请上经营场所证明"
+					},
+					agree : {
+						required : "请接受以上协议"
+					}
+				}
+			});
+
+		}
+
+		
+	</script>
+</body>
+</html>

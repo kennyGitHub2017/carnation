@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.CheckResultReplyMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.sns.model.CheckResultReply">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="result_name" property="resultName" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="DATE" />
+		<result column="hospital" property="hospital" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="result" property="result" jdbcType="VARCHAR" />
+		<result column="checkTime" property="checkTime" jdbcType="DATE" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sns.bo.CheckResultReplyBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, result_name, create_by, create_time, hospital, status, result,
+		checkTime
+	</sql>
+
+	<select id="search" resultMap="BOResultMap">
+		select * from check_results_reply rr, user_customer uc where
+		rr.create_by=uc.uid
+		<if test="vo.userId != null">
+			and uc.uid=#{vo.userId}
+		</if>
+		<if test="vo.status != null">
+			and rr.status=#{vo.status}
+		</if>
+		<if test="vo.nickname != null and vo.nickname != ''">
+			and uc.nickname=#{vo.nickname}
+		</if>
+		<if test="vo.mobile != null and vo.mobile != ''">
+			and uc.mobile=#{vo.mobile}
+		</if>
+		<if test="vo.startDate != null and vo.startDate != ''">
+			and #{vo.startDate}<![CDATA[<=]]>date(rr.create_time)
+		</if>
+		<if test="vo.endDate != null and vo.endDate != ''">
+			and date(rr.create_time)<![CDATA[<=]]>#{vo.endDate}
+		</if>
+	</select>
+
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.sns.model.CheckResultReplyExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from check_results_reply
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from check_results_reply
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from check_results_reply
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sns.model.CheckResultReplyExample">
+		delete from check_results_reply
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.CheckResultReply"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into check_results_reply (id, result_name, create_by,
+		create_time, hospital, status,
+		result, checkTime)
+		values (#{id,jdbcType=BIGINT}, #{resultName,jdbcType=VARCHAR},
+		#{createBy,jdbcType=BIGINT},
+		#{createTime,jdbcType=DATE}, #{hospital,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+		#{result,jdbcType=VARCHAR}, #{checkTime})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.CheckResultReply"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into check_results_reply
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="resultName != null">
+				result_name,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="hospital != null">
+				hospital,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="result != null">
+				result,
+			</if>
+			<if test="checkTime != null">
+				checkTime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="resultName != null">
+				#{resultName,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=DATE},
+			</if>
+			<if test="hospital != null">
+				#{hospital,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="result != null">
+				#{result,jdbcType=VARCHAR},
+			</if>
+			<if test="checkTime != null">
+				#{checkTime},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sns.model.CheckResultReplyExample"
+		resultType="java.lang.Integer">
+		select count(*) from check_results_reply
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update check_results_reply
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.resultName != null">
+				result_name = #{record.resultName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=DATE},
+			</if>
+			<if test="record.hospital != null">
+				hospital = #{record.hospital,jdbcType=VARCHAR},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.result != null">
+				result = #{record.result,jdbcType=VARCHAR},
+			</if>
+			<if test="record.checkTime != null">
+				checkTime = #{record.checkTime},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update check_results_reply
+		set id = #{record.id,jdbcType=BIGINT},
+		result_name = #{record.resultName,jdbcType=VARCHAR},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=DATE},
+		hospital = #{record.hospital,jdbcType=VARCHAR},
+		status = #{record.status,jdbcType=INTEGER},
+		result = #{record.result,jdbcType=VARCHAR},
+		checkTime = #{record.checkTime}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.CheckResultReply">
+		update check_results_reply
+		<set>
+			<if test="resultName != null">
+				result_name = #{resultName,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=DATE},
+			</if>
+			<if test="hospital != null">
+				hospital = #{hospital,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="result != null">
+				result = #{result,jdbcType=VARCHAR},
+			</if>
+			<if test="checkTime != null">
+				checkTime = #{checkTime},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.CheckResultReply">
+		update check_results_reply
+		set result_name = #{resultName,jdbcType=VARCHAR},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=DATE},
+		hospital = #{hospital,jdbcType=VARCHAR},
+		status = #{status,jdbcType=INTEGER},
+		result = #{result,jdbcType=VARCHAR},
+		checkTime = #{checkTime}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+
+	<select id="checkReportList" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		from check_results_reply a
+		WHERE a.create_by=#{uid,jdbcType=BIGINT}
+
+		ORDER BY a.create_time DESC
+	</select>
+</mapper>

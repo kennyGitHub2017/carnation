@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>拼手气赚积分</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <script>
+	    function getUrlPar(name) {
+		   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+		   var r = window.location.search.substr(1).match(reg);
+		   if (r!=null) return (r[2]); return null;
+		}
+    	var url=location.href;
+    	var nocache=getUrlPar('nocache');
+    	var time=new Date().getTime();
+    	if(nocache==null){
+    		location.href=url+"&time="+time+"&nocache=true";
+    	}
+    	
+    </script>
+	<script>
+		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+		document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+        var isAndroid = window.navigator.appVersion.match(/android/gi);
+        var isIPhone = window.navigator.appVersion.match(/iphone/gi);
+        var devicePixelRatio = window.devicePixelRatio;
+        if (isIPhone) {
+            if (devicePixelRatio >= 3) {                
+                dpr = 3;
+            } else if (devicePixelRatio >= 2){
+                dpr = 2;
+            } else {
+                dpr = 1;
+            }
+        } else {
+            dpr = 1;
+        }
+    	document.documentElement.setAttribute('data-dpr', dpr);  
+	</script>
+	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/integral/css/common.css"/>
+	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/integral/css/jifen.css"/>
+	<style>
+		html[data-dpr='2'] .aa{
+				font-size: 80px;
+		}
+		html[data-dpr='3'] .aa{
+				font-size: 800px;
+		}
+	</style>
+</head>
+<body>
+	<div class="bg"></div>
+	<div class="topbg"></div>
+	<div class="bottombg"></div>
+	<a href="javascript:;" class="return">返回</a>
+	<div class="tit"></div>
+	<div class="coin"></div>
+	<div class="coins"></div>
+	<div class="flipperCon">
+		#if($!signDay<7)
+			<div class="flipper junior">
+				<span class="front"></span>
+				<span class="back"></span>
+			</div>
+			<div class="flipper junior">
+				<span class="front"></span>
+				<span class="back"></span>
+			</div>
+			<div class="flipper junior">
+				<span class="front"></span>
+				<span class="back"></span>
+			</div>
+		#else
+			<div class="flipper senior">
+				<span class="front"></span>
+				<span class="back"></span>
+			</div>
+			<div class="flipper senior">
+				<span class="front"></span>
+				<span class="back"></span>
+			</div>
+			<div class="flipper senior">
+				<span class="front"></span>
+				<span class="back"></span>
+			</div>
+		#end
+	</div>
+	#if($!signDay>7)
+		<div class="descript">
+			已连续翻牌<span>$!signDay</span>天，已拥有高级翻牌啦！
+		</div>
+	#else
+		<div class="descript">
+		#set($remaining=7-$!signDay)
+			已连续翻牌<span>$!signDay</span>天，再翻牌$!{remaining}天，就可升级为高级拼手气翻牌啦！
+		</div>
+	#end
+	
+	<div class="rules">
+		<span class="gz">规则</span>
+		<div class="rul">
+			<div class="num">1.</div>
+			<div class="content">
+				<p>普通翻牌和高级翻牌的区别</p>
+				<p>普通翻牌:5积分、8积分、10积分</p>
+				<p>高级翻牌:10积分、15积分、20积分</p>
+			</div>			
+		</div>
+		<div class="rul rulmt">
+			<div class="num">2.</div>
+			<div class="content">
+				<p>如间断一天没有翻牌，可有一次机会消费20积分弥补，否则间断后将重新计算。</p>
+			</div>
+		</div>
+	</div>
+	<a href="javascript:;" class="btn makeScore">去赚积分</a>
+	<a href="javascript:;" class="btn exchange">积分兑换</a>
+	#if($!flagyeyesterday==true)
+		<div class="hideload">
+			<div class="flipper senior">
+				<span class="front"></span>
+				<span class="back"></span>
+			</div>
+		</div>
+	#end
+	
+ 	<script src="${apiPath}/resources/js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script>
+ 	<script src="${apiPath}/resources/js/jquery.easing.min.js" type="text/javascript" charset="utf-8"></script>
+ 	<script src="${apiPath}/resources/js/tips.js" type="text/javascript" charset="utf-8"></script>
+ 	<script src="${apiPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
+ 	<script src="${apiPath}/resources/js/tools.js" type="text/javascript" charset="utf-8"></script>
+ 	<script src="${apiPath}/resources/js/tipbox2.js" type="text/javascript" charset="utf-8"></script>
+ 	<script type="text/javascript"> 	
+ 		$(document).ready(function(){
+
+ 			#if($!flagyeyesterday==true)
+ 				//这里是补签的弹框 /integral/integral_flip_cards_lost 放哪
+	 			tipsbox("真可惜连续5天翻牌已中断，花20积分获得一次补救机会",function(){
+	 				//请求补签的接口
+	 				$.ajax({
+			             type: "get",
+			             url: "integral_flip_cards_lost",
+			             data: {userId:$uid,yesterday:$yesterday},
+			             dataType: "text",
+			             success: function(data){
+			            	 /* $(that).find(".back").html(data);
+			            	 $(that).addClass("curr");
+			            	 flag=true; */
+	                     }
+			        });
+	 				
+					$(".flipper .back").hide();
+	 				$(".flipper span").css("opacity",0).css("-webkit-transform","scale(0.8)").css("transform","scale(0.8)");
+	 				setTimeout(function(){ 					
+	 					$(".flipper").removeClass("junior").addClass("senior").find("span").css("opacity",1).css("-webkit-transform","scale(1)").css("transform","scale(1)"); 					
+	 				},800);
+	 				setTimeout(function(){
+	 					$(".flipper .back").show();
+	 				},1300);
+	 					$(".flipper span").removeAttr("style");
+	 			});
+ 			#end
+ 			$(".bg").css("height",document.documentElement.scrollHeight);
+ 			var flag=true;
+ 			$(".flipper").on("touchstart",function(){
+ 				if(!flag) return;
+ 				if($(".flipperCon .curr").length>=1){
+ 					tips("您已经抽过奖了");
+ 					return;
+ 				}
+ 				#if($!flag==true)
+ 					tips("您已经抽过奖了");
+					return;
+ 				#end
+ 				var that=this;
+ 				flag=false;
+ 				//这里要请求获取的积分
+ 				//在这里判断
+ 				if($(".flipperCon").find(".senior").length>0){//请求高级翻牌
+ 					$.ajax({
+ 			             type: "get",
+ 			             url: "integral_flip_cards_get",
+ 			             data: {userID:$uid,flag:$flag},
+ 			             dataType: "text",
+ 			             success: function(data){
+ 			            	 if(data=="0")
+		            		 {
+ 			            		tips("网络错误，请稍后重试");
+ 			            		flag=true;
+ 			            		return;
+		            		 }
+ 			            	 $(that).find(".back").html(data);
+ 			            	 $(that).addClass("curr");
+ 			            	 flag=true;
+ 	                     }
+ 			        });
+ 				}else{//初级翻牌==  不是请求  是显示 显示成高级牌
+ 					$.ajax({
+ 			             type: "get",
+ 			             url: "integral_flip_cards_get",
+ 			             data: {userID:$uid,flag:$flag},
+ 			             dataType: "text",
+ 			             success: function(data){
+ 			            	 if(data=="0")
+		            		 {
+  			            		tips("网络错误，请稍后重试");
+ 			            		flag=true;
+ 			            		return;
+		            		 }
+ 			            	 $(that).find(".back").html(data);
+ 			            	 $(that).addClass("curr");
+ 			            	 flag=true;
+ 	                     }
+ 			        });
+ 				}				 				
+ 			});
+ 			$(".return").on("touchstart",function(){
+ 				fn.requestBack();
+ 			});
+ 			
+ 			$(".makeScore").on('touchstart',function(){
+ 				fn.requestGetJf();
+ 			});
+			$(".exchange").on('touchstart',function(){
+ 				fn.requestExchangeJf();
+ 			});
+ 		});
+ 	</script>
+</body>
+</html>                                    

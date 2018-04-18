@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.o2o.mapper.GroupComplaintMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.o2o.model.GroupComplaint">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="appeal_time" property="appealTime" jdbcType="TIMESTAMP" />
+		<result column="handle_time" property="handleTime" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="cs_id" property="csId" jdbcType="BIGINT" />
+		<result column="from_acc1" property="fromAcc1" jdbcType="VARCHAR" />
+		<result column="from_acc2" property="fromAcc2" jdbcType="VARCHAR" />
+		<result column="from_acc3" property="fromAcc3" jdbcType="VARCHAR" />
+		<result column="from_user_id" property="fromUserId" jdbcType="BIGINT" />
+		<result column="handle_user_id" property="handleUserId"
+			jdbcType="BIGINT" />
+		<result column="of_id" property="ofId" jdbcType="BIGINT" />
+		<result column="to_acc1" property="toAcc1" jdbcType="VARCHAR" />
+		<result column="to_acc2" property="toAcc2" jdbcType="VARCHAR" />
+		<result column="to_acc3" property="toAcc3" jdbcType="VARCHAR" />
+		<result column="to_user_id" property="toUserId" jdbcType="BIGINT" />
+		<result column="problem_desc" property="problemDesc" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.o2o.model.GroupComplaint"
+		extends="BaseResultMap">
+		<result column="from_user_content" property="fromUserContent"
+			jdbcType="LONGVARCHAR" />
+		<result column="handle_content" property="handleContent"
+			jdbcType="LONGVARCHAR" />
+		<result column="talk_content" property="talkContent" jdbcType="LONGVARCHAR" />
+		<result column="to_user_content" property="toUserContent"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.o2o.bo.GroupComplaintBO"
+		extends="ResultMapWithBLOBs">
+		<result column="nick_name" property="nickname" jdbcType="VARCHAR" />
+		<result column="from_moblie" property="mobile" jdbcType="VARCHAR" />
+		<result column="store_mobile" property="storeMobile" jdbcType="VARCHAR" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="group_info" property="groupInfo" jdbcType="VARCHAR" />
+		<result column="area_id" property="areaId" jdbcType="VARCHAR" />
+		<result column="groupOrderId" property="groupOrderId" jdbcType="BIGINT" />
+		<result column="toUserName" property="toUserName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, appeal_time, handle_time, status, type,
+		cs_id, from_acc1,
+		from_acc2, from_acc3, from_user_id, handle_user_id, of_id, to_acc1, to_acc2,
+		to_acc3,
+		to_user_id, problem_desc
+	</sql>
+	<sql id="Blob_Column_List">
+		from_user_content, handle_content, talk_content, to_user_content
+	</sql>
+
+	<select id="search" resultMap="BOResultMap">
+		select * from o2o_group_complaint gc, o2o_group_order go, shop_store
+		ss, user_customer uc
+		where gc.of_id=go.id and go.user_id=uc.uid and
+		go.store_id=ss.id
+		<if test="vo.userId != null and vo.userId != 0">
+			and go.user_id=#{vo.userId}
+		</if>
+		<if test="vo.mobile != null and vo.mobile != ''">
+			and uc.mobile=#{vo.mobile}
+		</if>
+		<if test="vo.nickName != null and vo.nickName != ''">
+			and uc.nickname=#{vo.nickName}
+		</if>
+		<if test="vo.storeName != null and vo.storeName != ''">
+			and ss.store_name=#{vo.storeName}
+		</if>
+		<if test="vo.status != null and vo.status != 0">
+			and gc.status=#{vo.status}
+		</if>
+		<if test="vo.storeMobile != null and vo.storeMobile != ''">
+			and ss.create_user_id=(select uid from sys_user_account where
+			login_name=#{vo.storeMobile} and account_type=2)
+		</if>
+		<if test="vo.areaId != null and vo.areaId != 0">
+			and (ss.area_id=#{vo.areaId} or ss.area_id in (select id from dic_area
+			where parent_id=#{vo.areaId}))
+		</if>
+		order by gc.id desc
+	</select>
+
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.o2o.model.GroupComplaintExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from o2o_group_complaint
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.o2o.model.GroupComplaintExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from o2o_group_complaint
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from o2o_group_complaint
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from o2o_group_complaint
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.o2o.model.GroupComplaintExample">
+		delete from o2o_group_complaint
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.o2o.model.GroupComplaint"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into o2o_group_complaint (id, add_time, delete_status,
+		appeal_time, handle_time, status,
+		type, cs_id, from_acc1,
+		from_acc2, from_acc3, from_user_id,
+		handle_user_id, of_id, to_acc1,
+		to_acc2, to_acc3, to_user_id,
+		problem_desc, from_user_content, handle_content,
+		talk_content, to_user_content)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{appealTime,jdbcType=TIMESTAMP}, #{handleTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER},
+		#{type,jdbcType=VARCHAR}, #{csId,jdbcType=BIGINT},
+		#{fromAcc1,jdbcType=VARCHAR},
+		#{fromAcc2,jdbcType=VARCHAR}, #{fromAcc3,jdbcType=VARCHAR}, #{fromUserId,jdbcType=BIGINT},
+		#{handleUserId,jdbcType=BIGINT}, #{ofId,jdbcType=BIGINT},
+		#{toAcc1,jdbcType=VARCHAR},
+		#{toAcc2,jdbcType=VARCHAR}, #{toAcc3,jdbcType=VARCHAR}, #{toUserId,jdbcType=BIGINT},
+		#{problemDesc,jdbcType=VARCHAR},
+		#{fromUserContent,jdbcType=LONGVARCHAR},
+		#{handleContent,jdbcType=LONGVARCHAR},
+		#{talkContent,jdbcType=LONGVARCHAR},
+		#{toUserContent,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.o2o.model.GroupComplaint"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into o2o_group_complaint
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="appealTime != null">
+				appeal_time,
+			</if>
+			<if test="handleTime != null">
+				handle_time,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="csId != null">
+				cs_id,
+			</if>
+			<if test="fromAcc1 != null">
+				from_acc1,
+			</if>
+			<if test="fromAcc2 != null">
+				from_acc2,
+			</if>
+			<if test="fromAcc3 != null">
+				from_acc3,
+			</if>
+			<if test="fromUserId != null">
+				from_user_id,
+			</if>
+			<if test="handleUserId != null">
+				handle_user_id,
+			</if>
+			<if test="ofId != null">
+				of_id,
+			</if>
+			<if test="toAcc1 != null">
+				to_acc1,
+			</if>
+			<if test="toAcc2 != null">
+				to_acc2,
+			</if>
+			<if test="toAcc3 != null">
+				to_acc3,
+			</if>
+			<if test="toUserId != null">
+				to_user_id,
+			</if>
+			<if test="problemDesc != null">
+				problem_desc,
+			</if>
+			<if test="fromUserContent != null">
+				from_user_content,
+			</if>
+			<if test="handleContent != null">
+				handle_content,
+			</if>
+			<if test="talkContent != null">
+				talk_content,
+			</if>
+			<if test="toUserContent != null">
+				to_user_content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="appealTime != null">
+				#{appealTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="handleTime != null">
+				#{handleTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="csId != null">
+				#{csId,jdbcType=BIGINT},
+			</if>
+			<if test="fromAcc1 != null">
+				#{fromAcc1,jdbcType=VARCHAR},
+			</if>
+			<if test="fromAcc2 != null">
+				#{fromAcc2,jdbcType=VARCHAR},
+			</if>
+			<if test="fromAcc3 != null">
+				#{fromAcc3,jdbcType=VARCHAR},
+			</if>
+			<if test="fromUserId != null">
+				#{fromUserId,jdbcType=BIGINT},
+			</if>
+			<if test="handleUserId != null">
+				#{handleUserId,jdbcType=BIGINT},
+			</if>
+			<if test="ofId != null">
+				#{ofId,jdbcType=BIGINT},
+			</if>
+			<if test="toAcc1 != null">
+				#{toAcc1,jdbcType=VARCHAR},
+			</if>
+			<if test="toAcc2 != null">
+				#{toAcc2,jdbcType=VARCHAR},
+			</if>
+			<if test="toAcc3 != null">
+				#{toAcc3,jdbcType=VARCHAR},
+			</if>
+			<if test="toUserId != null">
+				#{toUserId,jdbcType=BIGINT},
+			</if>
+			<if test="problemDesc != null">
+				#{problemDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="fromUserContent != null">
+				#{fromUserContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="handleContent != null">
+				#{handleContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="talkContent != null">
+				#{talkContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="toUserContent != null">
+				#{toUserContent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.o2o.model.GroupComplaintExample"
+		resultType="java.lang.Integer">
+		select count(*) from o2o_group_complaint
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update o2o_group_complaint
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.appealTime != null">
+				appeal_time = #{record.appealTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.handleTime != null">
+				handle_time = #{record.handleTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=VARCHAR},
+			</if>
+			<if test="record.csId != null">
+				cs_id = #{record.csId,jdbcType=BIGINT},
+			</if>
+			<if test="record.fromAcc1 != null">
+				from_acc1 = #{record.fromAcc1,jdbcType=VARCHAR},
+			</if>
+			<if test="record.fromAcc2 != null">
+				from_acc2 = #{record.fromAcc2,jdbcType=VARCHAR},
+			</if>
+			<if test="record.fromAcc3 != null">
+				from_acc3 = #{record.fromAcc3,jdbcType=VARCHAR},
+			</if>
+			<if test="record.fromUserId != null">
+				from_user_id = #{record.fromUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.handleUserId != null">
+				handle_user_id = #{record.handleUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.ofId != null">
+				of_id = #{record.ofId,jdbcType=BIGINT},
+			</if>
+			<if test="record.toAcc1 != null">
+				to_acc1 = #{record.toAcc1,jdbcType=VARCHAR},
+			</if>
+			<if test="record.toAcc2 != null">
+				to_acc2 = #{record.toAcc2,jdbcType=VARCHAR},
+			</if>
+			<if test="record.toAcc3 != null">
+				to_acc3 = #{record.toAcc3,jdbcType=VARCHAR},
+			</if>
+			<if test="record.toUserId != null">
+				to_user_id = #{record.toUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.problemDesc != null">
+				problem_desc = #{record.problemDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.fromUserContent != null">
+				from_user_content = #{record.fromUserContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.handleContent != null">
+				handle_content = #{record.handleContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.talkContent != null">
+				talk_content = #{record.talkContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.toUserContent != null">
+				to_user_content = #{record.toUserContent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update o2o_group_complaint
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		appeal_time = #{record.appealTime,jdbcType=TIMESTAMP},
+		handle_time = #{record.handleTime,jdbcType=TIMESTAMP},
+		status = #{record.status,jdbcType=INTEGER},
+		type = #{record.type,jdbcType=VARCHAR},
+		cs_id = #{record.csId,jdbcType=BIGINT},
+		from_acc1 = #{record.fromAcc1,jdbcType=VARCHAR},
+		from_acc2 = #{record.fromAcc2,jdbcType=VARCHAR},
+		from_acc3 = #{record.fromAcc3,jdbcType=VARCHAR},
+		from_user_id = #{record.fromUserId,jdbcType=BIGINT},
+		handle_user_id = #{record.handleUserId,jdbcType=BIGINT},
+		of_id = #{record.ofId,jdbcType=BIGINT},
+		to_acc1 = #{record.toAcc1,jdbcType=VARCHAR},
+		to_acc2 = #{record.toAcc2,jdbcType=VARCHAR},
+		to_acc3 = #{record.toAcc3,jdbcType=VARCHAR},
+		to_user_id = #{record.toUserId,jdbcType=BIGINT},
+		problem_desc = #{record.problemDesc,jdbcType=VARCHAR},
+		from_user_content = #{record.fromUserContent,jdbcType=LONGVARCHAR},
+		handle_content = #{record.handleContent,jdbcType=LONGVARCHAR},
+		talk_content = #{record.talkContent,jdbcType=LONGVARCHAR},
+		to_user_content = #{record.toUserContent,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update o2o_group_complaint
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		appeal_time = #{record.appealTime,jdbcType=TIMESTAMP},
+		handle_time = #{record.handleTime,jdbcType=TIMESTAMP},
+		status = #{record.status,jdbcType=INTEGER},
+		type = #{record.type,jdbcType=VARCHAR},
+		cs_id = #{record.csId,jdbcType=BIGINT},
+		from_acc1 = #{record.fromAcc1,jdbcType=VARCHAR},
+		from_acc2 = #{record.fromAcc2,jdbcType=VARCHAR},
+		from_acc3 = #{record.fromAcc3,jdbcType=VARCHAR},
+		from_user_id = #{record.fromUserId,jdbcType=BIGINT},
+		handle_user_id = #{record.handleUserId,jdbcType=BIGINT},
+		of_id = #{record.ofId,jdbcType=BIGINT},
+		to_acc1 = #{record.toAcc1,jdbcType=VARCHAR},
+		to_acc2 = #{record.toAcc2,jdbcType=VARCHAR},
+		to_acc3 = #{record.toAcc3,jdbcType=VARCHAR},
+		to_user_id = #{record.toUserId,jdbcType=BIGINT},
+		problem_desc = #{record.problemDesc,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.o2o.model.GroupComplaint">
+		update o2o_group_complaint
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="appealTime != null">
+				appeal_time = #{appealTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="handleTime != null">
+				handle_time = #{handleTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="csId != null">
+				cs_id = #{csId,jdbcType=BIGINT},
+			</if>
+			<if test="fromAcc1 != null">
+				from_acc1 = #{fromAcc1,jdbcType=VARCHAR},
+			</if>
+			<if test="fromAcc2 != null">
+				from_acc2 = #{fromAcc2,jdbcType=VARCHAR},
+			</if>
+			<if test="fromAcc3 != null">
+				from_acc3 = #{fromAcc3,jdbcType=VARCHAR},
+			</if>
+			<if test="fromUserId != null">
+				from_user_id = #{fromUserId,jdbcType=BIGINT},
+			</if>
+			<if test="handleUserId != null">
+				handle_user_id = #{handleUserId,jdbcType=BIGINT},
+			</if>
+			<if test="ofId != null">
+				of_id = #{ofId,jdbcType=BIGINT},
+			</if>
+			<if test="toAcc1 != null">
+				to_acc1 = #{toAcc1,jdbcType=VARCHAR},
+			</if>
+			<if test="toAcc2 != null">
+				to_acc2 = #{toAcc2,jdbcType=VARCHAR},
+			</if>
+			<if test="toAcc3 != null">
+				to_acc3 = #{toAcc3,jdbcType=VARCHAR},
+			</if>
+			<if test="toUserId != null">
+				to_user_id = #{toUserId,jdbcType=BIGINT},
+			</if>
+			<if test="problemDesc != null">
+				problem_desc = #{problemDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="fromUserContent != null">
+				from_user_content = #{fromUserContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="handleContent != null">
+				handle_content = #{handleContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="talkContent != null">
+				talk_content = #{talkContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="toUserContent != null">
+				to_user_content = #{toUserContent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.o2o.model.GroupComplaint">
+		update o2o_group_complaint
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		appeal_time = #{appealTime,jdbcType=TIMESTAMP},
+		handle_time = #{handleTime,jdbcType=TIMESTAMP},
+		status = #{status,jdbcType=INTEGER},
+		type = #{type,jdbcType=VARCHAR},
+		cs_id = #{csId,jdbcType=BIGINT},
+		from_acc1 = #{fromAcc1,jdbcType=VARCHAR},
+		from_acc2 = #{fromAcc2,jdbcType=VARCHAR},
+		from_acc3 = #{fromAcc3,jdbcType=VARCHAR},
+		from_user_id = #{fromUserId,jdbcType=BIGINT},
+		handle_user_id = #{handleUserId,jdbcType=BIGINT},
+		of_id = #{ofId,jdbcType=BIGINT},
+		to_acc1 = #{toAcc1,jdbcType=VARCHAR},
+		to_acc2 = #{toAcc2,jdbcType=VARCHAR},
+		to_acc3 = #{toAcc3,jdbcType=VARCHAR},
+		to_user_id = #{toUserId,jdbcType=BIGINT},
+		problem_desc = #{problemDesc,jdbcType=VARCHAR},
+		from_user_content = #{fromUserContent,jdbcType=LONGVARCHAR},
+		handle_content = #{handleContent,jdbcType=LONGVARCHAR},
+		talk_content = #{talkContent,jdbcType=LONGVARCHAR},
+		to_user_content = #{toUserContent,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.o2o.model.GroupComplaint">
+		update o2o_group_complaint
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		appeal_time = #{appealTime,jdbcType=TIMESTAMP},
+		handle_time = #{handleTime,jdbcType=TIMESTAMP},
+		status = #{status,jdbcType=INTEGER},
+		type = #{type,jdbcType=VARCHAR},
+		cs_id = #{csId,jdbcType=BIGINT},
+		from_acc1 = #{fromAcc1,jdbcType=VARCHAR},
+		from_acc2 = #{fromAcc2,jdbcType=VARCHAR},
+		from_acc3 = #{fromAcc3,jdbcType=VARCHAR},
+		from_user_id = #{fromUserId,jdbcType=BIGINT},
+		handle_user_id = #{handleUserId,jdbcType=BIGINT},
+		of_id = #{ofId,jdbcType=BIGINT},
+		to_acc1 = #{toAcc1,jdbcType=VARCHAR},
+		to_acc2 = #{toAcc2,jdbcType=VARCHAR},
+		to_acc3 = #{toAcc3,jdbcType=VARCHAR},
+		to_user_id = #{toUserId,jdbcType=BIGINT},
+		problem_desc = #{problemDesc,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- my complaints lists -->
+	<select id="groupComplaintList" resultMap="BOResultMap">
+		SELECT
+		a.id,
+		c.name,c.nickname,s.store_name, a.add_time
+		from
+		o2o_group_complaint a
+		inner join o2o_group_order aa on a.of_id=aa.id
+		inner JOIN shop_store s on s.id = aa.store_id
+		INNER JOIN user_owns o ON
+		s.create_user_id = o.seller_user_id
+		inner join user_customer c on
+		a.from_user_id=c.uid
+		inner join user_operator u on u.id=o.own_operator_id
+		where
+		u.user_id = #{uid,jdbcType=BIGINT}
+
+		<if test="status != null and status !=''">
+			and a.status = #{status,jdbcType=VARCHAR}
+		</if>
+
+		<if test="name != null and name !=''">
+			and s.store_name = #{name,jdbcType=VARCHAR}
+		</if>
+
+
+
+		ORDER BY a.add_time DESC
+	</select>
+
+	<!-- my complaints details -->
+	<select id="groupComplaintDetails" resultMap="BOResultMap">
+		SELECT
+		c.nickname,a.id,a.handle_content,
+		aa.order_status,aa.order_id,aa.pay_time,aa.goods_amount,s.store_name,s.store_telephone,
+		s.area_id,s.store_address,c.name,a.status,c.mobile,a.add_time,a.from_acc1,a.from_acc2,a.from_acc3,aa.group_info,a.problem_desc,a.from_user_content
+		from o2o_group_complaint a
+		inner join o2o_group_order aa on
+		a.of_id=aa.id
+		inner JOIN shop_store s on s.id = aa.store_id
+		INNER JOIN
+		user_owns o ON s.create_user_id = o.seller_user_id
+		inner join
+		user_customer c on a.from_user_id=c.uid
+		where
+
+		a.id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<!-- 查询运营商的投诉列表 -->
+	<select id="searchOperatorList" resultMap="BOResultMap">
+		SELECT
+		gc.*,
+		uc.nickname as nick_name,
+		uc.`mobile` as mobile,
+		ss.store_name as
+		store_name,
+		go.id as groupOrderId,
+		go.`group_info` as group_info,
+		se.`mobile` as store_mobile,
+		ss.`area_id` as area_id ,
+		sua.login_name as
+		toUserName
+		FROM o2o_group_complaint gc
+		LEFT JOIN o2o_group_order go ON gc.of_id=go.id
+		LEFT JOIN user_customer uc ON go.user_id=uc.uid
+		LEFT JOIN shop_store ss ON go.store_id=ss.id
+		LEFT JOIN `user_seller` se ON ss.id = se.`store_id`
+		LEFT JOIN `user_owns` ow ON ow.`seller_user_id` = se.`uid`
+		LEFT JOIN sys_user_account sua ON sua.uid = ss.create_user_id and
+		sua.account_type = 2
+		where ow.`own_operator_id`=#{vo.operatorId}
+
+		<if test="vo.mobile != null and vo.mobile != ''">
+			and uc.mobile=#{vo.mobile}
+		</if>
+		<if test="vo.nickName != null and vo.nickName != ''">
+			and uc.nickname=#{vo.nickName}
+		</if>
+		<if test="vo.storeName != null and vo.storeName != ''">
+			and ss.store_name=#{vo.storeName}
+		</if>
+		<if test="vo.status != null and vo.status != 0">
+			and gc.status=#{vo.status}
+		</if>
+		<if test="vo.storeMobile != null and vo.storeMobile != ''">
+			and se.`mobile`= #{vo.storeMobile}
+		</if>
+		order by gc.id desc
+	</select>
+
+</mapper>

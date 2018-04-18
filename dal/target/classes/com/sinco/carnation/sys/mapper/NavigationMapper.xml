@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.NavigationMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.Navigation">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="display" property="display" jdbcType="BIT" />
+		<result column="location" property="location" jdbcType="INTEGER" />
+		<result column="new_win" property="newWin" jdbcType="INTEGER" />
+		<result column="original_url" property="originalUrl" jdbcType="VARCHAR" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="sys_Nav" property="sysNav" jdbcType="BIT" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="type_id" property="typeId" jdbcType="BIGINT" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sys.bo.NavigationBO"
+		extends="BaseResultMap" />
+
+	<select id="findByLocation" parameterType="map" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_navigation
+		where display=1 and location =#{location} and type !=#{notType}
+		order by sequence asc
+		<if test="count != null and count > 0">
+			limit 0,#{count}
+		</if>
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<select id="selectByTitle" resultType="map">
+		select * from sys_navigation
+		<if test="title != null and title != ''">
+			where title like concat('%',#{title},'%')
+		</if>
+		order by sequence
+	</select>
+
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, display, location, new_win, original_url,
+		sequence,
+		sys_Nav, title, type, type_id, url
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.sys.model.NavigationExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_navigation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_navigation
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sys_navigation
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.NavigationExample">
+		delete from sys_navigation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.Navigation"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_navigation (id, add_Time, delete_Status,
+		display, location, new_win,
+		original_url, sequence, sys_Nav,
+		title, type, type_id,
+		url)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{display,jdbcType=BIT}, #{location,jdbcType=INTEGER}, #{newWin,jdbcType=INTEGER},
+		#{originalUrl,jdbcType=VARCHAR}, #{sequence,jdbcType=INTEGER},
+		#{sysNav,jdbcType=BIT},
+		#{title,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{typeId,jdbcType=BIGINT},
+		#{url,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.Navigation"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_navigation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="display != null">
+				display,
+			</if>
+			<if test="location != null">
+				location,
+			</if>
+			<if test="newWin != null">
+				new_win,
+			</if>
+			<if test="originalUrl != null">
+				original_url,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="sysNav != null">
+				sys_Nav,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="typeId != null">
+				type_id,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="display != null">
+				#{display,jdbcType=BIT},
+			</if>
+			<if test="location != null">
+				#{location,jdbcType=INTEGER},
+			</if>
+			<if test="newWin != null">
+				#{newWin,jdbcType=INTEGER},
+			</if>
+			<if test="originalUrl != null">
+				#{originalUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="sysNav != null">
+				#{sysNav,jdbcType=BIT},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="typeId != null">
+				#{typeId,jdbcType=BIGINT},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.NavigationExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_navigation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_navigation
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.display != null">
+				display = #{record.display,jdbcType=BIT},
+			</if>
+			<if test="record.location != null">
+				location = #{record.location,jdbcType=INTEGER},
+			</if>
+			<if test="record.newWin != null">
+				new_win = #{record.newWin,jdbcType=INTEGER},
+			</if>
+			<if test="record.originalUrl != null">
+				original_url = #{record.originalUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.sysNav != null">
+				sys_Nav = #{record.sysNav,jdbcType=BIT},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=VARCHAR},
+			</if>
+			<if test="record.typeId != null">
+				type_id = #{record.typeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.url != null">
+				url = #{record.url,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sys_navigation
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=BIT},
+		display = #{record.display,jdbcType=BIT},
+		location = #{record.location,jdbcType=INTEGER},
+		new_win = #{record.newWin,jdbcType=INTEGER},
+		original_url = #{record.originalUrl,jdbcType=VARCHAR},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		sys_Nav = #{record.sysNav,jdbcType=BIT},
+		title = #{record.title,jdbcType=VARCHAR},
+		type = #{record.type,jdbcType=VARCHAR},
+		type_id = #{record.typeId,jdbcType=BIGINT},
+		url = #{record.url,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.Navigation">
+		update sys_navigation
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="display != null">
+				display = #{display,jdbcType=BIT},
+			</if>
+			<if test="location != null">
+				location = #{location,jdbcType=INTEGER},
+			</if>
+			<if test="newWin != null">
+				new_win = #{newWin,jdbcType=INTEGER},
+			</if>
+			<if test="originalUrl != null">
+				original_url = #{originalUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="sysNav != null">
+				sys_Nav = #{sysNav,jdbcType=BIT},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="typeId != null">
+				type_id = #{typeId,jdbcType=BIGINT},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.Navigation">
+		update sys_navigation
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=BIT},
+		display = #{display,jdbcType=BIT},
+		location = #{location,jdbcType=INTEGER},
+		new_win = #{newWin,jdbcType=INTEGER},
+		original_url = #{originalUrl,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=INTEGER},
+		sys_Nav = #{sysNav,jdbcType=BIT},
+		title = #{title,jdbcType=VARCHAR},
+		type = #{type,jdbcType=VARCHAR},
+		type_id = #{typeId,jdbcType=BIGINT},
+		url = #{url,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

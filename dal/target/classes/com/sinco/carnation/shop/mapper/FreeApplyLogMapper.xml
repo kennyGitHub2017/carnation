@@ -1,0 +1,618 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.FreeApplyLogMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.FreeApplyLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="apply_status" property="applyStatus" jdbcType="INTEGER" />
+		<result column="evaluate_status" property="evaluateStatus"
+			jdbcType="INTEGER" />
+		<result column="evaluate_time" property="evaluateTime"
+			jdbcType="TIMESTAMP" />
+		<result column="free_goods_id" property="freeGoodsId" jdbcType="BIGINT" />
+		<result column="free_goods_name" property="freeGoodsName"
+			jdbcType="VARCHAR" />
+		<result column="receiver_name" property="receiverName"
+			jdbcType="VARCHAR" />
+		<result column="receiver_area" property="receiverArea"
+			jdbcType="VARCHAR" />
+		<result column="receiver_area_info" property="receiverAreaInfo"
+			jdbcType="VARCHAR" />
+		<result column="receiver_mobile" property="receiverMobile"
+			jdbcType="VARCHAR" />
+		<result column="receiver_telephone" property="receiverTelephone"
+			jdbcType="VARCHAR" />
+		<result column="receiver_zip" property="receiverZip" jdbcType="VARCHAR" />
+		<result column="ship_code" property="shipCode" jdbcType="VARCHAR" />
+		<result column="ship_addr_id" property="shipAddrId" jdbcType="BIGINT" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="whether_self" property="whetherSelf" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.FreeApplyLogBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.FreeApplyLog"
+		extends="BaseResultMap">
+		<result column="apply_reason" property="applyReason" jdbcType="LONGVARCHAR" />
+		<result column="express_info" property="expressInfo" jdbcType="LONGVARCHAR" />
+		<result column="ship_addr" property="shipAddr" jdbcType="LONGVARCHAR" />
+		<result column="use_experience" property="useExperience"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, apply_status, evaluate_status,
+		evaluate_time, free_goods_id,
+		free_goods_name, receiver_name, receiver_area, receiver_area_info, receiver_mobile,
+		receiver_telephone, receiver_zip, ship_code, ship_addr_id, store_id,
+		user_id, user_name,
+		whether_self
+	</sql>
+	<sql id="Blob_Column_List">
+		apply_reason, express_info, ship_addr, use_experience
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.shop.model.FreeApplyLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_free_apply_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.shop.model.FreeApplyLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_free_apply_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_free_apply_log
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_free_apply_log
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.FreeApplyLogExample">
+		delete from shop_free_apply_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.FreeApplyLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_free_apply_log (id, add_time, delete_status,
+		apply_status, evaluate_status, evaluate_time,
+		free_goods_id, free_goods_name, receiver_name,
+		receiver_area, receiver_area_info, receiver_mobile,
+		receiver_telephone, receiver_zip, ship_code,
+		ship_addr_id, store_id, user_id,
+		user_name, whether_self, apply_reason,
+		express_info, ship_addr, use_experience
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{applyStatus,jdbcType=INTEGER}, #{evaluateStatus,jdbcType=INTEGER},
+		#{evaluateTime,jdbcType=TIMESTAMP},
+		#{freeGoodsId,jdbcType=BIGINT}, #{freeGoodsName,jdbcType=VARCHAR}, #{receiverName,jdbcType=VARCHAR},
+		#{receiverArea,jdbcType=VARCHAR},
+		#{receiverAreaInfo,jdbcType=VARCHAR},
+		#{receiverMobile,jdbcType=VARCHAR},
+		#{receiverTelephone,jdbcType=VARCHAR},
+		#{receiverZip,jdbcType=VARCHAR}, #{shipCode,jdbcType=VARCHAR},
+		#{shipAddrId,jdbcType=BIGINT}, #{storeId,jdbcType=BIGINT},
+		#{userId,jdbcType=BIGINT},
+		#{userName,jdbcType=VARCHAR}, #{whetherSelf,jdbcType=INTEGER}, #{applyReason,jdbcType=LONGVARCHAR},
+		#{expressInfo,jdbcType=LONGVARCHAR}, #{shipAddr,jdbcType=LONGVARCHAR},
+		#{useExperience,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.FreeApplyLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_free_apply_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="applyStatus != null">
+				apply_status,
+			</if>
+			<if test="evaluateStatus != null">
+				evaluate_status,
+			</if>
+			<if test="evaluateTime != null">
+				evaluate_time,
+			</if>
+			<if test="freeGoodsId != null">
+				free_goods_id,
+			</if>
+			<if test="freeGoodsName != null">
+				free_goods_name,
+			</if>
+			<if test="receiverName != null">
+				receiver_name,
+			</if>
+			<if test="receiverArea != null">
+				receiver_area,
+			</if>
+			<if test="receiverAreaInfo != null">
+				receiver_area_info,
+			</if>
+			<if test="receiverMobile != null">
+				receiver_mobile,
+			</if>
+			<if test="receiverTelephone != null">
+				receiver_telephone,
+			</if>
+			<if test="receiverZip != null">
+				receiver_zip,
+			</if>
+			<if test="shipCode != null">
+				ship_code,
+			</if>
+			<if test="shipAddrId != null">
+				ship_addr_id,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="whetherSelf != null">
+				whether_self,
+			</if>
+			<if test="applyReason != null">
+				apply_reason,
+			</if>
+			<if test="expressInfo != null">
+				express_info,
+			</if>
+			<if test="shipAddr != null">
+				ship_addr,
+			</if>
+			<if test="useExperience != null">
+				use_experience,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="applyStatus != null">
+				#{applyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="evaluateStatus != null">
+				#{evaluateStatus,jdbcType=INTEGER},
+			</if>
+			<if test="evaluateTime != null">
+				#{evaluateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="freeGoodsId != null">
+				#{freeGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="freeGoodsName != null">
+				#{freeGoodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverName != null">
+				#{receiverName,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverArea != null">
+				#{receiverArea,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverAreaInfo != null">
+				#{receiverAreaInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverMobile != null">
+				#{receiverMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverTelephone != null">
+				#{receiverTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverZip != null">
+				#{receiverZip,jdbcType=VARCHAR},
+			</if>
+			<if test="shipCode != null">
+				#{shipCode,jdbcType=VARCHAR},
+			</if>
+			<if test="shipAddrId != null">
+				#{shipAddrId,jdbcType=BIGINT},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="whetherSelf != null">
+				#{whetherSelf,jdbcType=INTEGER},
+			</if>
+			<if test="applyReason != null">
+				#{applyReason,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="expressInfo != null">
+				#{expressInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="shipAddr != null">
+				#{shipAddr,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="useExperience != null">
+				#{useExperience,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.FreeApplyLogExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_free_apply_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_free_apply_log
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.applyStatus != null">
+				apply_status = #{record.applyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.evaluateStatus != null">
+				evaluate_status = #{record.evaluateStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.evaluateTime != null">
+				evaluate_time = #{record.evaluateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.freeGoodsId != null">
+				free_goods_id = #{record.freeGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="record.freeGoodsName != null">
+				free_goods_name = #{record.freeGoodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverName != null">
+				receiver_name = #{record.receiverName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverArea != null">
+				receiver_area = #{record.receiverArea,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverAreaInfo != null">
+				receiver_area_info = #{record.receiverAreaInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverMobile != null">
+				receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverTelephone != null">
+				receiver_telephone = #{record.receiverTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverZip != null">
+				receiver_zip = #{record.receiverZip,jdbcType=VARCHAR},
+			</if>
+			<if test="record.shipCode != null">
+				ship_code = #{record.shipCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.shipAddrId != null">
+				ship_addr_id = #{record.shipAddrId,jdbcType=BIGINT},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userName != null">
+				user_name = #{record.userName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.whetherSelf != null">
+				whether_self = #{record.whetherSelf,jdbcType=INTEGER},
+			</if>
+			<if test="record.applyReason != null">
+				apply_reason = #{record.applyReason,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.expressInfo != null">
+				express_info = #{record.expressInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.shipAddr != null">
+				ship_addr = #{record.shipAddr,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.useExperience != null">
+				use_experience = #{record.useExperience,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_free_apply_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		apply_status = #{record.applyStatus,jdbcType=INTEGER},
+		evaluate_status = #{record.evaluateStatus,jdbcType=INTEGER},
+		evaluate_time = #{record.evaluateTime,jdbcType=TIMESTAMP},
+		free_goods_id = #{record.freeGoodsId,jdbcType=BIGINT},
+		free_goods_name = #{record.freeGoodsName,jdbcType=VARCHAR},
+		receiver_name = #{record.receiverName,jdbcType=VARCHAR},
+		receiver_area = #{record.receiverArea,jdbcType=VARCHAR},
+		receiver_area_info = #{record.receiverAreaInfo,jdbcType=VARCHAR},
+		receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
+		receiver_telephone = #{record.receiverTelephone,jdbcType=VARCHAR},
+		receiver_zip = #{record.receiverZip,jdbcType=VARCHAR},
+		ship_code = #{record.shipCode,jdbcType=VARCHAR},
+		ship_addr_id = #{record.shipAddrId,jdbcType=BIGINT},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		whether_self = #{record.whetherSelf,jdbcType=INTEGER},
+		apply_reason = #{record.applyReason,jdbcType=LONGVARCHAR},
+		express_info = #{record.expressInfo,jdbcType=LONGVARCHAR},
+		ship_addr = #{record.shipAddr,jdbcType=LONGVARCHAR},
+		use_experience = #{record.useExperience,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_free_apply_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		apply_status = #{record.applyStatus,jdbcType=INTEGER},
+		evaluate_status = #{record.evaluateStatus,jdbcType=INTEGER},
+		evaluate_time = #{record.evaluateTime,jdbcType=TIMESTAMP},
+		free_goods_id = #{record.freeGoodsId,jdbcType=BIGINT},
+		free_goods_name = #{record.freeGoodsName,jdbcType=VARCHAR},
+		receiver_name = #{record.receiverName,jdbcType=VARCHAR},
+		receiver_area = #{record.receiverArea,jdbcType=VARCHAR},
+		receiver_area_info = #{record.receiverAreaInfo,jdbcType=VARCHAR},
+		receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
+		receiver_telephone = #{record.receiverTelephone,jdbcType=VARCHAR},
+		receiver_zip = #{record.receiverZip,jdbcType=VARCHAR},
+		ship_code = #{record.shipCode,jdbcType=VARCHAR},
+		ship_addr_id = #{record.shipAddrId,jdbcType=BIGINT},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		whether_self = #{record.whetherSelf,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.FreeApplyLog">
+		update shop_free_apply_log
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="applyStatus != null">
+				apply_status = #{applyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="evaluateStatus != null">
+				evaluate_status = #{evaluateStatus,jdbcType=INTEGER},
+			</if>
+			<if test="evaluateTime != null">
+				evaluate_time = #{evaluateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="freeGoodsId != null">
+				free_goods_id = #{freeGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="freeGoodsName != null">
+				free_goods_name = #{freeGoodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverName != null">
+				receiver_name = #{receiverName,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverArea != null">
+				receiver_area = #{receiverArea,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverAreaInfo != null">
+				receiver_area_info = #{receiverAreaInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverMobile != null">
+				receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverTelephone != null">
+				receiver_telephone = #{receiverTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverZip != null">
+				receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+			</if>
+			<if test="shipCode != null">
+				ship_code = #{shipCode,jdbcType=VARCHAR},
+			</if>
+			<if test="shipAddrId != null">
+				ship_addr_id = #{shipAddrId,jdbcType=BIGINT},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="whetherSelf != null">
+				whether_self = #{whetherSelf,jdbcType=INTEGER},
+			</if>
+			<if test="applyReason != null">
+				apply_reason = #{applyReason,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="expressInfo != null">
+				express_info = #{expressInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="shipAddr != null">
+				ship_addr = #{shipAddr,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="useExperience != null">
+				use_experience = #{useExperience,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.FreeApplyLog">
+		update shop_free_apply_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		apply_status = #{applyStatus,jdbcType=INTEGER},
+		evaluate_status = #{evaluateStatus,jdbcType=INTEGER},
+		evaluate_time = #{evaluateTime,jdbcType=TIMESTAMP},
+		free_goods_id = #{freeGoodsId,jdbcType=BIGINT},
+		free_goods_name = #{freeGoodsName,jdbcType=VARCHAR},
+		receiver_name = #{receiverName,jdbcType=VARCHAR},
+		receiver_area = #{receiverArea,jdbcType=VARCHAR},
+		receiver_area_info = #{receiverAreaInfo,jdbcType=VARCHAR},
+		receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
+		receiver_telephone = #{receiverTelephone,jdbcType=VARCHAR},
+		receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+		ship_code = #{shipCode,jdbcType=VARCHAR},
+		ship_addr_id = #{shipAddrId,jdbcType=BIGINT},
+		store_id = #{storeId,jdbcType=BIGINT},
+		user_id = #{userId,jdbcType=BIGINT},
+		user_name = #{userName,jdbcType=VARCHAR},
+		whether_self = #{whetherSelf,jdbcType=INTEGER},
+		apply_reason = #{applyReason,jdbcType=LONGVARCHAR},
+		express_info = #{expressInfo,jdbcType=LONGVARCHAR},
+		ship_addr = #{shipAddr,jdbcType=LONGVARCHAR},
+		use_experience = #{useExperience,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.FreeApplyLog">
+		update shop_free_apply_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		apply_status = #{applyStatus,jdbcType=INTEGER},
+		evaluate_status = #{evaluateStatus,jdbcType=INTEGER},
+		evaluate_time = #{evaluateTime,jdbcType=TIMESTAMP},
+		free_goods_id = #{freeGoodsId,jdbcType=BIGINT},
+		free_goods_name = #{freeGoodsName,jdbcType=VARCHAR},
+		receiver_name = #{receiverName,jdbcType=VARCHAR},
+		receiver_area = #{receiverArea,jdbcType=VARCHAR},
+		receiver_area_info = #{receiverAreaInfo,jdbcType=VARCHAR},
+		receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
+		receiver_telephone = #{receiverTelephone,jdbcType=VARCHAR},
+		receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+		ship_code = #{shipCode,jdbcType=VARCHAR},
+		ship_addr_id = #{shipAddrId,jdbcType=BIGINT},
+		store_id = #{storeId,jdbcType=BIGINT},
+		user_id = #{userId,jdbcType=BIGINT},
+		user_name = #{userName,jdbcType=VARCHAR},
+		whether_self = #{whetherSelf,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

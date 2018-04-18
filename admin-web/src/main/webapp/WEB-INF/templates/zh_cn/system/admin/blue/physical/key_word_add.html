@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>关键字编辑</title> #macro ( genericTree $somelist ) #foreach ( $some in
+$somelist )
+<option value="$!some.id">#if($!some.level>0) #foreach($count
+	in [0..$!some.level])&nbsp;&nbsp;&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) #end #end
+</head>
+
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+	jQuery(document).ready(function() {
+	 jQuery("#theForm").validate({
+	 rules : {
+		 name : {
+			 required : true
+	 			},
+	 
+		 type : {
+			 required : true
+			 },
+	 },
+		 messages : {
+			 name : {
+		 		required : "关键字需要填写"
+		 		},
+		 		
+		 	 type : {
+		 		required : "类型需要选择"
+		 		 }
+		 }
+	 });
+	}); 
+
+	function saveForm() {
+		jQuery("#theForm").submit();
+	}
+</script>
+
+<body>
+	<div class="cont">
+		<h1 class="seth">关键字编辑</h1>
+		<div class="nav_list">
+			<ul>
+				<li><a href="$!webPath/admin/physicalKeyWord/pageList.htm"><b>管理</b></a></li>
+				<li><a href="$!webPath/admin/physicalKeyWord/editKeyWordPage.htm" class="this">
+					<b>#if($!obj) 编辑 #else 新增 #end</b></a></li>
+			</ul>
+
+		</div>
+
+
+		<form name="theForm" id="theForm"
+			action="$!webPath/admin/physicalKeyWord/editKeyWord.htm" method="post">
+
+			<div class="edit">
+				<div class="editul setcont">
+
+					<!--鼠标经过样式-->
+
+
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>关键字</li>
+						<li><span class="webname"> <input name="name"
+								type="text" id="name" value="" />
+						</span></li>
+						
+						<li class="setcont_bg"><strong class="sred">*</strong>类型</li>
+						<li><span class="webname"> <select
+								name="type" id="type_id">
+									<option value="">--请选择--</option> 
+									#foreach($keyWordType in $keyWordType)
+									<option value="$!keyWordType.id">$!keyWordType.name</option> #end
+							</select>
+
+						</span></li>
+					</ul>
+					
+					<ul class="set1">
+							<li class="setcont_bg"><strong class="sred">*</strong>是否推荐</li>
+							<li><input type="radio" name="isTop" value="1" />是 &nbsp;&nbsp; 
+							<input type="radio" name="isTop" value="0" checked="checked"/>否</li>
+					</ul>
+					
+				 	<ul class="set1">
+							<li class="setcont_bg"><strong class="sred">*</strong>是否系统标签</li>
+							<li><input type="radio" name="isSystem" value="1"/>是 &nbsp;&nbsp; 
+							<input type="radio" name="isSystem" value="0" checked="checked"/>否</li>
+					</ul>
+					
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>是否启用</li>
+							<li><input type="radio" name="isEnabled" value="1"/>是 &nbsp;&nbsp; 
+							<input type="radio" name="isEnabled"  value="0" checked="checked"/>否</li>
+					</ul>
+					
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>权重</li>
+						<li><span class="webname"> <input name="priority"
+								type="text" id="priority" value="" style="width: 30px" />
+						</span></li>
+					</ul> 
+					
+				</div>
+			</div>
+
+		</form>
+
+		<div class="submit">
+			<span class="pad120"><input name="save" type="button"
+				value="提交" onclick="saveForm()" /></span>
+		</div>
+
+
+	</div>
+</body>
+</html>

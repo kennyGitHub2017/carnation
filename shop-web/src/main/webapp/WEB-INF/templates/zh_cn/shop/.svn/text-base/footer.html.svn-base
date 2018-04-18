@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title>底部</title>
+<!--	<link rel="stylesheet" href="./css/bottom.css">	-->
+<link rel="stylesheet" href="$!webPath/resources/pcIndecx/css/bottom.css">
+<style type="text/css">
+	.sh_footer{margin-top: -60px;background-color:#f3f6f5;}
+</style>
+</head>
+<body>
+	<fotter id="docFoot">
+		<div class="footBgWrap">
+			<div class="box">
+				<div id="btmlist">
+					<ul class="clearfix">
+						<li>
+							<i class="w-icon w-icon-23"></i>
+							<strong class="tit">购物安全</strong>
+							<span class="desc">放心购物 健康无忧</span>
+						</li>
+						<li>
+							<i class="w-icon w-icon-244"></i>
+							<strong class="tit">正品保障</strong>
+							<span class="desc">全球精选 正品保障</span>
+						</li>
+						<li>
+							<i class="w-icon w-icon-255 w-icon-23-1"></i>
+							<strong class="tit">7天退换 </strong>
+							<span class="desc">国内退货 售后无忧</span>
+						</li>
+						<li>
+							<i class="w-icon w-icon-26 w-icon-23-1"></i>
+							<strong class="tit">低价保障 </strong>
+							<span class="desc">缩短流通 确保低价</span>
+						</li>
+						<li>
+							<i class="w-icon w-icon-27 w-icon-23-1"></i>
+							<strong class="tit">综合服务 </strong>
+							<span class="desc">尊享专业健康管理服务</span>
+						</li>
+					</ul>
+				</div>
+				<div id="guideList">
+					<ul class="clearfix">
+						<li class="bd_none first">
+							<!-- <a href="$!webPath/index.htm" title="云尚"> -->
+								<img width="215" height="70" src="$!webPath/resources/pcIndecx/images/hlogo.jpg" alt="">
+								<div class="focuson">
+									<span class="label">关注我们</span>
+									<a href="http://weibo.com/ysysgo" target="_blank" rel="nofollow" class="itm">
+										<em class="w-icon w-icon-24"></em>
+									</a>
+									<a href="javascript:;" onclick="showid('erweima')"  rel="nofollow" class="itm">
+										<em class="w-icon w-icon-25"></em>
+									</a>
+								</div>
+							<!-- </a> -->
+						</li>
+						
+						#foreach($ac in $acs)<li>
+							<dl>
+								<dt><em>$!ac.className</em></dt>
+								#foreach($article in $ac.articles)
+						            #if($!article.url!="")
+						            #set($url="$!article.url")
+						            #else
+						            #set($url="$!webPath/article_$!{article.id}.htm")
+						            #end
+									<dd><a href=""><a  href="$!url" target="_blank">$!CommUtil.substring("$!article.title",12)</a></dd>
+					            #end
+							</dl>
+						</li>#end
+						
+						<li class="bd_none">
+							<img src="$!webPath/resources/pcIndecx/images/erwm.png" width="108" height="108" alt="">
+							<span style="margin-right: 0px;">扫描下载手机版</span>
+						</li>	
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="sh_footer">
+		<div class="footer_center">
+			<p class="first">Copyright 2017 ysysgo.com. All Rights. Reserved <a href="http://www.miitbeian.gov.cn">吉ICP备16005774号-1</a></p>
+			<p class="er">版权所有: 吉林云尚保健食品有限公司   服务热线: 400-888-2933</p>
+			<p class="er">	增值电信业务经营许可证  吉B2-20170027</p>
+			<div class="er">
+				<ul>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+		
+		 <div id="erweima" style="display:none; position:relative;"><img alt="关闭" id="closex" src="$!webPath/resources/pcIndecx/images/closex.png" style="position:absolute; right:0px; top:0px; cursor:pointer;" />
+		    <img src="$!webPath/resources/pcIndecx/images/qrcode.jpg" alt="" />
+	    </div>
+	    <script>
+	    function showid(idname){
+	   var isIE = (document.all) ? true : false;
+	   var isIE6 = isIE && ([/MSIE (\d)\.0/i.exec(navigator.userAgent)][0][1] == 6);
+	   var newbox=document.getElementById(idname);
+	   var closex=document.getElementById("closex");
+	   newbox.style.zIndex="9999";
+	   newbox.style.display="block"
+	   newbox.style.position = !isIE6 ? "fixed" : "absolute";
+	   newbox.style.top =newbox.style.left = "50%";
+	   newbox.style.marginTop = - newbox.offsetHeight / 2 + "px";
+	   newbox.style.marginLeft = - newbox.offsetWidth / 2 + "px";  
+	   var layer=document.createElement("div");
+	   layer.id="layer";
+	   layer.style.width=layer.style.height="100%";
+	   layer.style.position= !isIE6 ? "fixed" : "absolute";
+	   layer.style.top=layer.style.left=0;
+	   layer.style.backgroundColor="#000";
+	   layer.style.zIndex="9998";
+	   layer.style.opacity="0.6";
+	   document.body.appendChild(layer);
+	   var sel=document.getElementsByTagName("select");
+	   for(var i=0;i<sel.length;i++){        
+	   sel[i].style.visibility="hidden";
+	   }
+	   function layer_iestyle(){      
+	   layer.style.width=Math.max(document.documentElement.scrollWidth, 
+
+	   document.documentElement.clientWidth)
+	   + "px";
+	   layer.style.height= Math.max(document.documentElement.scrollHeight, 
+
+	   document.documentElement.clientHeight) +
+	   "px";
+	   }
+	   function newbox_iestyle(){      
+	   newbox.style.marginTop = document.documentElement.scrollTop - newbox.offsetHeight / 2 + 
+
+	   "px";
+	   newbox.style.marginLeft = document.documentElement.scrollLeft - newbox.offsetWidth / 2 + 
+
+	   "px";
+	   }
+	   if(isIE){layer.style.filter ="alpha(opacity=60)";}
+	   if(isIE6){  
+	   layer_iestyle()
+	   newbox_iestyle();
+	   window.attachEvent("onscroll",function(){                              
+	   newbox_iestyle();
+	   })
+	   window.attachEvent("onresize",layer_iestyle)          
+	   }  
+	   layer.onclick=function(){newbox.style.display="none";layer.style.display="none";for(var 
+
+	   i=0;i<sel.length;i++){
+	   sel[i].style.visibility="visible";
+	   }}
+
+	   closex.onclick=function(){newbox.style.display="none";layer.style.display="none";for(var 
+
+	   i=0;i<sel.length;i++){
+	   sel[i].style.visibility="visible";
+	   }}
+	   }
+	    </script>
+		
+	</fotter>
+</body>
+</html>

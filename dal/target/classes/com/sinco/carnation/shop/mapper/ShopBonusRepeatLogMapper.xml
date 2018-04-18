@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.ShopBonusRepeatLogMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.shop.model.ShopBonusRepeatLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="uid" property="uid" jdbcType="BIGINT" />
+		<result column="user_alias" property="userAlias" jdbcType="VARCHAR" />
+		<result column="order_id" property="orderId" jdbcType="BIGINT" />
+		<result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+		<result column="used_bonus_price" property="usedBonusPrice"
+			jdbcType="DECIMAL" />
+		<result column="TYPE" property="type" jdbcType="INTEGER" />
+		<result column="pay_type" property="payType" jdbcType="INTEGER" />
+		<result column="used_repeat_money" property="usedRepeatMoney"
+			jdbcType="DECIMAL" />
+		<result column="date_time" property="dateTime" jdbcType="TIMESTAMP" />
+		<result column="return_trac_no" property="returnTracNo"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.shop.bo.ShopBonusRepeatLogBO" extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, uid, user_alias, order_id, total_price, used_bonus_price, TYPE,
+		pay_type, used_repeat_money,
+		date_time, return_trac_no
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.shop.model.ShopBonusRepeatLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_bonus_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_bonus_log
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_bonus_log
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.shop.model.ShopBonusRepeatLogExample">
+		delete from shop_bonus_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.ShopBonusRepeatLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_bonus_log (id, uid, user_alias,
+		order_id, total_price, used_bonus_price,
+		TYPE, pay_type, used_repeat_money,
+		date_time, return_trac_no)
+		values (#{id,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT},
+		#{userAlias,jdbcType=VARCHAR},
+		#{orderId,jdbcType=BIGINT}, #{totalPrice,jdbcType=DECIMAL}, #{usedBonusPrice,jdbcType=DECIMAL},
+		#{type,jdbcType=INTEGER}, #{payType,jdbcType=INTEGER},
+		#{usedRepeatMoney,jdbcType=DECIMAL},
+		#{dateTime,jdbcType=TIMESTAMP}, #{returnTracNo,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.ShopBonusRepeatLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_bonus_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="userAlias != null">
+				user_alias,
+			</if>
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="totalPrice != null">
+				total_price,
+			</if>
+			<if test="usedBonusPrice != null">
+				used_bonus_price,
+			</if>
+			<if test="type != null">
+				TYPE,
+			</if>
+			<if test="payType != null">
+				pay_type,
+			</if>
+			<if test="usedRepeatMoney != null">
+				used_repeat_money,
+			</if>
+			<if test="dateTime != null">
+				date_time,
+			</if>
+			<if test="returnTracNo != null">
+				return_trac_no,
+			</if>
+			<if test="usedIntegralMoney != null">
+				used_integral_money,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="userAlias != null">
+				#{userAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="orderId != null">
+				#{orderId,jdbcType=BIGINT},
+			</if>
+			<if test="totalPrice != null">
+				#{totalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="usedBonusPrice != null">
+				#{usedBonusPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="payType != null">
+				#{payType,jdbcType=INTEGER},
+			</if>
+			<if test="usedRepeatMoney != null">
+				#{usedRepeatMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="dateTime != null">
+				#{dateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="returnTracNo != null">
+				#{returnTracNo,jdbcType=VARCHAR},
+			</if>
+			<if test="usedIntegralMoney != null">
+				#{usedIntegralMoney,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.shop.model.ShopBonusRepeatLogExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_bonus_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_bonus_log
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.uid != null">
+				uid = #{record.uid,jdbcType=BIGINT},
+			</if>
+			<if test="record.userAlias != null">
+				user_alias = #{record.userAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="record.orderId != null">
+				order_id = #{record.orderId,jdbcType=BIGINT},
+			</if>
+			<if test="record.totalPrice != null">
+				total_price = #{record.totalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.usedBonusPrice != null">
+				used_bonus_price = #{record.usedBonusPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.type != null">
+				TYPE = #{record.type,jdbcType=INTEGER},
+			</if>
+			<if test="record.payType != null">
+				pay_type = #{record.payType,jdbcType=INTEGER},
+			</if>
+			<if test="record.usedRepeatMoney != null">
+				used_repeat_money = #{record.usedRepeatMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="record.dateTime != null">
+				date_time = #{record.dateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.returnTracNo != null">
+				return_trac_no = #{record.returnTracNo,jdbcType=VARCHAR},
+			</if>
+	
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_bonus_log
+		set id = #{record.id,jdbcType=BIGINT},
+		uid = #{record.uid,jdbcType=BIGINT},
+		user_alias = #{record.userAlias,jdbcType=VARCHAR},
+		order_id = #{record.orderId,jdbcType=BIGINT},
+		total_price = #{record.totalPrice,jdbcType=DECIMAL},
+		used_bonus_price = #{record.usedBonusPrice,jdbcType=DECIMAL},
+		TYPE = #{record.type,jdbcType=INTEGER},
+		pay_type = #{record.payType,jdbcType=INTEGER},
+		used_repeat_money = #{record.usedRepeatMoney,jdbcType=DECIMAL},
+		date_time = #{record.dateTime,jdbcType=TIMESTAMP},
+		return_trac_no = #{record.returnTracNo,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.ShopBonusRepeatLog">
+		update shop_bonus_log
+		<set>
+			<if test="uid != null">
+				uid = #{uid,jdbcType=BIGINT},
+			</if>
+			<if test="userAlias != null">
+				user_alias = #{userAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="orderId != null">
+				order_id = #{orderId,jdbcType=BIGINT},
+			</if>
+			<if test="totalPrice != null">
+				total_price = #{totalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="usedBonusPrice != null">
+				used_bonus_price = #{usedBonusPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="type != null">
+				TYPE = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="payType != null">
+				pay_type = #{payType,jdbcType=INTEGER},
+			</if>
+			<if test="usedRepeatMoney != null">
+				used_repeat_money = #{usedRepeatMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="dateTime != null">
+				date_time = #{dateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="returnTracNo != null">
+				return_trac_no = #{returnTracNo,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.ShopBonusRepeatLog">
+		update shop_bonus_log
+		set uid = #{uid,jdbcType=BIGINT},
+		user_alias = #{userAlias,jdbcType=VARCHAR},
+		order_id = #{orderId,jdbcType=BIGINT},
+		total_price = #{totalPrice,jdbcType=DECIMAL},
+		used_bonus_price = #{usedBonusPrice,jdbcType=DECIMAL},
+		TYPE = #{type,jdbcType=INTEGER},
+		pay_type = #{payType,jdbcType=INTEGER},
+		used_repeat_money = #{usedRepeatMoney,jdbcType=DECIMAL},
+		date_time = #{dateTime,jdbcType=TIMESTAMP},
+		return_trac_no = #{returnTracNo,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="getByVo" resultMap="BaseResultMap">
+		SELECT * FROM shop_bonus_log WHERE 1=1
+		<if test="vo.uid != null">
+			AND uid = #{vo.uid,jdbcType=BIGINT}
+		</if>
+		<if test="vo.userAlias != null">
+			AND user_alias = #{vo.userAlias,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.orderId != null">
+			AND order_id = #{vo.orderId,jdbcType=BIGINT}
+		</if>
+		<if test="vo.totalPrice != null">
+			AND total_price = #{vo.totalPrice,jdbcType=DECIMAL}
+		</if>
+		<if test="vo.usedBonusPrice != null">
+			AND used_bonus_price = #{vo.usedBonusPrice,jdbcType=DECIMAL}
+		</if>
+		<if test="vo.type != null">
+			AND TYPE = #{vo.type,jdbcType=INTEGER}
+		</if>
+		<if test="vo.payType != null">
+			AND pay_type = #{vo.payType,jdbcType=INTEGER}
+		</if>
+		<if test="vo.usedRepeatMoney != null">
+			AND used_repeat_money = #{vo.usedRepeatMoney,jdbcType=DECIMAL}
+		</if>
+		<if test="vo.dateTime != null">
+			AND date_time = #{vo.dateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="vo.returnTracNo != null">
+			AND return_trac_no = #{vo.returnTracNo,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+</mapper>

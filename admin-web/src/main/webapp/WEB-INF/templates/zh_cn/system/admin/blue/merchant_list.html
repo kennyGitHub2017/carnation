@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/blue/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet"/>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+    jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/store_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+
+jQuery(document).ready(function(){
+	var options="<option value=''>请选择...</option>";
+	#foreach($c in $citys)
+   	options+='<option value="$!c.id" #if($!city == $!c.id) selected="selected"#end>$!c.areaName</option>';
+   	#end
+   	jQuery("#city").html(options);
+   	
+   	jQuery('#beginTimeStr').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+	  jQuery('#endTimeStr').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+});
+
+function provinceOnchange(id, target){
+	var options='<option value="">请选择...</option>';
+	jQuery.ajax({type:'POST',
+				url:'$!webPath/admin/get_city_by_province.htm',
+				data:{"parentId":jQuery("#"+id).val()},
+				success:function(data){
+					var list = jQuery.parseJSON(data);
+					jQuery.each(list,function(index,obj){
+						options+='<option value="'+obj.id+'">'+obj.areaName+'</option>';
+					}); 
+					jQuery("#"+target).html(options);
+				}
+	});	
+}
+function export_excel(){
+	#if($!objs.size()>0)	
+		var storeName = jQuery("#store_name").val();
+		var storeStatus = jQuery("#store_status").val();
+		var province = jQuery("#province").val();
+		var city = jQuery("#city").val();
+		var storeRecommend = jQuery("#storeRecommend").val();
+		window.location.href="$!webPath/admin/merchant_list_excel.htm?storeName="+storeName+"&storeStatus="+storeStatus+"&province="+province+"&city="+city+"&storeRecommend="+storeRecommend;
+	#else
+		alert("当前没有可以导出的数据！");
+	#end		
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">商户管理</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/admin/merchant_list.htm?currentPage=$!currentPage"  class="this"><b>管理</b></a></li>
+    	  <li><a class="add_btn" onclick="export_excel()" href="javascript:void(0);"> <b class="add_btn_b">导出Excel</b></a></li>
+    </ul>
+  </div>
+  <form action="$!webPath/admin/merchant_list.htm" method="post" name="ListForm" id="ListForm">
+  <input type="hidden" id="c" value="$!city" />
+  <div class="search">
+    <ul>
+      <li> 
+      <span>商户名称</span> <span class="size ">
+        <input name="storeName" type="text" id="store_name"  value="$!vo.storeName"/>
+        </span> 
+        <span>用户名</span> <span class="size150">
+        <input name="loginName" type="text" id="loginName"  value="$!vo.loginName"/>
+        </span> 
+        <span>商户状态</span> 
+        <span>
+	        <select name="storeStatus" id="store_status" style="width: 150px">
+			  <option value="">请选择...</option>
+			   #foreach($map in $StoreConstants.getMerchantStatusMap().entrySet())
+			   		<option value="$map.key" #if($!vo.storeStatus == $map.key) selected="selected"#end>$map.value</option>
+			   #end 
+	        </select>
+        </span> 
+        <span>城市</span>
+        <span>
+	        <select name="province" id="province" onchange="provinceOnchange('province','city');" style="width: 150px">
+	        	<option value="">请选择...</option>
+	        	#foreach($p in $provinces)
+	        	<option value="$!p.id" #if($!province == $!p.id) selected="selected"#end>$!p.areaName</option>
+	        	#end
+	        </select>
+	    </span>
+	    <span>
+	    	<select name="city" id="city" style="width: 150px">
+	    		<option value="">请选择...</option>
+	        </select>
+	    </span> 
+      </li>
+      <li>
+	    <span>推荐APP首页</span> 
+	    <span>
+	        <select name="storeRecommend" id="storeRecommend" style="width: 150px">
+			  <option value="" #if($!a == 0) selected="selected"#end>请选择...</option>
+	          <option value="1" #if($!a == 1) selected="selected"#end>是</option>
+	          <option value="0" #if($!a == 2) selected="selected"#end>否</option>
+	        </select>
+        </span> 
+        <span>运营商所属区域</span>
+        <span>
+	        <select name="operProvince" id="operProvince" onchange="provinceOnchange('operProvince','operCity');" style="width: 150px">
+	        	<option value="">请选择...</option>
+	        	#foreach($p in $provinces)
+	        	<option value="$!p.id" #if($!province == $!p.id) selected="selected"#end>$!p.areaName</option>
+	        	#end
+	        </select>
+	    </span>
+	    <span>
+	    	<select name="operCity" id="operCity" style="width: 150px">
+	    		<option value="">请选择...</option>
+	        </select>
+	    </span> 
+	    <span>运营商名称</span> <span class="size150">
+        	<input name="operatorName" type="text" id="operatorName"  value="$!vo.operatorName"/>
+        <span>
+        </li>
+        <li>
+	    <span>运营商编号</span> <span class="size150">
+        	<input name="operatorCode" type="text" id="operatorCode"  value="$!vo.operatorCode"/>
+        <span>
+        <span>联系电话</span> <span class="size150">
+        	<input name="operatorPhone" type="text" id="operatorPhone"  value="$!vo.operatorPhone"/>
+        <span>
+        <span>商户创建时间</span>
+        <span class="size100"> 
+			<input name="beginTimeStr" type="text" id="beginTimeStr" value="$!vo.beginTimeStr" readonly="readonly" />
+		</span>&nbsp;—
+		<span class="size100"> 
+			<input name="endTimeStr" type="text" id="endTimeStr" value="$!vo.endTimeStr" readonly="readonly" />
+		</span> 
+        	<input name="" type="submit"  value="搜索"  style="cursor: pointer; width: 70px;" class="search_btn"/>
+        </span> 
+      </li>
+    </ul>
+   </div>
+   <div class="operation">
+      <h3>友情提示</h3>
+      <ul>
+        <li>到期已提交续费申请的商户请尽快与店主联系并完成线下续费流程，待店主续费成功后请编辑商户状态为正常营业</li>
+      </ul>
+  </div>
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+<!--         <th width="5%">&nbsp;</th> -->
+        <th width="10%" ><span class="form_btna">商户名称</span></th>
+        <th width="15%"><span class="form_btna">商户用户名 | 店主姓名</span></th>
+        <th width="10%"><span class="form_btna">所在地</span></th>
+        <th width="10%"><span class="form_btna">状态</span></th>
+        <th width="10%"><span class="form_btna">所属运营商</span></th>
+        <th width="10%"><span class="form_btna">运营商编号</span></th>
+        <th width="10%"><span class="form_btna">联系电话</span></th>
+        <th width="10%"><span class="form_btna">商户创建时间</span></th>
+        <th width="6%"><span class="form_btna">公司信息</span></th>
+        <th><b class="form_btnb">操作</b></th>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+      	 #set($store_url="$!shopPath/group/store.htm?id=$!obj.id")
+         #if($!config.secondDomainOpen && $!obj.storeSecondDomain!="")
+           #set($store_url="http://$!{obj.storeSecondDomain}.$!{domainPath}/group/store.htm?id=$!obj.id")
+         #end
+<!--         <td class="check_position"><input type="checkbox" name="checkbox" id="checkbox" value="$!obj.id" /></td> -->
+        <td align="center"><a href="$store_url"  class="blue" target="_blank">$!obj.storeName</a></td>
+        <td align="center">
+        	$!{obj.loginName}&nbsp;&nbsp;|&nbsp;&nbsp;$!{obj.nickname}
+        </td>
+        <td align="center">#if($!obj.areaName!="")#if($!obj.parentAreaName!="")[$!obj.parentAreaName]#end$!obj.areaName#else暂未填写#end</td>
+        <td align="center">$StoreConstants.getMerchantStatusValue($!obj.storeStatus)</td>
+        <td align="center"><a href="$!webPath/admin/operator_view.htm?id=$!obj.operatorId&isForMerchant=true" class="blue">$!obj.operatorName</a></td>
+        <td align="center">$!obj.operatorCode</td>
+        <td align="center">$!obj.operatorPhone</td>
+        <td align="center">$!CommUtil.formatShortDate($!obj.addTime)</td>
+        #set($userName=$!$!basicUserDetails.username)
+        #if($userName=='liyajun' or $userName=='caiwua' or $userName=='caiwub' or $userName=='caiwuc')
+        	<!-- 不给财务其他功能 -->
+	        <td align="center">
+	        	<a href="$!webPath/admin/merchant_company.htm?id=$!obj.id" class="blue">查看</a>&nbsp;&nbsp;
+	        </td>
+	        <td class="hui oprate_con" align="center">
+	        </td>
+        #else
+	        <td align="center">
+	        	<a href="$!webPath/admin/merchant_company.htm?id=$!obj.id" class="blue">查看</a>&nbsp;&nbsp;
+	        	<a href="$!webPath/admin/merchant_company_edit.htm?id=$!obj.id" class="blue">编辑</a>
+	        </td>
+	        <td class="hui oprate_con" align="center">
+	        	#if($!obj.storeStatus==15)
+	           		<a href="$!webPath/admin/merchant_violation_close.htm?id=$!obj.id&currentPage=$!currentPage" class="blue">违规关闭</a>  | 
+	           		<a href="$!webPath/admin/merchant_recommend.htm?id=$!obj.id&currentPage=$!currentPage" class="blue">推荐</a>  |
+	           		#if($!obj.storeRecommend)
+	           		<a href="$!webPath/admin/merchant_app_recommend.htm?id=$!obj.id&storeRecommend=0&currentPage=$!currentPage" class="blue">取消推荐APP首页</a>
+	           		#else
+	           		<a href="$!webPath/admin/merchant_app_recommend.htm?id=$!obj.id&storeRecommend=1&currentPage=$!currentPage" class="blue">推荐APP首页</a>
+	           		#end
+	         	#end
+	         	#if($!obj.storeStatus==5 && ${sec.anyGranted("ROLE_ADMIN_MERCHANT_CHECK")})
+	         	<a href="$!webPath/admin/merchant_audit.htm?id=$!obj.id&isEepay=$!obj.isEepay&currentPage=$!currentPage" class="blue">审核</a>
+	         	#end
+	         	#if($!obj.storeStatus==20)
+	           		<a href="$!webPath/admin/merchant_recovery.htm?id=$!obj.id&currentPage=$!currentPage" class="blue">恢复营业</a>  
+	         	#end
+	         	#if($!obj.storeStatus==15 && $!obj.isEepay)
+	           		  | <a href="$!webPath/admin/merchant_edit_num.htm?id=$!obj.id&currentPage=$!currentPage" class="blue">修改机具编码</a>  
+	         	#end
+	         	|<a  href="$!webPath/admin/merchant_stat.htm?id=$!obj.id"  class="blue">商户统计</a>|<a   href="$!webPath/admin/merchant_share_details.htm?id=$!obj.id" class="blue">商户收益记录</a>
+	         	|<a   href="$!webPath/admin/merchant_target_add.htm?id=$!obj.id" class="blue">商户标签</a>
+	<!--         	<a href="$!webPath/admin/merchant_edit.htm?id=$!obj.id" class="blue">编辑</a>  -->
+	<!--             |<a href="javascript:void();" onclick="if(confirm('删除店铺将同步删除店铺对应的商品、订单，且不可恢复，是否继续？'))window.location.href='$!webPath/admin/store_del.htm?mulitId=$!obj.id'" class="blue">删除</a>  -->
+	<!--             |<a href="$!store_url" target="_blank" class="blue">查看商户</a> -->
+			</td>
+        #end
+      </tr>
+      #end
+    </table>
+  </div>
+  <div class="operate_bar">
+    <div class="fenye">
+    	<input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	 	<input name="mulitId" type="hidden" id="mulitId" />
+      	$!gotoPageFormHTML
+    </div>    
+    <div class="oper_sp">
+<!--     	<span class="oper_check"><input type="checkbox" name="all" id="all" value="" onclick="selectAll(this);" />全部</span> -->
+<!--         <span class="oper_del"><input name="" type="button" onclick="cmd('$!webPath/admin/store_del.htm','')" value="删除" style="cursor:pointer;" /> -->
+<!--         </span> -->
+    </div>     
+ </div>
+  </form>
+</div>
+</body>
+</html>

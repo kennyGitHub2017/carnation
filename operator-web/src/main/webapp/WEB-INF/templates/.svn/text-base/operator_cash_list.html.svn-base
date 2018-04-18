@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+    <link type="text/css" rel="stylesheet" href="/resources/css/jquery-ui.min.css">
+</head>
+<body>
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 提现记录
+</div>
+
+<div class="main">
+    <ul class="m-menu">
+        <li><a href="/operator/operator_cash_list.htm"  class="active">提现记录</a> </li>
+    </ul>
+
+    <form class="form-control pb-30" action="/operator/operator_cash_list.htm" method="post">
+                     编号:<input type="text" name="cashSn" value="$!vo.cashSn" class="txt min-txt">&nbsp;
+            提现方式:
+        <select class="txt min-txt" name="cashPayment">
+        	<option value="">所有</option>
+        	<option #if($!cashPayment == "alipay")selected="selected" #end value="alipay">支付宝</option>
+        	<option #if($!cashPayment == "alipay_wap")selected="selected" #end value="alipay_wap">手机网页支付宝</option>
+        	<option #if($!cashPayment == "alipay_app")selected="selected" #end value="alipay_app">手机支付宝APP</option>
+        	<option #if($!cashPayment == "bill")selected="selected" #end value="bill">快钱</option>
+        	<option #if($!cashPayment == "chinabank")selected="selected" #end value="chinabank">网银在线</option>
+        	<option #if($!cashPayment == "tenpay")selected="selected" #end value="tenpay">财付通</option>
+        </select> &nbsp;
+             提现状态:
+        <select class="txt min-txt" name="cashStatus">
+        	<option value="">所有</option>
+        	<option #if($!cashStatus == "0")selected="selected" #end value="0">等待审核</option>
+        	<option #if($!cashStatus == "1")selected="selected" #end  value="1">审核完成</option>
+        </select> &nbsp;
+                     支付状态:
+        <select class="txt min-txt" name="cashPayStatus">
+        	<option value="">所有</option>
+        	<option #if($!cashPayStatus == "0")selected="selected" #end value="0">等待支付</option>
+        	<option #if($!cashPayStatus == "1")selected="selected" #end value="1">支付完成</option>
+        </select> &nbsp;
+        时间:<input onclick="WdatePicker()" type="text" readonly="readonly" name="startDate" value="$!startDate" class="txt min-txt datepicker" /> -
+      <input onclick="WdatePicker()" type="text" readonly="readonly" name="endDate" value="$!endDate" class="txt min-txt datepicker" />
+        <input type="submit" class="btn btn-blue btn-medium" value="搜索" />
+    </form>
+	<form action="/operator/operator_cash_list.htm" id="searchForm">
+    	<input type="hidden" name="currentPage" value="1" id="currentPage"/>
+	</form>
+    <div class="table-scroll-wrap">
+    #if($!objs.size() > 0)
+    	<table cellspacing="0" cellpadding="0" width="100%" class="table-simple table-scroll">
+          <tr>
+            <th>编号</th>
+            <th>申请时间</th>
+            <th>提现金额</th>
+            <th>提现方式</th>
+            <th>提现状态</th>
+            <th>支付状态</th>
+          </tr>
+          #foreach($obj in $objs)
+          <tr>
+            <td  align="center">$!obj.cashSn</td>
+            <td  align="center">$!date.format($!obj.addTime)</td>
+            <td  align="center">¥$!obj.cashAmount</td>
+            	#if($!obj.cashPayment=="alipay")
+                #set($cash_payment="支付宝")
+                #end
+                #if($!obj.cashPayment=="alipay_wap")
+                #set($cash_payment="手机网页支付宝")
+                #end
+                #if($!obj.cashPayment=="alipay_app")
+                #set($cash_payment="手机支付宝APP")
+                #end
+                #if($!obj.cashPayment=="bill")
+                  #set($cash_payment="快钱")
+                #end
+                #if($!obj.cashPayment=="chinabank")
+                  #set($cash_payment="网银在线")
+                #end
+                #if($!obj.cashPayment=="tenpay")
+                  #set($cash_payment="财付通")
+                #end
+            <td  align="center">$!cash_payment</td>
+            	#if($!obj.cashStatus==0)
+                  #set($cash_status="等待审核")
+                #end
+                #if($!obj.cashStatus==1)
+                  #set($cash_status="审核完成")
+                #end
+            <td  align="center">$!cash_status</td>
+            	#if($!obj.cashPayStatus==0)
+                  #set($cash_pay_status="等待支付")
+                #end
+               
+                #if($!obj.cashPayStatus==1)
+                  #set($cash_pay_status="支付完成")
+                #end
+            <td  align="center">$!cash_pay_status</td>
+          </tr>
+          #end
+        </table>
+    </div>
+    <div class="fenye">
+        $!gotoPageFormHTML
+    </div>
+	#else
+		<div class="ui-warn text-center">
+			暂无记录！
+		</div>
+	#end
+</div>
+</body>
+<script src="/resources/js/jquery-1.8.2.js"></script>
+<script src="/resources/js/jquery-ui.min.js"></script>
+<script src="/resources/js/common.js"></script>
+<script src="/resources/js/jquery.blockUI.dialog.js"></script>
+<script src="/resources/js/WdatePicker/WdatePicker.js"></script>
+
+</html>

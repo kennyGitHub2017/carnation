@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+
+<script>
+jQuery(document).ready(function(){
+	jQuery("#condition").val("$!condition");	
+	jQuery("#condition2").val("$!condition2");	
+	jQuery("select[id^=area]").change(function(){
+	     var level=jQuery(this).attr("level");
+		 var id=jQuery(this).val();
+		 changeArea(level, id, true);
+	 });
+	jQuery("#area2").change(function(){
+ 	   var id=jQuery(this).val();
+ 	   jQuery("#operatorAreaId").val(id);
+ 	});
+	jQuery("#area3").change(function(){
+ 	   var id=jQuery(this).val();
+ 	  if(id != '')
+	   {
+	 	   jQuery("#operatorAreaId").val(id);
+	   }
+	   else
+	   {
+	 	   jQuery("#operatorAreaId").val(jQuery("#area2").val());
+	   }
+ 	});
+	jQuery('#startDate').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+	  jQuery('#endDate').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+	  
+	  #if($!vo.areaSheng)
+	  	 changeArea(2, jQuery("#area1").val(), false);
+      #end
+});
+function changeArea(level, id, needEmpty)
+{
+	if(needEmpty)
+	  	jQuery("#operatorAreaId").val("");
+	
+	 for(var i=4;i>level;i--){
+	  jQuery("#area"+i).empty();
+	  jQuery("#area"+i).append("<option value=''>请选择</option>");
+	 }
+	 if(id!=""){
+	  jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	     jQuery("#area"+level).empty();
+		  jQuery("#area"+level).append("<option value=''>请选择</option>");
+	      jQuery.each(data, function(index,item){
+	    	  var option = "<option value='"+item.id+"' areaName='"+item.areaName+"'";
+	    	  if(level == 2)
+		      {
+		    	  #if($!vo.areaShi)
+		    	  	  if("$!vo.areaShi" == item.areaName)
+		    	  	  {
+			    	  	  option += " selected = 'selected'";
+		    	  	  }
+		          #end
+		      }
+	    	  else if(level == 3)
+		      {
+		    	  #if($!vo.areaXian)
+		    		  if("$!vo.areaXian" == item.areaName)
+		    	  	  {
+			    	  	  option += " selected = 'selected'";
+		    	  	  }
+		          #end
+		      }
+	    	  option += ">"+item.areaName+"</option>";
+		    jQuery("#area"+level).append(option);
+		  });
+	      if(level == 2)
+	      {
+	    	  #if($!vo.areaShi)
+	    	  	  changeArea(3, jQuery("#area2").val(), false);
+	          #end
+	      }
+	  },"json");
+	 }else{
+	   for(var i=level;i<=4;i++){
+	    jQuery("#area"+i).empty();
+	   }
+	 }
+}
+
+function changeAction(action)
+{
+	if (jQuery("#area1").val() != '' && jQuery("#operatorAreaId").val() == '') 
+	{
+		alert("运营地搜索最少选择区级！");
+	}
+	else
+	{
+		jQuery("#ListForm").attr("action", action);
+		jQuery("#ListForm").submit();
+	}
+}
+</script>
+<body>
+  <div class="cont">
+    <h1 class="seth">运营商管理</h1>
+    <div class="nav_list">
+    <ul> 
+    <li><a href="$!webPath/admin/operator_list.htm"  class="this"><b>管理</b></a> </li>
+    <li><a href="$!webPath/admin/operator_add.htm" ><b>新增</b></a></li>
+    <li><a href="$!webPath/admin/operator_assigned_list.htm"><b>商户分配</b></a> </li>
+     </ul> 
+     </div>
+	<FORM name="ListForm" id="ListForm"  action="$!webPath/admin/operator_list.htm" method="post">
+	<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <div class="search">
+    	<!--  
+      	  <span>
+      	  	 姓名
+          </span>
+      	  <span class="size100">
+          	<input name="userName" type="text" value="$!vo.userName" />
+          </span>
+      	  <span>
+      	  	 编码
+          </span>
+      	  <span class="size100">
+          	<input name="operatorCode" type="text" value="$!vo.operatorCode" />
+          </span>
+          -->
+          <select name="condition" id="condition">
+            <option value="1">姓名</option>
+            <option value="2">运营商账号</option>
+            <option value="3">手机</option>
+          </select>
+          </span> <span class="size150">
+          <input name="value" type="text" id="value" value="$!value" />
+          </span>
+          <select name="condition2" id="condition2">
+            <option value="1">推荐人姓名</option>
+            <option value="2">推荐人编码</option>
+          </select>
+          </span> <span class="size150">
+          <input name="value2" type="text" id="value2" value="$!value2" />
+          </span>
+          <!--  
+      	  <span>
+      	  	 推荐人姓名
+          </span>
+      	  <span class="size100">
+          	<input name="refereeUserName" type="text" value="$!vo.refereeUserName" />
+          </span>
+      	  <span>
+      	  	 推荐人编码
+          </span>
+      	  <span class="size100">
+          	<input name="refereeOperatorCode" type="text" value="$!vo.refereeOperatorCode" />
+          </span>
+          -->
+          <span>创建时间</span>
+          	<span class="size100"> 
+          		<input name="startDate" type="text" id="startDate" value="$!vo.startDate" readonly="readonly" />
+			</span>
+			<span>—</span>
+			<span class="size100"> 
+				<input name="endDate" type="text" id="endDate" value="$!vo.endDate" readonly="readonly" />
+			</span> 
+      </div>
+      <div class="search">
+      <!--
+      	  <span>
+      	  	 手机
+          </span>
+      	  <span class="size100">
+          	<input name="phone" type="text" value="$!vo.phone" />
+          </span>
+          -->
+		  <span>
+			状态
+          </span>
+          
+      	  <span>
+	          <select name="status">
+	            <option value="">全部</option>
+	            <option value="0" #if($!vo.status == 0) selected="selected" #end>审核中</option>
+	            <option value="1" #if($!vo.status == 1) selected="selected" #end>审核通过</option>
+<!-- 	            <option value="-1" #if($!vo.status == -1) selected="selected" #end>审核不通过</option> -->
+	          </select>
+          </span>
+		  <span>
+			运营商级别
+          </span>
+      	  <span>
+	          <select name="level">
+	            <option value="">全部运营商</option>
+	            <option value="1" #if($!vo.level == 1) selected="selected" #end>市级运营商</option>
+	            <option value="2" #if($!vo.level == 2) selected="selected" #end>区级运营商</option>
+	            <option value="3" #if($!vo.level == 3) selected="selected" #end>VIP运营商</option>
+	            <option value="7" #if($!vo.level == 7) selected="selected" #end>金卡运营商</option>
+	            <option value="9" #if($!vo.level == 9) selected="selected" #end>银卡运营商</option>
+	          </select>
+          </span>
+      	  <span>
+      	  	 运营地
+          </span>
+      	  <span class="size150">
+          	<span>
+	          <select name="area1" id="area1" level="2">
+                <option value="">省份/自治区</option>
+		          #foreach($area in $areas)            
+		                <option value="$!area.id" areaName="$!area.areaName" #if($!area.areaName==$!vo.areaSheng) selected="true" #end>$!area.areaName</option>
+		           #end          
+              </select>
+              <select name="area2" id="area2" level="3">
+              	#if($!vo.areaShi)
+              		<option>$!vo.areaShi</option>
+              	#else
+                	<option value="">市/区</option>
+                #end
+              </select>
+              <select name="area3" id="area3" level="4">
+              	#if($!vo.areaXian)
+              		<option>$!vo.areaXian</option>
+              	#else
+                	<option value="">县/区</option>
+                #end
+              </select>
+              <input id="operatorAreaId" name="operatorAreaId" type="hidden" value="$!vo.operatorAreaId" /></td>
+          </span>
+          </span>
+          <span>
+          <input name="" type="button"  onclick="changeAction('$!webPath/admin/operator_list.htm');"  value="搜索" style="cursor:pointer;" title="搜索"  class="search_btn"/>
+          <input name="" type="button"  onclick="changeAction('$!webPath/admin/operator_list_export.htm');"  value="导出" style="cursor:pointer;" title="导出"  class="search_btn"/>
+          </span>
+
+    </div>
+
+    <div class="fshoptb page-fixed-mb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="10%" align="left"><span class="form_btna">编码</span></th>
+		  <th width="5%" align="center"><span class="form_btna">级别</span></th>
+		  <th width="5%" align="center"><span class="form_btna">名称</span></th>
+		  <th width="5%" align="center"><span class="form_btna">姓名</span></th>
+          <th width="10%" align="center"><span class="form_btna">身份证</span></th>
+          <th width="5%" align="center"><span class="form_btna">电话</span></th>
+          <th width="5%" align="center"><span class="form_btna">邀请码</span></th>
+          <th width="10%" align="center"><span class="form_btna">运营地</span></th>
+          <th width="5%" align="center"><span class="form_btna">推荐人编码</span></th>
+          <th width="5%" align="center"><span class="form_btna">推荐人姓名</span></th>
+          <th width="5%" align="center"><span class="form_btna">状态</span></th>
+          <th width="10%" align="center"><span class="form_btna">创建时间</span></th>
+          <th align="center"><span class="form_btna">操作</span></th>
+        </tr>
+        #foreach($!obj in $objs)
+					<tr>
+						<td class="lightred">$!obj.operatorCode</td>
+						<td class="lightred">#if($!obj.level == 1) 市级 #elseif($!obj.level == 2) 区级 #elseif($!obj.level == 3) vip#elseif($!obj.level == 7) 金卡 #elseif($!obj.level == 9) 银卡 #end</td>
+						<td class="lightred">
+						<a href="$!webPath/admin/operator_view.htm?id=$!obj.id" class="blue">$!obj.operatorName</a>
+						</td>
+						<td class="lightred">$!obj.userName</td>
+						<td class="lightred">$!obj.idCard</td>
+						<td class="lightred">$!obj.phone</td>
+						<td class="lightred">$!obj.invitationCode</td>
+						<td class="lightred">$!obj.areaName</td>
+						<td class="lightred">#if($!obj.refereeOperatorCode) $!obj.refereeOperatorCode #else 无 #end</td>
+						<td class="lightred">#if($!obj.refereeUserName) $!obj.refereeUserName #else 无 #end</td>
+						<td class="lightred">
+							#if($!obj.userStatus == "2")
+								已冻结
+							#else
+								#if($!obj.status == 0) 审核中 #elseif($!obj.status == 1) 审核通过 #elseif($!obj.status == -1) 审核不通过 #end
+							#end
+						</td>
+						<td>$!CommUtil.formatLongDate($!obj.createTime)</td>
+						<td align="center" class="hui oprate_con">
+							#if($!obj.userStatus=="2")
+           						<a href="javascript:void(0);" onclick="if(confirm('解冻的运营商将恢复登录，是否继续？'))window.location.href='$!webPath/admin/operator_freeze.htm?mulitId=$!obj.userId&currentPage=$!currentPage&freezed=false'" class="blue" >解冻</a>
+           					#else
+           						<a href="javascript:void(0);" onclick="if(confirm('冻结的运营商将不可登录，是否继续？'))window.location.href='$!webPath/admin/operator_freeze.htm?mulitId=$!obj.userId&currentPage=$!currentPage&freezed=true'" class="blue" >冻结</a>
+           					#end
+							<a href="$!webPath/admin/operator_edit.htm?id=$!obj.id" class="blue">编辑</a><br />
+							#if(${sec.anyGranted("ROLE_OPERATOR_CHECK_PERMITER")} && $!obj.status == 0)<a href="javascript:void(0);" class="blue" onclick="if(confirm('审核通过之后，将不能修改运营地和级别，是否继续'))window.location.href='$!webPath/admin/operator_check.htm?id=$!obj.id&currentPage=${currentPage}'">审核</a><br />#end
+							<a href="$!webPath/admin/operator_own_shop.htm?operatorId=$!obj.id" class="blue">所属商户</a><a href="$!webPath/admin/register_shop_list.htm?operatorId=$!obj.id" class="blue">注册商户</a><br />
+							<a href="$!webPath/admin/operator_own_shopMember.htm?operatorId=$!obj.id" class="blue">所属会员</a><a href="$!webPath/admin/register_user_list.htm?operatorId=$!obj.id" class="blue">注册会员</a><br />
+							<a href="$!webPath/admin/area_operator_list.htm?Id=$!obj.id" class="blue">辖区运营商</a><a href="$!webPath/admin/register_operator_list.htm?Id=$!obj.id" class="blue">注册运营商</a><br />
+							<a href="javascript:void(0);" class="blue" dialog_uri="$!webPath/admin/operator_state_relation.htm?id=$!obj.id" dialog_title="关系统计" dialog_width="600" dialog_id="operator_state_relation">关系统计</a><br />
+							<a href="javascript:void(0);" class="blue" dialog_uri="$!webPath/admin/operator_state_rebate.htm?id=$!obj.id" dialog_title="收益统计" dialog_width="600" dialog_id="operator_state_rebate">收益统计</a>
+						</td>
+					</tr>
+					#end
+        <tr>
+        <td colspan="11" style="border-bottom:0px; padding:0px;">
+        	<div class="operate_bar page-fixed">
+				<div class="fenye">$!gotoPageFormHTML</div>
+			</div>
+		</td>
+        </tr>
+      </table>
+    </div>
+	</FORM>
+  </div>
+</body>
+</html>

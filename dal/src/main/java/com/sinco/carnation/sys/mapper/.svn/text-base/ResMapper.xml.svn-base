@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.ResMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.Res">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="info" property="info" jdbcType="VARCHAR" />
+		<result column="res_name" property="resName" jdbcType="VARCHAR" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="value" property="value" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="BoResultMap" type="com.sinco.carnation.sys.bo.ResBO">
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, info, res_name, sequence, type, value
+	</sql>
+	<select id="selectByExample" resultMap="BoResultMap"
+		parameterType="com.sinco.carnation.sys.model.ResExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_res
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_res
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sys_res
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.ResExample">
+		delete from sys_res
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.Res">
+		insert into sys_res (id, add_time, delete_status,
+		info, res_name, sequence,
+		type, value)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{info,jdbcType=VARCHAR}, #{resName,jdbcType=VARCHAR}, #{sequence,jdbcType=INTEGER},
+		#{type,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.Res"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_res
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="info != null">
+				info,
+			</if>
+			<if test="resName != null">
+				res_name,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="value != null">
+				value,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="info != null">
+				#{info,jdbcType=VARCHAR},
+			</if>
+			<if test="resName != null">
+				#{resName,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="value != null">
+				#{value,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.ResExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_res
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_res
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.info != null">
+				info = #{record.info,jdbcType=VARCHAR},
+			</if>
+			<if test="record.resName != null">
+				res_name = #{record.resName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=VARCHAR},
+			</if>
+			<if test="record.value != null">
+				value = #{record.value,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sys_res
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		info = #{record.info,jdbcType=VARCHAR},
+		res_name = #{record.resName,jdbcType=VARCHAR},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		type = #{record.type,jdbcType=VARCHAR},
+		value = #{record.value,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.Res">
+		update sys_res
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="info != null">
+				info = #{info,jdbcType=VARCHAR},
+			</if>
+			<if test="resName != null">
+				res_name = #{resName,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="value != null">
+				value = #{value,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.Res">
+		update sys_res
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		info = #{info,jdbcType=VARCHAR},
+		res_name = #{resName,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=INTEGER},
+		type = #{type,jdbcType=VARCHAR},
+		value = #{value,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="findResByRoleType" resultMap="BaseResultMap">
+		SELECT r.* FROM sys_res AS r
+		INNER JOIN `sys_role_res` AS rr ON rr.`res_id` = r.`id`
+		INNER JOIN `sys_role` AS role ON role.`id` = rr.`role_id`
+		WHERE role.`type` = #{roleType,jdbcType=VARCHAR}
+		AND r.`value` = #{value,jdbcType=VARCHAR}
+	</select>
+
+</mapper>

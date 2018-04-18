@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+
+<script>
+jQuery(document).ready(function(){
+  jQuery('#startTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  //
+});
+</script>
+<body>
+  <div class="cont">
+    <h1 class="seth">所属会员</h1>
+    <div class="nav_list">
+    <ul> 
+    <li><a href="$!webPath/admin/operator_list.htm"><b>管理</b></a> </li>
+    <li><a href="$!webPath/admin/operator_add.htm" ><b>新增</b></a></li>
+    <li><a href="$!webPath/admin/operator_assigned_list.htm"><b>商户分配</b></a> </li>
+    <li><a href="javascript:void(0);" class="this" ><b>所属会员</b></a></li>
+     </ul> 
+     </div>
+	<FORM name="ListForm" id="ListForm"  action="$!webPath/admin/operator_own_shopMember.htm" method="post">
+		<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+		<input name="operatorId" type="hidden" id="operatorId" value="$!vo.operatorId" />
+    <div class="search">
+        <span>所属类型：</span>
+
+      	<span>
+        <select name="isOwn">
+        	<option value="">所有级别</option>
+        	<option #if($!vo.isOwn == "1") selected="selected" #end value="1">隶属</option>
+        	<option #if($!vo.isOwn == "0") selected="selected" #end value="0">辖区</option>
+        </select> &nbsp;
+    	</span>
+        <input name="" type="submit"  value="搜索" style="cursor:pointer;" title="搜索"  class="search_btn"/>
+    </div>
+    <div class="fshoptb page-fixed-mb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="100px" align="center"><span class="form_btna">会员昵称</span></th>
+		  <th width="100px" align="center"><span class="form_btna">会员辖区</span></th>
+		  <th width="100px" align="center"><span class="form_btna">隶属商户昵称</span></th>
+		  <th width="100px" align="center"><span class="form_btna">隶属商户运营商</span></th>
+          <th width="100px" align="center"><span class="form_btna">隶属运营商编号</span></th>
+          <th width="100px" align="center"><span class="form_btna">注册时间</span></th>
+          <th width="100px" align="center"><span class="form_btna">消费总金额</span></th>
+          <th width="100px" align="center"><span class="form_btna"></span></th>
+        </tr>
+        #foreach($!obj in $objs)
+			<tr>
+			<td class="lightred">$!obj.nickname</td>
+            <td class="lightred">$!obj.operator.areaName </td>
+            <td class="lightred">$!obj.sellerNickName</td>
+            <td class="lightred">$!obj.operator.operatorName</td>
+            <td class="lightred">$!obj.operator.operatorCode</td>
+            <td class="lightred">$!date.format($!obj.createTime)</td>
+            <td class="lightred">$!#if($!obj.totlePrice) $!obj.totlePrice #else 0.00 #end</td>
+            <td class="lightred"></td>
+            </tr>
+		#end
+        <tr>
+        <td colspan="11" style="border-bottom:0px; padding:0px;">
+        	<div class="operate_bar page-fixed">
+				<div class="fenye">$!gotoPageFormHTML</div>
+			</div>
+		</td>
+        </tr>
+      </table>
+    </div>
+	</FORM>
+  </div>
+</body>
+</html>

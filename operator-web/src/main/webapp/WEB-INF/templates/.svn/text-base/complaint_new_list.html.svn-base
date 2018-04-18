@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>新投诉列表</title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+</head>
+<body>
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 新投诉列表
+</div>
+
+<div class="main">
+    <ul class="m-menu">
+        <li><a href="/operator/complaint_new_list.htm" class="active">新投诉列表</a> </li>
+        <li><a href="/operator/complaint_deal_list.htm">已完成投诉列表</a> </li>
+    </ul>
+	<form class="form-control pb-30" action="/operator/complaint_new_list.htm" id="searchForm">
+    	<input type="hidden" name="currentPage" value="1" id="currentPage"/>
+        投诉人手机号：<input type="text" name="mobile" value="$!vo.mobile" class="txt min-txt" /> &nbsp;   
+        投诉人昵称：<input type="text" name="nickName" value="$!vo.nickName" class="txt min-txt" />  &nbsp;
+        商户手机号：<input type="text" name="storeMobile" value="$!vo.storeMobile" class="txt min-txt" /> &nbsp;   
+        商户名称：<input type="text" name="storeName" value="$!vo.storeName" class="txt min-txt" />    &nbsp; 
+        <input type="submit" class="btn btn-blue btn-medium" value="搜索" />
+	</form>
+    <div class="table-scroll-wrap">
+    #if($!objs.size() > 0)
+    	<table cellspacing="0" cellpadding="0" width="100%" class="table-simple">
+          <tr>
+            <th width="16%">投诉人</th>
+            <th width="16%">投诉人手机号</th>
+            <th width="16%">被投诉商户</th>
+            <th width="12%">被投诉服务</th>
+            <th width="12%">被投诉商户手机号</th>
+            <th width="12%">商户所在地</th>
+            <th width="12%">投诉时间</th>
+            <th width="12%" align="center">操作</th>
+          </tr>
+          #foreach($obj in $objs)
+          <tr>
+            <td  align="center">$!obj.nickname</td>
+            <td  align="center">$!obj.mobile</td>
+            <td  align="center">$!obj.storeName</td>
+            <td  align="center">$!obj.groupInfo</td>
+            <td  align="center">$!obj.toUserName</td>
+            <td  align="center">$!obj.areaText</td>
+            <td  align="center">$!date.format($!obj.addTime)</td>
+
+            <td  align="center">
+            	<a class="c_blue" href="/operator/complaint_deal.htm?id=$!obj.ofId">处理</a> 
+            </td>
+          </tr>
+          #end
+        </table>
+    </div>
+    <div class="fenye">
+        $!gotoPageFormHTML
+    </div>
+	#else
+		<div class="ui-warn text-center">
+			暂无记录！
+		</div>
+	#end
+</div>
+</body>
+<script src="/resources/js/jquery-1.8.2.js"></script>
+<script src="/resources/js/jquery-ui.min.js"></script>
+<script src="/resources/js/common.js"></script>
+</html>

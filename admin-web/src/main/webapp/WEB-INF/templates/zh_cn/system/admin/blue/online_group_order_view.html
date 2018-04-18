@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+#set($map = $!orderFormTools.queryGroupInfo("$!order.groupInfo"))
+#set($goods_id = "$!{map.get('goods_id')}")	
+#set($goods_name = "$!{map.get('goods_name')}")	
+#set($goods_begin_time = "$!{map.get('goods_begin_time')}")
+#set($goods_end_time = "$!{map.get('goods_end_time')}")
+#set($goods_total_price = "$!{map.get('goods_total_price')}")
+#set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+#set($goods_price = "$!{map.get('goods_price')}")
+<div class="cont">
+<h3 class="seth">线上服务订单</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/admin/online_group_order_list.htm"><b>所有订单</b></a></li>
+        <li><a href="javascript:void(0);" class="this"><b>订单详情</b></a></li>
+    </ul>
+  </div>
+  <div class="orderdetail">
+    <div class="orderh">订单状态</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">订单号：</span><span>$!order.orderId</span></li>
+        	#if($!order.orderStatus==10)
+            #set($status="待付款")
+            #elseif($!order.orderStatus==20)
+            #set($status="未消费")
+            #else
+            #set($status="已完成")
+            #end  
+        <li><span class="ordertitle"> 订单状态：</span><span>$!status</span></li>
+        <li><span class="ordertitle">订单总额：</span><span><strong class="orange" style="padding-right：10px;">¥$!goods_total_price</strong></span></li>
+      </ul>
+    </div>
+    <div class="orderh">订单详情</div>
+    <div class="orderhh">订单信息</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">买家名称：</span><span>$!order.userCustomer.nickname</span></li>
+        #if($!store.storeName)
+        <li><span class="ordertitle"> 商家名称：</span><span>$!store.storeName</span></li>
+        #end
+        #set($payment=$PaymentConstants.getPaymentName($!order.paymentMark))
+        <li><span class="ordertitle">支付方式：</span><span>$!payment</span></li>
+        <li><span class="ordertitle">支付说明：</span><span>$!order.payMsg</span></li>
+        <li><span class="ordertitle">下单时间：</span><span>$!CommUtil.formatLongDate($!order.addTime)</span></li>
+        <li><span class="ordertitle">有效期：</span><span>$goods_begin_time至$goods_end_time</span></li>
+      </ul>
+    </div>
+    <div class="orderhhh">服务信息</div>
+    <div class="ordetable">
+      <table width="90%" border="0" cellspacing="0" cellpadding="0" class="orde_table">
+        <tr style="border-bottom：1px dotted #CCEAF4">
+          <td width="20%">&nbsp;</td>
+          <td width="50%"><strong>服务名称</strong></td>
+          <td width="10%"><strong>消费码</strong></td>
+          <td width="10%"><strong>支付金额</strong></td>
+          <td width="10%"><strong>状态</strong></td>
+        </tr>
+        #if($!order.orderStatus > 10)
+        #foreach($obj in $infos)
+        <tr style="border-bottom：1px dotted #CCEAF4">
+          <td><img src="$goods_mainphoto_path" width="45" height="45" /></td>
+            #set($goods_url="$!{shopPath}/group/view_$!{goods_id}.htm")
+	        #if($!config.secondDomainOpen && $!obj.goodsStore.storeSecondDomain!="")
+	        	#set($goods_url="http://$!{obj.goodsStore.storeSecondDomain}.$!{domainPath}/group/view_$!{goods_id}.htm")
+	        #end
+          <td>
+          	<a href="$goods_url" target="_blank" class="blue">$goods_name</a>
+          </td>
+          <td> 
+            <li class="hui2">$!obj.groupSn</li>
+          </td>
+          <td>
+          		<strong class="orange">¥</strong><strong style="color：#F90">$!goods_price
+          </td>
+             #if($!obj.status==0)
+               #set($infoStatus="未消费")
+             #end
+             #if($!obj.status==1)
+               #set($infoStatus="已消费")
+             #end
+             #if($!obj.status==-1)
+               #set($infoStatus="已过期")
+             #end
+             #if($!obj.status==3 || $!obj.status==5)
+               #set($infoStatus="退款中")
+             #end
+             #if($!obj.status==7)
+               #set($infoStatus="已退款")
+             #end
+             #if($!obj.status==6)
+               #set($infoStatus="审核未通过")
+             #end
+          <td>$infoStatus</td>
+        </tr>
+        #end
+        #else
+        #foreach($count in [1..$!{map.get('goods_count')}])
+        <tr style="border-bottom：1px dotted #CCEAF4">
+          <td><img src="$goods_mainphoto_path" width="45" height="45" /></td>
+            #set($goods_url="$!{shopPath}/group/view_$!{goods_id}.htm")
+	        #if($!config.secondDomainOpen && $!obj.goodsStore.storeSecondDomain!="")
+	        	#set($goods_url="http://$!{obj.goodsStore.storeSecondDomain}.$!{domainPath}/group/view_$!{goods_id}.htm")
+	        #end
+          <td>
+          	<a href="$goods_url" target="_blank" class="blue">$goods_name</a>
+          </td>
+          <td> 
+            <li class="hui2"></li>
+          </td>
+          <td>
+          		<strong class="orange">¥</strong><strong style="color：#F90">$!goods_price
+          </td>
+          <td>未支付</td>
+        </tr>
+        #end
+        #end
+      </table>
+    </div>
+    <div class="orderhhh">操作历史</div>
+    <div class="orderul_record">
+      <ul>
+        #foreach($log in $!logs)
+        <li><strong style="color：#F90">$!{log.userCustomer.nickname}</strong>于<strong><em>$!CommUtil.formatLongDate($!log.addTime)</em></strong>$!log.logInfo</li>
+        #end
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>

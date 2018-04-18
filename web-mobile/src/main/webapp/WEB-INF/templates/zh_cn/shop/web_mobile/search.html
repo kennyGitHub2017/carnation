@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="viewport"
+	content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="full-screen" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>搜索</title>
+<link href="$!webPath/resources/shop/css/style.css" rel="stylesheet"
+	type="text/css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.cookie.js"></script>
+<script>
+	var screenWidth = window.innerWidth || document.documentElement.clientWidth;
+	document.documentElement.style.fontSize = parseInt(screenWidth / 7.5)
+			+ "px";
+</script>
+<script>
+	var _hmt = _hmt || [];
+	(function() {
+		var hm = document.createElement("script");
+		hm.src = "//hm.baidu.com/hm.js?5ec07b377284cf8ef95ebaa33fa298f5";
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(hm, s);
+	})();
+</script>
+
+<style>
+html {
+	background-color: #fff;
+}
+</style>
+</head>
+<body>
+	<form action="$!webPath/search.htm" method="post" id="searchForm">
+		<input name="type" type="hidden" id="type" value="$!type" />
+		<div class="main search-main">
+			<div class="searce-shuru">
+				<input type="text" name="keyword" placeholder="搜索喜欢的宝贝" id="keyword"
+					placeholder='$!keyw' x-webkit-speech lang="zh-CN"
+					onwebkitspeechchange="jQuery('#searchForm').submit()"
+					class="h_sear_txt" autocomplete="off" value="$!keyword" /> <span
+					class="qx" value="搜索" onclick="search()">搜索</span>
+			</div>
+			<div class="searce-remen">
+				<!-- 	<span class="remen-search" onclick="search_history_data();">热门搜索</span> -->
+				<span class="remen-search" onclick="search_history_data();">热门搜索</span>
+			</div>
+			#if($!config.hotSearch!="")
+			<div class="sousuo-fl">
+				<ul>
+					#foreach($info in $CommUtil.splitByChar("$!config.hotSearch",","))
+					<li><a href="javascript:void(0);"
+						onclick="search_form('$info','goods');"> $!info </a></li> #end
+				</ul>
+			</div>
+			#end
+
+			<!--搜索历史 -->
+			<div class="head_search_history_up" id="head_search_history_up"
+				style="display: none">
+				<dl>
+					<dt>
+						<ul>
+							<li class="head_search_history_top"><span>搜索历史</span><i><a
+									href="">清除全部</a></i></li>
+						</ul>
+					</dt>
+					<dd>
+						<span class="head_search_history_hot">热门搜索...</span>
+						<ul>
+
+							#if($!config.hotSearch!="") #foreach($info in
+							$CommUtil.splitByChar("$!config.hotSearch",","))
+							<li><a href="javascript:void(0);"
+								onclick="search_form('$info','goods');">$!info</a></li> #end #end
+						</ul>
+					</dd>
+				</dl>
+			</div>
+
+			<div class="searce-remen">
+				<span class="remen-search">历史搜索</span>
+			</div>
+			<div class="search-list" id="search-list">
+				<!-- 历史搜索记录为空 -->
+				<span style="display: none;">历史搜索记录为空</span>
+				<!-- 有搜索历史 -->
+				<ul>
+				</ul>
+			</div>
+
+			<div class="search-button">
+				<a href="javascript:void(0)" onclick="search_data_del_all()"><input
+					type="button" value="清除历史搜索"></a>
+			</div>
+
+		</div>
+	</form>
+	<script src="$!webPath/resources/js/common.js"></script>
+	<script>
+		search_history_data();
+		//删除全部历史记录
+		function search_data_del_all() {
+			jQuery.cookie("search_history", null);
+			search_html_restore();
+			search_history_data();
+		}
+		//加载搜索历史
+		function search_history_data() {
+			var data = jQuery.cookie("search_history");
+			if (data == null) {
+				jQuery("div[id^='head_search_history']").remove();
+			} else {
+				jQuery.each(data.split(","), function(index, item) {
+					if (index < 10) {
+						item = item.replace(/\"/g, "");
+						jQuery("#search-list").find("ul").append(
+								"<li><span data='"+item+"'><a href='javascript:void(0)'>"
+										+ item + "</a></li>");
+					}
+				});
+			}
+		}
+		function search_form() {
+			var keyword = arguments[0];
+			var type = arguments[1];
+			if (keyword != "" && keyword != undefined) {
+				jQuery("#keyword").val(keyword);
+			}
+			if (type != "" && type != undefined) {
+				jQuery("#type").val(type);
+			}
+			jQuery("#searchForm").submit();
+			jQuery("#keyword").val("");
+		}
+		function search() {
+			if (jQuery("#keyword").val() == '') {
+				jQuery("#keyword").val("$!keyw");
+			}
+			jQuery("#searchForm").submit();
+		}
+		jQuery(document).ready(function() {
+			//选定某一搜索历史
+			jQuery("#search-list").find("ul>li>span").click(function() {
+				jQuery("#keyword").val(jQuery(this).attr("data"));
+				jQuery("#searchForm").submit();
+			});
+		});
+	</script>
+	$!httpInclude.include("/wx_foot.htm")
+</body>
+</html>

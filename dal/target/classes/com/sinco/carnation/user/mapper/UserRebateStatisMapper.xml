@@ -1,0 +1,898 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.UserRebateStatisMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.user.model.UserRebateStatis">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="uid" property="uid" jdbcType="BIGINT" />
+		<result column="statis_type" property="statisType" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="rebate_member" property="rebateMember"
+			jdbcType="DECIMAL" />
+		<result column="rebate_member_first" property="rebateMemberFirst"
+			jdbcType="DECIMAL" />
+		<result column="rebate_member_second" property="rebateMemberSecond"
+			jdbcType="DECIMAL" />
+		<result column="rebate_member_third" property="rebateMemberThird"
+			jdbcType="DECIMAL" />
+		<result column="rebate_binding_seller" property="rebateBindingSeller"
+			jdbcType="DECIMAL" />
+		<result column="rebate_binding_seller_first" property="rebateBindingSellerFirst"
+			jdbcType="DECIMAL" />
+		<result column="rebate_binding_seller_second" property="rebateBindingSellerSecond"
+			jdbcType="DECIMAL" />
+		<result column="rebate_binding_seller_third" property="rebateBindingSellerThird"
+			jdbcType="DECIMAL" />
+		<result column="rebate_spending_seller" property="rebateSpendingSeller"
+			jdbcType="DECIMAL" />
+		<result column="rebate_spending_seller_first" property="rebateSpendingSellerFirst"
+			jdbcType="DECIMAL" />
+		<result column="rebate_spending_seller_second" property="rebateSpendingSellerSecond"
+			jdbcType="DECIMAL" />
+		<result column="rebate_spending_seller_third" property="rebateSpendingSellerThird"
+			jdbcType="DECIMAL" />
+		<result column="rebate_spending_district_operator" property="rebateSpendingDistrictOperator"
+			jdbcType="DECIMAL" />
+		<result column="rebate_spending_district_operator_first"
+			property="rebateSpendingDistrictOperatorFirst" jdbcType="DECIMAL" />
+		<result column="rebate_spending_city_operator" property="rebateSpendingCityOperator"
+			jdbcType="DECIMAL" />
+		<result column="rebate_spending_city_operator_first" property="rebateSpendingCityOperatorFirst"
+			jdbcType="DECIMAL" />
+		<result column="rebate_binding_district_operator" property="rebateBindingDistrictOperator"
+			jdbcType="DECIMAL" />
+		<result column="rebate_binding_district_operator_first"
+			property="rebateBindingDistrictOperatorFirst" jdbcType="DECIMAL" />
+		<result column="rebate_binding_city_operator" property="rebateBindingCityOperator"
+			jdbcType="DECIMAL" />
+		<result column="rebate_binding_city_operator_first" property="rebateBindingCityOperatorFirst"
+			jdbcType="DECIMAL" />
+		<result column="repeat_rebate" property="repeatRebate"
+			jdbcType="DECIMAL" />
+		<result column="rebate_supplier" property="rebateSupplier"
+			jdbcType="DECIMAL" />
+		<result column="rebate_supplier_first" property="rebateSupplierFirst"
+			jdbcType="DECIMAL" />
+		<result column="rebate_supplier_second" property="rebateSupplierSecond"
+			jdbcType="DECIMAL" />
+		<result column="rebate_supplier_third" property="rebateSupplierThird"
+			jdbcType="DECIMAL" />
+		<result column="rebate_member_recommend_cnoperator_first"
+			property="rebateMemberRecommendCnoperatorFirst" jdbcType="DECIMAL" />
+		<result column="rebate_member_recommend_cnoperator_second"
+			property="rebateMemberRecommendCnoperatorSecond" jdbcType="DECIMAL" />
+		<result column="rebate_member_recommend_cnoperator_third"
+			property="rebateMemberRecommendCnoperatorThird" jdbcType="DECIMAL" />
+		<result column="rebate_yun_gou_bi" property="rebateYunGouBi"
+			jdbcType="DECIMAL" />
+		<result column="seller_qr_pay" property="sellerQrPay" jdbcType="DECIMAL" />
+	</resultMap>
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.user.bo.UserRebateStatisBO" extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, uid, statis_type, create_time, rebate_member, rebate_member_first,
+		rebate_member_second,
+		rebate_member_third, rebate_binding_seller, rebate_binding_seller_first,
+		rebate_binding_seller_second,
+		rebate_binding_seller_third, rebate_spending_seller, rebate_spending_seller_first,
+		rebate_spending_seller_second, rebate_spending_seller_third,
+		rebate_spending_district_operator,
+		rebate_spending_district_operator_first,
+		rebate_spending_city_operator, rebate_spending_city_operator_first,
+		rebate_binding_district_operator,
+		rebate_binding_district_operator_first, rebate_binding_city_operator,
+		rebate_binding_city_operator_first, repeat_rebate, rebate_supplier,
+		rebate_supplier_first,
+		rebate_supplier_second, rebate_supplier_third, rebate_member_recommend_cnoperator_first,
+		rebate_member_recommend_cnoperator_second,
+		rebate_member_recommend_cnoperator_third,
+		rebate_yun_gou_bi, seller_qr_pay
+	</sql>
+
+	<select id="getUserRebateStatisByTimeAndUid" resultMap="BOResultMap">
+		select
+		sum(rebate_member) as rebate_member,
+		sum(rebate_member_first) as rebate_member_first,
+		sum(rebate_member_second) as rebate_member_second,
+		sum(rebate_member_third) as rebate_member_third,
+		sum(rebate_binding_seller) as rebate_binding_seller,
+		sum(rebate_binding_seller_first) as rebate_binding_seller_first,
+		sum(rebate_binding_seller_second) as rebate_binding_seller_second,
+		sum(rebate_binding_seller_third) as rebate_binding_seller_third,
+		sum(rebate_spending_seller) as rebate_spending_seller,
+		sum(rebate_spending_seller_first) as rebate_spending_seller_first,
+		sum(rebate_spending_seller_second) as rebate_spending_seller_second,
+		sum(rebate_spending_seller_third) as rebate_spending_seller_third,
+		sum(rebate_spending_district_operator) as
+		rebate_spending_district_operator,
+		sum(rebate_spending_district_operator_first) as
+		rebate_spending_district_operator_first,
+		sum(rebate_spending_city_operator) as rebate_spending_city_operator,
+		sum(rebate_spending_city_operator_first) as
+		rebate_spending_city_operator_first,
+		sum(rebate_binding_district_operator) as
+		rebate_binding_district_operator,
+		sum(rebate_binding_district_operator_first) as
+		rebate_binding_district_operator_first,
+		sum(rebate_binding_city_operator) as rebate_binding_city_operator,
+		sum(rebate_binding_city_operator_first) as
+		rebate_binding_city_operator_first,
+		sum(repeat_rebate) as repeat_rebate,
+		sum(rebate_supplier) as rebate_supplier,
+		sum(rebate_supplier_first) as rebate_supplier_first,
+		sum(rebate_supplier_second) as rebate_supplier_second,
+		sum(rebate_supplier_third) as rebate_supplier_third,
+		sum(rebate_member_recommend_cnoperator_first) as
+		rebate_member_recommend_cnoperator_first,
+		sum(rebate_member_recommend_cnoperator_second) as
+		rebate_member_recommend_cnoperator_second,
+		sum(rebate_member_recommend_cnoperator_third) as
+		rebate_member_recommend_cnoperator_third
+		from user_rebate_statis
+		where uid = #{vo.uid}
+		<if test="vo.statisType != null and vo.statisType != ''">
+			and statis_type = #{vo.statisType}
+		</if>
+		<if test="vo.startTime != null and vo.startTime != ''">
+			AND DATE_FORMAT(create_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.startTime},'%Y-%m-%d')
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+			AND DATE_FORMAT(create_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{vo.endTime},'%Y-%m-%d')
+		</if>
+	</select>
+
+	<select id="findByUidAndTime" resultMap="BOResultMap">
+		SELECT * from user_rebate_statis
+		where uid = #{uid}
+		<if test="startTime != null and startTime != ''">
+			AND DATE_FORMAT(create_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{startTime},'%Y-%m-%d')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND DATE_FORMAT(create_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{endTime},'%Y-%m-%d')
+		</if>
+	</select>
+
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.user.model.UserRebateStatisExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_rebate_statis
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_rebate_statis
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_rebate_statis
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.user.model.UserRebateStatisExample">
+		delete from user_rebate_statis
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.UserRebateStatis"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_rebate_statis (id, uid, statis_type,
+		create_time, rebate_member, rebate_member_first,
+		rebate_member_second, rebate_member_third,
+		rebate_binding_seller, rebate_binding_seller_first,
+		rebate_binding_seller_second, rebate_binding_seller_third,
+		rebate_spending_seller, rebate_spending_seller_first,
+		rebate_spending_seller_second, rebate_spending_seller_third,
+		rebate_spending_district_operator, rebate_spending_district_operator_first,
+		rebate_spending_city_operator, rebate_spending_city_operator_first,
+		rebate_binding_district_operator,
+		rebate_binding_district_operator_first,
+		rebate_binding_city_operator, rebate_binding_city_operator_first,
+		repeat_rebate, rebate_supplier, rebate_supplier_first,
+		rebate_supplier_second, rebate_supplier_third,
+		rebate_member_recommend_cnoperator_first, rebate_member_recommend_cnoperator_second,
+		rebate_member_recommend_cnoperator_third, rebate_yun_gou_bi,
+		seller_qr_pay)
+		values (#{id,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT},
+		#{statisType,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{rebateMember,jdbcType=DECIMAL},
+		#{rebateMemberFirst,jdbcType=DECIMAL},
+		#{rebateMemberSecond,jdbcType=DECIMAL},
+		#{rebateMemberThird,jdbcType=DECIMAL},
+		#{rebateBindingSeller,jdbcType=DECIMAL},
+		#{rebateBindingSellerFirst,jdbcType=DECIMAL},
+		#{rebateBindingSellerSecond,jdbcType=DECIMAL},
+		#{rebateBindingSellerThird,jdbcType=DECIMAL},
+		#{rebateSpendingSeller,jdbcType=DECIMAL},
+		#{rebateSpendingSellerFirst,jdbcType=DECIMAL},
+		#{rebateSpendingSellerSecond,jdbcType=DECIMAL},
+		#{rebateSpendingSellerThird,jdbcType=DECIMAL},
+		#{rebateSpendingDistrictOperator,jdbcType=DECIMAL},
+		#{rebateSpendingDistrictOperatorFirst,jdbcType=DECIMAL},
+		#{rebateSpendingCityOperator,jdbcType=DECIMAL},
+		#{rebateSpendingCityOperatorFirst,jdbcType=DECIMAL},
+		#{rebateBindingDistrictOperator,jdbcType=DECIMAL},
+		#{rebateBindingDistrictOperatorFirst,jdbcType=DECIMAL},
+		#{rebateBindingCityOperator,jdbcType=DECIMAL},
+		#{rebateBindingCityOperatorFirst,jdbcType=DECIMAL},
+		#{repeatRebate,jdbcType=DECIMAL}, #{rebateSupplier,jdbcType=DECIMAL},
+		#{rebateSupplierFirst,jdbcType=DECIMAL},
+		#{rebateSupplierSecond,jdbcType=DECIMAL},
+		#{rebateSupplierThird,jdbcType=DECIMAL},
+		#{rebateMemberRecommendCnoperatorFirst,jdbcType=DECIMAL},
+		#{rebateMemberRecommendCnoperatorSecond,jdbcType=DECIMAL},
+		#{rebateMemberRecommendCnoperatorThird,jdbcType=DECIMAL},
+		#{rebateYunGouBi,jdbcType=DECIMAL},
+		#{sellerQrPay,jdbcType=DECIMAL})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.UserRebateStatis"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_rebate_statis
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="statisType != null">
+				statis_type,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="rebateMember != null">
+				rebate_member,
+			</if>
+			<if test="rebateMemberFirst != null">
+				rebate_member_first,
+			</if>
+			<if test="rebateMemberSecond != null">
+				rebate_member_second,
+			</if>
+			<if test="rebateMemberThird != null">
+				rebate_member_third,
+			</if>
+			<if test="rebateBindingSeller != null">
+				rebate_binding_seller,
+			</if>
+			<if test="rebateBindingSellerFirst != null">
+				rebate_binding_seller_first,
+			</if>
+			<if test="rebateBindingSellerSecond != null">
+				rebate_binding_seller_second,
+			</if>
+			<if test="rebateBindingSellerThird != null">
+				rebate_binding_seller_third,
+			</if>
+			<if test="rebateSpendingSeller != null">
+				rebate_spending_seller,
+			</if>
+			<if test="rebateSpendingSellerFirst != null">
+				rebate_spending_seller_first,
+			</if>
+			<if test="rebateSpendingSellerSecond != null">
+				rebate_spending_seller_second,
+			</if>
+			<if test="rebateSpendingSellerThird != null">
+				rebate_spending_seller_third,
+			</if>
+			<if test="rebateSpendingDistrictOperator != null">
+				rebate_spending_district_operator,
+			</if>
+			<if test="rebateSpendingDistrictOperatorFirst != null">
+				rebate_spending_district_operator_first,
+			</if>
+			<if test="rebateSpendingCityOperator != null">
+				rebate_spending_city_operator,
+			</if>
+			<if test="rebateSpendingCityOperatorFirst != null">
+				rebate_spending_city_operator_first,
+			</if>
+			<if test="rebateBindingDistrictOperator != null">
+				rebate_binding_district_operator,
+			</if>
+			<if test="rebateBindingDistrictOperatorFirst != null">
+				rebate_binding_district_operator_first,
+			</if>
+			<if test="rebateBindingCityOperator != null">
+				rebate_binding_city_operator,
+			</if>
+			<if test="rebateBindingCityOperatorFirst != null">
+				rebate_binding_city_operator_first,
+			</if>
+			<if test="repeatRebate != null">
+				repeat_rebate,
+			</if>
+			<if test="rebateSupplier != null">
+				rebate_supplier,
+			</if>
+			<if test="rebateSupplierFirst != null">
+				rebate_supplier_first,
+			</if>
+			<if test="rebateSupplierSecond != null">
+				rebate_supplier_second,
+			</if>
+			<if test="rebateSupplierThird != null">
+				rebate_supplier_third,
+			</if>
+			<if test="rebateMemberRecommendCnoperatorFirst != null">
+				rebate_member_recommend_cnoperator_first,
+			</if>
+			<if test="rebateMemberRecommendCnoperatorSecond != null">
+				rebate_member_recommend_cnoperator_second,
+			</if>
+			<if test="rebateMemberRecommendCnoperatorThird != null">
+				rebate_member_recommend_cnoperator_third,
+			</if>
+			<if test="rebateYunGouBi != null">
+				rebate_yun_gou_bi,
+			</if>
+			<if test="sellerQrPay != null">
+				seller_qr_pay,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="statisType != null">
+				#{statisType,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="rebateMember != null">
+				#{rebateMember,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateMemberFirst != null">
+				#{rebateMemberFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateMemberSecond != null">
+				#{rebateMemberSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateMemberThird != null">
+				#{rebateMemberThird,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingSeller != null">
+				#{rebateBindingSeller,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingSellerFirst != null">
+				#{rebateBindingSellerFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingSellerSecond != null">
+				#{rebateBindingSellerSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingSellerThird != null">
+				#{rebateBindingSellerThird,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingSeller != null">
+				#{rebateSpendingSeller,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingSellerFirst != null">
+				#{rebateSpendingSellerFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingSellerSecond != null">
+				#{rebateSpendingSellerSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingSellerThird != null">
+				#{rebateSpendingSellerThird,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingDistrictOperator != null">
+				#{rebateSpendingDistrictOperator,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingDistrictOperatorFirst != null">
+				#{rebateSpendingDistrictOperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingCityOperator != null">
+				#{rebateSpendingCityOperator,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingCityOperatorFirst != null">
+				#{rebateSpendingCityOperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingDistrictOperator != null">
+				#{rebateBindingDistrictOperator,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingDistrictOperatorFirst != null">
+				#{rebateBindingDistrictOperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingCityOperator != null">
+				#{rebateBindingCityOperator,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingCityOperatorFirst != null">
+				#{rebateBindingCityOperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="repeatRebate != null">
+				#{repeatRebate,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSupplier != null">
+				#{rebateSupplier,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSupplierFirst != null">
+				#{rebateSupplierFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSupplierSecond != null">
+				#{rebateSupplierSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSupplierThird != null">
+				#{rebateSupplierThird,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateMemberRecommendCnoperatorFirst != null">
+				#{rebateMemberRecommendCnoperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateMemberRecommendCnoperatorSecond != null">
+				#{rebateMemberRecommendCnoperatorSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateMemberRecommendCnoperatorThird != null">
+				#{rebateMemberRecommendCnoperatorThird,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateYunGouBi != null">
+				#{rebateYunGouBi,jdbcType=DECIMAL},
+			</if>
+			<if test="sellerQrPay != null">
+				#{sellerQrPay,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.user.model.UserRebateStatisExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_rebate_statis
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_rebate_statis
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.uid != null">
+				uid = #{record.uid,jdbcType=BIGINT},
+			</if>
+			<if test="record.statisType != null">
+				statis_type = #{record.statisType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.rebateMember != null">
+				rebate_member = #{record.rebateMember,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateMemberFirst != null">
+				rebate_member_first = #{record.rebateMemberFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateMemberSecond != null">
+				rebate_member_second = #{record.rebateMemberSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateMemberThird != null">
+				rebate_member_third = #{record.rebateMemberThird,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateBindingSeller != null">
+				rebate_binding_seller =
+				#{record.rebateBindingSeller,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateBindingSellerFirst != null">
+				rebate_binding_seller_first =
+				#{record.rebateBindingSellerFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateBindingSellerSecond != null">
+				rebate_binding_seller_second =
+				#{record.rebateBindingSellerSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateBindingSellerThird != null">
+				rebate_binding_seller_third =
+				#{record.rebateBindingSellerThird,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateSpendingSeller != null">
+				rebate_spending_seller =
+				#{record.rebateSpendingSeller,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateSpendingSellerFirst != null">
+				rebate_spending_seller_first =
+				#{record.rebateSpendingSellerFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateSpendingSellerSecond != null">
+				rebate_spending_seller_second =
+				#{record.rebateSpendingSellerSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateSpendingSellerThird != null">
+				rebate_spending_seller_third =
+				#{record.rebateSpendingSellerThird,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateSpendingDistrictOperator != null">
+				rebate_spending_district_operator =
+				#{record.rebateSpendingDistrictOperator,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateSpendingDistrictOperatorFirst != null">
+				rebate_spending_district_operator_first =
+				#{record.rebateSpendingDistrictOperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateSpendingCityOperator != null">
+				rebate_spending_city_operator =
+				#{record.rebateSpendingCityOperator,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateSpendingCityOperatorFirst != null">
+				rebate_spending_city_operator_first =
+				#{record.rebateSpendingCityOperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateBindingDistrictOperator != null">
+				rebate_binding_district_operator =
+				#{record.rebateBindingDistrictOperator,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateBindingDistrictOperatorFirst != null">
+				rebate_binding_district_operator_first =
+				#{record.rebateBindingDistrictOperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateBindingCityOperator != null">
+				rebate_binding_city_operator =
+				#{record.rebateBindingCityOperator,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateBindingCityOperatorFirst != null">
+				rebate_binding_city_operator_first =
+				#{record.rebateBindingCityOperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="record.repeatRebate != null">
+				repeat_rebate = #{record.repeatRebate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateSupplier != null">
+				rebate_supplier = #{record.rebateSupplier,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateSupplierFirst != null">
+				rebate_supplier_first =
+				#{record.rebateSupplierFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateSupplierSecond != null">
+				rebate_supplier_second =
+				#{record.rebateSupplierSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateSupplierThird != null">
+				rebate_supplier_third =
+				#{record.rebateSupplierThird,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateMemberRecommendCnoperatorFirst != null">
+				rebate_member_recommend_cnoperator_first =
+				#{record.rebateMemberRecommendCnoperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateMemberRecommendCnoperatorSecond != null">
+				rebate_member_recommend_cnoperator_second =
+				#{record.rebateMemberRecommendCnoperatorSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateMemberRecommendCnoperatorThird != null">
+				rebate_member_recommend_cnoperator_third =
+				#{record.rebateMemberRecommendCnoperatorThird,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateYunGouBi != null">
+				rebate_yun_gou_bi = #{record.rebateYunGouBi,jdbcType=DECIMAL},
+			</if>
+			<if test="record.sellerQrPay != null">
+				seller_qr_pay = #{record.sellerQrPay,jdbcType=DECIMAL},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_rebate_statis
+		set id = #{record.id,jdbcType=BIGINT},
+		uid = #{record.uid,jdbcType=BIGINT},
+		statis_type = #{record.statisType,jdbcType=VARCHAR},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		rebate_member = #{record.rebateMember,jdbcType=DECIMAL},
+		rebate_member_first = #{record.rebateMemberFirst,jdbcType=DECIMAL},
+		rebate_member_second = #{record.rebateMemberSecond,jdbcType=DECIMAL},
+		rebate_member_third = #{record.rebateMemberThird,jdbcType=DECIMAL},
+		rebate_binding_seller = #{record.rebateBindingSeller,jdbcType=DECIMAL},
+		rebate_binding_seller_first =
+		#{record.rebateBindingSellerFirst,jdbcType=DECIMAL},
+		rebate_binding_seller_second =
+		#{record.rebateBindingSellerSecond,jdbcType=DECIMAL},
+		rebate_binding_seller_third =
+		#{record.rebateBindingSellerThird,jdbcType=DECIMAL},
+		rebate_spending_seller =
+		#{record.rebateSpendingSeller,jdbcType=DECIMAL},
+		rebate_spending_seller_first =
+		#{record.rebateSpendingSellerFirst,jdbcType=DECIMAL},
+		rebate_spending_seller_second =
+		#{record.rebateSpendingSellerSecond,jdbcType=DECIMAL},
+		rebate_spending_seller_third =
+		#{record.rebateSpendingSellerThird,jdbcType=DECIMAL},
+		rebate_spending_district_operator =
+		#{record.rebateSpendingDistrictOperator,jdbcType=DECIMAL},
+		rebate_spending_district_operator_first =
+		#{record.rebateSpendingDistrictOperatorFirst,jdbcType=DECIMAL},
+		rebate_spending_city_operator =
+		#{record.rebateSpendingCityOperator,jdbcType=DECIMAL},
+		rebate_spending_city_operator_first =
+		#{record.rebateSpendingCityOperatorFirst,jdbcType=DECIMAL},
+		rebate_binding_district_operator =
+		#{record.rebateBindingDistrictOperator,jdbcType=DECIMAL},
+		rebate_binding_district_operator_first =
+		#{record.rebateBindingDistrictOperatorFirst,jdbcType=DECIMAL},
+		rebate_binding_city_operator =
+		#{record.rebateBindingCityOperator,jdbcType=DECIMAL},
+		rebate_binding_city_operator_first =
+		#{record.rebateBindingCityOperatorFirst,jdbcType=DECIMAL},
+		repeat_rebate = #{record.repeatRebate,jdbcType=DECIMAL},
+		rebate_supplier = #{record.rebateSupplier,jdbcType=DECIMAL},
+		rebate_supplier_first =
+		#{record.rebateSupplierFirst,jdbcType=DECIMAL},
+		rebate_supplier_second = #{record.rebateSupplierSecond,jdbcType=DECIMAL},
+		rebate_supplier_third =
+		#{record.rebateSupplierThird,jdbcType=DECIMAL},
+		rebate_member_recommend_cnoperator_first =
+		#{record.rebateMemberRecommendCnoperatorFirst,jdbcType=DECIMAL},
+		rebate_member_recommend_cnoperator_second =
+		#{record.rebateMemberRecommendCnoperatorSecond,jdbcType=DECIMAL},
+		rebate_member_recommend_cnoperator_third =
+		#{record.rebateMemberRecommendCnoperatorThird,jdbcType=DECIMAL},
+		rebate_yun_gou_bi = #{record.rebateYunGouBi,jdbcType=DECIMAL},
+		seller_qr_pay = #{record.sellerQrPay,jdbcType=DECIMAL}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.UserRebateStatis">
+		update user_rebate_statis
+		<set>
+			<if test="uid != null">
+				uid = #{uid,jdbcType=BIGINT},
+			</if>
+			<if test="statisType != null">
+				statis_type = #{statisType,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="rebateMember != null">
+				rebate_member = #{rebateMember,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateMemberFirst != null">
+				rebate_member_first = #{rebateMemberFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateMemberSecond != null">
+				rebate_member_second = #{rebateMemberSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateMemberThird != null">
+				rebate_member_third = #{rebateMemberThird,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingSeller != null">
+				rebate_binding_seller = #{rebateBindingSeller,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingSellerFirst != null">
+				rebate_binding_seller_first =
+				#{rebateBindingSellerFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingSellerSecond != null">
+				rebate_binding_seller_second =
+				#{rebateBindingSellerSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingSellerThird != null">
+				rebate_binding_seller_third =
+				#{rebateBindingSellerThird,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingSeller != null">
+				rebate_spending_seller = #{rebateSpendingSeller,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingSellerFirst != null">
+				rebate_spending_seller_first =
+				#{rebateSpendingSellerFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingSellerSecond != null">
+				rebate_spending_seller_second =
+				#{rebateSpendingSellerSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingSellerThird != null">
+				rebate_spending_seller_third =
+				#{rebateSpendingSellerThird,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingDistrictOperator != null">
+				rebate_spending_district_operator =
+				#{rebateSpendingDistrictOperator,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingDistrictOperatorFirst != null">
+				rebate_spending_district_operator_first =
+				#{rebateSpendingDistrictOperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingCityOperator != null">
+				rebate_spending_city_operator =
+				#{rebateSpendingCityOperator,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSpendingCityOperatorFirst != null">
+				rebate_spending_city_operator_first =
+				#{rebateSpendingCityOperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingDistrictOperator != null">
+				rebate_binding_district_operator =
+				#{rebateBindingDistrictOperator,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingDistrictOperatorFirst != null">
+				rebate_binding_district_operator_first =
+				#{rebateBindingDistrictOperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingCityOperator != null">
+				rebate_binding_city_operator =
+				#{rebateBindingCityOperator,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateBindingCityOperatorFirst != null">
+				rebate_binding_city_operator_first =
+				#{rebateBindingCityOperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="repeatRebate != null">
+				repeat_rebate = #{repeatRebate,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSupplier != null">
+				rebate_supplier = #{rebateSupplier,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSupplierFirst != null">
+				rebate_supplier_first = #{rebateSupplierFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSupplierSecond != null">
+				rebate_supplier_second = #{rebateSupplierSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateSupplierThird != null">
+				rebate_supplier_third = #{rebateSupplierThird,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateMemberRecommendCnoperatorFirst != null">
+				rebate_member_recommend_cnoperator_first =
+				#{rebateMemberRecommendCnoperatorFirst,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateMemberRecommendCnoperatorSecond != null">
+				rebate_member_recommend_cnoperator_second =
+				#{rebateMemberRecommendCnoperatorSecond,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateMemberRecommendCnoperatorThird != null">
+				rebate_member_recommend_cnoperator_third =
+				#{rebateMemberRecommendCnoperatorThird,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateYunGouBi != null">
+				rebate_yun_gou_bi = #{rebateYunGouBi,jdbcType=DECIMAL},
+			</if>
+			<if test="sellerQrPay != null">
+				seller_qr_pay = #{sellerQrPay,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.UserRebateStatis">
+		update user_rebate_statis
+		set uid = #{uid,jdbcType=BIGINT},
+		statis_type = #{statisType,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		rebate_member = #{rebateMember,jdbcType=DECIMAL},
+		rebate_member_first = #{rebateMemberFirst,jdbcType=DECIMAL},
+		rebate_member_second = #{rebateMemberSecond,jdbcType=DECIMAL},
+		rebate_member_third = #{rebateMemberThird,jdbcType=DECIMAL},
+		rebate_binding_seller = #{rebateBindingSeller,jdbcType=DECIMAL},
+		rebate_binding_seller_first =
+		#{rebateBindingSellerFirst,jdbcType=DECIMAL},
+		rebate_binding_seller_second =
+		#{rebateBindingSellerSecond,jdbcType=DECIMAL},
+		rebate_binding_seller_third =
+		#{rebateBindingSellerThird,jdbcType=DECIMAL},
+		rebate_spending_seller = #{rebateSpendingSeller,jdbcType=DECIMAL},
+		rebate_spending_seller_first =
+		#{rebateSpendingSellerFirst,jdbcType=DECIMAL},
+		rebate_spending_seller_second =
+		#{rebateSpendingSellerSecond,jdbcType=DECIMAL},
+		rebate_spending_seller_third =
+		#{rebateSpendingSellerThird,jdbcType=DECIMAL},
+		rebate_spending_district_operator =
+		#{rebateSpendingDistrictOperator,jdbcType=DECIMAL},
+		rebate_spending_district_operator_first =
+		#{rebateSpendingDistrictOperatorFirst,jdbcType=DECIMAL},
+		rebate_spending_city_operator =
+		#{rebateSpendingCityOperator,jdbcType=DECIMAL},
+		rebate_spending_city_operator_first =
+		#{rebateSpendingCityOperatorFirst,jdbcType=DECIMAL},
+		rebate_binding_district_operator =
+		#{rebateBindingDistrictOperator,jdbcType=DECIMAL},
+		rebate_binding_district_operator_first =
+		#{rebateBindingDistrictOperatorFirst,jdbcType=DECIMAL},
+		rebate_binding_city_operator =
+		#{rebateBindingCityOperator,jdbcType=DECIMAL},
+		rebate_binding_city_operator_first =
+		#{rebateBindingCityOperatorFirst,jdbcType=DECIMAL},
+		repeat_rebate = #{repeatRebate,jdbcType=DECIMAL},
+		rebate_supplier = #{rebateSupplier,jdbcType=DECIMAL},
+		rebate_supplier_first = #{rebateSupplierFirst,jdbcType=DECIMAL},
+		rebate_supplier_second = #{rebateSupplierSecond,jdbcType=DECIMAL},
+		rebate_supplier_third = #{rebateSupplierThird,jdbcType=DECIMAL},
+		rebate_member_recommend_cnoperator_first =
+		#{rebateMemberRecommendCnoperatorFirst,jdbcType=DECIMAL},
+		rebate_member_recommend_cnoperator_second =
+		#{rebateMemberRecommendCnoperatorSecond,jdbcType=DECIMAL},
+		rebate_member_recommend_cnoperator_third =
+		#{rebateMemberRecommendCnoperatorThird,jdbcType=DECIMAL},
+		rebate_yun_gou_bi = #{rebateYunGouBi,jdbcType=DECIMAL},
+		seller_qr_pay = #{sellerQrPay,jdbcType=DECIMAL}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

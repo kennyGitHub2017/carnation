@@ -1,0 +1,468 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>酒店详情</title>
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="$!webPath/resources/elong/css/main.css?v=sd" />
+<link rel="stylesheet"
+	href="$!webPath/resources/elong/css/idangerous.swiper.css?2.1" />
+
+</head>
+<body>
+	<div class="pages">
+		<div class="page">
+			<!-- 详情页优化，渠道定制去头 -->
+			<header class="bar bar-nav flight-order-head none_backg">
+				<a class="icon icon-left-nav pull-left icon-back tjclick"
+					data-rel="back" href="/hotel/0101/nlist/"
+					data-tj='{"cspot":"back"}'></a> <a
+					class="icon    icon-collect  collect  pull-right tjclick"
+					data-tj='{"cspot":"mycollection"}'></a>
+				<h1 class="title">酒店详情</h1>
+			</header>
+			<div class="bar stickys indexnew">
+				<div class="hotel-info detail-date datefixed tjclick"
+					data-tj='{"cspot":"time"}'>
+					<div class="getin_room_a">
+						<span> <em class="deepNightFlag" style="display: none;">深夜</em>
+							入住
+						</span> <span class="ol_night">共$!hotel.intervalDay晚</span> <span>离店</span>
+					</div>
+					<div class="getin_room_b">
+						<span><em class="indate" data='2017-06-06'>$!hotel.arrivalDate</em><em
+							class="startweek">今天</em></span> <span class="getin_fen">|</span> <span><em
+							class="outdate" data='2017-06-08'>$!hotel.departureDate</em><em
+							class="endweek">周四</em></span>
+					</div>
+				</div>
+				<div class="fastchoose">
+					<div class="choice tjclick" data-tj='{"cspot":"roomtypeFilter"}'>
+						筛选<i class="getin"></i>
+					</div>
+					<ul></ul>
+				</div>
+			</div>
+			<div class="page-content new_detailst mvt_161125">
+				<section class="detail-main detail-mainNew">
+
+					<div class="hotel-info">
+						<div class="pic-wrap tjclick" data-tj='{"cspot":"image"}'>
+							<a href="javascript:void(0)"></a> <i class="picbg"></i>
+							<div class="swiper-wrapper focuspic"
+								style="background: url($!hotel.thumbnailUrl) no-repeat; background-size: cover">
+							</div>
+							<h1 class="name">
+								<i class="grade grade1"></i> <em>$!hotel.hotelName</em>
+							</h1>
+							#if($!hotel.category == 3) <span class="hotel-type">经济型</span>
+							#end #if($!hotel.category == 4) <span class="hotel-type">高档型</span>
+							#end #if($!hotel.category == 5) <span class="hotel-type">豪华型</span>
+							#end
+
+							<div class="num">
+								<i></i>69
+							</div>
+						</div>
+						<div class="info">
+							<ul>
+								<!--酒店地址-->
+								<li class="info_mn">
+									<div class="col_tb">
+										<div class="posi">
+											<div class="addr">$!hotel.address</div>
+											<div class="dis">
+												<span class="disc">距达官营地铁站导航2.2公里</span><span class="dis_tm">驾车约7分钟</span>
+											</div>
+										</div>
+									</div>
+									<div class="map_bg"></div>
+									<div class="right">
+										<div class="map_c">
+											<img
+												srcset="//apis.map.qq.com/ws/staticmap/v2/?center=39.883360,116.340431&zoom=14&key=4BCBZ-OGQWX-3PE4P-ZNP3C-EU77E-QGF3Z&size=500*250&scale=2"
+												width="180" height="180"> <i class="map_icons"></i>
+										</div>
+									</div>
+								</li>
+
+								<!--住客评价-->
+								<li class="choose">
+									<div class="titles">
+										<ul>
+											<li class=" active ">住客评价</li>
+											<li class="hoteldetail   tjclick"
+												data-tj='{"cspot":"hoteldetailchange"}'>酒店详情</li>
+										</ul>
+										<span class="line "></span>
+									</div>
+									<div class="text1 tabcomment all-com tjclick text_comments"
+										data-tj='{"cspot":"comment"}'>
+										<div class="left_c">
+											<div class="praise_nbm">
+												<span class="u_nbm"><b class="s_nbm">$!hotel.grade</b>分</span>
+												<span class="u_btn">挺好哒</span>
+											</div>
+										</div>
+										<div class="right_c">
+											<h1>
+												会员5059<span class="ping"><span class="level2">点评达人</span></span>
+											</h1>
+											<p>价格实惠，设施不错，暖气暖和，热水也好，电视清晰。位置稍微隐蔽一点，离地铁站八百米。性价比很高。推荐。</p>
+										</div>
+										<p class="more_p info-comments">
+											查看$!hotel.reviewCount条住客评价<i></i>
+										</p>
+									</div>
+
+									<div class="text1 tabdetails tjclick" style="display: none;"
+										data-tj='{"cspot":"hoteldetail"}'>
+										<div class="mid2">
+											<ul>
+												<li><span class="icon-parking"></span> <span>停车场</span>
+												</li>
+												<li><span class="icon-wifi"></span> <span>无线wifi</span>
+												</li>
+												<li class="no"><span class="icon-bra"></span> <span>餐厅</span>
+												</li>
+												<li class="no"><span class="icon-bui"></span> <span>健身房</span>
+												</li>
+											</ul>
+										</div>
+										<p class="more_p">
+											查看全部信息<i></i>
+										</p>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- mvt 20161125 日历控件dom start-->
+					<div class="stickys indexnew sticky" style="top: 42px;">
+						<div class="ht_day detail-date detail-hotel">
+							<div class="getin_room_a">
+								<span class="c8">入住</span> <span class="indate">$!hotel.arrivalDate</span>
+								<span class="night" style="display: none;">深夜</span> <span
+									class="c8">离店</span> <span class="outdate">$!hotel.departureDate</span>
+							</div>
+							<div class="getin_room_b">
+								<span class="count_day">共<span class="count_nmb">$!hotel.intervalDay</span>晚<i></i></span>
+							</div>
+						</div>
+
+						<div class="fastchoose">
+							<div class="choice "
+								data-tj="{&quot;cspot&quot;:&quot;roomtypeFilter&quot;}">
+								筛选<i class="getin"></i>
+							</div>
+							<ul>
+								<li class="tjclick" kw="kw0" data-id="30"
+									data-tj="{&quot;cspot&quot;:&quot;paymentInHotel&quot;}">到店付</li>
+								<li class="tjclick" kw="kw0" data-id="101"
+									data-tj="{&quot;cspot&quot;:&quot;freeCancellation&quot;}">免费取消</li>
+								<li class="tjclick" kw="kw0" data-id="102"
+									data-tj="{&quot;cspot&quot;:&quot;instantConfirm&quot;}">立即确认</li>
+							</ul>
+						</div>
+					</div>
+					<!-- mvt 20161125 日历控件dom end-->
+
+
+					<div class="type">
+						<ul>
+						#if($!roomList.size()>0) #foreach($room in $roomList)
+							<li class="rooms rec_hotel">
+								<div class="wrap">
+									<div class="left roomdetail">
+										<div class="pic tjclick rpDetail"
+											data-tj="{&quot;cspot&quot;:&quot;roomimage&quot;}">
+											<div>
+												<img
+													src="$!room.imageUrl">
+											</div>
+											<span class="pic_tags bookedicdet">新客专享</span>
+										</div>
+										<div class="picroom-info">
+											<div class="room">$!room.name</div>
+											<div class="room-info">
+												<span>$!room.area平米</span> <span>$!room.bedType</span> <span>有窗</span>
+											</div>
+											#if($!room.roomRatePlan.size()>0) #foreach($ratePlan in $room.roomRatePlan)
+											<div class="room-choose">
+												<span>$!ratePlan.cancelRuleType</span> <span>$!ratePlan.instantConfirmation</span> <span>$!ratePlan.paymentType</span>
+											</div>
+											<div class="icon">$!ratePlan.drrRuleDesc</div>
+											#end #end
+										</div>
+									</div>
+									<div class="right">
+										<div class="price">
+											<span>¥</span> <span class="num">$!room.lowRate</span>
+										</div>
+										<div class="icon">
+											198优惠17<br>
+										</div>
+										<div class="book tjclick"
+											data-tj="{&quot;cspot&quot;:&quot;booking&quot;}">
+											<div class="btn2 btn2_center"
+												app-url="//mhuodong.elong.com/C/A.htm?b=true&amp;f=h5_5zxz&amp;r=0101,2017-06-06,2017-06-08,91244474">
+												<span>订</span>
+												<p>APP</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li> 
+							#end #end
+						</ul>
+					</div>
+
+
+
+					<div class="facilities">
+						<dl>
+							<dt>酒店设施</dt>
+							<dd class="fac">
+								<ul>
+								</ul>
+							</dd>
+						</dl>
+						<dl>
+							<dt>酒店电话</dt>
+							<dd>
+								<a href="tel:010-59877788" class="tel">010-59877788</a>艺龙电话预订：<a
+									href="tel:400-666-1166" class="tel">400-666-1166</a>
+							</dd>
+						</dl>
+						<dl>
+							<dt>开业时间</dt>
+							<dd>酒店开业时间 2008年06月01日年</dd>
+						</dl>
+						<dl>
+							<dt>酒店服务</dt>
+							<dd>商品部,安全消防系统,大堂吧,公共区域闭路电视监控系统,电子结账系统,24小时热水,免费停车,有电梯,免费wifi,商旅之家,度假休闲,培训学习,酒店,入住时间,离店时间</dd>
+						</dl>
+						<a class="more">更多酒店信息</a>
+					</div>
+				</section>
+				<section class="detail-sider">
+					<div class="look">
+						<dl class="list">
+							<dt>
+								<i class="clock icon-clock"></i>历史浏览
+							</dt>
+						</dl>
+					</div>
+					<!--
+            <div class="near">
+                <dl class="list">
+                    <dt><i class="mark icon-nearby"></i>附近酒店</dt>
+                </dl>
+            </div>
+        -->
+				</section>
+				<!-- 高铁管家定制 -->
+				<section class="tool">
+					<div class="ver">
+						<a href="javascript:void(0);" class="xq"><i
+							class=" icon-collect  "></i>我感兴趣</a><span>｜</span><a
+							href="javascript:void(0);" class="ht"><i class="icon-phone"></i>联系电话</a>
+					</div>
+					<div class="copy">©2009-2017 艺龙无线</div>
+				</section>
+			</div>
+			<div class="detail_singlepic plugin-inited page-plugin">
+				<section id="close_image" class="detail-hotelpic">
+					<dl class="shpictop">
+						<dt class="picTitle"></dt>
+						<dd class="pic-process">1/1</dd>
+						<dd class="shpic_closed"></dd>
+					</dl>
+					<div class="spic_img swiper-container">
+						<ul class="swiper-wrapper"></ul>
+					</div>
+					<div style="display: none" class="spic_bottom">
+						<p>查看酒店VR</p>
+					</div>
+				</section>
+			</div>
+			<div class="hotel_info_facbox plugin-inited page-plugin">
+				<header class="bar bar-nav">
+					<a class="icon pull-left icon-back"></a> <a
+						class="icon icon-phone pull-right"></a>
+					<h1 class="title">酒店详情</h1>
+				</header>
+				<div class="page-content">
+					<section class="info-pop-box">
+						<div class="na clearfix">
+							<div class="na_lf">
+								<div class="name">飘HOME连锁酒店(北京西客站店)</div>
+								<div class="addr">
+									<i></i>红居南街1号48栋
+								</div>
+							</div>
+						</div>
+						<div class="facilities_con">
+							<dl class="facilities">
+								<dt>酒店设施</dt>
+								<dd class="">
+									<i class="i1"></i>
+									<p>免费停车</p>
+								</dd>
+								<dd class="">
+									<i class="i2"></i>
+									<p>免费wifi</p>
+								</dd>
+								<dd class="no">
+									<i class="i3"></i>
+									<p>餐厅</p>
+								</dd>
+								<dd class="no">
+									<i class="i7"></i>
+									<p>健身房</p>
+								</dd>
+								<dd class="no">
+									<i class="i5"></i>
+									<p>游泳池</p>
+								</dd>
+								<dd class="no">
+									<i class="i4"></i>
+									<p>接机服务</p>
+								</dd>
+								<dd class="no">
+									<i class="i6"></i>
+									<p>会议室</p>
+								</dd>
+								<dd class="no">
+									<i class="i8"></i>
+									<p>行李寄存</p>
+								</dd>
+							</dl>
+							<div class="fac_txt">
+								<div class="fac_txtc">
+									<div class="fac_txtc_h">
+										<p>商品部,安全消防系统,大堂吧,公共区域闭路电视监控系统,电子结账系统,24小时热水,免费停车,有电梯,免费wifi,商旅之家,度假休闲,培训学习,酒店,入住时间,离店时间</p>
+									</div>
+								</div>
+								<div class="fac_more">查看更多</div>
+							</div>
+						</div>
+						<div class="other">
+							<dl>
+								<dt>温馨提示</dt>
+								<dd class="clearfix">
+									<span class="dct_tit">入离通知：</span> <span class="dct_txt">
+										入住时间:12点以后,离店时间:12点以前 </span>
+								</dd>
+							</dl>
+						</div>
+						<div class="intro">
+							<div class="tit">酒店简介</div>
+							<div class="intro_con">
+								<div class="ht_txt clearfix">
+									<div class="dct_con">
+										<span class="dct_tit">开业时间：</span> <span class="dct_txt">2008-06-01</span>
+									</div>
+									<div class="dct_con">
+										<span class="dct_tit">装修时间：</span> <span class="dct_txt">2014-06-01</span>
+									</div>
+								</div>
+								<div class="text_con_h">
+									<div class="text">
+										飘HOME连锁酒店（北京西客站店）设计风格独特，设施完善，拥有温馨的大床房、双床房等各类房型，将为您提供一个“洁净、经济、温馨”的住宿环境。
+									</div>
+									<div class="ht_dct clearfix">
+										<span class="dct_tit">支持卡种：</span> <span class="dct_txt">牡丹卡,金穗卡,长城卡,太平洋卡,东方卡</span>
+									</div>
+								</div>
+							</div>
+							<div class="fac_more">查看更多</div>
+						</div>
+						<div class="periphery">
+							<div class="tit">酒店周边</div>
+							<div class="preiphety_con">
+								<div class="distance_lst clearfix">
+									<div class="prpy_icon">
+										<i class="hcz_icons"></i>
+									</div>
+									<div class="prpy_distance">
+										<p class="clearfix">
+											<span class="ads_txt">北京西站</span> <span class="dtc_txt">直线距离2.2公里</span>
+										</p>
+										<p class="clearfix">
+											<span class="ads_txt">北京南站</span> <span class="dtc_txt">直线距离4.0公里</span>
+										</p>
+										<p class="clearfix">
+											<span class="ads_txt">北京北站</span> <span class="dtc_txt">直线距离7.5公里</span>
+										</p>
+										<p class="clearfix">
+											<span class="ads_txt">北京站</span> <span class="dtc_txt">直线距离8.6公里</span>
+										</p>
+										<p class="clearfix">
+											<span class="ads_txt">北京东站</span> <span class="dtc_txt">直线距离12.6公里</span>
+										</p>
+									</div>
+								</div>
+								<div class="distance_lst clearfix">
+									<div class="prpy_icon">
+										<i class="jc_icons"></i>
+									</div>
+									<div class="prpy_distance">
+										<p class="clearfix">
+											<span class="ads_txt">北京南苑机场</span> <span class="dtc_txt">直线距离10.6公里</span>
+										</p>
+										<p class="clearfix">
+											<span class="ads_txt">首都机场T3航站楼</span> <span class="dtc_txt">直线距离31.1公里</span>
+										</p>
+										<p class="clearfix">
+											<span class="ads_txt">首都机场T1航站楼</span> <span class="dtc_txt">直线距离31.3公里</span>
+										</p>
+										<p class="clearfix">
+											<span class="ads_txt">首都机场T2航站楼</span> <span class="dtc_txt">直线距离31.5公里</span>
+										</p>
+									</div>
+								</div>
+								<div class="distance_lst clearfix">
+									<div class="prpy_icon">
+										<i class="qcz_icons"></i>
+									</div>
+									<div class="prpy_distance">
+										<p class="clearfix">
+											<span class="ads_txt">丽泽桥长途汽车站</span> <span class="dtc_txt">直线距离1.9公里</span>
+										</p>
+										<p class="clearfix">
+											<span class="ads_txt">莲花池长途汽车站</span> <span class="dtc_txt">直线距离2.0公里</span>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="btn_con">
+							<a href="#" class="btn">返回并继续预订</a>
+						</div>
+					</section>
+				</div>
+			</div>
+			<nav class="bar record record-text" style="display: none;"></nav>
+			<div class="weixin-custom-mask" style="display: none;"></div>
+
+
+		</div>
+	</div>
+</body>
+<script type="text/javascript"
+	src="$!webPath/resources/elong/js/jquery-2.0.0.min.js"></script>
+<script type="text/javascript"
+	src="$!webPath/resources/elong/js/jquery.plug.js"></script>
+<script type="text/javascript"
+	src="$!webPath/resources/elong/js/hotel_detail.js"></script>
+
+
+
+
+
+
+</html>

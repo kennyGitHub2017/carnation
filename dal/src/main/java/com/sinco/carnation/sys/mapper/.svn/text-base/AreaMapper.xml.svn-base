@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.AreaMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.Area">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="area_Name" property="areaName" jdbcType="VARCHAR" />
+		<result column="common" property="common" jdbcType="BIT" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="is_group_hot" property="isGroupHot" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sys.bo.AreaBO"
+		extends="BaseResultMap">
+		<result column="provinceName" property="provinceName" />
+		<result column="cityName" property="cityName" />
+		<result column="CountyName" property="CountyName" />
+	</resultMap>
+
+
+	<select id="queryAreaByName" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM dic_area
+		WHERE area_Name LIKE CONCAT(CONCAT(#{areaName}), '%') AND `level`=1
+	</select>
+
+	<select id="findParentById" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sys.model.AreaExample">
+		select ap.*
+		from dic_area a INNER join dic_area ap on a.parent_id=ap.id
+		where a.id=#{id}
+	</select>
+
+	<select id="queryAreaByPidAndName" resultMap="BaseResultMap">
+		SELECT d.* FROM `dic_area` d WHERE
+		d.`parent_id` = #{parentId} AND d.area_Name LIKE CONCAT(CONCAT('%', #{areaName}),
+		'%');
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<select id="selectByProvince" resultType="map">
+		select * from dic_area
+		where parent_id is null
+	</select>
+
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, area_Name, common, level, sequence,
+		parent_id,is_group_hot
+	</sql>
+
+	<select id="queryAreaList" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		from dic_area where delete_Status=0
+		<if test="pid == -1">
+			and parent_id is null
+		</if>
+		<if test="pid != -1">
+			and parent_id=#{pid,jdbcType=BIGINT}
+		</if>
+		order by sequence
+	</select>
+
+	<select id="queryAreaByParentId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from dic_area where parent_id=#{parentId,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sys.model.AreaExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from dic_area
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from dic_area
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from dic_area
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.AreaExample">
+		delete from dic_area
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.Area">
+		insert into dic_area (id, add_Time, delete_Status,
+		area_Name, common, level,
+		sequence, parent_id)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{areaName,jdbcType=VARCHAR}, #{common,jdbcType=BIT}, #{level,jdbcType=INTEGER},
+		#{sequence,jdbcType=INTEGER}, #{parentId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.Area">
+		insert into dic_area
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="areaName != null">
+				area_Name,
+			</if>
+			<if test="common != null">
+				common,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="isGroupHot != null">
+				is_group_hot,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="areaName != null">
+				#{areaName,jdbcType=VARCHAR},
+			</if>
+			<if test="common != null">
+				#{common,jdbcType=BIT},
+			</if>
+			<if test="level != null">
+				#{level,jdbcType=INTEGER},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="isGroupHot != null">
+				#{isGroupHot,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.AreaExample"
+		resultType="java.lang.Integer">
+		select count(*) from dic_area
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update dic_area
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.areaName != null">
+				area_Name = #{record.areaName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.common != null">
+				common = #{record.common,jdbcType=BIT},
+			</if>
+			<if test="record.level != null">
+				level = #{record.level,jdbcType=INTEGER},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=BIGINT},
+			</if>
+			<if test="record.isGroupHot != null">
+				is_group_hot = #{record.isGroupHot,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update dic_area
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		area_Name = #{record.areaName,jdbcType=VARCHAR},
+		common = #{record.common,jdbcType=BIT},
+		level = #{record.level,jdbcType=INTEGER},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		parent_id = #{record.parentId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.Area">
+		update dic_area
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="areaName != null">
+				area_Name = #{areaName,jdbcType=VARCHAR},
+			</if>
+			<if test="common != null">
+				common = #{common,jdbcType=BIT},
+			</if>
+			<if test="level != null">
+				level = #{level,jdbcType=INTEGER},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="isGroupHot != null">
+				is_group_hot = #{isGroupHot,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.Area">
+		update dic_area
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		area_Name = #{areaName,jdbcType=VARCHAR},
+		common = #{common,jdbcType=BIT},
+		level = #{level,jdbcType=INTEGER},
+		sequence = #{sequence,jdbcType=INTEGER},
+		parent_id = #{parentId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="queryParentArea" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM dic_area da WHERE da.parent_id IS NULL;
+	</select>
+	<select id="findGroupHotCityByPage" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM dic_area da
+		WHERE da.delete_Status='0'
+		and da.is_group_hot=1
+		order by sequence asc
+	</select>
+
+	<select id="selectNameByAreaId" resultMap="BOResultMap">
+		SELECT de.area_Name AS provinceName,dr.area_Name AS cityName , da.area_Name
+		AS CountyName
+		FROM dic_area da
+		LEFT JOIN dic_area dr ON dr.id=da.`parent_id`
+		LEFT JOIN dic_area de ON de.id=dr.parent_id
+		WHERE da.id = #{areaId}
+		AND da.level = 2
+	</select>
+</mapper>

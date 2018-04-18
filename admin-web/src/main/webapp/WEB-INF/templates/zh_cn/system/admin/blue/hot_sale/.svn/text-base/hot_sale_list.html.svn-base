@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link href="$!webPath/resources/style/system/front/default/css/seller_apply.css" type="text/css" rel="stylesheet" />
+	
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css" />
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js" ></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/plugins/jquery.validatebox.js"></script>
+	 
+</head>
+<body>
+	 <div id='opButtonsList' style="padding:5px 5px;">
+	
+	 <form id="searchForm" method="post" action="$!webPath/admin/hot_sale_list.htm" >
+	    	<div style="padding:5px 5px;" >
+					<strong>查询：</strong>
+	    			
+					<input id="strStartTime" name="strStartTime" value="$!vo.strStartTime" class="easyui-datetimebox" data-options="prompt:'开始时间'" style="width:150px"/>
+					<strong>至</strong>
+					<input id="strEndTime" name="strEndTime" value="$!vo.strEndTime" class="easyui-datetimebox" data-options="prompt:'结束时间'" style="width:150px"/>
+										
+					<input id="hotName" name="hotName" value="$!vo.hotName" class="easyui-textbox" type="text" style="width:100px;" data-options="prompt:'活动名称'"/>
+					
+	    			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="formSubmit()">查询</a>
+	    			
+	    	</div>
+	    	<input type="hidden" id="page" name="page" value="$!currentPage"></input>
+	    	<input type="hidden" id="size" name="size" value="$!pageSize"></input>
+	</form>
+	    
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="edit(0)">添加</a>
+	</div>
+		
+	<table id="listData" class="easyui-datagrid" style="width:100%;height:500px"
+			data-options="singleSelect:true,collapsible:true" toolbar="#opButtonsList">
+		<thead>
+			<tr>
+				<th data-options="halign:'center',field:'schemeName',width:120,align:'left'">活动名称</th>
+				<th data-options="halign:'center',field:'terminalType',width:120,align:'left'">首页图片</th>
+				<th data-options="halign:'center',field:'minMoney',width:120,align:'right'">活动头部图片url</th>
+				<th data-options="halign:'center',field:'totalCount',width:120,align:'right'">活动脚部图片url</th>
+				<th data-options="halign:'center',field:'getCount',width:120,align:'right'">code编码</th>
+				<th data-options="halign:'center',field:'getCount',width:120,align:'right'">背景颜色</th>
+				<th data-options="halign:'center',field:'startTime',width:125,align:'center'">开始时间</th>
+				<th data-options="halign:'center',field:'endTime',width:125,align:'center'">结束时间</th>
+				<th data-options="halign:'center',field:'createTime',width:125,align:'center'">是否启用</th>
+				<!--
+				<th data-options="halign:'center',field:'currentGetCount',width:120,align:'right'">创建人</th>
+				-->
+				<th data-options="halign:'center',field:'priority',width:125,align:'right'">创建时间 </th>
+				<!--
+				<th data-options="halign:'center',field:'status',width:50,align:'center'">修改人</th> 
+				<th data-options="halign:'center',field:'status',width:50,align:'center'">修改时间</th>
+				<th data-options="halign:'center',field:'status',width:80,align:'center'"> 删除状态</th>
+				 -->
+				<th data-options="halign:'center',field:'operate',width:140,align:'center'">操作</th>
+			</tr>
+		</thead>
+	    <tbody>  
+	      #foreach($obj in $objs)
+	        <tr>    
+	            <td>$!obj.hotName</td>
+	            <td> <img src="$!obj.firstImage" width="50" height="50"></img></td>           
+	            <td><img src="$!obj.headImage" width="50" height="50"></img></td>	            
+	            <td><img src="$!obj.footImage" width="50" height="50"></img></td>	            
+	            <td>$!obj.vcode</td> 
+	            <td>$!obj.backGroundColor</td>
+	            <td>$!CommUtil.formatLongDate($!obj.startTime)</td>	
+	            <td>$!CommUtil.formatLongDate($!obj.endTime)</td>
+	             <td>
+			         #if($!obj.isEnabled==1)
+			                           <span style="color:green;">启用</span>
+			         #end
+			         #if($!obj.isEnabled==0)
+			                         <span style="color:red;">停用 </span> 
+			         #end
+		         </td>
+		          <!-- 
+		          <td>$!obj.createBy</td>	
+		           --> 
+	              <td>$!CommUtil.formatLongDate($!obj.createTime)</td>
+	              <!-- 
+	              <td>$!obj.modifyBy</td>	
+	              <td>$!CommUtil.formatLongDate($!obj.modifyTime)</td>
+	            
+	               <td align="center">
+	               #if($!obj.deleteStatus==1)
+			                              是
+			         #end
+			         #if($!obj.deleteStatus==0)
+			                             否                  
+			         #end 
+	               </td>
+	                --> 
+	        <td>
+	        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit'" onclick="edit($!obj.id)">修改</a>
+	        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="del($!obj.id)">删除</a>
+		</td>
+	        </tr>
+	      #end
+	      </tbody>
+	</table>
+	<div id="listPager" class="easyui-pagination" data-options="total:$!rows,pageSize:$!pageSize,pageNumber:$!currentPage,pageList:[10,20,50,100]" style="background:#efefef;border:1px solid #ccc;"></div> 
+
+</body>
+
+<!-- 弹出层页面 -->
+	<div id="dlg" class="easyui-dialog" data-options="closed:true">
+	</div>
+	
+ 	<script type="text/javascript">	 	
+	    jQuery('#listPager').pagination({
+	    	onSelectPage:function(pageNumber, pageSize){
+	    		jQuery(this).pagination('loading');
+	    		jQuery('#page').attr("value",pageNumber);
+	    		jQuery('#size').attr("value",pageSize);
+	    		jQuery(this).pagination('loaded');
+				formSubmit();
+	    	},
+	    });
+        function edit(id) {
+        	//	alert(id);
+        	var op = 'add';
+        	if(id > 0){
+        		op = 'modify';
+        	}
+        	
+        	jQuery("#dlg").dialog({
+                title: op=='add'?'添加活动':'编辑活动',
+                href:  op=='add'?'hot_sale_add.htm':'hot_sale_edit.htm?id=' + id,
+                width:'800',
+     	    	height:'350',
+                top:(jQuery(window).height() - 600) * 0.5,   
+                left:(jQuery(window).width() - 800) * 0.5,
+                iconCls: 'icon-edit',
+                modal: true,
+                closed: false,
+                buttons: [{
+					text:'保存',
+					iconCls:'icon-save',
+					handler:function(){
+						var flag =  jQuery('#theForm').form('validate');
+						if (flag){
+						    //alert('验证通过！');
+							jQuery("#theForm").submit();
+							jQuery("#dlg").dialog('close');
+							
+						}
+					}
+				},{
+					text:'关闭',
+					iconCls:'icon-cancel',
+					handler:function(){
+						jQuery("#dlg").dialog('close');
+					}
+				}]                
+            });
+        }
+
+        function formSubmit(){
+        	jQuery("#searchForm").submit();
+        }
+        
+        function del(id){
+        	
+        	$.messager.confirm('确认', '删除后不可恢复，是否继续？', function (data) {
+			    if (data) {
+			     window.location.href='$!webPath/admin/hot_sale_del.htm?id='+ id +'&currentPage=$!currentPage';
+			    }
+        	});
+ 		}
+        
+        function batchDel(){
+        	var row = jQuery('#listData').datagrid('getSelections');  
+            var i = 0;  
+            var strId = "";  
+            for(i;i<row.length;i++){  
+            	strId += row[i].id;  
+                if(i < row.length-1){  
+                	strId += ',';  
+                }else{  
+                    break;  
+                }  
+            }
+            if(strId != ''){
+            	del(strId);
+            }
+        }
+       
+
+   </script>
+   
+</html>

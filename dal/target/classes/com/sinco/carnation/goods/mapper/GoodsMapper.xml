@@ -1,0 +1,3521 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.goods.mapper.GoodsMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.goods.model.Goods">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="activity_goods_id" property="activityGoodsId"
+			jdbcType="BIGINT" />
+		<result column="activity_status" property="activityStatus"
+			jdbcType="INTEGER" />
+		<result column="advance_date" property="advanceDate" jdbcType="DATE" />
+		<result column="advance_sale_type" property="advanceSaleType"
+			jdbcType="INTEGER" />
+		<result column="bad_evaluate" property="badEvaluate" jdbcType="DECIMAL" />
+		<result column="buy_gift_amount" property="buyGiftAmount"
+			jdbcType="DECIMAL" />
+		<result column="buy_gift_id" property="buyGiftId" jdbcType="BIGINT" />
+		<result column="combin_parts_id" property="combinPartsId"
+			jdbcType="BIGINT" />
+		<result column="combin_status" property="combinStatus"
+			jdbcType="INTEGER" />
+		<result column="combin_suit_id" property="combinSuitId"
+			jdbcType="BIGINT" />
+		<result column="delivery_area" property="deliveryArea"
+			jdbcType="VARCHAR" />
+		<result column="delivery_area_id" property="deliveryAreaId"
+			jdbcType="BIGINT" />
+		<result column="description_evaluate" property="descriptionEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="ems_trans_fee" property="emsTransFee" jdbcType="DECIMAL" />
+		<result column="enough_reduce" property="enoughReduce"
+			jdbcType="INTEGER" />
+		<result column="express_trans_fee" property="expressTransFee"
+			jdbcType="DECIMAL" />
+		<result column="f_sale_type" property="fSaleType" jdbcType="INTEGER" />
+		<result column="goods_bottom_format_id" property="goodsBottomFormatId"
+			jdbcType="BIGINT" />
+		<result column="goods_choice_type" property="goodsChoiceType"
+			jdbcType="INTEGER" />
+		<result column="goods_click" property="goodsClick" jdbcType="INTEGER" />
+		<result column="goods_cod" property="goodsCod" jdbcType="INTEGER" />
+		<result column="goods_collect" property="goodsCollect"
+			jdbcType="INTEGER" />
+		<result column="has_exchange_integral" property="hasExchangeIntegral"
+			jdbcType="BIT" />
+		<result column="exchange_integral" property="exchangeIntegral"
+			jdbcType="INTEGER" />
+		<result column="goods_integral_price" property="goodsIntegralPrice"
+			jdbcType="DECIMAL" />
+		<result column="has_mobile_price" property="hasMobilePrice"
+			jdbcType="BIT" />
+		<result column="goods_mobile_price" property="goodsMobilePrice"
+			jdbcType="DECIMAL" />
+		<result column="self_add_price" property="selfAddPrice"
+			jdbcType="DECIMAL" />
+		<result column="goods_current_price" property="goodsCurrentPrice"
+			jdbcType="DECIMAL" />
+		<result column="goods_fee" property="goodsFee" jdbcType="VARCHAR" />
+		<result column="goods_inventory" property="goodsInventory"
+			jdbcType="INTEGER" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+		<result column="goods_recommend" property="goodsRecommend"
+			jdbcType="BIT" />
+		<result column="goods_salenum" property="goodsSalenum"
+			jdbcType="INTEGER" />
+		<result column="goods_seller_time" property="goodsSellerTime"
+			jdbcType="TIMESTAMP" />
+		<result column="goods_serial" property="goodsSerial" jdbcType="VARCHAR" />
+		<result column="goods_status" property="goodsStatus" jdbcType="INTEGER" />
+		<result column="goods_top_format_id" property="goodsTopFormatId"
+			jdbcType="BIGINT" />
+		<result column="goods_transfee" property="goodsTransfee"
+			jdbcType="INTEGER" />
+		<result column="goods_type" property="goodsType" jdbcType="INTEGER" />
+		<result column="goods_volume" property="goodsVolume" jdbcType="DECIMAL" />
+		<result column="goods_warn_inventory" property="goodsWarnInventory"
+			jdbcType="INTEGER" />
+		<result column="goods_weight" property="goodsWeight" jdbcType="DECIMAL" />
+		<result column="group_buy" property="groupBuy" jdbcType="INTEGER" />
+		<result column="inventory_type" property="inventoryType"
+			jdbcType="VARCHAR" />
+		<result column="mail_trans_fee" property="mailTransFee"
+			jdbcType="DECIMAL" />
+		<result column="middle_evaluate" property="middleEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="mobile_hot" property="mobileHot" jdbcType="INTEGER" />
+		<result column="mobile_hotTime" property="mobileHottime"
+			jdbcType="DATE" />
+		<result column="mobile_recommend" property="mobileRecommend"
+			jdbcType="INTEGER" />
+		<result column="mobile_recommendTime" property="mobileRecommendtime"
+			jdbcType="DATE" />
+		<result column="order_enough_give_status" property="orderEnoughGiveStatus"
+			jdbcType="INTEGER" />
+		<result column="order_enough_if_give" property="orderEnoughIfGive"
+			jdbcType="INTEGER" />
+		<result column="order_enough_reduce_id" property="orderEnoughReduceId"
+			jdbcType="VARCHAR" />
+		<result column="price_history" property="priceHistory"
+			jdbcType="DECIMAL" />
+		<result column="publish_goods_status" property="publishGoodsStatus"
+			jdbcType="INTEGER" />
+		<result column="qr_img_path" property="qrImgPath" jdbcType="VARCHAR" />
+		<result column="seo_keywords" property="seoKeywords" jdbcType="VARCHAR" />
+		<result column="store_price" property="storePrice" jdbcType="DECIMAL" />
+		<result column="store_recommend" property="storeRecommend"
+			jdbcType="BIT" />
+		<result column="store_recommend_time" property="storeRecommendTime"
+			jdbcType="TIMESTAMP" />
+		<result column="tax_invoice" property="taxInvoice" jdbcType="INTEGER" />
+		<result column="warn_inventory_status" property="warnInventoryStatus"
+			jdbcType="INTEGER" />
+		<result column="well_evaluate" property="wellEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="whether_free" property="whetherFree" jdbcType="INTEGER" />
+		<result column="ztc_apply_time" property="ztcApplyTime"
+			jdbcType="TIMESTAMP" />
+		<result column="ztc_begin_time" property="ztcBeginTime"
+			jdbcType="DATE" />
+		<result column="ztc_click_num" property="ztcClickNum" jdbcType="INTEGER" />
+		<result column="ztc_dredge_price" property="ztcDredgePrice"
+			jdbcType="INTEGER" />
+		<result column="ztc_gold" property="ztcGold" jdbcType="INTEGER" />
+		<result column="ztc_pay_status" property="ztcPayStatus"
+			jdbcType="INTEGER" />
+		<result column="ztc_price" property="ztcPrice" jdbcType="INTEGER" />
+		<result column="ztc_status" property="ztcStatus" jdbcType="INTEGER" />
+		<result column="gc_id" property="gcId" jdbcType="BIGINT" />
+		<result column="goods_brand_id" property="goodsBrandId"
+			jdbcType="BIGINT" />
+		<result column="goods_main_photo_path" property="goodsMainPhotoPath"
+			jdbcType="VARCHAR" />
+		<result column="goods_store_id" property="goodsStoreId"
+			jdbcType="BIGINT" />
+		<result column="goods_index_photo_path" property="goodsIndexPhotoPath"
+			jdbcType="VARCHAR" />
+		<result column="group_id" property="groupId" jdbcType="BIGINT" />
+		<result column="transport_id" property="transportId" jdbcType="BIGINT" />
+		<result column="user_admin_id" property="userAdminId" jdbcType="BIGINT" />
+		<result column="ztc_admin_id" property="ztcAdminId" jdbcType="BIGINT" />
+		<result column="evaluate_count" property="evaluateCount"
+			jdbcType="INTEGER" />
+		<result column="weixin_hot" property="weixinHot" jdbcType="INTEGER" />
+		<result column="weixin_hotTime" property="weixinHottime"
+			jdbcType="DATE" />
+		<result column="weixin_recommend" property="weixinRecommend"
+			jdbcType="INTEGER" />
+		<result column="weixin_recommendTime" property="weixinRecommendtime"
+			jdbcType="DATE" />
+		<result column="sort_weight" property="sortWeight" jdbcType="INTEGER" />
+		<result column="self_add_price_log" property="selfAddPriceLog"
+			jdbcType="DECIMAL" />
+		<result column="ex_price_flag" property="exPriceFlag" jdbcType="INTEGER" />
+		<result column="cn_self_add_price" property="cnSelfAddPrice"
+			jdbcType="DECIMAL" />
+		<result column="need_ygb" property="needYgb" jdbcType="DECIMAL" />
+		<result column="need_money" property="needMoney" jdbcType="DECIMAL" />
+		<result column="need_integral" property="needIntegral"
+			jdbcType="DECIMAL" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.goods.bo.GoodsBO"
+		extends="BaseResultMap">
+		<result column="goods_bottom_format_content" property="goodsBottomFormatContent"
+			jdbcType="LONGVARCHAR" />
+		<result column="goods_details" property="goodsDetails"
+			jdbcType="LONGVARCHAR" />
+		<result column="goods_f_code" property="goodsFCode" jdbcType="LONGVARCHAR" />
+		<result column="goods_inventory_detail" property="goodsInventoryDetail"
+			jdbcType="LONGVARCHAR" />
+		<result column="goods_property" property="goodsProperty"
+			jdbcType="LONGVARCHAR" />
+		<result column="goods_service" property="goodsService"
+			jdbcType="LONGVARCHAR" />
+		<result column="goods_top_format_content" property="goodsTopFormatContent"
+			jdbcType="LONGVARCHAR" />
+		<result column="pack_details" property="packDetails" jdbcType="LONGVARCHAR" />
+		<result column="seo_description" property="seoDescription"
+			jdbcType="LONGVARCHAR" />
+		<result column="ztc_admin_content" property="ztcAdminContent"
+			jdbcType="LONGVARCHAR" />
+		<result column="goods_details_mobile" property="goodsDetailsMobile"
+			jdbcType="LONGVARCHAR" />
+		<result column="goods_target" property="goodsTarget" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="BoResultMap" type="com.sinco.carnation.goods.bo.GoodsBO"
+		extends="ResultMapWithBLOBs">
+		<result column="store_second_domain" property="storeSecondDomain" />
+		<result column="brandName" property="brandName" />
+		<result column="need_ygb" property="needYgb" />
+		<result column="need_money" property="needMoney" />
+		<result column="need_integral" property="needIntegral" />
+		<result column="is_ygb" property="isYgb" />
+		<result column="remark" property="remark" />
+		<association property="goodsStore"
+			javaType="com.sinco.carnation.store.bo.StoreBO" column="goods_store_id"
+			resultMap="com.sinco.carnation.store.mapper.StoreMapper.BOResultMap"></association>
+		<association property="transport"
+			javaType="com.sinco.carnation.shop.model.Transport" column="transport_id"
+			resultMap="com.sinco.carnation.shop.mapper.TransportMapper.BaseResultMap"></association>
+	</resultMap>
+	<resultMap id="CountResultMap" type="java.util.Map">
+		<result column="count" property="count" jdbcType="INTEGER" />
+		<result column="goodsStatus" property="goodsStatus" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap type="com.sinco.carnation.goods.bo.GoodsBO" id="queryFavaPageResult"
+		extends="BaseResultMap">
+	</resultMap>
+
+	<select id="queryFavaGoodsPageList" resultMap="queryFavaPageResult">
+		SELECT
+		g.id,g.goods_name,g.goods_type,g.goods_current_price,g.has_exchange_integral,g.activity_goods_id
+		,g.goods_integral_price,g.has_mobile_price,g.goods_mobile_price,g.goods_main_photo_path,g.goods_index_photo_path
+		from user_customer_favorites u
+		LEFT JOIN shop_goods g ON u.fid=g.id
+		WHERE u.type=#{type,jdbcType=INTEGER} AND g.goods_status=0
+		AND
+		u.uid=#{uid,jdbcType=BIGINT}
+	</select>
+
+	<select id="querygoodsYourLike" resultMap="BoResultMap">
+		SELECT
+		obj.id,
+		obj.goods_name,
+		obj.goods_current_price,
+		obj.goods_price,
+		obj.goods_main_photo_path,
+		obj.goods_index_photo_path,
+		obj.goods_inventory_detail,
+		obj.inventory_type
+		FROM
+		shop_goods obj
+		WHERE
+		obj.goods_status = 0
+		AND obj.delete_status = 0
+		<if test="gcId != null and gcId != ''">
+			AND obj.gc_id = #{gcId}
+		</if>
+		<if test="goodsId != null and goodsId != ''">
+			AND obj.id != #{goodsId}
+		</if>
+		ORDER BY obj.goods_salenum DESC
+	</select>
+
+	<update id="increaseGoodsCollect">
+		update shop_goods set goods_collect=goods_collect+1
+		where id=#{id}
+	</update>
+
+	<update id="reduceGoodsCollect">
+		update shop_goods set goods_collect=goods_collect-1
+		where id=#{id}
+	</update>
+	<select id="findCountByStoreId" resultMap="CountResultMap">
+		SELECT COUNT(0) count,
+		goods_status goodsStatus FROM shop_goods WHERE
+		goods_store_id =
+		#{storeId} and delete_status = 0 GROUP BY
+		goods_status
+	</select>
+	<select id="findAllSellingGoods" resultType="Long">
+		SELECT id FROM shop_goods WHERE goods_status = 0 AND delete_status = 0
+		AND (is_ygb <![CDATA[<>]]>
+		1 or is_ygb is null)
+	</select>
+
+	<select id="findBOByid" resultMap="BoResultMap" parameterType="Long">
+		select
+		g.*,
+		b.`name` brandName ,
+		u.`name` userName,
+		store.*
+		from shop_goods
+		g
+		left join shop_goods_brand b on
+		g.goods_brand_id = b.id
+		left join
+		user_manager u on g.user_admin_id =
+		u.uid
+		left join shop_store store ON
+		store.id=g.goods_store_id
+		where
+		g.id=#{id}
+	</select>
+
+	<select id="queryByIds" resultMap="BoResultMap">
+		select
+		g.id, g.goods_name, g.has_mobile_price, g.goods_mobile_price,
+		g.goods_current_price, g.goods_inventory_detail,
+		goods_inventory,
+		g.goods_main_photo_path,
+		g.goods_current_price,
+		g.goods_price
+
+		from
+		shop_goods g
+		where g.goods_status=0 and g.id in
+		<foreach collection="ids" index="index" item="id" open="("
+			separator="," close=")">
+			#{id}
+		</foreach>
+		ORDER BY g.goods_inventory DESC,g.goods_salenum DESC
+
+	</select>
+
+	<select id="findShopListBO" resultMap="BoResultMap">
+		select
+		g.goods_brand_id,
+		store_name,
+		g.id,
+		g.goods_name,
+		g.inventory_type,
+		g.goods_inventory_detail,
+		g.goods_current_price,
+		g.goods_price,
+		g.goods_salenum,
+		g.goods_main_photo_path,
+		g.goods_index_photo_path,
+		store.store_second_domain,
+		g.self_add_price,
+		g.goods_type,
+		g.cn_self_add_price,
+		g.ex_price_flag
+		from
+		shop_goods g
+		left join
+		shop_store store ON store.id=g.goods_store_id
+		LEFT
+		JOIN shop_goods_brand
+		gb ON g.goods_brand_id = gb.id
+		where
+		g.delete_status = 0
+		<if test="goodsStatus != null">
+			and g.goods_status = #{goodsStatus}
+		</if>
+		<if test="ids != null and ids.size() > 0">
+			and g.id in
+			<foreach collection="ids" item="listItem" open="(" close=")"
+				separator=",">
+				#{listItem}
+			</foreach>
+		</if>
+		<if test="notId != null">
+			and g.id != #{notId}
+		</if>
+		<if test="gcId != null">
+			and g.gc_id = #{gcId}
+		</if>
+		<if test="goodsStoreId != null">
+			and g.goods_store_id = #{goodsStoreId}
+		</if>
+		<if test="storeRecommend != null">
+			and g.store_recommend = #{storeRecommend}
+		</if>
+		<if test="goodsBrandId != null ">
+			and g.goods_brand_id = #{goodsBrandId}
+		</if>
+		<if test="likebBrandName != null and likebBrandName != '' ">
+			and gb.name like '%${likebBrandName}%'
+		</if>
+		<if test="orderBy != null">
+			order by ${orderBy}
+			<if test="orderType != null">${orderType}</if>
+		</if>
+
+		<if test="orderBy == null and ids != null and ids.size() > 0">
+			order by field(g.id,
+			<foreach collection="ids" item="listItem" separator=",">
+				#{listItem}
+			</foreach>
+			)
+		</if>
+		<if test="count != null and count > 0">
+			limit 0,#{count}
+		</if>
+	</select>
+
+	<select id="selectBOByVO" resultMap="BoResultMap"
+		parameterType="com.sinco.carnation.goods.vo.GoodsVO">
+		select
+		g.*, b.`name` brandName , u.`name` userName
+		<if test="vo.goodsType == null or vo.goodsType != 0">
+			, store.*
+		</if>
+		from shop_goods g
+		<if test="vo.userGoodsClassId != null and vo.userGoodsClassId != ''">
+			INNER JOIN shop_goods_ugc gugc on gugc.goods_id = g.id AND
+			gugc.class_id =
+			#{vo.userGoodsClassId}
+		</if>
+
+		<if
+			test="vo.goodsType == null or vo.goodsType != 0 or vo.storeName != null or vo.storeName != ''">
+			<choose>
+				<when test="vo.storeName != null and vo.storeName != ''">
+					inner join shop_store store ON
+					store.id=g.goods_store_id and store.store_name like CONCAT('%',
+					#{vo.storeName} ,'%')
+				</when>
+				<otherwise>
+					left join shop_store store ON store.id=g.goods_store_id
+				</otherwise>
+			</choose>
+		</if>
+		LEFT JOIN shop_goods_class sc1 ON (sc1.id = g.gc_id AND sc1.level=2)
+		LEFT JOIN shop_goods_class sc2 ON ((sc1.parent_id = sc2.id OR sc2.id =
+		g.gc_id) AND sc2.level=1)
+		LEFT JOIN shop_goods_class sc3 ON
+		((sc2.parent_id = sc3.id) AND sc3.level=0)
+		left join shop_goods_brand b
+		on g.goods_brand_id = b.id
+		left join user_manager u on g.user_admin_id
+		= u.uid
+		where g.delete_status = 0
+		<if test="vo.goodsStatus != null">
+			AND g.goods_status = #{vo.goodsStatus}
+		</if>
+		<if test="vo.goodsStatusList != null and vo.goodsStatusList.size() > 0">
+			AND g.goods_status in
+			<foreach collection="vo.goodsStatusList" item="status" open="("
+				close=")" separator=",">
+				#{status}
+			</foreach>
+		</if>
+		<if test="vo.goodsName != null and vo.goodsName != ''">
+			AND g.goods_name like CONCAT('%', #{vo.goodsName} ,'%')
+		</if>
+		<if test="vo.goodsType != null">
+			AND g.goods_type = #{vo.goodsType}
+		</if>
+		<if test="vo.goodsBrandId != null and vo.goodsBrandId != ''">
+			AND g.goods_brand_id = #{vo.goodsBrandId}
+		</if>
+		<if test="vo.userAdminId != null and vo.userAdminId != ''">
+			AND g.user_admin_id = #{vo.userAdminId}
+		</if>
+		<if test="vo.gcId != null and vo.gcId >0">
+			AND g.gc_id = #{vo.gcId}
+		</if>
+
+		<if test="vo.fgcId != null and vo.fgcId >0">
+			AND sc3.id=#{vo.fgcId}
+		</if>
+		<if test="vo.sgcId != null and vo.sgcId >0">
+			AND sc2.id = #{vo.sgcId}
+		</if>
+		<if test="vo.tgcId != null and vo.tgcId >0">
+			AND sc1.id = #{vo.tgcId}
+		</if>
+
+		<if test="vo.storeId != null and vo.storeId != ''">
+			AND g.goods_store_id = #{vo.storeId}
+		</if>
+		<if test="vo.goodsClassIds != null and vo.goodsClassIds.size() > 0">
+			AND g.gc_id in
+			<foreach collection="vo.goodsClassIds" item="gcId" open="("
+				close=")" separator=",">
+				#{gcId}
+			</foreach>
+		</if>
+		<if test="vo.startDate != null and vo.startDate != ''">
+			AND DATE_FORMAT(g.add_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.startDate},'%Y-%m-%d')
+		</if>
+		<if test="vo.endDate != null and vo.endDate != ''">
+			AND DATE_FORMAT(g.add_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{vo.endDate},'%Y-%m-%d')
+		</if>
+		<if test="vo != null and vo.timeIndex == 1">
+			AND g.add_time <![CDATA[>=]]>
+			DATE_FORMAT(now(),'%Y-%m-%d 00:00:00') and g.add_time <![CDATA[<=]]>
+			DATE_FORMAT(now(),'%Y-%m-%d 23:59:59')
+		</if>
+		<if test="vo != null and vo.timeIndex == 2">
+			AND g.add_time <![CDATA[>=]]>
+			DATE_FORMAT(date_sub(current_date(),interval 1 day),'%Y-%m-%d
+			00:00:00') and g.add_time <![CDATA[<=]]>
+			DATE_FORMAT(date_sub(current_date(),interval 1 day),'%Y-%m-%d
+			23:59:59')
+		</if>
+		<if
+			test="vo != null and vo.timeIndex == 3 or vo.timeIndex == 4 or vo.timeIndex ==  5 ">
+			AND g.add_time <![CDATA[>=]]>
+			concat(#{vo.startTime},' 00:00:00') and g.add_time <![CDATA[<=]]>
+			concat(#{vo.endTime},' 23:59:59')
+		</if>
+		<if test="vo.goodsId != null and vo.goodsId != '' ">
+			AND g.id = #{vo.goodsId}
+		</if>
+		<if test="vo.isYgb != null ">
+			AND g.is_ygb = #{vo.isYgb}
+		</if>
+		order by g.add_time desc
+	</select>
+
+	<select id="selectGoodsListByVO" resultMap="BoResultMap"
+		parameterType="com.sinco.carnation.goods.vo.GoodsVO">
+		SELECT
+		g.id,
+		g.goods_name,
+		g.inventory_type,
+		g.goods_inventory_detail,
+		g.goods_current_price,
+		g.goods_price,
+		g.goods_main_photo_path,
+		g.goods_index_photo_path,
+		g.has_exchange_integral,
+		g.has_mobile_price,
+		g.goods_salenum,
+		g.exchange_integral,
+		g.goods_integral_price,
+		g.goods_mobile_price,
+		g.goods_transfee,
+		g.self_add_price,
+		g.goods_type,
+		g.cn_self_add_price,
+		g.ex_price_flag
+		FROM
+		shop_goods g
+		<if test="vo.userGoodsClassIds != null and vo.userGoodsClassIds.size() > 0">
+			INNER JOIN shop_goods_ugc ugc ON ugc.goods_id = g.id AND ugc.class_id
+			in
+			<foreach collection="vo.userGoodsClassIds" item="ugcId" open="("
+				close=")" separator=",">
+				#{ugcId}
+			</foreach>
+		</if>
+		WHERE
+		g.goods_status = 0 and g.delete_status=0
+		<if test="vo.goodsClassIds != null and vo.goodsClassIds.size() > 0">
+			AND g.gc_id in
+			<foreach collection="vo.goodsClassIds" item="gcId" open="("
+				close=")" separator=",">
+				#{gcId}
+			</foreach>
+		</if>
+		<if test="vo.goodsCod != null">
+			AND g.goods_cod = #{vo.goodsCod}
+		</if>
+		<if test="vo.goodsTransfee != null and vo.goodsTransfee != ''">
+			AND g.goods_transfee = #{vo.goodsTransfee}
+		</if>
+		<if test="vo.goodsBrandIds != null and vo.goodsBrandIds.size() > 0">
+			AND g.goods_brand_id in
+			<foreach collection="vo.goodsBrandIds" item="gbId" open="("
+				close=")" separator=",">
+				#{gbId}
+			</foreach>
+		</if>
+		<if test="vo.goodsSpecIds != null and vo.goodsSpecIds.size() > 0">
+			AND g.id in(SELECT goods_id FROM shop_goods_spec gs WHERE gs.spec_id
+			in
+			<foreach collection="vo.goodsSpecIds" item="gsId" open="("
+				close=")" separator=",">
+				#{gsId}
+			</foreach>
+			)
+		</if>
+		<if
+			test="vo.gtpName != null and vo.gtpName != '' and vo.gtpValue != null and vo.gtpValue != ''">
+			AND (g.goods_property LIKE CONCAT('%',#{vo.gtpName}, '%') AND
+			g.goods_property LIKE CONCAT('%',#{vo.gtpValue}, '%'))
+		</if>
+		<if test="vo.goodsInventory != null and vo.goodsInventory == 0">
+			AND g.goods_inventory <![CDATA[ > ]]>
+			0
+		</if>
+		<if test="vo.storeId != null">
+			AND g.goods_store_id = #{vo.storeId}
+		</if>
+
+		<if test="vo.goodsType != null and vo.goodsType != -1">
+			AND g.goods_type = #{vo.goodsType}
+		</if>
+		<if test="vo.isYgb != null">
+			AND g.is_ygb = ${vo.isYgb}
+		</if>
+		<if test="vo.exPriceFlag != null">
+			AND g.ex_price_flag=1 AND g.cn_self_add_price <![CDATA[ > ]]>
+			0
+		</if>
+		<if test="vo.hasStock != null and vo.hasStock > 0">
+			AND g.goods_inventory <![CDATA[ > ]]>
+			0
+		</if>
+		<if test="vo.orderBy != null and vo.orderBy != ''">
+			ORDER BY g.${vo.orderBy} ${vo.orderType}
+		</if>
+	</select>
+
+
+	<select id="searchGoodsLikeByIds" resultMap="BoResultMap">
+		SELECT
+		goods_store_id,
+		obj.id,
+		obj.goods_name,
+		obj.goods_current_price,
+		obj.goods_price,
+		obj.goods_main_photo_path,
+		obj.goods_index_photo_path,
+		obj.goods_inventory_detail,
+		obj.inventory_type,
+		obj.goods_type,
+		obj.ex_price_flag,
+		obj.cn_self_add_price,
+		obj.need_money,
+		obj.need_integral,
+		obj.need_ygb,
+		obj.is_ygb
+		FROM
+		shop_goods obj
+		WHERE
+		obj.goods_status = 0
+		AND obj.delete_status = 0
+		<if test="goodsIds != null and goodsIds.length > 0">
+			AND obj.id in
+			<foreach collection="goodsIds" item="goodsId" open="(" close=")"
+				separator=",">
+				#{goodsId}
+			</foreach>
+		</if>
+		ORDER BY
+		obj.add_time DESC
+	</select>
+
+	<select id="searchGoodsYourLike" resultMap="BoResultMap">
+		SELECT
+		obj.id,
+		obj.goods_name,
+		obj.goods_current_price,
+		obj.goods_price,
+		obj.goods_main_photo_path,
+		obj.goods_index_photo_path,
+		obj.goods_inventory_detail,
+		obj.inventory_type,
+		obj.goods_mobile_price,
+		obj.has_mobile_price,
+		obj.ex_price_flag,
+		obj.cn_self_add_price,
+		obj.goods_type
+		FROM
+		shop_goods obj
+		WHERE
+		obj.goods_status = 0
+		AND
+		obj.delete_status = 0
+		AND obj.is_ygb = 0
+		<if test="gcId != null and gcId != ''">
+			AND obj.gc_id = #{gcId}
+		</if>
+		<if test="goodsId != null and goodsId != ''">
+			AND obj.id != #{goodsId}
+		</if>
+		<if test="goodsIds != null and goodsIds.size() > 0">
+			AND obj.id in
+			<foreach collection="goodsIds" item="goodsId" open="(" close=")"
+				separator=",">
+				#{goodsId}
+			</foreach>
+		</if>
+		<if test="gcIds != null and gcIds.size() > 0">
+			AND obj.gc_id in
+			<foreach collection="gcIds" item="gcId" open="(" close=")"
+				separator=",">
+				#{gcId}
+			</foreach>
+		</if>
+		ORDER BY
+		obj.randIndex DESC
+	</select>
+
+	<select id="selectGoodsYourLike" resultMap="BoResultMap">
+		SELECT
+		obj.id,
+		obj.goods_name,
+		obj.goods_current_price,
+		obj.goods_price,
+		obj.goods_main_photo_path,
+		obj.goods_index_photo_path,
+		obj.goods_inventory_detail,
+		obj.inventory_type,
+		obj.goods_mobile_price,
+		obj.has_mobile_price,
+		obj.goods_type,
+		obj.cn_self_add_price,
+		obj.ex_price_flag
+		FROM
+		shop_goods obj
+		WHERE
+		obj.goods_status = 0
+		AND
+		obj.delete_status = 0
+		AND obj.is_ygb = 0
+		<if test="gcId != null and gcId != ''">
+			AND obj.gc_id = #{gcId}
+		</if>
+		<if test="goodsId != null and goodsId != ''">
+			AND obj.id != #{goodsId}
+		</if>
+		<if test="goodsIds != null and goodsIds.size() > 0">
+			AND obj.id in
+			<foreach collection="goodsIds" item="goodsId" open="(" close=")"
+				separator=",">
+				#{goodsId}
+			</foreach>
+		</if>
+		<if test="gcIds != null and gcIds.size() > 0">
+			AND obj.gc_id in
+			<foreach collection="gcIds" item="gcId" open="(" close=")"
+				separator=",">
+				#{gcId}
+			</foreach>
+		</if>
+		ORDER BY
+		obj.randIndex DESC
+		<if test="offset != null and offset != -1">
+			limit #{start}, #{offset}
+		</if>
+	</select>
+	<select id="selectSameClassGoodsList" resultMap="BoResultMap">
+		SELECT
+		obj.id,
+		obj.goods_name,
+		obj.goods_current_price,
+		obj.goods_price,
+		obj.goods_main_photo_path,
+		obj.goods_index_photo_path,
+		obj.goods_inventory_detail,
+		obj.inventory_type,
+		obj.cn_self_add_price,
+		obj.ex_price_flag,
+		obj.goods_type
+		FROM
+		shop_goods obj
+		WHERE
+		obj.goods_status = 0
+		AND obj.is_ygb = 0
+		<if test="gcId != null and gcId != ''">
+			AND obj.gc_id = #{gcId}
+		</if>
+		<if test="goodsId != null and goodsId != ''">
+			AND obj.id != #{goodsId}
+		</if>
+		ORDER BY
+		obj.goods_salenum DESC
+		<if test="offset != null and offset != -1">
+			limit #{start}, #{offset}
+		</if>
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id,
+		add_time,
+		delete_status,
+		activity_goods_id,
+		activity_status,
+		advance_date,
+		advance_sale_type,
+		bad_evaluate,
+		buy_gift_amount,
+		buy_gift_id,
+		combin_parts_id,
+		combin_status,
+		combin_suit_id,
+		delivery_area,
+		delivery_area_id,
+		description_evaluate,
+		ems_trans_fee,
+		enough_reduce,
+		express_trans_fee,
+		f_sale_type,
+		goods_bottom_format_id,
+		goods_choice_type,
+		goods_click,
+		goods_cod,
+		goods_collect,
+		has_exchange_integral,
+		exchange_integral,
+		goods_integral_price,
+		has_mobile_price,
+		goods_mobile_price,
+		self_add_price,
+		goods_current_price,
+		goods_fee,
+		goods_inventory,
+		goods_name,
+		goods_price,
+		goods_recommend,
+		goods_salenum,
+		goods_seller_time,
+		goods_serial,
+		goods_status,
+		goods_top_format_id,
+		goods_transfee,
+		goods_type,
+		goods_volume,
+		goods_warn_inventory,
+		goods_weight,
+		group_buy,
+		inventory_type,
+		mail_trans_fee,
+		middle_evaluate,
+		mobile_hot,
+		mobile_hotTime,
+		mobile_recommend,
+		mobile_recommendTime,
+		order_enough_give_status,
+		order_enough_if_give,
+		order_enough_reduce_id,
+		price_history,
+		publish_goods_status,
+		qr_img_path,
+		seo_keywords,
+		store_price,
+		store_recommend,
+		store_recommend_time,
+		tax_invoice,
+		warn_inventory_status,
+		well_evaluate,
+		whether_free,
+		ztc_apply_time,
+		ztc_begin_time,
+		ztc_click_num,
+		ztc_dredge_price,
+		ztc_gold,
+		ztc_pay_status,
+		ztc_price,
+		ztc_status,
+		gc_id,
+		goods_brand_id,
+		goods_main_photo_path,
+		goods_index_photo_path,
+		goods_store_id,
+		group_id,
+		transport_id,
+		user_admin_id,
+		ztc_admin_id,
+		evaluate_count,
+		weixin_hot,
+		weixin_hotTime,
+		weixin_recommend,
+		weixin_recommendTime,
+		goods_target,
+		is_ygb,
+		need_ygb,
+		need_money,
+		remark,
+		self_add_price_log,
+		ex_price_flag,
+		cn_self_add_price,
+		need_integral
+	</sql>
+	<sql id="Blob_Column_List">
+		goods_bottom_format_content, goods_details, goods_f_code,
+		goods_inventory_detail,
+		goods_property, goods_service,
+		goods_top_format_content, pack_details,
+		seo_description,
+		ztc_admin_content, goods_details_mobile
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.goods.model.GoodsExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.goods.model.GoodsExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BoResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		shop_goods
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.goods.model.GoodsExample">
+		delete from shop_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.goods.model.Goods">
+		insert into shop_goods (id,
+		add_time, delete_status,
+		activity_goods_id, activity_status,
+		advance_date,
+		advance_sale_type, bad_evaluate, buy_gift_amount,
+		buy_gift_id, combin_parts_id, combin_status,
+		combin_suit_id,
+		delivery_area, delivery_area_id,
+		description_evaluate, ems_trans_fee,
+		enough_reduce,
+		express_trans_fee, f_sale_type, goods_bottom_format_id,
+		goods_choice_type, goods_click, goods_cod, goods_collect,
+		has_exchange_integral, exchange_integral, goods_integral_price,
+		has_mobile_price,
+		goods_mobile_price, self_add_price,
+		goods_current_price, goods_fee,
+		goods_inventory, goods_name,
+		goods_price,
+		goods_recommend, goods_salenum, goods_seller_time,
+		goods_serial, goods_status, goods_top_format_id,
+		goods_transfee,
+		goods_type, goods_volume,
+		goods_warn_inventory, goods_weight,
+		group_buy,
+		inventory_type, mail_trans_fee, middle_evaluate,
+		mobile_hot,
+		mobile_hotTime, mobile_recommend,
+		mobile_recommendTime,
+		order_enough_give_status,
+		order_enough_if_give, order_enough_reduce_id,
+		price_history, publish_goods_status, qr_img_path,
+		seo_keywords,
+		store_price, store_recommend,
+		store_recommend_time, tax_invoice,
+		warn_inventory_status,
+		well_evaluate, whether_free, ztc_apply_time,
+		ztc_begin_time, ztc_click_num, ztc_dredge_price,
+		ztc_gold,
+		ztc_pay_status, ztc_price,
+		ztc_status, gc_id, goods_brand_id,
+		goods_main_photo_path,
+		goods_index_photo_path, goods_store_id,
+		group_id,
+		transport_id, user_admin_id, ztc_admin_id,
+		evaluate_count,
+		weixin_hot, weixin_hotTime,
+		weixin_recommend, weixin_recommendTime,
+		goods_bottom_format_content,
+		goods_details, goods_f_code,
+		goods_inventory_detail,
+		goods_property, goods_service,
+		goods_top_format_content,
+		pack_details, seo_description,
+		ztc_admin_content,
+		goods_details_mobile,goods_target,sort_weight,need_integral)
+		values
+		(#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{activityGoodsId,jdbcType=BIGINT},
+		#{activityStatus,jdbcType=INTEGER}, #{advanceDate,jdbcType=DATE},
+		#{advanceSaleType,jdbcType=INTEGER}, #{badEvaluate,jdbcType=DECIMAL},
+		#{buyGiftAmount,jdbcType=DECIMAL},
+		#{buyGiftId,jdbcType=BIGINT},
+		#{combinPartsId,jdbcType=BIGINT}, #{combinStatus,jdbcType=INTEGER},
+		#{combinSuitId,jdbcType=BIGINT}, #{deliveryArea,jdbcType=VARCHAR},
+		#{deliveryAreaId,jdbcType=BIGINT},
+		#{descriptionEvaluate,jdbcType=DECIMAL},
+		#{emsTransFee,jdbcType=DECIMAL}, #{enoughReduce,jdbcType=INTEGER},
+		#{expressTransFee,jdbcType=DECIMAL}, #{fSaleType,jdbcType=INTEGER},
+		#{goodsBottomFormatId,jdbcType=BIGINT},
+		#{goodsChoiceType,jdbcType=INTEGER}, #{goodsClick,jdbcType=INTEGER},
+		#{goodsCod,jdbcType=INTEGER}, #{goodsCollect,jdbcType=INTEGER},
+		#{hasExchangeIntegral,jdbcType=BIT},
+		#{exchangeIntegral,jdbcType=INTEGER},
+		#{goodsIntegralPrice,jdbcType=DECIMAL},
+		#{hasMobilePrice,jdbcType=BIT}, #{goodsMobilePrice,jdbcType=DECIMAL},
+		#{selfAddPrice,jdbcType=DECIMAL},
+		#{goodsCurrentPrice,jdbcType=DECIMAL}, #{goodsFee,jdbcType=VARCHAR},
+		#{goodsInventory,jdbcType=INTEGER}, #{goodsName,jdbcType=VARCHAR},
+		#{goodsPrice,jdbcType=DECIMAL},
+		#{goodsRecommend,jdbcType=BIT},
+		#{goodsSalenum,jdbcType=INTEGER},
+		#{goodsSellerTime,jdbcType=TIMESTAMP},
+		#{goodsSerial,jdbcType=VARCHAR}, #{goodsStatus,jdbcType=INTEGER},
+		#{goodsTopFormatId,jdbcType=BIGINT},
+		#{goodsTransfee,jdbcType=INTEGER}, #{goodsType,jdbcType=INTEGER},
+		#{goodsVolume,jdbcType=DECIMAL},
+		#{goodsWarnInventory,jdbcType=INTEGER},
+		#{goodsWeight,jdbcType=DECIMAL}, #{groupBuy,jdbcType=INTEGER},
+		#{inventoryType,jdbcType=VARCHAR}, #{mailTransFee,jdbcType=DECIMAL},
+		#{middleEvaluate,jdbcType=DECIMAL},
+		#{mobileHot,jdbcType=INTEGER},
+		#{mobileHottime,jdbcType=DATE}, #{mobileRecommend,jdbcType=INTEGER},
+		#{mobileRecommendtime,jdbcType=DATE},
+		#{orderEnoughGiveStatus,jdbcType=INTEGER},
+		#{orderEnoughIfGive,jdbcType=INTEGER},
+		#{orderEnoughReduceId,jdbcType=VARCHAR},
+		#{priceHistory,jdbcType=DECIMAL},
+		#{publishGoodsStatus,jdbcType=INTEGER}, #{qrImgPath,jdbcType=VARCHAR},
+		#{seoKeywords,jdbcType=VARCHAR}, #{storePrice,jdbcType=DECIMAL},
+		#{storeRecommend,jdbcType=BIT},
+		#{storeRecommendTime,jdbcType=TIMESTAMP},
+		#{taxInvoice,jdbcType=INTEGER},
+		#{warnInventoryStatus,jdbcType=INTEGER},
+		#{wellEvaluate,jdbcType=DECIMAL}, #{whetherFree,jdbcType=INTEGER},
+		#{ztcApplyTime,jdbcType=TIMESTAMP},
+		#{ztcBeginTime,jdbcType=DATE},
+		#{ztcClickNum,jdbcType=INTEGER}, #{ztcDredgePrice,jdbcType=INTEGER},
+		#{ztcGold,jdbcType=INTEGER}, #{ztcPayStatus,jdbcType=INTEGER},
+		#{ztcPrice,jdbcType=INTEGER},
+		#{ztcStatus,jdbcType=INTEGER},
+		#{gcId,jdbcType=BIGINT}, #{goodsBrandId,jdbcType=BIGINT},
+		#{goodsMainPhotoPath,jdbcType=VARCHAR},
+		#{goodsIndexPhotoPath,jdbcType=VARCHAR},
+		#{goodsStoreId,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT},
+		#{transportId,jdbcType=BIGINT}, #{userAdminId,jdbcType=BIGINT},
+		#{ztcAdminId,jdbcType=BIGINT},
+		#{evaluateCount,jdbcType=INTEGER},
+		#{weixinHot,jdbcType=INTEGER}, #{weixinHottime,jdbcType=DATE},
+		#{weixinRecommend,jdbcType=INTEGER},
+		#{weixinRecommendtime,jdbcType=DATE},
+		#{goodsBottomFormatContent,jdbcType=LONGVARCHAR},
+		#{goodsDetails,jdbcType=LONGVARCHAR},
+		#{goodsFCode,jdbcType=LONGVARCHAR},
+		#{goodsInventoryDetail,jdbcType=LONGVARCHAR},
+		#{goodsProperty,jdbcType=LONGVARCHAR},
+		#{goodsService,jdbcType=LONGVARCHAR},
+		#{goodsTopFormatContent,jdbcType=LONGVARCHAR},
+		#{packDetails,jdbcType=LONGVARCHAR},
+		#{seoDescription,jdbcType=LONGVARCHAR},
+		#{ztcAdminContent,jdbcType=LONGVARCHAR},
+		#{goodsDetailsMobile,jdbcType=LONGVARCHAR},
+		#{goodsTarget,jdbcType=LONGVARCHAR},
+		#{sortWeight,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.goods.model.Goods"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_goods
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="activityGoodsId != null">
+				activity_goods_id,
+			</if>
+			<if test="activityStatus != null">
+				activity_status,
+			</if>
+			<if test="advanceDate != null">
+				advance_date,
+			</if>
+			<if test="advanceSaleType != null">
+				advance_sale_type,
+			</if>
+			<if test="badEvaluate != null">
+				bad_evaluate,
+			</if>
+			<if test="buyGiftAmount != null">
+				buy_gift_amount,
+			</if>
+			<if test="buyGiftId != null">
+				buy_gift_id,
+			</if>
+			<if test="combinPartsId != null">
+				combin_parts_id,
+			</if>
+			<if test="combinStatus != null">
+				combin_status,
+			</if>
+			<if test="combinSuitId != null">
+				combin_suit_id,
+			</if>
+			<if test="deliveryArea != null">
+				delivery_area,
+			</if>
+			<if test="deliveryAreaId != null">
+				delivery_area_id,
+			</if>
+			<if test="descriptionEvaluate != null">
+				description_evaluate,
+			</if>
+			<if test="emsTransFee != null">
+				ems_trans_fee,
+			</if>
+			<if test="enoughReduce != null">
+				enough_reduce,
+			</if>
+			<if test="expressTransFee != null">
+				express_trans_fee,
+			</if>
+			<if test="fSaleType != null">
+				f_sale_type,
+			</if>
+			<if test="goodsBottomFormatId != null">
+				goods_bottom_format_id,
+			</if>
+			<if test="goodsChoiceType != null">
+				goods_choice_type,
+			</if>
+			<if test="goodsClick != null">
+				goods_click,
+			</if>
+			<if test="goodsCod != null">
+				goods_cod,
+			</if>
+			<if test="goodsCollect != null">
+				goods_collect,
+			</if>
+			<if test="hasExchangeIntegral != null">
+				has_exchange_integral,
+			</if>
+			<if test="exchangeIntegral != null">
+				exchange_integral,
+			</if>
+			<if test="goodsIntegralPrice != null">
+				goods_integral_price,
+			</if>
+			<if test="hasMobilePrice != null">
+				has_mobile_price,
+			</if>
+			<if test="goodsMobilePrice != null">
+				goods_mobile_price,
+			</if>
+			<if test="selfAddPrice != null">
+				self_add_price,
+			</if>
+			<if test="goodsCurrentPrice != null">
+				goods_current_price,
+			</if>
+			<if test="goodsFee != null">
+				goods_fee,
+			</if>
+			<if test="goodsInventory != null">
+				goods_inventory,
+			</if>
+			<if test="goodsName != null">
+				goods_name,
+			</if>
+			<if test="goodsPrice != null">
+				goods_price,
+			</if>
+			<if test="goodsRecommend != null">
+				goods_recommend,
+			</if>
+			<if test="goodsSalenum != null">
+				goods_salenum,
+			</if>
+			<if test="goodsSellerTime != null">
+				goods_seller_time,
+			</if>
+			<if test="goodsSerial != null">
+				goods_serial,
+			</if>
+			<if test="goodsStatus != null">
+				goods_status,
+			</if>
+			<if test="goodsTopFormatId != null">
+				goods_top_format_id,
+			</if>
+			<if test="goodsTransfee != null">
+				goods_transfee,
+			</if>
+			<if test="goodsType != null">
+				goods_type,
+			</if>
+			<if test="goodsVolume != null">
+				goods_volume,
+			</if>
+			<if test="goodsWarnInventory != null">
+				goods_warn_inventory,
+			</if>
+			<if test="goodsWeight != null">
+				goods_weight,
+			</if>
+			<if test="groupBuy != null">
+				group_buy,
+			</if>
+			<if test="inventoryType != null">
+				inventory_type,
+			</if>
+			<if test="mailTransFee != null">
+				mail_trans_fee,
+			</if>
+			<if test="middleEvaluate != null">
+				middle_evaluate,
+			</if>
+			<if test="mobileHot != null">
+				mobile_hot,
+			</if>
+			<if test="mobileHottime != null">
+				mobile_hotTime,
+			</if>
+			<if test="mobileRecommend != null">
+				mobile_recommend,
+			</if>
+			<if test="mobileRecommendtime != null">
+				mobile_recommendTime,
+			</if>
+			<if test="orderEnoughGiveStatus != null">
+				order_enough_give_status,
+			</if>
+			<if test="orderEnoughIfGive != null">
+				order_enough_if_give,
+			</if>
+			<if test="orderEnoughReduceId != null">
+				order_enough_reduce_id,
+			</if>
+			<if test="priceHistory != null">
+				price_history,
+			</if>
+			<if test="publishGoodsStatus != null">
+				publish_goods_status,
+			</if>
+			<if test="qrImgPath != null">
+				qr_img_path,
+			</if>
+			<if test="seoKeywords != null">
+				seo_keywords,
+			</if>
+			<if test="storePrice != null">
+				store_price,
+			</if>
+			<if test="storeRecommend != null">
+				store_recommend,
+			</if>
+			<if test="storeRecommendTime != null">
+				store_recommend_time,
+			</if>
+			<if test="taxInvoice != null">
+				tax_invoice,
+			</if>
+			<if test="warnInventoryStatus != null">
+				warn_inventory_status,
+			</if>
+			<if test="wellEvaluate != null">
+				well_evaluate,
+			</if>
+			<if test="whetherFree != null">
+				whether_free,
+			</if>
+			<if test="ztcApplyTime != null">
+				ztc_apply_time,
+			</if>
+			<if test="ztcBeginTime != null">
+				ztc_begin_time,
+			</if>
+			<if test="ztcClickNum != null">
+				ztc_click_num,
+			</if>
+			<if test="ztcDredgePrice != null">
+				ztc_dredge_price,
+			</if>
+			<if test="ztcGold != null">
+				ztc_gold,
+			</if>
+			<if test="ztcPayStatus != null">
+				ztc_pay_status,
+			</if>
+			<if test="ztcPrice != null">
+				ztc_price,
+			</if>
+			<if test="ztcStatus != null">
+				ztc_status,
+			</if>
+			<if test="gcId != null">
+				gc_id,
+			</if>
+			<if test="goodsBrandId != null">
+				goods_brand_id,
+			</if>
+			<if test="goodsMainPhotoPath != null">
+				goods_main_photo_path,
+			</if>
+			<if test="goodsIndexPhotoPath != null">
+				goods_index_photo_path,
+			</if>
+			<if test="goodsStoreId != null">
+				goods_store_id,
+			</if>
+			<if test="groupId != null">
+				group_id,
+			</if>
+			<if test="transportId != null">
+				transport_id,
+			</if>
+			<if test="userAdminId != null">
+				user_admin_id,
+			</if>
+			<if test="ztcAdminId != null">
+				ztc_admin_id,
+			</if>
+			<if test="evaluateCount != null">
+				evaluate_count,
+			</if>
+			<if test="weixinHot != null">
+				weixin_hot,
+			</if>
+			<if test="weixinHottime != null">
+				weixin_hotTime,
+			</if>
+			<if test="weixinRecommend != null">
+				weixin_recommend,
+			</if>
+			<if test="weixinRecommendtime != null">
+				weixin_recommendTime,
+			</if>
+			<if test="goodsBottomFormatContent != null">
+				goods_bottom_format_content,
+			</if>
+			<if test="goodsDetails != null">
+				goods_details,
+			</if>
+			<if test="goodsFCode != null">
+				goods_f_code,
+			</if>
+			<if test="goodsInventoryDetail != null">
+				goods_inventory_detail,
+			</if>
+			<if test="goodsProperty != null">
+				goods_property,
+			</if>
+			<if test="goodsService != null">
+				goods_service,
+			</if>
+			<if test="goodsTopFormatContent != null">
+				goods_top_format_content,
+			</if>
+			<if test="packDetails != null">
+				pack_details,
+			</if>
+			<if test="seoDescription != null">
+				seo_description,
+			</if>
+			<if test="ztcAdminContent != null">
+				ztc_admin_content,
+			</if>
+			<if test="goodsDetailsMobile != null">
+				goods_details_mobile,
+			</if>
+			<if test="goodsTarget != null">
+				goods_target,
+			</if>
+			<if test="sortWeight != null">
+				sort_weight,
+			</if>
+			<if test="needYgb != null ">
+				need_ygb,
+			</if>
+			<if test="needMoney != null">
+				need_money,
+			</if>
+			<if test="isYgb != null ">
+				is_ygb,
+			</if>
+			<if test="selfAddPriceLog != null ">
+				self_add_price_log,
+			</if>
+			<if test="exPriceFlag != null ">
+				ex_price_flag,
+			</if>
+			<if test="cnSelfAddPrice != null ">
+				cn_self_add_price,
+			</if>
+			<if test="needIntegral != null ">
+				need_integral,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="activityGoodsId != null">
+				#{activityGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="activityStatus != null">
+				#{activityStatus,jdbcType=INTEGER},
+			</if>
+			<if test="advanceDate != null">
+				#{advanceDate,jdbcType=DATE},
+			</if>
+			<if test="advanceSaleType != null">
+				#{advanceSaleType,jdbcType=INTEGER},
+			</if>
+			<if test="badEvaluate != null">
+				#{badEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="buyGiftAmount != null">
+				#{buyGiftAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="buyGiftId != null">
+				#{buyGiftId,jdbcType=BIGINT},
+			</if>
+			<if test="combinPartsId != null">
+				#{combinPartsId,jdbcType=BIGINT},
+			</if>
+			<if test="combinStatus != null">
+				#{combinStatus,jdbcType=INTEGER},
+			</if>
+			<if test="combinSuitId != null">
+				#{combinSuitId,jdbcType=BIGINT},
+			</if>
+			<if test="deliveryArea != null">
+				#{deliveryArea,jdbcType=VARCHAR},
+			</if>
+			<if test="deliveryAreaId != null">
+				#{deliveryAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="descriptionEvaluate != null">
+				#{descriptionEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="emsTransFee != null">
+				#{emsTransFee,jdbcType=DECIMAL},
+			</if>
+			<if test="enoughReduce != null">
+				#{enoughReduce,jdbcType=INTEGER},
+			</if>
+			<if test="expressTransFee != null">
+				#{expressTransFee,jdbcType=DECIMAL},
+			</if>
+			<if test="fSaleType != null">
+				#{fSaleType,jdbcType=INTEGER},
+			</if>
+			<if test="goodsBottomFormatId != null">
+				#{goodsBottomFormatId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsChoiceType != null">
+				#{goodsChoiceType,jdbcType=INTEGER},
+			</if>
+			<if test="goodsClick != null">
+				#{goodsClick,jdbcType=INTEGER},
+			</if>
+			<if test="goodsCod != null">
+				#{goodsCod,jdbcType=INTEGER},
+			</if>
+			<if test="goodsCollect != null">
+				#{goodsCollect,jdbcType=INTEGER},
+			</if>
+			<if test="hasExchangeIntegral != null">
+				#{hasExchangeIntegral,jdbcType=BIT},
+			</if>
+			<if test="exchangeIntegral != null">
+				#{exchangeIntegral,jdbcType=INTEGER},
+			</if>
+			<if test="goodsIntegralPrice != null">
+				#{goodsIntegralPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="hasMobilePrice != null">
+				#{hasMobilePrice,jdbcType=BIT},
+			</if>
+			<if test="goodsMobilePrice != null">
+				#{goodsMobilePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="selfAddPrice != null">
+				#{selfAddPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsCurrentPrice != null">
+				#{goodsCurrentPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsFee != null">
+				#{goodsFee,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsInventory != null">
+				#{goodsInventory,jdbcType=INTEGER},
+			</if>
+			<if test="goodsName != null">
+				#{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsPrice != null">
+				#{goodsPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsRecommend != null">
+				#{goodsRecommend,jdbcType=BIT},
+			</if>
+			<if test="goodsSalenum != null">
+				#{goodsSalenum,jdbcType=INTEGER},
+			</if>
+			<if test="goodsSellerTime != null">
+				#{goodsSellerTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="goodsSerial != null">
+				#{goodsSerial,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsStatus != null">
+				#{goodsStatus,jdbcType=INTEGER},
+			</if>
+			<if test="goodsTopFormatId != null">
+				#{goodsTopFormatId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsTransfee != null">
+				#{goodsTransfee,jdbcType=INTEGER},
+			</if>
+			<if test="goodsType != null">
+				#{goodsType,jdbcType=INTEGER},
+			</if>
+			<if test="goodsVolume != null">
+				#{goodsVolume,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsWarnInventory != null">
+				#{goodsWarnInventory,jdbcType=INTEGER},
+			</if>
+			<if test="goodsWeight != null">
+				#{goodsWeight,jdbcType=DECIMAL},
+			</if>
+			<if test="groupBuy != null">
+				#{groupBuy,jdbcType=INTEGER},
+			</if>
+			<if test="inventoryType != null">
+				#{inventoryType,jdbcType=VARCHAR},
+			</if>
+			<if test="mailTransFee != null">
+				#{mailTransFee,jdbcType=DECIMAL},
+			</if>
+			<if test="middleEvaluate != null">
+				#{middleEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="mobileHot != null">
+				#{mobileHot,jdbcType=INTEGER},
+			</if>
+			<if test="mobileHottime != null">
+				#{mobileHottime,jdbcType=DATE},
+			</if>
+			<if test="mobileRecommend != null">
+				#{mobileRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="mobileRecommendtime != null">
+				#{mobileRecommendtime,jdbcType=DATE},
+			</if>
+			<if test="orderEnoughGiveStatus != null">
+				#{orderEnoughGiveStatus,jdbcType=INTEGER},
+			</if>
+			<if test="orderEnoughIfGive != null">
+				#{orderEnoughIfGive,jdbcType=INTEGER},
+			</if>
+			<if test="orderEnoughReduceId != null">
+				#{orderEnoughReduceId,jdbcType=VARCHAR},
+			</if>
+			<if test="priceHistory != null">
+				#{priceHistory,jdbcType=DECIMAL},
+			</if>
+			<if test="publishGoodsStatus != null">
+				#{publishGoodsStatus,jdbcType=INTEGER},
+			</if>
+			<if test="qrImgPath != null">
+				#{qrImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="seoKeywords != null">
+				#{seoKeywords,jdbcType=VARCHAR},
+			</if>
+			<if test="storePrice != null">
+				#{storePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="storeRecommend != null">
+				#{storeRecommend,jdbcType=BIT},
+			</if>
+			<if test="storeRecommendTime != null">
+				#{storeRecommendTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="taxInvoice != null">
+				#{taxInvoice,jdbcType=INTEGER},
+			</if>
+			<if test="warnInventoryStatus != null">
+				#{warnInventoryStatus,jdbcType=INTEGER},
+			</if>
+			<if test="wellEvaluate != null">
+				#{wellEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="whetherFree != null">
+				#{whetherFree,jdbcType=INTEGER},
+			</if>
+			<if test="ztcApplyTime != null">
+				#{ztcApplyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ztcBeginTime != null">
+				#{ztcBeginTime,jdbcType=DATE},
+			</if>
+			<if test="ztcClickNum != null">
+				#{ztcClickNum,jdbcType=INTEGER},
+			</if>
+			<if test="ztcDredgePrice != null">
+				#{ztcDredgePrice,jdbcType=INTEGER},
+			</if>
+			<if test="ztcGold != null">
+				#{ztcGold,jdbcType=INTEGER},
+			</if>
+			<if test="ztcPayStatus != null">
+				#{ztcPayStatus,jdbcType=INTEGER},
+			</if>
+			<if test="ztcPrice != null">
+				#{ztcPrice,jdbcType=INTEGER},
+			</if>
+			<if test="ztcStatus != null">
+				#{ztcStatus,jdbcType=INTEGER},
+			</if>
+			<if test="gcId != null">
+				#{gcId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsBrandId != null">
+				#{goodsBrandId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsMainPhotoPath != null">
+				#{goodsMainPhotoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsIndexPhotoPath != null">
+				#{goodsIndexPhotoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsStoreId != null">
+				#{goodsStoreId,jdbcType=BIGINT},
+			</if>
+			<if test="groupId != null">
+				#{groupId,jdbcType=BIGINT},
+			</if>
+			<if test="transportId != null">
+				#{transportId,jdbcType=BIGINT},
+			</if>
+			<if test="userAdminId != null">
+				#{userAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="ztcAdminId != null">
+				#{ztcAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="evaluateCount != null">
+				#{evaluateCount,jdbcType=INTEGER},
+			</if>
+			<if test="weixinHot != null">
+				#{weixinHot,jdbcType=INTEGER},
+			</if>
+			<if test="weixinHottime != null">
+				#{weixinHottime,jdbcType=DATE},
+			</if>
+			<if test="weixinRecommend != null">
+				#{weixinRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="weixinRecommendtime != null">
+				#{weixinRecommendtime,jdbcType=DATE},
+			</if>
+			<if test="goodsBottomFormatContent != null">
+				#{goodsBottomFormatContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsDetails != null">
+				#{goodsDetails,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsFCode != null">
+				#{goodsFCode,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsInventoryDetail != null">
+				#{goodsInventoryDetail,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsProperty != null">
+				#{goodsProperty,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsService != null">
+				#{goodsService,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsTopFormatContent != null">
+				#{goodsTopFormatContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="packDetails != null">
+				#{packDetails,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="seoDescription != null">
+				#{seoDescription,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="ztcAdminContent != null">
+				#{ztcAdminContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsDetailsMobile != null">
+				#{goodsDetailsMobile,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsTarget != null">
+				#{goodsTarget,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="sortWeight != null">
+				#{sortWeight,jdbcType=INTEGER},
+			</if>
+			<if test="needYgb != null ">
+				#{needYgb,jdbcType=INTEGER},
+			</if>
+			<if test="needMoney != null">
+				#{needMoney,jdbcType=INTEGER},
+			</if>
+			<if test="isYgb != null ">
+				#{isYgb,jdbcType=INTEGER},
+			</if>
+			<if test="selfAddPriceLog != null">
+				#{selfAddPriceLog,jdbcType=DECIMAL},
+			</if>
+			<if test="exPriceFlag != null ">
+				#{exPriceFlag,jdbcType=INTEGER},
+			</if>
+			<if test="cnSelfAddPrice != null ">
+				#{cnSelfAddPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="needIntegral != null ">
+				#{needIntegral,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.goods.model.GoodsExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_goods
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.activityGoodsId != null">
+				activity_goods_id =
+				#{record.activityGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="record.activityStatus != null">
+				activity_status =
+				#{record.activityStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.advanceDate != null">
+				advance_date = #{record.advanceDate,jdbcType=DATE},
+			</if>
+			<if test="record.advanceSaleType != null">
+				advance_sale_type =
+				#{record.advanceSaleType,jdbcType=INTEGER},
+			</if>
+			<if test="record.badEvaluate != null">
+				bad_evaluate = #{record.badEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.buyGiftAmount != null">
+				buy_gift_amount =
+				#{record.buyGiftAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.buyGiftId != null">
+				buy_gift_id = #{record.buyGiftId,jdbcType=BIGINT},
+			</if>
+			<if test="record.combinPartsId != null">
+				combin_parts_id =
+				#{record.combinPartsId,jdbcType=BIGINT},
+			</if>
+			<if test="record.combinStatus != null">
+				combin_status = #{record.combinStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.combinSuitId != null">
+				combin_suit_id = #{record.combinSuitId,jdbcType=BIGINT},
+			</if>
+			<if test="record.deliveryArea != null">
+				delivery_area = #{record.deliveryArea,jdbcType=VARCHAR},
+			</if>
+			<if test="record.deliveryAreaId != null">
+				delivery_area_id =
+				#{record.deliveryAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="record.descriptionEvaluate != null">
+				description_evaluate =
+				#{record.descriptionEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.emsTransFee != null">
+				ems_trans_fee = #{record.emsTransFee,jdbcType=DECIMAL},
+			</if>
+			<if test="record.enoughReduce != null">
+				enough_reduce = #{record.enoughReduce,jdbcType=INTEGER},
+			</if>
+			<if test="record.expressTransFee != null">
+				express_trans_fee =
+				#{record.expressTransFee,jdbcType=DECIMAL},
+			</if>
+			<if test="record.fSaleType != null">
+				f_sale_type = #{record.fSaleType,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsBottomFormatId != null">
+				goods_bottom_format_id =
+				#{record.goodsBottomFormatId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goodsChoiceType != null">
+				goods_choice_type =
+				#{record.goodsChoiceType,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsClick != null">
+				goods_click = #{record.goodsClick,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsCod != null">
+				goods_cod = #{record.goodsCod,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsCollect != null">
+				goods_collect = #{record.goodsCollect,jdbcType=INTEGER},
+			</if>
+			<if test="record.hasExchangeIntegral != null">
+				has_exchange_integral =
+				#{record.hasExchangeIntegral,jdbcType=BIT},
+			</if>
+			<if test="record.exchangeIntegral != null">
+				exchange_integral =
+				#{record.exchangeIntegral,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsIntegralPrice != null">
+				goods_integral_price =
+				#{record.goodsIntegralPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.hasMobilePrice != null">
+				has_mobile_price = #{record.hasMobilePrice,jdbcType=BIT},
+			</if>
+			<if test="record.goodsMobilePrice != null">
+				goods_mobile_price =
+				#{record.goodsMobilePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.selfAddPrice != null">
+				self_add_price = #{record.selfAddPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.goodsCurrentPrice != null">
+				goods_current_price =
+				#{record.goodsCurrentPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.goodsFee != null">
+				goods_fee = #{record.goodsFee,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsInventory != null">
+				goods_inventory =
+				#{record.goodsInventory,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsName != null">
+				goods_name = #{record.goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsPrice != null">
+				goods_price = #{record.goodsPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.goodsRecommend != null">
+				goods_recommend = #{record.goodsRecommend,jdbcType=BIT},
+			</if>
+			<if test="record.goodsSalenum != null">
+				goods_salenum = #{record.goodsSalenum,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsSellerTime != null">
+				goods_seller_time =
+				#{record.goodsSellerTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.goodsSerial != null">
+				goods_serial = #{record.goodsSerial,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsStatus != null">
+				goods_status = #{record.goodsStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsTopFormatId != null">
+				goods_top_format_id =
+				#{record.goodsTopFormatId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goodsTransfee != null">
+				goods_transfee =
+				#{record.goodsTransfee,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsType != null">
+				goods_type = #{record.goodsType,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsVolume != null">
+				goods_volume = #{record.goodsVolume,jdbcType=DECIMAL},
+			</if>
+			<if test="record.goodsWarnInventory != null">
+				goods_warn_inventory =
+				#{record.goodsWarnInventory,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsWeight != null">
+				goods_weight = #{record.goodsWeight,jdbcType=DECIMAL},
+			</if>
+			<if test="record.groupBuy != null">
+				group_buy = #{record.groupBuy,jdbcType=INTEGER},
+			</if>
+			<if test="record.inventoryType != null">
+				inventory_type =
+				#{record.inventoryType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.mailTransFee != null">
+				mail_trans_fee = #{record.mailTransFee,jdbcType=DECIMAL},
+			</if>
+			<if test="record.middleEvaluate != null">
+				middle_evaluate =
+				#{record.middleEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.mobileHot != null">
+				mobile_hot = #{record.mobileHot,jdbcType=INTEGER},
+			</if>
+			<if test="record.mobileHottime != null">
+				mobile_hotTime = #{record.mobileHottime,jdbcType=DATE},
+			</if>
+			<if test="record.mobileRecommend != null">
+				mobile_recommend =
+				#{record.mobileRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="record.mobileRecommendtime != null">
+				mobile_recommendTime =
+				#{record.mobileRecommendtime,jdbcType=DATE},
+			</if>
+			<if test="record.orderEnoughGiveStatus != null">
+				order_enough_give_status =
+				#{record.orderEnoughGiveStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.orderEnoughIfGive != null">
+				order_enough_if_give =
+				#{record.orderEnoughIfGive,jdbcType=INTEGER},
+			</if>
+			<if test="record.orderEnoughReduceId != null">
+				order_enough_reduce_id =
+				#{record.orderEnoughReduceId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.priceHistory != null">
+				price_history = #{record.priceHistory,jdbcType=DECIMAL},
+			</if>
+			<if test="record.publishGoodsStatus != null">
+				publish_goods_status =
+				#{record.publishGoodsStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.qrImgPath != null">
+				qr_img_path = #{record.qrImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.seoKeywords != null">
+				seo_keywords = #{record.seoKeywords,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storePrice != null">
+				store_price = #{record.storePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.storeRecommend != null">
+				store_recommend = #{record.storeRecommend,jdbcType=BIT},
+			</if>
+			<if test="record.storeRecommendTime != null">
+				store_recommend_time =
+				#{record.storeRecommendTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.taxInvoice != null">
+				tax_invoice = #{record.taxInvoice,jdbcType=INTEGER},
+			</if>
+			<if test="record.warnInventoryStatus != null">
+				warn_inventory_status =
+				#{record.warnInventoryStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.wellEvaluate != null">
+				well_evaluate = #{record.wellEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.whetherFree != null">
+				whether_free = #{record.whetherFree,jdbcType=INTEGER},
+			</if>
+			<if test="record.ztcApplyTime != null">
+				ztc_apply_time =
+				#{record.ztcApplyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.ztcBeginTime != null">
+				ztc_begin_time = #{record.ztcBeginTime,jdbcType=DATE},
+			</if>
+			<if test="record.ztcClickNum != null">
+				ztc_click_num = #{record.ztcClickNum,jdbcType=INTEGER},
+			</if>
+			<if test="record.ztcDredgePrice != null">
+				ztc_dredge_price =
+				#{record.ztcDredgePrice,jdbcType=INTEGER},
+			</if>
+			<if test="record.ztcGold != null">
+				ztc_gold = #{record.ztcGold,jdbcType=INTEGER},
+			</if>
+			<if test="record.ztcPayStatus != null">
+				ztc_pay_status = #{record.ztcPayStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.ztcPrice != null">
+				ztc_price = #{record.ztcPrice,jdbcType=INTEGER},
+			</if>
+			<if test="record.ztcStatus != null">
+				ztc_status = #{record.ztcStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.gcId != null">
+				gc_id = #{record.gcId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goodsBrandId != null">
+				goods_brand_id = #{record.goodsBrandId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goodsMainPhotoPath != null">
+				goods_main_photo_path =
+				#{record.goodsMainPhotoPath,jdbcType=VARCHAR},
+			</if>
+
+			<if test="record.goodsIndexPhotoPath != null">
+				goods_index_photo_path =
+				#{record.goodsIndexPhotoPath,jdbcType=VARCHAR},
+			</if>
+
+			<if test="record.goodsStoreId != null">
+				goods_store_id = #{record.goodsStoreId,jdbcType=BIGINT},
+			</if>
+			<if test="record.groupId != null">
+				group_id = #{record.groupId,jdbcType=BIGINT},
+			</if>
+			<if test="record.transportId != null">
+				transport_id = #{record.transportId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userAdminId != null">
+				user_admin_id = #{record.userAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="record.ztcAdminId != null">
+				ztc_admin_id = #{record.ztcAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="record.evaluateCount != null">
+				evaluate_count =
+				#{record.evaluateCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.weixinHot != null">
+				weixin_hot = #{record.weixinHot,jdbcType=INTEGER},
+			</if>
+			<if test="record.weixinHottime != null">
+				weixin_hotTime = #{record.weixinHottime,jdbcType=DATE},
+			</if>
+			<if test="record.weixinRecommend != null">
+				weixin_recommend =
+				#{record.weixinRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="record.weixinRecommendtime != null">
+				weixin_recommendTime =
+				#{record.weixinRecommendtime,jdbcType=DATE},
+			</if>
+			<if test="record.goodsBottomFormatContent != null">
+				goods_bottom_format_content =
+				#{record.goodsBottomFormatContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsDetails != null">
+				goods_details =
+				#{record.goodsDetails,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsFCode != null">
+				goods_f_code = #{record.goodsFCode,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsInventoryDetail != null">
+				goods_inventory_detail =
+				#{record.goodsInventoryDetail,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsProperty != null">
+				goods_property =
+				#{record.goodsProperty,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsService != null">
+				goods_service =
+				#{record.goodsService,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsTopFormatContent != null">
+				goods_top_format_content =
+				#{record.goodsTopFormatContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.packDetails != null">
+				pack_details =
+				#{record.packDetails,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.seoDescription != null">
+				seo_description =
+				#{record.seoDescription,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.ztcAdminContent != null">
+				ztc_admin_content =
+				#{record.ztcAdminContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsDetailsMobile != null">
+				goods_details_mobile =
+				#{record.goodsDetailsMobile,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsDetailsMobile != null">
+				goods_target =
+				#{record.goodsTarget,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.sortWeight != null">
+				sort_weight = #{record.sortWeight,jdbcType=INTEGER},
+			</if>
+			<if test="record.exPriceFlag != null">
+				ex_price_flag = #{record.exPriceFlag,jdbcType=INTEGER},
+			</if>
+			<if test="record.cnSelfAddPrice != null">
+				cn_self_add_price =
+				#{record.cnSelfAddPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.needIntegral != null">
+				need_integral = #{record.needIntegral,jdbcType=DECIMAL},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_goods
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=INTEGER},
+		activity_goods_id =
+		#{record.activityGoodsId,jdbcType=BIGINT},
+		activity_status =
+		#{record.activityStatus,jdbcType=INTEGER},
+		advance_date =
+		#{record.advanceDate,jdbcType=DATE},
+		advance_sale_type =
+		#{record.advanceSaleType,jdbcType=INTEGER},
+		bad_evaluate =
+		#{record.badEvaluate,jdbcType=DECIMAL},
+		buy_gift_amount =
+		#{record.buyGiftAmount,jdbcType=DECIMAL},
+		buy_gift_id =
+		#{record.buyGiftId,jdbcType=BIGINT},
+		combin_parts_id =
+		#{record.combinPartsId,jdbcType=BIGINT},
+		combin_status =
+		#{record.combinStatus,jdbcType=INTEGER},
+		combin_suit_id =
+		#{record.combinSuitId,jdbcType=BIGINT},
+		delivery_area =
+		#{record.deliveryArea,jdbcType=VARCHAR},
+		delivery_area_id =
+		#{record.deliveryAreaId,jdbcType=BIGINT},
+		description_evaluate =
+		#{record.descriptionEvaluate,jdbcType=DECIMAL},
+		ems_trans_fee =
+		#{record.emsTransFee,jdbcType=DECIMAL},
+		enough_reduce =
+		#{record.enoughReduce,jdbcType=INTEGER},
+		express_trans_fee =
+		#{record.expressTransFee,jdbcType=DECIMAL},
+		f_sale_type =
+		#{record.fSaleType,jdbcType=INTEGER},
+		goods_bottom_format_id =
+		#{record.goodsBottomFormatId,jdbcType=BIGINT},
+		goods_choice_type =
+		#{record.goodsChoiceType,jdbcType=INTEGER},
+		goods_click =
+		#{record.goodsClick,jdbcType=INTEGER},
+		goods_cod =
+		#{record.goodsCod,jdbcType=INTEGER},
+		goods_collect =
+		#{record.goodsCollect,jdbcType=INTEGER},
+		has_exchange_integral =
+		#{record.hasExchangeIntegral,jdbcType=BIT},
+		exchange_integral =
+		#{record.exchangeIntegral,jdbcType=INTEGER},
+		goods_integral_price =
+		#{record.goodsIntegralPrice,jdbcType=DECIMAL},
+		has_mobile_price =
+		#{record.hasMobilePrice,jdbcType=BIT},
+		goods_mobile_price =
+		#{record.goodsMobilePrice,jdbcType=DECIMAL},
+		self_add_price =
+		#{record.selfAddPrice,jdbcType=DECIMAL},
+		goods_current_price =
+		#{record.goodsCurrentPrice,jdbcType=DECIMAL},
+		goods_fee =
+		#{record.goodsFee,jdbcType=VARCHAR},
+		goods_inventory =
+		#{record.goodsInventory,jdbcType=INTEGER},
+		goods_name =
+		#{record.goodsName,jdbcType=VARCHAR},
+		goods_price =
+		#{record.goodsPrice,jdbcType=DECIMAL},
+		goods_recommend =
+		#{record.goodsRecommend,jdbcType=BIT},
+		goods_salenum =
+		#{record.goodsSalenum,jdbcType=INTEGER},
+		goods_seller_time =
+		#{record.goodsSellerTime,jdbcType=TIMESTAMP},
+		goods_serial =
+		#{record.goodsSerial,jdbcType=VARCHAR},
+		goods_status =
+		#{record.goodsStatus,jdbcType=INTEGER},
+		goods_top_format_id =
+		#{record.goodsTopFormatId,jdbcType=BIGINT},
+		goods_transfee =
+		#{record.goodsTransfee,jdbcType=INTEGER},
+		goods_type =
+		#{record.goodsType,jdbcType=INTEGER},
+		goods_volume =
+		#{record.goodsVolume,jdbcType=DECIMAL},
+		goods_warn_inventory =
+		#{record.goodsWarnInventory,jdbcType=INTEGER},
+		goods_weight =
+		#{record.goodsWeight,jdbcType=DECIMAL},
+		group_buy =
+		#{record.groupBuy,jdbcType=INTEGER},
+		inventory_type =
+		#{record.inventoryType,jdbcType=VARCHAR},
+		mail_trans_fee =
+		#{record.mailTransFee,jdbcType=DECIMAL},
+		middle_evaluate =
+		#{record.middleEvaluate,jdbcType=DECIMAL},
+		mobile_hot =
+		#{record.mobileHot,jdbcType=INTEGER},
+		mobile_hotTime =
+		#{record.mobileHottime,jdbcType=DATE},
+		mobile_recommend =
+		#{record.mobileRecommend,jdbcType=INTEGER},
+		mobile_recommendTime =
+		#{record.mobileRecommendtime,jdbcType=DATE},
+		order_enough_give_status =
+		#{record.orderEnoughGiveStatus,jdbcType=INTEGER},
+		order_enough_if_give
+		= #{record.orderEnoughIfGive,jdbcType=INTEGER},
+		order_enough_reduce_id
+		=
+		#{record.orderEnoughReduceId,jdbcType=VARCHAR},
+		price_history =
+		#{record.priceHistory,jdbcType=DECIMAL},
+		publish_goods_status =
+		#{record.publishGoodsStatus,jdbcType=INTEGER},
+		qr_img_path =
+		#{record.qrImgPath,jdbcType=VARCHAR},
+		seo_keywords =
+		#{record.seoKeywords,jdbcType=VARCHAR},
+		store_price =
+		#{record.storePrice,jdbcType=DECIMAL},
+		store_recommend =
+		#{record.storeRecommend,jdbcType=BIT},
+		store_recommend_time =
+		#{record.storeRecommendTime,jdbcType=TIMESTAMP},
+		tax_invoice =
+		#{record.taxInvoice,jdbcType=INTEGER},
+		warn_inventory_status =
+		#{record.warnInventoryStatus,jdbcType=INTEGER},
+		well_evaluate =
+		#{record.wellEvaluate,jdbcType=DECIMAL},
+		whether_free =
+		#{record.whetherFree,jdbcType=INTEGER},
+		ztc_apply_time =
+		#{record.ztcApplyTime,jdbcType=TIMESTAMP},
+		ztc_begin_time =
+		#{record.ztcBeginTime,jdbcType=DATE},
+		ztc_click_num =
+		#{record.ztcClickNum,jdbcType=INTEGER},
+		ztc_dredge_price =
+		#{record.ztcDredgePrice,jdbcType=INTEGER},
+		ztc_gold =
+		#{record.ztcGold,jdbcType=INTEGER},
+		ztc_pay_status =
+		#{record.ztcPayStatus,jdbcType=INTEGER},
+		ztc_price =
+		#{record.ztcPrice,jdbcType=INTEGER},
+		ztc_status =
+		#{record.ztcStatus,jdbcType=INTEGER},
+		gc_id =
+		#{record.gcId,jdbcType=BIGINT},
+		goods_brand_id =
+		#{record.goodsBrandId,jdbcType=BIGINT},
+		goods_main_photo_path =
+		#{record.goodsMainPhotoPath,jdbcType=VARCHAR},
+		goods_index_photo_path =
+		#{record.goodsIndexPhotoPath,jdbcType=VARCHAR},
+		goods_store_id =
+		#{record.goodsStoreId,jdbcType=BIGINT},
+		group_id =
+		#{record.groupId,jdbcType=BIGINT},
+		transport_id =
+		#{record.transportId,jdbcType=BIGINT},
+		user_admin_id =
+		#{record.userAdminId,jdbcType=BIGINT},
+		ztc_admin_id =
+		#{record.ztcAdminId,jdbcType=BIGINT},
+		evaluate_count =
+		#{record.evaluateCount,jdbcType=INTEGER},
+		weixin_hot =
+		#{record.weixinHot,jdbcType=INTEGER},
+		weixin_hotTime =
+		#{record.weixinHottime,jdbcType=DATE},
+		weixin_recommend =
+		#{record.weixinRecommend,jdbcType=INTEGER},
+		weixin_recommendTime =
+		#{record.weixinRecommendtime,jdbcType=DATE},
+		goods_bottom_format_content =
+		#{record.goodsBottomFormatContent,jdbcType=LONGVARCHAR},
+		goods_details
+		= #{record.goodsDetails,jdbcType=LONGVARCHAR},
+		goods_f_code =
+		#{record.goodsFCode,jdbcType=LONGVARCHAR},
+		goods_inventory_detail =
+		#{record.goodsInventoryDetail,jdbcType=LONGVARCHAR},
+		goods_property =
+		#{record.goodsProperty,jdbcType=LONGVARCHAR},
+		goods_service =
+		#{record.goodsService,jdbcType=LONGVARCHAR},
+		goods_top_format_content =
+		#{record.goodsTopFormatContent,jdbcType=LONGVARCHAR},
+		pack_details =
+		#{record.packDetails,jdbcType=LONGVARCHAR},
+		seo_description =
+		#{record.seoDescription,jdbcType=LONGVARCHAR},
+		ztc_admin_content =
+		#{record.ztcAdminContent,jdbcType=LONGVARCHAR},
+		goods_details_mobile =
+		#{record.goodsDetailsMobile,jdbcType=LONGVARCHAR},
+		goods_target=#{record.goodsTarget,jdbcType=LONGVARCHAR},
+		sort_weight =
+		#{record.sortWeight,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_goods
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=INTEGER},
+		activity_goods_id =
+		#{record.activityGoodsId,jdbcType=BIGINT},
+		activity_status =
+		#{record.activityStatus,jdbcType=INTEGER},
+		advance_date =
+		#{record.advanceDate,jdbcType=DATE},
+		advance_sale_type =
+		#{record.advanceSaleType,jdbcType=INTEGER},
+		bad_evaluate =
+		#{record.badEvaluate,jdbcType=DECIMAL},
+		buy_gift_amount =
+		#{record.buyGiftAmount,jdbcType=DECIMAL},
+		buy_gift_id =
+		#{record.buyGiftId,jdbcType=BIGINT},
+		combin_parts_id =
+		#{record.combinPartsId,jdbcType=BIGINT},
+		combin_status =
+		#{record.combinStatus,jdbcType=INTEGER},
+		combin_suit_id =
+		#{record.combinSuitId,jdbcType=BIGINT},
+		delivery_area =
+		#{record.deliveryArea,jdbcType=VARCHAR},
+		delivery_area_id =
+		#{record.deliveryAreaId,jdbcType=BIGINT},
+		description_evaluate =
+		#{record.descriptionEvaluate,jdbcType=DECIMAL},
+		ems_trans_fee =
+		#{record.emsTransFee,jdbcType=DECIMAL},
+		enough_reduce =
+		#{record.enoughReduce,jdbcType=INTEGER},
+		express_trans_fee =
+		#{record.expressTransFee,jdbcType=DECIMAL},
+		f_sale_type =
+		#{record.fSaleType,jdbcType=INTEGER},
+		goods_bottom_format_id =
+		#{record.goodsBottomFormatId,jdbcType=BIGINT},
+		goods_choice_type =
+		#{record.goodsChoiceType,jdbcType=INTEGER},
+		goods_click =
+		#{record.goodsClick,jdbcType=INTEGER},
+		goods_cod =
+		#{record.goodsCod,jdbcType=INTEGER},
+		goods_collect =
+		#{record.goodsCollect,jdbcType=INTEGER},
+		has_exchange_integral =
+		#{record.hasExchangeIntegral,jdbcType=BIT},
+		exchange_integral =
+		#{record.exchangeIntegral,jdbcType=INTEGER},
+		goods_integral_price =
+		#{record.goodsIntegralPrice,jdbcType=DECIMAL},
+		has_mobile_price =
+		#{record.hasMobilePrice,jdbcType=BIT},
+		goods_mobile_price =
+		#{record.goodsMobilePrice,jdbcType=DECIMAL},
+		self_add_price =
+		#{record.selfAddPrice,jdbcType=DECIMAL},
+		goods_current_price =
+		#{record.goodsCurrentPrice,jdbcType=DECIMAL},
+		goods_fee =
+		#{record.goodsFee,jdbcType=VARCHAR},
+		goods_inventory =
+		#{record.goodsInventory,jdbcType=INTEGER},
+		goods_name =
+		#{record.goodsName,jdbcType=VARCHAR},
+		goods_price =
+		#{record.goodsPrice,jdbcType=DECIMAL},
+		goods_recommend =
+		#{record.goodsRecommend,jdbcType=BIT},
+		goods_salenum =
+		#{record.goodsSalenum,jdbcType=INTEGER},
+		goods_seller_time =
+		#{record.goodsSellerTime,jdbcType=TIMESTAMP},
+		goods_serial =
+		#{record.goodsSerial,jdbcType=VARCHAR},
+		goods_status =
+		#{record.goodsStatus,jdbcType=INTEGER},
+		goods_top_format_id =
+		#{record.goodsTopFormatId,jdbcType=BIGINT},
+		goods_transfee =
+		#{record.goodsTransfee,jdbcType=INTEGER},
+		goods_type =
+		#{record.goodsType,jdbcType=INTEGER},
+		goods_volume =
+		#{record.goodsVolume,jdbcType=DECIMAL},
+		goods_warn_inventory =
+		#{record.goodsWarnInventory,jdbcType=INTEGER},
+		goods_weight =
+		#{record.goodsWeight,jdbcType=DECIMAL},
+		group_buy =
+		#{record.groupBuy,jdbcType=INTEGER},
+		inventory_type =
+		#{record.inventoryType,jdbcType=VARCHAR},
+		mail_trans_fee =
+		#{record.mailTransFee,jdbcType=DECIMAL},
+		middle_evaluate =
+		#{record.middleEvaluate,jdbcType=DECIMAL},
+		mobile_hot =
+		#{record.mobileHot,jdbcType=INTEGER},
+		mobile_hotTime =
+		#{record.mobileHottime,jdbcType=DATE},
+		mobile_recommend =
+		#{record.mobileRecommend,jdbcType=INTEGER},
+		mobile_recommendTime =
+		#{record.mobileRecommendtime,jdbcType=DATE},
+		order_enough_give_status =
+		#{record.orderEnoughGiveStatus,jdbcType=INTEGER},
+		order_enough_if_give
+		= #{record.orderEnoughIfGive,jdbcType=INTEGER},
+		order_enough_reduce_id
+		=
+		#{record.orderEnoughReduceId,jdbcType=VARCHAR},
+		price_history =
+		#{record.priceHistory,jdbcType=DECIMAL},
+		publish_goods_status =
+		#{record.publishGoodsStatus,jdbcType=INTEGER},
+		qr_img_path =
+		#{record.qrImgPath,jdbcType=VARCHAR},
+		seo_keywords =
+		#{record.seoKeywords,jdbcType=VARCHAR},
+		store_price =
+		#{record.storePrice,jdbcType=DECIMAL},
+		store_recommend =
+		#{record.storeRecommend,jdbcType=BIT},
+		store_recommend_time =
+		#{record.storeRecommendTime,jdbcType=TIMESTAMP},
+		tax_invoice =
+		#{record.taxInvoice,jdbcType=INTEGER},
+		warn_inventory_status =
+		#{record.warnInventoryStatus,jdbcType=INTEGER},
+		well_evaluate =
+		#{record.wellEvaluate,jdbcType=DECIMAL},
+		whether_free =
+		#{record.whetherFree,jdbcType=INTEGER},
+		ztc_apply_time =
+		#{record.ztcApplyTime,jdbcType=TIMESTAMP},
+		ztc_begin_time =
+		#{record.ztcBeginTime,jdbcType=DATE},
+		ztc_click_num =
+		#{record.ztcClickNum,jdbcType=INTEGER},
+		ztc_dredge_price =
+		#{record.ztcDredgePrice,jdbcType=INTEGER},
+		ztc_gold =
+		#{record.ztcGold,jdbcType=INTEGER},
+		ztc_pay_status =
+		#{record.ztcPayStatus,jdbcType=INTEGER},
+		ztc_price =
+		#{record.ztcPrice,jdbcType=INTEGER},
+		ztc_status =
+		#{record.ztcStatus,jdbcType=INTEGER},
+		gc_id =
+		#{record.gcId,jdbcType=BIGINT},
+		goods_brand_id =
+		#{record.goodsBrandId,jdbcType=BIGINT},
+		goods_main_photo_path =
+		#{record.goodsMainPhotoPath,jdbcType=VARCHAR},
+		goods_index_photo_path =
+		#{record.goodsIndexPhotoPath,jdbcType=VARCHAR},
+		goods_store_id =
+		#{record.goodsStoreId,jdbcType=BIGINT},
+		group_id =
+		#{record.groupId,jdbcType=BIGINT},
+		transport_id =
+		#{record.transportId,jdbcType=BIGINT},
+		user_admin_id =
+		#{record.userAdminId,jdbcType=BIGINT},
+		ztc_admin_id =
+		#{record.ztcAdminId,jdbcType=BIGINT},
+		evaluate_count =
+		#{record.evaluateCount,jdbcType=INTEGER},
+		weixin_hot =
+		#{record.weixinHot,jdbcType=INTEGER},
+		weixin_hotTime =
+		#{record.weixinHottime,jdbcType=DATE},
+		weixin_recommend =
+		#{record.weixinRecommend,jdbcType=INTEGER},
+		weixin_recommendTime =
+		#{record.weixinRecommendtime,jdbcType=DATE},
+		goods_target=#{record.goodsTarget,jdbcType=LONGVARCHAR},
+		sort_weight =
+		#{record.sortWeight,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.goods.model.Goods">
+		update shop_goods
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="activityGoodsId != null">
+				activity_goods_id = #{activityGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="activityStatus != null">
+				activity_status = #{activityStatus,jdbcType=INTEGER},
+			</if>
+			<if test="advanceDate != null">
+				advance_date = #{advanceDate,jdbcType=DATE},
+			</if>
+			<if test="advanceSaleType != null">
+				advance_sale_type = #{advanceSaleType,jdbcType=INTEGER},
+			</if>
+			<if test="badEvaluate != null">
+				bad_evaluate = #{badEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="buyGiftAmount != null">
+				buy_gift_amount = #{buyGiftAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="buyGiftId != null">
+				buy_gift_id = #{buyGiftId,jdbcType=BIGINT},
+			</if>
+			<if test="combinPartsId != null">
+				combin_parts_id = #{combinPartsId,jdbcType=BIGINT},
+			</if>
+			<if test="combinStatus != null">
+				combin_status = #{combinStatus,jdbcType=INTEGER},
+			</if>
+			<if test="combinSuitId != null">
+				combin_suit_id = #{combinSuitId,jdbcType=BIGINT},
+			</if>
+			<if test="deliveryArea != null">
+				delivery_area = #{deliveryArea,jdbcType=VARCHAR},
+			</if>
+			<if test="deliveryAreaId != null">
+				delivery_area_id = #{deliveryAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="descriptionEvaluate != null">
+				description_evaluate =
+				#{descriptionEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="emsTransFee != null">
+				ems_trans_fee = #{emsTransFee,jdbcType=DECIMAL},
+			</if>
+			<if test="enoughReduce != null">
+				enough_reduce = #{enoughReduce,jdbcType=INTEGER},
+			</if>
+			<if test="expressTransFee != null">
+				express_trans_fee = #{expressTransFee,jdbcType=DECIMAL},
+			</if>
+			<if test="fSaleType != null">
+				f_sale_type = #{fSaleType,jdbcType=INTEGER},
+			</if>
+			<if test="goodsBottomFormatId != null">
+				goods_bottom_format_id =
+				#{goodsBottomFormatId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsChoiceType != null">
+				goods_choice_type = #{goodsChoiceType,jdbcType=INTEGER},
+			</if>
+			<if test="goodsClick != null">
+				goods_click = #{goodsClick,jdbcType=INTEGER},
+			</if>
+			<if test="goodsCod != null">
+				goods_cod = #{goodsCod,jdbcType=INTEGER},
+			</if>
+			<if test="goodsCollect != null">
+				goods_collect = #{goodsCollect,jdbcType=INTEGER},
+			</if>
+			<if test="hasExchangeIntegral != null">
+				has_exchange_integral =
+				#{hasExchangeIntegral,jdbcType=BIT},
+			</if>
+			<if test="exchangeIntegral != null">
+				exchange_integral = #{exchangeIntegral,jdbcType=INTEGER},
+			</if>
+			<if test="goodsIntegralPrice != null">
+				goods_integral_price =
+				#{goodsIntegralPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="hasMobilePrice != null">
+				has_mobile_price = #{hasMobilePrice,jdbcType=BIT},
+			</if>
+			<if test="goodsMobilePrice != null">
+				goods_mobile_price =
+				#{goodsMobilePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="selfAddPrice != null">
+				self_add_price = #{selfAddPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="selfAddPriceLog != null">
+				self_add_price_log = #{selfAddPriceLog,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsCurrentPrice != null">
+				goods_current_price =
+				#{goodsCurrentPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsFee != null">
+				goods_fee = #{goodsFee,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsInventory != null">
+				goods_inventory = #{goodsInventory,jdbcType=INTEGER},
+			</if>
+			<if test="goodsName != null">
+				goods_name = #{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsPrice != null">
+				goods_price = #{goodsPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsRecommend != null">
+				goods_recommend = #{goodsRecommend,jdbcType=BIT},
+			</if>
+			<if test="goodsSalenum != null">
+				goods_salenum = #{goodsSalenum,jdbcType=INTEGER},
+			</if>
+			<if test="goodsSellerTime != null">
+				goods_seller_time =
+				#{goodsSellerTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="goodsSerial != null">
+				goods_serial = #{goodsSerial,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsStatus != null">
+				goods_status = #{goodsStatus,jdbcType=INTEGER},
+			</if>
+			<if test="goodsTopFormatId != null">
+				goods_top_format_id =
+				#{goodsTopFormatId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsTransfee != null">
+				goods_transfee = #{goodsTransfee,jdbcType=INTEGER},
+			</if>
+			<if test="goodsType != null">
+				goods_type = #{goodsType,jdbcType=INTEGER},
+			</if>
+			<if test="goodsVolume != null">
+				goods_volume = #{goodsVolume,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsWarnInventory != null">
+				goods_warn_inventory =
+				#{goodsWarnInventory,jdbcType=INTEGER},
+			</if>
+			<if test="goodsWeight != null">
+				goods_weight = #{goodsWeight,jdbcType=DECIMAL},
+			</if>
+			<if test="groupBuy != null">
+				group_buy = #{groupBuy,jdbcType=INTEGER},
+			</if>
+			<if test="inventoryType != null">
+				inventory_type = #{inventoryType,jdbcType=VARCHAR},
+			</if>
+			<if test="mailTransFee != null">
+				mail_trans_fee = #{mailTransFee,jdbcType=DECIMAL},
+			</if>
+			<if test="middleEvaluate != null">
+				middle_evaluate = #{middleEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="mobileHot != null">
+				mobile_hot = #{mobileHot,jdbcType=INTEGER},
+			</if>
+			<if test="mobileHottime != null">
+				mobile_hotTime = #{mobileHottime,jdbcType=DATE},
+			</if>
+			<if test="mobileRecommend != null">
+				mobile_recommend = #{mobileRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="mobileRecommendtime != null">
+				mobile_recommendTime =
+				#{mobileRecommendtime,jdbcType=DATE},
+			</if>
+			<if test="orderEnoughGiveStatus != null">
+				order_enough_give_status =
+				#{orderEnoughGiveStatus,jdbcType=INTEGER},
+			</if>
+			<if test="orderEnoughIfGive != null">
+				order_enough_if_give =
+				#{orderEnoughIfGive,jdbcType=INTEGER},
+			</if>
+			<if test="orderEnoughReduceId != null">
+				order_enough_reduce_id =
+				#{orderEnoughReduceId,jdbcType=VARCHAR},
+			</if>
+			<if test="priceHistory != null">
+				price_history = #{priceHistory,jdbcType=DECIMAL},
+			</if>
+			<if test="publishGoodsStatus != null">
+				publish_goods_status =
+				#{publishGoodsStatus,jdbcType=INTEGER},
+			</if>
+			<if test="qrImgPath != null">
+				qr_img_path = #{qrImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="seoKeywords != null">
+				seo_keywords = #{seoKeywords,jdbcType=VARCHAR},
+			</if>
+			<if test="storePrice != null">
+				store_price = #{storePrice,jdbcType=DECIMAL},
+			</if>
+			<if test="storeRecommend != null">
+				store_recommend = #{storeRecommend,jdbcType=BIT},
+			</if>
+			<if test="storeRecommendTime != null">
+				store_recommend_time =
+				#{storeRecommendTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="taxInvoice != null">
+				tax_invoice = #{taxInvoice,jdbcType=INTEGER},
+			</if>
+			<if test="warnInventoryStatus != null">
+				warn_inventory_status =
+				#{warnInventoryStatus,jdbcType=INTEGER},
+			</if>
+			<if test="wellEvaluate != null">
+				well_evaluate = #{wellEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="whetherFree != null">
+				whether_free = #{whetherFree,jdbcType=INTEGER},
+			</if>
+			<if test="ztcApplyTime != null">
+				ztc_apply_time = #{ztcApplyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ztcBeginTime != null">
+				ztc_begin_time = #{ztcBeginTime,jdbcType=DATE},
+			</if>
+			<if test="ztcClickNum != null">
+				ztc_click_num = #{ztcClickNum,jdbcType=INTEGER},
+			</if>
+			<if test="ztcDredgePrice != null">
+				ztc_dredge_price = #{ztcDredgePrice,jdbcType=INTEGER},
+			</if>
+			<if test="ztcGold != null">
+				ztc_gold = #{ztcGold,jdbcType=INTEGER},
+			</if>
+			<if test="ztcPayStatus != null">
+				ztc_pay_status = #{ztcPayStatus,jdbcType=INTEGER},
+			</if>
+			<if test="ztcPrice != null">
+				ztc_price = #{ztcPrice,jdbcType=INTEGER},
+			</if>
+			<if test="ztcStatus != null">
+				ztc_status = #{ztcStatus,jdbcType=INTEGER},
+			</if>
+			<if test="gcId != null">
+				gc_id = #{gcId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsBrandId != null">
+				goods_brand_id = #{goodsBrandId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsMainPhotoPath != null">
+				goods_main_photo_path =
+				#{goodsMainPhotoPath,jdbcType=VARCHAR},
+			</if>
+
+			<if test="goodsIndexPhotoPath != null">
+				goods_index_photo_path =
+				#{goodsIndexPhotoPath,jdbcType=VARCHAR},
+			</if>
+
+			<if test="goodsStoreId != null">
+				goods_store_id = #{goodsStoreId,jdbcType=BIGINT},
+			</if>
+			<if test="groupId != null">
+				group_id = #{groupId,jdbcType=BIGINT},
+			</if>
+			<if test="transportId != null"> 
+			transport_id = #{transportId,jdbcType=BIGINT}, 
+				</if>
+			<if test="userAdminId != null">
+				user_admin_id = #{userAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="ztcAdminId != null">
+				ztc_admin_id = #{ztcAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="evaluateCount != null">
+				evaluate_count = #{evaluateCount,jdbcType=INTEGER},
+			</if>
+			<if test="weixinHot != null">
+				weixin_hot = #{weixinHot,jdbcType=INTEGER},
+			</if>
+			<if test="weixinHottime != null">
+				weixin_hotTime = #{weixinHottime,jdbcType=DATE},
+			</if>
+			<if test="weixinRecommend != null">
+				weixin_recommend = #{weixinRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="weixinRecommendtime != null">
+				weixin_recommendTime =
+				#{weixinRecommendtime,jdbcType=DATE},
+			</if>
+			<if test="goodsBottomFormatContent != null">
+				goods_bottom_format_content =
+				#{goodsBottomFormatContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsDetails != null">
+				goods_details = #{goodsDetails,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsFCode != null">
+				goods_f_code = #{goodsFCode,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsInventoryDetail != null">
+				goods_inventory_detail =
+				#{goodsInventoryDetail,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsProperty != null">
+				goods_property = #{goodsProperty,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsService != null">
+				goods_service = #{goodsService,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsTopFormatContent != null">
+				goods_top_format_content =
+				#{goodsTopFormatContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="packDetails != null">
+				pack_details = #{packDetails,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="seoDescription != null">
+				seo_description = #{seoDescription,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="ztcAdminContent != null">
+				ztc_admin_content =
+				#{ztcAdminContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsDetailsMobile != null">
+				goods_details_mobile =
+				#{goodsDetailsMobile,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsTarget != null">
+				goods_target = #{goodsTarget,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="sortWeight != null">
+				sort_weight = #{sortWeight,jdbcType=INTEGER},
+			</if>
+			<if test="needMoney != null">
+				need_money = #{needMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="needYgb != null">
+				need_ygb = #{needYgb,jdbcType=DECIMAL},
+			</if>
+			<if test="exPriceFlag != null">
+				ex_price_flag = #{exPriceFlag,jdbcType=INTEGER},
+			</if>
+			<if test="cnSelfAddPrice != null">
+				cn_self_add_price = #{cnSelfAddPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="needIntegral != null">
+				need_integral = #{needIntegral,jdbcType=DECIMAL},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.goods.model.Goods">
+		update
+		shop_goods
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{deleteStatus,jdbcType=INTEGER},
+		activity_goods_id =
+		#{activityGoodsId,jdbcType=BIGINT},
+		activity_status =
+		#{activityStatus,jdbcType=INTEGER},
+		advance_date =
+		#{advanceDate,jdbcType=DATE},
+		advance_sale_type =
+		#{advanceSaleType,jdbcType=INTEGER},
+		bad_evaluate =
+		#{badEvaluate,jdbcType=DECIMAL},
+		buy_gift_amount =
+		#{buyGiftAmount,jdbcType=DECIMAL},
+		buy_gift_id =
+		#{buyGiftId,jdbcType=BIGINT},
+		combin_parts_id =
+		#{combinPartsId,jdbcType=BIGINT},
+		combin_status =
+		#{combinStatus,jdbcType=INTEGER},
+		combin_suit_id =
+		#{combinSuitId,jdbcType=BIGINT},
+		delivery_area =
+		#{deliveryArea,jdbcType=VARCHAR},
+		delivery_area_id =
+		#{deliveryAreaId,jdbcType=BIGINT},
+		description_evaluate =
+		#{descriptionEvaluate,jdbcType=DECIMAL},
+		ems_trans_fee =
+		#{emsTransFee,jdbcType=DECIMAL},
+		enough_reduce =
+		#{enoughReduce,jdbcType=INTEGER},
+		express_trans_fee =
+		#{expressTransFee,jdbcType=DECIMAL},
+		f_sale_type =
+		#{fSaleType,jdbcType=INTEGER},
+		goods_bottom_format_id =
+		#{goodsBottomFormatId,jdbcType=BIGINT},
+		goods_choice_type =
+		#{goodsChoiceType,jdbcType=INTEGER},
+		goods_click =
+		#{goodsClick,jdbcType=INTEGER},
+		goods_cod =
+		#{goodsCod,jdbcType=INTEGER},
+		goods_collect =
+		#{goodsCollect,jdbcType=INTEGER},
+		has_exchange_integral =
+		#{hasExchangeIntegral,jdbcType=BIT},
+		exchange_integral =
+		#{exchangeIntegral,jdbcType=INTEGER},
+		goods_integral_price =
+		#{goodsIntegralPrice,jdbcType=DECIMAL},
+		has_mobile_price =
+		#{hasMobilePrice,jdbcType=BIT},
+		goods_mobile_price =
+		#{goodsMobilePrice,jdbcType=DECIMAL},
+		self_add_price =
+		#{selfAddPrice,jdbcType=DECIMAL},
+		goods_current_price =
+		#{goodsCurrentPrice,jdbcType=DECIMAL},
+		goods_fee =
+		#{goodsFee,jdbcType=VARCHAR},
+		goods_inventory =
+		#{goodsInventory,jdbcType=INTEGER},
+		goods_name =
+		#{goodsName,jdbcType=VARCHAR},
+		goods_price =
+		#{goodsPrice,jdbcType=DECIMAL},
+		goods_recommend =
+		#{goodsRecommend,jdbcType=BIT},
+		goods_salenum =
+		#{goodsSalenum,jdbcType=INTEGER},
+		goods_seller_time =
+		#{goodsSellerTime,jdbcType=TIMESTAMP},
+		goods_serial =
+		#{goodsSerial,jdbcType=VARCHAR},
+		goods_status =
+		#{goodsStatus,jdbcType=INTEGER},
+		goods_top_format_id =
+		#{goodsTopFormatId,jdbcType=BIGINT},
+		goods_transfee =
+		#{goodsTransfee,jdbcType=INTEGER},
+		goods_type =
+		#{goodsType,jdbcType=INTEGER},
+		goods_volume =
+		#{goodsVolume,jdbcType=DECIMAL},
+		goods_warn_inventory =
+		#{goodsWarnInventory,jdbcType=INTEGER},
+		goods_weight =
+		#{goodsWeight,jdbcType=DECIMAL},
+		group_buy =
+		#{groupBuy,jdbcType=INTEGER},
+		inventory_type =
+		#{inventoryType,jdbcType=VARCHAR},
+		mail_trans_fee =
+		#{mailTransFee,jdbcType=DECIMAL},
+		middle_evaluate =
+		#{middleEvaluate,jdbcType=DECIMAL},
+		mobile_hot =
+		#{mobileHot,jdbcType=INTEGER},
+		mobile_hotTime =
+		#{mobileHottime,jdbcType=DATE},
+		mobile_recommend =
+		#{mobileRecommend,jdbcType=INTEGER},
+		mobile_recommendTime =
+		#{mobileRecommendtime,jdbcType=DATE},
+		order_enough_give_status =
+		#{orderEnoughGiveStatus,jdbcType=INTEGER},
+		order_enough_if_give =
+		#{orderEnoughIfGive,jdbcType=INTEGER},
+		order_enough_reduce_id =
+		#{orderEnoughReduceId,jdbcType=VARCHAR},
+		price_history =
+		#{priceHistory,jdbcType=DECIMAL},
+		publish_goods_status =
+		#{publishGoodsStatus,jdbcType=INTEGER},
+		qr_img_path =
+		#{qrImgPath,jdbcType=VARCHAR},
+		seo_keywords =
+		#{seoKeywords,jdbcType=VARCHAR},
+		store_price =
+		#{storePrice,jdbcType=DECIMAL},
+		store_recommend =
+		#{storeRecommend,jdbcType=BIT},
+		store_recommend_time =
+		#{storeRecommendTime,jdbcType=TIMESTAMP},
+		tax_invoice =
+		#{taxInvoice,jdbcType=INTEGER},
+		warn_inventory_status =
+		#{warnInventoryStatus,jdbcType=INTEGER},
+		well_evaluate =
+		#{wellEvaluate,jdbcType=DECIMAL},
+		whether_free =
+		#{whetherFree,jdbcType=INTEGER},
+		ztc_apply_time =
+		#{ztcApplyTime,jdbcType=TIMESTAMP},
+		ztc_begin_time =
+		#{ztcBeginTime,jdbcType=DATE},
+		ztc_click_num =
+		#{ztcClickNum,jdbcType=INTEGER},
+		ztc_dredge_price =
+		#{ztcDredgePrice,jdbcType=INTEGER},
+		ztc_gold =
+		#{ztcGold,jdbcType=INTEGER},
+		ztc_pay_status =
+		#{ztcPayStatus,jdbcType=INTEGER},
+		ztc_price =
+		#{ztcPrice,jdbcType=INTEGER},
+		ztc_status =
+		#{ztcStatus,jdbcType=INTEGER},
+		gc_id = #{gcId,jdbcType=BIGINT},
+		goods_brand_id = #{goodsBrandId,jdbcType=BIGINT},
+		goods_main_photo_path = #{goodsMainPhotoPath,jdbcType=VARCHAR},
+		goods_index_photo_path = #{goodsIndexPhotoPath,jdbcType=VARCHAR},
+		goods_store_id = #{goodsStoreId,jdbcType=BIGINT},
+		group_id =
+		#{groupId,jdbcType=BIGINT},
+		transport_id =
+		#{transportId,jdbcType=BIGINT},
+		user_admin_id =
+		#{userAdminId,jdbcType=BIGINT},
+		ztc_admin_id =
+		#{ztcAdminId,jdbcType=BIGINT},
+		evaluate_count =
+		#{evaluateCount,jdbcType=INTEGER},
+		weixin_hot =
+		#{weixinHot,jdbcType=INTEGER},
+		weixin_hotTime =
+		#{weixinHottime,jdbcType=DATE},
+		weixin_recommend =
+		#{weixinRecommend,jdbcType=INTEGER},
+		weixin_recommendTime =
+		#{weixinRecommendtime,jdbcType=DATE},
+		goods_bottom_format_content =
+		#{goodsBottomFormatContent,jdbcType=LONGVARCHAR},
+		goods_details =
+		#{goodsDetails,jdbcType=LONGVARCHAR},
+		goods_f_code =
+		#{goodsFCode,jdbcType=LONGVARCHAR},
+		goods_inventory_detail =
+		#{goodsInventoryDetail,jdbcType=LONGVARCHAR},
+		goods_property =
+		#{goodsProperty,jdbcType=LONGVARCHAR},
+		goods_service =
+		#{goodsService,jdbcType=LONGVARCHAR},
+		goods_top_format_content =
+		#{goodsTopFormatContent,jdbcType=LONGVARCHAR},
+		pack_details =
+		#{packDetails,jdbcType=LONGVARCHAR},
+		seo_description =
+		#{seoDescription,jdbcType=LONGVARCHAR},
+		ztc_admin_content =
+		#{ztcAdminContent,jdbcType=LONGVARCHAR},
+		goods_details_mobile =
+		#{goodsDetailsMobile,jdbcType=LONGVARCHAR},
+		goods_target =
+		#{goodsTarget,jdbcType=LONGVARCHAR},
+		sort_weight =
+		#{sortWeight,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.goods.model.Goods">
+		update shop_goods
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{deleteStatus,jdbcType=INTEGER},
+		activity_goods_id =
+		#{activityGoodsId,jdbcType=BIGINT},
+		activity_status =
+		#{activityStatus,jdbcType=INTEGER},
+		advance_date =
+		#{advanceDate,jdbcType=DATE},
+		advance_sale_type =
+		#{advanceSaleType,jdbcType=INTEGER},
+		bad_evaluate =
+		#{badEvaluate,jdbcType=DECIMAL},
+		buy_gift_amount =
+		#{buyGiftAmount,jdbcType=DECIMAL},
+		buy_gift_id =
+		#{buyGiftId,jdbcType=BIGINT},
+		combin_parts_id =
+		#{combinPartsId,jdbcType=BIGINT},
+		combin_status =
+		#{combinStatus,jdbcType=INTEGER},
+		combin_suit_id =
+		#{combinSuitId,jdbcType=BIGINT},
+		delivery_area =
+		#{deliveryArea,jdbcType=VARCHAR},
+		delivery_area_id =
+		#{deliveryAreaId,jdbcType=BIGINT},
+		description_evaluate =
+		#{descriptionEvaluate,jdbcType=DECIMAL},
+		ems_trans_fee =
+		#{emsTransFee,jdbcType=DECIMAL},
+		enough_reduce =
+		#{enoughReduce,jdbcType=INTEGER},
+		express_trans_fee =
+		#{expressTransFee,jdbcType=DECIMAL},
+		f_sale_type =
+		#{fSaleType,jdbcType=INTEGER},
+		goods_bottom_format_id =
+		#{goodsBottomFormatId,jdbcType=BIGINT},
+		goods_choice_type =
+		#{goodsChoiceType,jdbcType=INTEGER},
+		goods_click =
+		#{goodsClick,jdbcType=INTEGER},
+		goods_cod =
+		#{goodsCod,jdbcType=INTEGER},
+		goods_collect =
+		#{goodsCollect,jdbcType=INTEGER},
+		has_exchange_integral =
+		#{hasExchangeIntegral,jdbcType=BIT},
+		exchange_integral =
+		#{exchangeIntegral,jdbcType=INTEGER},
+		goods_integral_price =
+		#{goodsIntegralPrice,jdbcType=DECIMAL},
+		has_mobile_price =
+		#{hasMobilePrice,jdbcType=BIT},
+		goods_mobile_price =
+		#{goodsMobilePrice,jdbcType=DECIMAL},
+		self_add_price =
+		#{selfAddPrice,jdbcType=DECIMAL},
+		goods_current_price =
+		#{goodsCurrentPrice,jdbcType=DECIMAL},
+		goods_fee =
+		#{goodsFee,jdbcType=VARCHAR},
+		goods_inventory =
+		#{goodsInventory,jdbcType=INTEGER},
+		goods_name =
+		#{goodsName,jdbcType=VARCHAR},
+		goods_price =
+		#{goodsPrice,jdbcType=DECIMAL},
+		goods_recommend =
+		#{goodsRecommend,jdbcType=BIT},
+		goods_salenum =
+		#{goodsSalenum,jdbcType=INTEGER},
+		goods_seller_time =
+		#{goodsSellerTime,jdbcType=TIMESTAMP},
+		goods_serial =
+		#{goodsSerial,jdbcType=VARCHAR},
+		goods_status =
+		#{goodsStatus,jdbcType=INTEGER},
+		goods_top_format_id =
+		#{goodsTopFormatId,jdbcType=BIGINT},
+		goods_transfee =
+		#{goodsTransfee,jdbcType=INTEGER},
+		goods_type =
+		#{goodsType,jdbcType=INTEGER},
+		goods_volume =
+		#{goodsVolume,jdbcType=DECIMAL},
+		goods_warn_inventory =
+		#{goodsWarnInventory,jdbcType=INTEGER},
+		goods_weight =
+		#{goodsWeight,jdbcType=DECIMAL},
+		group_buy =
+		#{groupBuy,jdbcType=INTEGER},
+		inventory_type =
+		#{inventoryType,jdbcType=VARCHAR},
+		mail_trans_fee =
+		#{mailTransFee,jdbcType=DECIMAL},
+		middle_evaluate =
+		#{middleEvaluate,jdbcType=DECIMAL},
+		mobile_hot =
+		#{mobileHot,jdbcType=INTEGER},
+		mobile_hotTime =
+		#{mobileHottime,jdbcType=DATE},
+		mobile_recommend =
+		#{mobileRecommend,jdbcType=INTEGER},
+		mobile_recommendTime =
+		#{mobileRecommendtime,jdbcType=DATE},
+		order_enough_give_status =
+		#{orderEnoughGiveStatus,jdbcType=INTEGER},
+		order_enough_if_give =
+		#{orderEnoughIfGive,jdbcType=INTEGER},
+		order_enough_reduce_id =
+		#{orderEnoughReduceId,jdbcType=VARCHAR},
+		price_history =
+		#{priceHistory,jdbcType=DECIMAL},
+		publish_goods_status =
+		#{publishGoodsStatus,jdbcType=INTEGER},
+		qr_img_path =
+		#{qrImgPath,jdbcType=VARCHAR},
+		seo_keywords =
+		#{seoKeywords,jdbcType=VARCHAR},
+		store_price =
+		#{storePrice,jdbcType=DECIMAL},
+		store_recommend =
+		#{storeRecommend,jdbcType=BIT},
+		store_recommend_time =
+		#{storeRecommendTime,jdbcType=TIMESTAMP},
+		tax_invoice =
+		#{taxInvoice,jdbcType=INTEGER},
+		warn_inventory_status =
+		#{warnInventoryStatus,jdbcType=INTEGER},
+		well_evaluate =
+		#{wellEvaluate,jdbcType=DECIMAL},
+		whether_free =
+		#{whetherFree,jdbcType=INTEGER},
+		ztc_apply_time =
+		#{ztcApplyTime,jdbcType=TIMESTAMP},
+		ztc_begin_time =
+		#{ztcBeginTime,jdbcType=DATE},
+		ztc_click_num =
+		#{ztcClickNum,jdbcType=INTEGER},
+		ztc_dredge_price =
+		#{ztcDredgePrice,jdbcType=INTEGER},
+		ztc_gold =
+		#{ztcGold,jdbcType=INTEGER},
+		ztc_pay_status =
+		#{ztcPayStatus,jdbcType=INTEGER},
+		ztc_price =
+		#{ztcPrice,jdbcType=INTEGER},
+		ztc_status =
+		#{ztcStatus,jdbcType=INTEGER},
+		gc_id = #{gcId,jdbcType=BIGINT},
+		goods_brand_id = #{goodsBrandId,jdbcType=BIGINT},
+		goods_main_photo_path = #{goodsMainPhotoPath,jdbcType=VARCHAR},
+		goods_index_photo_path = #{goodsIndexPhotoPath,jdbcType=VARCHAR},
+		goods_store_id = #{goodsStoreId,jdbcType=BIGINT},
+		group_id =
+		#{groupId,jdbcType=BIGINT},
+		transport_id =
+		#{transportId,jdbcType=BIGINT},
+		user_admin_id =
+		#{userAdminId,jdbcType=BIGINT},
+		ztc_admin_id =
+		#{ztcAdminId,jdbcType=BIGINT},
+		evaluate_count =
+		#{evaluateCount,jdbcType=INTEGER},
+		weixin_hot =
+		#{weixinHot,jdbcType=INTEGER},
+		weixin_hotTime =
+		#{weixinHottime,jdbcType=DATE},
+		weixin_recommend =
+		#{weixinRecommend,jdbcType=INTEGER},
+		weixin_recommendTime =
+		#{weixinRecommendtime,jdbcType=DATE},
+		goods_target =
+		#{goodsTarget,jdbcType=LONGVARCHAR},
+		sort_weight =
+		#{sortWeight,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="findPageByVo" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods
+		where goods_status = 0 and delete_status = 0
+		<if test="vo.goodsName != null and vo.goodsName !=''">
+			and goods_name like CONCAT('%',#{vo.goodsName},'%')
+		</if>
+		<if test="vo.gcIds != null and vo.gcIds.size() > 0">
+			and gc_id in
+			<foreach collection="vo.gcIds" item="listItem" open="("
+				close=")" separator=",">
+				#{listItem}
+			</foreach>
+		</if>
+		<if test="vo.goodsBrandId != null and vo.goodsBrandId != '' ">
+			and goods_brand_id = #{vo.goodsBrandId}
+		</if>
+
+		<if test="vo.isYgb != null">
+			and is_ygb = #{vo.isYgb}
+		</if>
+		<if test="vo.hasIntegral != null and vo.hasIntegral == 1">
+			and need_integral &gt; 0
+		</if>
+
+		<if test="vo.goodsInventory != null and vo.goodsInventory > 0">
+			and goods_inventory &gt; 0
+		</if>
+		<if test="vo.goodsTransfee != null and vo.goodsTransfee != ''">
+			and goods_transfee = #{vo.goodsTransfee}
+		</if>
+		<if test="vo.exPriceFlag != null and vo.exPriceFlag == 1">
+			and ex_price_flag = 1 and cn_self_add_price &gt; 0
+		</if>
+
+		<if
+			test="vo.orderBy != null and vo.orderBy != '' and vo.orderType != null and vo.orderType != ''">
+			order by ${vo.orderBy} ${vo.orderType}
+		</if>
+	</select>
+	<select id="findCountWarnGoods" resultType="java.lang.Integer">
+		select count(*) from
+		shop_goods s where s.delete_status=0 and s.goods_store_id = #{storeId}
+		and goods_status = 0 and s.goods_inventory &lt;
+		s.goods_warn_inventory;
+	</select>
+
+	<select id="findGoodsByVoAndLimit" resultMap="BoResultMap">
+		SELECT
+		obj.id,
+		obj.goods_name,
+		obj.goods_current_price,
+		obj.goods_price,
+		obj.goods_main_photo_path,
+		obj.goods_index_photo_path,
+		obj.goods_inventory_detail,
+		obj.inventory_type,
+		obj.goods_type,
+		obj.cn_self_add_price,
+		obj.ex_price_flag
+		FROM shop_goods obj
+		WHERE
+		obj.goods_status = 0
+		<if test="vo.isYgb != null ">
+			AND obj.is_ygb = #{vo.isYgb}
+		</if>
+		ORDER BY obj.goods_salenum DESC
+		<if test="offset != null and offset != -1">
+			limit #{start}, #{offset}
+		</if>
+	</select>
+
+	<select id="selectYgGoodsListByVO" resultMap="BoResultMap"
+		parameterType="com.sinco.carnation.goods.vo.GoodsVO">
+		SELECT
+		g.id,
+		g.goods_name,
+		g.inventory_type,
+		g.goods_inventory_detail,
+		g.goods_current_price,
+		g.goods_price,
+		g.goods_main_photo_path,
+		g.goods_index_photo_path,
+		g.has_exchange_integral,
+		g.has_mobile_price,
+		g.goods_salenum,
+		g.exchange_integral,
+		g.goods_integral_price,
+		g.goods_mobile_price,
+		g.goods_transfee,
+		g.self_add_price,
+		g.goods_type,
+		g.need_ygb,
+		g.need_money,
+		g.need_integral,
+		g.store_price,
+		g.cn_self_add_price,
+		g.ex_price_flag
+		FROM
+		shop_goods g
+		<if test="vo.userGoodsClassIds != null and vo.userGoodsClassIds.size() > 0">
+			INNER JOIN shop_goods_ugc ugc ON ugc.goods_id = g.id AND ugc.class_id
+			in
+			<foreach collection="vo.userGoodsClassIds" item="ugcId" open="("
+				close=")" separator=",">
+				#{ugcId}
+			</foreach>
+		</if>
+		WHERE
+		g.goods_status = 0 and g.delete_status=0
+		<if test="vo.goodsClassIds != null and vo.goodsClassIds.size() > 0">
+			AND g.gc_id in
+			<foreach collection="vo.goodsClassIds" item="gcId" open="("
+				close=")" separator=",">
+				#{gcId}
+			</foreach>
+		</if>
+		<if test="vo.goodsCod != null">
+			AND g.goods_cod = #{vo.goodsCod}
+		</if>
+		<if test="vo.goodsTransfee != null">
+			AND g.goods_transfee = #{vo.goodsTransfee}
+		</if>
+		<if test="vo.goodsBrandIds != null and vo.goodsBrandIds.size() > 0">
+			AND g.goods_brand_id in
+			<foreach collection="vo.goodsBrandIds" item="gbId" open="("
+				close=")" separator=",">
+				#{gbId}
+			</foreach>
+		</if>
+		<if test="vo.goodsSpecIds != null and vo.goodsSpecIds.size() > 0">
+			AND g.id in(SELECT goods_id FROM shop_goods_spec gs WHERE gs.spec_id
+			in
+			<foreach collection="vo.goodsSpecIds" item="gsId" open="("
+				close=")" separator=",">
+				#{gsId}
+			</foreach>
+			)
+		</if>
+		<if
+			test="vo.gtpName != null and vo.gtpName != '' and vo.gtpValue != null and vo.gtpValue != ''">
+			AND (g.goods_property LIKE CONCAT('%',#{vo.gtpName}, '%') AND
+			g.goods_property LIKE CONCAT('%',#{vo.gtpValue}, '%'))
+		</if>
+		<if test="vo.goodsInventory == 0">
+			AND g.goods_inventory <![CDATA[ > ]]>
+			0
+		</if>
+		<if test="vo.storeId != null">
+			AND g.goods_store_id = #{vo.storeId}
+		</if>
+
+		<if test="vo.goodsType != null and vo.goodsType != -1">
+			AND g.goods_type = #{vo.goodsType}
+		</if>
+
+		<if test="vo.isYgb != null">
+			AND g.is_ygb = ${vo.isYgb}
+		</if>
+		<if test="vo.exPriceFlag != null">
+			AND g.ex_price_flag = ${vo.exPriceFlag}
+		</if>
+		<if test="vo.hasStock != null and vo.hasStock > 0">
+			AND g.goods_inventory <![CDATA[ > ]]>
+			0
+		</if>
+		<if test="vo.hasIntegral != null and vo.hasIntegral > 0">
+			AND g.need_integral <![CDATA[ > ]]>
+			0
+		</if>
+		<if test="vo.orderBy != null and vo.orderBy != ''">
+			ORDER BY g.${vo.orderBy} ${vo.orderType}
+		</if>
+	</select>
+
+	<update id="updateGoodStateByID">
+		update
+		shop_goods
+		<set>
+			goods_status = #{good.goodsStatus,jdbcType=INTEGER},
+			remark =
+			#{good.remark,jdbcType=VARCHAR}
+		</set>
+		where id = #{good.id,jdbcType=BIGINT}
+	</update>
+	<update id="">
+	
+	</update>
+</mapper>

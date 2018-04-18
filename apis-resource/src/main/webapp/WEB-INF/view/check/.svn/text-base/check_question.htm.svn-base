@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+
+    <title>自测题</title>
+<script type="text/javascript">
+	var url = window.location.href;
+	var bool = url.indexOf("ysysgo.com");
+	var domain = 'http://shop.ysysgo.com';//global variable
+	
+	function GetUrlPar(name) {
+		   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+		   var r = window.location.search.substr(1).match(reg);
+		   if (r!=null) return (r[2]); return null;
+	}
+	
+	if(bool > -1){
+			//window.location = "http://shop.ysysgo.com/mobile_register.htm?invitationCode=$!{request.getParameter("invitationCode")}";
+			domain = 'http://shop.ysysgo.com';
+	}
+
+	function is_weixin(){  
+	    var ua = navigator.userAgent.toLowerCase();  
+	    if(ua.match(/MicroMessenger/i)=="micromessenger") {  
+	        return true;  
+	    } else {  
+	        return false;  
+	    }  
+	}
+	if(is_weixin()){
+		location.href=domain+'/mobile_register.htm?invitationCode='+GetUrlPar('invitationCode')+ location.hash.replace("#", "")
+	}
+</script>
+    #parse("/include/common.htm")
+
+</head>
+<body class="gray-bg">
+    <div class="wrapper">
+        <div class="self-header">
+            <div class="progress-bar"><i id="J_progress" style="width:0"></i></div>
+            <div class="progress-text" id="J_progress-text">0/$!checkQuestionBO.totleCount  已完成 0%</div>
+        </div>
+        <div class="self-text-wrap">
+            <div class="title" id="questionTitle">$!checkQuestionBO.questionIndex.$!checkQuestionBO.questionTitle</div>
+            <ul class="self-text-list list" id="optionContainer">
+            	#foreach($option in $checkQuestionBO.options)
+                <li>
+                    <label><input type="radio" name="option-radio" score="$!option.score"> $!option.optionDesc</label>
+                </li>
+                #end
+            </ul>
+        </div>
+    </div>
+    <input type="hidden" id="totleCount" name="totleCount" value="$!checkQuestionBO.totleCount">
+    <input type="hidden" id="groupId" name="groupId" value="$!checkQuestionBO.groupId">
+    <script src="${staticPath}/static/app/assets/js/jquery-2.1.4.min.js"></script>
+    <script>
+    	var totleScore = 0;
+    	var questionIndex = 2;
+    	
+    	initRadio();
+    	
+    	var nextFlag = true;
+    	
+    	function initRadio()
+    	{
+    		
+    		$('[name=option-radio]').on('click', function(event)
+		    {
+    			totleScore += parseInt($(this).attr("score"));
+    			
+    			var rate = parseInt(((parseInt(questionIndex - 1)) * 100)/parseInt($("#totleCount").val()));
+                $("#J_progress").css("width", rate + "%");
+                $("#J_progress-text").text((questionIndex-1)+"/"+$("#totleCount").val()+"  已完成 "+rate + "%");
+    			if ((questionIndex-1) == $("#totleCount").val()) 
+                {
+					if(isAndroid)
+					{
+						
+						java.requstResult(parseInt($("#groupId").val()), totleScore);
+					}
+					if(isiOS)
+					{
+						if(document.referrer.indexOf("checkMain")>-1){
+							location.href="http://static.ysysgo.com/carnation-static/static/app/check/checkMain.htm";
+						}
+						requstResult(parseInt($("#groupId").val()), totleScore);
+					}
+
+				}
+    			else
+    			{
+	    			getNextQuestion();
+    			}
+		    });
+    	}
+    	
+    	function getNextQuestion()
+    	{
+    		if(nextFlag)
+    		{
+    			nextFlag = false;
+	    		jQuery.ajax({
+	                type: "POST",
+	                url: "${apiPath}/check/ajax_question",
+	                data: {groupId:$("#groupId").val(), questionIndex:questionIndex},
+	                dataType: "json",
+	                success: function(data){
+	                	if(data != 'no')
+	                	{
+	                	   $("#questionTitle").text(questionIndex+"."+data.questionTitle)
+	                	   jsonArray = data.options;
+	                	   var htmlString = "";
+	                	   jQuery.each(jsonArray, function(i, item){     
+		                	   htmlString += '<li><label><input type="radio" name="option-radio" score="'+item.score+'"> '+item.optionDesc+'</label></li>';
+		                   });
+		                   
+		                   $("#optionContainer").html(htmlString);
+		                   
+		                   questionIndex = questionIndex + 1;
+		                   initRadio();
+		                   nextFlag = true;
+	                	}
+	                	else
+	                	{
+	                		nextFlag = true;
+	                	}
+	                },
+	                error: function(XMLHttpRequest, textStatus, errorThrown) {
+	                	 nextFlag = true;
+	                }
+	            });
+    		}
+    	}
+    </script>
+</body>
+</html>

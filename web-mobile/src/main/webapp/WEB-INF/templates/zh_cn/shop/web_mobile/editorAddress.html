@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="viewport"
+	content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="full-screen" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<!-- <script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.custom.validate.js"></script> -->
+<script src="$!webPath/resources/js/tipsbox.js"></script>
+
+<title>$!currentPage</title>
+<link href="$!webPath/resources/shop/css/style.css" rel="stylesheet"
+	type="text/css" />
+<script>
+	var screenWidth = window.innerWidth || document.documentElement.clientWidth;
+	document.documentElement.style.fontSize = parseInt(screenWidth / 7.5)
+			+ "px";
+</script>
+<style>
+html {
+	background-color: #fff;
+}
+</style>
+<script>
+	var _hmt = _hmt || [];
+	(function() {
+		var hm = document.createElement("script");
+		hm.src = "//hm.baidu.com/hm.js?5ec07b377284cf8ef95ebaa33fa298f5";
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(hm, s);
+	})();
+</script>
+
+<script>
+	
+	jQuery(document).ready(
+			function() {
+				//								
+
+				//
+				jQuery("select").change(
+						function() {
+							var level = jQuery(this).attr("level");
+							var id = jQuery(this).val();
+							if (id != "") {
+								jQuery.post("$!webPath/load_area.htm", {
+									"pid" : id
+								}, function(data) {
+									jQuery("#area" + level).empty();
+									jQuery("#area" + level).append(
+											"<option value=''>请选择</option>");
+									jQuery.each(data, function(index, item) {
+										jQuery("#area" + level).append(
+												"<option value='"+item.id+"'>"
+														+ item.areaName
+														+ "</option>");
+										jQuery("#area" + level).show();
+									});
+								}, "json");
+							} else {
+								for (var i = level; i <= 3; i++) {
+									jQuery("#area" + i).empty();
+									jQuery("#area" + i).hide();
+								}
+							}
+						});
+				//
+				jQuery("#area3").change(function() {
+					var id = jQuery(this).val();
+					jQuery("#area_id").val(id);
+				});
+			});
+
+	function saveForm() {
+		var username = $("input[name='trueName']").val();
+		var phonenumber = $("input[name='mobile']").val();
+		var city = $("input[name='areaId']").val();
+		var areaInfo = $("textarea[name='areaInfo']").val();
+		var youbian = $("input[name='zip']").val();
+		if (!username) {
+			tipsbox("收货人姓名不能为空!");
+			return;
+		}
+		if (!phonenumber
+				.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/)) {
+			tipsbox("手机号码格式不对!");
+			return;
+		}
+		if (!city) {
+			tipsbox("所在城市不能为空!");
+			return;
+		}
+		 
+		if (!areaInfo) {
+			tipsbox("详细地址不能为空!");
+			return;
+		} 
+		if (!youbian.match(/^[1-9][0-9]{5}$/)) {
+			tipsbox("邮政编码格式不对!");
+			return;
+		}
+		jQuery("#theForm").submit();
+		if (jQuery("#theForm").validate().valid()) {
+			jQuery("#save").attr("disabled", "disabled");
+		}
+
+	}
+</script>
+
+</head>
+<body>
+	<form action="$!webPath/buyer/address_save.htm" method="post"
+		id="theForm">
+		<div class="main address-creat">
+			<ul>
+				<li><label for="">收货人：</label> <!-- <input type="text" placeholder="收货人姓名"> -->
+					<input name="id" type="hidden" id="id" value="$!obj.id" /> <input
+					name="trueName" type="text" id="trueName" value="$!obj.trueName"
+					type="text" placeholder="收货人姓名" /></li>
+				<li><label for="">手机号码：</label> <input name="mobile"
+					type="text" id="mobile" value="$!obj.mobile" type="text"
+					placeholder="收货人手机号码" /> <!-- <input type="text" placeholder="收货人手机号码"> -->
+				</li>
+
+				<li style="height: auto; overflow: hidden;"><label for="">所在城市：</label>
+					<div class="textarea" id="area_area_info" placeholder=""
+						name="area_edit" id="area_edit" value="修改"
+						#if(!$!obj)style="display: none;" #end
+						onclick="javascript:jQuery('#area1').show();jQuery('#area_area_info').empty();jQuery('#area_id').val('');jQuery(this).hide();">
+						$!{obj.areaName}</div> <!-- 						<textarea name="areaInfo"   id="area_area_info" placeholder="" >$!{obj.area.parent.parent.areaName} $!{obj.area.parent.areaName} $!{obj.areaName}</textarea>
+ -->           <span class="xz-address-add" style=""> <span style="float: left; display: inline-block;"> 
+ 					<select name="area1" id="area1" level="2" style="width: 1.5rem; # if ($!obj)display: none;">
+								<option value="" selected="selected">请选择地区</option>
+								#foreach($area in $areas)
+								<option value="$!area.id">$!area.areaName</option> #end
+					</select> 
+					<select name="area2" id="area2" style="display: none; width: 1.5rem;" level="3"></select> 
+					<select name="area3" id="area3" style="display: none; width: 1.5rem;" level="4"></select> 
+					<input name="areaId" type="hidden" id="area_id" value="$!obj.areaId" /></span> 
+					<span style="float: left; color: #F00;"></span>
+					
+				</span>
+				</li>
+					<li style="height: auto; overflow: hidden;"><label for="">详细地址：</label>
+						
+						<textarea class="textarea" name="areaInfo" id="area_info" placeholder="建议您如实填写收货地址，例如街道名称，门牌号码，楼层和房间号等信息">$!obj.areaInfo</textarea>
+	
+					</li>
+					<li><label for="">邮政编码：</label> <input name="zip" type="text"
+						id="zip" value="$!obj.zip" type="text" placeholder="邮政编码" /> <!-- <input type="text" placeholder="邮政编码"> -->
+					</li>
+
+			</ul>
+			<!-- <div class="moren-address">
+			<a href="javascript:void(0);" onclick="showDialog('msg_info','','确定设置为默认地址？',1,'question',3,function(){window.location.href='$!webPath/buyer/address_default.htm?id=$!obj.id'});" class="del_a">
+			<input type="radio" >
+			<span>设置为默认地址</span> 
+			</a>
+		</div> -->
+			<div class="tj-botton">
+				<a onclick="saveForm()" id="save" href="javascript:void(0)">确定</a>
+				<!-- <input name="" id="save" type="hidden" value="提交" onclick="saveForm()" style="cursor: pointer;" class="white_btn" />  -->
+				<input name="currentPage" type="hidden" id="currentPage"
+					value="$!currentPage" />
+			</div>
+		</div>
+	</form>
+	</script>
+	$!httpInclude.include("/wx_foot3.htm")
+</body>
+</html>

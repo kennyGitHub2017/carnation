@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/jquery-ui-1.9.2.custom.min.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+function ajax_update(id,fieldName,obj){
+	   var val=jQuery(obj).val();
+	   alert(val);
+	   jQuery.ajax({type:'POST',
+		              url:'$!webPath/admin/group_floor_ajax.htm',
+					  data:{"id":id,"fieldName":fieldName,"value":val},
+					beforeSend:function(){
+					  
+					},
+				   success:function(data){
+					   alert(data);
+					   var dis = false;
+		             if(val==""){
+						if(data=="1"){
+						  dis = true;
+						 }
+					   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+dis+".png");
+					 }else{
+					   jQuery(obj).val(val);
+					 }      
+	              }
+		    });
+	}
+	
+function group_floor_ajax_update_display(id,obj){
+	   var val=jQuery(obj).attr("val");
+	   //alert(val);
+	   if(val=="true"){
+		   val=false;
+	   }else{
+		   val=true;
+	   }
+	   jQuery.ajax({type:'POST',
+		              url:'$!webPath/admin/group_floor_ajax_update_display.htm',
+					  data:{"id":id,"value":val},
+					beforeSend:function(){
+					  
+					},
+				   success:function(data){
+					   //alert(data);
+					   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+val+".png");
+					   jQuery(obj).attr("val",val);   
+	              }
+		    });
+	}
+
+function group_floor_ajax_update_seq(id,obj){
+	   var val=jQuery(obj).val();
+	   //alert(val);
+	   jQuery.ajax({type:'POST',
+		              url:'$!webPath/admin/group_floor_ajax_update_seq.htm',
+					  data:{"id":id,"value":val},
+					beforeSend:function(){
+					  
+					},
+				   success:function(data){
+					   //alert(data);     
+	              }
+		    });
+	}	
+
+</script>
+<body>
+<div class="cont">
+  <h3 class="seth">团购楼层管理</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/admin/group_floor_list.html" class="this"><b>管理</b></a></li>
+      <li><a href="$!webPath/admin/group_floor_add.html"><b>新增</b></a></li>
+    </ul>
+  </div>
+  <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li> 通过楼层管理，你可以定制商城前台楼层信息，设置显示后该楼层即在前台对应位置显示</li>
+      <li> 橱窗标识：前台页面调用显示楼层的api时，需将楼层标识作为参数传递，才可以在该位置显示该标识对应的楼层</li>
+    </ul>
+  </div> 
+  <form name="ListForm" id="ListForm" action="$!webPath/admin/group_case_list.htm" method="post">
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="3%">&nbsp;</th>
+          <th width="10%"><span class="form_btna">排序</span></th>
+          <th width="25%"><span class="form_btna">标题</span></th>
+          <th width="20%" align="center"><span class="form_btna">显示</span></th>
+          <th  align="center"><b class="form_btnb">操作</b></th>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+          <td  class="check_position"><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td align="center"><span class="size90">
+            <input type="text" class="spinner" name="$!obj.gfSequence" id="$!obj.gfSequence"  value="$!obj.gfSequence"  onblur="group_floor_ajax_update_seq('$!obj.id',this)" title="可编辑"/>
+            </span></td>
+          <td align="center">$!obj.gfName</td>
+          #set($display="false")
+          #if($!obj.display=="true")
+          #set($display="true")
+          #end
+          <td align="center"><img onclick="group_floor_ajax_update_display('$!obj.id',this)" src="$!webPath/resources/style/system/manage/blue/images/$!{display}.png" width="25" height="21" border="0" style="cursor:pointer;" title="可编辑" val="$!obj.display"/></td>
+          <td class="hui oprate_con" align="center"><a href="$!webPath/admin/group_floor_edit.htm?id=$!obj.id" class="blue">编辑</a> |<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续'))window.location.href='$!webPath/admin/group_floor_del.html?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">删除</a></td>
+        </tr>
+        #end
+      </table>
+      <div class="operate_bar">
+        <div class="fenye" id="queryCondition">
+          <input name="mulitId" type="hidden" id="mulitId" />
+          <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+          $!gotoPageFormHTML </div>
+        <div class="oper_sp"> <span class="oper_check">
+          <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+          全部 </span> <span class="oper_del">
+          <input name="" type="button" style="cursor:pointer;" value="删除" onclick="cmd('$!webPath/admin/group_floor_del.html?currentPage=$!currentPage');"/>
+          </span> </div>
+      </div>
+    </div>
+  </form>  
+</div>
+</body>
+</html>

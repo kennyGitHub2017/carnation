@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>完成任务</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="format-detection" content="telephone=no">
+    	<meta name="format-detection" content="email=no">
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/common.css"/>
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/task.css" />
+    	<script type="text/javascript">
+	    	var screenWidth=window.innerWidth||document.documentElement.clientWidth;	
+	    	var fontSize=parseInt(screenWidth /7.5 )
+	    	var fontEl = document.createElement('style');
+	    	document.documentElement.firstElementChild.appendChild(fontEl);
+	    	fontEl.innerHTML = 'html{font-size:' + fontSize + 'px!important;}';
+    	</script>
+	</head>
+	<body>
+		<div class="appbar fn-clear">
+			<a href="javascript:;" class="return"></a>
+			<span class="centerTitle">$!obj.taskName</span>
+			<a href="javascript:;" class="submit">设置</a>
+			<input type="hidden" id="id" value="$!obj.id"/>
+			<input type="hidden" id="taskID" value="$!obj.taskID"/>
+			<input type="hidden" id="uid" value="$!uid"/>
+		</div>	
+		<div class="taskHolder">
+			<div class="dotask">
+				<div class="timenow">$!currDate</div>
+				<div class="undone"></div>
+				<div class="tips">请点击完成任务</div>
+			</div>
+			<div class="tongji">
+				<a href="javascript:;">已坚持<span id="countDay">$!obj.doDays</span>天</a>
+				成长统计
+			</div>
+			<div class="weekly">
+				<div class="week">
+		            <ul>
+		                <li #if($!mon==1 || $!everyDay==1) class="curr" #end>周一</li>
+		                <li #if($!tue==1 || $!everyDay==1) class="curr" #end>周二</li>
+		                <li #if($!wed==1 || $!everyDay==1) class="curr" #end>周三</li>
+		                <li #if($!thu==1 || $!everyDay==1) class="curr" #end>周四</li>
+		                <li #if($!fri==1 || $!everyDay==1) class="curr" #end>周五</li>
+		                <li #if($!sat==1 || $!everyDay==1) class="curr" #end>周六</li>
+		                <li #if($!sun==1 || $!everyDay==1) class="curr" #end>周日</li>
+		            </ul>
+		       </div>
+			</div>
+		</div>
+		<script src="${apiPath}/resources/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/jQuery.fn/tap.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function(){
+				if(fn.getQueryPar("taskDone")=="taskDone"){
+					setTimeout(function(){
+						jQuery(".undone").trigger("touchstart");
+					},500);					
+				}
+			});			
+			var undoneflag=false;
+			jQuery(".undone").on('touchstart',function(){
+				if(undoneflag) return;
+				undoneflag=true;
+				var id = jQuery("#id").val();
+				var taskID = jQuery("#taskID").val();
+				var uid = jQuery("#uid").val();
+				var that=this;
+				console.log(" id:"+id+" taskID:"+taskID+" uid:"+uid);
+				
+				var url = "${apiPath}/v1/ht/doSign?id="+id+"&taskID="+taskID+"&uid="+uid;
+				/* var data_ = "{id:"+id+",taskID:"+taskID+",uid:"+uid+"}"; */
+				jQuery.ajax({
+					type : 'POST',
+					url : url,
+					/* data : data_,  */
+					success : function(data){						
+						var day=new Date().getDay();
+						if(day==0){day==7;}
+						$(".week ul li").eq(day-1).addClass("curr");
+						jQuery(that).addClass("done");
+						jQuery(".tips").html("已完成");
+						var countDayNum=parseInt($("#countDay").html());
+						$("#countDay").html(countDayNum+1);
+					},
+					dataType : "JSON"
+				});
+
+				
+			});
+			//返回按钮
+			jQuery(".return").on("touchstart",function(){
+				if(history.length==1){
+					fn.requestBack();
+				}
+				else{
+					window.location.href="${apiPath}/v1/ht/index?userID="+jQuery("#uid").val();
+				}
+			});
+			//设置按钮
+			jQuery(".submit").on("touchstart",function(){
+				window.location.href="${apiPath}/v1/ht/taskSet?id="+jQuery("#taskID").val()+"&userID="+jQuery("#uid").val()+"&jumpType=sys";
+			});
+		</script>
+	</body>
+</html>

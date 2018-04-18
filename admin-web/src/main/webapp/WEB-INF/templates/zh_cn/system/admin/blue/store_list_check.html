@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/blue/template.css"
+	rel="stylesheet" type="text/css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<script>
+function ajax_update(id,fieldName,obj){
+   var val=jQuery(obj).val();
+    jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/store_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }      
+              }
+	    });
+}
+jQuery(document).ready(function(){
+	#*
+// 	#if($!grade_id)
+// 		jQuery("#grade_id").val("$!grade_id");
+// 	#end
+	
+// 	#if($!store_status)
+// 		jQuery("#store_status").val("$!vo.storeStatus");
+// 	#end
+	*#
+	
+	#if($!vo.gcMainId)
+		$('#gc_main_id').val($!vo.gcMainId);
+	#end
+	});
+
+</script>
+</head>
+<body>
+	<div class="cont">
+		<h3 class="seth">店铺管理</h3>
+		<div class="nav_list">
+			<ul>
+				<li><a href="$!webPath/admin/store_listCheck.htm" class="this"><b>管理</b></a></li>
+			</ul>
+		</div>
+		<form action="$!webPath/admin/store_listCheck.htm" method="post"
+			name="ListForm" id="ListForm">
+			<div class="search">
+				<ul>
+					<li><span>店铺状态</span> <span> <select name="storeStatus"
+							id="store_status">
+								<option value="">请选择...</option>
+								<option value="5" #if($!vo.storeStatus== 5) selected="selected"
+									#end>店铺待审核</option>
+								<option value="6" #if($!vo.storeStatus== 6) selected="selected"
+									#end>店铺审核拒绝</option>
+
+								<option value="15" #if($!vo.storeStatus==
+									15) selected="selected" #end>正常营业</option>
+								<option value="20" #if($!vo.storeStatus==
+									20) selected="selected" #end>违规关闭</option>
+								<option value="25" #if($!vo.storeStatus==
+									25) selected="selected" #end>到期关闭</option>
+								<option value="26" #if($!vo.storeStatus==
+									26) selected="selected" #end>续费申请</option>
+						</select>
+					</span> <span> <span>手机号</span> <span class="size100"> <input
+								name="mobile" type="text" id="mobile" value="$!vo.mobile" />
+						</span> <span>主营类目</span> <span class="size100"> <select
+								name="gcMainId" id="gc_main_id">
+									<option value="0">请选择...</option> #foreach($gc in $gcs)
+									<option value="$!gc.id">$!gc.className</option> #end
+							</select>
+						</span> <input name="" type="submit" value="搜索" style="cursor: pointer;"
+							class="search_btn" />
+					</span></li>
+				</ul>
+			</div>
+			<div class="operation">
+				<h3>友情提示</h3>
+				<ul>
+					<li>到期已提交续费申请的店铺请尽快与店主联系并完成线下续费流程，待店主续费成功后请编辑店铺状态为正常营业</li>
+				</ul>
+			</div>
+			<div class="fshoptb  page-fixed-mb">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					class="fshop_table">
+					<tr>
+						<th width="5%">&nbsp;
+							</td>
+							<th width="5%"><span class="form_btna">手机号</span></th>
+							<th width="5%"><span class="form_btna">用户昵称</span></th>
+							<th width="10%"><span class="form_btna">申请店铺名称</span></th>
+							<th width="10%"><span class="form_btna">申请店铺公司名称</span></th>
+							<th width="10%"><span class="form_btna">申请经营类目</span></th>
+							<th width="10%"><span class="form_btna">提交时间</span></th>
+							<th><span class="form_btna">店铺状态</span></th>
+							<th width="10%"><b class="form_btnb">审核查看</b></th>
+					</tr>
+
+					#foreach($obj in $objs)
+					<tr>
+
+						<td class="check_position"><input type="checkbox"
+							name="checkbox" id="checkbox" value="$!obj.id" /></td>
+
+						<td align="center">$!obj.loginName</td>
+						<td align="center">$!obj.nickname</td>
+						<td align="center">$!obj.storeName</td>
+						<td align="center">$!obj.licenseCName</td>
+						<td align="center">$!obj.className</td>
+						<td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+
+						#if($!obj.storeStatus==0) #set($store_status="未提交入驻申请") #end
+						#if($!obj.storeStatus==5) #set($store_status="店铺待审核") #end
+						#if($!obj.storeStatus==6) #set($store_status="店铺审核拒绝") #end
+						#if($!obj.storeStatus==10) #set($store_status="店铺待审核") #end
+						#if($!obj.storeStatus==11) #set($store_status="店铺审核拒绝") #end
+						#if($!obj.storeStatus==15) #set($store_status="正常营业") #end
+						#if($!obj.storeStatus==20) #set($store_status="违规关闭") #end
+						#if($!obj.storeStatus==25) #set($store_status="到期关闭") #end
+						#if($!obj.storeStatus==26) #set($store_status="到期已申请续费") #end
+
+						#set($store_url="$!shopPath/store_$!{obj.id}.htm")
+						#if($!config.secondDomainOpen && $!obj.storeSecondDomain!="")
+						#set($store_url="http://$!{obj.storeSecondDomain}.$!{domainPath}")
+						#end #if($!obj.storeStatus==15)
+						<td align="center" #if($!obj.storeStatus==26) style="color: #F00"
+							#end>$!store_status</td> #else
+						<td align="center" #if($!obj.storeStatus==26) style="color: #F00"
+							#end>$!store_status#if($!obj.failReseaon)
+							($!obj.failReseaon)#end</td> #end
+
+						<td align="center"><a
+							href="$!webPath/admin/store_companyCheck.htm?id=$!obj.id"
+							class="blue">审核</a></td>
+					</tr>
+
+					#end
+				</table>
+			</div>
+			<div class="operate_bar  page-fixed">
+				<div class="fenye">
+					<input type="hidden" name="mulitId" id="mulitId" /> <input
+						name="currentPage" type="hidden" id="currentPage"
+						value="$!currentPage" /> $!gotoPageFormHTML
+				</div>
+				<div class="oper_sp">
+					<span class="oper_check"><input type="checkbox" name="all"
+						id="all" value="" onclick="selectAll(this);" />全部</span> <span
+						class="oper_del"><input name="" type="button"
+						onclick="cmd('$!webPath/admin/store_del.htm','')" value="删除"
+						style="cursor: pointer;" /> </span>
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

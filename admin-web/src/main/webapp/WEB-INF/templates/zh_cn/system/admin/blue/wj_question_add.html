@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head></head>
+#macro ( genericTree $somelist ) #foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0) #foreach($count
+	in [0..$!some.level])&nbsp;&nbsp;&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) #end #end
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css"
+	type="text/css" rel="stylesheet" />
+<link rel="stylesheet"
+	href="$!webPath/resources/editor/themes/default/default.css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+<script src="$!webPath/resources/js/jquery.imgareaselect.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js//jquery.metadata.js"
+	type="text/javascript"></script>
+<script src="$!webPath/resources/js/jquery.shop.base.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script>
+var newRowNum = 0;
+jQuery(document).ready(function() {
+    jQuery("#logoShow").mouseover(function() {
+        jQuery("#logoImg").css('display', 'block');
+    }).mouseout(function() {
+        jQuery("#logoImg").css('display', 'none');
+    });
+
+    $("#addRow").click(function() {
+    	newRowNum = newRowNum + 1;
+		var tr = '<tr class="datatr">'+
+	         		   '<td align="center" >'+
+		   				'<input name="optionId"  type="hidden"  value="0"/>'+
+      		         		   '<input name="optionIndex' + newRowNum + '" type="text"  value=""'+
+      		         		' class="{required:true,digits:true,max:999,messages: { required: \'选项排序必填\',digits:\'选项排序必须为正整数\',max:\'选项排序不能超过999\'}}  opdata"/>'+
+      		         		'<input name="optionIndex" id="optionIndex' + newRowNum + '" type="hidden"  value="" />'+
+      	         		   '</td>'+
+      	         		   '<td align="center">'+
+      		         		   '<input name="optionDesc' + newRowNum + '" type="text"  value="" '+
+      		         		   'class="{required:true,maxlength:100,messages: { required: \'选项描述必填\',maxlength:\'选项描述长度不能超过100\'}} opdata"/>'+
+      		         		   '<input name="optionDesc" id="optionDesc' + newRowNum + '" type="hidden"  value="" />'+
+      	         		   '</td>'+
+      	         		   '<td align="center">'+
+      		         		   '<input name="score' + newRowNum + '" type="text"  value="" '+
+      		         		   'class="{required:true,digits:true,max:999,messages: { required: \'选项分值必填\',digits:\'选项分值必须为正整数\',max:\'选项分值不能超过999\'}} opdata"/>'+
+      		         		   '<input name="score" id="score' + newRowNum + '" type="hidden"  value="" />'+
+      	         		   '</td>'+
+      	         		 '<td align="center">新增数据</td>'+
+      	         		   '<td class="hui oprate_con" align="center">'+
+      		         		   '<a href="javascript:void(0);" onclick="delRow($(this));" class="blue">移除</a></td>'+
+    	         		   '</tr>';
+			$("#optionsTab").append(tr);
+	});
+
+    intValidate();
+	
+   
+    //改变系统提示的样式
+    jQuery("span .w").mousemove(function() {
+        var id = jQuery(this.parentNode).attr("id");
+        if (id = "nothis") {
+            jQuery(this.parentNode).attr("id", "this")
+        }
+    }).mouseout(function() {
+        var id = jQuery(this.parentNode).attr("id");
+        if (id = "this") {
+            jQuery(this.parentNode).attr("id", "nothis")
+        }
+    });
+    //
+
+});
+
+function intValidate(){
+	jQuery.validator.addMethod("sort",
+		    function(value, element) {
+			  var sortIds = $("#sortIds").val();
+			  var questionIndex = $("#questionIndex").val();
+			  var ary = new Array();
+			  ary = sortIds.split(",");
+			 var hash = {};
+			 for(var i in ary) {
+				 hash[ary[i]] = true;
+			  }
+			 if(hash[questionIndex])
+		        {
+		            return false;
+		        }else{
+					return true;
+				}
+			});
+	 jQuery("#theForm").validate({
+	        rules: {
+	        	questionTitle: {
+	                required: true,
+	                maxlength:150
+	            },
+	            questionIndex: {
+	                required: true,
+	                digits:true,
+	                max:999,
+	                sort:true
+	            }
+	        },
+	        messages: {
+	        	questionTitle: {
+	                required: "题目不能为空",
+	                maxlength:"题目长度不能超过150"
+	            },
+	            questionIndex: {
+	                required: "题目排序不能为空",
+	                digits:"题目排序必须为正数",
+	                max:"题目排序最大不能超过999",
+	                sort:"题目排序数值已存在，排序数值不能重复"
+	            }
+	        }
+	    });
+}
+
+function addRules(){
+	$("input[name='optionIndex']").each(
+            function() {
+                $(this).rules("add", { required: true, messages: { required: " 选项排序必填"} });
+                $(this).rules("add", { digits:true, messages: { digits: "选项排序必须为整数"} });
+            }
+      );
+}
+
+function delOption(obj, optionId){
+	var dataTrs = $(".datatr");
+	if (dataTrs.size() <= 1){
+		alert('至少一个答案选项！');
+		return false;
+	}
+	var url = "$!webPath/admin/deleteWenJuanQuestionOption.htm";
+	if(confirm('删除后不可恢复，是否继续?')){
+		$.ajax({
+		     url: url,
+		     type:'POST',
+			 data: {id:optionId},
+		     async:false,
+		     dataType: 'json',
+		     contentType:"application/x-www-form-urlencoded; charset=utf-8",
+		     success: function(data)
+		     {
+					alert('操作完成!');
+					obj.parent().parent().remove();
+		    }
+		});
+	}
+}
+
+function delRow(obj){
+	var dataTrs = $(".datatr");
+	if (dataTrs.size() <= 1){
+		alert('至少一个答案选项！');
+		return false;
+	}
+	if(confirm('确定移除?')){
+		obj.parent().parent().remove();
+	}
+}
+
+
+function saveForm() {
+  var r = jQuery("#theForm").valid(); 
+
+  $(".opdata").each(
+          function() {
+        	  $("#" + $(this).attr("name") + "").val($(this).val());
+          }
+    );
+  jQuery("#theForm").submit();
+}
+
+
+</script>
+</head>
+<body>
+	<form action="$!webPath/admin/save_WenJuan_Question.htm" method="post" name="theForm" id="theForm">
+		<input name="id" type="hidden" id="id" value="$!question.id" />
+		<input name="groupId" type="hidden" id="groupId" value="$!groupID" /> 
+		<input name="addUrl" type="hidden" id="addUrl" value="$!webPath/admin/wj_question_add.htm?groupID=$!groupID" /> 
+		<input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/wj_question_list.htm?groupID=$!groupID" /> 
+		<input name="sortIds" type="hidden" id="sortIds" value="$!sortIds" />
+		<div class="cont">
+			<h1 class="seth">自测题管理</h1>
+			<div class="nav_list">
+				<ul>
+					<li>
+						<a href="$!webPath/admin/wj_question_list.htm?groupID=$!groupID">
+						<b>题目列表</b>
+						</a>
+					</li>
+					<li>
+						<a href="$!webPath/admin/wj_question_add.htm?groupID=$!groupID"
+						#if(!$!edit) class="this" #end><b>新增题目</b></a></li> #if($!edit)
+						<li>
+							<a href="javascript:void(0);" class="this">
+							<b>编辑</b>
+							</a>
+						</li>
+					#end
+				</ul>
+			</div>
+			<div class="fshoptb">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+					<tr>
+						<th colspan=2>
+							<span class="form_btna">
+								题目数据
+							</span>
+						</th>
+					</tr>
+					<tr>
+						<th><span class="form_btna">题目</span></th>
+						<th><span class="form_btnb">排序</span></th>
+					</tr>
+					<tr>
+						<td align="center">
+							<input name="questionTitle" type="text" id="questionTitle" value="$!question.questionTitle" />
+						</td>
+						<td align="center">
+							<input name="questionIndex" type="text" id="questionIndex" value="$!question.questionIndex" />
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="fshoptb">
+				<table id="optionsTab" width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+					<th colspan=5>
+						<span class="form_btna">选项数据</span>
+					</th>
+					<tr>
+						<th width="25%"><span class="form_btna">排序</span></th>
+						<th width="25%"><span class="form_btna">选项描述</span></th>
+						<th width="25%"><span class="form_btna">分值</span></th>
+						<th width="5%"><span class="form_btna">数据类型</span></th>
+						<th><span class="form_btnb">操作</span></th>
+					</tr>
+					#foreach($option in $!list)
+					<tr class="datatr">
+						<td align="center">
+							<input name="optionId" type="hidden" value="$!option.id" /> 
+							#set($optionIndexName="$!option.id" +"optionIndex") 
+							<input name="$!optionIndexName" type="text" value="$!option.optionIndex"
+								class="{required:true,digits:true,max:999,messages: { required: '选项排序必填',digits:'选项排序必须为正整数',max:'选项排序不能超过999'}}  opdata" />
+							<input name="optionIndex" id="$!optionIndexName" type="hidden" value="" />
+						</td>
+						<td align="center">
+							#set($optionDescName="$!option.id" + "optionDesc") 
+							<input name="$!optionDescName" type="text" value="$!option.optionDesc"
+								class="{required:true,maxlength:100,messages: { required: '选项描述必填',maxlength:'选项描述长度不能超过100'}} opdata" />
+							<input name="optionDesc" id="$!optionDescName" type="hidden" value="" />
+						</td>
+						<td align="center">
+							#set($optionScoreName="$!option.id" +"score") 
+							<input name="$!optionScoreName" type="text" value="$!option.score"
+							class="{required:true,digits:true,max:999,messages: { required: '选项分值必填',digits:'选项分值必须为正整数',max:'选项分值不能超过999'}} opdata" />
+							<input name="score" id="$!optionScoreName" type="hidden" value="" />
+						</td>
+						<td align="center">已存在数据</td>
+						<td class="hui oprate_con" align="center">
+							<a href="javascript:void(0);" onclick="delOption($(this),$!option.id);" class="blue">
+							删除
+							</a>
+						</td>
+					</tr>
+					#end 
+					#if ($!isOption)
+					<tr class="datatr">
+						<td align="center">
+							<input name="optionId" type="hidden" value="0" /> 
+							<input name="optionIndex0" type="text" value=""
+								class="{required:true,digits:true,max:999,messages: { required: '选项排序必填',digits:'选项排序必须为正整数',max:'选项排序不能超过999'}}  opdata" />
+							<input name="optionIndex" id="optionIndex0" type="hidden" value="" />
+						</td>
+						<td align="center">
+							<input name="optionDesc0" type="text" value=""
+								class="{required:true,maxlength:100,messages: { required: '选项描述必填',maxlength:'选项描述长度不能超过100'}} opdata" />
+							<input name="optionDesc" id="optionDesc0" type="hidden" value="" />
+						</td>
+						<td align="center">
+							<input name="score0" type="text" value=""
+								class="{required:true,digits:true,max:999,messages: { required: '选项分值必填',digits:'选项分值必须为正整数',max:'选项分值不能超过999'}} opdata" />
+							<input name="score" id="score0" type="hidden" value="" />
+						</td>
+						<td align="center">新增数据</td>
+						<td class="hui oprate_con" align="center">
+							<a href="javascript:void(0);" onclick="delRow($(this));" class="blue">
+								移除
+							</a>
+						</td>
+					</tr>
+					#end
+				</table>
+			</div>
+			<div class="submit">
+				<span class="pad120"> 
+					<input id="addRow" name="" type="button" value="新增一行" style="cursor: pointer;" />
+					&nbsp;&nbsp;&nbsp;
+					<input name="" type="button" value="保存" style="cursor: pointer;" onclick="saveForm();" />
+				</span>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

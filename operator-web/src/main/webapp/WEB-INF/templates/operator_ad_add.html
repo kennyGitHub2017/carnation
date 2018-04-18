@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/jquery-ui.min.css">
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+</head>
+<body>
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 新增广告
+</div>
+
+<div class="main">
+    <ul class="m-menu">
+    	<li><a href="/operator/operator_ad_list.html">所有广告</a> </li>
+        <li><a href="/operator/operator_group_list.htm">所有服务</a> </li>
+        <li><a href="javascript:void(0);" class="active">新增广告</a> </li>
+    </ul>
+	<form class="form-control" action="/operator/operator_ad_save.htm" method="post" name="theForm" id="theForm" enctype="multipart/form-data">
+		<input type="hidden" name="adType" value="$!adType"/>
+		<input type="hidden" name="id" value="$!advertBO.id"/>
+        <ul>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 原标题：</span>
+                #if(!$!advertBO.id)
+	                #if($!adType == 6)
+	                	$!goodsBO.ggName
+	                #elseif($!adType == 5)
+	                	$!store.storeName
+	                #end
+	            #else
+	            	#if($!advertBO.adType == 6)
+	                	$!goodsBO.ggName
+	                #elseif($!advertBO.adType == 5)
+	                	$!store.storeName
+	                #end
+	            #end
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 广告名称：</span>
+                <input name="adTitle" type="text" id="adTitle" value="$!advertBO.adTitle"  class="txt"/>
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 广告位置：</span>
+                <select name="adApCode" id="adApCode" class="txt">
+                   <option value="" selected="selected">请选择广告位</option>                          
+                   <option value="APP_GROUP_INDEX" #if($!advertBO.apCode == "APP_GROUP_INDEX") selected="selected" #end>APP服务大首页广告位(720*360)</option>
+            		<option value="GROUP_HOME_SLIDE" #if($!advertBO.apCode == "GROUP_HOME_SLIDE") selected="selected" #end>服务首页幻灯片(1000*400)</option>
+                 </select>
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 开始时间：</span>
+                <input name="strAdBeginDate" type="text" id="strAdBeginDate"  class="txt datepicker" value="$!date.format('yyyy-MM-dd', $!advertBO.adBeginTime)" readonly="readonly"/>
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 结束时间：</span>
+                <input name="strAdEndDate" type="text" id="strAdEndDate" class="txt datepicker" value="$!date.format('yyyy-MM-dd', $!advertBO.adEndTime)" readonly="readonly"/>
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 广告图片：</span>
+                <input name="advertImg" type="file" id="advertImg" class="txt"/>
+                #if($!advertBO.adImgPath)
+                <img src="$!advertBO.adImgPath" width="200"/>
+                #end
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 广告链接：</span>
+                #if($!adType == 6)
+	                <input name="adUrl" type="text" id="adUrl" class="txt" value="$!goodsBO.id" readonly="readonly"/>
+                #elseif($!adType == 5)
+	                <input name="adUrl" type="text" id="adUrl" class="txt" value="$!store.id" readonly="readonly"/>
+	            #elseif($!advertBO.id)
+	            	<input name="adUrl" type="text" id="adUrl" class="txt" value="$!advertBO.adUrl" readonly="readonly"/>
+                #end
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 幻灯片序号：</span>
+                <input name="adSlideSequence" type="text" id="adSlideSequence" #if($!advertBO.adSlideSequence) value="$!advertBO.adSlideSequence" #else value="1"  #end class="txt"/>
+            </li>
+            <li class="btns">
+                <input type="submit" value="保存" class="btn btn-blue save"/>
+            </li>
+        </ul>
+    </form>
+</div>
+
+<script src="/resources/js/jquery-1.8.2.js"></script>
+<script src="/resources/js/jquery-ui.min.js"></script>
+<script src="/resources/js/jquery.validate.min.js"></script>
+<script src="/resources/js/jquery.blockUI.dialog.js"></script>
+<script src="/resources/js/common.js"></script>
+
+<script>
+jQuery(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+
+jQuery(document).ready(function(){
+	jQuery("#theForm").validate({
+	    rules: {
+	    		adTitle:{required:true},
+	    		adApCode:{required:true},
+	    		strAdBeginDate:{required:true},
+	    		strAdEndDate:{required:true},
+	    		#if(!$!advertBO.adImgPath)
+	    		advertImg:{required:true},
+	    		#end
+	    		adUrl:{required:true},
+	    		adSlideSequence:{required:true, digits:true}
+			  },
+		   messages: {
+			    adTitle:{required:"广告名称不能为空"},
+			    adApCode:{required:"请选择广告位"},
+			    strAdBeginDate:{required:"请选择开始时间"},
+			    strAdEndDate:{required:"请选择结束时间"},
+			    #if(!$!advertBO.adImgPath)
+			    advertImg:{required:"请上传图片"},
+			    #end
+			    adUrl:{required:"广告链接地址不能为空"},
+			    adSlideSequence:{required:"序号不能为空！", digits:"请填写数字！"}
+		     }
+	});
+});
+
+</script>
+
+</body>
+</html>

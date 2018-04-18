@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title> #macro ( genericTree $somelist ) #foreach ( $some in
+$somelist )
+<option value="$!some.id">#if($!some.level>0) #foreach($count
+	in [0..$!some.level])&nbsp;&nbsp;&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) #end #end
+</head>
+
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+#if($flag)
+<script>
+if('$!flag' == '1'){
+	console.log('$!flag');
+	$('#xueya_div_id').show();
+}
+</script>
+#end
+
+<script>
+	jQuery(document).ready(function() {
+		
+		jQuery("#theForm").validate({
+			rules : {
+				physicalType : {
+					required : true
+				},
+				minAge: {
+					required : true,
+					digits:true
+				},
+				
+				maxAge: {
+					required : true,
+					digits:true
+				},
+				
+				resultKeyWord: {
+					required : true
+				},
+				rangeMin: {
+					required : true,
+					number:true
+				},
+				rangeMax: {
+					required : true,
+					number:true
+				}
+			},
+			messages : {
+				physicalType : {
+					required : "体检项需要选择"
+				},
+				
+				minAge: {
+					required : "年龄需要填写",
+					digits:"请输入合法数值"
+				},
+				maxAge: {
+					required : "年龄需要填写",
+					digits:"请输入合法数值"
+				},
+				resultKeyWord: {
+					required : "结果需要填写"
+				},
+				rangeMin: {
+					required : "参考值需要填写",
+					number:"请输入合法数值"
+				},
+				rangeMax: {
+					required : "参考值需要填写",
+					number:"请输入合法数值"
+				}
+			}
+		});
+		});
+		
+
+	
+
+	function saveForm() {
+		jQuery("#theForm").submit();
+	}
+	
+ 	jQuery(document).ready(function(){
+ 		
+ 		$("#physicalType_select").change(function(){
+ 			var val = jQuery("#physicalType_select  option:selected").text();
+ 			console.log(val);
+ 			if(val == '血压'){
+ 				$('#xueya_div_id').show();
+ 			}else{
+ 				$('#xueya_div_id').hide();
+ 			}
+ 		});
+	});  
+	
+
+</script>
+<body>
+	<div class="cont">
+		<h1 class="seth">体检参数添加</h1>
+		<div class="nav_list">
+			<ul>
+				<li><a href="$!webPath/admin/checkValuation/pageList.htm"><b>管理</b></a></li>
+				<li><a href="$!webPath/admin/checkValuation/addPage.htm"
+					class="this"><b>#if($!obj) 编辑 #else 新增 #end</b></a></li>
+			</ul>
+
+		</div>
+
+
+		<form name="theForm" id="theForm" action="$!webPath/admin/checkValuation/editValuation.htm" method="post">
+			
+			<input name="id" type="hidden" id="id_input" value="$!valuation.id" />
+			<div class="edit">
+				<div class="editul setcont">
+
+					<!--鼠标经过样式-->
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>体检项名称</li>
+						<li><span class="webname">
+						
+						<select name="physicalTypeId" id="physicalType_select">
+								<option value="">--请选择--</option>
+								#foreach($typeList in $typeList)
+								<option value="$!typeList.id" #if($valuation.physicalTypeId== $!typeList.id) selected="selected" #end>$!typeList.typeName</option>
+								#end
+						</select>
+						
+						</span></li>
+					</ul>
+
+					<ul class="set1">
+							<li class="setcont_bg"><strong class="sred">*</strong>性别</li>
+							<li><input type="radio" name="sex" value="2" #if($!valuation.sex== 2) checked="checked" #end />全部&nbsp;&nbsp; 
+							<input type="radio" name="sex"  value="1" #if($!valuation.sex== 1) checked="checked" #end />男&nbsp;&nbsp; 
+							<input type="radio" name="sex"  value="0" #if($!valuation.sex== 0) checked="checked" #end/>女
+							</li>
+					</ul>
+
+					<ul class="set1" id="numberType">
+						<li class="setcont_bg"><strong class="sred">*</strong>年龄范围</li>
+						<li><input name="minAge" type="text" id="minAge"
+							value="$!valuation.minAge" size="18" />~ <input name="maxAge"
+							type="text" id="maxAge" value="$!valuation.maxAge" size="18" /></li>
+					</ul>
+
+
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>结果说明</li>
+						<li><span class="webname"> 
+						<select name="resultType" id="resultType">
+						<option value="">--请选择--</option>
+								 	#foreach($sKey in ${physicalResult.keySet()})
+									<option value="$!sKey" #if($!valuation.resultType== $!sKey) selected="selected" #end>${physicalResult.get($sKey)}</option>
+									#end
+							</select>
+						</span></li>
+					</ul>
+
+					<ul class="set1" id="numberType">
+						<li class="setcont_bg"><strong class="sred">*</strong>高压/参考值</li>
+						<li><input name="rangeMin" type="text" id="rengeMin"
+							value="$!valuation.rangeMin" size="18" />~ <input name="rangeMax"
+							type="text" id="rengeMax" value="$!valuation.rangeMax" size="18" /></li>
+					</ul>
+					
+					<div id="xueya_div_id" #if($!flag != 1 ) style="display: none; #end ">
+						<ul class="set1" id="numberType">
+							<li class="setcont_bg"><strong class="sred">*</strong>低压参考值</li>
+							<li><input name="rangeMin2" type="text" id="rengeMin"
+								value="$!valuation.rangeMin2" size="18" />~ <input name="rangeMax2"
+								type="text" id="rengeMax" value="$!valuation.rangeMax2" size="18" /></li>
+						</ul>
+						
+						<ul class="set1" id="numberType">
+							<li class="setcont_bg"><strong class="sred">*</strong>脉压差</li>
+							<li><input name="rangeMin3" type="text" id="rengeMin"
+								value="$!valuation.rangeMin3" size="18" />~ <input name="rangeMax3"
+								type="text" id="rengeMax" value="$!valuation.rangeMax3" size="18" /></li>
+						</ul>
+					</div>
+
+
+<!-- 					<ul class="set1">
+						<li class="setcont_bg">单位</li>
+						<li><span class="webname"> <input name="unit"
+								type="text" id="unit" value="$!obj.unit" size="40" />
+						</span></li>
+					</ul> -->
+
+					<ul class="set1">
+						<li class="setcont_bg">描述</li>
+						<li><span class="webname"> <textarea rows="6" cols="80" name="memo">$!valuation.memo</textarea>
+									
+						</span></li>
+					</ul>
+
+
+				</div>
+			</div>
+			
+			
+		</form>
+		
+		<div class="submit">
+			#if($!flag != 1)
+			<span class="pad120"><input name="save" type="button" value="提交" onclick="saveForm()" /></span>
+			#end
+		</div>
+
+		
+	</div>
+</body>
+</html>

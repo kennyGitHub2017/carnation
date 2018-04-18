@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>健康任务</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="format-detection" content="telephone=no">
+    	<meta name="format-detection" content="email=no">
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/common.css"/>
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/mui.min.css"/>
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/mui.picker.min.css"/>
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/task.css" />
+    	<script type="text/javascript">
+	    	var screenWidth=window.innerWidth||document.documentElement.clientWidth;	
+	    	var fontSize=parseInt(screenWidth /7.5 )
+	    	var fontEl = document.createElement('style');
+	    	document.documentElement.firstElementChild.appendChild(fontEl);
+	    	fontEl.innerHTML = 'html{font-size:' + fontSize + 'px!important;}';
+    	</script>
+	</head>
+	<body>
+		<div class="appbar fn-clear">
+			<a href="javascript:;" class="return" onclick="goBack()"></a>
+			<a href="javascript:;" class="edit hide">完成</a>
+			<span class="centerTitle">健康任务</span>
+			<a href="javascript:;" class="add"></a>
+		</div>	
+		<div class="taskHolder">
+			<div class="taList">
+				<ul>
+					#if(!$!list)
+					<div class="no-task-center">您还没有添加健康任务<br/>请点击右上角+号按钮添加任务</div>
+					#end
+					#foreach($!obj in $!list)
+						<li>
+							<a href="javascript:;" class="remove" data-tid="$!obj.healthTaskID">-</a>
+							<span class="icon">
+								<!-- <img src="${apiPath}/resources/img/task_icon.png" /> -->
+								<img src="$!obj.iconURL" />
+							</span>
+							<span class="taskName">$!obj.taskName</span>
+							<span class="dayCount">已坚持$!obj.doDays天</span>
+						</li>
+					#end
+				</ul>
+				<input type="hidden" id="uid" value="$!uid"/>
+			</div>
+			
+		</div>
+		<script src="${apiPath}/resources/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/jQuery.fn/tap.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			jQuery(document).ready(function(){
+				var startPos,endPos,
+				isTouchPad = (/hp-tablet/gi).test(navigator.appVersion),
+            	hasTouch = 'ontouchstart' in window && !isTouchPad;
+				jQuery(".taList ul li").each(function(){			
+			        fn.addEvent(this,'touchstart',start);
+			        fn.addEvent(this,'touchmove',move);
+			        fn.addEvent(this,'touchend',end);
+				});
+				
+				function start(e){
+					startPos=hasTouch? e.touches[0].pageX: e.pageX;
+				}
+				function move(e){
+					endPos=hasTouch? e.touches[0].pageX: e.pageX;
+				}
+				function end(e){
+					if(endPos-startPos>100){
+						jQuery(this).find(".remove").show();
+					}
+				}
+				
+				jQuery(".taList ul li").on("click",function(e){
+					var tid=jQuery(this).find(".remove").attr("data-tid");
+					var uid = jQuery("#uid").val();
+					//window.location.href = "${apiPath}/v1/ht/taskSet?id="+tid+"&userID="+uid;
+					window.location.href = "${apiPath}/v1/ht/taskFinishSignLog?taskID="+tid+"&userID="+uid+"&jumpType=task-index";
+				});
+				
+				jQuery(".taList ul li .remove").on("click",function(e){
+					e.stopPropagation();
+					var tid=jQuery(this).attr("data-tid");
+					var uid = jQuery("#uid").val();
+					console.log("......."+tid);
+					var that=this;
+					jQuery.post("${apiPath}/v1/ht/delete?taskID="+tid+"&userID="+uid,function(data){
+					   var result_ = data.result;
+					   var boo = (result_== "succ");
+					   if(boo){
+						   jQuery(that).parent().remove();
+					   }
+					});
+					//jQuery(this).parent().remove();
+				});
+				
+				jQuery(".add").click(function(){
+					var uid = jQuery("#uid").val();
+					var url = "${apiPath}/v1/ht/sysTaskList?userID="+uid+"&jumpType=task-index";
+					console.log("....."+url);
+					window.location.href = url;
+				});
+				
+				jQuery(".return").on("touchstart",function(){
+					fn.requestBack();
+				});
+			});
+			
+			
+			var isAndroid, isiOS;
+		    (function() {
+		        var u = navigator.userAgent, app = navigator.appVersion;
+		        isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+		        isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+		    }());
+	       /*  function goBack() {           	
+	       		fn.requestBack();
+	       	} */
+	      	applicationCache.onupdateready = function(){
+				applicationCache.swapCache();
+				location.reload();
+			};
+			
+			
+			
+		</script>
+	
+	</body>
+</html>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.goods.mapper.GoodsCartGspMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.goods.model.GoodsCartGsp">
+		<id column="cart_id" property="cartId" jdbcType="BIGINT" />
+		<id column="gsp_id" property="gspId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.goods.bo.GoodsCartGspBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		cart_id, gsp_id
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.goods.model.GoodsCartGspExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_goods_cart_gsp
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from shop_goods_cart_gsp
+		where cart_id = #{cartId,jdbcType=BIGINT}
+		and gsp_id = #{gspId,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.goods.model.GoodsCartGspExample">
+		delete from shop_goods_cart_gsp
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.goods.model.GoodsCartGsp">
+		insert into shop_goods_cart_gsp (cart_id, gsp_id)
+		values (#{cartId,jdbcType=BIGINT}, #{gspId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.goods.model.GoodsCartGsp">
+		insert into shop_goods_cart_gsp
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="cartId != null">
+				cart_id,
+			</if>
+			<if test="gspId != null">
+				gsp_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="cartId != null">
+				#{cartId,jdbcType=BIGINT},
+			</if>
+			<if test="gspId != null">
+				#{gspId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.goods.model.GoodsCartGspExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_goods_cart_gsp
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_goods_cart_gsp
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.cartId != null">
+				cart_id = #{record.cartId,jdbcType=BIGINT},
+			</if>
+			<if test="record.gspId != null">
+				gsp_id = #{record.gspId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_goods_cart_gsp
+		set cart_id = #{record.cartId,jdbcType=BIGINT},
+		gsp_id = #{record.gspId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+</mapper>

@@ -1,0 +1,928 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.EvaluateMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.Evaluate">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="description_evaluate" property="descriptionEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="evaluate_buyer_val" property="evaluateBuyerVal"
+			jdbcType="INTEGER" />
+		<result column="evaluate_photos" property="evaluatePhotos"
+			jdbcType="VARCHAR" />
+		<result column="evaluate_status" property="evaluateStatus"
+			jdbcType="INTEGER" />
+		<result column="evaluate_type" property="evaluateType"
+			jdbcType="VARCHAR" />
+		<result column="goods_num" property="goodsNum" jdbcType="INTEGER" />
+		<result column="goods_price" property="goodsPrice" jdbcType="VARCHAR" />
+		<result column="service_evaluate" property="serviceEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="ship_evaluate" property="shipEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="evaluate_goods_id" property="evaluateGoodsId"
+			jdbcType="BIGINT" />
+		<result column="evaluate_user_id" property="evaluateUserId"
+			jdbcType="BIGINT" />
+		<result column="of_id" property="ofId" jdbcType="BIGINT" />
+		<result column="reply_status" property="replyStatus" jdbcType="INTEGER" />
+		<result column="addeva_status" property="addevaStatus"
+			jdbcType="INTEGER" />
+		<result column="addeva_time" property="addevaTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.Evaluate"
+		extends="BaseResultMap">
+		<result column="evaluate_admin_info" property="evaluateAdminInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="evaluate_info" property="evaluateInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="goods_spec" property="goodsSpec" jdbcType="LONGVARCHAR" />
+		<result column="reply" property="reply" jdbcType="LONGVARCHAR" />
+		<result column="addeva_info" property="addevaInfo" jdbcType="LONGVARCHAR" />
+		<result column="addeva_photos" property="addevaPhotos"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<resultMap id="queryEvaluateListMap" type="com.sinco.carnation.shop.bo.EvaluateBO"
+		extends="ResultMapWithBLOBs">
+		<result column="nickname" property="nickName" jdbcType="VARCHAR" />
+		<result column="goodsName" property="goodsName" jdbcType="VARCHAR" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="headImgPath" property="headImgPath" jdbcType="VARCHAR" />
+		<result column="goods_main_photo_path" property="goodsMainPhotoPath"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="queryEvaluateGoodsMap" type="com.sinco.carnation.shop.bo.EvaluateBO"
+		extends="ResultMapWithBLOBs">
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="goods_id" property="goodsId" jdbcType="VARCHAR" />
+		<result column="nickname" property="nickName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, description_evaluate,
+		evaluate_buyer_val,
+		evaluate_photos,
+		evaluate_status, evaluate_type,
+		goods_num, goods_price, service_evaluate,
+		ship_evaluate,
+		evaluate_goods_id, evaluate_user_id, of_id, reply_status,
+		addeva_status, addeva_time
+	</sql>
+	<sql id="Blob_Column_List">
+		evaluate_admin_info, evaluate_info, goods_spec, reply,
+		addeva_info, addeva_photos
+	</sql>
+
+	<select id="selectDistinctGoodsId" resultType="java.lang.Long">
+		SELECT DISTINCT
+		evaluate_goods_id FROM shop_evaluate WHERE delete_status = 0
+	</select>
+	<select id="queryEvaluateGoods" resultMap="queryEvaluateGoodsMap">
+		SELECT u.login_name,g.id goods_id,g.goods_name,e.* from shop_evaluate
+		e
+		LEFT JOIN shop_goods g ON e.evaluate_goods_id=g.id
+		LEFT JOIN
+		sys_user_account u ON (e.evaluate_user_id=u.uid and
+		u.account_type=2)
+		WHERE e.delete_status=0 and e.evaluate_status=0
+		<if test="replyStatus != null">
+			and e.reply_status=#{replyStatus,jdbcType=INTEGER}
+		</if>
+		<if test="goodsType != null">
+			and g.goods_type=#{goodsType}
+		</if>
+		order by add_time desc
+	</select>
+
+	<select id="queryEvaluateById" resultMap="queryEvaluateListMap">
+		SELECT
+		c.nickname,g.goods_name,s.store_name,e.* from shop_evaluate e
+		LEFT JOIN
+		shop_goods g ON e.evaluate_goods_id = g.id
+		LEFT JOIN user_customer c ON
+		c.uid=e.evaluate_user_id
+		LEFT JOIN shop_store s ON
+		s.id=g.goods_store_id WHERE
+		e.id=#{evaId,jdbcType=BIGINT}
+	</select>
+	<select id="queryByUserId" resultMap="queryEvaluateListMap">
+		SELECT
+		c.nickname,g.goods_name,s.store_name,e.* from shop_evaluate e
+		LEFT JOIN
+		shop_goods g ON e.evaluate_goods_id = g.id
+		LEFT JOIN user_customer c ON
+		c.uid=e.evaluate_user_id
+		LEFT JOIN shop_store s ON
+		s.id=g.goods_store_id
+		WHERE
+		e.evaluate_user_id=#{userId,jdbcType=BIGINT}
+		order by add_time desc
+	</select>
+	<select id="queryByVO" resultMap="queryEvaluateListMap">
+		SELECT c.nickname,g.goods_name,s.store_name,e.* from shop_evaluate e
+		LEFT JOIN shop_goods g ON e.evaluate_goods_id = g.id
+		LEFT JOIN
+		user_customer c ON c.uid=e.evaluate_user_id
+		LEFT JOIN shop_store s ON
+		s.id=g.goods_store_id
+		WHERE
+		e.evaluate_user_id=#{vo.userId,jdbcType=BIGINT}
+		<if test="vo.nickName != null and vo.nickName != ''">
+			and c.nickname like
+			CONCAT("%",#{vo.nickName,jdbcType=VARCHAR},"%")
+		</if>
+		<if test="vo.goodsName != null and vo.goodsName != ''">
+			and g.goods_name like
+			CONCAT("%",#{vo.goodsName,jdbcType=VARCHAR},"%")
+		</if>
+		order by add_time desc
+	</select>
+
+	<select id="queryEvaultePageList" resultMap="queryEvaluateListMap">
+		SELECT
+		g.goods_main_photo_path,c.nickname,g.goods_name,s.store_name,e.* from
+		shop_evaluate e
+		LEFT JOIN shop_goods g ON e.evaluate_goods_id = g.id
+		LEFT JOIN user_customer c ON c.uid=e.evaluate_user_id
+		LEFT JOIN
+		shop_store s ON s.id=g.goods_store_id
+		WHERE
+		e.evaluate_user_id=#{userId,jdbcType=BIGINT}
+		order by add_time desc
+	</select>
+
+	<select id="queryEvaultePageListByVal" resultMap="queryEvaluateListMap">
+		SELECT
+		g.goods_main_photo_path,c.nickname,g.goods_name,s.store_name,e.* from
+		shop_evaluate e
+		LEFT JOIN shop_goods g ON e.evaluate_goods_id = g.id
+		LEFT JOIN user_customer c ON c.uid=e.evaluate_user_id
+		LEFT JOIN
+		shop_store s ON s.id=g.goods_store_id
+		WHERE
+		e.evaluate_user_id=#{userId,jdbcType=BIGINT}
+
+		<if test="evaluateBuyerVal != null and evaluateBuyerVal != ''">
+			and e.evaluate_buyer_val = #{evaluateBuyerVal}
+		</if>
+		order by add_time desc
+	</select>
+	<select id="fetch" resultMap="ResultMapWithBLOBs">
+		SELECT * FROM shop_evaluate WHERE
+		evaluate_goods_id=#{goodsId,jdbcType=BIGINT} AND
+		evaluate_user_id=#{userId,jdbcType=BIGINT}
+	</select>
+	<select id="queryByStoreId" resultMap="queryEvaluateListMap">
+		SELECT a.*,b.store_id from
+		shop_evaluate a
+
+		LEFT JOIN shop_order_form b
+		on a.of_id =b.id
+		WHERE
+		b.store_id=#{storeId,jdbcType=BIGINT}
+	</select>
+	<select id="queryStatusLess2" resultMap="queryEvaluateListMap">
+		SELECT a.*,b.store_id
+		from shop_evaluate a
+
+		LEFT JOIN shop_order_form b
+		on a.of_id =b.id
+		WHERE
+		b.store_id=#{storeId,jdbcType=BIGINT} and a.evaluate_status&lt;2
+	</select>
+	<select id="queryEvaluateList" resultMap="queryEvaluateListMap">
+		SELECT c.nickname,g.goods_name,s.store_name,e.* from shop_evaluate e
+		LEFT JOIN shop_goods g ON e.evaluate_goods_id = g.id
+		LEFT JOIN
+		user_customer c ON c.uid=e.evaluate_user_id
+		LEFT JOIN shop_store s ON
+		s.id=g.goods_store_id where e.delete_status=0
+		<if test="nickName != null and nickName != ''">
+			and c.nickname like
+			CONCAT("%",#{nickName,jdbcType=VARCHAR},"%")
+		</if>
+		<if test="goodsName != null and goodsName != ''">
+			and g.goods_name like
+			CONCAT("%",#{goodsName,jdbcType=VARCHAR},"%")
+		</if>
+		order by add_time desc
+	</select>
+	<select id="queryEvaluateListByVO" resultMap="queryEvaluateListMap">
+		SELECT c.nickname, c.head_img_path headImgPath, e.* from shop_evaluate
+		e
+		LEFT JOIN user_customer c ON c.uid=e.evaluate_user_id
+		WHERE
+		e.delete_status=0
+		<if test="vo.evaluateGoodsId != null">
+			and e.evaluate_goods_id = #{vo.evaluateGoodsId}
+		</if>
+		<if test="vo.evaluateType != null and vo.evaluateType != ''">
+			and e.evaluate_type = #{vo.evaluateType}
+		</if>
+		<if test="vo.evaluateStatus != null">
+			and e.evaluate_status = #{vo.evaluateStatus}
+		</if>
+		<if test="vo.evaluatePhotos != null">
+			and e.evaluate_photos != ''
+		</if>
+		<if test="vo.evaluateBuyerVal != null">
+			and e.evaluate_buyer_val = #{vo.evaluateBuyerVal}
+		</if>
+		order by e.add_time desc
+	</select>
+
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.shop.model.EvaluateExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_evaluate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.shop.model.EvaluateExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_evaluate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_evaluate
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		shop_evaluate
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.EvaluateExample">
+		delete from shop_evaluate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.Evaluate">
+		insert into shop_evaluate (id,
+		add_time, delete_status,
+		description_evaluate, evaluate_buyer_val,
+		evaluate_photos, evaluate_status, evaluate_type,
+		goods_num,
+		goods_price, service_evaluate,
+		ship_evaluate, evaluate_goods_id,
+		evaluate_user_id,
+		of_id, reply_status, addeva_status,
+		addeva_time,
+		evaluate_admin_info, evaluate_info,
+		goods_spec, reply, addeva_info,
+		addeva_photos)
+		values (#{id,jdbcType=BIGINT},
+		#{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{descriptionEvaluate,jdbcType=DECIMAL},
+		#{evaluateBuyerVal,jdbcType=INTEGER},
+		#{evaluatePhotos,jdbcType=VARCHAR},
+		#{evaluateStatus,jdbcType=INTEGER}, #{evaluateType,jdbcType=VARCHAR},
+		#{goodsNum,jdbcType=INTEGER}, #{goodsPrice,jdbcType=VARCHAR},
+		#{serviceEvaluate,jdbcType=DECIMAL},
+		#{shipEvaluate,jdbcType=DECIMAL},
+		#{evaluateGoodsId,jdbcType=BIGINT},
+		#{evaluateUserId,jdbcType=BIGINT},
+		#{ofId,jdbcType=BIGINT}, #{replyStatus,jdbcType=INTEGER},
+		#{addevaStatus,jdbcType=INTEGER},
+		#{addevaTime,jdbcType=TIMESTAMP},
+		#{evaluateAdminInfo,jdbcType=LONGVARCHAR},
+		#{evaluateInfo,jdbcType=LONGVARCHAR},
+		#{goodsSpec,jdbcType=LONGVARCHAR}, #{reply,jdbcType=LONGVARCHAR},
+		#{addevaInfo,jdbcType=LONGVARCHAR},
+		#{addevaPhotos,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.Evaluate">
+		insert into shop_evaluate
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="descriptionEvaluate != null">
+				description_evaluate,
+			</if>
+			<if test="evaluateBuyerVal != null">
+				evaluate_buyer_val,
+			</if>
+			<if test="evaluatePhotos != null">
+				evaluate_photos,
+			</if>
+			<if test="evaluateStatus != null">
+				evaluate_status,
+			</if>
+			<if test="evaluateType != null">
+				evaluate_type,
+			</if>
+			<if test="goodsNum != null">
+				goods_num,
+			</if>
+			<if test="goodsPrice != null">
+				goods_price,
+			</if>
+			<if test="serviceEvaluate != null">
+				service_evaluate,
+			</if>
+			<if test="shipEvaluate != null">
+				ship_evaluate,
+			</if>
+			<if test="evaluateGoodsId != null">
+				evaluate_goods_id,
+			</if>
+			<if test="evaluateUserId != null">
+				evaluate_user_id,
+			</if>
+			<if test="ofId != null">
+				of_id,
+			</if>
+			<if test="replyStatus != null">
+				reply_status,
+			</if>
+			<if test="addevaStatus != null">
+				addeva_status,
+			</if>
+			<if test="addevaTime != null">
+				addeva_time,
+			</if>
+			<if test="evaluateAdminInfo != null">
+				evaluate_admin_info,
+			</if>
+			<if test="evaluateInfo != null">
+				evaluate_info,
+			</if>
+			<if test="goodsSpec != null">
+				goods_spec,
+			</if>
+			<if test="reply != null">
+				reply,
+			</if>
+			<if test="addevaInfo != null">
+				addeva_info,
+			</if>
+			<if test="addevaPhotos != null">
+				addeva_photos,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="descriptionEvaluate != null">
+				#{descriptionEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="evaluateBuyerVal != null">
+				#{evaluateBuyerVal,jdbcType=INTEGER},
+			</if>
+			<if test="evaluatePhotos != null">
+				#{evaluatePhotos,jdbcType=VARCHAR},
+			</if>
+			<if test="evaluateStatus != null">
+				#{evaluateStatus,jdbcType=INTEGER},
+			</if>
+			<if test="evaluateType != null">
+				#{evaluateType,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsNum != null">
+				#{goodsNum,jdbcType=INTEGER},
+			</if>
+			<if test="goodsPrice != null">
+				#{goodsPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceEvaluate != null">
+				#{serviceEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="shipEvaluate != null">
+				#{shipEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="evaluateGoodsId != null">
+				#{evaluateGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="evaluateUserId != null">
+				#{evaluateUserId,jdbcType=BIGINT},
+			</if>
+			<if test="ofId != null">
+				#{ofId,jdbcType=BIGINT},
+			</if>
+			<if test="replyStatus != null">
+				#{replyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="addevaStatus != null">
+				#{addevaStatus,jdbcType=INTEGER},
+			</if>
+			<if test="addevaTime != null">
+				#{addevaTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="evaluateAdminInfo != null">
+				#{evaluateAdminInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="evaluateInfo != null">
+				#{evaluateInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsSpec != null">
+				#{goodsSpec,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="reply != null">
+				#{reply,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="addevaInfo != null">
+				#{addevaInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="addevaPhotos != null">
+				#{addevaPhotos,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.EvaluateExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_evaluate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_evaluate
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.descriptionEvaluate != null">
+				description_evaluate =
+				#{record.descriptionEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.evaluateBuyerVal != null">
+				evaluate_buyer_val =
+				#{record.evaluateBuyerVal,jdbcType=INTEGER},
+			</if>
+			<if test="record.evaluatePhotos != null">
+				evaluate_photos =
+				#{record.evaluatePhotos,jdbcType=VARCHAR},
+			</if>
+			<if test="record.evaluateStatus != null">
+				evaluate_status =
+				#{record.evaluateStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.evaluateType != null">
+				evaluate_type = #{record.evaluateType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsNum != null">
+				goods_num = #{record.goodsNum,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsPrice != null">
+				goods_price = #{record.goodsPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="record.serviceEvaluate != null">
+				service_evaluate =
+				#{record.serviceEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.shipEvaluate != null">
+				ship_evaluate = #{record.shipEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.evaluateGoodsId != null">
+				evaluate_goods_id =
+				#{record.evaluateGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="record.evaluateUserId != null">
+				evaluate_user_id =
+				#{record.evaluateUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.ofId != null">
+				of_id = #{record.ofId,jdbcType=BIGINT},
+			</if>
+			<if test="record.replyStatus != null">
+				reply_status = #{record.replyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.addevaStatus != null">
+				addeva_status = #{record.addevaStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.addevaTime != null">
+				addeva_time = #{record.addevaTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.evaluateAdminInfo != null">
+				evaluate_admin_info =
+				#{record.evaluateAdminInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.evaluateInfo != null">
+				evaluate_info =
+				#{record.evaluateInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsSpec != null">
+				goods_spec = #{record.goodsSpec,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.reply != null">
+				reply = #{record.reply,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.addevaInfo != null">
+				addeva_info = #{record.addevaInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.addevaPhotos != null">
+				addeva_photos =
+				#{record.addevaPhotos,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_evaluate
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=INTEGER},
+		description_evaluate =
+		#{record.descriptionEvaluate,jdbcType=DECIMAL},
+		evaluate_buyer_val =
+		#{record.evaluateBuyerVal,jdbcType=INTEGER},
+		evaluate_photos =
+		#{record.evaluatePhotos,jdbcType=VARCHAR},
+		evaluate_status =
+		#{record.evaluateStatus,jdbcType=INTEGER},
+		evaluate_type =
+		#{record.evaluateType,jdbcType=VARCHAR},
+		goods_num =
+		#{record.goodsNum,jdbcType=INTEGER},
+		goods_price =
+		#{record.goodsPrice,jdbcType=VARCHAR},
+		service_evaluate =
+		#{record.serviceEvaluate,jdbcType=DECIMAL},
+		ship_evaluate =
+		#{record.shipEvaluate,jdbcType=DECIMAL},
+		evaluate_goods_id =
+		#{record.evaluateGoodsId,jdbcType=BIGINT},
+		evaluate_user_id =
+		#{record.evaluateUserId,jdbcType=BIGINT},
+		of_id =
+		#{record.ofId,jdbcType=BIGINT},
+		reply_status =
+		#{record.replyStatus,jdbcType=INTEGER},
+		addeva_status =
+		#{record.addevaStatus,jdbcType=INTEGER},
+		addeva_time =
+		#{record.addevaTime,jdbcType=TIMESTAMP},
+		evaluate_admin_info =
+		#{record.evaluateAdminInfo,jdbcType=LONGVARCHAR},
+		evaluate_info =
+		#{record.evaluateInfo,jdbcType=LONGVARCHAR},
+		goods_spec =
+		#{record.goodsSpec,jdbcType=LONGVARCHAR},
+		reply =
+		#{record.reply,jdbcType=LONGVARCHAR},
+		addeva_info =
+		#{record.addevaInfo,jdbcType=LONGVARCHAR},
+		addeva_photos =
+		#{record.addevaPhotos,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_evaluate
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=INTEGER},
+		description_evaluate =
+		#{record.descriptionEvaluate,jdbcType=DECIMAL},
+		evaluate_buyer_val =
+		#{record.evaluateBuyerVal,jdbcType=INTEGER},
+		evaluate_photos =
+		#{record.evaluatePhotos,jdbcType=VARCHAR},
+		evaluate_status =
+		#{record.evaluateStatus,jdbcType=INTEGER},
+		evaluate_type =
+		#{record.evaluateType,jdbcType=VARCHAR},
+		goods_num =
+		#{record.goodsNum,jdbcType=INTEGER},
+		goods_price =
+		#{record.goodsPrice,jdbcType=VARCHAR},
+		service_evaluate =
+		#{record.serviceEvaluate,jdbcType=DECIMAL},
+		ship_evaluate =
+		#{record.shipEvaluate,jdbcType=DECIMAL},
+		evaluate_goods_id =
+		#{record.evaluateGoodsId,jdbcType=BIGINT},
+		evaluate_user_id =
+		#{record.evaluateUserId,jdbcType=BIGINT},
+		of_id =
+		#{record.ofId,jdbcType=BIGINT},
+		reply_status =
+		#{record.replyStatus,jdbcType=INTEGER},
+		addeva_status =
+		#{record.addevaStatus,jdbcType=INTEGER},
+		addeva_time =
+		#{record.addevaTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.Evaluate">
+		update shop_evaluate
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="descriptionEvaluate != null">
+				description_evaluate =
+				#{descriptionEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="evaluateBuyerVal != null">
+				evaluate_buyer_val =
+				#{evaluateBuyerVal,jdbcType=INTEGER},
+			</if>
+			<if test="evaluatePhotos != null">
+				evaluate_photos = #{evaluatePhotos,jdbcType=VARCHAR},
+			</if>
+			<if test="evaluateStatus != null">
+				evaluate_status = #{evaluateStatus,jdbcType=INTEGER},
+			</if>
+			<if test="evaluateType != null">
+				evaluate_type = #{evaluateType,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsNum != null">
+				goods_num = #{goodsNum,jdbcType=INTEGER},
+			</if>
+			<if test="goodsPrice != null">
+				goods_price = #{goodsPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceEvaluate != null">
+				service_evaluate = #{serviceEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="shipEvaluate != null">
+				ship_evaluate = #{shipEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="evaluateGoodsId != null">
+				evaluate_goods_id = #{evaluateGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="evaluateUserId != null">
+				evaluate_user_id = #{evaluateUserId,jdbcType=BIGINT},
+			</if>
+			<if test="ofId != null">
+				of_id = #{ofId,jdbcType=BIGINT},
+			</if>
+			<if test="replyStatus != null">
+				reply_status = #{replyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="addevaStatus != null">
+				addeva_status = #{addevaStatus,jdbcType=INTEGER},
+			</if>
+			<if test="addevaTime != null">
+				addeva_time = #{addevaTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="evaluateAdminInfo != null">
+				evaluate_admin_info =
+				#{evaluateAdminInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="evaluateInfo != null">
+				evaluate_info = #{evaluateInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsSpec != null">
+				goods_spec = #{goodsSpec,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="reply != null">
+				reply = #{reply,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="addevaInfo != null">
+				addeva_info = #{addevaInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="addevaPhotos != null">
+				addeva_photos = #{addevaPhotos,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.Evaluate">
+		update
+		shop_evaluate
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		description_evaluate
+		= #{descriptionEvaluate,jdbcType=DECIMAL},
+		evaluate_buyer_val =
+		#{evaluateBuyerVal,jdbcType=INTEGER},
+		evaluate_photos =
+		#{evaluatePhotos,jdbcType=VARCHAR},
+		evaluate_status =
+		#{evaluateStatus,jdbcType=INTEGER},
+		evaluate_type =
+		#{evaluateType,jdbcType=VARCHAR},
+		goods_num =
+		#{goodsNum,jdbcType=INTEGER},
+		goods_price =
+		#{goodsPrice,jdbcType=VARCHAR},
+		service_evaluate =
+		#{serviceEvaluate,jdbcType=DECIMAL},
+		ship_evaluate =
+		#{shipEvaluate,jdbcType=DECIMAL},
+		evaluate_goods_id =
+		#{evaluateGoodsId,jdbcType=BIGINT},
+		evaluate_user_id =
+		#{evaluateUserId,jdbcType=BIGINT},
+		of_id = #{ofId,jdbcType=BIGINT},
+		reply_status = #{replyStatus,jdbcType=INTEGER},
+		addeva_status =
+		#{addevaStatus,jdbcType=INTEGER},
+		addeva_time =
+		#{addevaTime,jdbcType=TIMESTAMP},
+		evaluate_admin_info =
+		#{evaluateAdminInfo,jdbcType=LONGVARCHAR},
+		evaluate_info =
+		#{evaluateInfo,jdbcType=LONGVARCHAR},
+		goods_spec =
+		#{goodsSpec,jdbcType=LONGVARCHAR},
+		reply =
+		#{reply,jdbcType=LONGVARCHAR},
+		addeva_info =
+		#{addevaInfo,jdbcType=LONGVARCHAR},
+		addeva_photos =
+		#{addevaPhotos,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.Evaluate">
+		update
+		shop_evaluate
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		description_evaluate
+		= #{descriptionEvaluate,jdbcType=DECIMAL},
+		evaluate_buyer_val =
+		#{evaluateBuyerVal,jdbcType=INTEGER},
+		evaluate_photos =
+		#{evaluatePhotos,jdbcType=VARCHAR},
+		evaluate_status =
+		#{evaluateStatus,jdbcType=INTEGER},
+		evaluate_type =
+		#{evaluateType,jdbcType=VARCHAR},
+		goods_num =
+		#{goodsNum,jdbcType=INTEGER},
+		goods_price =
+		#{goodsPrice,jdbcType=VARCHAR},
+		service_evaluate =
+		#{serviceEvaluate,jdbcType=DECIMAL},
+		ship_evaluate =
+		#{shipEvaluate,jdbcType=DECIMAL},
+		evaluate_goods_id =
+		#{evaluateGoodsId,jdbcType=BIGINT},
+		evaluate_user_id =
+		#{evaluateUserId,jdbcType=BIGINT},
+		of_id = #{ofId,jdbcType=BIGINT},
+		reply_status = #{replyStatus,jdbcType=INTEGER},
+		addeva_status =
+		#{addevaStatus,jdbcType=INTEGER},
+		addeva_time =
+		#{addevaTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="findListByVo" resultMap="queryEvaluateGoodsMap">
+		select
+		se.*,
+		sg.goods_name,
+		uc.nickname
+		from shop_goods sg,shop_evaluate
+		se
+		left join user_customer uc
+		on uc.uid = se.evaluate_user_id
+		where 1=1
+		and se.evaluate_goods_id = sg.id
+		and se.evaluate_type = 'goods' and
+		se.evaluate_status = 0
+		<if test="vo.replyStatus!= null ">
+			and se.reply_status = #{vo.replyStatus,jdbcType=INTEGER}
+		</if>
+		<if test="vo.storeId != null ">
+			and sg.goods_store_id = #{vo.storeId,jdbcType=BIGINT}
+		</if>
+		<if test="vo.goodsName != null and vo.goodsName!=''">
+			and sg.goods_name = #{vo.goodsName,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.evaluateBuyerVal != null ">
+			and se.evaluate_buyer_val =
+			#{vo.evaluateBuyerVal,jdbcType=INTEGER}
+		</if>
+		order by se.add_time desc
+	</select>
+
+	<select id="getEvaluate" resultMap="ResultMapWithBLOBs">
+		SELECT * FROM shop_evaluate WHERE
+		evaluate_goods_id=#{goodsId,jdbcType=BIGINT} AND
+		evaluate_user_id=#{userId,jdbcType=BIGINT} AND
+		of_id=#{ofId,jdbcType=BIGINT}
+	</select>
+</mapper>

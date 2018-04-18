@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">运营商公告管理</h3>
+  <div class="nav_list">
+  	<ul>
+      <li><a href="$!webPath/admin/operator_notice_list.htm" ><b>运营商公告管理</b></a></li>
+      <li><a href="#" class="this"><b>公告详情</b></a></li>
+    </ul>
+  </div>
+  <div class="orderdetail">
+    <div class="orderhh">公告详情</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">运营商:</span><span>$!obj.operatorName</span></li>
+        <li><span class="ordertitle"></span><span></span></li>  
+        <li><span class="ordertitle">公告标题:</span><span>$!obj.ntTitle</span></li>
+        <li><span class="ordertitle"></span><span></span></li>  
+        <li><span class="ordertitle">公告排序:</span><span>$!obj.ntSort</span></li>
+        <li><span class="ordertitle"></span><span></span></li>  
+
+         #if($!obj.ntStatus==0)
+          #set($ntStatus="等待审核")
+        #end
+        #if($!obj.ntStatus==1)
+          #set($ntStatus="审核通过")
+        #end
+        #if($!obj.ntStatus==-1)
+         #set($ntStatus="审核失败")
+        #end 
+        <li><span class="ordertitle">审核状态:</span><span>$ntStatus</span></li>
+        <li><span class="ordertitle"></span><span></span></li>  
+
+        <li><span class="ordertitle">公告内容:</span><span>$!obj.ntContent</span></li>
+        <li><span class="ordertitle"></span><span></span></li>  
+
+      </ul>
+    </div>
+    
+
+
+  </div>
+  <div class="submit">
+    <input name="go" type="button" value="返回列表" onclick="window.location.href='$!webPath/admin/operator_notice_list.htm'" />
+  </div>
+
+</div>
+</body>
+</html>

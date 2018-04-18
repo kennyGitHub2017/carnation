@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html style="font-size:50px">
+<head>
+<title>向云尚商户付款</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=1.0">
+<meta name="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="email=no">
+<link href="$!{webPath}/resources/css/base.min.css" rel="stylesheet" type="text/css">
+<link href="$!{webPath}/resources/css/css.css?v=$!{version}" rel="stylesheet" type="text/css">
+<link href="$!{webPath}/resources/mch_wx_qr_pay/other.css?v=$!{version}" rel="stylesheet" type="text/css">
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.easing.min.js"></script>
+</head>
+<iframe id="__WeixinJSBridgeIframe_SetResult" style="display: none;"></iframe>
+<iframe id="__WeixinJSBridgeIframe" style="display: none;"></iframe>
+<style>
+       html,body{height: 100%;overflow:auto;}
+ </style>
+ <script type="text/javascript">
+    var jgGlobal={
+            screenWidth:window.innerWidth||document.documentElement.clientWidth,
+            screenHeight:window.innerHeight||document.documentElement.clientHeight,
+            isALlowTouchMove:true,
+            setFontSize:function(){
+                var sw=window.innerWidth||document.documentElement.clientWidth;
+                if (sw < 640) {
+                    document.documentElement.style.fontSize = parseInt(sw / 640 * 100) + "px";
+                }else{
+                    document.documentElement.style.fontSize="100px";
+                }
+            },
+            setTranslate:function(node, positionY,containCss, useAnimate) {
+                var cssText = [
+                    containCss,
+                    'display: block',
+                    'transform: translate3d(0, ' + positionY + 'px, 0)',
+                    '-webkit-transform: translate3d(0, ' + positionY + 'px, 0)',
+                ].join(';');
+                if (useAnimate) {
+                    cssText = [
+                        cssText,
+                        'transition: .5s transform ease',
+                        '-webkit-transition: .5s -webkit-transform ease'
+                    ].join(';');
+                }
+                node.style.cssText = cssText;
+            },
+            isTouchMove:function(){
+                var _this=this;
+                document.addEventListener("touchmove",function(e){
+                    if(!_this.isALlowTouchMove){
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                },false);
+                if (navigator.userAgent.toLowerCase().indexOf('firefox')>=0)
+                {
+
+                    addEventListener('DOMMouseScroll',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }else{
+                    addEventListener('mousewheel',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }
+            },
+            init:function(){
+                this.isTouchMove();
+                this.setFontSize();
+            }
+        }
+        jgGlobal.init();
+        jgGlobal.isALlowTouchMove=false;
+        window.onresize = function () {
+            jgGlobal.setFontSize();
+        }
+    </script>
+<body>
+    <div class="container pagecontainer">
+        <div class="merchant_name">$!{storeBo.storeName}</div>
+		<div class="amountMoney">
+			<span class="words">金额</span><span class="fn-rmb">&yen;</span>
+			<span class="amountDiv">
+				<span id="addmount">$!{money}</span>
+				<span class="pointer">|</span>
+				<label for="addmount">请询问商家后输入消费金额</label>
+			</span>
+		</div>
+		<div class="empty"></div>
+ 		<div class="discount">
+			#set($groupDiscount=$!{storeBo.groupDiscount} * 10)
+			<div><span class="fl">商家折扣</span><span class="tr"><span id="discount" class="mright5">$!{groupDiscount}</span>折</span></div>
+			<div><span class="fl">实付金额</span><span class="tr color_green"><span class="fn-rmb mright5">&yen;</span><span id="actualPay">0</span></span></div>
+		</div>
+		#if($!payType=="wxpay")
+		#set($pay_provider="微信")
+		#elseif($!payType=="alipay")
+		#set($pay_provider="支付宝")
+		#elseif($!payType=="jgpay")
+		#set($pay_provider="")
+		#end
+   		<div class="provideText">由云尚提供$!pay_provider支付服务</div>
+		<a href="javascript:void(0)" id="submit"  #if(!$money)  data-disabled="true"class="disabled" #end>确认支付</a>
+		<img src="$!{webPath}/resources/img/qrcode@2x.png" class="qrcode">
+		<p class="qrtext"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAmVBMVEUAAADNzc3u7u7Q0NDY2NjNzc3Nzc3Ozs7R0dHR0dHNzc3Nzc3Ozs7Nzc3MzMzMzMzNzc3Ozs7Nzc3MzMzNzc3Nzc3Nzc3Ozs7Nzc3Nzc3Nzc3MzMzNzc3Nzc3Nzc3Ozs7Ozs7Ozs7R0dHNzc3Nzc3Ozs7MzMzNzc3Nzc3Nzc3Ozs7Nzc3Nzc3MzMzNzc3Nzc3Ozs7Nzc3Nzc1KIKGVAAAAM3RSTlMA9QMcCcD+QxcQeNJZOvKXf13d2M2QZz746+OrlIh7TkooI++bLbq3tKczx7GDnnBhZVa/jhMPAAABr0lEQVQoz23R146jQBCF4b+bbnI0wQaDcw5jz7z/w20J2V7Nar8LWqK6ilOCj8390KVtdcvX/Gt5cA9D43nPhXWrH37ZdMOGFydMbw4f0xphVmHdhysj5dM24eWSPsDP0va4251alfmQby+vke0ARWo9jdCeVTEMrQ/iOIdQFYCfJAYoVCiPYMypHDhM4adyVdogEullFIUgzHyWvzNKr49Xwdr1kWHMyz2MvAxshu+uyS1GXYhne4I6iuoAR3lMlcEuOIYsW02UE0xsUdhJwP2KbpeEB6KY/IbjOvRWg7a1fMlwWhBHbKdkGdMUyhjPIy7Rs8v4bsvCcBtvaXfPeWDVgTTUX5gQMYkJjzI5wD54VuO1Xc8omQXMa9kcJhLjJEvIllMQ+toTqER2kuKebMfe1bycy4BFCWUDWo4nTQUBo8FhrVbjcBh3+urZzN7NzmSHrnpMA02EBJTjXevOmkcXcI+gyrnMfAn4LoaalVqyUR6rNGA3x6QeH0v1jZafznXAyJ2i03xMvqHvfIrUJy/B3vlLw2K7ltQxjiSn8fnFJpjoC84n/iu5Gilu+PgDsvAeMdmWKkkAAAAASUVORK5CYII=" />长按二维码识别下载云尚大健康APP</p>
+		<p class="download_app_text">恭喜您成为云尚大健康的一员</p>
+		<p class="download_app_text">赶紧扫码下载云尚大健康APP</p>
+    </div>
+	<div class="vip_login_container">
+        <div class="model"></div>
+        <div class="paying">
+	        <div class="bg"></div>
+	        <span class="des">云尚支付</span>
+	        <span class="cirContainer">
+	            <span class="cir fir"></span><span class="cir"></span><span class="cir"></span>
+	        </span>
+	    </div>
+        <div class="loginBox">
+            <div class="title">
+                会员登录
+                <a href="javascript:void(0)" class="close">×</a>
+            </div>
+            <div class="input_holder">
+                <input id="phone_username" type="number" placeholder="请输入手机号" value="$!{phone}" />
+                <span class="tips">手机号格式不正确</span>
+            </div>
+            <div class="input_holder">
+                <input id="pwd"  type="password" placeholder="请输入密码" />
+                <span class="tips">密码不能为空</span>
+            </div>
+            <a href="javascript:void(0)" id="pay_userlogin" class="btn_login">登录</a>
+        </div>
+        <div class="pswBox">
+            <div class="title">
+                请输入支付密码
+                <a href="javascript:void(0)" class="close">×</a>
+            </div>
+            <span class="fn-rmb psw-rmb">￥<span id="payConfrimMoney"></span></span>
+            <div class="pswPoint">
+                <ul class="fn-clear">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+        <div class="pswErrorBox fn-clear">
+            <div class="title">支付密码错误，请重试</div>
+            <div class="aContainer"><a href="javascript:void(0)" class="pswRetry">重试</a></div>
+            <div class="aContainer"><a href="javascript:void(0)" class="pswForget">忘记密码</a></div>
+        </div>
+    </div>
+	
+	<div id="keyboardContainer">
+		<table id="keyboard" border="0" cellpadding="0" cellspacing="0">
+			<tbody>
+				<tr>
+					<td data-key="1">1</td>
+					<td data-key="2">2</td>
+					<td data-key="3">3</td>
+				</tr>
+				<tr>
+					<td data-key="4">4</td>
+					<td data-key="5">5</td>
+					<td data-key="6">6</td>
+				</tr>
+				<tr>
+					<td data-key="7">7</td>
+					<td data-key="8">8</td>
+					<td data-key="9">9</td>
+				</tr>
+				<tr>
+					<td
+						style="background-color: #f1f1f1; font-size: 18px; font-weight: 400;"
+						data-key=".">.</td>
+					<td data-key="0">0</td>
+					<td
+						style="background-color: #f1f1f1; font-size: 18px; font-weight: 400;"
+						data-key="del">删除</td>
+				</tr>
+			</tbody>
+		</table>
+				
+	</div>
+        
+	
+	<div id="alertBg" class="alert-bg"></div>
+	<div id="payFailAlert" class="alert-model">
+		<div class="alert">
+			<div class="alert-title">付款失败</div>
+			<div class="alert-content"></div>
+			<div class="alert-button" style="color:#000">我知道了</div>
+		</div>
+	</div>
+	<div id="discountNotification" class="alert-model">
+		<div class="alert">
+			<div class="alert-content">
+				<p>优惠金额</p>
+				<p>
+					<span id="discountAmount"></span><span>&nbsp;元</span>
+				</p>
+				<p
+					style="margin-top: 0.25rem; font-size: 14px; color: black; color: #871b00;">云尚福利社又替我们省钱啦</p>
+				<button id="discountConfirm">好哒</button>
+			</div>
+		</div>
+	</div>
+	<div class="smalltips" id="smalltips">
+    </div>
+	<script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script>
+		var weixinSdkConf = JSON
+				.parse('{"appId":"$!{appId}","timestamp":$!{timestamp},"nonceStr":"$!{nonceStr}","signature":"$!{signature}"}');
+		wx.config({
+			debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			appId : weixinSdkConf.appId, // 必填，公众号的唯一标识
+			timestamp : weixinSdkConf.timestamp, // 必填，生成签名的时间戳
+			nonceStr : weixinSdkConf.nonceStr, // 必填，生成签名的随机串
+			signature : weixinSdkConf.signature,// 必填，签名，见附录1
+			jsApiList : [ 'hideOptionMenu', 'closeWindow', 'chooseWXPay' ]
+		// 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+		});
+		wx.ready(function() {
+			wx.hideOptionMenu();
+		});
+	</script>
+	<script src="$!{webPath}/resources/wx_red_package/images/zepto.min.js"></script>
+	<script src="$!{webPath}/resources/mch_wx_qr_pay/common.js?v=$!{version}"></script>
+	<script src="$!{webPath}/resources/mch_wx_qr_pay/weixin.js?v=$!{version}"></script>
+	<script type="text/javascript">
+        jQuery (document).ready(function(){
+            //支付密码错误重试
+            jQuery (".pswErrorBox .pswRetry").click(function(){
+                jQuery (".pswPoint ul li").html("");
+                jQuery (".pswErrorBox").hide();
+                jQuery (".pswBox").show();
+            });
+            jQuery (".container .confirmPay").click(function(){
+                jQuery (".input_holder input").val("");
+                jQuery (".pswErrorBox").show();
+                jgGlobal.setTranslate(jQuery (".vip_login_container")[0],0,"height:"+jgGlobal.screenHeight+"px",true);
+            });
+            
+            jQuery('.amountDiv').on('touchstart',function(e){
+            	$("#keyboardContainer").show();
+            	$(".amountDiv label").hide();
+            	e.stopPropagation();
+            });
+            jQuery('#keyboardContainer').on('touchstart',function(e){
+            	e.stopPropagation();
+            });
+            
+            jQuery('.container').on('touchstart',function(){
+            	$("#keyboardContainer").hide();
+            	if($("#addmount").html()==""){
+            		$(".amountDiv label").show();
+            	}  
+            });
+        });
+    </script>
+
+	 <input id='sellerId' type="hidden" value ="$!{sellerBo.uid}" />
+	 <input id='code' type="hidden" value ="$!{code}" />
+	 <input id='payType' type="hidden" value ="$!{payType}" />
+	 <input id='qrPayUrl' type="hidden" value ="$!{webPath}/q/wx_qr_pay_self_order.htm" />     
+     <input id='serverName' type="hidden" value ="$!{serverName}" />
+
+     <input id='login_check' type="hidden" value ="$!{webPath}/wap/login_check.htm" />
+     <input id='pay_pwd_check' type="hidden" value ="$!{webPath}/wap/pay_pwd_check.htm" />
+
+     <input id='isPwdKeyBoard' type="hidden" value ="false" />
+     <input id='enteredPwd' type="hidden" value ="" />
+
+     <input id='logoinUserId' type="hidden" value ="" />
+	 <input id='uid' type="hidden" value ="$!{uid}" />
+	 <input id='openId' type="hidden" value ="$!{openId}" />
+	 
+	 <input id='userId' type="hidden" value ="$!{userId}" />
+</body>
+</html>

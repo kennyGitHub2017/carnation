@@ -1,0 +1,37 @@
+#*********************************来源任超 ,双倍积分设置2016-01-04*********BEGIN
+
+-- 双倍积分表 改为 系统设置表名称
+ALTER  TABLE act_double_score_set RENAME TO config_set;
+
+#*********************************来源任超 ,双倍积分设置2016-01-04*********end
+
+#*********************************来源任超 ,云币提现表加字段 2016-01-07*********BEGIN
+ ALTER TABLE `shop_predeposit_cash`  ADD COLUMN `cash_subbranch` varchar(255) DEFAULT NULL COMMENT '银行支行' AFTER `cash_user_id`; 
+ ALTER TABLE `shop_predeposit_cash`  ADD COLUMN `cash_relation` INT(1) default '0' COMMENT '提现类型0,web端1,APP端' AFTER `cash_subbranch`; 
+
+#*********************************来源任超 ,云币提现表加字段 2016-01-07*********end
+
+
+#*********************************陈舟 支付宝手机网页支付 2016-01-06*********BEGIN
+#修改支付宝wap支付方式
+UPDATE `shop_payment`
+SET safe_key = 'qxhdt2bfdyukljnhb5y2wz8r3jb1567x',partner = '2088911762988054',seller_email = 'jgyes@qq.com'
+WHERE mark = 'alipay_wap';
+
+# 添加支付方式
+ALTER TABLE `shop_qr_pay_order`   
+  ADD COLUMN `payment_id` BIGINT(20) NULL  DEFAULT 0 COMMENT '支付方式Id' AFTER `modify_time`,
+  ADD COLUMN `payment_type` TINYINT(4) NULL DEFAULT 0 COMMENT '支付方式 1-微信支付 2-支付宝 0-云币' AFTER `payment_id`;
+  
+# 添加用户输入的手机号、服务名称
+ALTER TABLE `shop_qr_pay_order`   
+  ADD COLUMN `phone` VARCHAR(20) NULL  DEFAULT '' COMMENT '手机' AFTER `payment_type`,
+  ADD COLUMN `server_name` VARCHAR(200) NULL DEFAULT '' COMMENT '服务名称' AFTER `phone`;
+ 
+# 将以前的支付方式默认改为微信
+UPDATE shop_qr_pay_order SET payment_id = (SELECT id FROM `shop_payment` WHERE mark = 'mch_wxqrpay' LIMIT 1),payment_type = '1';
+
+  
+
+#****************************************************************************END
+

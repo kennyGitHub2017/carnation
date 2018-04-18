@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>体检建议管理</title>
+
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type=text/css rel=stylesheet />
+
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('#startDate').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endDate').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  $('#groupId').val($!vo.groupId);
+  $('#using').val($!vo.using);
+});
+</script>
+</head>
+<body>
+	<div class="cont">
+		<h1 class="seth">体检建议管理</h1>
+		<div class="nav_list">
+			<ul>
+				<li><a href="$!webPath/admin/checkSuggest/pageList.htm"
+					class="this"><b>管理</b></a></li>
+				<li><a href="$!webPath/admin/checkSuggest/addPage.htm"><b>新增</b></a></li>
+			</ul>
+		</div>
+		
+		
+		
+		
+		 <form action="$!webPath/admin/checkSuggest/pageList.htm" method="post">
+			<input name="userId" type="hidden" id="userIda" value="$!vo.userId" />
+			<div class="search">
+				<ul>
+					<li>
+					
+						<span>关键字名</span> <span class="size200"> 
+							<input name="" type="text" id="name" value="" />
+						</span>
+					
+						<span>体检项目</span> <span class="size200">
+							<select	name="physicalTypeId" id="using">
+									<option value="">--请选择--</option>
+									#foreach($typeList in $typeList)
+									<option value="$!typeList.id">$!typeList.typeName</option>
+									#end
+							</select>
+						</span>
+					
+						<span>建议分类</span>
+						<span class="webname"> <select name="suggestType"
+								id="groupId">
+									<option value="">--请选择--</option>
+									<option value="1">饮食</option>
+									<option value="2">运动</option>
+									<option value="3">生活</option>
+									<option value="4">医疗</option>
+									<option value="5">其他</option>
+							</select>
+						</span>
+					
+					<span>是否开启</span> <span class="size200"> 
+						<select	name="isEnabled" id="using"> 
+								<option value="">--请选择--</option>
+								<option value="1">是</option>
+								<option value="0">否</option>
+						</select>
+					</span>
+					
+				<span> <input name="" type="submit" value="搜索"
+							style="cursor: pointer;" class="search_btn" />
+					</span></li>
+				</ul>
+			</div>
+		</form> 
+		
+		
+			<FORM name="ListForm" id="ListForm" action="$!webPath/admin/checkSuggest/pageList.htm" method="post">
+			<div class="fshoptb">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					class="fshop_table">
+					<tr>
+						<th width="10%"><span class="form_btna">序号</span></th>
+						<th><span class="form_btna">体检项目</span></th>
+						<th><span class="form_btna">结果说明</span></th>
+						<th><span class="form_btna">建议分类</span></th>
+						<th><span class="form_btna">建议内容</span></th>
+						
+						
+						
+						<th><span class="form_btna">排序</span></th>
+						<th><span class="form_btna">是否启用</span></th>
+			
+						<th><span class="form_btna">操作</span></th>
+					</tr>
+					
+					#foreach($objs in $objs)
+					<tr>
+						<td align="center">$!objs.id</td>
+						<td align="center">$!objs.physicalTypeName</td>
+						<td align="center">
+						#foreach($sKey in ${physicalResult.keySet()})
+						#if($!sKey==$!objs.resultType) ${physicalResult.get($sKey)} #end
+						#end
+						</td>
+						<td align="center">
+						#foreach($sKey in ${suggestType.keySet()})
+						#if($!sKey==$!objs.suggestType) ${suggestType.get($sKey)} #end
+						#end
+						</td>
+						<td align="center">$!objs.content</td>
+						<td align="center">$!objs.priority</td>
+						
+						<td align="center">
+						#if($!objs.isEnabled  == 0) 否 #end 
+						#if($!objs.isEnabled  == 1) 是 #end
+						</td>
+						<td align="center">
+						<a class="blue" href='$!webPath/admin/checkSuggest/addPage.htm?id=$!objs.id&flag=1'>查看</a>
+						 <a class="blue" href="javascript:;" 
+						 onclick="if(confirm('确认要删除分类吗？'))window.location.href='$!webPath/admin/checkSuggest/deleteById.htm?id=$!objs.id'">删除</a>
+						</td>
+					</tr>
+					#end
+				</table>
+			</div>
+
+			<div class="operate_bar">
+
+
+				<div class="fenye">
+				<input name="apTitle" type="hidden" id="apTitle" value="$!vo.apTitle" />
+				<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+				 <input type="hidden" name="mulitId" id="mulitId" />
+				 <input name="adApId" type="hidden" id="adApId" value="$!vo.adApId" />
+				$!gotoPageFormHTML
+				</div>
+			</div>
+			
+		</FORM>
+	</div>
+</body>
+</html>

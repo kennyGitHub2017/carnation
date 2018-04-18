@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css"
+	type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<body>
+	<div class="cont">
+		<div class="nav_list">
+			<ul>
+				<li><a href="$!webPath/admin/user_collections_expert.htm?userId=$!userId" class="this"><b>专家列表</b></a>
+				</li>
+				<li><a href="$!webPath/admin/user_collections_post.htm?userId=$!userId"><b>帖子列表</b></a></li>
+				<li><a href="$!webPath/admin/user_collections_goods.htm?userId=$!userId"><b>商品列表</b></a>
+				<li><a href="$!webPath/admin/user_collections_seller.htm?userId=$!userId"><b>店铺列表</b></a>
+				<li><a href="$!webPath/admin/user_collections_service.htm?userId=$!userId"><b>服务列表</b></a>
+				</li>
+			</ul>
+		</div>
+<form action="$!webPath/admin/user_collections_expert.htm?userId=$!userId" id="ListForm" name="ListForm" method="post">
+<!--     <div class="search"> 
+      <span>收藏人昵称</span> <span class="size150">
+      <input name="nickName" type="text" id="userName"  value="$!nickName" />
+      </span> 
+      <span class="btn_search">
+      <input name="" type="submit"  value="搜索" style="cursor:pointer;"  class="search_btn"/>
+      </span> </div> -->
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="10%" align="center"><span class="form_btna">收藏人昵称</span></th>
+          <th width="10%" align="center"><span class="form_btna">专家姓名</span></th>
+          <th width="10%" align="center"><span class="form_btna">职称</span></th>
+          <th width="6%" align="center"><span class="form_btna">性别</span></th>
+          <th width="13%" align="center"><span class="form_btna">电话</span></th>
+          <th width="20%" align="center"><span class="form_btna">注册邮箱</span></th>
+          <th width="10%" align="center"><span class="form_btna">收藏时间</span></th>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+        <td>$!obj.nickName</td>
+          <td class="lightred">$!obj.name</td>
+          <td class="lightred">$!obj.title</td>
+          <td class="lightred">
+          #if($!obj.sex=='1')
+                              男
+          #elseif($!obj.sex=='2')
+                              女                    
+          #end
+          </td>
+          <td class="lightred">$!obj.mobile</td>
+          <td align="center">$!obj.email</td>
+          <td align="center">$!CommUtil.formatShortDate($!obj.createTime)</td>
+        </tr>
+        #end
+      </table>
+    </div>
+    <div class="operate_bar">
+      <div class="fenye">
+        <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+        <input name="mulitId" type="hidden" id="mulitId" />
+        $!gotoPageFormHTML </div>
+    </div>
+  </form>
+	</div>
+</body>
+</html>

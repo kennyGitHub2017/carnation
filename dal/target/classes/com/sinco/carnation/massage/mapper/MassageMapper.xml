@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.massage.mapper.MassageMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.massage.model.Massage">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="advice_time" property="adviceTime" jdbcType="INTEGER" />
+		<result column="all_time" property="allTime" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="LONGVARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="last_update_user" property="lastUpdateUser"
+			jdbcType="VARCHAR" />
+		<result column="last_update_time" property="lastUpdateTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, user_id, advice_time,all_time, remark,
+		create_time,last_update_time
+	</sql>
+	
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from massage
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="selectByUserId" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from massage
+		where user_id = #{userId,jdbcType=BIGINT}
+	</select>
+	
+	<insert id="insertSelective" parameterType="com.sinco.carnation.massage.model.Massage"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into massage
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="adviceTime != null">
+				advice_time,
+			</if>
+			<if test="allTime != null">
+				all_time,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="lastUpdateUser != null">
+				last_update_user,
+			</if>
+			<if test="lastUpdateTime != null">
+				last_update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="adviceTime != null">
+				#{adviceTime,jdbcType=INTEGER},
+			</if>
+			<if test="allTime != null">
+				#{allTime,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastUpdateUser != null">
+				#{lastUpdateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateTime != null">
+				#{lastUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.massage.model.Massage">
+		update massage
+		<set>
+			<if test="adviceTime != null">
+				advice_time = #{adviceTime,jdbcType=INTEGER},
+			</if>
+			<if test="allTime != null">
+				all_time = #{allTime,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				remark =#{remark,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="createUser != null">
+				create_user =#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time =#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastUpdateUser != null">
+				last_update_user =#{lastUpdateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateTime != null">
+				last_update_time =#{lastUpdateTime,jdbcType=TIMESTAMP}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

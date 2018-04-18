@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script src="$!webPath/resources/js/jquery.viewpic.js"></script>
+<script>
+//options为编辑配置属性
+var options = {
+        cssPath : '$!webPath/resources/editor/themes/default/default.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '700px',
+		height:'400px',
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+};
+jQuery(document).ready(function(){
+//
+  jQuery("#theForm").validate({
+	ignore: "",						  
+    rules:{
+      groupTitle:{required :true},
+      wjThemeID:{required:true},
+      pid:{required:true}
+	 },
+	messages:{
+	  groupTitle:{required:"题组名称不能为空"},
+	  wjThemeID:{required:"所属主题不能为空"},
+	  pid:{required:"附属题组不能为空"}
+	}
+  });
+  //
+  jQuery("#class_id").val("$!obj.class_id");
+  jQuery("#serviceType").val("$!obj.serviceType");
+  jQuery(":radio[id=ispush][value=$!obj.ispush]").attr("checked",true);
+  jQuery(":radio[id=state][value=$!obj.state]").attr("checked",true);
+  jQuery(":radio[id=type][value=$!obj.type]").attr("checked",true);
+  
+  var option$=jQuery("#wjThemeID option:selected");  //获取选中的项
+  var optionVal = option$.val();
+  if(optionVal!=null){
+	  jQuery.ajax({
+		  type : "get",  
+	      url : "$!webPath/admin/wj_groupByThemeID_Ajax.htm",  
+	      dataType:"json",  
+	      data:{themeID:optionVal},
+	      success : function(msg) {  
+	           var json = msg;
+	           var jsonArr = msg.result;
+	           var groupObj = jQuery("#pid");
+	           var htmlStr1 = "<option value=\"\">请选择</option><option value=\"0\">父级</option>";
+	           var htmlStr2 = "";
+	           var pid = parseInt(jQuery("#gpid").val());
+	           for(var i = 0;i<jsonArr.length;i++){
+	        	  var id = jsonArr[i].id;
+	        	  var title = jsonArr[i].title;
+	        	  if(id==pid){
+	        		  htmlStr2+="<option value=\""+id+"\" selected='selected'>"+title+"</option>";
+	        	  }else{
+	        		  htmlStr2+="<option value=\""+id+"\">"+title+"</option>";
+	        	  }
+	        	 
+	           }
+	          var str =  htmlStr1+htmlStr2;
+	          groupObj.html("");
+	          groupObj.html(str);
+	      }  
+	  });
+  }
+  	
+  jQuery("#wjThemeID").change(function(){
+	  var themeID_ = jQuery("#wjThemeID").val();
+	  jQuery.ajax({
+		  type : "get",  
+	      url : "$!webPath/admin/wj_groupByThemeID_Ajax.htm",  
+	      dataType:"json",  
+	      data:{themeID:themeID_},
+	      success : function(msg) {  
+	           var json = msg;
+	           var jsonArr = msg.result;
+	           var groupObj = jQuery("#pid");
+	           var htmlStr1 = "<option value=\"\">请选择</option><option value=\"0\">父级</option>";
+	           var htmlStr2 = "";
+	           for(var i = 0;i<jsonArr.length;i++){
+	        	  var id = jsonArr[i].id;
+	        	  var title = jsonArr[i].title;
+	        	  htmlStr2+="<option value=\""+id+"\">"+title+"</option>"
+	           }
+	          var str =  htmlStr1+htmlStr2;
+	          groupObj.html("");
+	          groupObj.html(str);
+	      }  
+	  });
+  });
+});
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">新增题组</h1>
+  <div class="nav_list">
+ 		<ul>
+  			<li>
+  				<a href="$!webPath/admin/wj_Group_list.htm">
+  					<b>管理</b>
+  				</a>
+  			</li>
+ 			<li>
+ 				<a href="$!webPath/admin/wj_group_add.htm" #if(!$!edit) class="this" #end><b>新增</b></a> </li>
+  				#if($!edit)
+  					<li> 
+  						<a href="javascript:void(0);" class="this">
+  							<b>编辑</b>
+  						</a>
+  					</li> 
+  				#end 
+  			</span> 
+  		</ul>
+  </div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/do_group_add.htm" method="POST"  enctype="multipart/form-data">
+	    <input name="id" type="hidden" id="id" value="$!wenJuanGroup.id" />
+	    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+	    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/wj_Group_list.htm" />
+	    <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/wj_group_add.htm" />
+	    <input name="gpid" type="hidden" id="gpid" value="$!wenJuanGroup.pid" />
+   <div class="edit">
+    <div class="editul setcont">
+      <ul class="set1">
+        <li class="setcont_bg">
+        	<strong class="sred">*</strong>
+        	题组名称
+        </li>
+        <li>
+        	<span class="webname">
+          		<input name="groupTitle" type="text" id="groupTitle" value="$!wenJuanGroup.groupTitle" size="40" />
+            </span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">
+        	<strong class="sred">*</strong>
+        	所属主题
+        </li>
+        <li>
+        	<span class="webname">
+          		<select name="wjThemeID" id="wjThemeID" >
+          				<option value="">请选择</option>
+          			#foreach($!theme in $!themeList)
+          				<option value="$!theme.id"
+          				#if($!wenJuanGroup.wjThemeID==$!theme.id)
+          				selected="selected"
+          				#end>
+          				$!theme.themeName</option>
+          			#end
+          		</select>
+            </span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">
+        	<strong class="sred">*</strong>
+        	附属题组
+        </li>
+        <li>
+        	<span class="webname">
+          		<!-- <input name="themeName" type="text" id="themeName" value="$!obj.themeName" size="40" /> -->
+          		<select name="pid" id="pid" >
+          			<option value="">请选择</option>
+          			<option value="0">父级</option>
+          		</select>
+            </span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">
+        	排序
+        </li>
+        <li>
+        	<span class="webname">
+          		<input name="groupIndex" type="text" id="groupIndex" value="$!wenJuanGroup.groupIndex" size="40" />
+            </span>
+        </li>
+      </ul>
+	  <ul class="set1">
+        <li class="setcont_bg">
+        	<strong class="sred">*</strong>
+        	是否开启
+        </li>
+        <li>
+        	 <span class="webnamesec sizese">
+             <input name="isDeleted" type="radio" id="ispush" value="0" checked="checked" />是  
+             <input name="isDeleted" type="radio" id="ispush" value="1" />否
+       </ul>
+    </div>
+    </div>
+  </form>
+  <div class="submit">
+   		<span class="pad120"><input name="save" type="button" 
+   			value="提交" onclick="saveForm()" /></span>
+  </div>
+</div>
+</body>
+</html>

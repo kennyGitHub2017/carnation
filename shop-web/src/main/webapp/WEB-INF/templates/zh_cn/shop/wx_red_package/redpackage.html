@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>抢红包</title>
+    <meta charset="UTF-8" />  
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Expires" content="-1">           
+    <meta http-equiv="Cache-Control" content="no-cache">           
+    <meta http-equiv="Pragma" content="no-cache">         
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	
+	 <link href="$!webPath/resources/style/app/css/css.css" rel="stylesheet" />
+	
+<!-- 	<link href="$!webPath/resources/style/app/css/style.css" rel="stylesheet" type="text/css" /> -->
+	<link rel="stylesheet" href="$!webPath/resources/style/app/css/csshake.min.css">
+	<link rel="stylesheet" href="$!webPath/resources/style/app/css/redstyle.css">
+	
+	<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <link href="$!webPath/resources/style/app/css/jquery.dialogbox.css" rel="stylesheet" />
+    <script src="$!webPath/resources/js/redpackage/jquery-1.11.2.min.js"></script>
+    <script src="$!webPath/resources/js/redpackage/jquery.dialogBox.js"></script>
+	
+    <script src="$!webPath/resources/js/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+    
+     <!-- 弹出框特效 -->
+<!--     <script src="$!webPath/resources/js/jAlert/jAlert-v3.js"></script>
+    <script src="$!webPath/resources/js/jAlert/jAlert-functions.js"></script>
+    <link href="$!webPath/resources/js/jAlert/jAlert-v3.css" rel="stylesheet"> -->
+    
+    <script type="text/javascript">
+        setFontSize();
+        window.onresize = function () {
+            setFontSize();
+        }
+        function setFontSize() {
+            var screenWidth = document.documentElement.clientWidth||document.body.clientWidth;
+            if (screenWidth < 750) {
+                document.documentElement.style.fontSize = parseInt(screenWidth / 750 * 100) + "px";
+            }
+        }    
+        
+        function alertgz(){
+        	var h=window.innerHeight||document.documentElement.clientHeight;
+            var w = document.documentElement.clientWidth||document.body.clientWidth;
+            if(w>750) w=750;
+            $(".hdgz").show();
+            $(".hdgz").css("top",(h-$(".hdgz").height())/2);
+        	$(".model").css("top",window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0);
+            
+        	$(".model").show();
+        	$("body").addClass("ovfHiden");
+        }
+        $(document).ready(function(){
+        	
+        	$(".hdgz .closegz").click(function(){
+        		console.log(1);
+        		$(".model").hide();
+        		$("body").removeClass("ovfHiden");
+        		$(".hdgz").hide();
+        	});
+        	
+        	$(".rules").click(function(){
+        		alertgz();        		
+        	});
+        });
+        
+        function alertbox(str,bl){
+        	if(str!="") $(".pdiv").html(str);
+        	var h=window.innerHeight||document.documentElement.clientHeight;
+            var w = document.documentElement.clientWidth||document.body.clientWidth;
+            if(w>750) w=750;
+            $(".downloadlink").removeClass("btn_ok");
+            if(bl){//关闭
+            	$(".downloadlink").attr("href","javascript:void(0)").html("确定");
+            	$(".downloadlink").addClass("btn_ok");
+            }
+            $(".alert").css("top",(window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0)+h/2-parseInt(w / 750 * 100));
+        	$(".model").css("height",$(document).height());
+            $(".alert").addClass("bouncein");
+        	$(".model").show();
+        	$("body").addClass("ovfHiden");
+        }
+        $(document).ready(function(){
+        	
+        	$(".alert .close,.btn_ok").click(function(){
+        		$(".model").hide();
+        		$("body").removeClass("ovfHiden");
+        		$(".alert").removeClass("bouncein");
+        	});
+        });
+    </script>
+   <style type="text/css">
+        .dialog-box-container{
+	        background: url($!webPath/resources/style/app/images/hdgz.png) no-repeat;
+	        width:95%;
+	        height:697/619*0.95*100%;
+	        box-shadow: 0 0 0px #bbb;
+		    
+        }
+    </style>
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#btn-custom-size').click(function () {
+            $('#custom-size-dialogBox').dialogBox({
+            	width: 619,
+                //弹出层宽度
+                height: 697,
+                //弹出层高度
+                autoSize: false,
+                //是否自适应尺寸,默认自适应
+                autoHide: false,
+                //是否自自动消失，配合time参数共用
+                time: 3000,
+                //自动消失时间，单位毫秒
+                zIndex: 99999,
+                //弹出层定位层级
+                hasMask: true,
+                //是否显示遮罩层ur
+                hasClose: true,
+                //是否显示关闭按钮
+                hasBtn: false,
+                //是否显示操作按钮，如取消，确定
+                confirmValue: null,
+                //确定按钮文字内容
+                confirm: function() {},
+                //点击确定后回调函数
+                cancelValue: null,
+                //取消按钮文字内容
+                cancel: function() {},
+                //点击取消后回调函数，默认关闭弹出框
+                effect: 'fade',
+                //动画效果：fade(默认),newspaper,fall,scaled,flip-horizontal,flip-vertical,sign,
+                type: 'normal',
+                title: ' ',
+                //content: '<h4>云尚红包生效时间</h4>自抢到红包时起生效，自抢到红包活动过期未领取，红包自动失效，请及时领取红包。<br/><h4>云尚红包活动使用规则</h4>Q:云尚的云豆有什么？<br/>A:云尚的云豆可以在云尚平台上购买云尚商品和服务。<br/><h4>云尚红包活动的领取规则</h4>在活动期间，用户抢到红包后，输入手机号后即可领取，每个用户（手机号）限领1次，如该手机号未注册云尚帐号，需注册才红包可领取。云尚红包一经领取，不可删除，不可转赠。由于领取人数多，可能出现云豆未即时到账的情况，云尚将在24小时内自动为您充值，请稍后查看，客服电话：4008-355-488。<br/><h4>云尚红包如何查看和使用?</h4>未安装云尚客户端用户需下载，登录云尚客户端后，点击首页左上角头像进入个人中心即可看到您的云豆。<br/>本活动最终解释权归云尚所有。若有其他问题，请致电客服热线：xxxxxxxx'
+            });
+        	$(".dialog-box-close").html('');
+        })
+    });
+	</script>
+		
+		
+<script type="text/javascript">
+    $(document).ready(function() {
+    	$('.download,.downloadlink').click(function(){
+   		 window.location.href="http://shop.ysysgo.com/mobile_register.htm?invitationCode="+$("#invitationCode").val();
+  	 	});
+    	
+   // 点击redbutton按钮时执行以下全部
+     $('.redbutton').click(function(){
+        var redstatus="-1";	 
+        $.ajax({
+             type: "post",
+             url: "$!webPath/find_redpackage_status.htm",
+             data:"id=$!id",
+             dataType: "json",
+             async:false,//使用同步的Ajax请求
+             success: function (falg) {
+		   if(falg=="1"){
+			   alertbox("矮油，别急，红包还有一会才到达战场，来来来，先坐下思考思考人生。");  
+		    return;
+		   }else if(falg=="2"){
+			   alertbox("别挤别挤，人家红包还没塞够呢，只有下载了云尚APP才能第一时间知道消息哟。");  
+		    return;
+		   }else if(falg=="3"){
+			   alertbox("哎呀，你怎么才来呀，我现在一毛钱都没有了，赶紧下载云尚APP，不要再错过下一波。");  
+			return;
+		   }else if(falg=="4"){
+			   alertbox("已到时间段：别挤别挤，人家红包还没塞够呢，只有下载了云尚APP才能第一时间知道消息哟。");  
+			return;
+		   }else if(falg=="5"){
+			   alertbox("亲爱哒，不要再戳我啦，红包已存，赶紧下载云尚APP查看钱包吧。不要忘记分享给你的小伙伴哟！");  
+				return;
+		   }else if(falg=="-1"){
+			   alertbox("该活动红包不存在！");  
+				return;
+		   }else  if(falg=="0"){ 
+			   redstatus="0";//红包状态正常  
+		   }
+						  
+	         },error: function (XMLHttpRequest, textStatus, errorThrown) { 
+	   	      showMessage(errorThrown,false); 
+	      }
+	   });
+        
+    	 
+   	 
+    //alert(redstatus);   
+    if(redstatus=="0"){//红包状态正常      
+	    $.ajax({
+              type: "post",
+              url: "$!webPath/get_redpackage.htm",
+              data:"id=$!id",
+              dataType: "json",
+              async:false,//使用同步的Ajax请求
+              success: function (result) {
+           	   if(result.code=="200"){
+           		  $.ajax({ type: "POST",url: '/write_url_key.htm',async: false, //设为false就是同步请求
+                  cache: false,success: function (notice) {}});
+       		      window.location.href="$!webPath/mobile_redpackage.htm?id=$!id"+"&invitationCode="+$("#invitationCode").val();
+           	   }else if(result.code=="600"){
+           			alertbox("哎呀，你怎么才来呀，我现在一毛钱都没有了，赶紧下载云尚APP，不要再错过下一波！",true);   
+           	   }else{
+           			alertbox("服务器错误！",false); 
+       	       } 
+              },error: function (XMLHttpRequest, textStatus, errorThrown) { 
+           	      showMessage(errorThrown,false); 
+              }
+          });
+    }	        
+		   
+   });
+});
+
+//消息框
+function showMessage(message,status){ //message 弹出文本 ,status true 下载 false 无下载
+	var theme ='red';//样式
+	var title='云尚';
+	var buttonOne='下载云 e 生 APP';
+	var buttonTwo='确定';
+	var buttonTheme='red';//按钮样式
+    if(status==true){
+    	
+    	 $.jAlert({
+             'title':title, 
+             'content':"<span style='font-size:20px;color:#ffffff'>"+message+"</span><div><br/><hr style='border-top:0.1px solid #FDC9CE;'></div>", 
+ 	         'btns': [
+ 		        		{'text':buttonOne, 'theme':buttonTheme ,'onClick': function(e, btn){
+ 					           e.preventDefault();
+ 					           window.location.href="http://static.ysysgo.com/static/platform/appDownload.jsp";
+ 					           return false;
+ 				           }}
+ 			        ],'theme': theme
+   		});	
+    	 
+    }else{
+    	
+    	$.jAlert({
+            'title':title, 
+            'content':"<span style='font-size:20px;'>"+message+"</span><div><br/><hr style='border-top:0.1px solid #FDC9CE;'></div>", 
+	        'btns': [
+		        		{'text':buttonTwo, 'theme':buttonTheme}
+			        ],'theme': theme
+  		});	
+    }
+}
+    </script>
+    
+    <script type="text/javascript" src="$!webPath/resources/wx_red_package/images/jweixin-1.0.0.js"></script>    
+    <script type="text/javascript" src="$!webPath/resources/wx_red_package/images/wx_share.js?v=12"></script> 
+
+    <!-- 微信分享 -->    
+    <script>
+    jQuery(document).ready(function(){ 
+	    wxConfig('${appId}',${timestamp},'${nonceStr}','${signature}');
+	    
+	    var title='云尚诚邀历届美猴王，分享心路历程';
+	    var desc='分享事小，撒钱事大。看猴子心底的故事，抢猴王手里的红包。';
+	    var link='$!webPath${url}';
+	    var imgUrl='$!webPath/resources/wx_red_package/images/shareico1.jpg';
+	    wxReady(title,desc,link,imgUrl);
+    });
+    </script>
+
+</head>
+<body>
+<div class="wrapper">
+    <div class="top">
+        <p class="title1">一年&nbsp;365&nbsp;天&nbsp;就等<span class="yellow">这一天!</span></p>
+        <p class="title2"><span>2016</span>红包第一波</p>
+        <p class="title3"><span class="yellow">百万</span>大派送</p>
+        <p class="title4">元旦节果然还是要和红包最配!</p>
+    </div>
+    <div class="center">
+        <div class="redbutton">抢</div>
+    </div>
+
+    <div class="quanDiv">
+        <div class="bg"></div>
+        <div class="quan">
+            <span class="leftcir"></span>
+            <span class="rightcir"></span>
+            <div class="title">
+                <a href="javascript:void(0)" class="rules">[活动规则]</a>
+                <a href="javascript:void(0)" class="download">下载云<span>e</span>生&nbsp;APP</a>
+                <span class="friend">看朋友手气如何</span>
+            </div>
+            <div class="userlist">
+                <ul>
+                    #if($!reds.size()>0)
+					 #foreach($obj in $reds)
+						<li>
+							#if($obj.headImgPath != "" && $!obj.headImgPath)
+								<img src="$!obj.headImgPath">
+							#else
+								<img src="$!webPath/resources/assets/images/official.jpg">
+							#end
+							<div> ¥$!obj.money</div>
+						</li>
+						#end
+					#else
+					  <li class="none">暂无数据....</li>
+					#end
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="bottom1"></div>
+    <div class="bottom"></div>
+    <div class="addbg"></div>
+    <div class="model"></div>
+    <div class="alert">
+        <a href="javascript:void(0)" class="close"><img src="$!webPath/resources/wx_red_package/images/close.png"></a>
+        <div class="content">
+            <div class="pdiv">矮油，别急，红包还有一会才到达战场，来来来，先坐下来思考思考人生。</div>
+        </div>
+        <a href="javascript:void(0)" class="downloadlink">下载云尚&nbsp;APP</a>
+    </div>
+	<div class="hdgz">
+		<a href="javascript:void(0)" class="closegz"></a>
+		<img src="$!webPath/resources/style/app/images/hdgz.png">
+	</div>
+	<style>
+		.hdgz{position:fixed;left:50%;top:50%;margin-left:-3.6rem;width:7.2rem;z-index:99999999999999999;display:none}
+		.hdgz img{width:100%}
+		.hdgz a.closegz{position:absolute;right:0.3rem;top:0.65rem;width:0.5rem;height:0.5rem;border-radius:50%}
+	</style>
+</div>
+<!--邀请码,url验证-->
+     <input type="hidden" id="invitationCode" value="$!invitationCode">
+	 <!-- 站长统计 -->
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='display: none;' id='cnzz_stat_icon_1255206113'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1255206113' type='text/javascript'%3E%3C/script%3E"));</script>
+<!-- 百度统计 -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8b2f2c6656ec077454798a10e8660852";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

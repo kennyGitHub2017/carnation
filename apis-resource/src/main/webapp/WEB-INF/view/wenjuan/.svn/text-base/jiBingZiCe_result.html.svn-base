@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta name="format-detection" content="telephone=no">
+        <meta name="format-detection" content="email=no">
+        <title>疾病风险自测结果</title>
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/common.css"/>
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/tijian.css" />
+	    <script>
+    		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+			document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+	    </script>
+	</head>
+	<body>
+		<div class="tjHolder">
+			#foreach($!obj in $!list)
+				<div class="jbResult">
+					<div class="title">
+						$!obj.proposalTitle
+					</div>
+					<div class="content">
+						$!obj.describes
+					</div>
+				</div>
+			#end
+
+			
+	<!-- 		<div class="tuijian">
+	            <div class="title">精华推荐</div>
+	            <div class="area groom">
+	                <div class="p_filter fc_title">
+	                    <div class="dd"><a href="javascript:m1.titleClickEvent(0);" class="selected"><i></i>帖子</a></div>
+	                    <div class="dd"><a href="javascript:m1.titleClickEvent(1);" class=""><i></i>商品</a></div>
+	                    <div class="dd"><a href="javascript:m1.titleClickEvent(2);" class=""><i></i>服务</a></div>
+	                </div>
+	                <div id="fc_con" class="m_touch">
+	                    <div class="touch_content">
+	                        <div class="touch_con">
+	                            <div class="touch_tab">
+	                                <ul class="list_con tiezi">
+	                                    <li>
+	                                        <a href="#">
+	                                            <img src="${apiPath}/resources/images/tiezi.png">
+	                                            <div class="content">
+	                                                <p class="tit">头发很油怎么办？</p>
+	                                                <div class="bot">
+	                                                    <p>秋冬天气干燥头发容易秋冬天气干燥头发容易</p>
+	                                                    <span>人气532</span>
+	                                                </div>
+	                                            </div>
+	                                        </a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="#">
+	                                            <img src="${apiPath}/resources/images/tiezi.png">
+	                                            <div class="content">
+	                                                <p class="tit">头发很油怎么办？</p>
+	                                                <div class="bot">
+	                                                    <p>秋冬天气干燥头发容易秋冬天气干燥头发容易</p>
+	                                                    <span>人气532</span>
+	                                                </div>
+	                                            </div>
+	                                        </a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="#">
+	                                            <img src="${apiPath}/resources/images/tiezi.png">
+	                                            <div class="content">
+	                                                <p class="tit">头发很油怎么办？</p>
+	                                                <div class="bot">
+	                                                    <p>秋冬天气干燥头发容易秋冬天气干燥头发容易</p>
+	                                                    <span>人气532</span>
+	                                                </div>
+	                                            </div>
+	                                        </a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="#">
+	                                            <img src="${apiPath}/resources/images/tiezi.png">
+	                                            <div class="content">
+	                                                <p class="tit">头发很油怎么办？</p>
+	                                                <div class="bot">
+	                                                    <p>秋冬天气干燥头发容易秋冬天气干燥头发容易</p>
+	                                                    <span>人气532</span>
+	                                                </div>
+	                                            </div>
+	                                        </a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="#">
+	                                            <img src="${apiPath}/resources/images/tiezi.png">
+	                                            <div class="content">
+	                                                <p class="tit">头发很油怎么办？</p>
+	                                                <div class="bot">
+	                                                    <p>秋冬天气干燥头发容易秋冬天气干燥头发容易</p>
+	                                                    <span>人气532</span>
+	                                                </div>
+	                                            </div>
+	                                        </a>
+	                                    </li>
+	                                </ul>
+	                            </div>
+	                            <div class="touch_tab">
+	                                <ul class="list_con goods">
+	                                    <li>
+	                                        <a href="#">
+	                                            <div class="goodsdiv">
+	                                                <img src="${apiPath}/resources/images/goods.jpg">
+	                                                <p class="tit">胡庆余堂 固元膏果仁阿胶片280克*2女士阿胶</p>
+	                                                <span class="price"><span class="fn-rmb">￥</span>236.00</span>
+	                                            </div>
+	                                        </a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="#">
+	                                            <div class="goodsdiv">
+	                                                <img src="${apiPath}/resources/images/goods.jpg">
+	                                                <p class="tit">胡庆余堂 固元膏果仁阿胶片280克*2女士阿胶</p>
+	                                                <span class="price"><span class="fn-rmb">￥</span>236.00</span>
+	                                            </div>
+	                                        </a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="#">
+	                                            <div class="goodsdiv">
+	                                                <img src="${apiPath}/resources/images/goods.jpg">
+	                                                <p class="tit">胡庆余堂 固元膏果仁阿胶片280克*2女士阿胶</p>
+	                                                <span class="price"><span class="fn-rmb">￥</span>236.00</span>
+	                                            </div>
+	                                        </a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="#">
+	                                            <div class="goodsdiv">
+	                                                <img src="${apiPath}/resources/images/goods.jpg">
+	                                                <p class="tit">胡庆余堂 固元膏果仁阿胶片280克*2女士阿胶</p>
+	                                                <span class="price"><span class="fn-rmb">￥</span>236.00</span>
+	                                            </div>
+	                                        </a>
+	                                    </li>
+	                                </ul>
+	                            </div>
+	                            <div class="touch_tab">
+	                                <ul class="list_con service">
+	                                    <li>
+	                                        <a href="#">
+	                                            <img src="${apiPath}/resources/images/tiezi.png">
+	                                            <div class="right">
+	                                                <p class="tit">金砖奶茶</p>
+	                                                <p class="star"><span class="rate_score"><em data-width="4.5"></em></span><span class="star_num">4.5</span></p>
+	                                                <span class="price"><span class="fn-rmb">￥</span>25</span>
+	                                                <div class="pos">
+	                                                    <p class="icon_p">341km</p>
+	                                                    <p>[已售125]</p>
+	                                                </div>
+	                                            </div>
+	                                        </a>
+	                                    </li>
+	                                    <li>
+	                                        <a href="#">
+	                                            <img src="${apiPath}/resources/images/tiezi.png">
+	                                            <div class="right">
+	                                                <p class="tit">金砖奶茶</p>
+	                                                <p class="star"><span class="rate_score"><em data-width="3.6"></em></span><span class="star_num">3.6</span></p>
+	                                                <span class="price"><span class="fn-rmb">￥</span>25</span>
+	                                                <div class="pos">
+	                                                    <p class="icon_p">341km</p>
+	                                                    <p>[已售125]</p>
+	                                                </div>
+	                                            </div>
+	                                        </a>
+	                                    </li>
+	                                </ul>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	        </div>
+	            
+	        </div> -->
+			
+		</div>
+		<script src="${apiPath}/resources/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="${apiPath}/resources/js/touchSlider.js" type="text/javascript" charset="utf-8"></script>
+        <script src="${apiPath}/resources/js/tools.js" type="text/javascript" charset="utf-8"></script>
+        <script src="${apiPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+	         jQuery("em").each(function(){
+	                var num=jQuery(this).attr("data-width");
+	                jQuery(this).width((22*Math.floor(num)+(num-Math.floor(num))*12)+"%");
+	         });
+	         var m1=new m_Touch("fc_con","fc_title");
+        </script>
+	</body>
+</html>

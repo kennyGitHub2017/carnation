@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.GoldLogMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.GoldLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="gl_admin_time" property="glAdminTime" jdbcType="TIMESTAMP" />
+		<result column="gl_count" property="glCount" jdbcType="INTEGER" />
+		<result column="gl_money" property="glMoney" jdbcType="INTEGER" />
+		<result column="gl_payment" property="glPayment" jdbcType="VARCHAR" />
+		<result column="gl_type" property="glType" jdbcType="INTEGER" />
+		<result column="gl_admin_id" property="glAdminId" jdbcType="BIGINT" />
+		<result column="gl_user_id" property="glUserId" jdbcType="BIGINT" />
+		<result column="gr_id" property="grId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.GoldLogBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.user.model.GoldLog"
+		extends="BaseResultMap">
+		<result column="gl_admin_content" property="glAdminContent"
+			jdbcType="LONGVARCHAR" />
+		<result column="gl_content" property="glContent" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, gl_admin_time, gl_count, gl_money,
+		gl_payment, gl_type,
+		gl_admin_id, gl_user_id, gr_id
+	</sql>
+	<sql id="Blob_Column_List">
+		gl_admin_content, gl_content
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.user.model.GoldLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_gold_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.user.model.GoldLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_gold_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_gold_log
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_gold_log
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.GoldLogExample">
+		delete from user_gold_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.GoldLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_gold_log (id, add_time, delete_status,
+		gl_admin_time, gl_count, gl_money,
+		gl_payment, gl_type, gl_admin_id,
+		gl_user_id, gr_id, gl_admin_content,
+		gl_content)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{glAdminTime,jdbcType=TIMESTAMP}, #{glCount,jdbcType=INTEGER}, #{glMoney,jdbcType=INTEGER},
+		#{glPayment,jdbcType=VARCHAR}, #{glType,jdbcType=INTEGER},
+		#{glAdminId,jdbcType=BIGINT},
+		#{glUserId,jdbcType=BIGINT}, #{grId,jdbcType=BIGINT}, #{glAdminContent,jdbcType=LONGVARCHAR},
+		#{glContent,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.GoldLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_gold_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="glAdminTime != null">
+				gl_admin_time,
+			</if>
+			<if test="glCount != null">
+				gl_count,
+			</if>
+			<if test="glMoney != null">
+				gl_money,
+			</if>
+			<if test="glPayment != null">
+				gl_payment,
+			</if>
+			<if test="glType != null">
+				gl_type,
+			</if>
+			<if test="glAdminId != null">
+				gl_admin_id,
+			</if>
+			<if test="glUserId != null">
+				gl_user_id,
+			</if>
+			<if test="grId != null">
+				gr_id,
+			</if>
+			<if test="glAdminContent != null">
+				gl_admin_content,
+			</if>
+			<if test="glContent != null">
+				gl_content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="glAdminTime != null">
+				#{glAdminTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="glCount != null">
+				#{glCount,jdbcType=INTEGER},
+			</if>
+			<if test="glMoney != null">
+				#{glMoney,jdbcType=INTEGER},
+			</if>
+			<if test="glPayment != null">
+				#{glPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="glType != null">
+				#{glType,jdbcType=INTEGER},
+			</if>
+			<if test="glAdminId != null">
+				#{glAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="glUserId != null">
+				#{glUserId,jdbcType=BIGINT},
+			</if>
+			<if test="grId != null">
+				#{grId,jdbcType=BIGINT},
+			</if>
+			<if test="glAdminContent != null">
+				#{glAdminContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="glContent != null">
+				#{glContent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.GoldLogExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_gold_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_gold_log
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.glAdminTime != null">
+				gl_admin_time = #{record.glAdminTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.glCount != null">
+				gl_count = #{record.glCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.glMoney != null">
+				gl_money = #{record.glMoney,jdbcType=INTEGER},
+			</if>
+			<if test="record.glPayment != null">
+				gl_payment = #{record.glPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="record.glType != null">
+				gl_type = #{record.glType,jdbcType=INTEGER},
+			</if>
+			<if test="record.glAdminId != null">
+				gl_admin_id = #{record.glAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="record.glUserId != null">
+				gl_user_id = #{record.glUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.grId != null">
+				gr_id = #{record.grId,jdbcType=BIGINT},
+			</if>
+			<if test="record.glAdminContent != null">
+				gl_admin_content = #{record.glAdminContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.glContent != null">
+				gl_content = #{record.glContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update user_gold_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		gl_admin_time = #{record.glAdminTime,jdbcType=TIMESTAMP},
+		gl_count = #{record.glCount,jdbcType=INTEGER},
+		gl_money = #{record.glMoney,jdbcType=INTEGER},
+		gl_payment = #{record.glPayment,jdbcType=VARCHAR},
+		gl_type = #{record.glType,jdbcType=INTEGER},
+		gl_admin_id = #{record.glAdminId,jdbcType=BIGINT},
+		gl_user_id = #{record.glUserId,jdbcType=BIGINT},
+		gr_id = #{record.grId,jdbcType=BIGINT},
+		gl_admin_content = #{record.glAdminContent,jdbcType=LONGVARCHAR},
+		gl_content = #{record.glContent,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_gold_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		gl_admin_time = #{record.glAdminTime,jdbcType=TIMESTAMP},
+		gl_count = #{record.glCount,jdbcType=INTEGER},
+		gl_money = #{record.glMoney,jdbcType=INTEGER},
+		gl_payment = #{record.glPayment,jdbcType=VARCHAR},
+		gl_type = #{record.glType,jdbcType=INTEGER},
+		gl_admin_id = #{record.glAdminId,jdbcType=BIGINT},
+		gl_user_id = #{record.glUserId,jdbcType=BIGINT},
+		gr_id = #{record.grId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.GoldLog">
+		update user_gold_log
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="glAdminTime != null">
+				gl_admin_time = #{glAdminTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="glCount != null">
+				gl_count = #{glCount,jdbcType=INTEGER},
+			</if>
+			<if test="glMoney != null">
+				gl_money = #{glMoney,jdbcType=INTEGER},
+			</if>
+			<if test="glPayment != null">
+				gl_payment = #{glPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="glType != null">
+				gl_type = #{glType,jdbcType=INTEGER},
+			</if>
+			<if test="glAdminId != null">
+				gl_admin_id = #{glAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="glUserId != null">
+				gl_user_id = #{glUserId,jdbcType=BIGINT},
+			</if>
+			<if test="grId != null">
+				gr_id = #{grId,jdbcType=BIGINT},
+			</if>
+			<if test="glAdminContent != null">
+				gl_admin_content = #{glAdminContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="glContent != null">
+				gl_content = #{glContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.user.model.GoldLog">
+		update user_gold_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		gl_admin_time = #{glAdminTime,jdbcType=TIMESTAMP},
+		gl_count = #{glCount,jdbcType=INTEGER},
+		gl_money = #{glMoney,jdbcType=INTEGER},
+		gl_payment = #{glPayment,jdbcType=VARCHAR},
+		gl_type = #{glType,jdbcType=INTEGER},
+		gl_admin_id = #{glAdminId,jdbcType=BIGINT},
+		gl_user_id = #{glUserId,jdbcType=BIGINT},
+		gr_id = #{grId,jdbcType=BIGINT},
+		gl_admin_content = #{glAdminContent,jdbcType=LONGVARCHAR},
+		gl_content = #{glContent,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.GoldLog">
+		update user_gold_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		gl_admin_time = #{glAdminTime,jdbcType=TIMESTAMP},
+		gl_count = #{glCount,jdbcType=INTEGER},
+		gl_money = #{glMoney,jdbcType=INTEGER},
+		gl_payment = #{glPayment,jdbcType=VARCHAR},
+		gl_type = #{glType,jdbcType=INTEGER},
+		gl_admin_id = #{glAdminId,jdbcType=BIGINT},
+		gl_user_id = #{glUserId,jdbcType=BIGINT},
+		gr_id = #{grId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

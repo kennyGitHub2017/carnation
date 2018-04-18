@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>投诉管理 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}" />
+<meta name="copyright" content="$!{config.copyRight}" />
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+$(function() {
+	$("#theForm").validate({
+	   rules:{
+		     to_user_content:{required:true},
+			 img1:{accept:"$!config.imageSuffix"},
+			 img2:{accept:"$!config.imageSuffix"},
+			 img3:{accept:"$!config.imageSuffix"}
+		   },
+	   messages:{
+		     to_user_content:{required:"申诉内容不能为空"},
+			 img1:{accept:"不允许的图片类型"},
+			 img2:{accept:"不允许的图片类型"},
+			 img3:{accept:"不允许的图片类型"}
+		}
+	});
+	$(".comp_poces b").removeClass("this");
+	$("#complaint_$!{obj.status}").addClass("this");
+	setInterval(complaint_talk_reload, 5000);
+});
+function complaint_appeal(){
+  $("#theForm").attr("action","$!webPath/buyer/complaint_appeal.htm");
+  $("#theForm").submit();
+}
+function complaint_arbitrate(){
+		var params = $("#theForm").serialize();
+	  $.ajax({type:'POST',url:'$!webPath/buyer/complaint_arbitrate.htm',data:params,
+				   success:function(data){		
+			 		 					showDialog("msg_info","","申请仲裁成功",0,"succeed",3,function(arg){window.location.href='$!webPath/buyer/order_complaint_list.htm'});
+								 }
+	  },'json'); 
+	
+}
+
+function closeComplaint() {
+	if (confirm("提交后不可更改，确定要关闭该投诉吗？")) {
+		$.post('$!webPath/buyer/complaint_close.htm', {
+			id: '$!obj.id',
+			handleContent: '用户自行关闭投诉'
+		}, function(data) {
+			location.href='$!webPath/buyer/complaint_view.htm?id=$!obj.id';
+		})
+	}
+}
+
+function complaint_talk(){
+   var talk_content=$("#talk_content").val();
+  $.post("$!webPath/buyer/complaint_talk.htm",{"talk_content":talk_content,"id":"$!obj.id"},function(data){
+	  $("#talk_content_detail").empty();	
+      $.each(data, function(index,item){
+	      $("#talk_content_detail").append("<li class='"+item.role+"'>"+item.content+"</li>");
+	  })
+  },"json");
+   $("#talk_content").val("");
+   showDialog("msg_info","","发布对话成功！",2,"succeed",3,function(){});
+}
+function complaint_talk_reload(){
+  $.post("$!webPath/buyer/complaint_talk.htm",{"talk_content":"","id":"$!obj.id"},function(data){
+	  $("#talk_content_detail").empty();	
+      $.each(data, function(index,item){
+	       $("#talk_content_detail").append("<li class='"+item.role+"'>"+item.content+"</li>");
+	  })
+  },"json");
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm")
+$!httpInclude.include("/nav1.htm")
+<div class="main clearfix">
+  <div class="usercenter"> $!httpInclude.include("/buyer/nav.htm?op=groupComplaint")
+    <form action="$!webPath/buyer/complaint_save.htm" method="post" enctype="multipart/form-data" id="theForm">
+      <div class="usercenter_right">
+        <div class="myorder">
+          <h4><span class="myorder_fright"></span><strong>我的投诉</strong></h4>
+        </div>
+        <div class="user_list">
+          <div class="user_list_title">
+            <ul class="user_title_ul">
+              <li><i></i><a href="$!webPath/group/complaintList.htm">服务投诉列表</a></li>
+              <li><i></i><a href="$!webPath/group/selfComplaintList.htm">我的投诉</a></li>
+              <li class="this"><a href="javascript:void(0);">投诉详情</a></li>
+            </ul>
+          </div>
+          <div class="user_list_box">
+            <div class="complaint_one">
+              <h1 class="complaint_h">订单详情</h1>
+              <div class="comp_goodetails">
+                <dl class="comp_goodl">
+                  <dt>订单信息</dt>
+                  <dd>
+                    <ul class="comp_gdul">
+                        #if($!order.orderStatus==10)
+			               #set($status="未支付")
+			             #end
+			             #if($!order.orderStatus==0)
+			               #set($status="已取消")
+			             #end
+			             #if($!order.orderStatus==20)
+			               #set($status="已支付")
+			             #end
+			             #if($!order.orderStatus==30)
+			               #set($status="已使用")
+			             #end
+			             #if($!order.orderStatus>=50)
+			               #set($status="已完成")
+			             #end
+			            <li> 订单状态：<strong>$!status</strong></li>
+	                    <li> 订单号：<b>$!order.orderId</b> </li>
+	                    <li> 下单时间：$!CommUtil.formatLongDate($!order.addTime)</li>
+	                    <li> 订单总额：¥$!{order.totalPrice}</li>
+                    </ul>
+                  </dd>
+                </dl>
+                <dl class="comp_goodl">
+                  <dt>买家信息</dt>
+                  <dd>
+                    <ul class="comp_gdul">
+                      <li> 买家名称：$!order.userCustomer.nickname</li>
+                    </ul>
+                  </dd>
+                </dl>
+              </div>
+            </div>
+            <div class="complaint_one">
+              <h1 class="complaint_h">投诉详情</h1>
+              <div class="comp_goodetails">
+                <dl class="comp_goodl">
+                  <dt>投诉信息</dt>
+                  <dd>
+                    <ul class="comp_gdul">
+                      #if($!order.groupComplaintBO.status==1)
+                        #set($status="处理中")
+                      #end
+                      #if($!order.groupComplaintBO.status==3)
+                        #set($status="已完成")
+                      #end
+                      <li> 投诉状态：$!status</li>
+                      <li> 投诉人：<b>$!order.userCustomer.nickname</b></li>
+                      <li> 取证图片：<a href="$!webPath/group/complaintDetails_img.htm?orderId=$!order.id" target="_blank">查看图片</a></li>
+                      <li> 投诉时间：$!CommUtil.formatLongDate($!order.groupComplaintBO.addTime)</li>
+                    </ul>
+                  </dd>
+                </dl>
+                <dl class="comp_goodl">
+                <dt>要投诉的服务</dt>
+                <dd>
+                  <table width="850" border="0" cellspacing="0" cellpadding="0" class="compgoods_table">
+                    <tr class="compgoods_th">
+                      <td width="200">&nbsp;</td>
+                      <td width="300">服务信息</td>
+                      <td width="100" align="center">数量</td>
+                      <td align="center">单价</td>
+                    </tr>
+	                    #set($map = $!orderFormTools.queryGroupInfo("$!order.groupInfo"))
+						#set($goods_id = "$!{map.get('goods_id')}")
+						#set($goods_name = "$!{map.get('goods_name')}")
+						#set($goods_begin_time = "$!{map.get('goods_begin_time')}")
+						#set($goods_end_time = "$!{map.get('goods_end_time')}")
+						#set($goods_total_price = "$!{map.get('goods_total_price')}")
+						#set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+						#set($goods_price = "$!{map.get('goods_price')}")
+						#set($goods_count = "$!{map.get('goods_count')}")
+                    <tr>
+                    <input type="hidden" name="goods_gsp_ids" value="$!goods_gsp_ids" />
+                      <td><b class="comp_tab_b">
+                        </b><em class="comp_tab_em"><span class="compimg_span tab_span">
+                        <p><img width="80" height="80" src="$!goods_mainphoto_path" /></p>
+                        </span></em></td>
+                      <td>
+                        服务名称：<a href="$!webPath/group/view_$!{goods_id}.htm" target="_blank" style="color: blue;">$!{goods_name}</a><br />
+                        商户名称：<a href="$!webPath/group/store.htm?id=$!{order.store.id}" target="_blank" style="color: blue;">$!{order.store.storeName}</a>
+                      </td>
+                      <td align="center">$!{goods_count}</td>
+                      <td align="center"><b class="c_blue">¥$!{goods_price}</b></td>
+                    </tr>
+                      <tr>
+                        <td colspan="4"><div class="comp_question"><em class="question_desp"><span>问题描述：$!order.groupComplaintBO.problemDesc</span></em></div></td>
+                      </tr>
+                    </table>
+                  </dd>
+                </dl>
+                <dl class="comp_goodl">
+                  <dt>投诉内容:</dt>
+                  <dd>
+                    <div class="comp_text"> <span style="color:#F00">$!order.groupComplaintBO.fromUserContent</span> </div>
+                  </dd>
+                </dl>
+
+                </div>
+            </div>
+          </div>
+          
+          #if($!order.groupComplaintBO.status==3)
+          <div class="complaint_one">
+            <h1 class="complaint_h">处理详情</h1>
+            <div class="comp_goodetails">
+              <dl class="comp_goodl">
+                <dt>处理信息</dt>
+                <dd>
+                  <ul class="comp_gdul">
+                    <li> 处理人：#if($!order.groupComplaintBO.handleUser.userType == 4) 运营商 #else 后台管理员 #end</li>
+                    <li> 处理时间：$!CommUtil.formatLongDate($!order.groupComplaintBO.handleTime)</li>
+                  </ul>
+                </dd>
+              </dl>
+              <dl class="comp_goodl">
+                <dt>处理结果：</dt>
+                <dd>
+                  <div class="comp_text">
+                    <p class="comp_cont">$!order.groupComplaintBO.handleContent</p>
+                  </div>
+                </dd>
+              </dl>
+            </div>
+          </div>
+          #end
+        </div>
+        <input name="id" type="hidden" id="id" value="$!obj.id" />
+        <input name="order_id" type="hidden" id="order_id" value="$!obj.orderForm.id" />
+        <input type="hidden" name="goods_ids" id="goods_ids" />
+        <input name="to_user_id" type="hidden" id="to_user_id" value="$!obj.toUserId" />
+        <input name="type" type="hidden" id="type" value="$!obj.type" />
+        #if($!obj.status==1 && $!obj.to_user.id==$!user.id)
+        <div class="comp_btn"> <span class="setsub nsp">
+          <input name="" type="button"  value="提交申诉" style="cursor:pointer;" onclick="complaint_appeal();" class="save"/>
+          </span></div>
+        #end
+        #if($!obj.status>=2 && $!obj.status < 4)
+        <div class="comp_btn"> <span class="setsub nsp">
+          <input name="" type="button"  value="发布对话" onclick="complaint_talk();" style="cursor:pointer;" class="btn btn-blue plr-30"/>
+          </span><span class="setsub nsp">
+          <input name="" type="button"  value="刷新对话" onclick="complaint_talk_reload();" style="cursor:pointer;" class="btn btn-blue plr-30"/>
+          </span>
+          #if($!obj.orderForm.orderForm == 0)
+          <span class="setsub">
+          <input name="" type="button"  value="提交仲裁" style="cursor:pointer;" onclick="complaint_arbitrate();" class="btn btn-blue plr-30"/>
+          </span>
+          #else
+          <span class="setsub">
+          <input name="" type="button"  value="关闭投诉" style="cursor:pointer;" onclick="closeComplaint();" class="btn btn-blue plr-30"/>
+          </span>
+          #end
+          </div>
+        #end </div>
+    </form>
+  </div>
+ </div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

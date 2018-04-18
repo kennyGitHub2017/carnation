@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/blue/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery('#beginTimeStr').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+	  jQuery('#endTimeStr').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">商户管理</h3>
+  <div class="nav_list">
+  	<ul>
+    	   <li><a href="$!webPath/admin/merchant_list.htm" ><b>管理</b></a></li>
+	    <li><a href="javascript:void(0)" class="this"><b>商户收益记录</b></a></li>
+    </ul>
+  </div>
+      <form action="$!webPath/admin/merchant_share_details.htm" method="post" name="ListForm" id="ListForm">
+    <div class="search">
+    <ul>
+      <li>   
+      <input type="hidden" value="$!{id}"/>
+        <span>手机号</span> <span class="size150">
+        <input name="mobile" type="text" id="store_name"  value="$!vo.mobile"/>
+        </span>      
+         	<span>结算时间</span> <span class="size100">
+      <input name="beginTimeStr" type="text" id="beginTimeStr" value="$!vo.beginTimeStr" readonly="readonly" />
+      </span> <span class="size100">
+      <input name="endTimeStr" type="text" id="endTimeStr" value="$!vo.endTimeStr" readonly="readonly" />
+      </span> 
+        <span>
+        	<input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn"/>
+        </span> 
+      </li>
+    </ul>
+   </div>
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="20%" ><span class="form_btna">服务名称</span></th>
+        <th width="20%"><span class="form_btna">会员用户名 | 会员姓名</span></th>
+        <th width="10%"><span class="form_btna">消费码</span></th>
+        <th width="15%"><span class="form_btna">结算时间</span></th>
+        <th width="6%"><span class="form_btna">会员消费反润</span></th>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+      	
+        <td align="center">$!obj.ggName</td>
+        <td align="center">
+        	$!obj.mobile | $!obj.nickname
+        </td>
+        <td align="center">$!obj.rebateCode</td>
+        <td align="center">$!CommUtil.formatLongDate($!obj.createTime)</td>
+      	<td align="center">$!obj.rebateAmount</td>
+      </tr>
+      #end
+    </table>
+  </div>
+  <div class="operate_bar">
+    <div class="fenye">
+    	<input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	 	   <input type="hidden"  name="id" value="$!id"/>
+      	$!gotoPageFormHTML
+    </div>        
+ </div>
+ </form>
+</div>
+</body>
+</html>

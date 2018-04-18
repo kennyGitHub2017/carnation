@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+
+	<!-- enable autowire -->
+	<context:annotation-config />
+
+	<context:component-scan base-package="com.sinco.carnation.*.service" />
+
+	<context:property-placeholder location="classpath:service.properties" />
+	
+	<bean id="jiuyeConfig" class="com.sinco.carnation.jiuye.config.JiuyeConfig">
+		<property name="remoteServiceDomain" value="${remote.service.domain}"></property>
+		<property name="whiteListIp" value="${white.list.ip}"></property>
+		<property name="orderDetailUrl" value="${order.details.h5.url}"></property>
+		<property name="indexUrl" value="${h5.index.url}"></property>
+	</bean>
+
+</beans>
+

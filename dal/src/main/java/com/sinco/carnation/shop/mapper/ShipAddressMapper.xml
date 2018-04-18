@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.ShipAddressMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.ShipAddress">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="sa_addr" property="saAddr" jdbcType="VARCHAR" />
+		<result column="sa_area_id" property="saAreaId" jdbcType="BIGINT" />
+		<result column="sa_company" property="saCompany" jdbcType="VARCHAR" />
+		<result column="sa_default" property="saDefault" jdbcType="BIT" />
+		<result column="sa_name" property="saName" jdbcType="VARCHAR" />
+		<result column="sa_sequence" property="saSequence" jdbcType="INTEGER" />
+		<result column="sa_telephone" property="saTelephone" jdbcType="VARCHAR" />
+		<result column="sa_type" property="saType" jdbcType="INTEGER" />
+		<result column="sa_user" property="saUser" jdbcType="VARCHAR" />
+		<result column="sa_user_id" property="saUserId" jdbcType="BIGINT" />
+		<result column="sa_zip" property="saZip" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.ShipAddressBO"
+		extends="BaseResultMap" />
+
+	<resultMap id="BOShipAddressResultMap" type="com.sinco.carnation.shop.bo.ShipAddressBO"
+		extends="BaseResultMap">
+		<result column="area_Id" property="areaId" jdbcType="BIGINT" />
+		<result column="area_Name" property="areaName" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, sa_addr, sa_area_id, sa_company, sa_default,
+		sa_name,
+		sa_sequence, sa_telephone, sa_type, sa_user, sa_user_id, sa_zip
+	</sql>
+
+	<select id="queryShipAddress" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM shop_ship_address
+		<where>
+			<if test="saType != null">
+				sa_type=#{saType}
+			</if>
+		</where>
+	</select>
+
+	<select id="findPageByVo" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM shop_ship_address ssa
+		WHERE ssa.sa_type = 0
+		<if test="vo.saUserId!=null and vo.saUserId>0">
+			AND ssa.sa_user_id = #{vo.saUserId}
+		</if>
+	</select>
+
+	<select id="queryShipAddressById" resultMap="BOShipAddressResultMap">
+		SELECT s.*,d.area_Name,d.id as area_Id,d.parent_id FROM shop_ship_address s
+		LEFT JOIN dic_area d ON d.id=s.sa_area_id WHERE
+		s.id=#{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectByExample" parameterType="com.sinco.carnation.shop.model.ShipAddressExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_ship_address
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_ship_address
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_ship_address
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.ShipAddressExample">
+		delete from shop_ship_address
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.ShipAddress"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_ship_address (id, add_Time, delete_Status,
+		sa_addr, sa_area_id, sa_company,
+		sa_default, sa_name, sa_sequence,
+		sa_telephone, sa_type, sa_user,
+		sa_user_id, sa_zip)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{saAddr,jdbcType=VARCHAR}, #{saAreaId,jdbcType=BIGINT}, #{saCompany,jdbcType=VARCHAR},
+		#{saDefault,jdbcType=BIT}, #{saName,jdbcType=VARCHAR},
+		#{saSequence,jdbcType=INTEGER},
+		#{saTelephone,jdbcType=VARCHAR}, #{saType,jdbcType=INTEGER}, #{saUser,jdbcType=VARCHAR},
+		#{saUserId,jdbcType=BIGINT}, #{saZip,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.ShipAddress"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_ship_address
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="saAddr != null">
+				sa_addr,
+			</if>
+			<if test="saAreaId != null">
+				sa_area_id,
+			</if>
+			<if test="saCompany != null">
+				sa_company,
+			</if>
+			<if test="saDefault != null">
+				sa_default,
+			</if>
+			<if test="saName != null">
+				sa_name,
+			</if>
+			<if test="saSequence != null">
+				sa_sequence,
+			</if>
+			<if test="saTelephone != null">
+				sa_telephone,
+			</if>
+			<if test="saType != null">
+				sa_type,
+			</if>
+			<if test="saUser != null">
+				sa_user,
+			</if>
+			<if test="saUserId != null">
+				sa_user_id,
+			</if>
+			<if test="saZip != null">
+				sa_zip,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="saAddr != null">
+				#{saAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="saAreaId != null">
+				#{saAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="saCompany != null">
+				#{saCompany,jdbcType=VARCHAR},
+			</if>
+			<if test="saDefault != null">
+				#{saDefault,jdbcType=BIT},
+			</if>
+			<if test="saName != null">
+				#{saName,jdbcType=VARCHAR},
+			</if>
+			<if test="saSequence != null">
+				#{saSequence,jdbcType=INTEGER},
+			</if>
+			<if test="saTelephone != null">
+				#{saTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="saType != null">
+				#{saType,jdbcType=INTEGER},
+			</if>
+			<if test="saUser != null">
+				#{saUser,jdbcType=VARCHAR},
+			</if>
+			<if test="saUserId != null">
+				#{saUserId,jdbcType=BIGINT},
+			</if>
+			<if test="saZip != null">
+				#{saZip,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.ShipAddressExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_ship_address
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_ship_address
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.saAddr != null">
+				sa_addr = #{record.saAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="record.saAreaId != null">
+				sa_area_id = #{record.saAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="record.saCompany != null">
+				sa_company = #{record.saCompany,jdbcType=VARCHAR},
+			</if>
+			<if test="record.saDefault != null">
+				sa_default = #{record.saDefault,jdbcType=BIT},
+			</if>
+			<if test="record.saName != null">
+				sa_name = #{record.saName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.saSequence != null">
+				sa_sequence = #{record.saSequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.saTelephone != null">
+				sa_telephone = #{record.saTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.saType != null">
+				sa_type = #{record.saType,jdbcType=INTEGER},
+			</if>
+			<if test="record.saUser != null">
+				sa_user = #{record.saUser,jdbcType=VARCHAR},
+			</if>
+			<if test="record.saUserId != null">
+				sa_user_id = #{record.saUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.saZip != null">
+				sa_zip = #{record.saZip,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_ship_address
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=BIT},
+		sa_addr = #{record.saAddr,jdbcType=VARCHAR},
+		sa_area_id = #{record.saAreaId,jdbcType=BIGINT},
+		sa_company = #{record.saCompany,jdbcType=VARCHAR},
+		sa_default = #{record.saDefault,jdbcType=BIT},
+		sa_name = #{record.saName,jdbcType=VARCHAR},
+		sa_sequence = #{record.saSequence,jdbcType=INTEGER},
+		sa_telephone = #{record.saTelephone,jdbcType=VARCHAR},
+		sa_type = #{record.saType,jdbcType=INTEGER},
+		sa_user = #{record.saUser,jdbcType=VARCHAR},
+		sa_user_id = #{record.saUserId,jdbcType=BIGINT},
+		sa_zip = #{record.saZip,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.ShipAddress">
+		update shop_ship_address
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="saAddr != null">
+				sa_addr = #{saAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="saAreaId != null">
+				sa_area_id = #{saAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="saCompany != null">
+				sa_company = #{saCompany,jdbcType=VARCHAR},
+			</if>
+			<if test="saDefault != null">
+				sa_default = #{saDefault,jdbcType=BIT},
+			</if>
+			<if test="saName != null">
+				sa_name = #{saName,jdbcType=VARCHAR},
+			</if>
+			<if test="saSequence != null">
+				sa_sequence = #{saSequence,jdbcType=INTEGER},
+			</if>
+			<if test="saTelephone != null">
+				sa_telephone = #{saTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="saType != null">
+				sa_type = #{saType,jdbcType=INTEGER},
+			</if>
+			<if test="saUser != null">
+				sa_user = #{saUser,jdbcType=VARCHAR},
+			</if>
+			<if test="saUserId != null">
+				sa_user_id = #{saUserId,jdbcType=BIGINT},
+			</if>
+			<if test="saZip != null">
+				sa_zip = #{saZip,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.ShipAddress">
+		update shop_ship_address
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=BIT},
+		sa_addr = #{saAddr,jdbcType=VARCHAR},
+		sa_area_id = #{saAreaId,jdbcType=BIGINT},
+		sa_company = #{saCompany,jdbcType=VARCHAR},
+		sa_default = #{saDefault,jdbcType=BIT},
+		sa_name = #{saName,jdbcType=VARCHAR},
+		sa_sequence = #{saSequence,jdbcType=INTEGER},
+		sa_telephone = #{saTelephone,jdbcType=VARCHAR},
+		sa_type = #{saType,jdbcType=INTEGER},
+		sa_user = #{saUser,jdbcType=VARCHAR},
+		sa_user_id = #{saUserId,jdbcType=BIGINT},
+		sa_zip = #{saZip,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="selectBySaType" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM shop_ship_address ssa WHERE ssa.sa_type = #{saType}
+	</select>
+	<select id="findAllByCondition" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM shop_ship_address ssa
+		<where>
+			<if test="saType!=null">
+				ssa.sa_type = #{saType}
+			</if>
+			<if test="saUserId!=null">
+				AND ssa.sa_user_id = #{saUserId}
+			</if>
+			<if test="saDefault!=null">
+				<if test="saDefault == true or saDefault == false">
+					AND ssa.sa_default = #{saDefault}
+				</if>
+			</if>
+		</where>
+		ORDER BY ssa.sa_default desc, ssa.sa_sequence asc
+	</select>
+</mapper>

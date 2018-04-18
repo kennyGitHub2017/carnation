@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+	#if($!vo.area1)
+	$('#area1').val('$!vo.area1');
+	changeArea(2, '$!vo.area1', false);
+	#end
+  jQuery('#beginTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery("#refundStatus").val("$!vo.refundStatus");
+	jQuery("select[id^=area]").change(function(){
+	     var level=jQuery(this).attr("level");
+		 var id=jQuery(this).val();
+		 changeArea(level, id, true);
+	 });
+	jQuery("#area2").change(function(){
+	   var id=jQuery(this).val();
+	   jQuery("#operatorAreaId").val(id);
+	});
+	jQuery("#area3").change(function(){
+	   var id=jQuery(this).val();
+	   jQuery("#operatorAreaId").val(id);
+	});
+	
+	  #if($!vo.areaSheng)
+	  	 changeArea(2, jQuery("#area1").val(), false);
+     #end
+});
+
+function changeArea(level, id, needEmpty)
+{
+	if(needEmpty)
+	  	jQuery("#operatorAreaId").val("");
+	
+	 for(var i=4;i>level;i--){
+	  jQuery("#area"+i).empty();
+	  jQuery("#area"+i).append("<option value=''>请选择</option>");
+	 }
+	 if(id!=""){
+	  jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	     jQuery("#area"+level).empty();
+		  jQuery("#area"+level).append("<option value=''>请选择</option>");
+	      jQuery.each(data, function(index,item){
+	    	  var option = "<option value='"+item.id+"' areaName='"+item.areaName+"'";
+	    	  if(level == 2)
+		      {
+		    	  #if($!vo.area2)
+		    	  	  if("$!vo.area2" == item.id)
+		    	  	  {
+			    	  	  option += " selected = 'selected'";
+		    	  	  }
+		          #end
+		      }
+	    	  else if(level == 3)
+		      {
+		    	  #if($!vo.area3)
+		    		  if("$!vo.area3" == item.id)
+		    	  	  {
+			    	  	  option += " selected = 'selected'";
+		    	  	  }
+		          #end
+		      }
+	    	  option += ">"+item.areaName+"</option>";
+		    jQuery("#area"+level).append(option);
+		  });
+	      if(level == 2)
+	      {
+	    	  #if($!vo.area2)
+	    	  	  changeArea(3, '$!vo.area2', false);
+	          #end
+	      }
+	  },"json");
+	 }else{
+	   for(var i=level;i<=4;i++){
+	    jQuery("#area"+i).empty();
+	   }
+	 }
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">服务投诉</h3>
+  <div class="nav_list">
+  		<ul>
+        	<li><a href="$!webPath/admin/group/compaintList.htm" #if($!vo.status != 3) class="this" #end><b>未处理</b></a></li>
+            <li><a href="$!webPath/admin/group/compaintList.htm?status=3" #if($!vo.status == 3) class="this" #end><b>已处理</b></a></li>
+        </ul>
+  </div>
+	<form name="queryForm" id="queryForm" action="$!webPath/admin/group/compaintList.htm" method="post">
+	  <input name="status" type="hidden" value="$!vo.status" />
+    <div class="search">
+      <span>投诉人手机号</span>
+      <span class="size150"><input name="mobile" type="text" id="goodsName" value="$!vo.mobile" /></span>
+      <span>投诉人昵称</span>
+      <span class="size150"><input name="nickName" type="text" id="userName" value="$!vo.nickName" /></span>
+      <span>商户名称</span>
+      <span class="size150"><input name="storeName" type="text" id="userName" value="$!vo.storeName" /></span>
+      <span>商户手机号</span>
+      <span class="size150"><input name="storeMobile" type="text" id="userName" value="$!vo.storeMobile" /></span>
+      <br />
+      <span>商户所在地</span>
+      <span class="size150">
+        <select name="area1" id="area1" level="2">
+                <option value="">省份/自治区</option>
+		          #foreach($area in $areas)            
+		                <option value="$!area.id" areaName="$!area.areaName" #if($!area.areaName==$!vo.areaSheng) selected="true" #end>$!area.areaName</option>
+		           #end          
+              </select>
+              <select name="area2" id="area2" level="3">
+              	#if($!vo.areaShi)
+              		<option>$!vo.areaShi</option>
+              	#else
+                	<option value="">市/区</option>
+                #end
+              </select>
+              <select name="area3" id="area3" level="4">
+              	#if($!vo.areaXian)
+              		<option>$!vo.areaXian</option>
+              	#else
+                	<option value="">县/区</option>
+                #end
+              </select>
+      </span>
+      <span><input type="submit" value="搜索" style="cursor:pointer;" class="search_btn" /></span>
+    </div>
+  </form>
+  <form name="ListForm" id="ListForm" action="$!webPath/admin/group/compaintList.htm" method="post">
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="10%">投诉人</th>
+          <th width="10%">投诉人手机号</th>
+          <th>被投诉商户</th>
+          <th>被投诉服务</th>
+          <th width="10%">被投诉商户手机号</th>
+          <th width="10%">商户所在地</th>
+          <th>投诉时间</th>
+          <th>操作</th>
+        </tr>
+        #foreach($obj in $objs)
+        	  #set($map = $!orderFormTools.queryGroupInfo("$!obj.groupInfo"))
+              #set($goods_id = "$!{map.get('goods_id')}")
+              #set($goods_name = "$!{map.get('goods_name')}")
+              #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+              #set($img = "$!{goods_mainphoto_path}")
+              #set($goods_count = "$!{map.get('goods_count')}")
+              #set($goods_price = "$!{map.get('goods_price')}")
+              #set($goods_begin_time = "$!{map.get('goods_begin_time')}")
+              #set($goods_end_time = "$!{map.get('goods_end_time')}")
+              #set($goods_total_price = "$!{map.get('goods_total_price')}")
+        <tr>
+          <td>$!obj.nickname</td>
+          <td align="center">$!obj.mobile</td>
+          <td align="center">$!obj.storeName</td> 
+          <td align="center">$!goods_name</td>     
+          <td align="center">$!obj.storeMobile</td>
+          <td align="center">$!obj.areaText</td>
+          <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+          <td align="center">
+            <a href="$!webPath/admin/group/complaintDetails.htm?orderId=$!obj.ofId" class="blue">#if($!obj.status == 1) 处理 #else 详情 #end</a>
+          </td>
+        </tr>
+        #end
+    </table>
+    
+    <div class="operate_bar">
+        <div class="fenye" id="queryCondition">
+        	<input name="mobile" type="hidden" id="goodsName" value="$!vo.mobile" />
+        	<input name="nickName" type="hidden" id="userName" value="$!vo.nickName" />
+        	<input name="storeName" type="hidden" id="refundStatus" value="$!vo.storeName" />
+        	<input name="storeMobile" type="hidden" id="refundStatus" value="$!vo.storeMobile" />
+            <input name="status" type="hidden" value="$!vo.status" />
+            <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+           $!gotoPageFormHTML
+        </div> 
+        <div class="oper_sp">
+        </div>         
+ 	</div>
+  </div>
+  </form>
+</div>
+</body>
+</html>

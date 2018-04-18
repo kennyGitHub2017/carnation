@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.PredepositPfLogMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.shop.model.PredepositPfLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="pf_log_amount" property="pfLogAmount" jdbcType="DECIMAL" />
+		<result column="pf_log_user_id" property="pfLogUserId"
+			jdbcType="BIGINT" />
+		<result column="order_id" property="orderId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.PredepositPfLogBO"
+		extends="BaseResultMap" />
+
+	<resultMap type="com.sinco.carnation.shop.bo.PredepositPfLogBO"
+		id="QueryGroupOrderByMonth" extends="BaseResultMap">
+		<result column="years" property="years" jdbcType="INTEGER" />
+		<result column="months" property="months" jdbcType="INTEGER" />
+		<result column="total_amout" property="monthTotalPrice"
+			jdbcType="DECIMAL" />
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, pf_log_amount, pf_log_user_id, order_id
+	</sql>
+
+	<select id="queryPredepositTotal" resultType="DECIMAL">
+		SELECT SUM(pf_log_amount) FROM shop_predeposit_pf_log WHERE
+		pf_log_user_id=#{uid}
+		<if test="startTime != null">
+			and <![CDATA[add_time >= #{startTime}]]>
+		</if>
+		<if test="endTime != null">
+			and <![CDATA[add_time <= #{endTime}]]>
+		</if>
+	</select>
+
+	<select id="queryMonthlyPre" resultMap="QueryGroupOrderByMonth">
+		SELECT YEAR(add_time) AS years,MONTH(add_time) AS months
+		,SUM(total_price) AS total_amout
+		FROM o2o_group_order WHERE (order_type=2 OR order_type=3) AND order_status<![CDATA[>=]]>30
+		AND store_id IN (SELECT id FROM shop_store WHERE
+		create_user_id=#{uid})
+		AND DATE_FORMAT(add_time ,'%y')=DATE_FORMAT(CURDATE(),'%y')
+		GROUP BY YEAR(add_time) DESC,MONTH( add_time) DESC
+	</select>
+
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.shop.model.PredepositPfLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_predeposit_pf_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_predeposit_pf_log
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_predeposit_pf_log
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.shop.model.PredepositPfLogExample">
+		delete from shop_predeposit_pf_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.PredepositPfLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_predeposit_pf_log (id, add_time, pf_log_amount,
+		pf_log_user_id, order_id)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{pfLogAmount,jdbcType=DECIMAL},
+		#{pfLogUserId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.PredepositPfLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_predeposit_pf_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="pfLogAmount != null">
+				pf_log_amount,
+			</if>
+			<if test="pfLogUserId != null">
+				pf_log_user_id,
+			</if>
+			<if test="orderId != null">
+				order_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="pfLogAmount != null">
+				#{pfLogAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="pfLogUserId != null">
+				#{pfLogUserId,jdbcType=BIGINT},
+			</if>
+			<if test="orderId != null">
+				#{orderId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.shop.model.PredepositPfLogExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_predeposit_pf_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_predeposit_pf_log
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.pfLogAmount != null">
+				pf_log_amount = #{record.pfLogAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.pfLogUserId != null">
+				pf_log_user_id = #{record.pfLogUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.orderId != null">
+				order_id = #{record.orderId,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_predeposit_pf_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		pf_log_amount = #{record.pfLogAmount,jdbcType=DECIMAL},
+		pf_log_user_id = #{record.pfLogUserId,jdbcType=BIGINT},
+		order_id = #{record.orderId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.PredepositPfLog">
+		update shop_predeposit_pf_log
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="pfLogAmount != null">
+				pf_log_amount = #{pfLogAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="pfLogUserId != null">
+				pf_log_user_id = #{pfLogUserId,jdbcType=BIGINT},
+			</if>
+			<if test="orderId != null">
+				order_id = #{orderId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.PredepositPfLog">
+		update shop_predeposit_pf_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		pf_log_amount = #{pfLogAmount,jdbcType=DECIMAL},
+		pf_log_user_id = #{pfLogUserId,jdbcType=BIGINT},
+		order_id = #{orderId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

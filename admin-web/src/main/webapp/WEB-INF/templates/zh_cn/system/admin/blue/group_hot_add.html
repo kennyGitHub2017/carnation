@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+    rules:{
+    	city:{
+	    required :true,
+	    remote:{
+		    url: "$!webPath/admin/group_hot_verify.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "city": function(){return jQuery("#city").val();}
+		     }
+		}
+	   },
+	   sequence:{
+		   digits:true,
+		   min:0,
+		   max:999
+	   }
+	 },
+	messages:{
+		city:{required:"城市不能为空",remote:"该城市已经是热门城市"},
+		sequence:{digits:"必须为数字",min:"最小0",max:"最大999"}
+	}
+  });	
+});
+
+function provinceOnchange(){
+	var options='<option value="">请选择...</option>';
+	jQuery.ajax({type:'POST',
+				url:'$!webPath/admin/get_city_by_province.htm',
+				data:{"parentId":jQuery("#province").val()},
+				success:function(data){
+					var list = jQuery.parseJSON(data);
+					jQuery.each(list,function(index,obj){
+						options+='<option value="'+obj.id+'">'+obj.areaName+'</option>';
+					}); 
+					jQuery("#city").html(options);
+				}
+	});	
+}
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">热门城市管理</h1>
+  <div class="nav_list">
+	  <ul>
+		<li><a href="$!webPath/admin/group_hot_list.htm?currentPage=1"><b>管理</b></a></li>
+		<li><a href="$!webPath/admin/group_hot_add.htm?currentPage=1" class="this"><b>新增</b></a></li>
+	  </ul>
+  </div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/group_hot_save.htm" method=post enctype="multipart/form-data">
+ <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <div class="edit">
+  <div class="editul setcont">
+    <ul class="set1">
+      <li class="setcont_bg">选择城市：</li>
+      <li>
+	      <span class="webname">
+	        <select name="province" id="province" onchange="provinceOnchange();">
+	        	<option value="">请选择...</option>
+	        	#foreach($p in $provinces)
+	        	<option value="$!p.id" #if($!province == $!p.id) selected="selected"#end>$!p.areaName</option>
+	        	#end
+	        </select>
+	      </span>
+      </li>
+      <li>
+	      <span class="webname">
+	        <select name="city" id="city">
+	    		<option value="">请选择...</option>
+	        </select>
+	      </span>
+      </li>
+    </ul>
+    <ul class="set1">
+      <li class="setcont_bg">排序</li>
+      <li><span class="size100">
+        <input name="sequence" type="text" id="sequence" value="$!obj.sequence" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小，显示越靠前</strong><strong class="c"></strong></span></li>
+    </ul>
+  </div>
+  </div>
+  </form>
+  <div class="submit">
+   <span class="pad120"> <input name="save" type="button" value="保存" onclick="saveForm()" /></span>
+  </div>
+</div>
+</body>
+</html>

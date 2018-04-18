@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.PrepareMoneyLogMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.user.model.PrepareMoneyLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="pd_log_amount" property="pdLogAmount" jdbcType="DECIMAL" />
+		<result column="pd_op_type" property="pdOpType" jdbcType="VARCHAR" />
+		<result column="pd_type" property="pdType" jdbcType="VARCHAR" />
+		<result column="balance" property="balance" jdbcType="DECIMAL" />
+		<result column="pd_log_admin_id" property="pdLogAdminId"
+			jdbcType="BIGINT" />
+		<result column="pd_log_user_id" property="pdLogUserId"
+			jdbcType="BIGINT" />
+		<result column="predeposit_id" property="predepositId"
+			jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.PrepareMoneyLogBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.sinco.carnation.user.model.PrepareMoneyLog" extends="BaseResultMap">
+		<result column="pd_log_info" property="pdLogInfo" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, pd_log_amount, pd_op_type, pd_type, balance,
+		pd_log_admin_id,
+		pd_log_user_id, predeposit_id
+	</sql>
+	<sql id="Blob_Column_List">
+		pd_log_info
+	</sql>
+	<select id="selectByExampleWithBLOBs"
+		parameterType="com.sinco.carnation.user.model.PrepareMoneyLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_prepare_money_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.user.model.PrepareMoneyLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_prepare_money_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_prepare_money_log
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_prepare_money_log
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.user.model.PrepareMoneyLogExample">
+		delete from user_prepare_money_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.PrepareMoneyLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_prepare_money_log (id, add_time, delete_status,
+		pd_log_amount, pd_op_type, pd_type,
+		balance, pd_log_admin_id, pd_log_user_id,
+		predeposit_id, pd_log_info)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{pdLogAmount,jdbcType=DECIMAL}, #{pdOpType,jdbcType=VARCHAR}, #{pdType,jdbcType=VARCHAR},
+		#{balance,jdbcType=DECIMAL}, #{pdLogAdminId,jdbcType=BIGINT},
+		#{pdLogUserId,jdbcType=BIGINT},
+		#{predepositId,jdbcType=BIGINT}, #{pdLogInfo,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.PrepareMoneyLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_prepare_money_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="pdLogAmount != null">
+				pd_log_amount,
+			</if>
+			<if test="pdOpType != null">
+				pd_op_type,
+			</if>
+			<if test="pdType != null">
+				pd_type,
+			</if>
+			<if test="balance != null">
+				balance,
+			</if>
+			<if test="pdLogAdminId != null">
+				pd_log_admin_id,
+			</if>
+			<if test="pdLogUserId != null">
+				pd_log_user_id,
+			</if>
+			<if test="predepositId != null">
+				predeposit_id,
+			</if>
+			<if test="pdLogInfo != null">
+				pd_log_info,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="pdLogAmount != null">
+				#{pdLogAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="pdOpType != null">
+				#{pdOpType,jdbcType=VARCHAR},
+			</if>
+			<if test="pdType != null">
+				#{pdType,jdbcType=VARCHAR},
+			</if>
+			<if test="balance != null">
+				#{balance,jdbcType=DECIMAL},
+			</if>
+			<if test="pdLogAdminId != null">
+				#{pdLogAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="pdLogUserId != null">
+				#{pdLogUserId,jdbcType=BIGINT},
+			</if>
+			<if test="predepositId != null">
+				#{predepositId,jdbcType=BIGINT},
+			</if>
+			<if test="pdLogInfo != null">
+				#{pdLogInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.user.model.PrepareMoneyLogExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_prepare_money_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_prepare_money_log
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.pdLogAmount != null">
+				pd_log_amount = #{record.pdLogAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.pdOpType != null">
+				pd_op_type = #{record.pdOpType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.pdType != null">
+				pd_type = #{record.pdType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.balance != null">
+				balance = #{record.balance,jdbcType=DECIMAL},
+			</if>
+			<if test="record.pdLogAdminId != null">
+				pd_log_admin_id = #{record.pdLogAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="record.pdLogUserId != null">
+				pd_log_user_id = #{record.pdLogUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.predepositId != null">
+				predeposit_id = #{record.predepositId,jdbcType=BIGINT},
+			</if>
+			<if test="record.pdLogInfo != null">
+				pd_log_info = #{record.pdLogInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update user_prepare_money_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		pd_log_amount = #{record.pdLogAmount,jdbcType=DECIMAL},
+		pd_op_type = #{record.pdOpType,jdbcType=VARCHAR},
+		pd_type = #{record.pdType,jdbcType=VARCHAR},
+		balance = #{record.balance,jdbcType=DECIMAL},
+		pd_log_admin_id = #{record.pdLogAdminId,jdbcType=BIGINT},
+		pd_log_user_id = #{record.pdLogUserId,jdbcType=BIGINT},
+		predeposit_id = #{record.predepositId,jdbcType=BIGINT},
+		pd_log_info = #{record.pdLogInfo,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_prepare_money_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		pd_log_amount = #{record.pdLogAmount,jdbcType=DECIMAL},
+		pd_op_type = #{record.pdOpType,jdbcType=VARCHAR},
+		pd_type = #{record.pdType,jdbcType=VARCHAR},
+		balance = #{record.balance,jdbcType=DECIMAL},
+		pd_log_admin_id = #{record.pdLogAdminId,jdbcType=BIGINT},
+		pd_log_user_id = #{record.pdLogUserId,jdbcType=BIGINT},
+		predeposit_id = #{record.predepositId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.PrepareMoneyLog">
+		update user_prepare_money_log
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="pdLogAmount != null">
+				pd_log_amount = #{pdLogAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="pdOpType != null">
+				pd_op_type = #{pdOpType,jdbcType=VARCHAR},
+			</if>
+			<if test="pdType != null">
+				pd_type = #{pdType,jdbcType=VARCHAR},
+			</if>
+			<if test="balance != null">
+				balance = #{balance,jdbcType=DECIMAL},
+			</if>
+			<if test="pdLogAdminId != null">
+				pd_log_admin_id = #{pdLogAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="pdLogUserId != null">
+				pd_log_user_id = #{pdLogUserId,jdbcType=BIGINT},
+			</if>
+			<if test="predepositId != null">
+				predeposit_id = #{predepositId,jdbcType=BIGINT},
+			</if>
+			<if test="pdLogInfo != null">
+				pd_log_info = #{pdLogInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.user.model.PrepareMoneyLog">
+		update user_prepare_money_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		pd_log_amount = #{pdLogAmount,jdbcType=DECIMAL},
+		pd_op_type = #{pdOpType,jdbcType=VARCHAR},
+		pd_type = #{pdType,jdbcType=VARCHAR},
+		balance = #{balance,jdbcType=DECIMAL},
+		pd_log_admin_id = #{pdLogAdminId,jdbcType=BIGINT},
+		pd_log_user_id = #{pdLogUserId,jdbcType=BIGINT},
+		predeposit_id = #{predepositId,jdbcType=BIGINT},
+		pd_log_info = #{pdLogInfo,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.PrepareMoneyLog">
+		update user_prepare_money_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		pd_log_amount = #{pdLogAmount,jdbcType=DECIMAL},
+		pd_op_type = #{pdOpType,jdbcType=VARCHAR},
+		pd_type = #{pdType,jdbcType=VARCHAR},
+		balance = #{balance,jdbcType=DECIMAL},
+		pd_log_admin_id = #{pdLogAdminId,jdbcType=BIGINT},
+		pd_log_user_id = #{pdLogUserId,jdbcType=BIGINT},
+		predeposit_id = #{predepositId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("select[id^=area]").change(function(){
+	     var level=jQuery(this).attr("level");
+		 var id=jQuery(this).val();
+		 changeArea(level, id, true);
+	 });
+	jQuery("#area2").change(function(){
+ 	   var id=jQuery(this).val();
+ 	   jQuery("#operatorAreaId").val(id);
+ 	});
+	jQuery("#area3").change(function(){
+ 	   var id=jQuery(this).val();
+ 	   jQuery("#operatorAreaId").val(id);
+ 	});
+	
+	  #if($!vo.areaSheng)
+	  	 changeArea(2, jQuery("#area1").val(), false);
+      #end
+});
+function changeArea(level, id, needEmpty)
+{
+	if(needEmpty)
+	  	jQuery("#operatorAreaId").val("");
+	
+	 for(var i=4;i>level;i--){
+	  jQuery("#area"+i).empty();
+	  jQuery("#area"+i).append("<option value=''>请选择</option>");
+	 }
+	 if(id!=""){
+	  jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	     jQuery("#area"+level).empty();
+		  jQuery("#area"+level).append("<option value=''>请选择</option>");
+	      jQuery.each(data, function(index,item){
+	    	  var option = "<option value='"+item.id+"' areaName='"+item.areaName+"'";
+	    	  if(level == 2)
+		      {
+		    	  #if($!vo.areaShi)
+		    	  	  if("$!vo.areaShi" == item.areaName)
+		    	  	  {
+			    	  	  option += " selected = 'selected'";
+		    	  	  }
+		          #end
+		      }
+	    	  else if(level == 3)
+		      {
+		    	  #if($!vo.areaXian)
+		    		  if("$!vo.areaXian" == item.areaName)
+		    	  	  {
+			    	  	  option += " selected = 'selected'";
+		    	  	  }
+		          #end
+		      }
+	    	  option += ">"+item.areaName+"</option>";
+		    jQuery("#area"+level).append(option);
+		  });
+	      if(level == 2)
+	      {
+	    	  #if($!vo.areaShi)
+	    	  	  changeArea(3, jQuery("#area2").val(), false);
+	          #end
+	      }
+	  },"json");
+	 }else{
+	   for(var i=level;i<=4;i++){
+	    jQuery("#area"+i).empty();
+	   }
+	 }
+}
+
+function export_excel(){
+	var areaId = $('#operatorAreaId').val();
+	window.location.href="$!webPath/admin/group/o2o_statistics_export_excel.htm?areaId="+areaId;
+}
+</script>
+<body>
+  <div class="cont">
+    <h1 class="seth">服务统计</h1>
+	<FORM name="ListForm" id="ListForm"  action="$!webPath/admin/group/o2o_statistics.htm" method="post">
+    <div class="search">
+      	  <span>
+      	  	 运营地：
+          </span>
+      	  <span class="size150">
+          	<span>
+	          <select name="area1" id="area1" level="2">
+                <option value="">省份/自治区</option>
+		          #foreach($area in $areas)            
+		                <option value="$!area.id" areaName="$!area.areaName" #if($!area.areaName==$!vo.areaSheng) selected="true" #end>$!area.areaName</option>
+		           #end          
+              </select>
+              <select name="area2" id="area2" level="3">
+              	#if($!vo.areaShi)
+              		<option>$!vo.areaShi</option>
+              	#else
+                	<option value="">市/区</option>
+                #end
+              </select>
+              <select name="area3" id="area3" level="4">
+              	#if($!vo.areaXian)
+              		<option>$!vo.areaXian</option>
+              	#else
+                	<option value="">县/区</option>
+                #end
+              </select>
+              <input id="operatorAreaId" name="operatorAreaId" type="hidden" value="$!vo.operatorAreaId" /></td>
+          </span>
+          </span>
+          <span>
+          <input name="" type="submit"  value="搜索" style="cursor:pointer;" title="搜索"  class="search_btn"/>
+          <input name="" type="button"  value="导出Excel" style="cursor:pointer;" title="导出Excel" class="search_btn"  onclick="export_excel()"/>
+          </span>
+
+    </div>
+
+    <div class="fshoptb page-fixed-mb">
+      	<div class="edit">
+      <div class="editul setcont">
+        <ul class="set1">
+          <li class="setcont_bg">运营商总数</li>
+          <li>${resultMap['operatorCount']} 个</li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">商户总数</li>
+          <li>${resultMap['storeCount']} 个</li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">会员总数</li>
+          <li>${resultMap['customerCount']} 个</li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">服务订单总数</li>
+          <li>${resultMap['orderCount']} 个</li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">产生的消费反润总数</li>
+          <li>${resultMap['resumeSum']} 云豆</li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">产生的手续费反润总数</li>
+          <li>${resultMap['rechangeSum']} 云豆</li>
+        </ul>
+      </div>
+    </div>
+    </div>
+	</FORM>
+  </div>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+#macro ( genericTree $somelist )
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs)
+#end
+#end
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/chosen/muitiple-select.css" type=text/css rel=stylesheet />
+    <style type="text/css">
+        .webname .radio{
+            width: 30px;
+            height: 15px;
+        }
+    </style>
+</head>
+<body>
+<form action="$!webPath/admin/checkValuation/sys_task_manager_save.htm" method="post" id="theForm" target="main_workspace" >
+    <input name="id" type="hidden" id="id" value="$!task.id">
+    <div class="cont">
+        <h1 class="seth">任务管理</h1>
+        <div class="nav_list">
+            <ul>
+                <li><a href="$!webPath/admin/checkValuation/sys_task_manager_list.htm"><b>管理列表</b></a></li>
+                <li><a href="$!webPath/admin/checkValuation/sys_task_manager_add.htm" class="this"><b>增加</b></a></li>
+            </ul>
+        </div>
+        <div class="edit">
+            <div class="editul setcont" >
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>任务名称</li>
+                    <li>
+                        <span class="webname"><input name="taskName" type="text" id="taskName" value="$!task.taskName"></span>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>任务内容</li>
+                    <li>
+                        <span class="webname"><textarea rows="5" cols="80" name="content" id="content" title="任务内容">$!task.content</textarea></span>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>关键字</li>
+                    <li>
+                      <span class="webname">
+                        <!--<select name="keyword" id="keyword" multiple="multiple" style="width: 260px;">-->
+                            <!--#foreach($kw in $keyWordList)-->
+                            <!--<option value="$!{kw.id}" #if($task.keyWord.id == $kw.id)selected="selected" #end>$!kw.name</option>-->
+                            <!--#end-->
+                        <!--</select>-->
+                          <span id="add" onclick="showKeywordsBox()">添加</span>
+                          <input type="hidden" id="keyword" name="keyword" value="#foreach($kw in $task.keyWords)$!kw.id,#end">
+                          <span id="keywordslist">#foreach($kw in $task.keyWords) <span kid="$!kw.id">$!kw.name</span>  #end</span>
+
+                      </span>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>是否推荐</li>
+                    <li>
+                  <span class="webname">
+                      <input type="radio" checked="checked" name="isTop" id="isTopTrue" value="1" class="radio"><label for="isTopTrue">是</label>
+                      <input type="radio" name="isTop" id="isTopFalse" value="0" class="radio"><label for="isTopFalse">否</label>
+                  </span>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>默认时间</li>
+                    <li>
+                      <span class="webname">
+                          <input name="defaultTime" type="text" id="defaultTime" value="$!CommUtil.formatShortDate($!task.defaultTime)" readonly="readonly" />
+                      </span>
+                    </li>
+                    <li>
+                        <label id="defaultTimeError" class="error" generated="true" style="display:none">默认时间不能为空</label>
+                    </li>
+
+                    <li class="setcont_bg"><strong class="sred">*</strong>默认周期</li>
+                    <li>
+                  <span class="webname">
+                      <input id="defaultDay" name="defaultDay" value="$!task.defaultDay" type="text" style="width: 100px;" title="默认周期">
+                  </span>
+                    </li>
+                    <li style=" clear:both;">
+                        <label id="defaultDayError" class="error" generated="true" style="display:none">默认周期不能为空</label>
+                    </li>
+                </ul>
+                <ul class="set1">
+                    <li class="setcont_bg"><strong class="sred">*</strong>任务状态</li>
+                    <li>
+                  <span class="webname">
+                      <input type="radio" checked="checked" name="isEnabled" id="isEnabledTrue" value="1" class="radio"><label for="isEnabledTrue">开启</label>
+                      <input type="radio" name="isEnabled" id="isEnabledFalse" value="0" class="radio"><label for="isEnabledFalse">关闭</label>
+                  </span>
+                    </li>
+
+                    <li class="setcont_bg" style="margin-left:173px;">权重</li>
+                    <li>
+                  <span class="webname">
+                      <input id="priority" name="priority" value="$!task.priority" type="text" style="width: 100px;">
+                  </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="submit">
+            <span class="pad120">
+              <input type="button" value="返回" style="cursor:pointer;" onclick="history.back();">
+              <input type="submit" value="保存" style="cursor:pointer;">
+            </span>
+        </div>
+    </div>
+</form>
+
+<div class="model"></div>
+<div class="keywordsBox">
+    <div class="title">添加关键字</div>
+    <div class="contents">
+        <div class="left">
+            <div class="tit">关键字类型</div>
+            <div class="list">
+                <ul>
+                    #foreach($item in $keyWordType)
+                    <li class="curr" value="$!item.id">$!item.name</li>
+                    #end
+                </ul>
+            </div>
+        </div>
+        <div class="right">
+            <div class="tit">关键字</div>
+            <div class="list curr">
+                <ul></ul>
+            </div>
+            <div class="list">
+                <ul></ul>
+            </div>
+            <div class="list">
+                <ul></ul>
+            </div>
+            <div class="list">
+                <ul></ul>
+            </div>
+        </div>
+    </div>
+    <p class="p_selected">已选择关键字:</p>
+    <div class="selected" id="selected"></div>
+    <div class="btns">
+        <span id="keywordsComfirm">确定</span>
+        <span id="keywordsCancel">取消</span>
+    </div>
+</div>
+<script src="$!webPath/resources/js/jquery-1.6.2.js" type="text/javascript"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js" type="text/javascript"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js" type="text/javascript"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js" type="text/javascript"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8" type="text/javascript"></script>
+<script src="$!webPath/resources/js/jquery.shop.base.js" type="text/javascript"></script>
+<script>
+    $('#defaultTime').datepicker({
+        dateFormat:"yy-mm-dd",
+        changeMonth: true,
+        changeYear: true
+    });
+    jQuery(document).ready(function () {
+        jQuery("#theForm").validate({
+            rules: {
+                taskName: {
+                    required: true
+                },
+                content: {
+                    required: true
+                },
+                keyword: {
+                    required: true
+                },
+                defaultTime: {
+                    required: true
+                },
+                defaultDay: {
+                    required: true,
+                    number: true,
+                    min: 0
+                },
+                priority: {
+                    number: true,
+                    min: 0
+                }
+            },
+            messages: {
+                taskName: {
+                    required: "任务名称不能为空"
+                },
+                content: {
+                    required: "任务内容不能为空"
+                },
+                keyword: {
+                    required: "关键不能为空"
+                },
+                defaultTime: {
+                    required: "默认时间不能为空"
+                },
+                defaultDay: {
+                    required: "默认周期不能为空",
+                    number: "请输入数字",
+                    min: "默认周期必须大于0"
+                },
+                priority: {
+                    number: "请输入数字",
+                    min: "权重必须大于0"
+                }
+            }
+        });
+    });
+    window.flag=0;
+    function saveForm() {
+        if (jQuery("#taskName").val() == "") {
+            jQuery("#taskNameError").show();
+            return;
+        }
+        if (jQuery("#content").val() == "") {
+            jQuery("#contentError").show();
+            return;
+        }
+        var selectedKeyWord = jQuery('#type option:selected').text();
+        /* if(selectedKeyWord == ""){
+         jQuery("#typeError").show();
+         return;
+         }*/
+        if (jQuery("#defaultTime").val() == "") {
+            jQuery("#defaultTimeError").show();
+            return;
+        }
+        if (window.flag == 0) {
+            window.flag = 1;
+            jQuery("#theForm").submit();
+        }
+    }
+
+    /*选择关键字js*/
+    $(".right .list").delegate("ul li", "click", function () {
+        if ($(this).hasClass("curr")) {
+            $(this).removeClass("curr");
+            var temp = $("#selected").html(),
+                    keyword = $(this).html(),
+                    kid = $(this).attr("kid");
+            $("#selected").html(temp.replace("<span kid=" + "\"" + kid + "\"" + ">" + keyword + "</span>", ""));
+        } else {
+            $(this).addClass("curr");
+            var temp = $("#selected").html(),
+                    keyword = $(this).html(),
+                    kid = $(this).attr("kid");
+            $("#selected").html(temp + "<span kid=" + kid + ">" + keyword + "</span>");
+        }
+    });
+
+    $("#keywordsCancel").click(function () {
+        $(".model").hide();
+        $(".keywordsBox").hide();
+    });
+
+    $("#keywordsComfirm").click(function () {
+        $(".model").hide();
+        $(".keywordsBox").hide();
+        var re = /<span kid="([^<]+)">([^<]+)<\/span>/g;
+        var keywordsStr = $("#selected").html();
+        var kidArr = [];
+        while (re.exec(keywordsStr) != null) {
+            kidArr.push(RegExp.$1);
+        }
+        $("#keyword").val(kidArr.join(","));
+        $("#keywordslist").html(keywordsStr);
+    });
+
+    function showKeywordsBox() {
+        $(".model").show();
+        $(".keywordsBox").show();
+    }
+
+    $(".left .list ul li").click(function () {
+        $(this).addClass("curr").siblings("li").removeClass("curr");
+        var index = $(".left .list ul li").index(this);
+        $(".right .list").eq(index).show().siblings(".list").hide();
+        var that = this;
+        var id = $(this).attr("value");
+
+        if ($(this).attr("load") == "loaded") {
+            return;
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: '$!webPath/admin/physicalKeyWord/getKeyWordByType.htm',
+                async: false,
+                data: {type:id},
+                dataType: 'json',
+                success: function (data) {
+                    data = data.data;
+                    var strHtml=""
+                    for(var i=0;i<data.length;i++){
+                        strHtml+="<li kid='"+data[i].id+"'>"+data[i].name+"</li>";
+                    }
+                    $(".right .list").eq(index).html("<ul>"+strHtml+"</ul>");
+                    $(that).attr("load","loaded");
+                },
+                error: function () {
+
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+</head>
+<body>
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 注册会员
+</div>
+
+<div class="main">
+    <ul class="m-menu">
+        <li><a href="/operator/register_user_list.htm" class="active">注册会员</a> </li>
+        <li><a href="/operator/area_user_list.htm">所属会员</a> </li>
+    </ul>
+
+    <form action="/operator/register_user_list.htm" method="post" id="searchForm">
+    	<input type="hidden" name="currentPage" value="1" id="currentPage"/>
+<!--     <form class="form-control pb-30" action="/operator/register_user_list.htm" method="post"> -->
+<!--         商户姓名：<input type="text" name="userName" value="$!vo.userName" class="txt min-txt" /> &nbsp; -->
+<!--         辖区内： -->
+<!--         <select class="txt min-txt" name="isOwn"> -->
+<!--         	<option value="">全部</option> -->
+<!--         	<option #if($!vo.isOwn == "1") selected="selected" #end value="1">是</option> -->
+<!--         	<option #if($!vo.isOwn == "0") selected="selected" #end value="0">否</option> -->
+<!--         </select> &nbsp; -->
+<!--         <input type="submit" class="btn btn-blue btn-medium" value="搜索" /> -->
+    </form>
+
+	#if($!objs.size() > 0)
+	    <table cellspacing="0" cellpadding="0" width="100%" class="table-simple">
+	        <tr>
+	            <th>会员昵称</th>
+	            <th>会员辖区</th>
+	            <th>隶属商户</th>
+	            <th>隶属商户运营商</th>
+	            <th>隶属运营商编号</th>
+	            <th>注册时间</th>
+	        </tr>
+	        #foreach($obj in $objs)
+		        <tr>
+		            <td>$!obj.nickname</td>
+		            <td>$!obj.operator.areaName</td>
+		            <td>$!obj.storeName</td>
+		            <td>$!obj.operator.operatorName</td>
+		            <td>$!obj.operator.operatorCode</td>
+		            <td>$!date.format($!obj.createTime)</td>
+		        </tr>
+	        #end
+	    </table>
+	    <div class="fenye">
+	        $!gotoPageFormHTML
+	    </div>
+	#else
+		<div class="ui-warn text-center">
+			暂无记录！
+		</div>
+	#end
+</div>
+</body>
+<script src="/resources/js/jquery-1.8.2.js"></script>
+<script src="/resources/js/jquery-ui.min.js"></script>
+<script src="/resources/js/common.js"></script>
+</html>

@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.UserMoneyMapper" >
+  <resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.UserMoney" >
+    <id column="uid" property="uid" jdbcType="BIGINT" />
+    <result column="available_balance" property="availableBalance" jdbcType="DECIMAL" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="record_balance" property="recordBalance" jdbcType="DECIMAL" />
+    <result column="o2o_balance" property="o2oBalance" jdbcType="DECIMAL" />
+    <result column="o2o_password" property="o2oPassword" jdbcType="VARCHAR" />
+    <result column="o2o_record_balance" property="o2oRecordBalance" jdbcType="DECIMAL" />
+    <result column="b2c_balance" property="b2cBalance" jdbcType="DECIMAL" />
+    <result column="b2c_password" property="b2cPassword" jdbcType="VARCHAR" />
+    <result column="b2c_record_balance" property="b2cRecordBalance" jdbcType="DECIMAL" />
+    <result column="yys_balance" property="yysBalance" jdbcType="DECIMAL" />
+    <result column="yys_password" property="yysPassword" jdbcType="VARCHAR" />
+    <result column="yys_record_balance" property="yysRecordBalance" jdbcType="DECIMAL" />
+  </resultMap>
+  <resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.UserMoneyBO" extends="BaseResultMap" />
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    uid, available_balance, password, record_balance, o2o_balance, o2o_password, o2o_record_balance, 
+    b2c_balance, b2c_password, b2c_record_balance, yys_balance, yys_password, yys_record_balance
+  </sql>
+  <select id="selectByExample" parameterType="com.sinco.carnation.user.model.UserMoneyExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_money
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      limit ${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_money
+    where uid = #{uid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_money
+    where uid = #{uid,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.UserMoneyExample" >
+    delete from user_money
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinco.carnation.user.model.UserMoney" >
+    insert into user_money (uid, available_balance, password, 
+      record_balance, o2o_balance, o2o_password, 
+      o2o_record_balance, b2c_balance, b2c_password, 
+      b2c_record_balance, yys_balance, yys_password, 
+      yys_record_balance)
+    values (#{uid,jdbcType=BIGINT}, #{availableBalance,jdbcType=DECIMAL}, #{password,jdbcType=VARCHAR}, 
+      #{recordBalance,jdbcType=DECIMAL}, #{o2oBalance,jdbcType=DECIMAL}, #{o2oPassword,jdbcType=VARCHAR}, 
+      #{o2oRecordBalance,jdbcType=DECIMAL}, #{b2cBalance,jdbcType=DECIMAL}, #{b2cPassword,jdbcType=VARCHAR}, 
+      #{b2cRecordBalance,jdbcType=DECIMAL}, #{yysBalance,jdbcType=DECIMAL}, #{yysPassword,jdbcType=VARCHAR}, 
+      #{yysRecordBalance,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinco.carnation.user.model.UserMoney" >
+    insert into user_money
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="availableBalance != null" >
+        available_balance,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="recordBalance != null" >
+        record_balance,
+      </if>
+      <if test="o2oBalance != null" >
+        o2o_balance,
+      </if>
+      <if test="o2oPassword != null" >
+        o2o_password,
+      </if>
+      <if test="o2oRecordBalance != null" >
+        o2o_record_balance,
+      </if>
+      <if test="b2cBalance != null" >
+        b2c_balance,
+      </if>
+      <if test="b2cPassword != null" >
+        b2c_password,
+      </if>
+      <if test="b2cRecordBalance != null" >
+        b2c_record_balance,
+      </if>
+      <if test="yysBalance != null" >
+        yys_balance,
+      </if>
+      <if test="yysPassword != null" >
+        yys_password,
+      </if>
+      <if test="yysRecordBalance != null" >
+        yys_record_balance,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="availableBalance != null" >
+        #{availableBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="recordBalance != null" >
+        #{recordBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="o2oBalance != null" >
+        #{o2oBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="o2oPassword != null" >
+        #{o2oPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="o2oRecordBalance != null" >
+        #{o2oRecordBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="b2cBalance != null" >
+        #{b2cBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="b2cPassword != null" >
+        #{b2cPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="b2cRecordBalance != null" >
+        #{b2cRecordBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="yysBalance != null" >
+        #{yysBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="yysPassword != null" >
+        #{yysPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="yysRecordBalance != null" >
+        #{yysRecordBalance,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.UserMoneyExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_money
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update user_money
+    <set >
+      <if test="record.availableBalance != null" >
+        available_balance = #{record.availableBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.password != null" >
+        password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordBalance != null" >
+        record_balance = #{record.recordBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.o2oBalance != null" >
+        o2o_balance = #{record.o2oBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.o2oPassword != null" >
+        o2o_password = #{record.o2oPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.o2oRecordBalance != null" >
+        o2o_record_balance = #{record.o2oRecordBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.b2cBalance != null" >
+        b2c_balance = #{record.b2cBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.b2cPassword != null" >
+        b2c_password = #{record.b2cPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.b2cRecordBalance != null" >
+        b2c_record_balance = #{record.b2cRecordBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.yysBalance != null" >
+        yys_balance = #{record.yysBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.yysPassword != null" >
+        yys_password = #{record.yysPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yysRecordBalance != null" >
+        yys_record_balance = #{record.yysRecordBalance,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update user_money
+    set 
+      available_balance = #{record.availableBalance,jdbcType=DECIMAL},
+      password = #{record.password,jdbcType=VARCHAR},
+      record_balance = #{record.recordBalance,jdbcType=DECIMAL},
+      o2o_balance = #{record.o2oBalance,jdbcType=DECIMAL},
+      o2o_password = #{record.o2oPassword,jdbcType=VARCHAR},
+      o2o_record_balance = #{record.o2oRecordBalance,jdbcType=DECIMAL},
+      b2c_balance = #{record.b2cBalance,jdbcType=DECIMAL},
+      b2c_password = #{record.b2cPassword,jdbcType=VARCHAR},
+      b2c_record_balance = #{record.b2cRecordBalance,jdbcType=DECIMAL},
+      yys_balance = #{record.yysBalance,jdbcType=DECIMAL},
+      yys_password = #{record.yysPassword,jdbcType=VARCHAR},
+      yys_record_balance = #{record.yysRecordBalance,jdbcType=DECIMAL}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.UserMoney" >
+    update user_money
+    <set >
+      <if test="availableBalance != null" >
+        available_balance = #{availableBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="recordBalance != null" >
+        record_balance = #{recordBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="o2oBalance != null" >
+        o2o_balance = #{o2oBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="o2oPassword != null" >
+        o2o_password = #{o2oPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="o2oRecordBalance != null" >
+        o2o_record_balance = #{o2oRecordBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="b2cBalance != null" >
+        b2c_balance = #{b2cBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="b2cPassword != null" >
+        b2c_password = #{b2cPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="b2cRecordBalance != null" >
+        b2c_record_balance = #{b2cRecordBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="yysBalance != null" >
+        yys_balance = #{yysBalance,jdbcType=DECIMAL},
+      </if>
+      <if test="yysPassword != null" >
+        yys_password = #{yysPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="yysRecordBalance != null" >
+        yys_record_balance = #{yysRecordBalance,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where uid = #{uid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.UserMoney" >
+    update user_money
+    set available_balance = #{availableBalance,jdbcType=DECIMAL},
+      password = #{password,jdbcType=VARCHAR},
+      record_balance = #{recordBalance,jdbcType=DECIMAL},
+      o2o_balance = #{o2oBalance,jdbcType=DECIMAL},
+      o2o_password = #{o2oPassword,jdbcType=VARCHAR},
+      o2o_record_balance = #{o2oRecordBalance,jdbcType=DECIMAL},
+      b2c_balance = #{b2cBalance,jdbcType=DECIMAL},
+      b2c_password = #{b2cPassword,jdbcType=VARCHAR},
+      b2c_record_balance = #{b2cRecordBalance,jdbcType=DECIMAL},
+      yys_balance = #{yysBalance,jdbcType=DECIMAL},
+      yys_password = #{yysPassword,jdbcType=VARCHAR},
+      yys_record_balance = #{yysRecordBalance,jdbcType=DECIMAL}
+    where uid = #{uid,jdbcType=BIGINT}
+  </update>
+  
+	<update id="addRecordMoney" parameterType="map">
+		update
+		user_money set record_balance=record_balance+#{money}
+		where uid=#{uid}
+	</update>
+
+	<update id="subtractRecordMoney" parameterType="map">
+		update user_money set record_balance =
+		<![CDATA[ 
+		case when 
+			record_balance-#{money} < 0
+		then
+			0
+		else
+		]]>
+		record_balance-#{money}
+		end
+		where uid=#{uid}
+	</update>
+
+	<select id="selectSumBalance" resultType="java.math.BigDecimal">
+		select sum(available_balance) from user_money
+	</select>
+
+	<update id="addMoney" parameterType="map">
+		update user_money set
+		available_balance=available_balance+#{money}
+		where uid=#{uid}
+	</update>
+
+	<update id="subtractMoney" parameterType="map">
+		update user_money
+		set available_balance=available_balance-#{money} 
+		where 1=1
+		and uid=#{uid}
+		and available_balance<![CDATA[ >= ]]>#{money}
+	</update>
+
+	<update id="subtractB2cMoney" parameterType="map">
+		update
+		user_money set b2c_balance=b2c_balance-#{money} 
+		where 1=1
+		and uid=#{uid}
+		and b2c_balance<![CDATA[ >= ]]>#{money}
+	</update>
+	<update id="subtractO2oMoney" parameterType="map">
+		update
+		user_money set o2o_balance=o2o_balance-#{money} 
+		where 
+		1=1
+		and uid=#{uid}
+		and o2o_balance<![CDATA[ >= ]]>#{money}
+	</update>
+	<update id="subtractYysMoney" parameterType="map">
+		update
+		user_money set yys_balance=yys_balance-#{money}
+		where 
+		1=1
+		and uid=#{uid}
+		and yys_balance<![CDATA[ >= ]]>#{money}
+	</update>
+
+	<update id="addB2cMoney" parameterType="map">
+		update user_money
+		set b2c_balance=b2c_balance+#{money} where uid=#{uid}
+	</update>
+	<update id="addO2oMoney" parameterType="map">
+		update user_money
+		set o2o_balance=o2o_balance+#{money} where uid=#{uid}
+	</update>
+	<update id="addYysMoney" parameterType="map">
+		update user_money
+		set yys_balance=yys_balance+#{money} where uid=#{uid}
+	</update>
+  
+</mapper>

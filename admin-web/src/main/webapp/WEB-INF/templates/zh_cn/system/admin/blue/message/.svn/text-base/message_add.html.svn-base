@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	
+	<link rel="stylesheet" href="$!webPath/resources/editor/themes/default/default.css" />
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	
+	
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/plugins/jquery.validatebox.js"></script>
+	
+	<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+	
+</head>
+<body>
+		<div style="padding:10px 20px 20px 20px">
+	    <form id="theForm" name="theForm" method="post" enctype="multipart/form-data" action="$!webPath/admin/message_save.htm" 
+	     data-options="validate:true,">
+	    
+            <input name="id" id="id" type="hidden" value="$!obj.id" />
+            
+	    	<table cellpadding="5">
+	    		<tr>
+	    			<td width=80><strong style="color:red;">*</strong>通知栏内容:</td>
+	    			<td width=200>
+	    			<input class="easyui-textbox" type="text" name="noticeTitle" data-options="required:true," value="$!obj.noticeTitle">
+	    			</input>
+	    			</td>
+	    			<td width=70></td>
+	    			<td width=200 ></td>
+	    		</tr>
+
+	    		<tr>
+	    			
+	    			<td width=80><strong style="color:red;">*</strong>消息标题:</td>
+	    			<td width=200>
+	    			<input class="easyui-textbox" type="text" name="title" data-options="required:true," value="$!obj.title">
+	    			</input>
+	    			</td>
+	    			<td width=70><strong style="color:red;">*</strong>发送位置:</td>
+	    			<td width=200 rowspan="4" valign="top">
+	    				<table>
+	    					<tr>
+	    				#set( $index = 0 ) 	
+		    			#foreach($sKey in ${receiveLocationMap.keySet()})
+		    				<td>
+							<input class="easyui-checkbox" type="checkbox" name="receiveLocation" data-options="required:true," 
+							#if($obj.receiveLocation == $!sKey) checked="true" #end 
+							value="$!sKey" #if($obj.isReceiveLocation($sKey)) checked="true" #end >${receiveLocationMap.get($sKey)}
+							</td>
+							#set( $index = $!index + 1 )
+							#if($index % 2 == 0)
+								</tr><tr>
+							#end
+						#end
+						
+						</tr>
+						</table>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    		    <td>接受类型:</td>
+	    			<td>
+		    			#foreach($sKey in ${receiveTypeMap.keySet()})
+		    			<input class="easyui-radio" type="radio" id="receiveType" name="receiveType" data-options="required:true," 		    			value="$!sKey" onclick="radioReceiveTypeClick($!sKey)"
+		    			#if($obj.receiveType == $!sKey) checked="true" #end   >
+							${receiveTypeMap.get($sKey)}
+						#end
+	    			</td>
+	    			<td></td>
+	    			<td></td>
+	    		</tr>
+	    		<tr id = "linkUrlDiv">
+	    		    <td><strong style="color:red;">*</strong>消息链接:</td>
+	    			<td>
+	    				<input id = "linkUrl" class="easyui-textbox" type="text" name="linkUrl" value="$!obj.linkUrl" />
+	    			</td>
+	    			<td></td>
+	    			<td></td>
+	    			
+	    		</tr>
+
+	    		<tr>
+	    			<td><strong style="color:red;">*</strong>权重:</td>
+	    			<td>
+	    			<input id = "priority"  class="easyui-numberbox" type="text" name="priority"  value="$!obj.priority" data-options="min:0,max:1000000000,precision:0,required:true"></input>
+	    			</td>
+	    			<td></td>
+	    			<td></td>
+	    			
+	    		</tr>
+
+	    		<tr id = "contentDiv">
+	    			<td><strong style="color:red;">*</strong>消息内容:</td>
+	    			<td colspan="3">
+						<span class="webname">
+	            		<textarea name="content" style="width:300px;height:400px;" id="content">$!obj.content</textarea>
+	            		</span>
+					</td>
+	    		</tr>
+	    	</table>
+	    </form>
+	    </div >
+	    
+</body>
+
+</html>

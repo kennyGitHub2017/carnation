@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.RegisterLogMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.RegisterLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="invitation_code" property="invitationCode"
+			jdbcType="VARCHAR" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="register_from" property="registerFrom"
+			jdbcType="TINYINT" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="TINYINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sys.bo.RegisterLogBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.sys.model.RegisterLog"
+		extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, phone, invitation_code, ip, register_from, delete_status, create_time
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.sys.model.RegisterLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from register_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.sys.model.RegisterLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from register_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from register_log
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from register_log
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.RegisterLogExample">
+		delete from register_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.RegisterLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into register_log (id, phone, invitation_code,
+		ip, register_from, delete_status,
+		create_time, content)
+		values (#{id,jdbcType=BIGINT}, #{phone,jdbcType=VARCHAR},
+		#{invitationCode,jdbcType=VARCHAR},
+		#{ip,jdbcType=VARCHAR}, #{registerFrom,jdbcType=TINYINT}, #{deleteStatus,jdbcType=TINYINT},
+		#{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.RegisterLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into register_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="invitationCode != null">
+				invitation_code,
+			</if>
+			<if test="ip != null">
+				ip,
+			</if>
+			<if test="registerFrom != null">
+				register_from,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="invitationCode != null">
+				#{invitationCode,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				#{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="registerFrom != null">
+				#{registerFrom,jdbcType=TINYINT},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.RegisterLogExample"
+		resultType="java.lang.Integer">
+		select count(*) from register_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update register_log
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.phone != null">
+				phone = #{record.phone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.invitationCode != null">
+				invitation_code = #{record.invitationCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ip != null">
+				ip = #{record.ip,jdbcType=VARCHAR},
+			</if>
+			<if test="record.registerFrom != null">
+				register_from = #{record.registerFrom,jdbcType=TINYINT},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update register_log
+		set id = #{record.id,jdbcType=BIGINT},
+		phone = #{record.phone,jdbcType=VARCHAR},
+		invitation_code = #{record.invitationCode,jdbcType=VARCHAR},
+		ip = #{record.ip,jdbcType=VARCHAR},
+		register_from = #{record.registerFrom,jdbcType=TINYINT},
+		delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		content = #{record.content,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update register_log
+		set id = #{record.id,jdbcType=BIGINT},
+		phone = #{record.phone,jdbcType=VARCHAR},
+		invitation_code = #{record.invitationCode,jdbcType=VARCHAR},
+		ip = #{record.ip,jdbcType=VARCHAR},
+		register_from = #{record.registerFrom,jdbcType=TINYINT},
+		delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.RegisterLog">
+		update register_log
+		<set>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="invitationCode != null">
+				invitation_code = #{invitationCode,jdbcType=VARCHAR},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="registerFrom != null">
+				register_from = #{registerFrom,jdbcType=TINYINT},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.sys.model.RegisterLog">
+		update register_log
+		set phone = #{phone,jdbcType=VARCHAR},
+		invitation_code = #{invitationCode,jdbcType=VARCHAR},
+		ip = #{ip,jdbcType=VARCHAR},
+		register_from = #{registerFrom,jdbcType=TINYINT},
+		delete_status = #{deleteStatus,jdbcType=TINYINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		content = #{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.RegisterLog">
+		update register_log
+		set phone = #{phone,jdbcType=VARCHAR},
+		invitation_code = #{invitationCode,jdbcType=VARCHAR},
+		ip = #{ip,jdbcType=VARCHAR},
+		register_from = #{registerFrom,jdbcType=TINYINT},
+		delete_status = #{deleteStatus,jdbcType=TINYINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

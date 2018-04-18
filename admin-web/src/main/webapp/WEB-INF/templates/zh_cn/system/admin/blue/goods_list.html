@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [-1..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+	#if($!brand_id)
+	jQuery("#brand_id").val("$!brand_id");
+	#end
+	#if($!gc_id)
+	jQuery("#gc_id").val("$!gc_id");
+	#end
+	#if($!goods_type)
+	jQuery("#goods_type").val("$!goods_type");
+	#end
+	
+	#if($!store_recommend)
+	jQuery("#store_recommend").val("$!store_recommend");
+	#end
+	
+	jQuery('#startDate').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	});
+	jQuery('#endDate').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	});
+	
+
+	$("#fgcId").change(function(){
+		console.log($(this).val());
+		var pid=$(this).val();
+		jQuery.ajax({
+			type : 'POST',
+			url : '$!webPath/admin/load_goods_class.htm',
+			data : {
+				"pid" : pid,
+				"level" : 1,
+				"session" : true
+			},
+			dataType : "json",
+			beforeSend : function() {
+				
+			},
+			success : function(data) {
+				console.log(data);
+				var str="";
+				str+="<option value=\"\">所有分类</option>";
+				jQuery.each(data,function(index, item) {
+					str+="<option value=\""+item.id+"\">"+item.className+"</option>";					
+				});
+				$("#sgcId").empty().append(str);
+				$("#tgcId").empty().append("<option value=\"\">所有分类</option>");
+			}
+		});
+	});
+	
+	$("#sgcId").change(function(){
+		var pid=$(this).val();
+		jQuery.ajax({
+			type : 'POST',
+			url : '$!webPath/admin/load_goods_class.htm',
+			data : {
+				"pid" : pid,
+				"level" : 2,
+				"session" : true
+			},
+			dataType : "json",
+			beforeSend : function() {
+				
+			},
+			success : function(data) {
+				console.log(data);
+				var str="";
+				str+="<option value=\"\">所有分类</option>";
+				jQuery.each(data,function(index, item) {
+					str+="<option value=\""+item.id+"\">"+item.className+"</option>";					
+				});
+				$("#tgcId").empty().append(str);
+			}
+		});
+	});
+	
+	});
+//
+function ajax_update(id,fieldName,obj,value){
+   var val;
+   if(value==undefined){
+	 val=jQuery(obj).val();
+   }else val=value; 
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/goods_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }    
+				 if(value!=undefined){
+				   jQuery(obj.parentNode.parentNode).remove();
+				 }
+              }
+	    });
+}
+</script>
+</head><body scroll="yes">
+<div class="cont">
+  <h3 class="seth">商品管理</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/admin/goods_list.htm" #if(!$!vo.goodsStatus)class="this"#end><b>所有商品</b></a></li>
+      <li><a href="$!webPath/admin/goods_list.htm?goodsStatus=-5" #if($!vo.goodsStatus==-5)class="this"#end><b>未审核商品</b></a></li>
+      <li><a href="$!webPath/admin/goods_outline.htm"><b>违规下架商品</b></a></li>
+    </ul>
+  </div>
+  <form name="ListForm" id="ListForm" action="" method="post">
+    <div class="search"> <span>商品名称</span> <span class="size150">
+      <input name="goodsName" type="text" id="goods_name" value="$!vo.goodsName" />
+      </span> <span>店铺名称</span> <span class="size150">
+      <input name="storeName" type="text" id="store_name" value="$!vo.storeName" />
+      </span> <span>商品类型</span> <span>
+      <select name="goodsType" id="goods_type">
+        <option value="">所有类型</option>
+        <option value="1" #if($!vo.goodsType == 1) selected="selected" #end>商家商品</option>
+        <option value="0" #if($!vo.goodsType == 0) selected="selected" #end>自营商品</option>
+      </select>
+      </span> <span>品牌名称</span> <span>
+      <select name="goodsBrandId" id="brand_id">
+        <option value="">所有品牌</option>
+          #foreach($gb in $gbs)
+        <option value="$!gb.id" #if($!vo.goodsBrandId == $!gb.id) selected="selected" #end>$!gb.name</option>
+          #end
+      </select>
+      </span> 
+      <span>商品分类</span> 
+		<span> 
+			<select name="fgcId" id="fgcId">
+					<option value="">所有分类</option> 
+					#foreach($obj in $gcs)
+					<option value="$!obj.id" #if($!vo.fgcId==$!obj.id) selected="selected" #end>$!obj.name</option> 
+					#end
+			</select>
+		</span>  
+		<span> 
+			<select name="sgcId" id="sgcId">
+					<option value="">所有分类</option> 
+					#foreach($obj in $gcs2)
+					<option value="$!obj.id" #if($!vo.sgcId==$!obj.id) selected="selected" #end>$!obj.name</option> 
+					#end
+			</select>
+		</span>  
+		<span> 
+			<select name="tgcId" id="tgcId">
+					<option value="">所有分类</option> 
+					#foreach($obj in $gcs3)
+					<option value="$!obj.id" #if($!vo.tgcId==$!obj.id) selected="selected" #end>$!obj.name</option> 
+					#end
+			</select>
+		</span> 
+       <div class="search">
+		<span>发布时间</span>
+		<span class="size150"> 
+			<input name="startDate" type="text" id="startDate" value="$!vo.startDate" readonly="readonly" />
+		</span>
+		<span>—</span>
+		<span class="size150"> 
+			<input name="endDate" type="text" id="endDate" value="$!vo.endDate" readonly="readonly" />
+		</span> 
+      <span>
+      <input name="" type="button"  value="搜索" style="cursor:pointer;" onclick="query();" class="search_btn"/>
+      </span>
+      </div> 
+       </div>
+    <div class="operation">
+      <h3>友情提示</h3>
+      <ul>
+        <li>所有商品，在商城前台所有访客均可查看，管理员和商家都可以设置商品上架状态</li>
+        <li>未审核商品，商家无论新发布商品还是编辑商品，都需要通过管理员审核通过后才能上架</li>
+        <li>违规商品，管理员根据商城访客举报结合实际情况设定违规，违规商品前台不可显示，只能管理员能取消违规</li>
+      </ul>
+    </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="3%">&nbsp;
+            </th>
+          <th width="15%"><span class="form_btna">商品名称</span></th>
+          <th width="10%"><span class="form_btna">分类名</span></th>
+          <th width="10%"><span class="form_btna">品牌</span></th>
+          <th width="10%"><span class="form_btna">店铺</span></th>
+          <th width="5%"><span class="form_btna">状态</span></th>
+          <th width="3%" align="center"><span class="form_btna">违规下架</span></th>
+          <th width="3%" align="center"><span class="form_btna">查看次数</span></th>
+          <th width="3%" align="center"><span class="form_btna">购买量</span></th>
+          <th width="3%" align="center"><span class="form_btna">库存量</span></th>
+          <th width="3%" align="center"><span class="form_btna">发布时间</span></th>
+          <th width="3%" align="center"><span class="form_btna">权重</span></th>
+          <th width="3%" align="center"><span class="form_btna">云购专区?</span></th>
+          <th align="center"><b class="form_btnb">操作</b></th>
+        </tr>
+        #foreach($obj in $objs)
+        #set($goods_url="$!{shopPath}/goods_$!{obj.id}.htm")
+        #if($!config.secondDomainOpen && $!obj.goodsType==1 && $!obj.goodsStore.storeSecondDomain!="")
+        #set($goods_url="http://$!{obj.goodsStore.storeSecondDomain}.$!{domainPath}/goods_$!{obj.id}.htm")
+        #end
+        <tr>
+          <td  class="check_position"><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td><label>
+              <textarea name="textarea" cols="30" rows="3"  title="可编辑" onblur="ajax_update('$!obj.id','goodsName',this)">$!obj.goodsName</textarea>
+            </label></td>
+          <td align="center">$!obj.goodsClassName</td>
+          <td align="center">$!obj.brandName</td>
+          <td align="center">#if($!obj.goodsType==0)$!obj.userName【自营商品】#else $!obj.goodsStore.storeName #end</td>
+          #if($!obj.goodsStatus==0)
+          #set($goods_status="上架")
+          #end
+          #if($!obj.goodsStatus==1)
+          #set($goods_status="仓库中")
+          #end
+          #if($!obj.goodsStatus==-1)
+          #set($goods_status="已下架")
+          #end
+          #if($!obj.goodsStatus==-2)
+          #set($goods_status="违规下架")
+          #end
+          #if($!obj.goodsStatus==-2)
+          #set($goods_status="店铺到期商品下架")
+          #end
+          #if($!obj.goodsStatus==-5)
+          #set($goods_status="未审核")
+          #end
+          #if($!obj.goodsStatus==-6)
+          	#set($goods_status="未审核通过")
+          #end
+          <td align="center">$!goods_status</td>
+          <td align="center"><img onclick="ajax_update('$!obj.id','goodsStatus',this,'-2')"  src="$!webPath/resources/style/system/manage/blue/images/weig.jpg"  border="0" style="cursor:pointer;" title="可编辑"/></td>
+          <td align="center">$!obj.goodsClick</td>
+          <td align="center">$!obj.goodsSalenum</td>
+          <td align="center">$!obj.goodsInventory</td>
+          <td align="center">$!CommUtil.formatShortDate($!obj.addTime)</td>
+          <td align="center">$!obj.sortWeight</td>
+          <td align="center">
+          #if($!obj.isYgb == 1) 是  #else 否 #end
+          </td>
+			<td class="hui oprate_con" align="center">
+				#if($!obj.goodsStatus==-5 || $!obj.goodsStatus==0) 
+					<a href="$!{goods_url}?admin_view=true" target="_blank" class="blue">查看</a> 
+					#if($!obj.goodsType==1)
+						<a href="javascript:void(0);" class="blue"
+							dialog_uri="$!webPath/admin/goods_check_form.htm?id=$!obj.id&status=$!{status}"
+							dialog_title="填写平台加价" dialog_width="950"
+							dialog_id="check_goods_add_price">
+							#if($!obj.goodsStatus==-5 && ${sec.anyGranted("ROLE_ADMIN_CHECK_GOODS")})
+								审核通过
+							#elseif($!obj.goodsStatus==0)
+								修改价格
+							#end
+							</a>
+							#if($!obj.goodsStatus==-5 && ${sec.anyGranted("ROLE_ADMIN_CHECK_GOODS")})
+								<a href="javascript:void(0);" class="blue"
+									dialog_uri="$!webPath/admin/goods_check_n_form.htm?id=$!obj.id&status=$!{status}"
+									dialog_title="审核不通过" dialog_width="600"
+									dialog_id="check_goods_n">
+									审核不通过
+								</a>
+							#end
+						
+					#end
+				#else 
+					<a href="$!{goods_url}?admin_view=true" target="_blank" class="blue">查看</a> 
+				#end
+					<a href="$!webPath/admin/goods_recommend.htm?id=$!obj.id" class="blue">推荐</a> 
+			</td>
+		</tr>
+        #end
+      </table>
+    </div>
+    <div class="operate_bar">
+      <div class="fenye"> <span id="queryCondition" style="display:none"> </span>
+        <input name="mulitId" type="hidden" id="mulitId" />
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML </div>
+      <div class="oper_sp"> <span class="oper_check">
+        <label>
+          <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+          全部</label>
+        </span> #if($!status==-5) <span class="oper_del">
+        <input name="" type="button" value="审核" onclick="cmd('$!webPath/admin/goods_audit.htm?status=$!{status}');" style="cursor:pointer;" />
+        </span> #end
+        
+        #if(!$!status) <span class="oper_del">
+        <input name="" type="button" value="删除" onclick="cmd('$!webPath/admin/goods_del.htm');" style="cursor:pointer;" />
+        </span> 
+        <span class="oper_del">
+        
+        <a href="javascript:void(0);" dialog_uri="$!webPath/admin/goods_types.htm?mulitId=1" dialog_title="批量移分类" 
+        dialog_width="1020" dialog_height="540" dialog_top="200" dialog_id="order_shipping">
+        	<input name="" type="button" value="批量移分类" style="cursor:pointer;" /></a>
+        </span> 
+        #end 
+        #if($!zero == true)
+        <span class="oper_del">
+        	<input name="" type="button" value="推到0元购" onclick="cmd('$!webPath/admin/zero_act/goods_zero_act_add.htm');" style="cursor:pointer;" />
+        </span>
+        #end 
+        </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

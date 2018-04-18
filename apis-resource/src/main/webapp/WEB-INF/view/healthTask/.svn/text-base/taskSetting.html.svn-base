@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>任务设置</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="format-detection" content="telephone=no">
+    	<meta name="format-detection" content="email=no">
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/common.css"/>
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/mui.min.css"/>
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/mui.picker.min.css"/>
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/task.css" />
+    	<script type="text/javascript">
+	    	var screenWidth=window.innerWidth||document.documentElement.clientWidth;	
+	    	var fontSize=parseInt(screenWidth /7.5 )
+	    	var fontEl = document.createElement('style');
+	    	document.documentElement.firstElementChild.appendChild(fontEl);
+	    	fontEl.innerHTML = 'html{font-size:' + fontSize + 'px!important;}';
+    	</script>
+	</head>
+	<body>
+		<div class="appbar fn-clear">
+			<a href="javascript:;" class="return"></a>
+			<span class="centerTitle">任务设置</span>
+			<a href="javascript:;" class="submit">确定</a>
+		</div>	
+		<div class="taskHolder">
+			<div class="taskTit">
+				<span class="icon">
+					<img src="$!obj.iconURL"/>
+				</span>
+				<span class="taskName">$!obj.taskName</span>
+				<input type="hidden" id="taskID" value="$!obj.id"/>
+				<input type="hidden" id="apiPath" value="${apiPath}"/>
+				<input type="hidden" id="uid" value="$!uid"/>
+				<input type="hidden" id="jumpType" value="$!jumpType"/>
+				<div class="mui-table-view-cell switch">
+					<span id="switch" style="display: none;">
+						#if($is_open==false)
+							false
+						#end
+					</span>
+					<div class="mui-switch mui-switch-mini  #if($is_open) mui-active  #end">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</div>
+			</div>
+			<div class="remindTime" #if($is_open==false) style="display: none;" #end> 
+				<span class="tit">提醒时间</span>
+				#set($timestr='选择时间 ...')
+				#if($!healthTask.remindTime !='')
+					#set($timestr=$!healthTask.remindTime)
+				#end
+				<button id='choose' data-options='{"type":"time"}' class="btn mui-btn mui-btn-block">
+				$timestr
+				</button>
+			</div>
+			<div class="cycle" #if($is_open==false) style="display: none;" #end>
+				<span class="tit">提醒周期</span>
+				<div class="week">
+		            <ul>
+		                <li #if($!healthTask.mon==1) class="curr" #end>周一</li>
+		                <li #if($!healthTask.tue==1) class="curr" #end>周二</li>
+		                <li #if($!healthTask.wed==1) class="curr" #end>周三</li>
+		                <li #if($!healthTask.thu==1) class="curr" #end>周四</li>
+		                <li #if($!healthTask.fri==1) class="curr" #end>周五</li>
+		                <li #if($!healthTask.sat==1) class="curr" #end>周六</li>
+		                <li #if($!healthTask.sun==1) class="curr" #end>周日</li>
+		            </ul>
+		       </div>
+			</div>
+		</div>
+		<script src="${apiPath}/resources/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/jQuery.fn/tap.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/tipsbox.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/healtTask/taskSetting.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

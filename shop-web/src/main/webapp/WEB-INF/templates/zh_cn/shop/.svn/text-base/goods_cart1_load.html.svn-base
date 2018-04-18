@@ -1,0 +1,1231 @@
+<script src="$!webPath/resources/js/jquery.shop.common.js" charset="utf-8"></script>
+<script>
+  function gift_tier_confirm(arg){
+	  var size = jQuery("#gift_inner_"+arg).find(":input:checked").length
+	 	if(size==0){
+			showDialog("msg_info","","请选择一件赠品！",2,"error",3,function(){
+				      
+		   });
+		}
+		if(size>1){
+			showDialog("msg_info","","只能选择一件赠品！",2,"error",3,function(){
+				      
+		   });
+		}
+		if(size==1){
+		 	var value = jQuery("#gift_inner_"+arg).find(":input:checked").val();
+			var name = jQuery("#gift_inner_"+arg).find(":input:checked").attr("goods_name");
+			var cart_id = jQuery("#gift_inner_"+arg).find(":input:checked").attr("cart_id");
+			jQuery("#gift_list_"+value).remove();
+			jQuery("#gift_header_"+arg).append("<div class='gift_list' id='gift_list_"+value+"' mark='"+arg+"' gogi='"+value+"'>赠品："+name+" x1<span><a href='javascript:void(0);' onclick='jQuery(this).parent().parent().remove()'>删除</a></span></div>");
+			jQuery("#gift_inner_"+arg).hide();
+		}
+	  }
+  function gift_tier_show(arg){
+		jQuery("#gift_inner_"+arg).show();	  
+	  }
+  function gift_tier_hide(arg){
+		jQuery("#gift_inner_"+arg).hide();	  
+	  }
+  function goods_count_adjust(gc_id,count,gift_id){
+	  var gcs="";
+	  var checkboxList=jQuery("input[id='id']:checked");
+	  checkboxList.each(function(){
+		   var id=jQuery(this).val();
+		   gcs=id+","+gcs;
+	  });
+	  if(gcs==""){
+	     gcs="-1";//为了和顶部的购物车计算总价区分开，如果gcs为空则会计算购物车所有商品总价，为-1则不会计算任何物品
+	  }
+   	  jQuery.post("$!webPath/goods_count_adjust.htm",{"gc_id":gc_id,"count":count,"gcs":gcs,"gift_id":gift_id},function(data){
+		 if(data.code=="100"){																										
+	       jQuery("#goods_count_"+gc_id).val(data.count);
+		   jQuery("#goods_count_"+gc_id).attr("goods_count",data.count)
+		   jQuery("#gc_price"+gc_id).html("¥"+data.gc_price);
+		   jQuery("#total_price").html("¥"+data.total_price);
+		   if(data.enough_reduce_price>0)
+		   	jQuery("#enough_reduce_money").show();
+		   else
+			jQuery("#enough_reduce_money").hide();
+		   jQuery("#before_price").html("¥"+data.before);
+		   jQuery("#reduce_price").html("¥"+data.enough_reduce_price);
+		   jQuery("#top_total_price").html(data.all_price);		   
+		   jQuery("#select_gift_"+gift_id).hide();
+		   jQuery("div[id^=gift_inner_]").hide();
+		   if(data.bg_ids!=undefined){
+			    jQuery.each(data.bg_ids,function(n,value){
+				jQuery("#select_gift_"+value).show();
+				if(!jQuery("#gift_inner_"+value).is(":hidden")){
+					jQuery("#gift_inner_"+value).show();
+															   }
+				 });
+				jQuery("div[id^=gift_list_]").each(function(){
+					if(data.bg_ids.indexOf(jQuery(this).attr("mark"))==-1){
+						jQuery(this).remove();
+					}
+				});
+			}
+			if(data.bg_ids!=undefined&&gift_id==undefined){
+				jQuery("div[id^=gift_list_]").remove();
+				}
+		   #foreach($obj in ${er_goods.keySet()})
+		   if(data.erString$!obj){
+		   var erstr=data.erString$!obj;
+		   jQuery("#erString$!obj").html(""+data.erString$!obj);		   
+		   }else{
+		   jQuery("#erString$!obj").html("$!erString.get($!obj)");	
+		   }
+		   #end
+		 }
+		 if(data.code=="200"){
+		   jQuery("#msg_info").remove(); 
+		   showDialog("msg_info","","库存不足，请重新选择数量",2,"warning",3,'');
+		   //jQuery("#goods_count_"+gc_id).val(data.count);
+		   //库存不足把该商品数量置为1
+		   jQuery("#goods_count_"+gc_id).val(1);
+		   jQuery("#total_price").html("¥"+data.total_price);
+		 }
+		 if(data.code=="300"){
+			jQuery("#msg_info").remove();  
+		   showDialog("msg_info","","库存不足，请重新选择数量",2,"warning",3,'');
+		   jQuery("#goods_count_"+gc_id).val(data.count);
+		   jQuery("#total_price").html("¥"+data.total_price);
+		 }
+	   },"json");
+  }
+
+  function confirm_cart(){
+	  var carts_size = jQuery(":checkbox[id=id]:checked").length;
+	  var gift_size = jQuery("div[id^=gift_list_]").length;
+	 if(carts_size>0){
+		   var gcs="";
+		  jQuery(":checkbox[id=id]:checked").each(function(){
+			   var id=jQuery(this).val();
+			   gcs=id+","+gcs;
+		  });
+		  if(gift_size>0){
+			   var gids="";
+			  jQuery("div[id^=gift_list_]").each(function(){
+			   var gid=jQuery(this).attr("gogi");
+			   gids=gid+","+gids;
+		 		 });
+			  jQuery("#giftids").val(gids);
+			  }
+		  jQuery("#gcs").val(gcs);
+		  jQuery("#cart_form").submit();		 
+			 } 
+  }  
+jQuery(document).ready(function(){
+var scBtn=false;
+jQuery("a[id^=favorite_]").click(function(){
+  #if($!user)
+    var user_id=jQuery(this).attr("user_id");
+    if(user_id=="$!{user.id}"){
+	  showDialog("msg_info","","不能收藏自己的商品",2,"warning",3,'');
+	}else{
+	  var id=jQuery(this).attr("id").substring(9);
+	  if(scBtn) return;
+	  scBtn=true;
+	  jQuery.post("$!webPath/add_goods_favorite.htm",{"id":id},function(data){
+		 if(data==0){
+		    showDialog("msg_info","","商品收藏成功!",2,"succeed",3,'');		    
+		 }
+		 if(data==1){
+		    showDialog("msg_info","","您已经收藏过该商品!",2,"warning",3,'');
+		 }
+		 scBtn=false;
+	  },"text");
+	}
+  #else
+   if(confirm("登录后才可收藏商品，现在登录？"))
+     window.location.href="$!webPath/user/login.htm?url=$!webPath/goods_cart1.htm"
+  #end
+  });								
+								
+//								
+  jQuery("a[id^=count_down]").click(function(){
+	var gc_id=jQuery(this).attr("gc_id");
+	var count=jQuery("#goods_count_"+gc_id).val();
+	var f_sale_type=parseInt(jQuery(this).attr("f_sale_type"));
+	var gift_id=jQuery(this).attr("check_gift_id");	
+	if(f_sale_type==0){
+	  if(count>1){
+	    count--;
+	    jQuery("#goods_count_"+gc_id).val(count);
+        goods_count_adjust(gc_id,count,gift_id);
+	  }
+	}else{
+	  jQuery("#msg_info").remove();	
+	  showDialog("msg_info","","F码商品一次只能购买一件!",2,"warning",3,'');
+	}
+  });
+  jQuery("a[id^=count_up]").click(function(){
+	var gc_id=jQuery(this).attr("gc_id");
+	var count=jQuery("#goods_count_"+gc_id).val();
+	var f_sale_type=parseInt(jQuery(this).attr("f_sale_type"));
+	var gift_id=jQuery(this).attr("check_gift_id");	
+	if(f_sale_type==0){
+	    count++;
+	    jQuery("#goods_count_"+gc_id).val(count);
+	    goods_count_adjust(gc_id,count,gift_id);
+	 }else{
+	  jQuery("#msg_info").remove();	 
+	  showDialog("msg_info","","F码商品一次只能购买一件!",2,"warning",3,'');
+	}
+  });
+  jQuery("input[id^=goods_count_]").keyup(function(){
+	var gc_id=jQuery(this).attr("gc_id");	
+	var count=jQuery("#goods_count_"+gc_id).val().replace(/\D/g,'');
+	var f_sale_type=parseInt(jQuery(this).attr("f_sale_type"));
+	var gift_id=jQuery(this).attr("check_gift_id");	
+	if(count==""){
+       count=1;
+	}	
+	if(f_sale_type==0){
+	  if(count>0){
+	    goods_count_adjust(gc_id,count,gift_id);
+	  }
+	  if(count==0){
+		jQuery("#goods_count_"+gc_id).val("1");
+		goods_count_adjust(gc_id,1,gift_id);
+	  }
+	}else{
+	 jQuery("#msg_info").remove();	 	
+	 showDialog("msg_info","","F码商品一次只能购买一件!",2,"warning",3,'');
+	 jQuery("#goods_count_"+gc_id).val("1");
+	}
+  });
+  //
+
+  jQuery(":checkbox[id=id]").click(function(){
+	var carts_size = jQuery(":checkbox[id=id]:checked").length;
+	    if(carts_size<=0){
+		 jQuery("span.go_count a").css("background","#999");
+		}else{
+		  jQuery("span.go_count a").css("background","#19bf96");
+	     }										
+     var val=jQuery(this).attr("checked");
+	 var gift_id=jQuery(this).attr("check_gift_id");	
+	 if(val=="checked"){		
+		  var Group=jQuery(this).attr("data-group");
+		  
+		  jQuery(":checkbox[id=id]").each(function(){
+			 if(jQuery(this).attr("checked")=="checked"&&jQuery(this).attr("data-group")!=Group){
+				 jQuery(this).attr("checked",false).parent().parent().parent().removeClass("this");
+			 } 
+		  });
+		  
+		  $(this).attr("checked","checked");
+		  jQuery(":checkbox[id^=ids_]").not("#ids_"+Group).attr("checked",false);
+		 
+		 
+        jQuery(this).parent().parent().parent().addClass("this");
+		var gc_id=jQuery(this).val();
+		var count=jQuery("#goods_count_"+gc_id).val();
+		goods_count_adjust(gc_id,count,gift_id);
+	 }else{
+	    jQuery(this).parent().parent().parent().removeClass("this");
+	    var group=jQuery(this).attr("data-group");
+	    jQuery(":checkbox[id=ids_"+group+"]").attr("checked",false);
+		var gc_id=jQuery(":checkbox[id=id]:checked:first").val();
+	    var count=jQuery("#goods_count_"+gc_id).val();
+	    goods_count_adjust(gc_id,count,gift_id);
+	 }
+  });
+  //全选普通商品
+  jQuery(":checkbox[id=ids_pt]").click(function(){
+    var val=jQuery(this).attr("checked");
+	var value="pt";
+	if(val=="checked"){
+	  if(jQuery(":checkbox[data-group=ygb]").attr("checked")=="checked"){
+			  jQuery(":checkbox[id=ids_ygb]").attr("checked",false);
+			  jQuery(":checkbox[data-group=ygb]").attr("checked",false);
+			  jQuery(":checkbox[data-group=ygb]").parent().parent().parent().removeClass("this");
+	  }
+	  if(jQuery(":checkbox[data-group=cn]").attr("checked")=="checked"){
+		  jQuery(":checkbox[id=ids_cn]").attr("checked",false);
+		  jQuery(":checkbox[data-group=cn]").attr("checked",false);
+		  jQuery(":checkbox[data-group=cn]").parent().parent().parent().removeClass("this");
+ 	  } 
+	  jQuery(":checkbox[data-group="+value+"]").attr("checked","checked");
+	  jQuery(":checkbox[data-group="+value+"]").parent().parent().parent().addClass("this");
+	  var gc_id=jQuery(":checkbox[id=id]:first").val();
+	  var count=jQuery("#goods_count_"+gc_id).val();
+	  goods_count_adjust(gc_id,count,"mul");
+	}else{
+	  jQuery(":checkbox[data-group="+value+"]").attr("checked",false);
+	  jQuery(":checkbox[data-group="+value+"]").parent().parent().parent().removeClass("this");
+	  jQuery("#total_price").html("¥0.00");
+	  jQuery("#enough_reduce_money").hide();
+	  jQuery("a[id^=select_gift_]").hide();
+	  jQuery("div[id^=gift_inner_]").hide();
+	  jQuery("div[id^=gift_list_]").remove();
+	  #if($!er_goods)
+          #foreach($param in ${er_goods.keySet()})
+		  jQuery("#erString$!param").html("$!erString.get($param)");
+		  #end
+	  #end
+	}
+	var carts_size = jQuery(":checkbox[id=id]:checked").length;
+	    if(carts_size<=0){
+		 jQuery("span.go_count a").css("background","#999");
+		}else{
+		  jQuery("span.go_count a").css("background","#19bf96");
+	   }
+  });
+  
+  //全选重消商品
+  jQuery(":checkbox[id=ids_ygb]").click(function(){
+	    var val=jQuery(this).attr("checked");
+		var value = "ygb";
+		if(val=="checked"){
+		  if(jQuery(":checkbox[data-group=pt]").attr("checked")=="checked"){
+			  jQuery(":checkbox[id=ids_pt]").attr("checked",false);
+			  jQuery(":checkbox[data-group=pt]").attr("checked",false);
+			  jQuery(":checkbox[data-group=pt]").parent().parent().parent().removeClass("this");
+		  }
+		  if(jQuery(":checkbox[data-group=cn]").attr("checked")=="checked"){
+			  jQuery(":checkbox[id=ids_cn]").attr("checked",false);
+			  jQuery(":checkbox[data-group=cn]").attr("checked",false);
+			  jQuery(":checkbox[data-group=cn]").parent().parent().parent().removeClass("this");
+		  } 
+		  jQuery(":checkbox[data-group="+value+"]").attr("checked","checked");
+		  jQuery(":checkbox[data-group="+value+"]").parent().parent().parent().addClass("this");
+		  var gc_id=jQuery(":checkbox[id=id]:first").val();
+		  var count=jQuery("#goods_count_"+gc_id).val();
+		  goods_count_adjust(gc_id,count,"mul");
+		}else{
+		  jQuery(":checkbox[data-group="+value+"]").attr("checked",false);
+		  jQuery(":checkbox[data-group="+value+"]").parent().parent().parent().removeClass("this");
+		  jQuery("#total_price").html("¥0.00");
+		  jQuery("#enough_reduce_money").hide();
+		  jQuery("a[id^=select_gift_]").hide();
+		  jQuery("div[id^=gift_inner_]").hide();
+		  jQuery("div[id^=gift_list_]").remove();
+		  #if($!er_goods)
+	          #foreach($param in ${er_goods.keySet()})
+			  jQuery("#erString$!param").html("$!erString.get($param)");
+			  #end
+		  #end
+		}
+		var carts_size = jQuery(":checkbox[id=id]:checked").length;
+		    if(carts_size<=0){
+			 jQuery("span.go_count a").css("background","#999");
+			}else{
+			  jQuery("span.go_count a").css("background","#19bf96");
+		   }
+	  });
+  //全选cn重消商品
+  jQuery(":checkbox[id=ids_cn]").click(function(){
+	    var val=jQuery(this).attr("checked");
+		var value = "cn";
+		if(val=="checked"){
+		  if(jQuery(":checkbox[data-group=pt]").attr("checked")=="checked"){
+			  jQuery(":checkbox[id=ids_pt]").attr("checked",false);
+			  jQuery(":checkbox[data-group=pt]").attr("checked",false);
+			  jQuery(":checkbox[data-group=pt]").parent().parent().parent().removeClass("this");			  
+		  }
+		  if(jQuery(":checkbox[data-group=ygb]").attr("checked")=="checked"){
+			  jQuery(":checkbox[id=ids_ygb]").attr("checked",false);
+			  jQuery(":checkbox[data-group=ygb]").attr("checked",false);
+			  jQuery(":checkbox[data-group=ygb]").parent().parent().parent().removeClass("this");
+		  } 
+		  jQuery(":checkbox[data-group="+value+"]").attr("checked","checked");
+		  jQuery(":checkbox[data-group="+value+"]").parent().parent().parent().addClass("this");
+		  var gc_id=jQuery(":checkbox[id=id]:first").val();
+		  var count=jQuery("#goods_count_"+gc_id).val();
+		  goods_count_adjust(gc_id,count,"mul");
+		}else{
+		  jQuery(":checkbox[data-group="+value+"]").attr("checked",false);
+		  jQuery(":checkbox[data-group="+value+"]").parent().parent().parent().removeClass("this");
+		  jQuery("#total_price").html("¥0.00");
+		  jQuery("#enough_reduce_money").hide();
+		  jQuery("a[id^=select_gift_]").hide();
+		  jQuery("div[id^=gift_inner_]").hide();
+		  jQuery("div[id^=gift_list_]").remove();
+		  #if($!er_goods)
+	          #foreach($param in ${er_goods.keySet()})
+			  jQuery("#erString$!param").html("$!erString.get($param)");
+			  #end
+		  #end
+		}
+		var carts_size = jQuery(":checkbox[id=id]:checked").length;
+		    if(carts_size<=0){
+			 jQuery("span.go_count a").css("background","#999");
+			}else{
+			  jQuery("span.go_count a").css("background","#19bf96");
+		   }
+	  });
+  
+//全选ygb
+  jQuery(":checkbox[id=ids_ygb]").click(function(){
+	    var val=jQuery(this).attr("checked");
+		var value = "ygb";
+		if(val=="checked"){
+		  if(jQuery(":checkbox[data-group=pt]").attr("checked")=="checked"){
+			  jQuery(":checkbox[id=ids_pt]").attr("checked",false);
+			  jQuery(":checkbox[data-group=pt]").attr("checked",false);
+			  jQuery(":checkbox[data-group=pt]").parent().parent().parent().removeClass("this");
+		  }
+		  if(jQuery(":checkbox[data-group=cn]").attr("checked")=="checked"){
+			  jQuery(":checkbox[id=ids_cn]").attr("checked",false);
+			  jQuery(":checkbox[data-group=cn]").attr("checked",false);
+			  jQuery(":checkbox[data-group=cn]").parent().parent().parent().removeClass("this");
+		  }
+		  jQuery(":checkbox[data-group="+value+"]").attr("checked","checked");
+		  jQuery(":checkbox[data-group="+value+"]").parent().parent().parent().addClass("this");
+		  var gc_id=jQuery(":checkbox[id=id]:first").val();
+		  var count=jQuery("#goods_count_"+gc_id).val();
+		  goods_count_adjust(gc_id,count,"mul");
+		}else{
+		  jQuery(":checkbox[data-group="+value+"]").attr("checked",false);
+		  jQuery(":checkbox[data-group="+value+"]").parent().parent().parent().removeClass("this");
+		  jQuery("#total_price").html("¥0.00");
+		  jQuery("#enough_reduce_money").hide();
+		  jQuery("a[id^=select_gift_]").hide();
+		  jQuery("div[id^=gift_inner_]").hide();
+		  jQuery("div[id^=gift_list_]").remove();
+		  #if($!er_goods)
+	          #foreach($param in ${er_goods.keySet()})
+			  jQuery("#erString$!param").html("$!erString.get($param)");
+			  #end
+		  #end
+		}
+		var carts_size = jQuery(":checkbox[id=id]:checked").length;
+		    if(carts_size<=0){
+			 jQuery("span.go_count a").css("background","#999");
+			}else{
+			  jQuery("span.go_count a").css("background","#19bf96");
+		   }
+	  });
+  
+  //打开页面清除所有商品选择
+  jQuery(":checkbox").attr("checked",false);
+  jQuery("span.go_count a").css("background","#999");  
+  #if($!user)
+  jQuery("span.go_count a").hover(					  
+ 	function(){
+	 var carts_size = jQuery(":checkbox[id=id]:checked").length;
+	  if(carts_size<=0){
+		  jQuery(this).css({cursor:"url($!webPath/resources/style/common/images/refuse.cur),auto"})
+		}else{
+		  jQuery(this).css("cursor","pointer");
+	     }
+	 },
+	 function(){
+	 jQuery(this).css({cursor:"url(),auto"}
+	)
+ })
+  #end 
+    jQuery("div[id^=gift_inner_]").find("input").each(function(){                                           
+       jQuery(this).click(function(){  
+        var test= jQuery(this).attr("checked");    
+        if(this.checked){  
+         jQuery(this).parent().parent().parent().siblings().removeClass("this").find("input").attr("checked",false);  
+		 jQuery(this).parent().parent().parent().addClass("this");
+        }     
+       });  
+      });  
+   jQuery(".standard_td1").hover(function(){
+		jQuery(this).find("b").show();								 
+		},function(){
+			jQuery(this).find("b").hide();		
+			});
+//去结算横条浮动   
+jQuery(window).scroll(function(){
+        var holder = jQuery("#shopping_operate"),
+            elHeight = holder.height(),
+            elWidth = holder.width(),
+            oTop = holder.offset().top;
+        function scrollBar() {
+    		var dTop = jQuery(document).scrollTop(),
+    			wHeight = jQuery(window).height();
+    		if (dTop < (oTop - wHeight + elHeight)) {
+    			holder.css({
+    				height: elHeight,
+    				width: elWidth
+    			}).addClass('over_buy_button');
+    		} else {
+    			holder.removeClass('over_buy_button');
+    		}
+    	}
+        scrollBar();
+    	jQuery(window).unbind('scroll').bind('scroll', scrollBar);   
+	});
+
+});////
+function more_big_cart_remove(){
+	  	  var gcs="";
+		  jQuery(":checkbox[id=id]:checked").each(function(){
+			   var id=jQuery(this).val();
+			   var data_bind=jQuery(this).attr("data_bind");
+			  	 if(data_bind!=""&&data_bind!=undefined){
+				    gcs=data_bind+","+gcs;
+				   }else{
+					gcs=id+","+gcs;   
+					   }
+		 	 });
+			  if(gcs!=""){
+				  big_cart_remove(gcs);		
+				}else{
+				  showDialog("warning","","至少选中一条数据！",2,"warning",3,'');		
+				}	  
+	}
+	
+function big_cart_remove(ids){
+			var type=arguments[1];
+      			var method = function(){
+					   jQuery.post("$!current_webPath/remove_goods_cart.htm",{"ids":ids},function(data){
+							if(type=="one_combin"){
+								window.location.href="$!current_webPath/goods_cart1.htm";
+							}else{
+								  if(data.code=="100"){
+										jQuery.each(data.ids, function(index,remove_id){
+											if(remove_id.indexOf("combin")<0){
+												jQuery("table.shopping_table tr[id="+remove_id+"]").remove();
+												}else{
+												jQuery("table.shopping_table tr[data_bind="+remove_id+"]").remove();	
+													}						   
+										});
+										 jQuery("tr[id^=tr_]").each(function(){
+											var mark = jQuery(this).attr("mark");
+											if(jQuery("tr[mark=if_size_"+mark+"]").size()==0){
+											   jQuery(this).remove();					
+												}											
+											});
+										 if(data.count==0){
+											jQuery("form[name='cart_form']").remove();
+											jQuery(".shopping_car_none").show();
+											}
+											//计算购物车价钱
+											goods_count_adjust();
+									  }
+									 if(data.code=="200"){	
+									   showDialog("warning","","系统繁忙，请稍后重试！",2,"warning",3,'');	
+									 }
+								}																		  
+						 },"json");
+					};
+			if(type=="one_combin"){
+				showDialog("warning","","删除后其他套装商品将不享受优惠！",1,"warning",3,method);	
+			}
+			if(type=="all_combin"){
+				showDialog("warning","","确定删除整个组合套装吗？",1,"warning",3,method);	
+			}
+			 if(type=="" || type==undefined){
+				showDialog("warning","","确定删除已选中的商品？",1,"warning",3,method);
+			}
+       }
+function change_spec(obj){
+	var obj_id = jQuery(obj).attr("obj_id");
+	var div =jQuery("#standard_"+obj_id);
+		jQuery("div[id^=standard_]").hide();
+		var obj_img = jQuery(obj).attr("obj_img");
+		jQuery.post("$!webPath/goods_cart1_spec.htm",{
+			"cart_id":obj_id
+			},function(data){
+				jQuery(div).find(".standard_left").html(data);
+				jQuery(div).show().find(".standard_right img").attr("src",obj_img);
+				},"text");
+	}
+function confirm_change_spec(obj){
+	var id = jQuery(obj).attr("cart_id");
+	var gsp="";
+	jQuery(".product_choose_standard").find("#pro_choose_li_standard_"+id).each(function(){
+			 jQuery(jQuery(this).find("a[class='choose_notype_standard this']")).each(function(){								 
+				 gsp=jQuery(this).attr("gsp")+","+gsp; 
+			 });
+			 jQuery(jQuery(this).find("a[class='choose_one_standard this']")).each(function(){								 
+				 gsp=jQuery(this).attr("gsp")+","+gsp; 
+			 });
+		});
+	jQuery.post("$!webPath/goods_cart1_spec_save.htm",{
+			"id":id,
+			"gsp":gsp
+			},function(data){
+				if(data.code==100){
+					 lazyload();
+					}else{
+					showDialog("error","","未知错误，请刷新页面重试",1,"error",3);
+						}
+				},"json");
+	}	
+function cancle_change(){
+	jQuery("div[id^=standard_]").hide();
+	}	
+var lazyload=function(){
+	var load_class=arguments[0];
+	  if(load_class==undefined||load_class==""){
+		jQuery("#shoppingcart").load("$!webPath/goods_cart1_load.htm",fun_clear);
+	  }else{
+		jQuery("#"+load_class).load("$!webPath/goods_cart1_load.htm",{load_class:load_class},fun_clear); 
+		  }
+	};	
+	
+</script>
+<style>
+.shopping_cart{width:1202px}
+.cart_common{ margin-left:57px;}
+/* 复选框样式自定义 */
+input[type="checkbox"]{opacity: 0;cursor: pointer;-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";filter: alpha(opacity=0);position:relative;z-index:2}
+.checkbox_par{position:relative}
+.checkbox{position:absolute;left:0;top:0;width:12px;height:12px;background-image:url($!webPath/resources/img/checkbox.png);background-position:left 0;z-index:1}
+input:checked + .checkbox {
+    background-position:right 0
+}
+.group_tit{background: #f5f5f5;border: solid 1px #e8e8e8;}
+.shopping_table th{border-top:none;background-color:#f5f5f5;height:30px;line-height:30px} 
+.shopping_result,#total_price{font-family:Arial}
+.cart_common{border:1px solid #d8d8d8;border-radius:3px;width:67px;height:24px;line-height: 24px;font-size: 12px;color: #7b7b7b;text-align: center;padding: 0px;}
+.shop_count{display:inline-block} 
+.standard_td1{display:table-cell}
+</style>
+<div id="carts_list"> 
+#if($!carts.size()>0)
+  <form  method="post"  name="cart_form" target="_self" id="cart_form" action="$!webPath/goods_cart2.htm">
+    <input type="hidden" name="giftids" id="giftids" value="" />
+    <div class="shopping_list">
+      <div class="shopping_h">
+        <h1 style="font-size:16px;">我的购物车</h1>
+        <span class="hbuy_l" style="font-size:14px"></span> </div>
+      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="shopping_table">
+        <tr>
+          <th align="left" style="padding-left:10px;width:60px" > 
+          	<!-- <span class="shopping_table_check">
+          		<label><input name="ids" type="checkbox" value="-1" id="ids" />全选</label>
+            </span> -->
+          </th>
+          <th width="12%">商品名称</th>
+          #if($!isCN)
+          <th width="10%">重消</th>
+          <th width="12%">购物积分＋现金</th>
+          #else
+          <th width="12%">积分＋现金</th>
+          #end
+          <th width="10%">规格</th>
+          <th width="8%">单价</th>
+          <th width="9%">数量</th>
+          <th width="10%">小计(元)</th>
+          <th>操作</th>
+        </tr>
+        <tr style="display: block;height: 15px;"></tr>
+        #if($!cart.size()>0)
+        <!--普通商品开始-->
+       	<tr class="group_tit">
+        	<td colspan="9" style="text-align:left;text-indent:10px;position:relative;border-bottom:none">
+        	<span class="all_check checkbox_par"><input name="ids" type="checkbox" value="-1" id="ids_pt" /><div class="checkbox"></div></span>平台商家</td>
+       	</tr>
+        #foreach($obj in $cart)
+			#if($!obj.goods.goodsMainPhotoPath)
+			 #set($img="$!{obj.goods.goodsMainPhotoPath}")
+			#else
+			 #set($img="$!{config.goodsImage.path}")
+			#end
+			#set($goods_url="$!webPath/goods_$!{obj.goodsId}.htm")
+			#if($!config.secondDomainOpen && $!obj.goods.goodsType==1 && $!obj.storeSecondDomain!="")
+			#set($goods_url="http://$!{obj.storeSecondDomain}.$!{domainPath}/goods_$!{obj.goodsId}.htm")
+			#end  
+        <tr goods_list="goods_info_$!obj.id" id="$!obj.id" #if($!{obj.goods.goodsType}==1 && $!{obj.storeStatus}!=15) class="no_goods" #end>          
+          #if( $!{obj.goods.goodsType}==1 && $!{obj.storeStatus}!=15)
+          <tr class="no_goods_center"></tr> #end
+          <td><span class="shopping_table_check1  checkbox_par">
+          	#if($!{obj.goods.goodsType}==0 || $!{obj.storeStatus}==15)
+            <input data-group="pt" name="id" type="checkbox" mark="$!obj.cart_type" value="$!{obj.id}" id="id" />
+            <div class="checkbox"></div>
+            #end
+            </span></td>
+          <td><dl class="shopping_goods">
+              <dt><a href="$!goods_url" target="_blank"><span class="img_cspan">
+                <p><img src="$!{img}" width="60" height="60" /></p>
+                </span></a></dt>
+              <dd>
+                <h5><a href="$!goods_url" target="_blank">$!obj.goods.goodsName </a> 
+                #if($!{obj.groupBuy}==2) <span style="color:#19bf96">(团购)</span> 
+                #end 
+                #if($!{obj.activityStatus}==2) <span style="color:#19bf96">(促销)</span> 
+                #end
+                #if($!{obj.goodsIntegralPrice} > 0) <span style="color:#19bf96">(积分兑购)</span> 
+                #end
+                #if($!{obj.goodsMobilePrice} > 0) <span style="color:#19bf96">(手机专享)</span> 
+                #end
+                </h5>
+              </dd>
+            </dl></td>
+              #if($!isCN)
+            <td align="center" name="cxb">
+            	0
+            </td>
+            <td align="center" name="gwjf">
+           		0＋0元
+            </td>
+            #else
+	            <td align="center" name="gwjf">暂无 </td>
+            #end
+          <td align="center"><div #if($!obj.specInfo!="")class="standard_td1" #end>#if($!obj.specInfo!="")$!{obj.specInfo}#else暂无#end</div></td>
+          <td align="center">¥$!obj.price</td>
+          <td style="text-align:center"><span class="shop_count" style="display:inline-block"> <a  href="javascript:void(0);" id="count_down_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.fSaleType" class="shop_cut"></a>
+            <input name="goods_count_$!{obj.id}" type="text" id="goods_count_$!{obj.id}" f_sale_type="$!obj.goods.fSaleType" value="$!obj.count" gc_id="$!obj.id"  goods_count="$!obj.count" class="shop_num" />
+            <a href="javascript:void(0);" id="count_up_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.fSaleType" class="shop_add"></a> </span></td>
+          #set($total_price=$!obj.count * $!obj.price)
+          <td align="center"><strong class="shopping_result" id="gc_price$!{obj.id}">¥$!{total_price}</strong></td>
+          <td  align="center"><a href="javascript:void(0);"  id="favorite_$!{obj.goodsId}" class="cart_common">收藏</a><a href="javascript:void(0);" onclick="big_cart_remove('$!obj.id');" class="cart_common">删除</a></td>
+        </tr>
+        #end
+        #end
+        <!--普通商品结束-->
+        <tr style="display: block;height: 15px;"></tr>
+        <style>
+        .icon_huiyuan{width:27px;height:14px;position:absolute;left:83px;top:8px;background:url("$!webPath/resources/shop/yugou/img/icon_huiyuan.png")}
+        .shopping_table td {border-bottom: 1px solid #e8e8e8;}
+        .all_check{margin-right:5px;vertical-align: inherit;}        
+        
+        </style>
+        <!--精选专区-->
+        #if($!yungouCart.size()>0)
+        #if($!isCN)
+        
+      	 <tr class="group_tit">
+      	 	<td colspan="10" style="text-align:left;text-indent:10px;position:relative">
+      	 	<span class="all_check checkbox_par"><input name="ids" type="checkbox" value="-1" id="ids_ygb" /><div class="checkbox"></div></span>
+      	 精选专区</td>
+      	 </tr>
+        #foreach($obj in $yungouCart)
+			#if($!obj.goods.goodsMainPhotoPath)
+			 #set($img="$!{obj.goods.goodsMainPhotoPath}")
+			#else
+			 #set($img="$!{config.goodsImage.path}")
+			#end
+			#set($goods_url="$!webPath/goods_$!{obj.goodsId}.htm")
+			#if($!config.secondDomainOpen && $!obj.goods.goodsType==1 && $!obj.storeSecondDomain!="")
+			#set($goods_url="http://$!{obj.storeSecondDomain}.$!{domainPath}/goods_$!{obj.goodsId}.htm")
+			#end  
+
+        <tr goods_list="goods_info_$!obj.id" id="$!obj.id" #if($!{obj.goods.goodsType}==1 && $!{obj.storeStatus}!=15) class="no_goods" #end>          
+          #if( $!{obj.goods.goodsType}==1 && $!{obj.storeStatus}!=15)
+          <tr class="no_goods_center"></tr> #end
+          <td><span class="shopping_table_check1 checkbox_par">
+          	#if($!{obj.goods.goodsType}==0 || $!{obj.storeStatus}==15)
+            <input data-group="ygb" data-type="ygb" name="id" type="checkbox" mark="$!obj.cart_type" value="$!{obj.id}" id="id" />
+            <div class="checkbox"></div>
+            #end
+            </span></td>
+          <td><dl class="shopping_goods">
+              <dt><a href="$!goods_url" target="_blank"><span class="img_cspan">
+                <p><img src="$!{img}" width="60" height="60" /></p>
+                </span></a></dt>
+              <dd>
+                <h5><a href="$!goods_url" target="_blank">$!obj.goods.goodsName </a> 
+                #if($!{obj.groupBuy}==2) <span style="color:#19bf96">(团购)</span> 
+                #end 
+                #if($!{obj.activityStatus}==2) <span style="color:#19bf96">(促销)</span> 
+                #end
+                #if($!{obj.goodsIntegralPrice} > 0) <span style="color:#19bf96">(积分兑购)</span> 
+                #end
+                #if($!{obj.goodsMobilePrice} > 0) <span style="color:#19bf96">(手机专享)</span> 
+                #end
+                </h5>
+              </dd>
+            </dl></td>
+
+	          #if($!isCN)
+	            <td align="center" name="cxb"> $!obj.goods.needYgb </td>
+	            <td align="center" name="gwjf"> $!CommUtil.formatInteger($!{obj.goods.needIntegral})＋$!{obj.goods.needMoney}元 </td>
+	          #else
+	            <td align="center" name="gwjf"> $!CommUtil.formatInteger($!{obj.goods.needIntegral})＋$!{obj.goods.needMoney}元 </td>
+	          #end
+            
+          <td align="center"><div #if($!obj.specInfo!="")class="standard_td1" #end>#if($!obj.specInfo!="")$!{obj.specInfo}#else暂无#end</div></td>
+          <td align="center">¥<!-- $!obj.price -->$!obj.goods.needYgb</td>
+          <td align="center"><span class="shop_count"> <a  href="javascript:void(0);" id="count_down_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.fSaleType" class="shop_cut"></a>
+            <input name="goods_count_$!{obj.id}" type="text" id="goods_count_$!{obj.id}" f_sale_type="$!obj.goods.fSaleType" value="$!obj.count" gc_id="$!obj.id"  goods_count="$!obj.count" class="shop_num" />
+            <a href="javascript:void(0);" id="count_up_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.fSaleType" class="shop_add"></a> </span></td>
+          #set($total_price=$!obj.count * $!obj.goods.needYgb)
+          <td align="center"><strong class="shopping_result" id="gc_price$!{obj.id}">¥<!-- $!{total_price} -->$!total_price</strong></td>
+          <td  align="center"><a href="javascript:void(0);"  id="favorite_$!{obj.goodsId}" class="cart_common">收藏</a><a href="javascript:void(0);" onclick="big_cart_remove('$!obj.id');" class="cart_common">删除</a></td>
+        </tr>
+        #end
+        
+        #else 
+        <!-- 普通会员购买精选专区商品 -->
+        	<tr class="group_tit">
+	      	 	<td colspan="10" style="text-align:left;text-indent:10px;position:relative">
+	      	 	<span class="all_check checkbox_par"><input name="ids" type="checkbox" value="-1" id="ids_ygb" /><div class="checkbox"></div></span>
+	      	 精选专区</td>
+	      	 </tr>
+	        #foreach($obj in $yungouCart)
+				#if($!obj.goods.goodsMainPhotoPath)
+				 #set($img="$!{obj.goods.goodsMainPhotoPath}")
+				#else
+				 #set($img="$!{config.goodsImage.path}")
+				#end
+				#set($goods_url="$!webPath/goods_$!{obj.goodsId}.htm")
+				#if($!config.secondDomainOpen && $!obj.goods.goodsType==1 && $!obj.storeSecondDomain!="")
+				#set($goods_url="http://$!{obj.storeSecondDomain}.$!{domainPath}/goods_$!{obj.goodsId}.htm")
+				#end  
+	
+	        <tr goods_list="goods_info_$!obj.id" id="$!obj.id" #if($!{obj.goods.goodsType}==1 && $!{obj.storeStatus}!=15) class="no_goods" #end>          
+	          #if( $!{obj.goods.goodsType}==1 && $!{obj.storeStatus}!=15)
+	          <tr class="no_goods_center"></tr> #end
+	          <td><span class="shopping_table_check1 checkbox_par">
+	          	#if($!{obj.goods.goodsType}==0 || $!{obj.storeStatus}==15)
+	            <input data-group="ygb" data-type="ygb" name="id" type="checkbox" mark="$!obj.cart_type" value="$!{obj.id}" id="id" />
+	            <div class="checkbox"></div>
+	            #end
+	            </span></td>
+	          <td><dl class="shopping_goods">
+	              <dt><a href="$!goods_url" target="_blank"><span class="img_cspan">
+	                <p><img src="$!{img}" width="60" height="60" /></p>
+	                </span></a></dt>
+	              <dd>
+	                <h5><a href="$!goods_url" target="_blank">$!obj.goods.goodsName </a> 
+	                #if($!{obj.groupBuy}==2) <span style="color:#19bf96">(团购)</span> 
+	                #end 
+	                #if($!{obj.activityStatus}==2) <span style="color:#19bf96">(促销)</span> 
+	                #end
+	                #if($!{obj.goodsIntegralPrice} > 0) <span style="color:#19bf96">(积分兑购)</span> 
+	                #end
+	                #if($!{obj.goodsMobilePrice} > 0) <span style="color:#19bf96">(手机专享)</span> 
+	                #end
+	                </h5>
+	              </dd>
+	            </dl></td>
+	            
+	            <td align="center">
+	           		$!CommUtil.formatInteger($!{obj.goods.needIntegral})＋$!{obj.goods.needMoney}元
+	            
+	            </td>
+	          <td align="center"><div #if($!obj.specInfo!="")class="standard_td1" #end>#if($!obj.specInfo!="")$!{obj.specInfo}#else暂无#end</div></td>
+	          <td align="center" name="danjia">¥<!-- $!obj.price -->$!obj.price</td>
+	          <td align="center"><span class="shop_count"> <a  href="javascript:void(0);" id="count_down_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.fSaleType" class="shop_cut"></a>
+	            <input name="goods_count_$!{obj.id}" type="text" id="goods_count_$!{obj.id}" f_sale_type="$!obj.goods.fSaleType" value="$!obj.count" gc_id="$!obj.id"  goods_count="$!obj.count" class="shop_num" />
+	            <a href="javascript:void(0);" id="count_up_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.fSaleType" class="shop_add"></a> </span></td>
+	          #set($total_price=$!obj.count * $!obj.price)
+	          <td align="center"><strong class="shopping_result" id="gc_price$!{obj.id}">¥<!-- $!{total_price} -->$!total_price</strong></td>
+	          <td  align="center"><a href="javascript:void(0);"  id="favorite_$!{obj.goodsId}" class="cart_common">收藏</a><a href="javascript:void(0);" onclick="big_cart_remove('$!obj.id');" class="cart_common">删除</a></td>
+	        </tr>
+	        #end
+        <!-- 普通会员购买精选专区商品 结束 -->
+        #end
+        
+        #end
+        <!--精选专区结束-->
+       
+       <!--重消商品开始-->
+        #if($!cnCart.size()>0)
+      	 <tr class="group_tit"><td colspan="10" style="text-align:left;text-indent:10px;position:relative">
+      	 	<span class="all_check checkbox_par">
+      	 		<input name="ids" type="checkbox" value="-1" id="ids_cn" />
+      	 		<div class="checkbox"></div>
+      	 	</span>重消
+      	 </td>
+      	 </tr>
+        #foreach($obj in $cnCart)
+			#if($!obj.goods.goodsMainPhotoPath)
+			 #set($img="$!{obj.goods.goodsMainPhotoPath}")
+			#else
+			 #set($img="$!{config.goodsImage.path}")
+			#end
+			#set($goods_url="$!webPath/goods_$!{obj.goodsId}.htm")
+			#if($!config.secondDomainOpen && $!obj.goods.goodsType==1 && $!obj.storeSecondDomain!="")
+			#set($goods_url="http://$!{obj.storeSecondDomain}.$!{domainPath}/goods_$!{obj.goodsId}.htm")
+			#end  
+
+        <tr goods_list="goods_info_$!obj.id" id="$!obj.id" #if($!{obj.goods.goodsType}==1 && $!{obj.storeStatus}!=15) class="no_goods" #end>          
+          #if( $!{obj.goods.goodsType}==1 && $!{obj.storeStatus}!=15)
+          <tr class="no_goods_center"></tr> #end
+          <td><span class="shopping_table_check1 checkbox_par">
+          	#if($!{obj.goods.goodsType}==0 || $!{obj.storeStatus}==15)
+            <input data-group="cn" data-type="cn" name="id" type="checkbox" mark="$!obj.cart_type" value="$!{obj.id}" id="id" />
+            <div class="checkbox"></div>
+            #end
+            </span></td>
+          <td><dl class="shopping_goods">
+              <dt><a href="$!goods_url" target="_blank"><span class="img_cspan">
+                <p><img src="$!{img}" width="60" height="60" /></p>
+                </span></a></dt>
+              <dd>
+                <h5><a href="$!goods_url" target="_blank">$!obj.goods.goodsName </a> 
+                #if($!{obj.groupBuy}==2) <span style="color:#19bf96">(团购)</span> 
+                #end 
+                #if($!{obj.activityStatus}==2) <span style="color:#19bf96">(促销)</span> 
+                #end
+                #if($!{obj.goodsIntegralPrice} > 0) <span style="color:#19bf96">(积分兑购)</span> 
+                #end
+                #if($!{obj.goodsMobilePrice} > 0) <span style="color:#19bf96">(手机专享)</span> 
+                #end
+                </h5>
+              </dd>
+            </dl></td>
+            <td></td>
+            <td></td>
+          <td align="center"><div #if($!obj.specInfo!="")class="standard_td1" #end>#if($!obj.specInfo!="")$!{obj.specInfo}#else暂无#end</div></td>
+          <td align="center">¥$!obj.price</td>
+          <td align="center"><span class="shop_count"> <a  href="javascript:void(0);" id="count_down_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.fSaleType" class="shop_cut"></a>
+            <input name="goods_count_$!{obj.id}" type="text" id="goods_count_$!{obj.id}" f_sale_type="$!obj.goods.fSaleType" value="$!obj.count" gc_id="$!obj.id"  goods_count="$!obj.count" class="shop_num" />
+            <a href="javascript:void(0);" id="count_up_$!obj.id" gc_id="$!obj.id" f_sale_type="$!obj.goods.fSaleType" class="shop_add"></a> </span></td>
+          #set($total_price=$!obj.count * $!obj.price)
+          <td align="center"><strong class="shopping_result" id="gc_price$!{obj.id}">¥$!{total_price}</strong></td>
+          <td  align="center"><a href="javascript:void(0);"  id="favorite_$!{obj.goodsId}" class="cart_common">收藏</a><a href="javascript:void(0);" onclick="big_cart_remove('$!obj.id');" class="cart_common">删除</a></td>
+        </tr>
+        #end
+        #end
+        <!--普通商品结束3-->
+       
+       
+       
+       
+        
+        <!--满就减活动开始-->
+        #if($!er_goods)
+        #foreach($param in ${er_goods.keySet()})
+        <tr  id="tr_$!param" mark="$!param">
+          <td colspan="7" style="padding:0px;"><div class="gift_header"> <span class="icon_j"></span> <span id="erString$!param">$!erString.get($param)</span><i><a href="$!webPath/enoughreduce/index_$!{param}.htm" target="_blank">更多活动商品</a></i> </div></td>
+        </tr>
+        #foreach($obj in ${er_goods.get($param)})
+        #if($!obj.goods.goods_main_photo)               
+        #set($img="$!imageWebServer/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        
+        #set($goods_url="$!webPath/goods_$!{obj.goods.id}.htm")
+        #if($!config.second_domain_open && $!obj.goodsType==1 && $!obj.goods.goods_store.store_second_domain!="")
+        #set($goods_url="http://$!{obj.goods.goods_store.store_second_domain}.$!{domainPath}/goods_$!{obj.goods.id}.htm")
+        #end
+        <tr goods_list="goods_info_$!obj.id" id="$!obj.id" mark="if_size_$!param" #if($!{obj.storeStatus}!=15) class="no_goods" #end>
+			#if($!{obj.storeStatus}!=15)
+			<tr class="no_goods_center"></tr>
+            #end
+          <td><span class="shopping_table_check1">
+          	#if($!{obj.goodsType}==0 || $!{obj.storeStatus}==15)
+            <input name="id" type="checkbox" value="$!{obj.id}" id="id" />
+            #end
+            </span></td>
+          <td><dl class="shopping_goods">
+              <dt><a href="$!goods_url" target="_blank"><span class="img_cspan">
+                <p><img src="$!{img}" width="60" height="60" /></p>
+                </span></a></dt>
+              <dd>
+                <h5><a href="$!goods_url" target="_blank">$!obj.goods.goodsName </a> </h5>
+              </dd>
+            </dl></td>
+          <td align="center"><div #if($!obj.specInfo!="")class="standard_td1" #end>#if($!obj.specInfo!="")$!{obj.specInfo}#else暂无#end
+              <!--规格修改-->
+              <div class="standard" id="standard_$!{obj.id}" style="display:none">
+              <div class="standard_left"></div>
+                <div class="standard_right"><img src="" width="150" height="150" /></div>
+              </div>
+              <!--规格修改-->
+             #if($!obj.specInfo!="") <b style="display:none"><a href="javascript:void(0);" obj_img="$!{img}" obj_id="$!obj.id" onclick="change_spec(this);">修改</a></b> #end</div></td>
+          <td align="center">¥$!obj.price</td>
+          <td align="center"><span class="shop_count"><a  href="javascript:void(0);" id="count_down_$!obj.id" f_sale_type="$!obj.fSaleType" gc_id="$!obj.id"  class="shop_cut"></a>
+            <input name="goods_count_$!{obj.id}" type="text" id="goods_count_$!{obj.id}" f_sale_type="$!obj.fSaleType" value="$!obj.count" gc_id="$!obj.id"  goods_count="$!obj.count" class="shop_num" />
+            <a href="javascript:void(0);" id="count_up_$!obj.id" f_sale_type="$!obj.fSaleType" gc_id="$!obj.id" class="shop_add"></a></span></td>
+          #set($total_price=$!obj.count * $!obj.price)
+          <td align="center"><strong class="shopping_result" id="gc_price$!{obj.id}">¥$!{total_price}</strong></td>
+          <td  align="center"><a href="javascript:void(0);" user_id="$!obj.goods.goods_store.user.id" id="favorite_$!{obj.goods.id}" class="cart_common">收藏</a><a href="javascript:void(0);" onclick="big_cart_remove('$!obj.id');" class="cart_common">删除</a></td>
+        </tr>
+        #end
+        #end
+        #end
+        <!--满就送活动开始-->
+        #if($!ac_goods)
+        #foreach($param in ${ac_goods.keySet()})
+        #set($buyGift = $!goodsViewTools.query_buyGift("$!{param}"))
+        <tr id="tr_$!buyGift.id" mark="$!buyGift.id" cart_id="$!obj.id">
+          <td colspan="7" style="padding:0px;"><div class="gift_header" id="gift_header_$!buyGift.id"> <span class="icon"></span> <span>活动商品满$!buyGift.condition_amount元即有赠品相送。</span><i><a href="$!webPath/buygift/index_$!{buyGift.id}.htm"  target="_blank">更多活动商品</a></i> <span class="gift_btn"> <a class="gift_a" style="display:none" href="javascript:void(0);" onclick="gift_tier_show('$!{buyGift.id}');" id="select_gift_$!buyGift.id">选择赠品</a>
+              <div class="gift_tier" style="display:none" id="gift_inner_$!buyGift.id">
+                <div class="gift_inner">
+                  <h1><span class="fl">请选赠送商品，数量有限，赠完即止</span><a class="fr" onclick="jQuery('#gift_inner_$!buyGift.id').hide();"></a></h1>
+                  <div class="gift_goods">
+                    <ul>
+                      #set($v_count=0)
+                      #foreach($map in $!CommUtil.Json2List("$!buyGift.gift_info"))
+                      #set($storegoods_count = $!{map.get('storegoods_count')})	
+                      #set($goods_id = "$!{map.get('goods_id')}")	
+                      #set($enough=1)
+                      #if($!storegoods_count==0)
+                      #if($!{map.get('goods_count')}<=0)
+                      #set($enough=0)
+                      #end
+                      #end
+                      
+                      #if($!storegoods_count==1)
+                      #set($g = $!goodsViewTools.query_Goods("$!{goods_id}"))
+                      #if($!g)
+                      #if($!g.goods_inventory<=0)
+                      #set($enough=0)
+                      #end
+                      #else
+                      #set($enough=0)
+                      #end
+                      #end
+                      
+                      
+                      #if($!enough==1)  
+                      #set($goods_name = "$!{map.get('goods_name')}")
+                      #set($goods_price = "$!{map.get('goods_price')}")
+                      #set($goods_mainphoto_path = "$!{map.get('goods_main_photo')}")
+                      #set($img="$!imageWebServer/$!{goods_mainphoto_path}")
+                      #set($goods_domainPath = "$!{map.get('goods_domainPath')}")
+                      #set($v_count=$!v_count+1)
+                      <li class="">
+                        <dl>
+                          <dt>
+                            <input type="checkbox" value="$!goods_id" goods_name="$!goods_name" id="giftid"  />
+                          </dt>
+                          <dd class="img"><a href="$!goods_domainPath" target="_blank"><img src="$!img" /></a></dd>
+                          <dd class="text"> <span><a href="$!goods_domainPath" target="_blank">$!goods_name</a></span> <span>原价：¥$!goods_price元 现价：¥0元</span> </dd>
+                        </dl>
+                      </li>
+                      #end
+                      #end
+                      #if($!v_count==0)
+                      <p style="padding-top:15px; text-align:center">暂无赠品</p>
+                      #end
+                    </ul>
+                  </div>
+                  <div class="gift_enter">
+                    <input class="enter" type="button" value="确定" onclick="gift_tier_confirm('$!{buyGift.id}');" />
+                    <input class="cancel" type="button" value="取消" onclick="gift_tier_hide('$!{buyGift.id}');" />
+                  </div>
+                </div>
+                <div class="gift_bg"></div>
+              </div>
+              </span> </div>
+            </td>
+        </tr>
+        #foreach($obj in ${ac_goods.get($param)})
+        #if($!obj.goods.goods_main_photo)               
+        #set($img="$!imageWebServer/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        
+        #set($goods_url="$!webPath/goods_$!{obj.goods.id}.htm")
+        #if($!config.second_domain_open && $!obj.goodsType==1 && $!obj.goods.goods_store.store_second_domain!="")
+        #set($goods_url="http://$!{obj.goods.goods_store.store_second_domain}.$!{domainPath}/goods_$!{obj.goods.id}.htm")
+        #end
+        <tr goods_list="goods_info_$!obj.id" id="$!obj.id" mark="if_size_$!buyGift.id" #if($!{obj.storeStatus}!=15) class="no_goods" #end>
+        	#if($!{obj.storeStatus}!=15)
+			<tr class="no_goods_center"></tr>
+            #end
+          <td><span class="shopping_table_check1">
+          	#if($!{obj.goodsType}==0 || $!{obj.storeStatus}==15)
+            <input name="id" type="checkbox" value="$!{obj.id}" id="id" check_gift_id="$!buyGift.id" />
+            #end
+            </span></td>
+          <td><dl class="shopping_goods">
+              <dt><a href="$!goods_url" target="_blank"><span class="img_cspan">
+                <p><img src="$!{img}" width="60" height="60" /></p>
+                </span></a></dt>
+              <dd>
+                <h5><a href="$!goods_url" target="_blank">$!obj.goods.goodsName </a> 
+                #if($!{obj.groupBuy}==2) <span style="color:#19bf96">(团购)</span> 
+                #end 
+                #if($!{obj.activityStatus}==2) <span style="color:#19bf96">(促销)</span> 
+                #end
+                #if($!{obj.goodsIntegralPrice} > 0) <span style="color:#19bf96">(积分兑购)</span> 
+                #end
+                #if($!{obj.goodsMobilePrice} > 0) <span style="color:#19bf96">(手机专享)</span> 
+                #end
+                </h5>
+              </dd>
+            </dl></td>
+          <td align="center"><div #if($!obj.specInfo!="")class="standard_td1" #end>#if($!obj.specInfo!="")$!{obj.specInfo}#else暂无#end
+              <!--规格修改-->
+              <div class="standard" id="standard_$!{obj.id}" style="display:none">
+              <div class="standard_left"></div>
+                <div class="standard_right"><img src="" width="150" height="150" /></div>
+              </div>
+              <!--规格修改-->
+             #if($!obj.specInfo!="") <b style="display:none"><a href="javascript:void(0);" obj_img="$!{img}" obj_id="$!obj.id" onclick="change_spec(this);">修改</a></b> #end</div></td>
+          <td align="center">¥$!obj.price</td>
+          <td align="center"><span class="shop_count"><a  href="javascript:void(0);" f_sale_type="$!obj.fSaleType" id="count_down_$!obj.id" gc_id="$!obj.id"  class="shop_cut" check_gift_id="$!buyGift.id"></a>
+            <input name="goods_count_$!{obj.id}" type="text" id="goods_count_$!{obj.id}"  f_sale_type="$!obj.fSaleType"  value="$!obj.count" gc_id="$!obj.id"  goods_count="$!obj.count" class="shop_num" check_gift_id="$!buyGift.id" />
+            <a href="javascript:void(0);" id="count_up_$!obj.id" f_sale_type="$!obj.fSaleType" gc_id="$!obj.id" class="shop_add" check_gift_id="$!buyGift.id"></a></span></td>
+          #set($total_price=$!obj.count * $!obj.price)
+          <td align="center"><strong class="shopping_result" id="gc_price$!{obj.id}">¥$!{total_price}</strong></td>
+          <td  align="center"><a href="javascript:void(0);" id="favorite_$!{obj.goods.id}" user_id="$!obj.goods.goods_store.user.id" class="cart_common">收藏</a><a href="javascript:void(0);" onclick="big_cart_remove('$!obj.id');" class="cart_common">删除</a></td>
+        </tr>
+        #end
+        #end
+        #end
+        <!--满就减活动结束-->
+        <script>
+         function combin_carts_detail(id){
+			 var div = jQuery("div[id=combin_other_"+id+"]");
+			 if(id!="" && id!=undefined){
+			   var dis = jQuery(div).css("display");
+				   if(dis=="none"){
+					   jQuery(div).show();
+					   jQuery.post("$!webPath/combin_carts_detail.htm",
+								 {"id":id
+									 },function(data){
+										 if(data.code==100){
+												 jQuery(div).find("div[id='combin_other_content']").show();
+												 jQuery(div).find("ul[id='combin_ul']").html("");
+												jQuery.each(data.map_list,function(index,obj){
+														var obj_id = obj.id;
+														var obj_img = obj.img;
+														var obj_name = obj.name;
+														var obj_url = obj.url;
+														var obj_price = obj.price;
+														var obj_count = obj.count;
+														var obj_spec_info = obj.specInfo;
+														 jQuery(div).find("ul[id='combin_ul']").append("<li><dl><dd class='img'><a href='"+obj_url+"' target='_blank'><img src='"+obj_img+"'/></a></dd><dd class='text'><span style='height:24px; overflow:hidden;'><a href='"+obj_url+"' target='_blank'>"+obj_name+"</a><br></span><span><span style='color:#666'>"+obj_spec_info+"</span></span></dd><dd style='padding-left:20px'><a style='color:#0a8db8' href='javascript:void(0);' onclick='big_cart_remove(\""+obj_id+"\",\"one_combin\")'>删除</a></dd></dl></li>");  					  
+												 });
+											 }
+											if(data.code==-100){
+												 showDialog("error","","参数错误，请刷新页面！",2,"error",3,"");
+												 }			  
+											 },"json"); 
+					   }
+				 }else{
+				 showDialog("error","","参数错误，请刷新页面！",2,"error",3,"");
+				 }
+			 };
+         </script>
+        <!--组合套装活动开始-->
+        #if($!combin_carts)
+        #foreach($obj in $combin_carts)
+        #if($!obj.combin_main==1)
+        #set($suit_map=$!goodsViewTools.getSuitInfo("$!obj.id"))
+        #end
+        #if($!obj.goods.goods_main_photo)               
+        #set($img="$!imageWebServer/$!{obj.goods.goods_main_photo.path}/$!{obj.goods.goods_main_photo.name}_small.$!{obj.goods.goods_main_photo.ext}")
+        #else
+        #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+        #end
+        
+        #set($goods_url="$!webPath/goods_$!{obj.goods.id}.htm")
+        #if($!config.second_domain_open && $!obj.goodsType==1 && $!obj.goods.goods_store.store_second_domain!="")
+        #set($goods_url="http://$!{obj.goods.goods_store.store_second_domain}.$!{domainPath}/goods_$!{obj.goods.id}.htm")
+        #end
+        <tr data_bind="$!obj.combinMark">
+          <td colspan="7" style="padding-top:0; padding-bottom:0px;"><div class="gift_header group_car"> <span class="icon"></span> <span>$!{obj.combin_version}套装价格：¥$!{suit_map.get('plan_goods_price')}</span> <span class="gift_btn"> <a class="gift_a" href="javascript:void(0);" onclick="combin_carts_detail('$!obj.id');">组合明细</a>
+              <div class="gift_tier" id="combin_other_$!{obj.id}" style="display:none">
+                <div class="gift_loading" style="height:86px"><img src="$!webPath/resources/style/common/images/ajax_loader.gif"/></div>
+                <div class="gift_inner" id="combin_other_content" style="display:none">
+                  <h1><span class="fl" style="color:#F90">重要提示：删除任意套装内商品，其他商品不再享受套装优惠</span><a class="fr" onclick="javascript:jQuery('div[id^=combin_other]').hide();"></a></h1>
+                  <div class="gift_goods" style="height:150px">
+                    <ul id="combin_ul">
+                    </ul>
+                  </div>
+                  <div class="gift_enter">
+                    <input class="enter" type="button" value="关闭" onclick="javascript:jQuery('div[id^=combin_other]').hide();" />
+                  </div>
+                </div>
+                <div class="gift_bg" style="height:247px"></div>
+              </div>
+              </span> </div></td>
+        </tr>
+        <tr goods_list="goods_info_$!obj.id" id="$!obj.id" data_bind="$!obj.combinMark" #if($!{obj.storeStatus}!=15) class="no_goods" #end>
+          #if($!{obj.storeStatus}!=15)
+		<tr class="no_goods_center"></tr>
+          #end
+          <td><span class="shopping_table_check1">
+          #if($!{obj.goodsType}==0 || $!{obj.storeStatus}==15)
+            <input name="id" type="checkbox" value="$!{obj.id}" id="id" data_bind="$!obj.combinMark" />
+          #end  
+            </span></td>
+          <td><dl class="shopping_goods">
+              <dt><a href="$!goods_url" target="_blank"><span class="img_cspan">
+                <p><img src="$!{img}" width="60" height="60" /></p>
+                </span></a></dt>
+              <dd>
+                <h5><a href="$!goods_url" target="_blank">$!obj.goods.goodsName </a></h5>
+              </dd>
+            </dl></td>
+          <td align="center"><div #if($!obj.specInfo!="")class="standard_td1" #end>#if($!obj.specInfo!="")$!{obj.specInfo}#else暂无#end
+         </div></td>
+          <td align="center">¥$!{suit_map.get('plan_goods_price')}<br>
+            <b style="color:#19bf96">（组合单价）</b></td>
+          <td align="center"><span class="shop_count"> <a  href="javascript:void(0);" f_sale_type="$!obj.fSaleType" id="count_down_$!obj.id" gc_id="$!obj.id"  class="shop_cut"></a>
+            <input name="goods_count_$!{obj.id}" type="text" id="goods_count_$!{obj.id}" f_sale_type="$!obj.fSaleType" value="$!obj.count" gc_id="$!obj.id"  goods_count="$!obj.count" class="shop_num" />
+            <a href="javascript:void(0);" id="count_up_$!obj.id" f_sale_type="$!obj.fSaleType" gc_id="$!obj.id" class="shop_add"></a> </span></td>
+          <td align="center"><strong class="shopping_result" id="gc_price$!{obj.id}">¥#if($!{suit_map.get('suit_all_price')})$!{suit_map.get('suit_all_price')}#else$!{suit_map.get('plan_goods_price')}#end</strong></td>
+          <td  align="center"><a href="javascript:void(0);" user_id="$!obj.goods.goods_store.user.id" id="favorite_$!{obj.goods.id}" class="cart_common">收藏</a><a href="javascript:void(0);" onclick="big_cart_remove('$!obj.combinMark','all_combin');" class="cart_common">删除</a></td>
+        </tr>
+        #end 
+        #end
+        <!--组合套装活动结束-->
+      </table>
+    </div>
+    <div id="show_money">
+    <div class="shopping_operate" id="shopping_operate"> <span class="go_count"> <i style="height:45px; width:200px; float:left;">
+      <ul style="display:none" id="enough_reduce_money">
+        <li style="height:20px; margin-top:3px; width:200px;line-height:20px; float:left;">商品总计:<span id="before_price">0</span>元</li>
+        <li style="height:20px; margin-top:3px; width:200px;line-height:20px; float:left;">满就减金额:<span id="reduce_price">0</span>元</li>
+      </ul>
+      </i> <b>商品总价（不含运费）：<strong id="total_price"><span style="margin-right: 10px">¥</span>0.00</strong></b>
+      <a href="javascript:void(0);" 
+	      #if(!$!user) dialog_uri="$!webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" 
+	      #else onclick="confirm_cart()" 
+	      #end class="go_price">
+	      <input type="hidden" name="gcs" id="gcs" />
+	      	去结算
+	      </a></span> 
+	      <!-- <span class="shopping_operate_check"><label><input name="ids" type="checkbox" value="-1" id="ids" />全选</label></span> -->
+   		 <span class="shop_del_all"><a href="javascript:void(0);" onclick="more_big_cart_remove();">批量删除</a></span><span class="shop_del_all"><a href="$!webPath/index.htm">继续购物</a></span></div>
+     </div> 
+  </form>
+  #end
+  <div class="shopping_car_none"  #if($!carts.size()>0) style="display:none" #end>
+    <div class="shopcar_none_box">
+      <dl>
+        <dt></dt>
+        <dd>
+          <h4>您的购物车还是空的，赶紧行动吧！</h4>
+          <span class="none_box_sp">您可以<a href="$!webPath/buyer/order.htm">查看订单</a>，或者是<a href="$!webPath/index.htm">随便看看</a></span></dd>
+      </dl>
+    </div>
+  </div>
+</div>
+#if(!$!load_class)
+<script>
+      jQuery(document).ready(function(){
+		jQuery(".shopping_other_list_center").slide({titCell:".shopping_other_list_button ul",mainCell:".shopping_other_list_center_box ul",autoPage:true,effect:"left",autoPlay:true,scroll:6,vis:7,trigger:"click"});
+		});
+      </script>
+      
+#set($goodsList=$!goodsViewTools.query_Ztc_Goods(21))
+#if($!goodsList.size() > 0)
+<div class="shopping_other">
+  <div class="shopping_other_list_center">
+    <div class="shopping_other_list_button">
+      <div class="shopping_other_list_button_left">您可能还需要其他商品</div>
+      <div class="shopping_other_list_button_right"> <a class="next"></a>
+        <ul>
+          <li></li>
+        </ul>
+        <a class="prev"></a> </div>
+    </div>
+    <div class="shopping_other_list_center_box">
+      <div class="shopping_other_list_center_box_c">
+        <ul>
+        
+          #foreach($goods in $!goodsList)
+	   		#if($!goods.goodsMainPhotoPath)
+	         #set($img="$!{goods.goodsMainPhotoPath}")
+	        #else
+	         #set($img="$!{config.goodsImage.path}")
+	        #end
+	
+	        #set($goods_url="goods_$!{goods.id}_floor.htm") 
+	        #if($!config.secondDomainOpen && $!goods.goodsType==1 && $!goods.storeSecondDomain!="")
+	        #set($goods_url="http://$!{goods.storeSecondDomain}.$!{domainPath}/goods_$!{goods.id}_floor.htm")
+	        #end
+          <li><span><a href="$!goods_url" target="_blank"><img src="$!{img}_148x148" /></a></span><i><a href="$!goods_url" target="_blank">$!goods.goodsName</a></i><b>商城价：<strong>¥$!{goods.goodsShowPrice}</strong></b> <em class="shopping_other_list_center_box_buy"> #if($!user)
+            #if($!goods.fSaleType==1) <a style="margin:0 auto;" href="javascript:void(0);" goods_id="$!goods.id" goods_type="$!goodsType" user_id="$!goods.goods_store.user.id"   id="f_goods_cart_$!{goods.id}">F码购买</a></a> #else <a style="margin:0 auto;" href="javascript:void(0);" goods_id="$!goods.id" goods_type="$!goodsType" store_id="$!goods.goodsStoreId" id="goods_cart_$!{goods.id}">加入购物车</a> #end
+            #else
+            #if($!goods.fSaleType==1) <a style="margin:0 auto;" href="javascript:void(0);" dialog_uri="$!current_webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login">F码购买</a> #else <a style="margin:0 auto;" href="javascript:void(0);" goods_id="$!goods.id" goods_type="$!goodsType" store_id="$!goods.goodsStoreId" id="goods_cart_$!{goods.id}">加入购物车</a> #end
+            #end </em> </li>
+          #end
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+#end
+#end

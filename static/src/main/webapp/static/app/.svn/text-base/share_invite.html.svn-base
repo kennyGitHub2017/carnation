@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html style="font-size: 50px;">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="format-detection" content="telephone=no">
+    	<meta name="format-detection" content="email=no">
+    	<link rel="stylesheet" type="text/css" href="assets/css/common.css"/>
+    	<script type="text/javascript">
+			var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+			document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+    	</script>
+    	<script src="assets/js/base64.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			function is_weixin(){
+				var ua = navigator.userAgent.toLowerCase();
+				if(ua.match(/MicroMessenger/i)=="micromessenger") {
+					return true;
+			 	} else {
+					return false;
+				}
+			}
+			function getUrlPar(name) {
+				   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+				   var r = window.location.search.substr(1).match(reg);
+				   if (r!=null) return (r[2]); return null;
+			}
+			function wxlogin(){
+				var tit=getUrlPar('tit');
+				if(tit==null)
+				{
+					location.href=location.href+"&tit=5LqR5bCa5Lya5ZGY";
+				}
+				if(is_weixin()&&getUrlPar('isflag')==null){
+					var url=Base64.encode(location.href);
+					var invitationCode=getUrlPar('invitationCode');
+					if(parseInt(invitationCode)==NaN) return;
+					var domain;
+					if(location.href.indexOf("ysysgo.com")>-1){
+						domain="http://mobile.ysysgo.com";
+					}else if(location.href.indexOf("ysysgo.cn")>-1){
+						domain="http://mobile.ysysgo.cn";
+					}
+					location.href=domain+"/user/loginUrl.htm?url='"+url+"'&invitationCode="+invitationCode;
+				}
+			}
+			wxlogin();
+			
+		</script>
+    	<style type="text/css">    		
+    		html,body{margin: 0;padding: 0;}
+    		.page{overflow: hidden;height: 100%;
+    			background: -moz-linear-gradient(top, #c9f2e4 0%, #ffffff 100%);
+			    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c9f2e4), color-stop(100%,#ffffff));
+			    background: -webkit-linear-gradient(top, #c9f2e4 0%,#ffffff 100%);
+			    background: -o-linear-gradient(top, #c9f2e4 0%,#ffffff 100%);
+			    background: -ms-linear-gradient(top, #c9f2e4 0%,#ffffff 100%);
+			    background: linear-gradient(to bottom, #c9f2e4 0%,#ffffff 100%);
+			    padding-bottom:1.8rem
+    		}
+    		.page .logo{width: 4.22rem;height: 1.31rem;margin: 0 auto;margin-top: 0.5rem;display: block;}    		
+    		.page .share_qrcode_text{width: 5.93rem;height:2.04rem;margin: 0 auto;margin-top: 0.5rem;}
+    		.page img{width: 100%;vertical-align: top;}
+    		.page .download{width: 2.76rem;height: 0.96rem;display: block;margin: 0 auto;margin-top: 0.1rem;}
+    		.share_qrcode_img{width: 6.55rem;height: 5.78rem;}
+    		.bottom{background: #29be96;position: fixed;width: 100%;left: 0;bottom: 0;border-top: dashed 2px #29BE96;height: 1.75rem;background-clip: padding-box;font-size: 0;}
+    		.bottom .icon{background: url(assets/shareImg/cut.png) no-repeat center center;background-size: cover;width: 0.37rem;height: 0.3rem;position:absolute;right: 10px;top: -0.15rem;}
+			.bottom .gzh{margin: 0.18rem 0 0 0.7rem;display: inline-block;width: 1.34rem;height: 1.37rem;}
+    		.bottom .bottom_text{background: url(assets/shareImg/share_bottom_text.png) no-repeat center center;background-size: cover;width: 4.38rem;height: 0.98rem;display: inline-block;margin: 0.38rem 0 0 0.35rem;}
+    	</style>
+	</head>
+	<body>
+		<div class="page">
+			<img src="assets/shareImg/logo.png" alt="" class="logo" />
+			<div class="share_qrcode_text">
+				<img src="assets/shareImg/share_qrcode_text.png"  />
+			</div>
+			<a href="http://app.ysysgo.com" class="download"><img src="assets/shareImg/share_download.png" /></a>
+			<div class="share_qrcode_img">
+				 <img src="assets/shareImg/share_qrcode_img.png" />
+			</div>
+			<div class="bottom fn-clear">
+				<span class="icon"></span>
+				<img src="assets/shareImg/share_gzh.png" class="gzh" />				
+				<span class="bottom_text"></span>
+			</div>
+		</div>
+		<script src="assets/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="assets/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="assets/js/jquery.easing.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="assets/js/tips.js" type="text/javascript" charset="utf-8"></script>
+		<script src="assets/js/gongzhonghao.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var des=getUrlPar('des');
+				var tit=getUrlPar('tit');
+				if(tit==null)
+				{
+					location.href=location.href+"&tit=5LqR5bCa5Lya5ZGY";
+				}
+				if(des!=null){
+					tips(des);
+				}
+				if(tit!=null){
+					document.title="我是"+Base64.decode(tit)+",我为云尚代言";
+				}
+				$(".bottom").on('touchstart',function(){
+					gzhBox();
+				});
+			});
+  		</script>
+	</body>
+</html>

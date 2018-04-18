@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.FreeGoodsMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.FreeGoods">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="apply_count" property="applyCount" jdbcType="INTEGER" />
+		<result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+		<result column="class_id" property="classId" jdbcType="BIGINT" />
+		<result column="current_count" property="currentCount"
+			jdbcType="INTEGER" />
+		<result column="default_count" property="defaultCount"
+			jdbcType="INTEGER" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="failed_reason" property="failedReason"
+			jdbcType="VARCHAR" />
+		<result column="free_status" property="freeStatus" jdbcType="INTEGER" />
+		<result column="free_type" property="freeType" jdbcType="INTEGER" />
+		<result column="free_name" property="freeName" jdbcType="VARCHAR" />
+		<result column="goods_id" property="goodsId" jdbcType="BIGINT" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="free_acc_path" property="freeAccPath" jdbcType="VARCHAR" />
+		<result column="mobile_recommend" property="mobileRecommend"
+			jdbcType="INTEGER" />
+		<result column="mobile_recommend_time" property="mobileRecommendTime"
+			jdbcType="DATE" />
+		<result column="weixin_recommend" property="weixinRecommend"
+			jdbcType="INTEGER" />
+		<result column="weixin_recommend_time" property="weixinRecommendTime"
+			jdbcType="DATE" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.FreeGoodsBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.FreeGoods"
+		extends="BaseResultMap">
+		<result column="free_details" property="freeDetails" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, apply_count, begin_time, class_id,
+		current_count, default_count,
+		end_time, failed_reason, free_status, free_type, free_name, goods_id,
+		goods_name,
+		store_id, free_acc_path, mobile_recommend, mobile_recommend_time,
+		weixin_recommend,
+		weixin_recommend_time
+	</sql>
+	<sql id="Blob_Column_List">
+		free_details
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.shop.model.FreeGoodsExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_free_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.shop.model.FreeGoodsExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_free_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_free_goods
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_free_goods
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.FreeGoodsExample">
+		delete from shop_free_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.FreeGoods"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_free_goods (id, add_time, delete_status,
+		apply_count, begin_time, class_id,
+		current_count, default_count, end_time,
+		failed_reason, free_status, free_type,
+		free_name, goods_id, goods_name,
+		store_id, free_acc_path, mobile_recommend,
+		mobile_recommend_time, weixin_recommend, weixin_recommend_time,
+		free_details)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{applyCount,jdbcType=INTEGER}, #{beginTime,jdbcType=TIMESTAMP}, #{classId,jdbcType=BIGINT},
+		#{currentCount,jdbcType=INTEGER}, #{defaultCount,jdbcType=INTEGER},
+		#{endTime,jdbcType=TIMESTAMP},
+		#{failedReason,jdbcType=VARCHAR}, #{freeStatus,jdbcType=INTEGER}, #{freeType,jdbcType=INTEGER},
+		#{freeName,jdbcType=VARCHAR}, #{goodsId,jdbcType=BIGINT},
+		#{goodsName,jdbcType=VARCHAR},
+		#{storeId,jdbcType=BIGINT}, #{freeAccPath,jdbcType=VARCHAR}, #{mobileRecommend,jdbcType=INTEGER},
+		#{mobileRecommendTime,jdbcType=DATE},
+		#{weixinRecommend,jdbcType=INTEGER},
+		#{weixinRecommendTime,jdbcType=DATE},
+		#{freeDetails,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.FreeGoods"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_free_goods
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="applyCount != null">
+				apply_count,
+			</if>
+			<if test="beginTime != null">
+				begin_time,
+			</if>
+			<if test="classId != null">
+				class_id,
+			</if>
+			<if test="currentCount != null">
+				current_count,
+			</if>
+			<if test="defaultCount != null">
+				default_count,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+			<if test="failedReason != null">
+				failed_reason,
+			</if>
+			<if test="freeStatus != null">
+				free_status,
+			</if>
+			<if test="freeType != null">
+				free_type,
+			</if>
+			<if test="freeName != null">
+				free_name,
+			</if>
+			<if test="goodsId != null">
+				goods_id,
+			</if>
+			<if test="goodsName != null">
+				goods_name,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="freeAccPath != null">
+				free_acc_path,
+			</if>
+			<if test="mobileRecommend != null">
+				mobile_recommend,
+			</if>
+			<if test="mobileRecommendTime != null">
+				mobile_recommend_time,
+			</if>
+			<if test="weixinRecommend != null">
+				weixin_recommend,
+			</if>
+			<if test="weixinRecommendTime != null">
+				weixin_recommend_time,
+			</if>
+			<if test="freeDetails != null">
+				free_details,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="applyCount != null">
+				#{applyCount,jdbcType=INTEGER},
+			</if>
+			<if test="beginTime != null">
+				#{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="classId != null">
+				#{classId,jdbcType=BIGINT},
+			</if>
+			<if test="currentCount != null">
+				#{currentCount,jdbcType=INTEGER},
+			</if>
+			<if test="defaultCount != null">
+				#{defaultCount,jdbcType=INTEGER},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="failedReason != null">
+				#{failedReason,jdbcType=VARCHAR},
+			</if>
+			<if test="freeStatus != null">
+				#{freeStatus,jdbcType=INTEGER},
+			</if>
+			<if test="freeType != null">
+				#{freeType,jdbcType=INTEGER},
+			</if>
+			<if test="freeName != null">
+				#{freeName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsId != null">
+				#{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsName != null">
+				#{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="freeAccPath != null">
+				#{freeAccPath,jdbcType=VARCHAR},
+			</if>
+			<if test="mobileRecommend != null">
+				#{mobileRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="mobileRecommendTime != null">
+				#{mobileRecommendTime,jdbcType=DATE},
+			</if>
+			<if test="weixinRecommend != null">
+				#{weixinRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="weixinRecommendTime != null">
+				#{weixinRecommendTime,jdbcType=DATE},
+			</if>
+			<if test="freeDetails != null">
+				#{freeDetails,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.FreeGoodsExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_free_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_free_goods
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.applyCount != null">
+				apply_count = #{record.applyCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.beginTime != null">
+				begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.classId != null">
+				class_id = #{record.classId,jdbcType=BIGINT},
+			</if>
+			<if test="record.currentCount != null">
+				current_count = #{record.currentCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.defaultCount != null">
+				default_count = #{record.defaultCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.endTime != null">
+				end_time = #{record.endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.failedReason != null">
+				failed_reason = #{record.failedReason,jdbcType=VARCHAR},
+			</if>
+			<if test="record.freeStatus != null">
+				free_status = #{record.freeStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.freeType != null">
+				free_type = #{record.freeType,jdbcType=INTEGER},
+			</if>
+			<if test="record.freeName != null">
+				free_name = #{record.freeName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsId != null">
+				goods_id = #{record.goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goodsName != null">
+				goods_name = #{record.goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.freeAccPath != null">
+				free_acc_path = #{record.freeAccPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.mobileRecommend != null">
+				mobile_recommend = #{record.mobileRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="record.mobileRecommendTime != null">
+				mobile_recommend_time = #{record.mobileRecommendTime,jdbcType=DATE},
+			</if>
+			<if test="record.weixinRecommend != null">
+				weixin_recommend = #{record.weixinRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="record.weixinRecommendTime != null">
+				weixin_recommend_time = #{record.weixinRecommendTime,jdbcType=DATE},
+			</if>
+			<if test="record.freeDetails != null">
+				free_details = #{record.freeDetails,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_free_goods
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		apply_count = #{record.applyCount,jdbcType=INTEGER},
+		begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+		class_id = #{record.classId,jdbcType=BIGINT},
+		current_count = #{record.currentCount,jdbcType=INTEGER},
+		default_count = #{record.defaultCount,jdbcType=INTEGER},
+		end_time = #{record.endTime,jdbcType=TIMESTAMP},
+		failed_reason = #{record.failedReason,jdbcType=VARCHAR},
+		free_status = #{record.freeStatus,jdbcType=INTEGER},
+		free_type = #{record.freeType,jdbcType=INTEGER},
+		free_name = #{record.freeName,jdbcType=VARCHAR},
+		goods_id = #{record.goodsId,jdbcType=BIGINT},
+		goods_name = #{record.goodsName,jdbcType=VARCHAR},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		free_acc_path = #{record.freeAccPath,jdbcType=VARCHAR},
+		mobile_recommend = #{record.mobileRecommend,jdbcType=INTEGER},
+		mobile_recommend_time = #{record.mobileRecommendTime,jdbcType=DATE},
+		weixin_recommend = #{record.weixinRecommend,jdbcType=INTEGER},
+		weixin_recommend_time = #{record.weixinRecommendTime,jdbcType=DATE},
+		free_details = #{record.freeDetails,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_free_goods
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		apply_count = #{record.applyCount,jdbcType=INTEGER},
+		begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+		class_id = #{record.classId,jdbcType=BIGINT},
+		current_count = #{record.currentCount,jdbcType=INTEGER},
+		default_count = #{record.defaultCount,jdbcType=INTEGER},
+		end_time = #{record.endTime,jdbcType=TIMESTAMP},
+		failed_reason = #{record.failedReason,jdbcType=VARCHAR},
+		free_status = #{record.freeStatus,jdbcType=INTEGER},
+		free_type = #{record.freeType,jdbcType=INTEGER},
+		free_name = #{record.freeName,jdbcType=VARCHAR},
+		goods_id = #{record.goodsId,jdbcType=BIGINT},
+		goods_name = #{record.goodsName,jdbcType=VARCHAR},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		free_acc_path = #{record.freeAccPath,jdbcType=VARCHAR},
+		mobile_recommend = #{record.mobileRecommend,jdbcType=INTEGER},
+		mobile_recommend_time = #{record.mobileRecommendTime,jdbcType=DATE},
+		weixin_recommend = #{record.weixinRecommend,jdbcType=INTEGER},
+		weixin_recommend_time = #{record.weixinRecommendTime,jdbcType=DATE}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.FreeGoods">
+		update shop_free_goods
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="applyCount != null">
+				apply_count = #{applyCount,jdbcType=INTEGER},
+			</if>
+			<if test="beginTime != null">
+				begin_time = #{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="classId != null">
+				class_id = #{classId,jdbcType=BIGINT},
+			</if>
+			<if test="currentCount != null">
+				current_count = #{currentCount,jdbcType=INTEGER},
+			</if>
+			<if test="defaultCount != null">
+				default_count = #{defaultCount,jdbcType=INTEGER},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="failedReason != null">
+				failed_reason = #{failedReason,jdbcType=VARCHAR},
+			</if>
+			<if test="freeStatus != null">
+				free_status = #{freeStatus,jdbcType=INTEGER},
+			</if>
+			<if test="freeType != null">
+				free_type = #{freeType,jdbcType=INTEGER},
+			</if>
+			<if test="freeName != null">
+				free_name = #{freeName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsId != null">
+				goods_id = #{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsName != null">
+				goods_name = #{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="freeAccPath != null">
+				free_acc_path = #{freeAccPath,jdbcType=VARCHAR},
+			</if>
+			<if test="mobileRecommend != null">
+				mobile_recommend = #{mobileRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="mobileRecommendTime != null">
+				mobile_recommend_time = #{mobileRecommendTime,jdbcType=DATE},
+			</if>
+			<if test="weixinRecommend != null">
+				weixin_recommend = #{weixinRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="weixinRecommendTime != null">
+				weixin_recommend_time = #{weixinRecommendTime,jdbcType=DATE},
+			</if>
+			<if test="freeDetails != null">
+				free_details = #{freeDetails,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.FreeGoods">
+		update shop_free_goods
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		apply_count = #{applyCount,jdbcType=INTEGER},
+		begin_time = #{beginTime,jdbcType=TIMESTAMP},
+		class_id = #{classId,jdbcType=BIGINT},
+		current_count = #{currentCount,jdbcType=INTEGER},
+		default_count = #{defaultCount,jdbcType=INTEGER},
+		end_time = #{endTime,jdbcType=TIMESTAMP},
+		failed_reason = #{failedReason,jdbcType=VARCHAR},
+		free_status = #{freeStatus,jdbcType=INTEGER},
+		free_type = #{freeType,jdbcType=INTEGER},
+		free_name = #{freeName,jdbcType=VARCHAR},
+		goods_id = #{goodsId,jdbcType=BIGINT},
+		goods_name = #{goodsName,jdbcType=VARCHAR},
+		store_id = #{storeId,jdbcType=BIGINT},
+		free_acc_path = #{freeAccPath,jdbcType=VARCHAR},
+		mobile_recommend = #{mobileRecommend,jdbcType=INTEGER},
+		mobile_recommend_time = #{mobileRecommendTime,jdbcType=DATE},
+		weixin_recommend = #{weixinRecommend,jdbcType=INTEGER},
+		weixin_recommend_time = #{weixinRecommendTime,jdbcType=DATE},
+		free_details = #{freeDetails,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.FreeGoods">
+		update shop_free_goods
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		apply_count = #{applyCount,jdbcType=INTEGER},
+		begin_time = #{beginTime,jdbcType=TIMESTAMP},
+		class_id = #{classId,jdbcType=BIGINT},
+		current_count = #{currentCount,jdbcType=INTEGER},
+		default_count = #{defaultCount,jdbcType=INTEGER},
+		end_time = #{endTime,jdbcType=TIMESTAMP},
+		failed_reason = #{failedReason,jdbcType=VARCHAR},
+		free_status = #{freeStatus,jdbcType=INTEGER},
+		free_type = #{freeType,jdbcType=INTEGER},
+		free_name = #{freeName,jdbcType=VARCHAR},
+		goods_id = #{goodsId,jdbcType=BIGINT},
+		goods_name = #{goodsName,jdbcType=VARCHAR},
+		store_id = #{storeId,jdbcType=BIGINT},
+		free_acc_path = #{freeAccPath,jdbcType=VARCHAR},
+		mobile_recommend = #{mobileRecommend,jdbcType=INTEGER},
+		mobile_recommend_time = #{mobileRecommendTime,jdbcType=DATE},
+		weixin_recommend = #{weixinRecommend,jdbcType=INTEGER},
+		weixin_recommend_time = #{weixinRecommendTime,jdbcType=DATE}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

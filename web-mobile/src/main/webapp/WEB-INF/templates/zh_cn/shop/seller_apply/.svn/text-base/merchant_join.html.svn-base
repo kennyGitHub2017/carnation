@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>商户申请</title>
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css"
+          rel="stylesheet"/>
+    <link href="$!webPath/resources/style/service/public.css?v=2" type="text/css" rel="stylesheet"/>
+
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+    <script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+    <script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=700b132845ef5b0b135066dfa0222a37"></script>
+    <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/group/head.htm")
+$!httpInclude.include("/group/nav.htm")
+
+<div class="main clearfix">
+    <div class="position"><a href="$!webPath/index.htm"><b>首页</b></a><i>&gt;</i><a href="http://localhost:8080/buyer/order.htm">我的订单</a><i>&gt;</i>236201508271807581</div>
+    <div class="order_pay">
+        <div class="order_pay_note">
+            <h3><span>订单号：236201508271807581</span><span>状态：<b style="color:#f60;">待付款</b> </span></h3>
+        </div>
+    </div>
+    <form id="joinForm">
+        <ul class="join-form">
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 商户名称：</span>
+                <input type="text" name="storeName" class="txt" value="$!store.storeName"/>
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 所属行业：</span>
+                <input type="text" class="txt" name="industry" value="$!store." />
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 经营范围：</span>
+                <input type="text" class="txt" />
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 公司简介：</span>
+                <input type="text" class="txt" />
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 主营类目：</span>
+                <select name="main_category" id="main_category">
+                    <option value="">请选择主营类目</option>
+                    <option value="1">大保键</option>
+                </select>
+            </li>
+            <li id="category_li" style="display: none;">
+                <span class="txt-label"><span class="c_red">*</span> 详细类目：</span>
+                <div class="category-chks">
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目一</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目二</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目一</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目二</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目一</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目二</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目一</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目二</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目一</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目二</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目一</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目二</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目一</label>
+                    <label class="item"><input type="checkbox" name="category" /> 二级类目二</label>
+                </div>
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 商户所在地区：</span>
+                <select id="province"><option value="">广东省</option></select>
+                <select id="city"><option value="">深圳市</option></select>
+                <select id="district"><option value="">罗湖区</option></select>
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 标记地址：</span>
+                <a href="javascript:void(0)" class="f-line c_blue"  dialog_uri="$!current_webPath/static?name=marker_map.html" dialog_title="标记地址" dialog_width="640" dialog_height="400" dialog_id="marker_dialog">标记</a>
+                <span id="marker_map_state" class="c_gray ml-20"></span>
+                <input type="hidden" id="maker_pos_E">
+                <input type="hidden" id="maker_pos_N">
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 详细地址：</span>
+                <input type="text" class="txt" id="address" />
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 固定电话：</span>
+                <input type="text" class="txt" />
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 手机号码：</span>
+                <input type="text" class="txt" />
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 所属身份及编号：</span>
+                <input type="text" class="txt" />
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 返佣比例：</span>
+                <input type="text" class="txt" />
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 折扣：</span>
+                <input type="text" class="txt" />
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 结算账户名：</span>
+                <input type="text" class="txt" />
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 结算账号：</span>
+                <input type="text" class="txt" />
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 账户开户行：</span>
+                <input type="text" class="txt" />
+            </li>
+            <li>
+                <span class="txt-label"> 安装POS机：</span>
+                <label><input type="radio" name="hasPos" checked /> 安装</label> &nbsp; &nbsp;
+                <label><input type="radio" name="hasPos" /> 不安装</label>
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 隶属运营商编号：</span>
+                <input type="text" class="txt" />
+            </li>
+
+
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 法人身份证正面照：</span>
+
+                <div class="upload-box">
+                    <span class="setable_img2" id="id_card_front_views"></span>
+
+                    <span class="upload_button">
+                        <span class="upload_button_up"><input style="cursor:pointer;" name="id_card_front_file" id="id_card_front_file" mark="id_card_front" type="file"></span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    <b class="settedtab_b" id="id_card_front_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+                    <input value="" name="id_card_front" id="id_card_front" type="hidden">
+                </div>
+            </li>
+
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 法人身份证反面照：</span>
+
+                <div class="upload-box">
+                    <span class="setable_img2" id="id_card_reverse_views"></span>
+
+                    <span class="upload_button">
+                        <span class="upload_button_up"><input style="cursor:pointer;" name="id_card_reverse_file" id="id_card_reverse_file" mark="id_card_reverse" type="file"></span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    <b class="settedtab_b" id="id_card_reverse_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+                    <input value="" name="id_card_reverse" id="id_card_reverse" type="hidden">
+                </div>
+            </li>
+
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 法人手持身份证正面照：</span>
+
+                <div class="upload-box">
+                    <span class="setable_img2" id="id_card_hand_views"></span>
+
+                    <span class="upload_button">
+                        <span class="upload_button_up"><input style="cursor:pointer;" name="id_card_hand_file" id="id_card_hand_file" mark="id_card_hand" type="file"></span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    <b class="settedtab_b" id="id_card_hand_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+                    <input value="" name="id_card_hand" id="id_card_hand" type="hidden">
+                </div>
+            </li>
+
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 银行卡正面照：</span>
+
+                <div class="upload-box">
+                    <span class="setable_img2" id="bank_card_front_views"></span>
+
+                    <span class="upload_button">
+                        <span class="upload_button_up"><input style="cursor:pointer;" name="bank_card_front_file" id="bank_card_front_file" mark="bank_card_front" type="file"></span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    <b class="settedtab_b" id="bank_card_front_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+                    <input value="" name="bank_card_front" id="bank_card_front" type="hidden">
+                </div>
+            </li>
+
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 银行卡反面照：</span>
+
+                <div class="upload-box">
+                    <span class="setable_img2" id="bank_card_reverse_views"></span>
+
+                    <span class="upload_button">
+                        <span class="upload_button_up"><input style="cursor:pointer;" name="bank_card_reverse_file" id="bank_card_reverse_file" mark="bank_card_reverse" type="file"></span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    <b class="settedtab_b" id="bank_card_reverse_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+                    <input value="" name="bank_card_reverse" id="bank_card_reverse" type="hidden">
+                </div>
+            </li>
+
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 营业执照：</span>
+
+                <div class="upload-box">
+                    <span class="setable_img2" id="license_views"></span>
+
+                    <span class="upload_button">
+                        <span class="upload_button_up"><input style="cursor:pointer;" name="license_file" id="license_file" mark="license" type="file"></span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    <b class="settedtab_b" id="license_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+                    <input value="" name="license" id="license" type="hidden">
+                </div>
+            </li>
+
+
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 经营场所证明：</span>
+
+                <div class="upload-box">
+                    <span class="setable_img2" id="premises_views"></span>
+
+                    <span class="upload_button">
+                        <span class="upload_button_up"><input style="cursor:pointer;" name="premises_file" id="premises_file" mark="premises" type="file"></span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    <b class="settedtab_b" id="premises_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+                    <input value="" name="premises" id="premises" type="hidden">
+                </div>
+            </li>
+            <li>
+                <span class="txt-label"> 其他：</span>
+
+                <div class="upload-box">
+                    <span class="setable_img2" id="other_views"></span>
+
+                    <span class="upload_button">
+                        <span class="upload_button_up"><input style="cursor:pointer;" name="other_file" id="other_file" mark="other" type="file"></span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    <b class="settedtab_b" id="other_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+                    <input value="" name="other" id="other" type="hidden">
+                </div>
+            </li>
+
+            <li class="btns"><input type="submit" class="btn btn-blue btn-large" value="提交申请" /></li>
+
+        </ul>
+    </form>
+
+</div>
+$!httpInclude.include("/footer.htm");
+
+<script>
+
+    jQuery(":file[mark]").bind("change",function() {
+        var that = jQuery(this), mark = that.attr("mark");
+        var eid = this.id, views = jQuery("#" + mark + "_views"), loader = jQuery("#" + mark + "_loader"), viewHtml = "", input = jQuery("#" + mark);
+
+        loader.show();
+
+        jQuery.ajaxFileUpload({
+            url: '$!webPath/image_save.htm?mark=' + mark + '&jsessionid=$!jsessionid&uid=$!user.id',
+            fileElementId: [eid],
+            fileFilter: ".jpg,.gif,.png",
+            fileSize: 1048576,
+            dataType: 'json',
+            success: function (data) {
+                if (data.url) {
+                    loader.hide();
+                    viewHtml = '<b class="setable_b J_uploadView">\
+                                    <a class="J_viewLink" href="$!webPath/' + data.url + '" target="_blank">\
+                                    <img class="J_viewPic" src="$!webPath/' + data.url + '" height="60" width="100"></a>\
+                                    <a class="J_viewLink" href="$!webPath/' + data.url + '" target="_blank">查看</a> &nbsp; | &nbsp; <a wid="' + data.id + '" href="javascript:void(0);" onclick="image_del(this,' + mark + ')">删除</a>\
+                                </b>';
+                    if (that.attr("multiple")) {
+                        views.append(viewHtml);
+                        input.val(input.val() + ";" + data.id);
+                    } else {
+                        views.html(viewHtml);
+                        input.val(data.id);
+                    }
+                }
+            }
+        });
+
+    });
+
+
+    function image_del(o, mark) {
+        if(confirm("是否删除此图片？")){
+            var views = jQuery("#" + mark + "_views"), input = jQuery("#" + mark), file = jQuery("#" + mark + "_file"), that = jQuery(o);
+
+            jQuery.post("$!webPath/image_del.htm",{"mark":mark,"uid": "$!user.id"},function(data){
+                if(data.result==true){
+                    if(views.children().length == 1){
+                        views.html("");
+                        input.val("");
+                    } else {
+                        that.parent().remove();
+                        input.val((function() {
+                            var value = "";
+                            views.find("a[wid]").each(function() {
+                                value += ($(this).attr("wid") + ";");
+                            });
+                            return value;
+                        }()));
+                    }
+                } else {
+                    showDialog("msg_info","","删除失败，请重新删除！",2,"warning",3,'');
+                }
+            });
+        }
+    }
+
+    $("#main_category").change(function() {
+       if($(this).val()) {
+            $("#category_li").show();
+       } else {
+           $("#category_li").hide();
+       }
+    });
+
+
+    jQuery("#joinForm").validate({
+        ignore: "",
+        rules:{
+            main_category: {
+                required :true
+            },
+            category: {
+                required :true
+            },
+            id_card_front: {
+                required :true
+            }
+        },
+        messages:{
+            main_category:{required:"主营类目不能为空"},
+            category:{required:"详细类目不能为空"},
+            id_card_front:  {required:"身份证正面照片不能为空"}
+        }
+    });
+
+</script>
+</body>
+</html>

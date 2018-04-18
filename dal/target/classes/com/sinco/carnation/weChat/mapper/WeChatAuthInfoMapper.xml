@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.weChat.mapper.WeChatAuthInfoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.weChat.model.WeChatAuthInfo">
+		<id column="ID" property="id" jdbcType="BIGINT" />
+		<result column="openid" property="openid" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.weChat.bo.WeChatAuthInfoBO" extends="BaseResultMap" />
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="Base_Column_List">
+		ID,
+		openid,
+		user_id
+	</sql>
+
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.weChat.model.WeChatAuthInfoExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from wx_auth_info
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from wx_auth_info
+		where ID = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from wx_auth_info
+		where ID = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.weChat.model.WeChatAuthInfoExample">
+		delete from wx_auth_info
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.weChat.model.WeChatAuthInfo">
+		insert into wx_auth_info (ID, openid, user_id
+		)
+		values (#{id,jdbcType=BIGINT}, #{openid,jdbcType=VARCHAR},
+		#{userId,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.weChat.model.WeChatAuthInfo">
+		insert into wx_auth_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="openid != null">
+				openid,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="openid != null">
+				#{openid,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.weChat.model.WeChatAuthInfoExample"
+		resultType="java.lang.Integer">
+		select count(*) from wx_auth_info
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update wx_auth_info
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				ID = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.openid != null">
+				openid = #{record.openid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update wx_auth_info
+		set ID = #{record.id,jdbcType=BIGINT},
+		openid = #{record.openid,jdbcType=VARCHAR},
+		user_id = #{record.userId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.weChat.model.WeChatAuthInfo">
+		update wx_auth_info
+		<trim prefix="set" suffixOverrides=",">
+			<if test="openid != null">
+				openid = #{openid,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		where ID = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.weChat.model.WeChatAuthInfo">
+		update wx_auth_info
+		set openid = #{openid,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=BIGINT}
+		where ID = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="findOneByOpenID" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		wx_auth_info
+		where
+		1=1
+		and
+		openid = #{openid,jdbcType=VARCHAR}
+	</select>
+
+
+
+</mapper>

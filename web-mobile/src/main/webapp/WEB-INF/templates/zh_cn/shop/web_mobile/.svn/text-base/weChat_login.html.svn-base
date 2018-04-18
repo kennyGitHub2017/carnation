@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<body>
+	<div id="hidden" align="center" style="display:'none'">
+		<form action="$!webPath/b2b2c_login.htm" method="post" name="theForm" id="theForm" style="display:'none'">
+			<input type="hidden" name="username" id="username" value="$!username"/>
+			<input name="password" type="hidden" id="password" value="$!password"/>
+			<input name="code" type="hidden" id="code" value="$!code"/>
+			<input name="encode" type="hidden" id="encode" value="$!encode"/>
+		</form>
+	</div>
+</body>
+<script type="text/javascript">
+	window.onload=function(){
+	    setTimeout(function() { document.forms[0].submit();}, 3000);  //5秒后将会调用执行remind()函数  
+	}
+</script> 
+</html>

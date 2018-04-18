@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>#if($!gc)$!{gc.className}#else搜索商品#end -
+	$!{config.poweredby}</title>
+<meta name="keywords" content="$!gc.seo_keywords" />
+<meta name="description" content="$!gc.seo_description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+function re_fresh(){
+	window.location.href="$!webPath/store_goods_list_$!{gc.id}.htm";
+}
+function search_gc(gc_id){
+	window.location.href="$!webPath/store_goods_list_"+gc_id+".htm";
+}	
+
+		<script>
+			function re_fresh() {
+				window.location.href = "$!webPath/store_goods_list_$!{gc.id}.htm";
+			}
+			function search_gc(gc_id) {
+				window.location.href = "$!webPath/store_goods_list_" + gc_id
+						+ ".htm";
+			}
+		</script>
+</head>
+<body>
+	<div class="main clearfix">
+		<form action="$!webPath/store_goods_list_$!{gc.id}.htm" method="post"
+			id="ListForm">
+			<div class="main_right">
+				<div class="main_list_box">
+					<div class="main_list_function">
+						<div class="main_list_bar">
+							<span class="list_fenye"><b class="list_fenya_b">共$!allCount个商品</b></span>
+							<b class="list_bar_px">排序：</b> <b class="list_bar_a"> <a
+								href="javascript:void(0);" orderBy="add_time" orderType="asc">默认<i
+									class="this"></i></a> <a href="javascript:void(0);"
+								orderBy="goods_salenum" orderType="desc">销量<i></i></a> <a
+								href="javascript:void(0);" orderBy="goods_collect"
+								orderType="desc">人气<i></i></a> <a href="javascript:void(0);"
+								orderBy="well_evaluate" orderType="desc">好评<i></i></a> <a
+								href="javascript:void(0);" orderBy="goods_current_price"
+								orderType="asc">价格<i class="price"></i></a> <!--price为默认状态,up为由低到高,down为由高到低-->
+							</b>
+						</div>
+						<!-- <div class="main_list_barb"> <i class="listbar_n_a">库存：</i> <b class="listbar_check"> <i>
+              <label>
+                <input name="goodsInventory" type="radio" id="goods_inventory" value="-1" checked="checked" />
+                全部 </label>
+              </i> <i>
+              <label>
+                <input name="goodsInventory" type="radio" id="goods_inventory" value="0" />
+                仅显示有货 </label>
+              </i> </b> <b class="listbar_class"> <i>商品类型：</i> <i>
+              <label>
+                <input name="goodsType" type="radio" id="goods_type" value="-1" checked="checked" />
+                全部 </label>
+              </i> <i>
+              <label>
+                <input name="goodsType" id="goods_type" type="radio" value="0" />
+                商城自营 </label>
+              </i> <i>
+              <label>
+                <input name="goodsType" id="goods_type" type="radio" value="1" />
+                商家商品 </label>
+              </i> </b><b class="listbar_pay"> <i style="display:none;">
+              <label style="cursor:pointer">
+                <input name="goodsCod" id="goods_cod" type="checkbox" value="0" />
+                货到付款 </label style="cursor:pointer">
+              </i> <i>
+              <label style="cursor:pointer">
+                <input name="goodsTransfee" id="goods_transfee" type="checkbox" value="1" />
+                卖家包邮 </label>
+              </i> </b> </div> -->
+					</div>
+					#if($!objs.size()>0)
+					<div class="pro_list">
+						#foreach($obj in $objs)
+						<div class="pro_list_one" data-bind="$!obj.id">
+							<ul class="">
+								<li class="pro_list_img">#if($!obj.goodsMainPhotoPath)
+									#set($small_img="$!{obj.goodsMainPhotoPath}")
+									#set($middle_img="$!{obj.goodsMainPhotoPath}") #else
+									#set($small_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+									#set($middle_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+									#end #set($goods_url="$!webPath/goods_$!{obj.id}.htm")
+									#if($!config.secondDomainOpen && $!obj.goods_type==1 &&
+									$!obj.goodsStore.storeSecondDomain!="")
+									#set($goods_url="http://$!{obj.goodsStore.storeSecondDomain}.$!{domainPath}/goods_$!{obj.id}.htm")
+									#end <a href="$!goods_url" target="_blank"> <span
+										class="img_cspan">
+											<p>
+												<img id="$!{obj.id}_main_img"
+													src="$!webPath/resources/style/common/images/loader.gif"
+													original="$!middle_img"
+													onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';"
+													width="28" height="28" data-bind="$!obj.id" />
+											</p>
+									</span>
+								</a>
+								</li>
+								<li class="pro_them">
+									<div class="pro_them_team">
+										<p
+											style="position: absolute; width: 700px; left: 0px; display: block;">
+											<b class="pro_team_b this_b" goods_id="$!{obj.id}"
+												middle_img="$!middle_img"> <img
+												src="$!webPath/resources/style/common/images/loader.gif"
+												original="$!small_img" width="28" height="28"
+												onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';" />
+												<i class="team_san"></i>
+											</b> #foreach($img in $obj.goodsPhotosList) <b class="pro_team_b"
+												goods_id="$!{obj.id}" middle_img="$!{img.accessory.path}">
+												<img original="$!{img.accessory.path}"
+												src="$!webPath/resources/style/common/images/loader.gif"
+												onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';"
+												width="28" height="28" /> <i class="team_san"
+												style="display: none"></i>
+											</b> #end
+										</p>
+									</div>
+								</li>
+								<li class="pro_list_name"><a href="$!goods_url"
+									target="_blank">$!{obj.goodsName}</a></li>
+								<li class="pro_list_price"><b>¥$!{obj.goodsShowPrice}</b>
+									#set($actName="") #if($!obj.activityStatus==2)
+									#set($actName="促销") #end #if($!obj.groupBuy==2)
+									#set($actName="团购") #end #if($!obj.combinStatus==1)
+									#set($actName="组合") #end #if($!obj.orderEnoughGiveStatus==1)
+									#set($actName="满送") #end #if($!obj.enoughReduce==1)
+									#set($actName="满减") #end #if($!obj.fSaleType==1)
+									#set($actName="F码") #end #if($!obj.advanceSaleType==1)
+									#set($actName="预售") #end #if($!actName!="") <i>$!actName</i>
+									#end #if($!obj.hasMobilePrice) <i class="orange">手机专享</i> #end
+									#if($!obj.hasExchangeIntegral) <i class="orange">积分兑换</i> #end
+									<!--<li class="pro_list_evaluate" style="display:none;">-->
+									<li class="pl-10">商品销量: #if($!{obj.goodsSalenum})
+										$!{obj.goodsSalenum} #else 0 #end</li>
+							</ul>
+						</div>
+						#end
+					</div>
+					<div class="fenye">
+						<span> $!gotoPageFormHTML</span>
+					</div>
+					#else
+					<div class="main_list_box">
+						<div class="main_list_none">
+							<span class="main_none_box"> <i></i>
+								<p>
+									抱歉，没有找到符合条件的商品！<a
+										href="$!webPath/store_goods_list_$!{gc.id}.htm">查看全部商品</a>
+								</p>
+							</span>
+						</div>
+					</div>
+					#end
+				</div>
+			</div>
+			<input name="gs_ids" type="hidden" id="gs_ids" value="$!gs_ids" /> <input
+				name="brand_ids" type="hidden" id="brand_ids" value="$!brand_ids" />
+			<input name="properties" type="hidden" id="properties"
+				value="$!properties" /> <input name="currentPage" type="hidden"
+				id="currentPage" value="$!currentPage" /> <input name="orderBy"
+				type="hidden" id="orderBy" value="$!orderBy" /> <input
+				name="orderType" type="hidden" id="orderType" value="$!orderType" />
+			<input name="all_property_status" type="hidden"
+				id="all_property_status" value="$!all_property_status" /> <input
+				name="detail_property_status" type="hidden"
+				id="detail_property_status" value="$!detail_property_status" />
+		</form>
+	</div>
+	</div>
+	<div class="cont-width">
+		<script>
+			jQuery(".multipleColumn").slide({
+				titCell : ".hd ul",
+				mainCell : ".bd .ulWrap",
+				autoPlay : true,
+				autoPage : true,
+				effect : "leftLoop",
+				scroll : 6,
+				vis : 7
+			});
+		</script>
+		$!httpInclude.include("/wx_foot.htm")
+</body>
+</html>

@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.EnoughReduceMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.EnoughReduce">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="er_type" property="erType" jdbcType="INTEGER" />
+		<result column="erbegin_time" property="erbeginTime" jdbcType="DATE" />
+		<result column="erend_time" property="erendTime" jdbcType="DATE" />
+		<result column="ersequence" property="ersequence" jdbcType="INTEGER" />
+		<result column="erstatus" property="erstatus" jdbcType="INTEGER" />
+		<result column="ertag" property="ertag" jdbcType="VARCHAR" />
+		<result column="er_title" property="erTitle" jdbcType="VARCHAR" />
+		<result column="store_id" property="storeId" jdbcType="VARCHAR" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.EnoughReduceBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.EnoughReduce"
+		extends="BaseResultMap">
+		<result column="er_json" property="erJson" jdbcType="LONGVARCHAR" />
+		<result column="ercontent" property="ercontent" jdbcType="LONGVARCHAR" />
+		<result column="ergoods_ids_json" property="ergoodsIdsJson"
+			jdbcType="LONGVARCHAR" />
+		<result column="failed_reason" property="failedReason"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, er_type, erbegin_time, erend_time,
+		ersequence, erstatus,
+		ertag, er_title, store_id, store_name
+	</sql>
+	<sql id="Blob_Column_List">
+		er_json, ercontent, ergoods_ids_json, failed_reason
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.shop.model.EnoughReduceExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_enough_reduce
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.shop.model.EnoughReduceExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_enough_reduce
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_enough_reduce
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_enough_reduce
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.EnoughReduceExample">
+		delete from shop_enough_reduce
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.EnoughReduce"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_enough_reduce (id, add_time, delete_status,
+		er_type, erbegin_time, erend_time,
+		ersequence, erstatus, ertag,
+		er_title, store_id, store_name,
+		er_json, ercontent, ergoods_ids_json,
+		failed_reason)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{erType,jdbcType=INTEGER}, #{erbeginTime,jdbcType=DATE}, #{erendTime,jdbcType=DATE},
+		#{ersequence,jdbcType=INTEGER}, #{erstatus,jdbcType=INTEGER},
+		#{ertag,jdbcType=VARCHAR},
+		#{erTitle,jdbcType=VARCHAR}, #{storeId,jdbcType=VARCHAR}, #{storeName,jdbcType=VARCHAR},
+		#{erJson,jdbcType=LONGVARCHAR}, #{ercontent,jdbcType=LONGVARCHAR},
+		#{ergoodsIdsJson,jdbcType=LONGVARCHAR},
+		#{failedReason,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.EnoughReduce"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_enough_reduce
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="erType != null">
+				er_type,
+			</if>
+			<if test="erbeginTime != null">
+				erbegin_time,
+			</if>
+			<if test="erendTime != null">
+				erend_time,
+			</if>
+			<if test="ersequence != null">
+				ersequence,
+			</if>
+			<if test="erstatus != null">
+				erstatus,
+			</if>
+			<if test="ertag != null">
+				ertag,
+			</if>
+			<if test="erTitle != null">
+				er_title,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="storeName != null">
+				store_name,
+			</if>
+			<if test="erJson != null">
+				er_json,
+			</if>
+			<if test="ercontent != null">
+				ercontent,
+			</if>
+			<if test="ergoodsIdsJson != null">
+				ergoods_ids_json,
+			</if>
+			<if test="failedReason != null">
+				failed_reason,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="erType != null">
+				#{erType,jdbcType=INTEGER},
+			</if>
+			<if test="erbeginTime != null">
+				#{erbeginTime,jdbcType=DATE},
+			</if>
+			<if test="erendTime != null">
+				#{erendTime,jdbcType=DATE},
+			</if>
+			<if test="ersequence != null">
+				#{ersequence,jdbcType=INTEGER},
+			</if>
+			<if test="erstatus != null">
+				#{erstatus,jdbcType=INTEGER},
+			</if>
+			<if test="ertag != null">
+				#{ertag,jdbcType=VARCHAR},
+			</if>
+			<if test="erTitle != null">
+				#{erTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=VARCHAR},
+			</if>
+			<if test="storeName != null">
+				#{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="erJson != null">
+				#{erJson,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="ercontent != null">
+				#{ercontent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="ergoodsIdsJson != null">
+				#{ergoodsIdsJson,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="failedReason != null">
+				#{failedReason,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.EnoughReduceExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_enough_reduce
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_enough_reduce
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.erType != null">
+				er_type = #{record.erType,jdbcType=INTEGER},
+			</if>
+			<if test="record.erbeginTime != null">
+				erbegin_time = #{record.erbeginTime,jdbcType=DATE},
+			</if>
+			<if test="record.erendTime != null">
+				erend_time = #{record.erendTime,jdbcType=DATE},
+			</if>
+			<if test="record.ersequence != null">
+				ersequence = #{record.ersequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.erstatus != null">
+				erstatus = #{record.erstatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.ertag != null">
+				ertag = #{record.ertag,jdbcType=VARCHAR},
+			</if>
+			<if test="record.erTitle != null">
+				er_title = #{record.erTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeName != null">
+				store_name = #{record.storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.erJson != null">
+				er_json = #{record.erJson,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.ercontent != null">
+				ercontent = #{record.ercontent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.ergoodsIdsJson != null">
+				ergoods_ids_json = #{record.ergoodsIdsJson,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.failedReason != null">
+				failed_reason = #{record.failedReason,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_enough_reduce
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		er_type = #{record.erType,jdbcType=INTEGER},
+		erbegin_time = #{record.erbeginTime,jdbcType=DATE},
+		erend_time = #{record.erendTime,jdbcType=DATE},
+		ersequence = #{record.ersequence,jdbcType=INTEGER},
+		erstatus = #{record.erstatus,jdbcType=INTEGER},
+		ertag = #{record.ertag,jdbcType=VARCHAR},
+		er_title = #{record.erTitle,jdbcType=VARCHAR},
+		store_id = #{record.storeId,jdbcType=VARCHAR},
+		store_name = #{record.storeName,jdbcType=VARCHAR},
+		er_json = #{record.erJson,jdbcType=LONGVARCHAR},
+		ercontent = #{record.ercontent,jdbcType=LONGVARCHAR},
+		ergoods_ids_json = #{record.ergoodsIdsJson,jdbcType=LONGVARCHAR},
+		failed_reason = #{record.failedReason,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_enough_reduce
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		er_type = #{record.erType,jdbcType=INTEGER},
+		erbegin_time = #{record.erbeginTime,jdbcType=DATE},
+		erend_time = #{record.erendTime,jdbcType=DATE},
+		ersequence = #{record.ersequence,jdbcType=INTEGER},
+		erstatus = #{record.erstatus,jdbcType=INTEGER},
+		ertag = #{record.ertag,jdbcType=VARCHAR},
+		er_title = #{record.erTitle,jdbcType=VARCHAR},
+		store_id = #{record.storeId,jdbcType=VARCHAR},
+		store_name = #{record.storeName,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.EnoughReduce">
+		update shop_enough_reduce
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="erType != null">
+				er_type = #{erType,jdbcType=INTEGER},
+			</if>
+			<if test="erbeginTime != null">
+				erbegin_time = #{erbeginTime,jdbcType=DATE},
+			</if>
+			<if test="erendTime != null">
+				erend_time = #{erendTime,jdbcType=DATE},
+			</if>
+			<if test="ersequence != null">
+				ersequence = #{ersequence,jdbcType=INTEGER},
+			</if>
+			<if test="erstatus != null">
+				erstatus = #{erstatus,jdbcType=INTEGER},
+			</if>
+			<if test="ertag != null">
+				ertag = #{ertag,jdbcType=VARCHAR},
+			</if>
+			<if test="erTitle != null">
+				er_title = #{erTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=VARCHAR},
+			</if>
+			<if test="storeName != null">
+				store_name = #{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="erJson != null">
+				er_json = #{erJson,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="ercontent != null">
+				ercontent = #{ercontent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="ergoodsIdsJson != null">
+				ergoods_ids_json = #{ergoodsIdsJson,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="failedReason != null">
+				failed_reason = #{failedReason,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.EnoughReduce">
+		update shop_enough_reduce
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		er_type = #{erType,jdbcType=INTEGER},
+		erbegin_time = #{erbeginTime,jdbcType=DATE},
+		erend_time = #{erendTime,jdbcType=DATE},
+		ersequence = #{ersequence,jdbcType=INTEGER},
+		erstatus = #{erstatus,jdbcType=INTEGER},
+		ertag = #{ertag,jdbcType=VARCHAR},
+		er_title = #{erTitle,jdbcType=VARCHAR},
+		store_id = #{storeId,jdbcType=VARCHAR},
+		store_name = #{storeName,jdbcType=VARCHAR},
+		er_json = #{erJson,jdbcType=LONGVARCHAR},
+		ercontent = #{ercontent,jdbcType=LONGVARCHAR},
+		ergoods_ids_json = #{ergoodsIdsJson,jdbcType=LONGVARCHAR},
+		failed_reason = #{failedReason,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.EnoughReduce">
+		update shop_enough_reduce
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		er_type = #{erType,jdbcType=INTEGER},
+		erbegin_time = #{erbeginTime,jdbcType=DATE},
+		erend_time = #{erendTime,jdbcType=DATE},
+		ersequence = #{ersequence,jdbcType=INTEGER},
+		erstatus = #{erstatus,jdbcType=INTEGER},
+		ertag = #{ertag,jdbcType=VARCHAR},
+		er_title = #{erTitle,jdbcType=VARCHAR},
+		store_id = #{storeId,jdbcType=VARCHAR},
+		store_name = #{storeName,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

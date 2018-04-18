@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.selftest.mapper.WenJuanThemeMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.selftest.model.WenJuanTheme">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="theme_name" property="themeName" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_userID" property="createUserid"
+			jdbcType="BIGINT" />
+	</resultMap>
+
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.selftest.bo.WenJuanThemeBO" extends="BaseResultMap" />
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="Base_Column_List">
+		id,
+		theme_name,
+		is_deleted,
+		create_time,
+		update_time,
+		create_userID
+	</sql>
+
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.selftest.model.WenJuanThemeExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from wj_theme
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from wj_theme
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		wj_theme
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.selftest.model.WenJuanThemeExample">
+		delete from wj_theme
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.selftest.model.WenJuanTheme"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into wj_theme (id,
+		theme_name, is_deleted,
+		create_time, update_time, create_userID
+		)
+		values
+		(#{id,jdbcType=BIGINT}, #{themeName,jdbcType=VARCHAR},
+		#{isDeleted,jdbcType=BIGINT},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}, #{createUserid,jdbcType=BIGINT}
+		)
+	</insert>
+
+	<insert id="insertSelective" parameterType="com.sinco.carnation.selftest.model.WenJuanTheme"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into wj_theme
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			create_time
+			<if test="id != null">
+				,id
+			</if>
+			<if test="themeName != null">
+				,theme_name
+			</if>
+			<if test="isDeleted != null">
+				,is_deleted
+			</if>
+			<if test="updateTime != null">
+				,update_time
+			</if>
+			<if test="createUserid != null">
+				,create_userID
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			now()
+			<if test="id != null">
+				,#{id,jdbcType=BIGINT}
+			</if>
+			<if test="themeName != null">
+				,#{themeName,jdbcType=VARCHAR}
+			</if>
+			<if test="isDeleted != null">
+				,#{isDeleted,jdbcType=BIGINT}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUserid != null">
+				, #{createUserid,jdbcType=BIGINT}
+			</if>
+		</trim>
+	</insert>
+
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.selftest.model.WenJuanThemeExample"
+		resultType="java.lang.Integer">
+		select count(*) from wj_theme
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update wj_theme
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.themeName != null">
+				theme_name = #{record.themeName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createUserid != null">
+				create_userID = #{record.createUserid,jdbcType=BIGINT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update wj_theme
+		set id = #{record.id,jdbcType=BIGINT},
+		theme_name =
+		#{record.themeName,jdbcType=VARCHAR},
+		is_deleted =
+		#{record.isDeleted,jdbcType=BIGINT},
+		create_time =
+		#{record.createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{record.updateTime,jdbcType=TIMESTAMP},
+		create_userID =
+		#{record.createUserid,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.selftest.model.WenJuanTheme">
+		update wj_theme
+		<trim prefix="set" suffixOverrides=",">
+			update_time = now(),
+			<if test="themeName != null">
+				theme_name = #{themeName,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createUserid != null">
+				create_userID = #{createUserid,jdbcType=BIGINT},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.selftest.model.WenJuanTheme">
+		update wj_theme
+		set theme_name = #{themeName,jdbcType=VARCHAR},
+		is_deleted =
+		#{isDeleted,jdbcType=BIGINT},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		create_userID =
+		#{createUserid,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- -->
+	<select id="findByPage" resultMap="BOResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from
+		wj_theme
+		where
+		1=1
+		<if test="vo.themeName != null">
+			and theme_name = #{vo.themeName,jdbcType=VARCHAR},
+		</if>
+		<if test="vo.isDeleted != null">
+			and is_deleted = #{vo.isDeleted,jdbcType=BIGINT},
+		</if>
+		ORDER BY create_time DESC
+	</select>
+
+
+</mapper>

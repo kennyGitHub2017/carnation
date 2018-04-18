@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+
+
+	<bean id="sendRelationMessageJob" class="com.sinco.carnation.job.SendRelationMessageJob"
+		scope="singleton">
+		<property name="messageService" ref="messageService"></property>
+		<property name="userService" ref="userService"></property>
+		<property name="userRelationService" ref="userRelationService"></property>
+		<property name="userCustomerService" ref="userCustomerService"></property>
+	</bean>
+
+	<bean id="canselYgOrderJob" class="com.sinco.carnation.job.CanselYgOrderJob"
+		scope="singleton">
+		<property name="orderFormService" ref="orderFormService"></property>
+	</bean>
+
+	<bean id="randomSequenceJob" class="com.sinco.carnation.job.RandomSequenceJob"
+		scope="singleton">
+		<property name="messageService" ref="messageService"></property>
+	</bean>
+
+	<!-- 商品相关 积分商城自动下架,商家自动结算 -->
+	<bean id="goodsJob" class="com.sinco.carnation.job.GoodsJob"
+		scope="singleton">
+		<property name="integralService" ref="integralService"></property>
+		<property name="payoffLogService" ref="payoffLogService"></property>
+	</bean>
+
+
+	<!-- //0元购 -->
+	<bean id="zeroActJob" class="com.sinco.carnation.job.ZeroActJob"
+		scope="singleton">
+		<property name="zeroGoodsService" ref="zeroGoodsService"></property>
+	</bean>
+
+
+	<bean id="statManageAction" class="com.sinco.carnation.job.StatManageAction"
+		scope="singleton">
+		<property name="jobService" ref="jobService"></property>
+	</bean>
+
+	<!-- 0元购 超过3分钟的订单设置成取消状态 -->
+	<bean id="zeroOrderCancelJob" class="com.sinco.carnation.job.ZeroOrderCancelJob"
+		scope="singleton">
+		<property name="orderFormService" ref="orderFormService"></property>
+	</bean>
+
+	<!-- 预分润态 -->
+	<bean id="recordBalanceJob" class="com.sinco.carnation.job.RecordBalanceJob"
+		scope="singleton">
+		<property name="userMoneyService" ref="userMoneyService"></property>
+	</bean>
+
+	<!-- 非专区的云购币订单退款 -->
+	<bean id="returnYgOrderPrice" class="com.sinco.carnation.job.ReturnYgOrderJob"
+		scope="singleton">
+		<property name="orderFormService" ref="orderFormService"></property>
+	</bean>
+
+	<!-- 积分订单取消退积分 -->
+	<bean id="integralOrderCance" class="com.sinco.carnation.job.IntegralOrderCancelJob"
+		scope="singleton">
+		<property name="integralGoodsOrderService" ref="integralGoodsOrderService"></property>
+	</bean>
+	<!-- 订单任务 取消超过时间的未付款普通订单 -->
+	<bean id="orderJob" class="com.sinco.carnation.job.OrderJob"
+		scope="singleton">
+		<property name="orderFormService" ref="orderFormService"></property>
+	</bean>
+	<!-- 微信扫码订单修复 -->
+	<bean id="wxPayOrderCheckAction" class="com.sinco.carnation.job.WxPayOrderCheckAction"
+		scope="singleton">
+		<property name="shopQrPayOrderService" ref="shopQrPayOrderService"></property>
+		<property name="groupOrderService" ref="groupOrderService"></property>
+		<property name="paymentService" ref="paymentService"></property>
+		<property name="userMoneyService" ref="userMoneyService"></property>
+		<property name="balanceExceptionOrderService" ref="balanceExceptionOrderService"></property>
+		<property name="isDebug" value="${carnation.isDebug}"></property>
+	</bean>
+	<!-- 艺农酒店订单数据同步 -->
+	<bean id="elongOrderSynJob" class="com.sinco.carnation.job.ElongOrderSynJob"
+		scope="singleton">
+		<property name="elongOrderService" ref="elongOrderService"></property>
+	</bean>
+	<!-- 卷皮数据同步 -->
+	<bean id="juanpiDataSynJob" class="com.sinco.carnation.job.JuanpiDataSynJob"
+		scope="singleton">
+		<property name="synJuanpiDataService" ref="synJuanpiDataService"></property>
+		<property name="isDebug" value="${carnation.isDebug}"></property>
+	</bean>
+	<!-- 酒业数据同步 -->
+	<bean id="jiuyeOrderSynJob" class="com.sinco.carnation.job.JiuyeOrderSynJob"
+		scope="singleton">
+		<property name="jiuyeOrderFormService" ref="jiuyeOrderFormService"></property>
+		<property name="userMoneyService" ref="userMoneyService"></property>
+	</bean>
+
+	<task:scheduled-tasks scheduler="myScheduler2">
+
+		<!-- 商品相关 积分商城自动下架,商家自动结算 -->
+		<task:scheduled ref="goodsJob" method="executeJob"
+			initial-delay="5000" fixed-delay="360000" />
+		<!-- 站内短信 -->
+		<task:scheduled ref="sendRelationMessageJob" method="sentMessage"
+			cron="0 0/2 * * * ?" />
+		<!-- 猜你喜欢，文章帖子，自测题 3小时更新一次 -->
+		<task:scheduled ref="randomSequenceJob" method="randomSequence"
+			initial-delay="8000" fixed-delay="720000" />
+		<!-- 取消在48小时内未完成现金支付的云购币订单 -->
+		<task:scheduled ref="canselYgOrderJob" method="executeJob"
+			cron="0 0/30 * * * ?" />
+		<!-- <task:scheduled ref="rebateStatisticsJob" method="RebateStatistics" 
+			cron="0 0 2 * * ?" /> -->
+		<!-- 数据统计及团购开启关闭、自动确认订单生产结算日志等 -->
+		<task:scheduled ref="statManageAction" method="execute"
+			initial-delay="5000" fixed-delay="600000" />
+		<!-- 0元购 监听活动时间，活动时间一过，将0元购中所有的商品移除，恢复原来的价格； -->
+		<task:scheduled ref="zeroActJob" method="ZeroAct"
+			initial-delay="50000" fixed-delay="600000" />
+		<!-- 0元购 超过3分钟的订单设置成取消状态 -->
+		<task:scheduled ref="zeroOrderCancelJob" method="cancelZeroActOrderCancel"
+			initial-delay="5000" fixed-delay="20000" />
+		<!-- 预分润 1小时执行一次 -->
+		<task:scheduled ref="recordBalanceJob" method="updateRecordBalance"
+			initial-delay="5000" fixed-delay="360000" />
+		<!-- 云购币订单退款 单设置成取消状态 -->
+		<task:scheduled ref="returnYgOrderPrice" method="cancelYgOrderJob"
+			initial-delay="8000" fixed-delay="720000" />
+		<!-- 积分商城自动取消72小时 -->
+		<task:scheduled ref="integralOrderCance" method="integralOrderCance"
+			initial-delay="8000" fixed-delay="720000" />
+		<!-- 订单任务 取消超过时间的未付款普通订单 -->	<!-- 5分钟执行一次 5*60*1000 -->
+		<task:scheduled ref="orderJob" method="executeJob"
+			initial-delay="30000" fixed-delay="300000" />
+		<!-- 微信扫码订单修复 -->
+		<task:scheduled ref="wxPayOrderCheckAction" method="fixPcScanOrder"
+			initial-delay="20000" fixed-delay="1800000" />
+		<task:scheduled ref="wxPayOrderCheckAction" method="fixBalanceExceptionOrder"
+			initial-delay="20000" fixed-delay="300000" />
+		<!-- 艺农酒店订单数据同步 -->
+		<task:scheduled ref="elongOrderSynJob" method="orderSyn"
+			initial-delay="20000" fixed-delay="300000" />
+		<!-- 卷皮数据同步 -->
+		<task:scheduled ref="juanpiDataSynJob" method="goodsSyn"
+			cron="0 0 3 * * ?" />
+		<task:scheduled ref="juanpiDataSynJob" method="orderSyn"
+			initial-delay="20000" fixed-delay="120000" />
+		<task:scheduled ref="juanpiDataSynJob" method="orderSyn2"
+			initial-delay="20000" fixed-delay="1200000" />
+		<task:scheduled ref="juanpiDataSynJob" method="orderFix"
+			initial-delay="20000" fixed-delay="1800000" />
+		<task:scheduled ref="jiuyeOrderSynJob" method="syn"
+			initial-delay="20000" fixed-delay="60000" />
+
+	</task:scheduled-tasks>
+	<task:scheduler id="myScheduler2" />
+
+</beans>

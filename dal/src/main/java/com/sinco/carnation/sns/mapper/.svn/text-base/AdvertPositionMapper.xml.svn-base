@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.AdvertPositionMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.AdvertPosition">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="ap_acc_url" property="apAccUrl" jdbcType="VARCHAR" />
+		<result column="ap_height" property="apHeight" jdbcType="INTEGER" />
+		<result column="ap_location" property="apLocation" jdbcType="VARCHAR" />
+		<result column="ap_price" property="apPrice" jdbcType="INTEGER" />
+		<result column="ap_sale_type" property="apSaleType" jdbcType="INTEGER" />
+		<result column="ap_show_type" property="apShowType" jdbcType="INTEGER" />
+		<result column="ap_status" property="apStatus" jdbcType="INTEGER" />
+		<result column="ap_sys_type" property="apSysType" jdbcType="INTEGER" />
+		<result column="ap_text" property="apText" jdbcType="VARCHAR" />
+		<result column="ap_title" property="apTitle" jdbcType="VARCHAR" />
+		<result column="ap_type" property="apType" jdbcType="VARCHAR" />
+		<result column="ap_use_status" property="apUseStatus" jdbcType="INTEGER" />
+		<result column="ap_width" property="apWidth" jdbcType="INTEGER" />
+		<result column="ap_img_path" property="apImgPath" jdbcType="VARCHAR" />
+		<result column="release_type" property="releaseType" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.sns.model.AdvertPosition"
+		extends="BaseResultMap">
+		<result column="ap_code" property="apCode" jdbcType="LONGVARCHAR" />
+		<result column="ap_content" property="apContent" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<select id="findByRelease" resultMap="BaseResultMap">
+		select * from sns_adv_pos
+		where release_type=#{releaseType} or ap_code='INDEX_SLIDE'
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, ap_acc_url, ap_height, ap_location,
+		ap_price, ap_sale_type,
+		ap_show_type, ap_status, ap_sys_type, ap_text, ap_title, ap_type, ap_use_status,
+		ap_code,
+		ap_width, ap_img_path, release_type,ap_level
+	</sql>
+	<sql id="Blob_Column_List">
+		ap_content
+	</sql>
+
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.sns.model.AdvertPositionExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_adv_pos
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sns.model.AdvertPositionExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_adv_pos
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_adv_pos
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sns_adv_pos
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sns.model.AdvertPositionExample">
+		delete from sns_adv_pos
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.AdvertPosition">
+		insert into sns_adv_pos (id, add_Time, delete_Status,
+		ap_acc_url, ap_height, ap_location,
+		ap_price, ap_sale_type, ap_show_type,
+		ap_status, ap_sys_type, ap_text,
+		ap_title, ap_type, ap_use_status,
+		ap_width, ap_img_path, ap_code,
+		ap_content, release_type)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{apAccUrl,jdbcType=VARCHAR}, #{apHeight,jdbcType=INTEGER}, #{apLocation,jdbcType=VARCHAR},
+		#{apPrice,jdbcType=INTEGER}, #{apSaleType,jdbcType=INTEGER},
+		#{apShowType,jdbcType=INTEGER},
+		#{apStatus,jdbcType=INTEGER}, #{apSysType,jdbcType=INTEGER}, #{apText,jdbcType=VARCHAR},
+		#{apTitle,jdbcType=VARCHAR}, #{apType,jdbcType=VARCHAR},
+		#{apUseStatus,jdbcType=INTEGER},
+		#{apWidth,jdbcType=INTEGER}, #{apImgPath,jdbcType=VARCHAR}, #{apCode,jdbcType=LONGVARCHAR},
+		#{apContent,jdbcType=LONGVARCHAR},#{releaseType,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.AdvertPosition">
+		insert into sns_adv_pos
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="apAccUrl != null">
+				ap_acc_url,
+			</if>
+			<if test="apHeight != null">
+				ap_height,
+			</if>
+			<if test="apLocation != null">
+				ap_location,
+			</if>
+			<if test="apPrice != null">
+				ap_price,
+			</if>
+			<if test="apSaleType != null">
+				ap_sale_type,
+			</if>
+			<if test="apShowType != null">
+				ap_show_type,
+			</if>
+			<if test="apStatus != null">
+				ap_status,
+			</if>
+			<if test="apSysType != null">
+				ap_sys_type,
+			</if>
+			<if test="apText != null">
+				ap_text,
+			</if>
+			<if test="apTitle != null">
+				ap_title,
+			</if>
+			<if test="apType != null">
+				ap_type,
+			</if>
+			<if test="apUseStatus != null">
+				ap_use_status,
+			</if>
+			<if test="apWidth != null">
+				ap_width,
+			</if>
+			<if test="apImgPath != null">
+				ap_img_path,
+			</if>
+			<if test="apCode != null">
+				ap_code,
+			</if>
+			<if test="apContent != null">
+				ap_content,
+			</if>
+			<if test="releaseType != null">
+				release_type,
+			</if>
+			<if test="apLevel != null">
+				ap_level
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="apAccUrl != null">
+				#{apAccUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="apHeight != null">
+				#{apHeight,jdbcType=INTEGER},
+			</if>
+			<if test="apLocation != null">
+				#{apLocation,jdbcType=VARCHAR},
+			</if>
+			<if test="apPrice != null">
+				#{apPrice,jdbcType=INTEGER},
+			</if>
+			<if test="apSaleType != null">
+				#{apSaleType,jdbcType=INTEGER},
+			</if>
+			<if test="apShowType != null">
+				#{apShowType,jdbcType=INTEGER},
+			</if>
+			<if test="apStatus != null">
+				#{apStatus,jdbcType=INTEGER},
+			</if>
+			<if test="apSysType != null">
+				#{apSysType,jdbcType=INTEGER},
+			</if>
+			<if test="apText != null">
+				#{apText,jdbcType=VARCHAR},
+			</if>
+			<if test="apTitle != null">
+				#{apTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="apType != null">
+				#{apType,jdbcType=VARCHAR},
+			</if>
+			<if test="apUseStatus != null">
+				#{apUseStatus,jdbcType=INTEGER},
+			</if>
+			<if test="apWidth != null">
+				#{apWidth,jdbcType=INTEGER},
+			</if>
+			<if test="apImgPath != null">
+				#{apImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="apCode != null">
+				#{apCode,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="apContent != null">
+				#{apContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="releaseType != null">
+				#{releaseType,jdbcType=INTEGER},
+			</if>
+			<if test="apLevel != null">
+				#{apLevel,jdbcType=INTEGER}
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sns.model.AdvertPositionExample"
+		resultType="java.lang.Integer">
+		select count(*) from sns_adv_pos
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sns_adv_pos
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.apAccUrl != null">
+				ap_acc_url = #{record.apAccUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.apHeight != null">
+				ap_height = #{record.apHeight,jdbcType=INTEGER},
+			</if>
+			<if test="record.apLocation != null">
+				ap_location = #{record.apLocation,jdbcType=VARCHAR},
+			</if>
+			<if test="record.apPrice != null">
+				ap_price = #{record.apPrice,jdbcType=INTEGER},
+			</if>
+			<if test="record.apSaleType != null">
+				ap_sale_type = #{record.apSaleType,jdbcType=INTEGER},
+			</if>
+			<if test="record.apShowType != null">
+				ap_show_type = #{record.apShowType,jdbcType=INTEGER},
+			</if>
+			<if test="record.apStatus != null">
+				ap_status = #{record.apStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.apSysType != null">
+				ap_sys_type = #{record.apSysType,jdbcType=INTEGER},
+			</if>
+			<if test="record.apText != null">
+				ap_text = #{record.apText,jdbcType=VARCHAR},
+			</if>
+			<if test="record.apTitle != null">
+				ap_title = #{record.apTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="record.apType != null">
+				ap_type = #{record.apType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.apUseStatus != null">
+				ap_use_status = #{record.apUseStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.apWidth != null">
+				ap_width = #{record.apWidth,jdbcType=INTEGER},
+			</if>
+			<if test="record.apImgPath != null">
+				ap_img_path = #{record.apImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.apCode != null">
+				ap_code = #{record.apCode,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.apContent != null">
+				ap_content = #{record.apContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.releaseType != null">
+				release_type = #{record.releaseType,jdbcType=INTEGER},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update sns_adv_pos
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		ap_acc_url = #{record.apAccUrl,jdbcType=VARCHAR},
+		ap_height = #{record.apHeight,jdbcType=INTEGER},
+		ap_location = #{record.apLocation,jdbcType=VARCHAR},
+		ap_price = #{record.apPrice,jdbcType=INTEGER},
+		ap_sale_type = #{record.apSaleType,jdbcType=INTEGER},
+		ap_show_type = #{record.apShowType,jdbcType=INTEGER},
+		ap_status = #{record.apStatus,jdbcType=INTEGER},
+		ap_sys_type = #{record.apSysType,jdbcType=INTEGER},
+		ap_text = #{record.apText,jdbcType=VARCHAR},
+		ap_title = #{record.apTitle,jdbcType=VARCHAR},
+		ap_type = #{record.apType,jdbcType=VARCHAR},
+		ap_use_status = #{record.apUseStatus,jdbcType=INTEGER},
+		ap_width = #{record.apWidth,jdbcType=INTEGER},
+		ap_img_path = #{record.apImgPath,jdbcType=VARCHAR},
+		ap_code = #{record.apCode,jdbcType=LONGVARCHAR},
+		ap_content = #{record.apContent,jdbcType=LONGVARCHAR},
+		release_type = #{record.releaseType,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sns_adv_pos
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		ap_acc_url = #{record.apAccUrl,jdbcType=VARCHAR},
+		ap_height = #{record.apHeight,jdbcType=INTEGER},
+		ap_location = #{record.apLocation,jdbcType=VARCHAR},
+		ap_price = #{record.apPrice,jdbcType=INTEGER},
+		ap_sale_type = #{record.apSaleType,jdbcType=INTEGER},
+		ap_show_type = #{record.apShowType,jdbcType=INTEGER},
+		ap_status = #{record.apStatus,jdbcType=INTEGER},
+		ap_sys_type = #{record.apSysType,jdbcType=INTEGER},
+		ap_text = #{record.apText,jdbcType=VARCHAR},
+		ap_title = #{record.apTitle,jdbcType=VARCHAR},
+		ap_type = #{record.apType,jdbcType=VARCHAR},
+		ap_use_status = #{record.apUseStatus,jdbcType=INTEGER},
+		ap_width = #{record.apWidth,jdbcType=INTEGER},
+		ap_img_path = #{record.apImgPath,jdbcType=VARCHAR},
+		release_type = #{record.releaseType,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.AdvertPosition">
+		update sns_adv_pos
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="apAccUrl != null">
+				ap_acc_url = #{apAccUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="apHeight != null">
+				ap_height = #{apHeight,jdbcType=INTEGER},
+			</if>
+			<if test="apLocation != null">
+				ap_location = #{apLocation,jdbcType=VARCHAR},
+			</if>
+			<if test="apPrice != null">
+				ap_price = #{apPrice,jdbcType=INTEGER},
+			</if>
+			<if test="apSaleType != null">
+				ap_sale_type = #{apSaleType,jdbcType=INTEGER},
+			</if>
+			<if test="apShowType != null">
+				ap_show_type = #{apShowType,jdbcType=INTEGER},
+			</if>
+			<if test="apStatus != null">
+				ap_status = #{apStatus,jdbcType=INTEGER},
+			</if>
+			<if test="apSysType != null">
+				ap_sys_type = #{apSysType,jdbcType=INTEGER},
+			</if>
+			<if test="apText != null">
+				ap_text = #{apText,jdbcType=VARCHAR},
+			</if>
+			<if test="apTitle != null">
+				ap_title = #{apTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="apType != null">
+				ap_type = #{apType,jdbcType=VARCHAR},
+			</if>
+			<if test="apUseStatus != null">
+				ap_use_status = #{apUseStatus,jdbcType=INTEGER},
+			</if>
+			<if test="apWidth != null">
+				ap_width = #{apWidth,jdbcType=INTEGER},
+			</if>
+			<if test="apImgPath != null">
+				ap_img_path = #{apImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="apCode != null">
+				ap_code = #{apCode,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="apContent != null">
+				ap_content = #{apContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="releaseType != null">
+				release_type = #{releaseType,jdbcType=INTEGER},
+			</if>
+			<if test="apLevel != null">
+				ap_level = #{apLevel,jdbcType=INTEGER}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.sns.model.AdvertPosition">
+		update sns_adv_pos
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		ap_acc_url = #{apAccUrl,jdbcType=VARCHAR},
+		ap_height = #{apHeight,jdbcType=INTEGER},
+		ap_location = #{apLocation,jdbcType=VARCHAR},
+		ap_price = #{apPrice,jdbcType=INTEGER},
+		ap_sale_type = #{apSaleType,jdbcType=INTEGER},
+		ap_show_type = #{apShowType,jdbcType=INTEGER},
+		ap_status = #{apStatus,jdbcType=INTEGER},
+		ap_sys_type = #{apSysType,jdbcType=INTEGER},
+		ap_text = #{apText,jdbcType=VARCHAR},
+		ap_title = #{apTitle,jdbcType=VARCHAR},
+		ap_type = #{apType,jdbcType=VARCHAR},
+		ap_use_status = #{apUseStatus,jdbcType=INTEGER},
+		ap_width = #{apWidth,jdbcType=INTEGER},
+		ap_img_path = #{apImgPath,jdbcType=VARCHAR},
+		ap_code = #{apCode,jdbcType=LONGVARCHAR},
+		ap_content = #{apContent,jdbcType=LONGVARCHAR},
+		release_type = #{releaseType,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.AdvertPosition">
+		update sns_adv_pos
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		ap_acc_url = #{apAccUrl,jdbcType=VARCHAR},
+		ap_height = #{apHeight,jdbcType=INTEGER},
+		ap_location = #{apLocation,jdbcType=VARCHAR},
+		ap_price = #{apPrice,jdbcType=INTEGER},
+		ap_sale_type = #{apSaleType,jdbcType=INTEGER},
+		ap_show_type = #{apShowType,jdbcType=INTEGER},
+		ap_status = #{apStatus,jdbcType=INTEGER},
+		ap_sys_type = #{apSysType,jdbcType=INTEGER},
+		ap_text = #{apText,jdbcType=VARCHAR},
+		ap_title = #{apTitle,jdbcType=VARCHAR},
+		ap_type = #{apType,jdbcType=VARCHAR},
+		ap_use_status = #{apUseStatus,jdbcType=INTEGER},
+		ap_width = #{apWidth,jdbcType=INTEGER},
+		ap_img_path = #{apImgPath,jdbcType=VARCHAR},
+		release_type = #{releaseType,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- grey added begin -->
+	<select id="selectListByVo" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM sns_adv_pos
+		<include refid="selectListByVoWhere" />
+		ORDER BY ap_level asc
+	</select>
+	<sql id="selectListByVoWhere">
+		<where>
+			<if test="vo.apTitle != null and vo.apTitle !=''">
+				ap_title like concat('%',#{vo.apTitle},'%')
+			</if>
+			<if test="vo.adApId != null">
+				id = #{vo.adApId}
+			</if>
+		</where>
+	</sql>
+	<select id="selectList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sns_adv_pos
+		order by ap_level desc, convert(ap_title using gbk) asc
+	</select>
+	<!-- grey added end -->
+
+	<update id="updateStatusById">
+		UPDATE sns_adv_pos SET ap_status = #{status} where id = #{id}
+	</update>
+</mapper>

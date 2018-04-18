@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+    <link type="text/css" rel="stylesheet" href="/resources/css/jquery-ui.min.css">
+</head>
+<body>
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 收益记录
+</div>
+
+<div class="main">
+    <ul class="m-menu">
+        <li><a href="/operator/operator_income_list.htm"  class="active">收益记录</a> </li>
+    </ul>
+ <div class="view-title">
+	<form class="form-control pb-30"  action="/operator/operator_income_list.htm" id="searchForm">
+    	<input type="hidden" name="currentPage" value="1" id="currentPage"/>
+    	
+        	&nbsp;
+    	商户店名:<input type="text" name="storeName" value="$!vo.storeName" class="txt min-txt">&nbsp;
+    	会员手机号:<input type="text" name="loginName" value="$!vo.loginName" class="txt min-txt">&nbsp;
+    	收益类型:<select name="type" id="querType" class="txt min-txt">
+        			<option value="">收益类型</option>
+        			#foreach($rebate in $!rabateTypeList)
+        				<option value="$rebate.id" #if($rebate.id == $!vo.type)selected="selected" #end>$rebate.rebateType</option>
+        			#end
+        	  </select>&nbsp;
+        		时间:<input type="text" onclick="WdatePicker()" readonly="readonly" name="beginTimeStr" value="$!vo.beginTimeStr" class="txt min-txt datepicker" /> -
+        		<input type="text" onclick="WdatePicker()" readonly="readonly" name="endTimeStr" value="$!vo.endTimeStr" class="txt min-txt datepicker" />
+        		<input type="submit" class="btn btn-blue btn-medium" value="搜索">
+        	
+	</form>
+	</div>
+    <div class="table-scroll-wrap">
+    #if($!objs.size() > 0)
+    	<table cellspacing="0" cellpadding="0" width="100%" class="table-simple table-scroll">
+          <tr>
+            <th>商户店名</th>
+            <th>收益时间</th>
+            <th>消费总额</th>
+            <th>收益金额</th>
+            <th>收益类型</th>
+          </tr>
+          #foreach($obj in $objs)
+          <tr>
+            <td  align="center">$!obj.storeName</td>
+            <td  align="center">$!date.format($!obj.createTime)</td>
+            <td  align="center">¥$!obj.codeAmount</td>
+            <td  align="center">¥$!obj.rebateAmount</td>
+            <td  align="center">$!obj.rebateName</td>
+          </tr>
+          #end
+        </table>
+    </div>
+    <div class="fenye">
+        $!gotoPageFormHTML
+    </div>
+	#else
+		<div class="ui-warn text-center">
+			暂无记录！
+		</div>
+	#end
+</div>
+</body>
+<script src="/resources/js/jquery-1.8.2.js"></script>
+<script src="/resources/js/jquery-ui.min.js"></script>
+<script src="/resources/js/jquery.blockUI.dialog.js"></script>
+<script src="/resources/js/common.js"></script>
+<script src="/resources/js/WdatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+	/* jQuery(".datepicker").datepicker({dateFormat: 'yy-mm-dd'}); */
+/* 	jQuery("#querType").change(function(){
+		jQuery("#selectTime input").val("");
+		jQuery("#searchForm").submit();
+	}); */
+</script>
+</html>

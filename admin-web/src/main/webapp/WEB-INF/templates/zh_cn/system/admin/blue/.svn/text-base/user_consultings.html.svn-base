@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+
+
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css"
+	type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+
+<script>
+jQuery(document).ready(function(){
+  //
+});
+</script>
+</head>
+<body>
+	<div class="cont">
+		<h1 class="seth">会员专家咨询列表</h1>
+		<form action="$!webPath/admin/user_consultings.htm?userId=$!userId" id="ListForm" name="ListForm" method="post">
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+        	 <th width="31%" align="center"><span class="form_btna">标题</span></th>
+          <th width="15%" align="center"><span class="form_btna">提问人姓名</span></th>
+          <th width="10%" align="center"><span class="form_btna">专家姓名</span></th>
+          <th width="10%" align="center"><span class="form_btna">回复数</span></th>
+          <th width="15%" align="center"><span class="form_btna">提问时间</span></th>
+          <th width="15%" align="center"><span class="form_btna">查看</span></th>
+        </tr>
+        #foreach($!obj in $objs) 
+        <tr>
+           #if($!obj.expertsUserId == $!obj.replyUserId)
+          <td class="lightred"><img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/wei.png"/>&nbsp;&nbsp;$!obj.title</td>
+          #elseif($!obj.userId == $!obj.replyUserId)
+           <td class="lightred"><img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/new.png"/>&nbsp;&nbsp;$!obj.title</td>
+          #else
+          <td class="lightred"><img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/wei.png"/>&nbsp;&nbsp;$!obj.title</td>
+          #end
+          <td class="lightred">$!obj.customerName</td>
+          <td class="lightred">$!obj.userExperts.name</td>
+          <td class="lightred">$!obj.replyCount</td>
+          <td class="lightred">$!CommUtil.formatLongDate($!obj.createTime)</td>
+          <td class="lightred"><a href="$!webPath/admin/consulting_detail.htm?consId=$!obj.id" class="blue">查看详情</a></td>
+        </tr>
+         #end
+      </table>
+    </div>
+    <div class="operate_bar">
+      <div class="fenye">
+        <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+        <input name="mulitId" type="hidden" id="mulitId" />
+        $!gotoPageFormHTML </div>
+    </div>
+  </form>
+	</div>
+</body>
+</html>

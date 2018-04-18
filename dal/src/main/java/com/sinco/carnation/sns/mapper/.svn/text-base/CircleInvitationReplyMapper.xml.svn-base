@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.CircleInvitationReplyMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.sns.model.CircleInvitationReply">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER" />
+		<result column="invitation_id" property="invitationId"
+			jdbcType="BIGINT" />
+		<result column="level_count" property="levelCount" jdbcType="INTEGER" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="reply_count" property="replyCount" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_photo" property="userPhoto" jdbcType="VARCHAR" />
+		<result column="is_add_integral" property="isAddIntegral" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.sinco.carnation.sns.model.CircleInvitationReply" extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="ExtendResultMap"
+		type="com.sinco.carnation.sns.bo.CircleInvitationReplyBO" extends="ResultMapWithBLOBs">
+		<result column="parentName" property="parentName" jdbcType="VARCHAR" />
+		<result column="parentLevelCount" property="parentLevelCount"
+			jdbcType="INTEGER" />
+		<result column="parentContent" property="parentContent"
+			jdbcType="LONGVARCHAR" />
+		<result column="parentPic" property="parentPic" jdbcType="LONGVARCHAR" />
+
+	</resultMap>
+
+	<select id="selectPageByVO" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_invitation_replys
+		where deleteStatus = 0
+		<if test="vo.content != null and vo.content != ''">
+			and content like concat('%', #{vo.content}, '%')
+		</if>
+		<if test="vo.userName != null and vo.userName != ''">
+			and user_Name like concat('%', #{vo.userName}, '%')
+		</if>
+		<if test="vo.invitationId != null">
+			and invitation_id = #{vo.invitationId}
+		</if>
+		order by addTime desc
+	</select>
+	<select id="selectPageCountByVO" resultType="int">
+		select
+		count(0)
+		from sns_invitation_replys
+		where deleteStatus = 0
+		<if test="vo.content != null and vo.content != ''">
+			and content like concat('%', #{vo.content}, '%')
+		</if>
+		<if test="vo.userName != null and vo.userName != ''">
+			and user_Name like concat('%', #{vo.userName}, '%')
+		</if>
+		<if test="vo.invitationId != null">
+			and invitation_id = #{vo.invitationId}
+		</if>
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, addTime, deleteStatus, invitation_id, level_count, parent_id,
+		reply_count, user_id,is_add_integral,
+		user_name, user_photo
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.sns.model.CircleInvitationReplyExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_invitation_replys
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sns.model.CircleInvitationReplyExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_invitation_replys
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_invitation_replys
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sns_invitation_replys
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sns.model.CircleInvitationReplyExample">
+		delete from sns_invitation_replys
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.CircleInvitationReply"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into sns_invitation_replys (id, addTime, deleteStatus,
+		invitation_id, level_count, parent_id,
+		reply_count, user_id, user_name,
+		user_photo, content)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{invitationId,jdbcType=BIGINT}, #{levelCount,jdbcType=INTEGER}, #{parentId,jdbcType=BIGINT},
+		#{replyCount,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT},
+		#{userName,jdbcType=VARCHAR},
+		#{userPhoto,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.CircleInvitationReply"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into sns_invitation_replys
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				addTime,
+			</if>
+			<if test="deleteStatus != null">
+				deleteStatus,
+			</if>
+			<if test="invitationId != null">
+				invitation_id,
+			</if>
+			<if test="levelCount != null">
+				level_count,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="replyCount != null">
+				reply_count,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="userPhoto != null">
+				user_photo,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="pic != null">
+				pic,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="invitationId != null">
+				#{invitationId,jdbcType=BIGINT},
+			</if>
+			<if test="levelCount != null">
+				#{levelCount,jdbcType=INTEGER},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="replyCount != null">
+				#{replyCount,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userPhoto != null">
+				#{userPhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="pic != null">
+				#{pic,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sns.model.CircleInvitationReplyExample"
+		resultType="java.lang.Integer">
+		select count(*) from sns_invitation_replys
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sns_invitation_replys
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				addTime = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				deleteStatus = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.invitationId != null">
+				invitation_id = #{record.invitationId,jdbcType=BIGINT},
+			</if>
+			<if test="record.levelCount != null">
+				level_count = #{record.levelCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=BIGINT},
+			</if>
+			<if test="record.replyCount != null">
+				reply_count = #{record.replyCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userName != null">
+				user_name = #{record.userName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userPhoto != null">
+				user_photo = #{record.userPhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update sns_invitation_replys
+		set id = #{record.id,jdbcType=BIGINT},
+		addTime = #{record.addTime,jdbcType=TIMESTAMP},
+		deleteStatus = #{record.deleteStatus,jdbcType=INTEGER},
+		invitation_id = #{record.invitationId,jdbcType=BIGINT},
+		level_count = #{record.levelCount,jdbcType=INTEGER},
+		parent_id = #{record.parentId,jdbcType=BIGINT},
+		reply_count = #{record.replyCount,jdbcType=INTEGER},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		user_photo = #{record.userPhoto,jdbcType=VARCHAR},
+		content = #{record.content,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sns_invitation_replys
+		set id = #{record.id,jdbcType=BIGINT},
+		addTime = #{record.addTime,jdbcType=TIMESTAMP},
+		deleteStatus = #{record.deleteStatus,jdbcType=INTEGER},
+		invitation_id = #{record.invitationId,jdbcType=BIGINT},
+		level_count = #{record.levelCount,jdbcType=INTEGER},
+		parent_id = #{record.parentId,jdbcType=BIGINT},
+		reply_count = #{record.replyCount,jdbcType=INTEGER},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		user_photo = #{record.userPhoto,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.CircleInvitationReply">
+		update sns_invitation_replys
+		<set>
+			<if test="addTime != null">
+				addTime = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				deleteStatus = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="invitationId != null">
+				invitation_id = #{invitationId,jdbcType=BIGINT},
+			</if>
+			<if test="levelCount != null">
+				level_count = #{levelCount,jdbcType=INTEGER},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="replyCount != null">
+				reply_count = #{replyCount,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userPhoto != null">
+				user_photo = #{userPhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.sns.model.CircleInvitationReply">
+		update sns_invitation_replys
+		set addTime = #{addTime,jdbcType=TIMESTAMP},
+		deleteStatus = #{deleteStatus,jdbcType=INTEGER},
+		invitation_id = #{invitationId,jdbcType=BIGINT},
+		level_count = #{levelCount,jdbcType=INTEGER},
+		parent_id = #{parentId,jdbcType=BIGINT},
+		reply_count = #{replyCount,jdbcType=INTEGER},
+		user_id = #{userId,jdbcType=BIGINT},
+		user_name = #{userName,jdbcType=VARCHAR},
+		user_photo = #{userPhoto,jdbcType=VARCHAR},
+		content = #{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.CircleInvitationReply">
+		update sns_invitation_replys
+		set addTime = #{addTime,jdbcType=TIMESTAMP},
+		deleteStatus = #{deleteStatus,jdbcType=INTEGER},
+		invitation_id = #{invitationId,jdbcType=BIGINT},
+		level_count = #{levelCount,jdbcType=INTEGER},
+		parent_id = #{parentId,jdbcType=BIGINT},
+		reply_count = #{replyCount,jdbcType=INTEGER},
+		user_id = #{userId,jdbcType=BIGINT},
+		user_name = #{userName,jdbcType=VARCHAR},
+		user_photo = #{userPhoto,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="invitationReplyList" resultMap="ExtendResultMap">
+		SELECT
+		r.*,
+		r2.user_name parentName,
+		r2.content parentContent,
+		r2.level_count parentLevelCount
+		,r2.pic parentPic
+		FROM
+		sns_invitation_replys r
+		LEFT JOIN sns_invitation_replys r2 ON r.parent_id = r2.id and
+		r2.deleteStatus = 0
+		WHERE
+		r.invitation_id = #{invitationId,jdbcType=INTEGER}
+		AND r.deleteStatus = 0
+		<if test="maxId != null">
+			AND r.id <![CDATA[ <= ]]>
+			#{maxId}
+		</if>
+		ORDER BY
+		r.addTime DESC
+		LIMIT #{start}, #{pageSize}
+	</select>
+
+	<select id="replyInvitationCount" resultType="int">
+		SELECT COUNT(0) from sns_invitation_replys WHERE
+		invitation_id=#{invitationId,jdbcType=INTEGER}
+	</select>
+	
+	<select id="listByisAddIntegral" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_invitation_replys
+		where is_add_integral = 0;
+	</select>
+	<update id="updateIsAddIntegralByid" parameterType="java.lang.Long">
+		update sns_invitation_replys set is_add_integral = 1
+		where id = #{id};
+	</update>
+</mapper>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>核对订单信息</title>
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet"/>
+    <link href="http://localhost:8080/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+    <link href="http://localhost:8080/resources/style/system/front/default/css/user.css" type="text/css"
+          rel="stylesheet"/>
+    <link href="$!webPath/resources/style/service/public.css?v=4" type="text/css" rel="stylesheet"/>
+	<style type="text/css">
+	.btn-blue {
+    background-color: #19bf96;}
+    .btn-blue:hover {
+    background-color: #19bf96;}
+	</style>
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/static/include?name=head.html")
+$!httpInclude.include("/static/include?name=nav.html")
+
+<div class="main clearfix">
+    <div class="shopping_step shopping_step_tow mt-20">
+        <ul>
+            <li class="shopping_step_a"><span></span><i></i><strong>1.填写核对订单信息</strong></li>
+
+            <li class="shopping_step_b"><span></span><i></i><strong>2.成功提交订单</strong></li>
+        </ul>
+    </div>
+    <h3 class="cl pt-20">服务</h3>
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" class="user_order_table order_view_table favorite_table">
+        <tr>
+            <th width="40%">服务</th>
+            <th width="15%">单价</th>
+            <th width="20%">数量</th>
+            <th width="15%">总价</th>
+        </tr>
+        <tr>
+            <td>新生活美容中心：养生系列套餐，女士专享</td>
+            <td align="center">¥46.00</td>
+            <td align="center"><span class="shop_count"> <a class="shop_cut" f_sale_type="0" gc_id="1319" id="count_down_1319" href="javascript:void(0);"></a>
+            <input type="text" class="shop_num" goods_count="1" gc_id="1319" value="1" f_sale_type="0" id="goods_count_1319" name="goods_count_1319">
+            <a class="shop_add" f_sale_type="0" gc_id="1319" id="count_up_1319" href="javascript:void(0);"></a> </span></td>
+            <td align="center"><span class="c_blue">¥46.00</span></td>
+        </tr>
+    </table>
+    <div class="order-total-prices cl">应付金额：<span class="price">¥359.00</span></div>
+    <div class="text-right">
+        <input class="btn btn-blue btn-large" value="提交订单" />
+    </div>
+</div>
+
+$!httpInclude.include("/footer.htm")
+
+<script>
+
+    jQuery("a[id^=count_down]").click(function(){
+        var gc_id=jQuery(this).attr("gc_id");
+        var count=jQuery("#goods_count_"+gc_id).val();
+        var gift_id=jQuery(this).attr("check_gift_id");
+
+        if(count>1){
+            count--;
+            jQuery("#goods_count_"+gc_id).val(count);
+            goods_count_adjust(gc_id,count,gift_id);
+        }
+    });
+    jQuery("a[id^=count_up]").click(function(){
+        var gc_id=jQuery(this).attr("gc_id");
+        var count=jQuery("#goods_count_"+gc_id).val();
+        var gift_id=jQuery(this).attr("check_gift_id");
+
+        count++;
+        jQuery("#goods_count_"+gc_id).val(count);
+        goods_count_adjust(gc_id,count,gift_id);
+    });
+    jQuery("input[id^=goods_count_]").keyup(function(){
+        var gc_id=jQuery(this).attr("gc_id");
+        var count=jQuery("#goods_count_"+gc_id).val().replace(/\D/g,'');
+
+        var gift_id=jQuery(this).attr("check_gift_id");
+        if(count==""){
+            count=1;
+        }
+        if(count>0){
+            goods_count_adjust(gc_id,count,gift_id);
+        }
+        if(count==0){
+            jQuery("#goods_count_"+gc_id).val("1");
+            goods_count_adjust(gc_id,1,gift_id);
+        }
+    });
+
+</script>
+</body>
+</html>

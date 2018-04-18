@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/blue/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery('#beginTime').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+	  jQuery('#endTime').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+});
+
+
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">商户调整申请</h3>
+	<form action="$!webPath/admin/merchant_adjust_info_list.htm" method="post">
+		<div class="search">
+			<ul>
+				<li>
+					<span>商户名称</span> 
+					<span class="size150"> 
+						<input name="storeName" type="text" id="storeName" value="$!vo.storeName" />
+					</span>
+					<span>状态</span> 
+					<span class="size150"> 
+						<select name="applyStatus">
+							<option value="-1">请选择...</option>
+							<option value="0">待处理</option>
+							<option value="5">申请被拒绝</option>
+						</select>
+					</span> 
+					<span>申请时间</span> 
+					<span class="size100"> 
+						<input name="beginTime" type="text" id="beginTime" value="$!vo.beginTime" readonly="readonly" />
+					</span>&nbsp;—
+					<span class="size100"> 
+						<input name="endTime" type="text" id="endTime" value="$!vo.endTime" readonly="readonly" />
+					</span> 
+					<span> 
+						<input name="" type="submit" value="搜索" style="cursor: pointer;" class="search_btn" /> 
+					</span>
+				</li>
+			</ul>
+		</div>
+	</form>
+<form action="$!webPath/admin/merchant_adjust_info_list.htm" method="post" name="ListForm" id="ListForm">
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th>&nbsp;</th>
+        <th width="10%" ><span class="form_btna">序号</span></th>
+        <th width="25%" ><span class="form_btna">商户名称</span></th>
+        <th width="15%" ><span class="form_btna">申请时间</span></th>
+        <th width="15%"><span class="form_btna">调整类型</span></th>
+        <th width="15%"><span class="form_btna">状态</span></th>
+        <th><b class="form_btnb">操作</b></th>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+        <td class="check_position"></td>
+        <td align="center">$!{velocityCount}</td>
+        <td align="center">$!obj.storeName</td>
+        <td align="center">$!CommUtil.formatLongDate($!{obj.addTime})</td>
+        #if($!obj.adjustType=="gc")
+        #set($type="类目调整")
+        #end
+        <td align="center">$!type</td>
+        #if($!obj.applyStatus==0)
+        #set($status="待处理")
+        #end
+        #if($!obj.applyStatus==5)
+        #set($status="申请被拒绝")
+        #end
+        <td align="center">$!status</td>
+        <td class="hui oprate_con" align="center">
+        	#if($!obj.applyStatus!=0)
+           	 已审核
+            #else
+            <a href="$!webPath/admin/merchant_adjust_info_view.htm?id=$!obj.id&currentPage=$!{currentPage}" class="blue">审核</a> 
+            #end
+        </td>
+      </tr>
+      #end
+    </table>
+  </div>
+  <div class="operate_bar">
+    <div class="fenye">
+    	<input type="hidden" name="mulitId" id="mulitId" />
+   		<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+   		<input name="storeName" type="hidden" value="$!vo.storeName" />
+   		<input name="applyStatus" type="hidden" value="$!vo.applyStatus" />
+   		<input name="beginTime" type="hidden" value="$!vo.beginTime" />
+   		<input name="endTime" type="hidden" value="$!vo.endTime" />
+  		$!gotoPageFormHTML
+    </div>        
+ </div>
+  </form>
+</div>
+</body>
+</html>

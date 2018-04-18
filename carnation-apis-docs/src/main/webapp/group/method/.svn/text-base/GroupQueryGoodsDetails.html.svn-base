@@ -1,0 +1,863 @@
+
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>API详情</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<link rel="stylesheet" href="/static/css/method/base-min.css" />
+<link rel="stylesheet" href="/static/css/method/common.css" />
+<link rel="stylesheet" href="/static/css/method/error.css" />
+
+<script type="text/javascript" src = "/static/js/method/kissy.js"></script>
+<script type="text/javascript" src = "/static/js/method/judge.js"> </script>
+<script type="text/javascript" src="/static/js/method/grade.js"></script>
+
+<link rel="stylesheet" href="/static/css/method/open-base.css" />
+
+<script type="text/javascript" src="/static/js/method/yahoo-dom-event.js"></script>	
+<script type="text/javascript" src="/static/js/method/doc.js"></script>
+<script type="text/javascript" src="/static/js/method/searchsuggest.js"></script>
+
+
+<script type="text/javascript" src="/static/js/method/sh.js"></script>
+<link rel="stylesheet" href="/static/css/method/sh.css"/>
+
+<link href="/static/css/method/editor-pkg-min-datauri.css" rel="stylesheet" />
+<link rel="stylesheet" href="/static/css/method/right-tools.css" />
+
+
+<script src="/static/js/method/a.js" type="text/javascript"></script>
+<script type="text/javascript" src="/static/js/method/editor-plugin-pkg-min.js"></script>
+
+</head>
+<body>
+	<!--header end-->	
+		<!--面包屑 begin-->	
+	<div class="crumbs">
+		<a href="/index.html">API文档</a>
+		<a href="/group/index.html">o2o商户</a>
+		<a class="last" href="#">/group/query_goods/details</a>	 <!--class with "last"-->		
+	</div>
+	<!--面包屑 end-->
+	
+	<div class = 'container grid-s165m0 layout'>
+		<!--正文区 begin-->
+		<div class = "col-main bg_line">
+			<div class = "main-wrap">
+				<div class = "title-wrap">
+					<h1 class = "open-bg title">/group/query_goods/details 服务详情
+					</h1>  
+					
+					<ul class= "api-sub-title layout clearfix">
+						<li class = "sub-title"><a class = "link" href = "#authorize">API用户授权类型</a></li>
+						<li class = "sub-title"><a class = "link" href = "#sys-param">系统级输入参数</a></li>
+						<li class = "sub-title"><a class = "link" href = "#api-param">应用级输入参数</a></li>
+						<li class = "sub-title"><a class = "link" href = "#result">返回结果</a></li>
+						<li class = "sub-title"><a class = "link" href = "#error-code">错误码</a></li>
+					</ul>
+				</div>
+
+				<div class="api-detail-bd" id="bd">
+					<!-- ued div start 不知何用-->
+					<div>						
+						
+						<p class = "title-intro">
+						服务详情
+						</p>
+						<div class="content-first">
+							<h2 class = "head-title" id="authorize">
+								<img src="/static/css/method/img/tri_down.png" style="cursor:pointer;margin-right:5px;" onclick="changeHide(this,'content-authorize')">
+								API用户授权类型
+							</h2>
+							<div id="content-authorize">
+								<p class = "introduction">
+																	需要
+																</p>
+							</div>
+							
+						</div>
+						<div>
+							<h2 class = "head-title" id="sys-param">
+								<img src="/static/css/method/img/tri_right.png" style="cursor:pointer;margin-right:5px;" onclick="changeHide(this,'content-sys-param')">
+								系统级别输入参数
+							</h2>
+							<div id="content-sys-param" style="display:none">
+								<div class="sub-column-title1"><a href="#">HTTP签名调用模式:</a></div>
+								<table class = "api-table" cellspacing = '0'>
+									<thead>
+										<tr>	
+											<th class = "middle" width="15%">名称</th>	
+											<th class = "middle" width="15%">类型</th>	
+											<th class = "middle" width="15%">是否必须</th>	
+											<th class = "left" width="55%">描述</th>	
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="even">
+											<td class = "middle">Authorization</td>
+											<td class = "middle">Http header</td>
+											<td class = "middle">是</td>
+											<td class = "left">传方式为 "bearer {access_token}"（注意bearer后需带空格）</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div>
+							<h2 class = "head-title" id="api-param">
+								<img src="/static/css/method/img/tri_down.png" style="cursor:pointer;margin-right:5px;" onclick="changeHide(this,'content-api-param')">
+								应用级输入参数
+							</h2>
+							<div id="content-api-param">
+								<table class = "api-table" cellspacing = '0'>
+									<thead>
+										<tr>	
+											<th width="15%" class = "middle">名称</th>
+											<th width="10%" class = "middle">类型</th>
+											<th width="10%" class = "middle">url 参数</th>
+											<th width="10%" class = "middle">是否必须</th>
+											<th width="30%" class = "left">描述</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr  class="odd" >
+												<td class = "middle">goodsId</td>
+												<td class = "middle">Long</td>
+												<td class = "middle">否</td>
+												<td class = "middle">否</td>
+												<td class = "left">商品id</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div>
+							<h2 class = "head-title" id="result">
+								<img src="/static/css/method/img/tri_down.png" style="cursor:pointer;margin-right:5px;" onclick="changeHide(this,'content-result')">
+								返回结果							
+							</h2>
+							<div id="content-result">
+								<table class = "api-table" cellspacing = '0'>
+									<thead>
+										<tr>	
+											<th width="25%"  class = "left">名称</th>
+											<th width="25%" class = "left">类型</th>
+											<th width="50%" class = "left">描述</th>
+										</tr>
+									</thead>
+									<tbody>
+											<tr  class="odd" >
+												<td class = "left">merchant</td>
+												<td class = "left">
+													<a href="../domain/StoreIndex.html">
+														StoreIndex
+													</a>
+												</td>
+												<td class = "left">商户首页</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">groupOrderList</td>
+												<td class = "left">
+													<a href="../domain/GroupOrder.html">
+														GroupOrder[]
+													</a>
+												</td>
+												<td class = "left">订单列表</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">groupOrderBO</td>
+												<td class = "left">
+													<a href="../domain/GroupOrder.html">
+														GroupOrder
+													</a>
+												</td>
+												<td class = "left">订单详情</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">groupGoodsBOs</td>
+												<td class = "left">
+													<a href="../domain/GroupGoods.html">
+														GroupGoods[]
+													</a>
+												</td>
+												<td class = "left">服务列表</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">groupGoodsDetails</td>
+												<td class = "left">
+													<a href="../domain/GroupGoods.html">
+														GroupGoods
+													</a>
+												</td>
+												<td class = "left">服务详情</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">applyInfo</td>
+												<td class = "left">
+													<a href="../domain/StoreApplyInfo.html">
+														StoreApplyInfo
+													</a>
+												</td>
+												<td class = "left">商户申请</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">evaluateList</td>
+												<td class = "left">
+													<a href="../domain/GroupEvaluates.html">
+														GroupEvaluates[]
+													</a>
+												</td>
+												<td class = "left">评论列表</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">rebateBO</td>
+												<td class = "left">
+													<a href="../domain/Rebate.html">
+														Rebate
+													</a>
+												</td>
+												<td class = "left">消费分润</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">rebateList</td>
+												<td class = "left">
+													<a href="../domain/Rebate.html">
+														Rebate[]
+													</a>
+												</td>
+												<td class = "left">当年消费分润统计</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">totalPrice</td>
+												<td class = "left">
+													<a href="#">
+														BigDecimal
+													</a>
+												</td>
+												<td class = "left">线上线下收入总额</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">orderTotalPriceList</td>
+												<td class = "left">
+													<a href="../domain/Rebate.html">
+														Rebate[]
+													</a>
+												</td>
+												<td class = "left">线下收入月统计</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">orderDetailsList</td>
+												<td class = "left">
+													<a href="../domain/OrderDetails.html">
+														OrderDetails[]
+													</a>
+												</td>
+												<td class = "left">线上线下收入明细</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">storeCustomerList</td>
+												<td class = "left">
+													<a href="../domain/StoreCustomer.html">
+														StoreCustomer[]
+													</a>
+												</td>
+												<td class = "left">店铺会员列表</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">storeAlbumList</td>
+												<td class = "left">
+													<a href="../domain/StoreAlbum.html">
+														StoreAlbum[]
+													</a>
+												</td>
+												<td class = "left">商户环境相册</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">tradeNo</td>
+												<td class = "left">
+													<a href="#">
+														String
+													</a>
+												</td>
+												<td class = "left">tradeNo</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">preCashList</td>
+												<td class = "left">
+													<a href="../domain/UPrepositLog.html">
+														UPrepositLog[]
+													</a>
+												</td>
+												<td class = "left">提现记录</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">groupClassList</td>
+												<td class = "left">
+													<a href="../domain/GroupClass.html">
+														GroupClass[]
+													</a>
+												</td>
+												<td class = "left">店铺主营类目</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">areaBOs</td>
+												<td class = "left">
+													<a href="../domain/GroupArea.html">
+														GroupArea[]
+													</a>
+												</td>
+												<td class = "left">地区</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">classDetails</td>
+												<td class = "left">
+													<a href="../domain/GroupClass.html">
+														GroupClass[]
+													</a>
+												</td>
+												<td class = "left">详细类目</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">evaluateTotal</td>
+												<td class = "left">
+													<a href="#">
+														Long
+													</a>
+												</td>
+												<td class = "left">评论总数</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">customerTotal</td>
+												<td class = "left">
+													<a href="#">
+														Long
+													</a>
+												</td>
+												<td class = "left">会员总数</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">refundBOs</td>
+												<td class = "left">
+													<a href="../domain/GoodsRefund.html">
+														GoodsRefund[]
+													</a>
+												</td>
+												<td class = "left">线上服务退款列表</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">orderStatus</td>
+												<td class = "left">
+													<a href="#">
+														Integer
+													</a>
+												</td>
+												<td class = "left">订单状态|订单状态，0为订单取消，10为已提交待付款，20为已付款，30为买家已使用，全部使用后更新该值,50买家评价完毕 ,60卖家已评价,65订单不可评价</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">orderId</td>
+												<td class = "left">
+													<a href="#">
+														Long
+													</a>
+												</td>
+												<td class = "left">订单id</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">storeAppInfoBo</td>
+												<td class = "left">
+													<a href="../domain/StoreAppInfo.html">
+														StoreAppInfo
+													</a>
+												</td>
+												<td class = "left">商户信息</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">storeCheckIn</td>
+												<td class = "left">
+													<a href="#">
+														Boolean
+													</a>
+												</td>
+												<td class = "left">商家入驻</td>
+											</tr>
+																														</tbody>
+								</table>
+							</div>
+						</div>
+						<div>
+							<h2 class = "head-title" id="error-code">
+								<img src="/static/css/method/img/tri_down.png" style="cursor:pointer;margin-right:5px;" onclick="changeHide(this,'content-error-code')">
+								方法错误码
+							</h2>
+							<div id="content-error-code">
+								<table class = "api-table" cellspacing = '0'>
+									<thead>
+										<tr>	
+											<th class = "left" width="30%">错误码</th>	
+											<th class = "left" width="30%">错误描述</th>
+											<th class = "left" width="40%">根错误</th>	
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div>
+							<h2 class = "head-title" id="error-code">
+								<img src="/static/css/method/img/tri_right.png" style="cursor:pointer;margin-right:5px;" onclick="changeHide(this,'common-error-code')">
+								公共错误码
+							</h2>
+							<div id="common-error-code" style="display:none">
+								<table class = "api-table" cellspacing = '0'>
+									<thead>
+										<tr>	
+											<th class = "left" width="30%">错误码</th>	
+											<th class = "left" width="30%">错误描述</th>
+											<th class = "left" width="40%">根错误</th>	
+										</tr>
+									</thead>
+									<tbody>
+											<tr class="odd">
+				                                  <td class="left">410</td>
+				                                  <td class="left">Token expired</td>
+												  <td class="left">2:Error authorize</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">invalid_arguments</td>
+				                                  <td class="left">Invalid Arguments</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">missing_required_arguments</td>
+				                                  <td class="left">Missing Required Arguments</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">page_size_null</td>
+				                                  <td class="left">page size is null</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">404</td>
+				                                  <td class="left">Invalid access token</td>
+												  <td class="left">2:Error authorize</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">401</td>
+				                                  <td class="left">Unauthorized</td>
+												  <td class="left">2:Error authorize</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">error_date_format</td>
+				                                  <td class="left">{param} 日期格式错误</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">error_param</td>
+				                                  <td class="left">{param} 为空，或者格式错误</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">query_time_null</td>
+				                                  <td class="left">query time is null</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">no_data</td>
+				                                  <td class="left">没有找到对应的数据</td>
+												  <td class="left">4:Error data</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">page_number_null</td>
+				                                  <td class="left">page number is null</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">rid_not_find</td>
+				                                  <td class="left">用户下未找到该角色</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">not_effective_fields</td>
+				                                  <td class="left">not effective fields</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">use_role_null</td>
+				                                  <td class="left">没有设置当前使用的角色，请调用设置当前使用角色API</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">operation_failed</td>
+				                                  <td class="left">系统错误，操作失败</td>
+												  <td class="left">1:Internal system error</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">query_number_null</td>
+				                                  <td class="left">query number is null</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- ued div end-->
+				</div>
+			</div>
+		</div>
+		<!--正文区 end-->
+		<!--左侧导航栏 begin-->
+		<div class = "col-sub">
+			<div class="APIgory">
+				<ul>
+					<li>
+						<div class= "APIgory-title" >
+							<a href="/group/index.html">返回&nbsp;<span class="APIgory-sub-title"> o2o商户</span></a>
+						</div>
+					</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupAreaList.html"
+									 title="/group/area/list">/group/area/list</a>
+									<p class = "APIgory-intro info-overflow">获取地区</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupCheckInSave.html"
+									 title="/group/checkIn/save">/group/checkIn/save</a>
+									<p class = "APIgory-intro info-overflow">商家入驻</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupConsumerSure.html"
+									 title="/group/consumer/sure">/group/consumer/sure</a>
+									<p class = "APIgory-intro info-overflow">券消费确认</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupConsumShareList.html"
+									 title="/group/consum_share/list">/group/consum_share/list</a>
+									<p class = "APIgory-intro info-overflow">消费分润统计总收入</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupEvaluateList.html"
+									 title="/group/evaluate/list">/group/evaluate/list</a>
+									<p class = "APIgory-intro info-overflow">评论列表</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupEvaluateSave.html"
+									 title="/group/evaluate/save">/group/evaluate/save</a>
+									<p class = "APIgory-intro info-overflow">评论保存</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupGoodsRefundList.html"
+									 title="/group/goods_refund/list">/group/goods_refund/list</a>
+									<p class = "APIgory-intro info-overflow">服务退款列表</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupGoodsShelves.html"
+									 title="/group/goods/shelves">/group/goods/shelves</a>
+									<p class = "APIgory-intro info-overflow">商品上下架</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupGroupClassList.html"
+									 title="/group/group_class/list">/group/group_class/list</a>
+									<p class = "APIgory-intro info-overflow">店铺主营类目</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupMerchantInfo.html"
+									 title="/group/merchant/info">/group/merchant/info</a>
+									<p class = "APIgory-intro info-overflow">商户首页</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupMoneyCash.html"
+									 title="/group/money/cash">/group/money/cash</a>
+									<p class = "APIgory-intro info-overflow">提现</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupOrderCartPay.html"
+									 title="/group/order_cart/pay">/group/order_cart/pay</a>
+									<p class = "APIgory-intro info-overflow">线下刷卡</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupOrderCountList.html"
+									 title="/group/order_count/list">/group/order_count/list</a>
+									<p class = "APIgory-intro info-overflow">线下服务月统计</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupOrderDetails.html"
+									 title="/group/order/details">/group/order/details</a>
+									<p class = "APIgory-intro info-overflow">订单详情</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupOrderGet.html"
+									 title="/group/order/get">/group/order/get</a>
+									<p class = "APIgory-intro info-overflow">获取订单状态</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupOrderLineDetails.html"
+									 title="/group/order_line/details">/group/order_line/details</a>
+									<p class = "APIgory-intro info-overflow">线上收入明细</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupOrderLineStatistics.html"
+									 title="/group/order_line/statistics">/group/order_line/statistics</a>
+									<p class = "APIgory-intro info-overflow">线上服务收入统计</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupOrderMonthList.html"
+									 title="/group/order_month/list">/group/order_month/list</a>
+									<p class = "APIgory-intro info-overflow">线上服务月统计</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupOrderOnlineList.html"
+									 title="/group/order_online/list">/group/order_online/list</a>
+									<p class = "APIgory-intro info-overflow">商户订单列表</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupOrderRefundSave.html"
+									 title="/group/order_refund/save">/group/order_refund/save</a>
+									<p class = "APIgory-intro info-overflow">线下退款</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupOrderRevenueDetails.html"
+									 title="/group/order_revenue/details">/group/order_revenue/details</a>
+									<p class = "APIgory-intro info-overflow">线下收入明细</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupOrderStatistics.html"
+									 title="/group/order/statistics">/group/order/statistics</a>
+									<p class = "APIgory-intro info-overflow">线下服务收入统计</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupPredepositList.html"
+									 title="/group/predeposit/list">/group/predeposit/list</a>
+									<p class = "APIgory-intro info-overflow">提现记录</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list focus">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupQueryGoodsDetails.html"
+									 title="/group/query_goods/details">/group/query_goods/details</a>
+									<p class = "APIgory-intro info-overflow">服务详情</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupQueryGoodsList.html"
+									 title="/group/query_goods/list">/group/query_goods/list</a>
+									<p class = "APIgory-intro info-overflow">服务列表</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupQueryStoreStatus.html"
+									 title="/group/query_store/status">/group/query_store/status</a>
+									<p class = "APIgory-intro info-overflow">查询商户审核进度</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupRebateCount.html"
+									 title="/group/rebate/count">/group/rebate/count</a>
+									<p class = "APIgory-intro info-overflow">消费分润当前年的月统计</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupShareDetails.html"
+									 title="/group/share/details">/group/share/details</a>
+									<p class = "APIgory-intro info-overflow">分润明细</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupStoreAlbunList.html"
+									 title="/group/store_albun/list">/group/store_albun/list</a>
+									<p class = "APIgory-intro info-overflow">商户环境相册</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupStoreCustomerList.html"
+									 title="/group/store_customer/list">/group/store_customer/list</a>
+									<p class = "APIgory-intro info-overflow">商户会员</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupStoreInfoGet.html"
+									 title="/group/store_info/get">/group/store_info/get</a>
+									<p class = "APIgory-intro info-overflow">获取商户信息</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupVoucherDetails.html"
+									 title="/group/voucher/details">/group/voucher/details</a>
+									<p class = "APIgory-intro info-overflow">消费券详情</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+					</ul>
+				<div class="quick-api">
+					<a href="/index.html">API文档</a>
+				</div>
+			</div>
+		</div>
+		<!--左侧导航栏 end-->
+	</div>
+	<script type="text/javascript">
+		function changeHide(imgDom,contentDivId){
+			var contentDiv=document.getElementById(contentDivId);
+			if(contentDiv.style.display=="none"){
+				contentDiv.style.display="";
+				imgDom.src="/static/css/method/img/tri_down.png";
+			}else{
+				contentDiv.style.display="none";
+				imgDom.src="/static/css/method/img/tri_right.png";
+			}
+		}
+	</script>
+</body>
+</html>

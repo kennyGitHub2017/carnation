@@ -1,0 +1,499 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>#if($!keyword) $!{keyword} 搜索结果 #else 搜索商品 #end - $!{config.poweredby}</title>
+<meta name="keywords" content="$!gc.seo_keywords" />
+<meta name="description" content="$!gc.seo_description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" ></meta>
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods2.css?v=1" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script src="$!webPath/resources/js/jquery.cookie.js"></script>
+<script>
+jQuery(document).ready(function(){
+ //对比
+ jQuery(".contrast a").click(function(e){
+	if(jQuery("#goods_compare_cart dl").size()<4){
+	 e.stopPropagation();
+	  var goods_main_img=jQuery(this).attr("goods_main_img");
+	  var goods_id=jQuery(this).attr("goods_id");
+	 jQuery(".contrast_center").show();
+	 jQuery(".contrast_center_nothing").hide();
+	 jQuery('body').append('<div id="float_img"><img src="'+goods_main_img+'" width="50" height="50" /></div');
+	 var x=jQuery(e.target).offset().left;
+	 var y=jQuery(e.target).offset().top;
+	 jQuery("#float_img").css({"left":x,"top":y,"position":"absolute"});
+	 var target_x=jQuery(".contrast_center_center").offset().left+jQuery(".contrast_center_center").width()/2;
+	 var target_y=jQuery(".contrast_center_center").offset().top+50;
+	 jQuery(this).parent().parent().find(".contrast").hide();
+	 jQuery(this).parent().parent().find(".contrast_off").show();
+	 if(!jQuery("#float_img").is(':animated')){
+	 jQuery("#float_img").animate({'left': target_x,'top': target_y,'opacity': 0},1000,'',
+		function(){
+		  jQuery('#float_img').remove();
+		  jQuery.ajax({type:'POST',url:'$!webPath/add_goods_compare_cart.htm',data:{"goods_id":goods_id},
+					  success:function(data){
+		                   jQuery("#goods_compare_cart").empty().append(data);
+						   if(jQuery("#goods_compare_cart dl").size()>1){
+							  jQuery(".contrast_b_yes a").attr("href","$!webPath/goods_compare.htm").attr("target","_blank").css("background","#F00");
+						   }
+						   if(jQuery("#goods_compare_cart dl").size()>0){
+						      jQuery(".contrast_center_center_nothing").hide();
+						   }
+		               }
+		  });
+	  });
+	 }
+	}else{
+	   showDialog("msg_info","","同时最多对比4件商品,请删除对比栏中一件商品！",2,"warning",3,'');
+	}
+  });
+  jQuery(".contrast_off a").click(function(){
+	 var goods_id=jQuery(this).attr("goods_id");
+	 jQuery.ajax({type:'POST',url:'$!webPath/remove_goods_compare_cart.htm',data:{"goods_id":goods_id},
+					  success:function(data){
+		                   jQuery("#goods_compare_cart").empty().append(data);
+						   if(jQuery("#goods_compare_cart dl").size()<2){
+						     jQuery(".contrast_b_yes a").attr("href","javascript:void(0);").removeAttr("target").css("background","#CCC");
+						   }
+						   if(jQuery("#goods_compare_cart dl").size()==0){
+						      jQuery(".contrast_center_center_nothing").show();
+						   }
+	                       jQuery("a[goods_id="+goods_id+"]").parent().parent().find(".contrast").show();
+	                       jQuery("a[goods_id="+goods_id+"]").parent().parent().find(".contrast_off").hide();
+		               }
+		  });
+   });
+
+   jQuery(".contrast_center_center_close").live("mouseover",function(){
+	     jQuery(this).css("cursor","pointer");
+	  }).live("click",function(){
+      var goods_id=jQuery(this).attr("goods_id");
+	  jQuery.ajax({type:'POST',url:'$!webPath/remove_goods_compare_cart.htm',data:{"goods_id":goods_id},
+					  success:function(data){
+		                   jQuery("#goods_compare_cart").empty().append(data);
+						   if(jQuery("#goods_compare_cart dl").size()<2){
+						     jQuery(".contrast_b_yes a").attr("href","javascript:void(0);").removeAttr("target").css("background","#CCC");
+						   }
+						   if(jQuery("#goods_compare_cart dl").size()==0){
+						      jQuery(".contrast_center_center_nothing").show();
+						   }
+
+						     jQuery(".contrast").show();
+	                         jQuery(".contrast_off").hide();
+
+		               }
+	   });
+   });
+   //
+   jQuery(".contrast_b_clear").click(function(){
+     jQuery.ajax({type:'POST',url:'$!webPath/remove_all_goods_compare_cart.htm',data:"",
+					  success:function(){
+		                   jQuery("#goods_compare_cart").empty();
+                           jQuery(".contrast_b_yes a").attr("href","javascript:void(0);").removeAttr("target").css("background","#CCC");
+						   jQuery(".contrast").show();
+						   jQuery(".contrast_off").hide();
+						   jQuery(".contrast_center_center_nothing").show();
+		               }
+	   });
+   });
+ jQuery(".search_list_shop_button").click(function(){
+	jQuery(".search_list_shop_button").fadeToggle();
+	jQuery(".search_list_shop_button_c").fadeToggle();
+	jQuery("#search_list_shop_center>div").each(function(index, element) {
+        if(index>0){
+			jQuery(this).slideToggle();
+		}
+    });
+ });
+ jQuery(".search_list_shop_button_c").click(function(){
+	jQuery(".search_list_shop_button_c").fadeToggle();
+	jQuery(".search_list_shop_button").fadeToggle();
+	jQuery("#search_list_shop_center>div").each(function(index, element) {
+        if(index>0){
+			jQuery(this).slideToggle();
+		}
+    });
+ });
+ <!--排序方式-->
+ jQuery(".list_bar_a a").click(function(){
+	 var orderBy = jQuery(this).attr("orderBy");
+	 var orderType = jQuery(this).attr("orderType");
+	 jQuery("#orderBy").val(orderBy);
+	 jQuery("#orderType").val(orderType);
+	 jQuery("#ListForm").submit();
+ });
+ #if($!{vo.orderBy}!="")
+    jQuery(".list_bar_a a").removeClass("this").find("i").removeClass("this");
+    jQuery(".list_bar_a a[orderBy='$!vo.orderBy']").addClass("this").find("i").addClass("this");
+   #if($!vo.orderBy=="goods_current_price" && $!vo.orderType=="asc")
+     jQuery(".list_bar_a a[orderBy='goods_current_price']").attr("orderType","desc").find("i").addClass("up");
+   #end
+   #if($!vo.orderBy=="goods_current_price"&& $!vo.orderType=="desc")
+     jQuery(".list_bar_a a[orderBy='goods_current_price']").attr("orderType","asc").find("i").addClass("down");
+   #end
+ #else
+ 	jQuery(".list_bar_a a[orderBy='default']").addClass("this").find("i").addClass("this");
+ #end
+  <!--移进移出-->
+  jQuery(".pro_list_one").mouseover(function(){
+    jQuery(".pro_list_one ul").removeClass("this");
+	jQuery(".pro_list_shop").hide();
+	jQuery(".pro_list_evaluate").hide();
+    jQuery(this).find("ul").addClass("this");
+	jQuery(this).find(".pro_list_shop").show();
+	jQuery(this).find(".pro_list_evaluate").show();
+	jQuery(this).find(".list_contrast").show();
+  }).mouseleave(function(){
+    jQuery(this).find("ul").removeClass("this");
+	jQuery(".pro_list_one ul").removeClass("this");
+	jQuery(".pro_list_shop").hide();
+	jQuery(".pro_list_evaluate").hide();
+	jQuery(this).find(".list_contrast").hide();
+  });
+  <!--点击小图-->
+  jQuery(".pro_them_team b").mouseover(function(){
+      var img_id="#"+jQuery(this).attr("goods_id")+"_main_img";
+	  var middle_img=jQuery(this).attr("middle_img");
+	  jQuery(img_id).attr("src",middle_img);
+	  jQuery(this).parent().find("b").removeClass("this_b");
+	  jQuery(this).addClass("this_b");
+	  jQuery(this).parent().find(".team_san").hide();
+	  jQuery(this).find(".team_san").show();
+  });
+  <!--图片加载-->
+  jQuery(".img_cspan img").lazyload({effect:"fadeIn",width:208,height:208});
+  jQuery(".pro_them_team img").lazyload({effect:"fadeIn",width:30,height:30});
+  <!--选择商品进行条件筛选-->
+  jQuery(":radio[id=goods_inventory][value=$!vo.goodsInventory]").attr("checked",true);
+  jQuery(":radio[id=goods_type][value=$!vo.goodsType]").attr("checked",true);
+  jQuery(":checkbox[id=goods_transfee][value=$!vo.goodsTransfee]").attr("checked",true);
+  jQuery(":checkbox[id=goods_cod][value=$!vo.goodsCod]").attr("checked",true);
+  jQuery(":radio[id=goods_inventory]").click(function(){
+    jQuery("#ListForm").submit();
+  });
+  jQuery(":radio[id=goods_type]").click(function(){
+    jQuery("#ListForm").submit();
+  });
+  jQuery("#goods_transfee").click(function(){
+    jQuery("#ListForm").submit();
+  });
+  jQuery("#goods_cod").click(function(){
+    jQuery("#ListForm").submit();
+  });
+  jQuery(".img_a").click(function(){
+	if(jQuery(this).find("i").hasClass("this")){
+		jQuery(this).find("i").removeClass("this");
+	}else{
+		jQuery(this).find("i").addClass("this");
+	}
+	if(jQuery(this).parent().next().attr("child_show")=="true"){
+		jQuery(this).parent().next().slideToggle();
+		jQuery(this).parent().next().attr("child_show","false");
+	}else{
+		jQuery(this).parent().next().slideToggle();
+		jQuery(this).parent().next().attr("child_show","true");
+	}
+	var gc_status="";
+	jQuery(".li_a").each(function(){
+			gc_status=gc_status+";"+jQuery(this).next().attr("id")+","+jQuery(this).next().attr("child_show");
+	});
+	jQuery.cookie("gc_status",gc_status);
+  });
+  #if($!gc_id)
+   if(jQuery.cookie("gc_status")!=null){
+      var gc_status=jQuery.cookie("gc_status");
+	  jQuery.each(gc_status.split(";"), function(index,item){
+		 var list=item.split(",");
+		 jQuery("#"+list[0]).attr("child_show",list[1]);
+		 if(list[1]=="true"){
+	       jQuery("#"+list[0]).show();
+		   jQuery("#"+list[0]).parent().find("i").addClass("this");
+		 }
+	  });
+   }
+   jQuery("#gc_"+"$!{gc_id}").addClass("word_red");
+   #else
+   jQuery.cookie("gc_status",null);
+   #end
+    //添加到购物车
+   jQuery("a[id^=goods_cart_]").live("click",function(e){
+	  var goods_id=jQuery(this).attr("goods_id");
+	  var goods_type=jQuery(this).attr("goods_type");
+	  var user_id=jQuery(this).attr("user_id");
+	  var buy=true;
+	  if(goods_type=="0"){
+	    if("$!user.userRole"=="ADMIN"){
+			buy=false;
+	    }
+	  }
+	  if(goods_type=="1"){
+	    if("$!user.id"==user_id){
+		   buy=false;
+		}
+	  }
+	  if(!buy){
+	     showDialog("msg_info","","不可以购买自己的商品！",2,"warning",3,'');
+	  }else{
+	     jQuery.post("$!current_webPath/add_goods_cart.htm",{"id":goods_id,"count":1,"price":"","gsp":""},
+				function(data){
+						   var change_count=function(){
+							    if(data.code!=-1){
+									 jQuery("b[id=cart_goods_count_top]").html(data.count);
+									}
+								jQuery("#float_div,#float_div img").stop();
+							    jQuery("#float_div,#float_div img").remove();
+							   };
+							   if(!jQuery("#float_div").is(':animated')){
+								   var tar_x= jQuery("b[id=cart_goods_count_top]").offset().left;
+								   var tar_y= jQuery("b[id=cart_goods_count_top]").offset().top;
+								   var div = jQuery("div[data-bind="+goods_id+"]");
+								   var src = jQuery("img[id="+goods_id+"_main_img]").attr("src");
+								   var x=jQuery(div).offset().left+6;
+	 							   var y=jQuery(div).offset().top+1;
+								   var html = "<div id='float_div' style='border:3px solid #ececec;left:"+x+"px;top:"+y+"px;position:absolute;padding:5px; background:#fff;z-index:9999'><img width='208px' height='208px' src='"+src+"' style=''/></div>";
+									jQuery("body").append(html);
+									jQuery("#float_div,#float_div img").animate({'left':x+150,'top':y},400,'').animate({'left':tar_x,'top':tar_y,'width':1,'height':1},600,'',change_count);
+								   }
+				 },"json");
+	  }
+   });
+   //F码购买
+   jQuery("a[id^=f_goods_cart_]").live("click",function(){
+	  var goods_id=jQuery(this).attr("goods_id");
+	  var user_id=jQuery(this).attr("user_id");
+	  var goods_type=parseInt(jQuery(this).attr("goods_type"));
+	  if("$!{user.id}"==user_id){
+         showDialog("msg_info","","不能购买自己的商品！",2,"warning",3,'');
+	  }else{
+          window.location.href="$!webPath/f_code_cart.htm?goods_id="+goods_id;
+	  }
+   })
+});<!--end-->
+/* function search_gc_keyword(gc_id){
+	window.location.href="$!webPath/search.htm?keyword=$!{keyword}&&gc_id="+gc_id;
+} */
+function search_gc(gc_id){
+	window.location.href="$!webPath/store_goods_list_"+gc_id+".htm";
+}	
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm?keyword=$!keyword")
+$!httpInclude.include("/nav1.htm")
+<div class="main">
+  <div class="main_top clearfix">
+    <div class="position"><a href="$!webPath/index.htm"><b>品牌馆</b></a><i>></i><a href="javascript:void(0)">全部结果</a><i></i><a href="javascript:void(0)" style=" width:1040px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; height:20px;"></a></div>
+    <div class="main_left">
+      <div class="main_left_top">
+        <h3><strong>所有类目</strong></h3>
+        <div class="main_leftop">
+          <ul class="main_leftop_ul">
+            #foreach($gc2 in $gcs)
+            <li> #set($gcs3=$gc2.childs)
+              <div class="li_a"> 
+              #if($!gcs3.size()>0) 
+              	<a class="img_a" href="javascript:void(0)"><i></i></a> 
+              #else 
+              	<a class="img_a"></a> 
+              #end 
+	              <a class="word_a" href="javascript:void(0)" onclick="search_gc_keyword('$!{gc2.id}')"> 
+	              	<b id="gc_$!{gc2.id}">$!{gc2.className}</b>
+	              </a> 
+              </div>
+              <ul style="display:none" id="ul_$!{gc2.id}" child_show="false">
+                #foreach($gc3 in $gcs3)
+                <li id="gc_$!{gc3.id}"><a href="javascript:void(0)" onclick="search_gc_keyword('$!{gc3.id}')">$!{gc3.className}</a></li>
+                   <li id="gc_$!{gc3.id}"><a href="javascript:void(0)" onclick="search_gc($!{gc3.id})">$!gc3.className</a></li>
+                #end
+              </ul>
+            </li>
+            #end
+          </ul>
+        </div>
+      </div>
+
+
+      </div>
+    <form action="$!webPath/search-goodsBy-Brand_$!{goodsBrandId}.htm" method="post" id="ListForm">
+      <div class="main_right">
+<!--         店铺匹配 -->
+      #if($!stores.size()>0)
+        <div class="search_list_shop">
+          <div class="search_list_shop_center" id="search_list_shop_center"> 
+          #foreach($store in $stores)
+            <div class="search_shop" #if($!velocityCount!=1) style="display:none" #end> #if($!config.storeImage)
+              #set($logo="$!imageWebServer/$!config.storeImage.path/$!config.storeImage.name")
+              #end
+              #if($!store.store_logo)
+              #set($logo="$!imageWebServer/$!store.store_logo.path/$!store.store_logo.name")
+              #end
+              #set($store_url="$!webPath/store_$!{store.id}.htm")
+              #if($!config.second_domain_open && $!store.store_second_domain!="")
+              #set($store_url="http://$!{store.store_second_domain}.$!{domainPath}")
+              #end
+              <div class="search_shop_logo"><a target="_blank" href="$!store_url"><img src="$!logo"/></a></div>
+              <div class="search_shop_name"><a target="_blank" href="$!store_url">$!store.store_name</a></div>
+              <div class="search_shop_grade">
+                <div class="pro_shop_value_b"> <span>综合评分：</span> <em>
+                  <!--评分改变width的百分数-->
+                  #set($pecent=$!{store.point.store_evaluate}/5*100)
+                  <div class="scores_value"> <a class="scores_scroll_value" href="javascript:void(0);"> <span class="scroll_gray_value"></span> <span class="scroll_red_value" style="width:$!{pecent}%;"></span> </a> </div>
+                  </em><span class="scroll_red_value_no"><b style="color:#F00">$!store.point.store_evaluate分</b></span> </div>
+              </div>
+              <div class="search_shop_button"><a target="_blank" href="$!store_url">进入店铺</a></div>
+            </div>
+            #end </div>
+          #if($!stores.size()>1)
+          <div class="search_list_shop_button"><a href="javascript:void(0)"></a></div>
+          #end
+          <div class="search_list_shop_button_c" style="display:none;"><a href="javascript:void(0)"></a></div>
+        </div>
+        #end
+
+        <div class="main_list_box">
+          <div class="main_list_function">
+            <div class="main_list_bar"><span class="list_fenye"><b class="list_fenya_b">共$!allCount个商品</b></span> <b class="list_bar_px">排序：</b> <b class="list_bar_a"> 
+            <a href="javascript:void(0);" orderBy="add_time"  orderType="asc">默认<i class="this"></i></a> 
+            <a href="javascript:void(0);" orderBy="goods_salenum" orderType="desc">销量<i></i></a> 
+            <a href="javascript:void(0);" orderBy="goods_collect" orderType="desc">人气<i></i></a> 
+            <a href="javascript:void(0);" orderBy="well_evaluate" orderType="desc">好评<i></i></a> 
+            <a href="javascript:void(0);" orderBy="goods_current_price"  orderType="asc">价格<i class="price"></i></a> 
+              <!--price为默认状态,up为由低到高,down为由高到低--> 
+              </b></div>
+ <!--            <div class="main_list_barb"> <i class="listbar_n_a">库存：</i> <b class="listbar_check"> <i>
+              <label>
+                <input name="goodsInventory" type="radio" id="goods_inventory" value="-1" checked="checked" />
+                全部 </label>
+              </i> <i>
+              <label>
+                <input name="goodsInventory" type="radio" id="goods_inventory" value="0" />
+                仅显示有货 </label>
+              </i> </b> <b class="listbar_class"> <i>商品类型：</i> <i>
+              <label>
+                <input name="goodsType" type="radio" id="goods_type" value="-1" checked="checked" />
+                全部 </label>
+              </i> <i>
+              <label>
+                <input name="goodsType" id="goods_type" type="radio" value="0" />
+                商城自营 </label>
+              </i> <i>
+              <label>
+                <input name="goodsType" id="goods_type" type="radio" value="1" />
+                商家商品 </label>
+              </i> </b><b class="listbar_pay"> 
+              <i style="display:none;">
+              <label style="cursor:pointer">
+                <input name="goodsCod" id="goods_cod" type="checkbox" value="0" />
+                货到付款 </label style="cursor:pointer">
+              </i> 
+              <i>
+              <label style="cursor:pointer">
+                <input name="goodsTransfee" id="goods_transfee" type="checkbox" value="1" />
+                卖家包邮 </label>
+              </i> </b> </div> -->
+          </div>
+          
+          
+          #if($!objs.size()>0)
+          <div class="pro_list"> 
+          #foreach($obj in $objs)
+            <div class="pro_list_one" data-bind="$!obj.vo_id">
+              <ul class="">
+               
+               
+                <li class="pro_list_img"> 
+                #set($goods_url="$!webPath/goods_$!{obj.id}.htm")
+                
+                  #set($store=$!goodsViewTools.query_LuceneVo_goods_store("$!obj.vo_id"))
+                  
+                  #if($!config.secondDomainOpen && $!obj.vo_goods_type==1 && $!store.storeSecondDomain!="")
+                  #set($goods_url="http://$!{store.storeSecondDomain}.$!{domainPath}/goods_$!{obj.vo_id}.htm")
+                  #end
+                  
+                  #if($!obj.goodsMainPhotoPath!='')
+                  #set($main_photos_url=$!obj.goodsMainPhotoPath)
+                  #else
+                  #set($main_photos_url="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                  #end
+                  
+                  <a href="$!goods_url" target="_blank"> 
+                  <span class="img_cspan">
+                  <p> <img id="$!{obj.id}_main_img" src="" 
+                  original="$!{main_photos_url}_208x208" onerror="this.src='$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}';"
+                   width="28" height="28" /> </p>
+                  </span> 
+                  </a> 
+                  
+                  </li>
+
+                
+                <li class="pro_list_name"><a href="$!goods_url" target="_blank">$!{obj.goodsName}</a></li>
+                
+                
+                
+                
+                
+                <li class="pro_list_price"><b>¥$!{obj.storePrice}</b>
+                
+                #set($statusGoods=$!{goodsViewTools.query_activity_status("$!obj.vo_id","group_buy")})
+                  #if($!{statusGoods.groupBuy}=="2")<i>团购</i>#end
+                  #if($!{statusGoods.activityStatus}=="1")<i>促销</i>#end
+                  #if($!{statusGoods.combinStatus}=="1")<i>组合</i>#end
+                  #if($!{statusGoods.orderEnoughGiveStatus}=="1")<i>满送</i>#end
+                  #if($!{statusGoods.enoughReduce}=="1")<i>满减</i>#end
+                  #if($!{statusGoods.fSaleType}=="1")<i>F码</i>#end
+                  #if($!{statusGoods.advanceSaleType}=="1")<i>预售</i>#end
+                    #if($!obj.vo_has_mobile_price)
+		                <i class="orange">手机专享</i>
+		            #end
+	                #if($!obj.vo_has_exchange_integral)
+	    	            <i class="orange">积分兑换</i>
+	                #end
+                  </li>
+
+                  <li class="pl-10">商品销量: #if($!{obj.goodsSalenum}) $!{obj.goodsSalenum} #else 0 #end</li>
+              </ul>
+            </div>
+            #end </div>
+            
+            
+          <div class="fenye"><span> $!gotoPageFormHTML</span></div>
+          #else
+          <div class="main_list_box">
+            <div class="main_list_none"> <span class="main_none_box"> <i></i>
+              <p>抱歉，没有找到符合条件的商品！<a href="$!webPath/index.htm">查看全部商品</a></p>
+              </span></div>
+          </div>
+          #end </div>
+      </div>
+      
+      <input name="keyword" type="hidden" id="keyword" value="$!keyword" />
+      <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      <input name="orderBy" type="hidden" id="orderBy" value="$!vo.orderBy" />
+      <input name="orderType" type="hidden" id="orderType" value="$!vo.orderType" />
+      <input name="gc_id" type="hidden" id="gc_id" value="$!gc_id" />
+    </form>
+
+
+
+  </div>
+  $!httpInclude.include("/goods_list_bottom.htm")
+  </div>
+$!httpInclude.include("/footer.htm")
+<script>
+    jQuery(".multipleColumn").slide({titCell:".hd ul",mainCell:".bd .ulWrap", autoPlay: true, autoPage:true,effect:"leftLoop", scroll: 6,vis:7});
+</script>
+</body>
+</html>

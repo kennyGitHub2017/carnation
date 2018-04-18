@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js" ></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	
+	 
+</head>
+<body>
+	 <div id='opButtonsList' style="padding:5px 5px;">
+	
+	 <form id="searchForm" method="post" action="$!webPath/admin/red_package_list.htm" >
+	    	<div style="padding:5px 5px;">
+					<strong>查询：</strong>
+	    			
+	    			<select id="state" class="easyui-combobox" name="state" style="width:100px;">
+	    			#foreach($sKey in ${statusMap.keySet()})
+						<option value="$!sKey" #if($!sKey==$!vo.status selected="true" #end >${statusMap.get($sKey)}</option>
+					#end
+					</select>
+					
+					<select id="terminalType" class="easyui-combobox" name="terminalType" style="width:100px;">
+					#foreach($sKey in ${terminalTypeMap.keySet()})
+						<option value="$!sKey" #if($!sKey==$!vo.terminalType) selected="true" #end >${terminalTypeMap.get($sKey)}</option>
+					#end
+					</select>
+					
+					<select id="actPosition" name="actPosition" class="easyui-combobox" style="width:100px;">
+						#foreach($sKey in ${actPosition.keySet()})
+						<option value="$!sKey" #if($!sKey==$!vo.actPosition selected="true" #end>${actPosition.get($sKey)}</option>
+					#end
+					</select>
+					
+					<inputid id="startTimeStr" name="startTimeStr" value="$!vo.startTimeStr" class="easyui-datetimebox" data-options="prompt:'开始时间',required:true" style="width:150px"/>
+					<strong>至</strong>
+					<input id="endTimeStr" name="endTimeStr" value="$!vo.endTimeStr" class="easyui-datetimebox" data-options="prompt:'结束时间',required:true" style="width:150px"/>
+										
+					<input id="schemeName" name="schemeName" value="$!vo.schemeName" class="easyui-textbox" type="text" style="width:100px;" data-options="prompt:'名称',required:true"/>
+					
+	    			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+	    			
+	    	</div>
+	    	<input type="hidden" id="page" name="page" value="$!currentPage"></input>
+	    	<input type="hidden" id="size" name="size" value="$!pageSize"></input>
+	    </form>
+	    
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="edit(0)">添加</a>
+		<!-- <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="del()">删除</a> -->
+		<!-- <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">Save</a>
+		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cut',disabled:true">Cut</a>
+		<a href="#" class="easyui-linkbutton">Text Button</a> -->
+	</div>
+		
+	<table id="listData" class="easyui-datagrid" style="width:100%;height:500px"
+			data-options="singleSelect:true,collapsible:true" toolbar="#opButtonsList">
+		<thead>
+			<tr>
+				<th data-options="halign:'center',field:'schemeName',width:120,align:'left'">名称</th>
+				<th data-options="halign:'center',field:'terminalType',width:60,align:'left'">终端类型</th>
+				<th data-options="halign:'center',field:'minMoney',width:80,align:'right'">面额</th>
+				<th data-options="halign:'center',field:'totalCount',width:80,align:'right'">发行量</th>
+				<th data-options="halign:'center',field:'getCount',width:80,align:'right'">限领量</th>
+				<th data-options="halign:'center',field:'userType',width:60,align:'left'">用户类型</th>
+				<th data-options="halign:'center',field:'tetType',width:60,align:'left'">领取方式</th>
+				<th data-options="halign:'center',field:'actPosition',width:60,align:'right'">活动位置</th>
+				<th data-options="halign:'center',field:'startTime',width:125,align:'center'">开始时间</th>
+				<th data-options="halign:'center',field:'endTime',width:125,align:'center'">结束时间</th>
+				<th data-options="halign:'center',field:'createTime',width:125,align:'center'">创建时间</th>
+				<th data-options="halign:'center',field:'currentGetCount',width:80,align:'right'">领取量</th>
+				<th data-options="halign:'center',field:'priority',width:50,align:'right'">权重</th>
+				<th data-options="halign:'center',field:'status',width:50,align:'center'">状态</th>
+				<th data-options="halign:'center',field:'operate',width:140,align:'center'">操作</th>
+			</tr>
+		</thead>
+	    <tbody>  
+	      #foreach($obj in $objs)
+	        <tr>    
+	            <td>$!obj.SchemeName</td>
+	            <td>$!obj.getTerminalTypeDesc()</td>	            
+	            <td>$!obj.MinMoney</td>	            
+	            <td>$!obj.TotalCount</td>	            
+	            <td>$!obj.GetCount</td>          
+	            <td>$!obj.getUserTypeDesc()</td>       
+	            <td>$!obj.getGetTypeDesc()</td>
+	            <td>$!obj.getActPositionDesc()</td> 
+	            <td>$!CommUtil.formatLongDate($!obj.StartTime)</td>	
+	            <td>$!CommUtil.formatLongDate($!obj.EndTime)</td>
+	            <td>$!CommUtil.formatLongDate($!obj.CreateTime)</td>
+	            <td>$!obj.CurrentGetCount</td>
+	            <td>$!obj.Priority</td>	            
+	             #set($status="启用")
+		         #if($!obj.isEnabled==1)
+		           #set($status="启用")
+		         #end
+		         #if($!obj.isEnabled==0)
+		           #set($status="停用")
+		         #end
+	        <td align="center">$!status</td>
+	        <td>
+	        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit'" onclick="edit($!obj.id)">修改</a>
+	        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="del($!obj.id)">删除</a>
+		</td>
+	        </tr>
+	      #end
+	      </tbody>
+	</table>
+	<div id="pp" class="easyui-pagination" data-options="total:$!rows,pageSize:$!pageSize,pageNumber:$!currentPage,pageList:[1,2,20,100]" style="background:#efefef;border:1px solid #ccc;"></div> 
+
+</body>
+
+<!-- 弹出层页面 -->
+	<div id="dlg" class="easyui-dialog" data-options="closed:true">
+	</div>
+	
+ 	<script type="text/javascript">
+ 	 
+ 		function del(id){
+			if(confirm('删除后不可恢复，是否继续？')){
+				window.location.href='$!webPath/admin/red_package_del.htm?id='+ id +'&currentPage=$!currentPage';
+			}
+ 		}
+        function edit(id) {
+        	//	alert(id);
+        	var op = 'add';
+        	if(id > 0){
+        		op = 'modify';
+        	}
+        	
+        	jQuery("#dlg").dialog({
+                title: op=='add'?'添加红包':'编辑红包',
+                href:  op=='add'?'red_package_add.htm':'red_package_edit.htm?id=' + id,
+                width:'800',
+     	    	height:'600',
+                top:(jQuery(window).height() - 600) * 0.5,   
+                left:(jQuery(window).width() - 800) * 0.5,
+                iconCls: 'icon-edit',
+                modal: true,
+                closed: false,
+                buttons: [{
+					text:'保存',
+					iconCls:'icon-save',
+					handler:function(){
+						jQuery("#theForm").submit();
+						jQuery("#dlg").dialog('close');
+					}
+				},{
+					text:'关闭',
+					iconCls:'icon-cancel',
+					handler:function(){
+						jQuery("#dlg").dialog('close');
+					}
+				}],                
+            });
+        }
+        
+        jQuery('#pp').pagination({
+        	onSelectPage:function(pageNumber, pageSize){
+        		jQuery(this).pagination('loading');
+        		jQuery('#page').attr("value",pageNumber);
+        		jQuery('#size').attr("value",pageSize);
+        		jQuery(this).pagination('loaded');
+				//var a = jQuery("#searchForm").submit();
+				formSubmit();
+        	},
+        });
+
+        function formSubmit(){
+        	jQuery("#searchForm").submit();
+        }
+
+        
+   </script>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-重消仓库商品管理-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<style>
+.del_a {
+    margin: 0px;
+}
+.user_order_table td {
+    padding-left: 0px;
+}
+.user_order_table .checkpro {
+    padding-left: 0px;
+}
+</style>
+<script>
+function not_audit(){
+	 showDialog("msg_info","","当前商品未经运营商审核通过！",2,"warning",3,'');
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/seller/top.htm")
+<div class="main">
+  <div class="seller_center">   $!httpInclude.include("/seller/nav.htm?op=goods_storage")
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/seller/index.htm">商家中心</a></b>><b>商品管理</b>><b>库存中的商品</b></span></div>
+      <div class="seller_list">
+        <div class="seller_list_title">
+          <form action="$!webPath/seller/goods_yungou_storage.htm" method="post">
+            <div  class="seller_title_sp"> 
+            
+<!--             <span>商品分类</span> <span>
+              <select name="userGoodsClassId" id="user_class_id">
+              <option value="">请选择商品分类...</option>
+                #foreach($user_class in $!userGoodsClassList)
+              		  <option value="$!user_class.id" #if($!vo.userGoodsClassId == $!user_class.id) selected="selected" #end>$!user_class.classname</option>
+                      #foreach($c_user_class in $user_class.childs)
+              		  <option value="$!c_user_class.id"  #if($!vo.userGoodsClassId == $!c_user_class.id) selected="selected" #end>&nbsp;&nbsp;$!c_user_class.classname</option>
+                      #end
+                #end
+            </select> -->
+              </span> <span>商品名称</span> <span class="size150">
+              <input name="goodsName" type="text" id="goods_name" value="$!vo.goodsName"/>
+              </span> <span>
+              <input name="" type="submit"  value="搜索" style="cursor:pointer;"   class="seller_sear_btn"/>
+              </span> </div>
+          </form>
+          #if($!objs.size()>0)
+          <div class="alldel_l"> <span class="check_input">
+            <input name="all" type="checkbox" id="all" value="" onclick="selectAll(this)" />
+            </span> <span>
+            <label for="all">全选</label>
+            </span> <span> <a href="javascript:void(0);" onclick="cmd('$!webPath/seller/goods_sale.htm','')" class="user_down_shop">上架</a> </span> 
+            </div>
+           #end
+        </div>
+        <form action="$!webPath/seller/goods_yungou_storage.htm" method="post" name="ListForm" id="ListForm">
+          <div class="seller_list_box">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" class="user_order_table" >
+              <tr id="opertitle">
+               <th width=""></th>
+               <th width="8%">商品名称</th>
+               <th width="4%">零售价</th>
+               <th width="5%">会员价</th>
+               <th width="5%">重消</th>
+               <th width="5%">购物积分+现金</th>
+               <th width="3%">销量</th>
+               <th width="5%">总库存</th>
+               <th width="5%">状态</th>
+               <th width="10%">发布时间</th>
+               <th align="center" width="18%">操作</th>
+              </tr>
+              #if($!objs.size()>0)
+              #foreach($obj in $objs)
+              <tr>
+                <td align="center"><span class="checkpro">
+                  <input type="checkbox" value="$!obj.id" />
+                  #if($!obj.goodsMainPhotoPath)
+                  #set($img="$!{obj.goodsMainPhotoPath}")
+                  #else
+                  #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                  #end </span>
+                 </td>
+				
+				<td valign="middle" style="padding-left: 10px;"><dl class="return_goods">
+						<dt>
+							<img src="$!img" width="60" height="63" />
+						</dt>
+						<dd class="nameproduct">$!obj.goodsName</dd>
+						<!-- <a href="$!webPath/goods_$!{obj.id}.htm" target="_blank"></a> -->
+					</dl>
+					<div class="goods_edit"></div>
+				</td>
+
+
+									<td align="center">¥$!{obj.goodsPrice}</td>
+                
+                <td align="center">¥$!{obj.storePrice}</td>
+                
+                <td align="center">¥$!{obj.needYgb}</td>
+                
+                <td align="center">$!CommUtil.formatInteger($!{obj.needIntegral})+$!{obj.needMoney}元</td>
+                
+               <td align="center">$!{obj.goodsSalenum} </td>
+                
+                <td>$!{obj.goodsInventory} </td>
+                <td>状态</td>
+                 <td>$!date.format('yyyy-MM-dd HH:mm:ss ',$!{obj.addTime})</td>
+	                <td class="del_operate" align="center"><a href="$!webPath/goods_$!{obj.id}.htm?admin_view=true" target="_blank" class="del_a">预览</a>
+	                <a href="$!webPath/seller/goods_yungou_edit.htm?id=$!obj.id" target="_blank" class="del_a">编辑</a>
+	                
+	                #if($!obj.goodsStatus==-5)
+	                 <a href="javascript:void(0);" onclick="not_audit()" class="del_a">上架</a> 
+	                #else 
+	                <a href="$!webPath/seller/goods_sale.htm?mulitId=$!obj.id&flag=1" class="del_a">上架</a> 
+	                
+	                #end <a href="javascript:void(0);" onclick="showDialog('msg_info','','确认删除该条数据吗？',1,'question',3,function(){window.location.href='$!webPath/seller/goods_del.htm?mulitId=$!obj.id&op=storage&flag=1'});" class="del_a">删除</a>
+	                </td>
+              </tr>
+              #end
+              #else
+              <tr>
+                <td colspan="11" align="center"><div class="seller_center_nothing">
+                    <div class="seller_center_nothing_left"><img src="$!webPath/resources/style/system/front/default/images/seller_center_nothing.png" /></div>
+                    <div class="seller_center_nothing_right">暂时没有数据</div>
+                  </div></td>
+              </tr>
+              #end
+            </table>
+          </div>
+          #if($!objs.size()>0)
+          <div class="userlist_allop">
+            <div class="seller_list_page">
+              <div  class="seller_page_sp">
+                <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                <input name="mulitId" type="hidden" id="mulitId" />
+                <input name="goodsName" type="hidden" id="goods_name" value="$!vo.goodsName" />
+                <input name="userGoodsClassId" type="hidden" id="user_class_id" value="$!vo.userGoodsClassId" />
+                $!gotoPageFormHTML</div>
+              <div class="user_listoper_p"> <i>
+                <input name="all1" type="checkbox" id="all1" onclick="selectAll(this)" value="" />
+                <label for="all">全选</label>
+                </i> <a  href="javascript:void(0);" onclick="cmd('$!webPath/seller/goods_sale.htm','')" class="seller_oper_all">上架</a> </div>
+            </div>
+          </div>
+          #end
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

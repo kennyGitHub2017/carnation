@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.AccessoryMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.Accessory">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="ext" property="ext" jdbcType="VARCHAR" />
+		<result column="height" property="height" jdbcType="INTEGER" />
+		<result column="info" property="info" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="path" property="path" jdbcType="VARCHAR" />
+		<result column="size" property="size" jdbcType="DECIMAL" />
+		<result column="width" property="width" jdbcType="INTEGER" />
+		<result column="album_id" property="albumId" jdbcType="BIGINT" />
+		<result column="config_id" property="configId" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+	</resultMap>
+
+	<resultMap id="BOBaseResultMap" type="com.sinco.carnation.sys.bo.AccessoryBO"
+		extends="BaseResultMap">
+		<result column="group_goods_id" property="groupGoodsId"
+			jdbcType="BIGINT" />
+	</resultMap>
+
+	<select id="selectGoodsPhontListByGoodsId" resultMap="BaseResultMap">
+		SELECT a.* FROM shop_goods_photo p, sys_accessory a WHERE p.photo_id = a.id
+		AND a.delete_Status = 0 AND p.goods_id = #{goodsId}
+	</select>
+
+	<select id="selectGroupGoodsByGoodsId" resultMap="BOBaseResultMap">
+		SELECT
+		sa.*, ga.group_goods_id
+		FROM
+		sys_accessory sa
+		INNER JOIN o2o_group_accessory ga ON sa.id = ga.accessory_id
+		WHERE
+		ga.group_goods_id =#{goodsId}
+	</select>
+
+	<select id="findByConfigId" parameterType="Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_accessory
+		where config_id=#{configId}
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, ext, height, info, name, path, size, width,
+		album_id,
+		config_id, user_id
+	</sql>
+
+	<select id="storeAccessoryList" resultMap="BOBaseResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from sys_accessory where album_id=#{albumId}
+		order by add_Time desc
+	</select>
+
+	<delete id="accessoryDelByAlbumId" parameterType="long">
+		delete from sys_accessory where album_id=#{albumId,jdbcType=BIGINT}
+	</delete>
+
+	<update id="updateAlbumTransfer">
+		update sys_accessory
+		set album_id=${toAlbumId}
+		where id in
+		<foreach collection="ids" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<delete id="deleteAccessotyById">
+		delete from sys_accessory
+		where id in
+		<foreach collection="id" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<select id="queryAccessoriesById" resultMap="BOBaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM sys_accessory WHERE album_id=#{albumId,jdbcType=BIGINT}
+		<if test="userId != null">
+			AND user_id = #{userId, jdbcType=BIGINT}
+		</if>
+	</select>
+
+	<select id="queryAlbumListCount" resultType="int">
+		SELECT COUNT(id) FROM sys_accessory WHERE
+		album_id=#{albumId,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sys.model.AccessoryExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_accessory
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_accessory
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sys_accessory
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.AccessoryExample">
+		delete from sys_accessory
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.Accessory">
+		insert into sys_accessory (id, add_Time, delete_Status,
+		ext, height, info,
+		name, path, size, width,
+		album_id, config_id, user_id
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{ext,jdbcType=VARCHAR}, #{height,jdbcType=INTEGER}, #{info,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR},
+		#{size,jdbcType=DECIMAL}, #{width,jdbcType=INTEGER},
+		#{albumId,jdbcType=BIGINT}, #{configId,jdbcType=BIGINT},
+		#{userId,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.Accessory"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_accessory
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="ext != null">
+				ext,
+			</if>
+			<if test="height != null">
+				height,
+			</if>
+			<if test="info != null">
+				info,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="path != null">
+				path,
+			</if>
+			<if test="size != null">
+				size,
+			</if>
+			<if test="width != null">
+				width,
+			</if>
+			<if test="albumId != null">
+				album_id,
+			</if>
+			<if test="configId != null">
+				config_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="ext != null">
+				#{ext,jdbcType=VARCHAR},
+			</if>
+			<if test="height != null">
+				#{height,jdbcType=INTEGER},
+			</if>
+			<if test="info != null">
+				#{info,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="path != null">
+				#{path,jdbcType=VARCHAR},
+			</if>
+			<if test="size != null">
+				#{size,jdbcType=DECIMAL},
+			</if>
+			<if test="width != null">
+				#{width,jdbcType=INTEGER},
+			</if>
+			<if test="albumId != null">
+				#{albumId,jdbcType=BIGINT},
+			</if>
+			<if test="configId != null">
+				#{configId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.AccessoryExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_accessory
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_accessory
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.ext != null">
+				ext = #{record.ext,jdbcType=VARCHAR},
+			</if>
+			<if test="record.height != null">
+				height = #{record.height,jdbcType=INTEGER},
+			</if>
+			<if test="record.info != null">
+				info = #{record.info,jdbcType=VARCHAR},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.path != null">
+				path = #{record.path,jdbcType=VARCHAR},
+			</if>
+			<if test="record.size != null">
+				size = #{record.size,jdbcType=DECIMAL},
+			</if>
+			<if test="record.width != null">
+				width = #{record.width,jdbcType=INTEGER},
+			</if>
+			<if test="record.albumId != null">
+				album_id = #{record.albumId,jdbcType=BIGINT},
+			</if>
+			<if test="record.configId != null">
+				config_id = #{record.configId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sys_accessory
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		ext = #{record.ext,jdbcType=VARCHAR},
+		height = #{record.height,jdbcType=INTEGER},
+		info = #{record.info,jdbcType=VARCHAR},
+		name = #{record.name,jdbcType=VARCHAR},
+		path = #{record.path,jdbcType=VARCHAR},
+		size = #{record.size,jdbcType=DECIMAL},
+		width = #{record.width,jdbcType=INTEGER},
+		album_id = #{record.albumId,jdbcType=BIGINT},
+		config_id = #{record.configId,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.Accessory">
+		update sys_accessory
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="ext != null">
+				ext = #{ext,jdbcType=VARCHAR},
+			</if>
+			<if test="height != null">
+				height = #{height,jdbcType=INTEGER},
+			</if>
+			<if test="info != null">
+				info = #{info,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="path != null">
+				path = #{path,jdbcType=VARCHAR},
+			</if>
+			<if test="size != null">
+				size = #{size,jdbcType=DECIMAL},
+			</if>
+			<if test="width != null">
+				width = #{width,jdbcType=INTEGER},
+			</if>
+			<if test="albumId != null">
+				album_id = #{albumId,jdbcType=BIGINT},
+			</if>
+			<if test="configId != null">
+				config_id = #{configId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.Accessory">
+		update sys_accessory
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		ext = #{ext,jdbcType=VARCHAR},
+		height = #{height,jdbcType=INTEGER},
+		info = #{info,jdbcType=VARCHAR},
+		name = #{name,jdbcType=VARCHAR},
+		path = #{path,jdbcType=VARCHAR},
+		size = #{size,jdbcType=DECIMAL},
+		width = #{width,jdbcType=INTEGER},
+		album_id = #{albumId,jdbcType=BIGINT},
+		config_id = #{configId,jdbcType=BIGINT},
+		user_id = #{userId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

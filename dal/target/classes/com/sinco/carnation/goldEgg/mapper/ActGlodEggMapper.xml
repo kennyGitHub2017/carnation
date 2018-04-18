@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.goldEgg.mapper.ActGlodEggMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.goldEgg.model.ActGlodEgg">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="total_count" property="totalCount" jdbcType="BIGINT" />
+		<result column="total_money" property="totalMoney" jdbcType="DECIMAL" />
+		<result column="day_limit_money" property="dayLimitMoney"
+			jdbcType="DECIMAL" />
+		<result column="current_get_money" property="currentGetMoney"
+			jdbcType="DECIMAL" />
+		<result column="priority" property="priority" jdbcType="INTEGER" />
+		<result column="act_id" property="actId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.goldEgg.bo.ActGlodEggBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, total_count, total_money, day_limit_money, current_get_money,
+		priority, act_id
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.goldEgg.model.ActGlodEggExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from act_glod_egg
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from act_glod_egg
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from act_glod_egg
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.goldEgg.model.ActGlodEggExample">
+		delete from act_glod_egg
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.goldEgg.model.ActGlodEgg"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into act_glod_egg (id, total_count, total_money,
+		day_limit_money, current_get_money, priority,
+		act_id)
+		values (#{id,jdbcType=BIGINT}, #{totalCount,jdbcType=BIGINT},
+		#{totalMoney,jdbcType=DECIMAL},
+		#{dayLimitMoney,jdbcType=DECIMAL}, #{currentGetMoney,jdbcType=DECIMAL}, #{priority,jdbcType=INTEGER},
+		#{actId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.goldEgg.model.ActGlodEgg"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into act_glod_egg
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="totalCount != null">
+				total_count,
+			</if>
+			<if test="totalMoney != null">
+				total_money,
+			</if>
+			<if test="dayLimitMoney != null">
+				day_limit_money,
+			</if>
+			<if test="currentGetMoney != null">
+				current_get_money,
+			</if>
+			<if test="priority != null">
+				priority,
+			</if>
+			<if test="actId != null">
+				act_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="totalCount != null">
+				#{totalCount,jdbcType=BIGINT},
+			</if>
+			<if test="totalMoney != null">
+				#{totalMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="dayLimitMoney != null">
+				#{dayLimitMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="currentGetMoney != null">
+				#{currentGetMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="priority != null">
+				#{priority,jdbcType=INTEGER},
+			</if>
+			<if test="actId != null">
+				#{actId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.goldEgg.model.ActGlodEggExample"
+		resultType="java.lang.Integer">
+		select count(*) from act_glod_egg
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update act_glod_egg
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.totalCount != null">
+				total_count = #{record.totalCount,jdbcType=BIGINT},
+			</if>
+			<if test="record.totalMoney != null">
+				total_money = #{record.totalMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="record.dayLimitMoney != null">
+				day_limit_money = #{record.dayLimitMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="record.currentGetMoney != null">
+				current_get_money = #{record.currentGetMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="record.priority != null">
+				priority = #{record.priority,jdbcType=INTEGER},
+			</if>
+			<if test="record.actId != null">
+				act_id = #{record.actId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update act_glod_egg
+		set id = #{record.id,jdbcType=BIGINT},
+		total_count = #{record.totalCount,jdbcType=BIGINT},
+		total_money = #{record.totalMoney,jdbcType=DECIMAL},
+		day_limit_money = #{record.dayLimitMoney,jdbcType=DECIMAL},
+		current_get_money = #{record.currentGetMoney,jdbcType=DECIMAL},
+		priority = #{record.priority,jdbcType=INTEGER},
+		act_id = #{record.actId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.goldEgg.model.ActGlodEgg">
+		update act_glod_egg
+		<trim prefix="set" suffixOverrides=",">
+			<if test="totalCount != null">
+				total_count = #{totalCount,jdbcType=BIGINT},
+			</if>
+			<if test="totalMoney != null">
+				total_money = #{totalMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="dayLimitMoney != null">
+				day_limit_money = #{dayLimitMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="currentGetMoney != null">
+				current_get_money = #{currentGetMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="priority != null">
+				priority = #{priority,jdbcType=INTEGER},
+			</if>
+			<if test="actId != null">
+				act_id = #{actId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.goldEgg.model.ActGlodEgg">
+		update act_glod_egg
+		set total_count = #{totalCount,jdbcType=BIGINT},
+		total_money = #{totalMoney,jdbcType=DECIMAL},
+		day_limit_money = #{dayLimitMoney,jdbcType=DECIMAL},
+		current_get_money = #{currentGetMoney,jdbcType=DECIMAL},
+		priority = #{priority,jdbcType=INTEGER},
+		act_id = #{actId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="addCurrentGetMoney">
+		UPDATE act_glod_egg SET current_get_money=current_get_money+#{money} WHERE
+		id=#{id}
+	</update>
+
+
+	<select id="findByActID" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		act_glod_egg
+		where
+		act_id = #{obj.actId,jdbcType=BIGINT}
+	</select>
+
+	<select id="findListByActID" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		act_glod_egg
+		where
+		act_id = #{act_id,jdbcType=BIGINT}
+	</select>
+
+</mapper>

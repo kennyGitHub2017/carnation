@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.juanpi.mapper.JuanpiOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.sinco.carnation.juanpi.model.JuanpiOrder" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="delete_status" property="deleteStatus" jdbcType="INTEGER" />
+    <result column="orderno" property="orderno" jdbcType="VARCHAR" />
+    <result column="ordertime" property="ordertime" jdbcType="TIMESTAMP" />
+    <result column="subchannel" property="subchannel" jdbcType="VARCHAR" />
+    <result column="goodsnumber" property="goodsnumber" jdbcType="BIGINT" />
+    <result column="goodsmoney" property="goodsmoney" jdbcType="DECIMAL" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="platid" property="platid" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="BOResultMap" type="com.sinco.carnation.juanpi.bo.JuanpiOrderBO" extends="BaseResultMap" />
+  <resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.juanpi.model.JuanpiOrder" extends="BaseResultMap" >
+    <result column="goodslist" property="goodslist" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, add_time, update_time, delete_status, orderno, ordertime, subchannel, platid, 
+    goodsnumber, goodsmoney, user_id
+  </sql>
+  <sql id="Blob_Column_List" >
+    goodslist
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.juanpi.model.JuanpiOrderExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from juanpi_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.sinco.carnation.juanpi.model.JuanpiOrderExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from juanpi_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      limit ${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from juanpi_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from juanpi_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.juanpi.model.JuanpiOrderExample" >
+    delete from juanpi_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinco.carnation.juanpi.model.JuanpiOrder" useGeneratedKeys="true" keyProperty="id" >
+    insert into juanpi_order (id, add_time, update_time, 
+      delete_status, orderno, ordertime, 
+      subchannel, platid, goodsnumber, 
+      goodsmoney, user_id, goodslist
+      )
+    values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{deleteStatus,jdbcType=INTEGER}, #{orderno,jdbcType=VARCHAR}, #{ordertime,jdbcType=TIMESTAMP}, 
+      #{subchannel,jdbcType=VARCHAR}, #{platid,jdbcType=INTEGER}, #{goodsnumber,jdbcType=BIGINT}, 
+      #{goodsmoney,jdbcType=DECIMAL}, #{userId,jdbcType=BIGINT}, #{goodslist,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinco.carnation.juanpi.model.JuanpiOrder" useGeneratedKeys="true" keyProperty="id" >
+    insert into juanpi_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status,
+      </if>
+      <if test="orderno != null" >
+        orderno,
+      </if>
+      <if test="ordertime != null" >
+        ordertime,
+      </if>
+      <if test="subchannel != null" >
+        subchannel,
+      </if>
+      <if test="platid != null" >
+        platid,
+      </if>
+      <if test="goodsnumber != null" >
+        goodsnumber,
+      </if>
+      <if test="goodsmoney != null" >
+        goodsmoney,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="goodslist != null" >
+        goodslist,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        #{deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="orderno != null" >
+        #{orderno,jdbcType=VARCHAR},
+      </if>
+      <if test="ordertime != null" >
+        #{ordertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subchannel != null" >
+        #{subchannel,jdbcType=VARCHAR},
+      </if>
+      <if test="platid != null" >
+        #{platid,jdbcType=INTEGER},
+      </if>
+      <if test="goodsnumber != null" >
+        #{goodsnumber,jdbcType=BIGINT},
+      </if>
+      <if test="goodsmoney != null" >
+        #{goodsmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="goodslist != null" >
+        #{goodslist,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinco.carnation.juanpi.model.JuanpiOrderExample" resultType="java.lang.Integer" >
+    select count(*) from juanpi_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update juanpi_order
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteStatus != null" >
+        delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderno != null" >
+        orderno = #{record.orderno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ordertime != null" >
+        ordertime = #{record.ordertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.subchannel != null" >
+        subchannel = #{record.subchannel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.platid != null" >
+        platid = #{record.platid,jdbcType=INTEGER},
+      </if>
+      <if test="record.goodsnumber != null" >
+        goodsnumber = #{record.goodsnumber,jdbcType=BIGINT},
+      </if>
+      <if test="record.goodsmoney != null" >
+        goodsmoney = #{record.goodsmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.goodslist != null" >
+        goodslist = #{record.goodslist,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update juanpi_order
+    set id = #{record.id,jdbcType=BIGINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      orderno = #{record.orderno,jdbcType=VARCHAR},
+      ordertime = #{record.ordertime,jdbcType=TIMESTAMP},
+      subchannel = #{record.subchannel,jdbcType=VARCHAR},
+      platid = #{record.platid,jdbcType=INTEGER},
+      goodsnumber = #{record.goodsnumber,jdbcType=BIGINT},
+      goodsmoney = #{record.goodsmoney,jdbcType=DECIMAL},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      goodslist = #{record.goodslist,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update juanpi_order
+    set id = #{record.id,jdbcType=BIGINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      orderno = #{record.orderno,jdbcType=VARCHAR},
+      ordertime = #{record.ordertime,jdbcType=TIMESTAMP},
+      subchannel = #{record.subchannel,jdbcType=VARCHAR},
+      platid = #{record.platid,jdbcType=INTEGER},
+      goodsnumber = #{record.goodsnumber,jdbcType=BIGINT},
+      goodsmoney = #{record.goodsmoney,jdbcType=DECIMAL},
+      user_id = #{record.userId,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.juanpi.model.JuanpiOrder" >
+    update juanpi_order
+    <set >
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status = #{deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="orderno != null" >
+        orderno = #{orderno,jdbcType=VARCHAR},
+      </if>
+      <if test="ordertime != null" >
+        ordertime = #{ordertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="subchannel != null" >
+        subchannel = #{subchannel,jdbcType=VARCHAR},
+      </if>
+      <if test="platid != null" >
+        platid = #{platid,jdbcType=INTEGER},
+      </if>
+      <if test="goodsnumber != null" >
+        goodsnumber = #{goodsnumber,jdbcType=BIGINT},
+      </if>
+      <if test="goodsmoney != null" >
+        goodsmoney = #{goodsmoney,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="goodslist != null" >
+        goodslist = #{goodslist,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.juanpi.model.JuanpiOrder" >
+    update juanpi_order
+    set add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=INTEGER},
+      orderno = #{orderno,jdbcType=VARCHAR},
+      ordertime = #{ordertime,jdbcType=TIMESTAMP},
+      subchannel = #{subchannel,jdbcType=VARCHAR},
+      platid = #{platid,jdbcType=INTEGER},
+      goodsnumber = #{goodsnumber,jdbcType=BIGINT},
+      goodsmoney = #{goodsmoney,jdbcType=DECIMAL},
+      user_id = #{userId,jdbcType=BIGINT},
+      goodslist = #{goodslist,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.juanpi.model.JuanpiOrder" >
+    update juanpi_order
+    set add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=INTEGER},
+      orderno = #{orderno,jdbcType=VARCHAR},
+      ordertime = #{ordertime,jdbcType=TIMESTAMP},
+      subchannel = #{subchannel,jdbcType=VARCHAR},
+      platid = #{platid,jdbcType=INTEGER},
+      goodsnumber = #{goodsnumber,jdbcType=BIGINT},
+      goodsmoney = #{goodsmoney,jdbcType=DECIMAL},
+      user_id = #{userId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update> 
+    <select id="selectOrderListByVO" parameterType="com.sinco.carnation.juanpi.vo.JuanpiOrderVO" resultMap="BOResultMap">
+  		select 
+	  		 *
+  		from juanpi_order 
+  		where 1=1 
+  		<if test="vo.orderno != '' and vo.orderno != null"  >
+  			AND orderno = #{vo.orderno}
+  		</if>
+  		<if test="vo.platid != '' and vo.platid != null"  >
+  			AND platid = #{vo.platid}
+  		</if> 
+  		<if test="vo.startTime != '' and vo.startTime != null" >
+  			AND ordertime <![CDATA[ >= ]]> #{vo.startTime}
+  		</if>
+  		<if test="vo.endTime != '' and vo.endTime != null">
+  			AND ordertime <![CDATA[ <= ]]> #{vo.endTime}
+  		</if>
+  </select>
+  <select id="findUnsynOrderGroupByDate" resultType="java.lang.String" >
+    SELECT DATE_FORMAT(ordertime, '%Y-%m-%d') dd FROM juanpi_order o, juanpi_order_goods g 
+    WHERE o.id=g.order_id AND g.status IN (1,2) GROUP BY dd 
+  </select>
+  
+  <select id="selectRebateByJuanPiOrderStatus" resultMap="BaseResultMap">
+  		SELECT
+		<include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+		FROM juanpi_order
+		WHERE 
+		1=1
+		AND orderno NOT IN (select `rebate_code` from user_rebate_record where rebate_status=1 and rebate_type in
+		('303','304','305','306','307','308','309','310','311','312','313','314','315','316','317','318','319','320','321','322','323','324','325','326','327','328','329','330','331'))
+  		AND delete_status=0
+   </select>
+   
+   
+   <select id="selectFindById" resultMap="BaseResultMap">
+  		SELECT
+		<include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+		FROM juanpi_order
+		WHERE 
+		1=1
+		AND id=#{id,jdbcType=BIGINT}
+   </select>
+   
+   
+   
+   
+   
+</mapper>

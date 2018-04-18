@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinco.carnation.sns.mapper.WenJuanGroupResultMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.sns.model.WenJuanGroupResult">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="create_by" jdbcType="BIGINT" property="createBy" />
+		<result column="update_by" jdbcType="BIGINT" property="updateBy" />
+		<result column="start_score" jdbcType="INTEGER" property="startScore" />
+		<result column="end_score" jdbcType="INTEGER" property="endScore" />
+		<result column="is_chronic" jdbcType="BIT" property="isChronic" />
+		<result column="is_high" jdbcType="BIT" property="isHigh" />
+		<result column="is_yjk" jdbcType="BIT" property="isYjk" />
+		<result column="is_healthy" jdbcType="BIT" property="isHealthy" />
+		<result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+		<result column="wj_proposal_id" jdbcType="BIGINT" property="wjProposalId" />
+		<result column="wj_group_id" jdbcType="BIGINT" property="wjGroupId" />
+	</resultMap>
+
+	<resultMap id="BOResultMap" extends="BaseResultMap"
+		type="com.sinco.carnation.sns.bo.WenJuanGroupResultBO" />
+
+	<sql id="Base_Column_List">
+		id, create_time, update_time, create_by, update_by, start_score,
+		end_score, is_chronic,
+		is_high, is_yjk, is_healthy, is_deleted, wj_proposal_id, wj_group_id
+	</sql>
+	<!-- 根据题ID获取题分数范围 -->
+	<select id="select_groupResults_byGroupID" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		wj_group_result
+		where
+		1=1
+		and
+		is_deleted = 0
+		and
+		wj_group_id = #{groupID,jdbcType=BIGINT}
+	</select>
+
+	<select id="select_groupResults_byThemeID" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		wj_group_result
+		where
+		1=1
+		and
+		is_deleted = 0
+		and
+		wj_theme_id = #{groupID,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		wj_group_result
+		where
+		id = #{id,jdbcType=BIGINT}
+	</select>
+
+
+	<select id="findByPage" resultMap="BOResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from
+		wj_group_result
+		where
+		1=1
+		and
+		is_deleted = 0
+		<if test="obj.wjGroupId != null">
+			and wj_group_id = #{obj.wjGroupId,jdbcType=BIGINT}
+		</if>
+		<if test="obj.wjThemeID != null">
+			and wj_theme_id = #{obj.wjThemeID,jdbcType=BIGINT}
+		</if>
+		<if test="obj.startScore != null">
+			and start_score = #{obj.startScore,jdbcType=INTEGER}
+		</if>
+		<if test="obj.endScore != null">
+			and end_score = #{obj.endScore,jdbcType=INTEGER}
+		</if>
+		<if test="obj.isChronic != null">
+			and is_chronic = #{obj.isChronic,jdbcType=BIT}
+		</if>
+		<if test="obj.isHigh != null">
+			and is_high = #{obj.isHigh,jdbcType=BIT}
+		</if>
+		<if test="obj.isYjk != null">
+			and is_yjk = #{obj.isYjk,jdbcType=BIT}
+		</if>
+		<if test="obj.isHealthy != null">
+			and is_healthy = #{obj.isHealthy,jdbcType=BIT}
+		</if>
+	</select>
+
+	<select id="selectMaxAndMinByThemeID" resultMap="BOResultMap">
+		select
+		min(start_score) as minScore,
+		max(end_score) as maxScore
+		from
+		wj_group_result
+		where
+		wj_theme_id = #{themeID,jdbcType=BIT};
+	</select>
+
+	<select id="selectMaxAndMinByGroupID" resultMap="BOResultMap">
+		select
+		min(start_score) as minScore,
+		max(end_score) as maxScore
+		from
+		wj_group_result
+		where
+		wj_group_id = #{groupID,jdbcType=BIT};
+	</select>
+
+	<insert id="insertSelective" keyProperty="id"
+		parameterType="com.sinco.carnation.sns.vo.WenJuanGroupResultVO"
+		useGeneratedKeys="true">
+		insert into wj_group_result
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			create_time
+			<if test="id != null">
+				,id
+			</if>
+			<if test="updateTime != null">
+				,update_time
+			</if>
+			<if test="createBy != null">
+				,create_by
+			</if>
+			<if test="updateBy != null">
+				,update_by
+			</if>
+			<if test="startScore != null">
+				,start_score
+			</if>
+			<if test="endScore != null">
+				,end_score
+			</if>
+			<if test="isChronic != null">
+				,is_chronic
+			</if>
+			<if test="isHigh != null">
+				,is_high
+			</if>
+			<if test="isYjk != null">
+				,is_yjk
+			</if>
+			<if test="isHealthy != null">
+				,is_healthy
+			</if>
+			<if test="isDeleted != null">
+				,is_deleted
+			</if>
+			<if test="wjProposalId != null">
+				,wj_proposal_id
+			</if>
+			<if test="wjGroupId != null">
+				,wj_group_id
+			</if>
+			<if test="wjThemeID != null">
+				,wj_theme_id
+			</if>
+		</trim>
+
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			now()
+			<if test="id != null">
+				,#{id,jdbcType=BIGINT}
+			</if>
+			<if test="updateTime != null">
+				, #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createBy != null">
+				,#{createBy,jdbcType=BIGINT}
+			</if>
+			<if test="updateBy != null">
+				, #{updateBy,jdbcType=BIGINT}
+			</if>
+			<if test="startScore != null">
+				,#{startScore,jdbcType=INTEGER}
+			</if>
+			<if test="endScore != null">
+				, #{endScore,jdbcType=INTEGER}
+			</if>
+			<if test="isChronic != null">
+				, #{isChronic,jdbcType=BIT}
+			</if>
+			<if test="isHigh != null">
+				,#{isHigh,jdbcType=BIT}
+			</if>
+			<if test="isYjk != null">
+				, #{isYjk,jdbcType=BIT}
+			</if>
+			<if test="isHealthy != null">
+				,#{isHealthy,jdbcType=BIT}
+			</if>
+			<if test="isDeleted != null">
+				,#{isDeleted,jdbcType=BIT}
+			</if>
+			<if test="wjProposalId != null">
+				,#{wjProposalId,jdbcType=BIGINT}
+			</if>
+			<if test="wjGroupId != null">
+				,#{wjGroupId,jdbcType=BIGINT}
+			</if>
+			<if test="wjThemeID != null">
+				,#{wjThemeID,jdbcType=BIGINT}
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from wj_group_result
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+
+	<!-- <resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.WenJuanGroupResult"> 
+		<id column="id" jdbcType="BIGINT" property="id" /> <result column="create_time" 
+		jdbcType="TIMESTAMP" property="createTime" /> <result column="update_time" 
+		jdbcType="TIMESTAMP" property="updateTime" /> <result column="create_by" 
+		jdbcType="BIGINT" property="createBy" /> <result column="update_by" jdbcType="BIGINT" 
+		property="updateBy" /> <result column="start_score" jdbcType="INTEGER" property="startScore" 
+		/> <result column="end_score" jdbcType="INTEGER" property="endScore" /> <result 
+		column="is_chronic" jdbcType="BIT" property="isChronic" /> <result column="is_high" 
+		jdbcType="BIT" property="isHigh" /> <result column="is_yjk" jdbcType="BIT" 
+		property="isYjk" /> <result column="is_healthy" jdbcType="BIT" property="isHealthy" 
+		/> <result column="is_deleted" jdbcType="BIT" property="isDeleted" /> <result 
+		column="wj_proposal_id" jdbcType="BIGINT" property="wjProposalId" /> <result 
+		column="wj_group_id" jdbcType="BIGINT" property="wjGroupId" /> </resultMap> 
+		<resultMap extends="BaseResultMap" id="BOResultMap" type="com.sinco.carnation.sns.bo.WenJuanGroupResultBO" 
+		/> <sql id="Example_Where_Clause"> <where> <foreach collection="oredCriteria" 
+		item="criteria" separator="or"> <if test="criteria.valid"> <trim prefix="(" 
+		prefixOverrides="and" suffix=")"> <foreach collection="criteria.criteria" 
+		item="criterion"> <choose> <when test="criterion.noValue"> and ${criterion.condition} 
+		</when> <when test="criterion.singleValue"> and ${criterion.condition} #{criterion.value} 
+		</when> <when test="criterion.betweenValue"> and ${criterion.condition} #{criterion.value} 
+		and #{criterion.secondValue} </when> <when test="criterion.listValue"> and 
+		${criterion.condition} <foreach close=")" collection="criterion.value" item="listItem" 
+		open="(" separator=","> #{listItem} </foreach> </when> </choose> </foreach> 
+		</trim> </if> </foreach> </where> </sql> <sql id="Update_By_Example_Where_Clause"> 
+		<where> <foreach collection="example.oredCriteria" item="criteria" separator="or"> 
+		<if test="criteria.valid"> <trim prefix="(" prefixOverrides="and" suffix=")"> 
+		<foreach collection="criteria.criteria" item="criterion"> <choose> <when 
+		test="criterion.noValue"> and ${criterion.condition} </when> <when test="criterion.singleValue"> 
+		and ${criterion.condition} #{criterion.value} </when> <when test="criterion.betweenValue"> 
+		and ${criterion.condition} #{criterion.value} and #{criterion.secondValue} 
+		</when> <when test="criterion.listValue"> and ${criterion.condition} <foreach 
+		close=")" collection="criterion.value" item="listItem" open="(" separator=","> 
+		#{listItem} </foreach> </when> </choose> </foreach> </trim> </if> </foreach> 
+		</where> </sql> <sql id="Base_Column_List"> id, create_time, update_time, 
+		create_by, update_by, start_score, end_score, is_chronic, is_high, is_yjk, 
+		is_healthy, is_deleted, wj_proposal_id, wj_group_id </sql> <select id="selectByExample" 
+		parameterType="com.sinco.carnation.sns.model.WenJuanGroupResultExample" resultMap="BOResultMap"> 
+		select <if test="distinct"> distinct </if> <include refid="Base_Column_List" 
+		/> from wj_group_result <if test="_parameter != null"> <include refid="Example_Where_Clause" 
+		/> </if> <if test="orderByClause != null"> order by ${orderByClause} </if> 
+		<if test="limit != null"> limit ${limit} </if> </select> <select id="selectByPrimaryKey" 
+		parameterType="java.lang.Long" resultMap="BOResultMap"> select <include refid="Base_Column_List" 
+		/> from wj_group_result where id = #{id,jdbcType=BIGINT} </select> <delete 
+		id="deleteByExample" parameterType="com.sinco.carnation.sns.model.WenJuanGroupResultExample"> 
+		delete from wj_group_result <if test="_parameter != null"> <include refid="Example_Where_Clause" 
+		/> </if> </delete> <insert id="insert" keyProperty="id" parameterType="com.sinco.carnation.sns.model.WenJuanGroupResult" 
+		useGeneratedKeys="true"> insert into wj_group_result (id, create_time, update_time, 
+		create_by, update_by, start_score, end_score, is_chronic, is_high, is_yjk, 
+		is_healthy, is_deleted, wj_proposal_id, wj_group_id) values (#{id,jdbcType=BIGINT}, 
+		#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, 
+		#{updateBy,jdbcType=BIGINT}, #{startScore,jdbcType=INTEGER}, #{endScore,jdbcType=INTEGER}, 
+		#{isChronic,jdbcType=BIT}, #{isHigh,jdbcType=BIT}, #{isYjk,jdbcType=BIT}, 
+		#{isHealthy,jdbcType=BIT}, #{isDeleted,jdbcType=BIT}, #{wjProposalId,jdbcType=BIGINT}, 
+		#{wjGroupId,jdbcType=BIGINT}) </insert> <select id="countByExample" parameterType="com.sinco.carnation.sns.model.WenJuanGroupResultExample" 
+		resultType="java.lang.Integer"> select count(*) from wj_group_result <if 
+		test="_parameter != null"> <include refid="Example_Where_Clause" /> </if> 
+		</select> <update id="updateByExampleSelective" parameterType="map"> update 
+		wj_group_result <set> <if test="record.id != null"> id = #{record.id,jdbcType=BIGINT}, 
+		</if> <if test="record.createTime != null"> create_time = #{record.createTime,jdbcType=TIMESTAMP}, 
+		</if> <if test="record.updateTime != null"> update_time = #{record.updateTime,jdbcType=TIMESTAMP}, 
+		</if> <if test="record.createBy != null"> create_by = #{record.createBy,jdbcType=BIGINT}, 
+		</if> <if test="record.updateBy != null"> update_by = #{record.updateBy,jdbcType=BIGINT}, 
+		</if> <if test="record.startScore != null"> start_score = #{record.startScore,jdbcType=INTEGER}, 
+		</if> <if test="record.endScore != null"> end_score = #{record.endScore,jdbcType=INTEGER}, 
+		</if> <if test="record.isChronic != null"> is_chronic = #{record.isChronic,jdbcType=BIT}, 
+		</if> <if test="record.isHigh != null"> is_high = #{record.isHigh,jdbcType=BIT}, 
+		</if> <if test="record.isYjk != null"> is_yjk = #{record.isYjk,jdbcType=BIT}, 
+		</if> <if test="record.isHealthy != null"> is_healthy = #{record.isHealthy,jdbcType=BIT}, 
+		</if> <if test="record.isDeleted != null"> is_deleted = #{record.isDeleted,jdbcType=BIT}, 
+		</if> <if test="record.wjProposalId != null"> wj_proposal_id = #{record.wjProposalId,jdbcType=BIGINT}, 
+		</if> <if test="record.wjGroupId != null"> wj_group_id = #{record.wjGroupId,jdbcType=BIGINT}, 
+		</if> </set> <if test="_parameter != null"> <include refid="Update_By_Example_Where_Clause" 
+		/> </if> </update> <update id="updateByExample" parameterType="map"> update 
+		wj_group_result set id = #{record.id,jdbcType=BIGINT}, create_time = #{record.createTime,jdbcType=TIMESTAMP}, 
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP}, create_by = #{record.createBy,jdbcType=BIGINT}, 
+		update_by = #{record.updateBy,jdbcType=BIGINT}, start_score = #{record.startScore,jdbcType=INTEGER}, 
+		end_score = #{record.endScore,jdbcType=INTEGER}, is_chronic = #{record.isChronic,jdbcType=BIT}, 
+		is_high = #{record.isHigh,jdbcType=BIT}, is_yjk = #{record.isYjk,jdbcType=BIT}, 
+		is_healthy = #{record.isHealthy,jdbcType=BIT}, is_deleted = #{record.isDeleted,jdbcType=BIT}, 
+		wj_proposal_id = #{record.wjProposalId,jdbcType=BIGINT}, wj_group_id = #{record.wjGroupId,jdbcType=BIGINT} 
+		<if test="_parameter != null"> <include refid="Update_By_Example_Where_Clause" 
+		/> </if> </update> <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.WenJuanGroupResult"> 
+		update wj_group_result <set> <if test="createTime != null"> create_time = 
+		#{createTime,jdbcType=TIMESTAMP}, </if> <if test="updateTime != null"> update_time 
+		= #{updateTime,jdbcType=TIMESTAMP}, </if> <if test="createBy != null"> create_by 
+		= #{createBy,jdbcType=BIGINT}, </if> <if test="updateBy != null"> update_by 
+		= #{updateBy,jdbcType=BIGINT}, </if> <if test="startScore != null"> start_score 
+		= #{startScore,jdbcType=INTEGER}, </if> <if test="endScore != null"> end_score 
+		= #{endScore,jdbcType=INTEGER}, </if> <if test="isChronic != null"> is_chronic 
+		= #{isChronic,jdbcType=BIT}, </if> <if test="isHigh != null"> is_high = #{isHigh,jdbcType=BIT}, 
+		</if> <if test="isYjk != null"> is_yjk = #{isYjk,jdbcType=BIT}, </if> <if 
+		test="isHealthy != null"> is_healthy = #{isHealthy,jdbcType=BIT}, </if> <if 
+		test="isDeleted != null"> is_deleted = #{isDeleted,jdbcType=BIT}, </if> <if 
+		test="wjProposalId != null"> wj_proposal_id = #{wjProposalId,jdbcType=BIGINT}, 
+		</if> <if test="wjGroupId != null"> wj_group_id = #{wjGroupId,jdbcType=BIGINT}, 
+		</if> </set> where id = #{id,jdbcType=BIGINT} </update> <update id="updateByPrimaryKey" 
+		parameterType="com.sinco.carnation.sns.model.WenJuanGroupResult"> update 
+		wj_group_result set create_time = #{createTime,jdbcType=TIMESTAMP}, update_time 
+		= #{updateTime,jdbcType=TIMESTAMP}, create_by = #{createBy,jdbcType=BIGINT}, 
+		update_by = #{updateBy,jdbcType=BIGINT}, start_score = #{startScore,jdbcType=INTEGER}, 
+		end_score = #{endScore,jdbcType=INTEGER}, is_chronic = #{isChronic,jdbcType=BIT}, 
+		is_high = #{isHigh,jdbcType=BIT}, is_yjk = #{isYjk,jdbcType=BIT}, is_healthy 
+		= #{isHealthy,jdbcType=BIT}, is_deleted = #{isDeleted,jdbcType=BIT}, wj_proposal_id 
+		= #{wjProposalId,jdbcType=BIGINT}, wj_group_id = #{wjGroupId,jdbcType=BIGINT} 
+		where id = #{id,jdbcType=BIGINT} </update> <resultMap id="BaseResultMap" 
+		type="com.sinco.carnation.sns.model.WenJuanGroupResult"> <id column="id" 
+		jdbcType="BIGINT" property="id" /> <result column="create_time" jdbcType="TIMESTAMP" 
+		property="createTime" /> <result column="update_time" jdbcType="TIMESTAMP" 
+		property="updateTime" /> <result column="create_by" jdbcType="BIGINT" property="createBy" 
+		/> <result column="update_by" jdbcType="BIGINT" property="updateBy" /> <result 
+		column="start_score" jdbcType="INTEGER" property="startScore" /> <result 
+		column="end_score" jdbcType="INTEGER" property="endScore" /> <result column="is_chronic" 
+		jdbcType="BIT" property="isChronic" /> <result column="is_high" jdbcType="BIT" 
+		property="isHigh" /> <result column="is_yjk" jdbcType="BIT" property="isYjk" 
+		/> <result column="is_healthy" jdbcType="BIT" property="isHealthy" /> <result 
+		column="is_deleted" jdbcType="BIT" property="isDeleted" /> <result column="wj_proposal_id" 
+		jdbcType="BIGINT" property="wjProposalId" /> </resultMap> <resultMap extends="BaseResultMap" 
+		id="BOResultMap" type="com.sinco.carnation.sns.bo.WenJuanGroupResultBO" /> 
+		<sql id="Example_Where_Clause"> <where> <foreach collection="oredCriteria" 
+		item="criteria" separator="or"> <if test="criteria.valid"> <trim prefix="(" 
+		prefixOverrides="and" suffix=")"> <foreach collection="criteria.criteria" 
+		item="criterion"> <choose> <when test="criterion.noValue"> and ${criterion.condition} 
+		</when> <when test="criterion.singleValue"> and ${criterion.condition} #{criterion.value} 
+		</when> <when test="criterion.betweenValue"> and ${criterion.condition} #{criterion.value} 
+		and #{criterion.secondValue} </when> <when test="criterion.listValue"> and 
+		${criterion.condition} <foreach close=")" collection="criterion.value" item="listItem" 
+		open="(" separator=","> #{listItem} </foreach> </when> </choose> </foreach> 
+		</trim> </if> </foreach> </where> </sql> <sql id="Update_By_Example_Where_Clause"> 
+		<where> <foreach collection="example.oredCriteria" item="criteria" separator="or"> 
+		<if test="criteria.valid"> <trim prefix="(" prefixOverrides="and" suffix=")"> 
+		<foreach collection="criteria.criteria" item="criterion"> <choose> <when 
+		test="criterion.noValue"> and ${criterion.condition} </when> <when test="criterion.singleValue"> 
+		and ${criterion.condition} #{criterion.value} </when> <when test="criterion.betweenValue"> 
+		and ${criterion.condition} #{criterion.value} and #{criterion.secondValue} 
+		</when> <when test="criterion.listValue"> and ${criterion.condition} <foreach 
+		close=")" collection="criterion.value" item="listItem" open="(" separator=","> 
+		#{listItem} </foreach> </when> </choose> </foreach> </trim> </if> </foreach> 
+		</where> </sql> <sql id="Base_Column_List"> id, create_time, update_time, 
+		create_by, update_by, start_score, end_score, is_chronic, is_high, is_yjk, 
+		is_healthy, is_deleted, wj_proposal_id </sql> <select id="selectByExample" 
+		parameterType="com.sinco.carnation.sns.model.WenJuanGroupResultExample" resultMap="BOResultMap"> 
+		select <if test="distinct"> distinct </if> <include refid="Base_Column_List" 
+		/> from wj_group_result <if test="_parameter != null"> <include refid="Example_Where_Clause" 
+		/> </if> <if test="orderByClause != null"> order by ${orderByClause} </if> 
+		<if test="limit != null"> limit ${limit} </if> </select> <select id="selectByPrimaryKey" 
+		parameterType="java.lang.Long" resultMap="BOResultMap"> select <include refid="Base_Column_List" 
+		/> from wj_group_result where id = #{id,jdbcType=BIGINT} </select> <delete 
+		id="deleteByPrimaryKey" parameterType="java.lang.Long"> delete from wj_group_result 
+		where id = #{id,jdbcType=BIGINT} </delete> <delete id="deleteByExample" parameterType="com.sinco.carnation.sns.model.WenJuanGroupResultExample"> 
+		delete from wj_group_result <if test="_parameter != null"> <include refid="Example_Where_Clause" 
+		/> </if> </delete> <insert id="insert" keyProperty="id" parameterType="com.sinco.carnation.sns.model.WenJuanGroupResult" 
+		useGeneratedKeys="true"> insert into wj_group_result (id, create_time, update_time, 
+		create_by, update_by, start_score, end_score, is_chronic, is_high, is_yjk, 
+		is_healthy, is_deleted, wj_proposal_id ) values (#{id,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+		#{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT}, 
+		#{startScore,jdbcType=INTEGER}, #{endScore,jdbcType=INTEGER}, #{isChronic,jdbcType=BIT}, 
+		#{isHigh,jdbcType=BIT}, #{isYjk,jdbcType=BIT}, #{isHealthy,jdbcType=BIT}, 
+		#{isDeleted,jdbcType=BIT}, #{wjProposalId,jdbcType=BIGINT} ) </insert> <insert 
+		id="insertSelective" keyProperty="id" parameterType="com.sinco.carnation.sns.model.WenJuanGroupResult" 
+		useGeneratedKeys="true"> insert into wj_group_result <trim prefix="(" suffix=")" 
+		suffixOverrides=","> <if test="id != null"> id, </if> <if test="createTime 
+		!= null"> create_time, </if> <if test="updateTime != null"> update_time, 
+		</if> <if test="createBy != null"> create_by, </if> <if test="updateBy != 
+		null"> update_by, </if> <if test="startScore != null"> start_score, </if> 
+		<if test="endScore != null"> end_score, </if> <if test="isChronic != null"> 
+		is_chronic, </if> <if test="isHigh != null"> is_high, </if> <if test="isYjk 
+		!= null"> is_yjk, </if> <if test="isHealthy != null"> is_healthy, </if> <if 
+		test="isDeleted != null"> is_deleted, </if> <if test="wjProposalId != null"> 
+		wj_proposal_id, </if> </trim> <trim prefix="values (" suffix=")" suffixOverrides=","> 
+		<if test="id != null"> #{id,jdbcType=BIGINT}, </if> <if test="createTime 
+		!= null"> #{createTime,jdbcType=TIMESTAMP}, </if> <if test="updateTime != 
+		null"> #{updateTime,jdbcType=TIMESTAMP}, </if> <if test="createBy != null"> 
+		#{createBy,jdbcType=BIGINT}, </if> <if test="updateBy != null"> #{updateBy,jdbcType=BIGINT}, 
+		</if> <if test="startScore != null"> #{startScore,jdbcType=INTEGER}, </if> 
+		<if test="endScore != null"> #{endScore,jdbcType=INTEGER}, </if> <if test="isChronic 
+		!= null"> #{isChronic,jdbcType=BIT}, </if> <if test="isHigh != null"> #{isHigh,jdbcType=BIT}, 
+		</if> <if test="isYjk != null"> #{isYjk,jdbcType=BIT}, </if> <if test="isHealthy 
+		!= null"> #{isHealthy,jdbcType=BIT}, </if> <if test="isDeleted != null"> 
+		#{isDeleted,jdbcType=BIT}, </if> <if test="wjProposalId != null"> #{wjProposalId,jdbcType=BIGINT}, 
+		</if> </trim> </insert> <select id="countByExample" parameterType="com.sinco.carnation.sns.model.WenJuanGroupResultExample" 
+		resultType="java.lang.Integer"> select count(*) from wj_group_result <if 
+		test="_parameter != null"> <include refid="Example_Where_Clause" /> </if> 
+		</select> <update id="updateByExampleSelective" parameterType="map"> update 
+		wj_group_result <set> <if test="record.id != null"> id = #{record.id,jdbcType=BIGINT}, 
+		</if> <if test="record.createTime != null"> create_time = #{record.createTime,jdbcType=TIMESTAMP}, 
+		</if> <if test="record.updateTime != null"> update_time = #{record.updateTime,jdbcType=TIMESTAMP}, 
+		</if> <if test="record.createBy != null"> create_by = #{record.createBy,jdbcType=BIGINT}, 
+		</if> <if test="record.updateBy != null"> update_by = #{record.updateBy,jdbcType=BIGINT}, 
+		</if> <if test="record.startScore != null"> start_score = #{record.startScore,jdbcType=INTEGER}, 
+		</if> <if test="record.endScore != null"> end_score = #{record.endScore,jdbcType=INTEGER}, 
+		</if> <if test="record.isChronic != null"> is_chronic = #{record.isChronic,jdbcType=BIT}, 
+		</if> <if test="record.isHigh != null"> is_high = #{record.isHigh,jdbcType=BIT}, 
+		</if> <if test="record.isYjk != null"> is_yjk = #{record.isYjk,jdbcType=BIT}, 
+		</if> <if test="record.isHealthy != null"> is_healthy = #{record.isHealthy,jdbcType=BIT}, 
+		</if> <if test="record.isDeleted != null"> is_deleted = #{record.isDeleted,jdbcType=BIT}, 
+		</if> <if test="record.wjProposalId != null"> wj_proposal_id = #{record.wjProposalId,jdbcType=BIGINT}, 
+		</if> </set> <if test="_parameter != null"> <include refid="Update_By_Example_Where_Clause" 
+		/> </if> </update> <update id="updateByExample" parameterType="map"> update 
+		wj_group_result set id = #{record.id,jdbcType=BIGINT}, create_time = #{record.createTime,jdbcType=TIMESTAMP}, 
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP}, create_by = #{record.createBy,jdbcType=BIGINT}, 
+		update_by = #{record.updateBy,jdbcType=BIGINT}, start_score = #{record.startScore,jdbcType=INTEGER}, 
+		end_score = #{record.endScore,jdbcType=INTEGER}, is_chronic = #{record.isChronic,jdbcType=BIT}, 
+		is_high = #{record.isHigh,jdbcType=BIT}, is_yjk = #{record.isYjk,jdbcType=BIT}, 
+		is_healthy = #{record.isHealthy,jdbcType=BIT}, is_deleted = #{record.isDeleted,jdbcType=BIT}, 
+		wj_proposal_id = #{record.wjProposalId,jdbcType=BIGINT} <if test="_parameter 
+		!= null"> <include refid="Update_By_Example_Where_Clause" /> </if> </update> 
+		<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.WenJuanGroupResult"> 
+		update wj_group_result <set> <if test="createTime != null"> create_time = 
+		#{createTime,jdbcType=TIMESTAMP}, </if> <if test="updateTime != null"> update_time 
+		= #{updateTime,jdbcType=TIMESTAMP}, </if> <if test="createBy != null"> create_by 
+		= #{createBy,jdbcType=BIGINT}, </if> <if test="updateBy != null"> update_by 
+		= #{updateBy,jdbcType=BIGINT}, </if> <if test="startScore != null"> start_score 
+		= #{startScore,jdbcType=INTEGER}, </if> <if test="endScore != null"> end_score 
+		= #{endScore,jdbcType=INTEGER}, </if> <if test="isChronic != null"> is_chronic 
+		= #{isChronic,jdbcType=BIT}, </if> <if test="isHigh != null"> is_high = #{isHigh,jdbcType=BIT}, 
+		</if> <if test="isYjk != null"> is_yjk = #{isYjk,jdbcType=BIT}, </if> <if 
+		test="isHealthy != null"> is_healthy = #{isHealthy,jdbcType=BIT}, </if> <if 
+		test="isDeleted != null"> is_deleted = #{isDeleted,jdbcType=BIT}, </if> <if 
+		test="wjProposalId != null"> wj_proposal_id = #{wjProposalId,jdbcType=BIGINT}, 
+		</if> </set> where id = #{id,jdbcType=BIGINT} </update> <update id="updateByPrimaryKey" 
+		parameterType="com.sinco.carnation.sns.model.WenJuanGroupResult"> update 
+		wj_group_result set create_time = #{createTime,jdbcType=TIMESTAMP}, update_time 
+		= #{updateTime,jdbcType=TIMESTAMP}, create_by = #{createBy,jdbcType=BIGINT}, 
+		update_by = #{updateBy,jdbcType=BIGINT}, start_score = #{startScore,jdbcType=INTEGER}, 
+		end_score = #{endScore,jdbcType=INTEGER}, is_chronic = #{isChronic,jdbcType=BIT}, 
+		is_high = #{isHigh,jdbcType=BIT}, is_yjk = #{isYjk,jdbcType=BIT}, is_healthy 
+		= #{isHealthy,jdbcType=BIT}, is_deleted = #{isDeleted,jdbcType=BIT}, wj_proposal_id 
+		= #{wjProposalId,jdbcType=BIGINT} where id = #{id,jdbcType=BIGINT} </update> -->
+</mapper>

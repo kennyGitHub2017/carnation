@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.elong.mapper.ElongGeoMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.elong.model.ElongGeo">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="area_name" property="areaName" jdbcType="VARCHAR" />
+		<result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="parent_code" property="parentCode" jdbcType="BIGINT" />
+		<result column="is_group_hot" property="isGroupHot" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="LONGVARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="last_update_user" property="lastUpdateUser"
+			jdbcType="VARCHAR" />
+		<result column="last_update_time" property="lastUpdateTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, delete_status, area_name,area_code, level, parent_code,
+		is_group_hot, remark,
+		create_time,last_update_time
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from elong_geo
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectByAreaCode" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from elong_geo
+		where area_code = #{areaCode,jdbcType=BIGINT}
+	</select>
+
+	<select id="queryGeoByName" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM elong_geo
+		WHERE area_name LIKE '%${areaName}%' AND
+		`level`=1
+	</select>
+
+	<insert id="insertSelective" parameterType="com.sinco.carnation.elong.model.ElongGeo"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into elong_geo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="areaName != null">
+				area_name,
+			</if>
+			<if test="areaCode != null">
+				area_code,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			<if test="parentCode != null">
+				parent_code,
+			</if>
+			<if test="isGroupHot != null">
+				is_group_hot,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="lastUpdateUser != null">
+				last_update_user,
+			</if>
+			<if test="lastUpdateTime != null">
+				last_update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="areaName != null">
+				#{areaName,jdbcType=VARCHAR},
+			</if>
+			<if test="areaCode != null">
+				#{areaCode,jdbcType=BIGINT},
+			</if>
+			<if test="level != null">
+				#{level,jdbcType=INTEGER},
+			</if>
+			<if test="parentCode != null">
+				#{parentCode,jdbcType=BIGINT},
+			</if>
+			<if test="isGroupHot != null">
+				#{isGroupHot,jdbcType=BIGINT},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastUpdateUser != null">
+				#{lastUpdateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateTime != null">
+				#{lastUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+</mapper>

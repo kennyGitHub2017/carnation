@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>春节抢券</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+<!--     <meta http-equiv="Expires" content="-1">           
+    <meta http-equiv="Cache-Control" content="no-cache">           
+    <meta http-equiv="Pragma" content="no-cache">   -->       
+    
+    <script src="$!webPath/resources/js/redpackage/jquery-1.11.2.min.js"></script>
+ 
+    <link href="$!webPath/resources/new_year/css/base.min.css" rel="stylesheet" />
+    
+    <script type="text/javascript">
+        var jgGlobal={
+            screenWidth:window.innerWidth||document.documentElement.clientWidth,
+            screenHeight:window.innerHeight||document.documentElement.clientHeight,
+            isALlowTouchMove:true,
+            setFontSize:function(){
+                var sw=window.innerWidth||document.documentElement.clientWidth;
+                if (sw < 640) {
+                    document.documentElement.style.fontSize = parseInt(sw / 640 * 100) + "px";
+                }else{
+                    document.documentElement.style.fontSize="100px";
+                }
+            },
+            setTranslate:function(node, positionY,containCss, useAnimate) {
+                var cssText = [
+                    containCss,
+                    'display: block',
+                    'transform: translate3d(0, ' + positionY + 'px, 0)',
+                    '-webkit-transform: translate3d(0, ' + positionY + 'px, 0)',
+                ].join(';');
+                if (useAnimate) {
+                    cssText = [
+                        cssText,
+                        'transition: .5s transform ease',
+                        '-webkit-transition: .5s -webkit-transform ease'
+                    ].join(';');
+                }
+                node.style.cssText = cssText;
+            },
+            isTouchMove:function(){
+                var _this=this;
+                document.addEventListener("touchmove",function(e){
+                    if(!_this.isALlowTouchMove){
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                },false);
+                if (navigator.userAgent.toLowerCase().indexOf('firefox')>=0)
+                {
+
+                    addEventListener('DOMMouseScroll',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }else{
+                    addEventListener('mousewheel',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }
+            },
+            init:function(){
+                this.isTouchMove();
+                this.setFontSize();
+            }
+        }
+        jgGlobal.init();
+        window.onresize = function () {
+            jgGlobal.setFontSize();
+        }
+
+    </script>
+ 
+ 
+   <script>
+    var isAndroid, isiOS;
+    (function() {
+        var u = navigator.userAgent, app = navigator.appVersion;
+        isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+        isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    }());
+</script>		
+		
+		<script type="text/javascript" language="javascript">
+		
+		  function sendDataDB(userId)
+		   {
+			 
+			     $('#userId').val(userId); 
+			   
+		   }
+
+		
+		</script>
+<script type="text/javascript">
+    $(document).ready(function() { 
+      
+     
+     $('.share').click(function(){
+    	 callbackShare();
+   });
+     
+     
+     
+      
+});
+
+    //Buy 买商品
+	function callback(proid) {  
+	 
+		if(isAndroid)
+		{
+			java.requestBuy(proid);
+		}
+		if(isiOS)
+		{
+			requestBuy(proid);
+		} 
+	}
+	
+	
+	//share 分享
+	function callbackShare() { 
+		 
+		if(isAndroid)
+		{
+			java.requestShareTicket();
+		}
+		if(isiOS)
+		{    
+			requestShareTicket();
+		} 
+	}
+ 
+	
+	//回调手机端获得用户id
+	function callbackUserId() {  
+		 
+		if(isAndroid)
+		{
+			 if($('#userId').val()=='')
+			 { 
+			     java.requestTicket();
+			 }
+		}
+		if(isiOS)
+		{    
+			if($('#userId').val()=='')
+			 { 
+			$('#userId').val(getTicketValidate());
+			 }
+		} 
+	}
+</script>  
+    
+ <script type="text/javascript">
+    $(document).ready(function() {
+    	
+    	//ios不能页面加载时调用,否则其它js失效
+    	if(isAndroid)
+		{
+    		 //回调手机端获得用户id 
+   	         callbackUserId(); 
+		}
+    	
+    
+	     //抢券    
+	     $('#btn_con').click(function(){
+	    	 
+		 	 var userId=$('#userId').val();
+		 	 if(userId==""){
+		 		//回调手机端获得用户id 
+		 	     callbackUserId(); 
+		 	 }
+	 		 var userId=$('#userId').val();
+	 	     
+		     if(userId!=""){
+		
+		    	   $('#userId').attr({"disabled":"disabled"}); //防止重复提交
+		      	   
+			    	 setTimeout(function(){
+			        	 grabCashCoupon(userId);
+			    		},1000);
+		       }   
+	 	 });
+	     
+     
+    	 //测试回调
+	     $('#btn_con1').click(function(){ 
+	    	 callbackShare(); 
+	     });
+    
+   });  
+        
+    
+    //异步调用抢券
+    function grabCashCoupon(userId){
+    	$.ajax({
+            type: "post",
+            url: "$!webPath/newyear/grab_cash_coupon.htm",
+            data:"id=$!obj.id"+"&userId="+userId,//$!{request.getParameter("userId")}
+            dataType: "json",
+            async:false,//使用同步的Ajax请求
+            success: function (result) {
+            //启用按钮	
+            $('#btn_con').removeAttr('disabled');
+            
+            var falg=result.status;
+			   if(falg=="0"){
+				   newYearAlert("ny_100");//抽中
+			   }else if(falg=="1"){
+				   newYearAlert("ny_notStart");//未开始
+			   }else if(falg=="2"){
+				   newYearAlert("ny_getten");//抽过了
+			   }else if(falg=="3"){
+				   newYearAlert("ny_none");//没抽中
+			   }else if(falg=="4"){
+				   newYearAlert("ny_end");//活动结束
+			   }else if(falg=="-1"){
+				  alert("该活动不存在,请联系客服!");
+			   }else if(falg=="-2"){
+				  alert("该会员不存在,请联系客服!");
+			   }
+	         },error: function (XMLHttpRequest, textStatus, errorThrown) { 
+	        	//启用按钮	
+	            $('#btn_con').removeAttr('disabled');
+	            newYearAlert("ny_login");//未登录
+	      }
+	   });
+    }
+    
+    function newYearAlert(className){
+     	//显示弹框
+         jQuery("#model").show();
+         jQuery("."+className).addClass("bounceIn");
+         jgGlobal.isALlowTouchMove=false;
+     }
+    
+    
+</script>
+    
+    <style>
+        html,body{width: 100%;max-width: 640px;margin: 0 auto;padding: 0;background: #fff}
+        body{background: #7f000a;font-family: sans-serif;position: relative}
+        .model{width: 100%; height: 100%; background-color: #000; opacity: 0.3; filter: alpha(opacity=30);z-index:99999998;position:absolute;left:0px; top:0px;display:none}
+        .top{position:relative;overflow:hidden;width:100%}
+        .imgContainer{width: 100%;position: relative;overflow:hidden}
+        .Container{width:100%;overflow:hidden}
+        .imgContainer img{width: 100%;vertical-align: top;display: inline}
+        .imgContainer a{display: block;text-indent: -9999px;position: absolute;top: 0;left: 55%;width: 24%;height: 100%}
+        .top .submit{position: absolute;top: 0;left: 0;width: 66%;margin-left: 17%;margin-top: 0.7rem;height: 6.3rem;background: none;border: none;outline: none;cursor: pointer}
+        .hd_rule{width: 5.4rem;margin: 0 auto;margin-top: 15px;color: #fce2b8;background: #e5283c;padding: 25px 0.2rem 20px 0.2rem;overflow:hidden}
+        .hd_rule .title{font-size: 20px;margin-bottom: 5px;width:100%}
+        .hd_rule .rule-list{border-bottom: solid 1px #fa9ea6;font-size: 14px;padding: 10px 0px;width:100%}
+        .hd_rule .rule-list:last-child{padding-bottom: 0px;border-bottom: none}
+        .hd_rule .rule-list p{line-height: 25px;width:100%}
+        .hd_rule .rule-list p span{color: #fce70b;margin-left: 5px}
+        .saleGoods{margin:0 auto;margin-top: 0.4rem;padding-bottom:0.2rem;width:6rem;overflow:hidden}
+        .saleGoods ul{width:6.4rem;overflow:hidden}
+        .saleGoods ul li{float: left;width: 2.9rem;margin-right: 0.2rem;background: #fff;margin-bottom: 0.1rem}        
+        .saleGoods ul li img{width:100%;height: 2.9rem;vertical-align: top}
+        .saleGoods ul li .goods-title{font-size: 0.28rem;overflow: hidden;padding: 0 5px;word-break: normal;text-overflow: ellipsis;white-space: nowrap;display: block;height: 0.4rem;line-height: 0.4rem;color: #4e4d4d}
+        .saleGoods ul li .prize{font-size: 0.24rem;padding: 0 5px;color: #ff3333}
+        .saleGoods ul li .prize .last{color: #a3a3a3}
+        .saleGoods ul li .num{margin: 0 5px;background: #bc102d;height: 0.3rem;position: relative;border-radius: 0.05rem;font-size: 0.18rem;line-height: 0.3rem;color: #fff;text-align: center}
+        .saleGoods ul li .num .now{position: absolute;height: 0.3rem;left: 0;top: 0;background: #ff3333;border-radius: 0.05rem}
+        .saleGoods ul li .num .text{position: absolute;height: 0.3rem;left: 0;top: 0;width: 100%;line-height:0.3rem}
+        .saleGoods ul li .btn_buy{height: 0.45rem;display: block;width:1.5rem;margin: 10px auto;background: #de0025;border-radius: 0.1rem;color: #fff;font-size: 0.30rem;line-height: 0.45rem;text-align: center}
+        .ny_tc{position: fixed;width:4rem;height: 5.6rem;left: 50%;margin-left: -1.85rem;top: 50%;margin-top: -2.8rem;z-index: 99999999;display: none;opacity: 0}
+        .ny_tc .close{position: absolute;top: 0;right: 0;width: 0.48rem;height: 0.5rem;text-indent: -9999px}
+        .ny_tc .share{position: absolute;width: 3.2rem;height: 0.8rem;left: 0.3rem;top: 4.6rem;text-indent: -9999px}
+        .ny_tc img{width: 4rem}
+        #loadingMore,#loadingEnd{color: #fff;letter-spacing: 2px;text-align: center}
+        #loadingEnd{display: none}
+        .bounceIn{animation: bouncein .6s 0s ease-out forwards; -webkit-animation: bouncein .6s 0s ease-out forwards;display: block}
+        a,button,input{-webkit-tap-highlight-color:rgba(0,0,0,0)}
+        /* 弹入 */
+        @-webkit-keyframes bouncein{
+            0%{opacity:0;-webkit-transform:scale(0.3);}
+            50%{opacity:1;-webkit-transform:scale(1.05);}
+            70%{-webkit-transform:scale(0.9);}
+            100%{-webkit-transform:scale(1);opacity: 1}
+        }
+        @-moz-keyframes bouncein{
+            0%{opacity:0;-moz-transform:scale(0.3);}
+            50%{opacity:1;-moz-transform:scale(1.05);}
+            70%{-moz-transform:scale(0.9);}
+            100%{-moz-transform:scale(1);opacity: 1}
+        }
+        @-ms-keyframes bouncein{
+            0%{opacity:0;-ms-transform:scale(0.3);}
+            50%{opacity:1;-ms-transform:scale(1.05);}
+            70%{-ms-transform:scale(0.9);}
+            100%{-ms-transform:scale(1);opacity: 1}
+        }
+        @keyframes bouncein{
+            0%{opacity:0;transform:scale(0.3);}
+            50%{opacity:1;transform:scale(1.05);}
+            70%{transform:scale(0.9);}
+            100%{transform:scale(1);opacity: 1}
+        }
+        
+        #countdown{background:yellow}
+        #words,#count{
+        font-size:0.25rem;
+        display:inline-block;
+        line-height:0.3rem;
+        font-family:"MicroSoft YaHei";
+        color:red;
+        }
+    </style>
+</head>
+<body>
+<div>
+<div class="top">
+    <div class="imgContainer">
+        <img src="$!webPath/resources/new_year/images/new_year_01.png"/>
+    </div>
+    <div class="imgContainer">
+        <img src="$!webPath/resources/new_year/images/new_year_02.png"/>
+    </div>
+    <div class="imgContainer">
+        <img src="$!webPath/resources/new_year/images/new_year_03.png"/>        
+    </div>
+    <input type="button" class="submit" id="btn_con">
+</div>    
+    <div class="hd_rule">
+        <div class="title">
+             $!obj.schemeName <br>
+        </div>
+        <div class="rule-list">
+            <p>活动时间①:<span>$!CommUtil.formatShortDateCn($!obj.getStart)-$!CommUtil.formatShortDateCn($!obj.getEnd) </span></p>
+            <p>$!CommUtil.subStringNum("$!obj.couponNum",".")元现金券大礼包等你来抢！使用时间：$!CommUtil.formatShortDateCn($!obj.useStart)-$!CommUtil.formatShortDateCn($!obj.useEnd) 购物满$!CommUtil.subStringNum("$!obj.minMoney",".")元即可一次性抵扣；</p>
+        </div>
+        <div class="rule-list">
+        	<p id="countdown"><span id="words"></span><span id="count"></span></p>
+            <p>活动时间②:<span>$!CommUtil.formatShortDateCn($!obj.startTime)-$!CommUtil.formatShortDateCn($!obj.endTime)</span></p>
+            <p>每天11:00整推出4款秒杀产品，单款支付成功前5名享免单，系统核实后返支付金额至云豆账户；</p>
+        </div>
+        <div class="rule-list">
+            <p>活动时间③:<span>$!CommUtil.formatShortDateCn($!obj.preStart)-$!CommUtil.formatShortDateCn($!obj.preEnd)</span></p>
+            <p>凡单笔购物满300元的用户，送"西班牙原装进口特级初榨橄榄油1L"，数量有限，送完即止。</p>
+        </div>
+    </div>
+    
+    <!-- 测试 
+    <a href="javascript:void(0)"  id="btn_con1">分享share测试</a> end -->
+    <input id="userId" type="hidden"  value=""> <!---->
+    
+    
+    <div class="saleGoods" id="wrapper">
+        <ul class="fn-clear" id="goodsUL">
+           #foreach($temp_y in $objs)
+            <li onclick="callback($!temp_y.goodsId)">
+                <img src="$!temp_y.adImgPath" />
+                <div class="goods-title">$!temp_y.adTitle</div>
+                <div class="prize"> 
+                  #if($!temp_y.goodsMobilePrice!=0 && $!temp_y.goodsMobilePrice)
+                                                   专享价:<span class="fn-rmb">￥<span class="fn-rmb-temp">$!CommUtil.toFixedNumber("$!temp_y.goodsMobilePrice")</span></span> <!-- <span class="last">  /<span class="fn-rmb">￥</span><span class="fn-rmb-temp">$!temp_y.goodsPrice</span></span> -->
+                  #else
+                                                  专享价:<span class="fn-rmb">￥<span class="fn-rmb-temp">$!CommUtil.toFixedNumber("$!temp_y.goodsCurrentPrice")</span> </span>
+                  #end                                  
+                </div>
+                
+                <a href="javascript:void(0)" onclick="callback($!temp_y.goodsId)"  class="btn_buy">立即抢购</a>
+            </li>
+            #end
+        </ul>
+        
+          
+    </div>
+    </div>
+    <div id="loadingMore"><span>更多商品加载中<span id="dot"></span></span></div>
+    <div id="loadingEnd">没有更多商品</div>
+    <div id="model" class="model"></div>
+    <div class="ny_tc ny_none">
+        <a href="javascript:void(0)" class="close">关闭</a>
+        <img src="$!webPath/resources/new_year/images/ny_getnone.png">
+        <a href="javascript:void(0)" class="share">分享</a>
+    </div>
+    <div class="ny_tc ny_100">
+        <a href="javascript:void(0)" class="close">关闭</a>
+        <img src="$!webPath/resources/new_year/images/ny_get100.png">
+        <a href="javascript:void(0)" class="share">分享</a>
+    </div>
+    <div class="ny_tc ny_notStart">
+        <a href="javascript:void(0)" class="close">关闭</a>
+        <img src="$!webPath/resources/new_year/images/ny_nostart.png">
+        <a href="javascript:void(0)" class="share">分享</a>
+    </div>
+    <div class="ny_tc ny_getten">
+        <a href="javascript:void(0)" class="close">关闭</a>
+        <img src="$!webPath/resources/new_year/images/ny_getten.png">
+        <a href="javascript:void(0)" class="share">分享</a>
+    </div>
+    <div class="ny_tc ny_end">
+        <a href="javascript:void(0)" class="close">关闭</a>
+        <img src="$!webPath/resources/new_year/images/ny_end.png">
+        <a href="javascript:void(0)" class="share">分享</a>
+    </div>
+    <div class="ny_tc ny_login">
+        <a href="javascript:void(0)" class="close">关闭</a>
+        <img src="$!webPath/resources/new_year/images/ny_login.png">
+    </div>
+
+ 	<input type="hidden" value="$!objs.size()" id="start"/>
+    <input type="hidden" value="$!maxId" id="maxId"/>
+    
+<script type="text/javascript">
+    (function(){
+        var now = new Date().getTime()/1000;
+        var nowMonth=new Date().getMonth();
+        var nowdate=new Date().getDate();
+        
+        var endDate=new Date("$!obj.endTime").getDate();
+        
+        var words=document.getElementById("words"),count=document.getElementById("count");
+
+        var todayStart=new Date(2016,nowMonth,nowdate,11,0,0).getTime()/1000;
+        var todayEnd=new Date(2016,nowMonth,nowdate,12,0,0).getTime()/1000;
+        var nextDayStart=new Date(2016,nowMonth,nowdate+1,11,0,0).getTime()/1000;
+        var nextDayEnd=new Date(2016,nowMonth,nowdate+1,12,0,0).getTime()/1000;
+        var times=null,endtime;
+        if(todayStart>=now){
+            endtime=todayStart;
+            times = setInterval(function(){
+                time_down(1);
+            }, 1000);
+        }else if(todayEnd>now){
+            endtime=todayEnd;
+            times = setInterval(function(){
+                time_down(2);
+            }, 1000);
+        }else{//距秒杀开始
+            endtime=nextDayStart;
+            times = setInterval(function(){
+                time_down(3);
+            }, 1000);
+        }
+
+
+        function time_down(downtype){
+            if(downtype==1){
+                words.innerHTML="距下次秒杀开始：";
+            }else if(downtype==2){
+                words.innerHTML="离今日秒杀结束：";
+            }else if(downtype==3){
+                words.innerHTML="距下次秒杀开始：";
+            }
+            var total =Math.floor(endtime - now);
+            if(total < 0&&downtype==1){
+                clearInterval(times);
+                //开始抢了
+                endtime=todayEnd;
+                times=setInterval(function(){
+                    time_down(2);
+                },1000);
+                return ;
+            }
+            if(total < 0&&downtype==2){
+                clearInterval(times);
+                if(now>(new Date(2016,1,endDate,12,0,0).getTime()/1000)){
+                	document.body.removeChild(countdown);
+                    return;
+                }
+                endtime=nextDayStart;
+                times=setInterval(function(){
+                    time_down(3);
+                },1000);
+                return ;
+            }
+            if(total < 0&&downtype==3){
+                clearInterval(times);
+                //开始抢了
+                endtime=nextDayEnd;
+                times=setInterval(function(){
+                    time_down(2);
+                },1000);
+                return ;
+            }
+            var hour =Math.floor(total/(60*60));
+            total = total - hour*60*60;
+            var minute  = Math.floor(total/(60));
+            total = total - minute*60
+            var second  = total
+            hours = hour.toString().split("");
+            var hour1;
+            var hour2;
+            var hour3;
+            var min1;
+            var min2;
+            var sec1;
+            var sec2;
+
+            if(hours.length == 3){
+                hour1 = hours[0];
+                hour2 = hours[1];
+                hour3 = hours[2];
+            }else if(hours.length == 2){
+                hour1 = 0;
+                hour2 = hours[0];
+                hour3 = hours[1];
+            }else{
+                hour1 = 0;
+                hour2 = 0;
+                hour3 = hours[0];
+            }
+
+            if(minute>9){
+                min1 = 	Math.floor(minute/10);
+                min2 = 	Math.floor(minute%10);
+            }else{
+                min1 = 0;
+                min2 = 	Math.floor(minute%10);
+            }
+            if(second>9){
+                sec1 = 	Math.floor(second/10);
+                sec2 = 	Math.floor(second%10);
+            }else{
+                sec1 = 0;
+                sec2 = 	Math.floor(second%10);
+            }
+            document.getElementById("count").innerHTML=hour2+hour3+"时"+min1+min2+"分"+sec1+sec2+"秒";
+            now = now + 1;
+        }
+    })();
+</script>
+  <script>
+     jQuery(document).ready(function(){
+    	 jgGlobal.setFontSize();
+         document.getElementById("model").style.height=document.documentElement.scrollHeight||document.body.scrollHeight+"px";
+                  
+         jQuery('.ny_tc .close').click(function(){
+        	 jQuery(".ny_tc").removeClass("bounceIn");
+             jQuery("#model").hide();
+             jgGlobal.isALlowTouchMove=true;
+         });
+         
+         setInterval(function(){
+             if($("#dot").html()=="..."){
+                 $("#dot").html("");
+             }else{
+                 $("#dot").html($("#dot").html()+".");
+             }
+         },300);
+		 
+         
+     });
+
+    </script>
+    <script type="text/javascript">
+        var stop = true;
+        var isend=false;
+        var num=1;
+        $(window).scroll(function () {
+            totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());
+            if ($(document).height() <= totalheight) {
+                if (stop == true) {
+                    stop = false;
+                    if(!isend)
+                    {
+                        GetData(num);
+                    }
+                }
+            }
+        });
+        
+        function GetData(pagenum) {
+            $.ajax({
+                type: "GET",
+                url: "$!webPath/newyear/ajax_goods_list",
+                  data: {actCode:"APP_HOT_SALE", start:$("#start").val(), maxId:$("#maxId").val()},
+                dataType: "json",
+                success: function (data) {
+                    if (data!=undefined && data.length > 0) {
+                        var arrdata = data;   //获取数据 //data: {pageNum: pagenum},
+                        var strHtml = "";
+                        for (var i = 0; i < arrdata.length; i++) {
+                            strHtml+="<li onclick='callback("+arrdata[i].goodsId+")'>";
+ 
+                            strHtml+="      <img src=\""+arrdata[i].adImgPath+"\" />";
+                            strHtml+="        <div class=\"goods-title\">"+arrdata[i].adTitle+"</div>";
+ 
+                            if(arrdata[i].goodsMobilePrice!=0&&arrdata[i].goodsMobilePrice!=""){
+                            	strHtml+="  <div class=\"prize\">专享价:<span class=\"fn-rmb\">￥"+arrdata[i].goodsMobilePrice.toFixed(2)+"</span></div>";
+                            }else{
+	                             strHtml+=" <div class=\"prize\">专享价:<span class=\"fn-rmb\">￥"+arrdata[i].goodsCurrentPrice.toFixed(2)+"</span></div>";
+                            } 
+                            
+                          
+                            strHtml+="  <a href=\"javascript:void(0)\" onclick='callback("+arrdata[i].goodsId+")' class=\"btn_buy\">立即抢购</a>";
+                            strHtml+="</li>";
+                            
+                            $("#maxId").val(arrdata[i].adId);
+                        }
+                        $("#goodsUL").html($("#goodsUL").html() + strHtml);
+                        num++;
+                        stop = true;
+                        
+                    }
+                    else {
+                    	 
+                            isend=true;
+                            $("#loadingMore").hide();
+							$("#loadingEnd").show();
+
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("服务器繁忙，请稍后..");
+                    return;
+                }
+            });
+        }
+    </script>
+
+
+</body>
+</html>

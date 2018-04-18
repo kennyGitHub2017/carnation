@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.store.mapper.StoreGradeMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.store.model.StoreGrade">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="acount_num" property="acountNum" jdbcType="INTEGER" />
+		<result column="add_funciton" property="addFunciton" jdbcType="VARCHAR" />
+		<result column="audit" property="audit" jdbcType="BIT" />
+		<result column="goods_count" property="goodsCount" jdbcType="INTEGER" />
+		<result column="goods_audit" property="goodsAudit" jdbcType="INTEGER" />
+		<result column="grade_level" property="gradeLevel" jdbcType="INTEGER" />
+		<result column="grade_name" property="gradeName" jdbcType="VARCHAR" />
+		<result column="main_limit" property="mainLimit" jdbcType="INTEGER" />
+		<result column="price" property="price" jdbcType="VARCHAR" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="space_size" property="spaceSize" jdbcType="REAL" />
+		<result column="sys_grade" property="sysGrade" jdbcType="BIT" />
+		<result column="templates" property="templates" jdbcType="VARCHAR" />
+		<result column="whether_free" property="whetherFree" jdbcType="BIT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.store.bo.StoreGradeBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.store.model.StoreGrade"
+		extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, acount_num, add_funciton, audit,
+		goods_count, goods_audit,
+		grade_level, grade_name, main_limit, price, sequence, space_size, sys_grade,
+		templates,
+		whether_free
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+
+	<select id="queryStoreGradePageList" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_store_grade order by sequence asc
+	</select>
+
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.store.model.StoreGradeExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_store_grade
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.store.model.StoreGradeExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_store_grade
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_store_grade
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_store_grade
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.store.model.StoreGradeExample">
+		delete from shop_store_grade
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.store.model.StoreGrade"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_store_grade (id, add_Time, delete_Status,
+		acount_num, add_funciton, audit,
+		goods_count, goods_audit, grade_level,
+		grade_name, main_limit, price,
+		sequence, space_size, sys_grade,
+		templates, whether_free, content
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{acountNum,jdbcType=INTEGER}, #{addFunciton,jdbcType=VARCHAR}, #{audit,jdbcType=BIT},
+		#{goodsCount,jdbcType=INTEGER}, #{goodsAudit,jdbcType=INTEGER},
+		#{gradeLevel,jdbcType=INTEGER},
+		#{gradeName,jdbcType=VARCHAR}, #{mainLimit,jdbcType=INTEGER}, #{price,jdbcType=VARCHAR},
+		#{sequence,jdbcType=INTEGER}, #{spaceSize,jdbcType=REAL},
+		#{sysGrade,jdbcType=BIT},
+		#{templates,jdbcType=VARCHAR}, #{whetherFree,jdbcType=BIT}, #{content,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.store.model.StoreGrade"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_store_grade
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="acountNum != null">
+				acount_num,
+			</if>
+			<if test="addFunciton != null">
+				add_funciton,
+			</if>
+			<if test="audit != null">
+				audit,
+			</if>
+			<if test="goodsCount != null">
+				goods_count,
+			</if>
+			<if test="goodsAudit != null">
+				goods_audit,
+			</if>
+			<if test="gradeLevel != null">
+				grade_level,
+			</if>
+			<if test="gradeName != null">
+				grade_name,
+			</if>
+			<if test="mainLimit != null">
+				main_limit,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="spaceSize != null">
+				space_size,
+			</if>
+			<if test="sysGrade != null">
+				sys_grade,
+			</if>
+			<if test="templates != null">
+				templates,
+			</if>
+			<if test="whetherFree != null">
+				whether_free,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="acountNum != null">
+				#{acountNum,jdbcType=INTEGER},
+			</if>
+			<if test="addFunciton != null">
+				#{addFunciton,jdbcType=VARCHAR},
+			</if>
+			<if test="audit != null">
+				#{audit,jdbcType=BIT},
+			</if>
+			<if test="goodsCount != null">
+				#{goodsCount,jdbcType=INTEGER},
+			</if>
+			<if test="goodsAudit != null">
+				#{goodsAudit,jdbcType=INTEGER},
+			</if>
+			<if test="gradeLevel != null">
+				#{gradeLevel,jdbcType=INTEGER},
+			</if>
+			<if test="gradeName != null">
+				#{gradeName,jdbcType=VARCHAR},
+			</if>
+			<if test="mainLimit != null">
+				#{mainLimit,jdbcType=INTEGER},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="spaceSize != null">
+				#{spaceSize,jdbcType=REAL},
+			</if>
+			<if test="sysGrade != null">
+				#{sysGrade,jdbcType=BIT},
+			</if>
+			<if test="templates != null">
+				#{templates,jdbcType=VARCHAR},
+			</if>
+			<if test="whetherFree != null">
+				#{whetherFree,jdbcType=BIT},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.store.model.StoreGradeExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_store_grade
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_store_grade
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.acountNum != null">
+				acount_num = #{record.acountNum,jdbcType=INTEGER},
+			</if>
+			<if test="record.addFunciton != null">
+				add_funciton = #{record.addFunciton,jdbcType=VARCHAR},
+			</if>
+			<if test="record.audit != null">
+				audit = #{record.audit,jdbcType=BIT},
+			</if>
+			<if test="record.goodsCount != null">
+				goods_count = #{record.goodsCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsAudit != null">
+				goods_audit = #{record.goodsAudit,jdbcType=INTEGER},
+			</if>
+			<if test="record.gradeLevel != null">
+				grade_level = #{record.gradeLevel,jdbcType=INTEGER},
+			</if>
+			<if test="record.gradeName != null">
+				grade_name = #{record.gradeName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.mainLimit != null">
+				main_limit = #{record.mainLimit,jdbcType=INTEGER},
+			</if>
+			<if test="record.price != null">
+				price = #{record.price,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.spaceSize != null">
+				space_size = #{record.spaceSize,jdbcType=REAL},
+			</if>
+			<if test="record.sysGrade != null">
+				sys_grade = #{record.sysGrade,jdbcType=BIT},
+			</if>
+			<if test="record.templates != null">
+				templates = #{record.templates,jdbcType=VARCHAR},
+			</if>
+			<if test="record.whetherFree != null">
+				whether_free = #{record.whetherFree,jdbcType=BIT},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_store_grade
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=BIT},
+		acount_num = #{record.acountNum,jdbcType=INTEGER},
+		add_funciton = #{record.addFunciton,jdbcType=VARCHAR},
+		audit = #{record.audit,jdbcType=BIT},
+		goods_count = #{record.goodsCount,jdbcType=INTEGER},
+		goods_audit = #{record.goodsAudit,jdbcType=INTEGER},
+		grade_level = #{record.gradeLevel,jdbcType=INTEGER},
+		grade_name = #{record.gradeName,jdbcType=VARCHAR},
+		main_limit = #{record.mainLimit,jdbcType=INTEGER},
+		price = #{record.price,jdbcType=VARCHAR},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		space_size = #{record.spaceSize,jdbcType=REAL},
+		sys_grade = #{record.sysGrade,jdbcType=BIT},
+		templates = #{record.templates,jdbcType=VARCHAR},
+		whether_free = #{record.whetherFree,jdbcType=BIT},
+		content = #{record.content,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_store_grade
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=BIT},
+		acount_num = #{record.acountNum,jdbcType=INTEGER},
+		add_funciton = #{record.addFunciton,jdbcType=VARCHAR},
+		audit = #{record.audit,jdbcType=BIT},
+		goods_count = #{record.goodsCount,jdbcType=INTEGER},
+		goods_audit = #{record.goodsAudit,jdbcType=INTEGER},
+		grade_level = #{record.gradeLevel,jdbcType=INTEGER},
+		grade_name = #{record.gradeName,jdbcType=VARCHAR},
+		main_limit = #{record.mainLimit,jdbcType=INTEGER},
+		price = #{record.price,jdbcType=VARCHAR},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		space_size = #{record.spaceSize,jdbcType=REAL},
+		sys_grade = #{record.sysGrade,jdbcType=BIT},
+		templates = #{record.templates,jdbcType=VARCHAR},
+		whether_free = #{record.whetherFree,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.store.model.StoreGrade">
+		update shop_store_grade
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="acountNum != null">
+				acount_num = #{acountNum,jdbcType=INTEGER},
+			</if>
+			<if test="addFunciton != null">
+				add_funciton = #{addFunciton,jdbcType=VARCHAR},
+			</if>
+			<if test="audit != null">
+				audit = #{audit,jdbcType=BIT},
+			</if>
+			<if test="goodsCount != null">
+				goods_count = #{goodsCount,jdbcType=INTEGER},
+			</if>
+			<if test="goodsAudit != null">
+				goods_audit = #{goodsAudit,jdbcType=INTEGER},
+			</if>
+			<if test="gradeLevel != null">
+				grade_level = #{gradeLevel,jdbcType=INTEGER},
+			</if>
+			<if test="gradeName != null">
+				grade_name = #{gradeName,jdbcType=VARCHAR},
+			</if>
+			<if test="mainLimit != null">
+				main_limit = #{mainLimit,jdbcType=INTEGER},
+			</if>
+			<if test="price != null">
+				price = #{price,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="spaceSize != null">
+				space_size = #{spaceSize,jdbcType=REAL},
+			</if>
+			<if test="sysGrade != null">
+				sys_grade = #{sysGrade,jdbcType=BIT},
+			</if>
+			<if test="templates != null">
+				templates = #{templates,jdbcType=VARCHAR},
+			</if>
+			<if test="whetherFree != null">
+				whether_free = #{whetherFree,jdbcType=BIT},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.store.model.StoreGrade">
+		update shop_store_grade
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=BIT},
+		acount_num = #{acountNum,jdbcType=INTEGER},
+		add_funciton = #{addFunciton,jdbcType=VARCHAR},
+		audit = #{audit,jdbcType=BIT},
+		goods_count = #{goodsCount,jdbcType=INTEGER},
+		goods_audit = #{goodsAudit,jdbcType=INTEGER},
+		grade_level = #{gradeLevel,jdbcType=INTEGER},
+		grade_name = #{gradeName,jdbcType=VARCHAR},
+		main_limit = #{mainLimit,jdbcType=INTEGER},
+		price = #{price,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=INTEGER},
+		space_size = #{spaceSize,jdbcType=REAL},
+		sys_grade = #{sysGrade,jdbcType=BIT},
+		templates = #{templates,jdbcType=VARCHAR},
+		whether_free = #{whetherFree,jdbcType=BIT},
+		content = #{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.store.model.StoreGrade">
+		update shop_store_grade
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=BIT},
+		acount_num = #{acountNum,jdbcType=INTEGER},
+		add_funciton = #{addFunciton,jdbcType=VARCHAR},
+		audit = #{audit,jdbcType=BIT},
+		goods_count = #{goodsCount,jdbcType=INTEGER},
+		goods_audit = #{goodsAudit,jdbcType=INTEGER},
+		grade_level = #{gradeLevel,jdbcType=INTEGER},
+		grade_name = #{gradeName,jdbcType=VARCHAR},
+		main_limit = #{mainLimit,jdbcType=INTEGER},
+		price = #{price,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=INTEGER},
+		space_size = #{spaceSize,jdbcType=REAL},
+		sys_grade = #{sysGrade,jdbcType=BIT},
+		templates = #{templates,jdbcType=VARCHAR},
+		whether_free = #{whetherFree,jdbcType=BIT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="findPageByVo" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM shop_store_grade
+		<where>
+			<if test="vo.gradeName != null and vo.gradeName !=''">
+				grade_name like concat('%',#{vo.gradeName},'%')
+			</if>
+		</where>
+	</select>
+	<select id="findAllList" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM shop_store_grade
+		order by sequence asc
+	</select>
+</mapper>

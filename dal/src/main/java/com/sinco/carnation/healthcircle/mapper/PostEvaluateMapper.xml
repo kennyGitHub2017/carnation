@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.healthcircle.mapper.PostEvaluateMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.healthcircle.model.PostEvaluate">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="post_id" property="postId" jdbcType="BIGINT" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="reply_status" property="replyStatus" jdbcType="INTEGER" />
+		<result column="to_userid" property="toUserid" jdbcType="BIGINT" />
+		<result column="from_userid" property="fromUserid" jdbcType="BIGINT" />
+		<result column="to_username" property="toUserName" jdbcType="VARCHAR" />
+		<result column="from_username" property="fromUserName"
+			jdbcType="VARCHAR" />
+		<result column="pid" property="pid" jdbcType="BIGINT" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="headImgPath" property="headImgPath" />
+		<result column="is_add_integral" property="isAddIntegral" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.healthcircle.bo.PostEvaluateBO" extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, post_id, content, reply_status, to_userid,
+		from_userid,is_add_integral
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.healthcircle.model.PostEvaluateExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from health_circle_evaluate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from health_circle_evaluate
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from health_circle_evaluate
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.healthcircle.model.PostEvaluateExample">
+		delete from health_circle_evaluate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.healthcircle.model.PostEvaluate"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into health_circle_evaluate (id, add_time, delete_status,
+		post_id, content, reply_status,
+		to_userid, from_userid)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{postId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, #{replyStatus,jdbcType=INTEGER},
+		#{toUserid,jdbcType=BIGINT}, #{fromUserid,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.healthcircle.model.PostEvaluate"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into health_circle_evaluate
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			add_time,
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="postId != null">
+				post_id,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="replyStatus != null">
+				reply_status,
+			</if>
+			<if test="toUserid != null">
+				to_userid,
+			</if>
+			<if test="fromUserid != null">
+				from_userid,
+			</if>
+			<if test="toUserName != null">
+				to_username,
+			</if>
+			<if test="fromUserName != null">
+				from_username,
+			</if>
+			<if test="type!= null">
+				type,
+			</if>
+			<if test="pid!= null">
+				pid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			now(),
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="postId != null">
+				#{postId,jdbcType=BIGINT},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=VARCHAR},
+			</if>
+			<if test="replyStatus != null">
+				#{replyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="toUserid != null">
+				#{toUserid,jdbcType=BIGINT},
+			</if>
+			<if test="fromUserid != null">
+				#{fromUserid,jdbcType=BIGINT},
+			</if>
+			<if test="toUserName != null">
+				#{toUserName,jdbcType=BIGINT},
+			</if>
+			<if test="fromUserName != null">
+				#{fromUserName,jdbcType=BIGINT},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="pid!= null">
+				#{pid,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.healthcircle.model.PostEvaluateExample"
+		resultType="java.lang.Integer">
+		select count(*) from health_circle_evaluate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update health_circle_evaluate
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.postId != null">
+				post_id = #{record.postId,jdbcType=BIGINT},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=VARCHAR},
+			</if>
+			<if test="record.replyStatus != null">
+				reply_status = #{record.replyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.toUserid != null">
+				to_userid = #{record.toUserid,jdbcType=BIGINT},
+			</if>
+			<if test="record.fromUserid != null">
+				from_userid = #{record.fromUserid,jdbcType=BIGINT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update health_circle_evaluate
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		post_id = #{record.postId,jdbcType=BIGINT},
+		content = #{record.content,jdbcType=VARCHAR},
+		reply_status = #{record.replyStatus,jdbcType=INTEGER},
+		to_userid = #{record.toUserid,jdbcType=BIGINT},
+		from_userid = #{record.fromUserid,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.healthcircle.model.PostEvaluate">
+		update health_circle_evaluate
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="postId != null">
+				post_id = #{postId,jdbcType=BIGINT},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=VARCHAR},
+			</if>
+			<if test="replyStatus != null">
+				reply_status = #{replyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="toUserid != null">
+				to_userid = #{toUserid,jdbcType=BIGINT},
+			</if>
+			<if test="fromUserid != null">
+				from_userid = #{fromUserid,jdbcType=BIGINT},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.healthcircle.model.PostEvaluate">
+		update health_circle_evaluate
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		post_id = #{postId,jdbcType=BIGINT},
+		content = #{content,jdbcType=VARCHAR},
+		reply_status = #{replyStatus,jdbcType=INTEGER},
+		to_userid = #{toUserid,jdbcType=BIGINT},
+		from_userid = #{fromUserid,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<sql id="column_list">
+		a.id, a.add_time,
+		a.delete_status,a.content,a.reply_status,a.to_userid,a.from_userid,a.post_id,a.to_username,a.from_username,a.pid,a.type
+	</sql>
+	<select id="selectAllByPid" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+		<include refid="column_list" />
+		,
+		uc.head_img_path as headImgPath
+		from health_circle_evaluate a
+		LEFT JOIN user_customer uc ON a.from_userid=uc.uid
+		where a.delete_status=0
+		<if test="postId!=null and postId!=''">
+			and a.post_id=#{postId}
+		</if>
+		ORDER BY a.add_time DESC
+	</select>
+
+	<select id="selectPageByPostId" resultMap="BaseResultMap"
+		parameterType="map">
+		select
+		<include refid="column_list" />
+		,
+		uc.head_img_path as headImgPath
+		from health_circle_evaluate a
+		LEFT JOIN user_customer uc ON a.from_userid=uc.uid
+		where a.delete_status=0
+		<if test="postId!=null and postId!=''">
+			and a.post_id=#{postId}
+		</if>
+		ORDER BY a.add_time DESC
+	</select>
+	
+	
+	<select id="listByisAddIntegral" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from health_circle_evaluate
+		where is_add_integral = 0;
+	</select>
+	<update id="updateIsAddIntegralByid" parameterType="java.lang.Long">
+		update health_circle_evaluate set is_add_integral = 1
+		where id = #{id};
+	</update>
+</mapper>

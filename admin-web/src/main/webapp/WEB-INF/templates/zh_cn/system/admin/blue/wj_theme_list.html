@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+/* 
+系统通用方法，根据参数来决定处理的url和参数
+*/
+function cmd22(){
+	var url=arguments[0];
+	var mulitId="";
+	jQuery("#ListForm").find(":checkbox:checked").each(function(){
+	  if(jQuery(this).val()!=""){	  
+	    mulitId+=jQuery(this).val()+",";
+	  }
+	});
+	if(mulitId!=""){
+	  jQuery("#ListForm #mulitId").val(mulitId);
+	  if(confirm("确定要执行该操作？")){
+	     jQuery("#ListForm").attr("action",url);
+	     jQuery("#ListForm").submit();
+	  }
+	}else{
+       alert("至少选择一条数据记录");
+	}
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">问卷主题</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li>
+    		<a href="$!webPath/admin/wj_theme_list.htm" class="this">
+    			<b>管理</b>
+    		</a>
+    	</li>
+        <li>
+	        <a href="$!webPath/admin/wj_theme_add.htm" >
+	        	<b>新增</b>
+	        </a>
+        </li>
+    </ul>
+  </div>
+  <!-- <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/admin/label_manage_list.htm"  class="this"><b>管理</b></a></li>
+  
+    </ul>
+  </div> -->
+<!--   <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li>添加标识可通过article_标识.htm进行站内引用，标识不可重复</li>
+    </ul>
+  </div> -->
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/admin/wj_theme_list.htm" method="post">
+  
+      <div class="search">
+			<span>主题名称</span> 
+			<span class="size250">
+				<input type="text" value="$!labelName" id=labelName name="labelName">
+			</span> 
+			<span class="btn_search">
+				<input type="submit" class="search_btn" style="cursor: pointer;" value="搜索" name="">
+			</span>
+	   </div>
+  
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="5%">
+        	&nbsp;序号
+        </th>
+        <th >
+        	<span class="form_btna">主题名称</span>
+        </th>
+        <th >
+        	<span class="form_btna">状态</span>
+        </th>
+        <th >
+        	<span class="form_btna">创建时间</span>
+        </th>
+        <th >
+        	<b class="form_btnb">操作</b>
+        </th>
+      </tr>
+      #foreach($obj in $objs)
+      <tr>
+      	<td class="check_position">
+        	<input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" />
+        </td>
+        <td align="center">$!obj.themeName</td> 
+        <td align="center">
+        	#if($!obj.isDeleted==0)
+        		开启
+        	#else
+        		关闭
+        	#end
+        </td> 
+        <td align="center">
+        	$!dataUtile.formatDateTime($!obj.createTime)
+        </td> 
+        <td class="hui oprate_con" align="center">
+        	<!-- <a href="" class="blue">删除</a> -->
+        	<a href="$!webPath/admin/edit_wj_Theme.htm?id=$!obj.id&amp;currentPage=$!currentPage" class="blue">修改</a>
+        </td>
+      </tr>
+      #end
+      
+      
+	  <!-- #foreach($obj in $objs)
+      <tr>
+        <td class="check_position">
+        	<input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" />
+        </td>
+        <td align="center">$!obj.nickname</td> 
+        <td align="center"> 
+           #if($!obj.sex==1)
+                               男
+           #end
+           #if($!obj.sex==2)
+                              女
+           #end
+        </td> 
+        <td align="center">$!date.format('yyyy-MM-dd HH:mm:ss',$!obj.addTime)</td> 
+        <td align="center">$!obj.location</td> 
+        <td align="center"> 
+           #if($!obj.ispush==1)
+                               是
+           #else
+                              否
+           #end
+        </td> 
+        <td align="center">$!obj.evaluateNum</td> 
+        <td align="center">$!obj.praiseNum</td>   
+        <td align="center">$!obj.labelNames</td>
+        <td class="hui oprate_con" align="center">
+             #if($!obj.ispush==1)
+        	<a href="$!webPath/admin/post_push.htm?id=$!obj.id&ispush=0&amp;currentPage=$!currentPage" class="blue">取消推荐</a> 
+             #else
+            <a href="$!webPath/admin/post_push.htm?id=$!obj.id&ispush=1&amp;currentPage=$!currentPage" class="blue">推荐</a> 
+             #end
+            |<a href="$!webPath/admin/post_preview.htm?id=$!obj.id&amp;currentPage=$!currentPage" class="blue">预览</a>        
+            |<a href="$!webPath/admin/post_del.htm?mulitId=$!obj.id&amp;currentPage=$!currentPage" class="blue">删除</a>
+        </td>
+      </tr>
+      #end -->
+    </table>
+ </div>
+ <div class="operate_bar">
+ 	<div class="oper_sp"> 
+    	<span class="oper_check">
+    		<label>
+    			<input type="checkbox" name="all" id="all" onclick="selectAll(this)" value="" />
+    			全部
+    		</label>
+    	</span>
+    	<span class="oper_del">
+    		<input name="" type="button" value="删除" style="cursor:pointer;" onclick="cmd22('$!webPath/admin/del_wj_Theme.htm')"/>
+    	</span>
+    </div>
+    <div class="fenye">
+    	<input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	  	<input name="mulitId" type="hidden" id="mulitId" />
+	  	$!gotoPageFormHTML
+    </div>       
+ </div>
+ </FORM>
+</div>
+</body>
+</html>

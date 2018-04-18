@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head></head>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" href="$!webPath/resources/editor/themes/default/default.css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+<script src="$!webPath/resources/js/jquery.imgareaselect.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.viewpic.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.base.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+
+<script>
+jQuery(document).ready(function() {
+    jQuery("#logoShow").mouseover(function() {
+        jQuery("#logoImg").css('display', 'block');
+    }).mouseout(function() {
+        jQuery("#logoImg").css('display', 'none');
+    });
+	jQuery.validator.addMethod("cp",
+    function(value, element) {
+		var isParent=jQuery(" option:selected").attr("disabled");
+        if(isParent=="disabled"){
+			return false;	
+		}else{
+			return true;
+		}
+	});
+    jQuery("#theForm").validate({
+        rules: {
+        	groupTitle: {
+                required: true
+            },
+            classId: {
+                required: true,
+                cp:true
+            },
+            summary: {
+                required: true,
+                maxlength: 200
+            },
+            #if(!$!obj.thumbnail)
+			cover:{required:true},
+			#end
+            content:{
+			 	required: true,
+			}
+        },
+        messages: {
+        	groupTitle: {
+                required: "套题标题不能为空"
+            },
+            classId: {
+                required: "套题分类不能为空",
+                cp:"请选择子分类"
+            },
+            summary: {
+                required: "自测题概述不能为空",
+                maxlength: "自测题概述最多200字"
+            },
+            #if(!$!obj.thumbnail)
+            cover:{required:"自测题封面图不能为空"},
+            #end
+            content:{
+			 	required: "自测题详细不能为空",
+			}
+        },
+        errorPlacement: function(error, element) { 
+    		if(element.attr('name')=='cover') {
+    			error.appendTo(element.parent("span").parent("span").next("span").next("span"))
+    		}else{
+    			error.appendTo(element.parent("span"));
+    		}
+    	} 
+    });
+    //改变系统提示的样式
+    jQuery("span .w").mousemove(function() {
+        var id = jQuery(this.parentNode).attr("id");
+        if (id = "nothis") {
+            jQuery(this.parentNode).attr("id", "this")
+        }
+    }).mouseout(function() {
+        var id = jQuery(this.parentNode).attr("id");
+        if (id = "this") {
+            jQuery(this.parentNode).attr("id", "nothis")
+        }
+    });
+    //
+    var options = {
+        cssPath: '$!webPath/resources/editor/plugins/code/prettify.css',
+        filterMode: true,
+        uploadJson: '$!webPath/upload.htm',
+        width: '900px',
+        height: '400px',
+        resizeType: 1,
+        syncType: "form",
+        afterCreate: function() {
+            var self = this;
+            self.sync();
+        },
+        afterChange: function() {
+            var self = this;
+            self.sync();
+        },
+        afterBlur: function() {
+            var self = this;
+            self.sync();
+        },
+        items: ['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste', 'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript', 'superscript', '|', 'selectall', 'clearhtml', 'quickformat', '|', 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage', 'flash', 'media', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+    };
+
+    editor = KindEditor.create('#content', options);
+});
+
+function saveForm() {
+  var r = jQuery("#theForm").valid(); 
+	if(jQuery("#content").val()==""){
+		jQuery("#show").show();
+	}else{
+		  editor.sync();
+    	jQuery("#theForm").submit();
+	}
+}
+
+
+function switch_editor_album(mark) {
+    var dis = jQuery("#info_goods").css("display");
+	var dis2 = jQuery("#info_goods_imgs").css("display");
+    if (dis == "none" && dis2 == "none") {
+        jQuery.post("$!webPath/admin/information_goods.htm", {
+        },
+        function(text) {
+            jQuery("#info_goods").empty();
+            jQuery("#info_goods").append(text);
+        },
+        "text");
+        jQuery("#info_goods").show();
+		jQuery("#good_button").html("关闭商品图片");
+    } else {
+        jQuery("#info_goods").hide();
+		jQuery("#info_goods_imgs").hide();
+		jQuery("#good_button").html("添加商品图片");
+    }
+}
+function information_goods_load(){
+	var gc_id=jQuery("#gc_id").val();
+	var goods_name=jQuery("#goods_name").val();
+	jQuery.post("$!webPath/admin/information_goods.htm", {
+		"gc_id":gc_id,
+		"goods_name":goods_name
+        },
+        function(text) {
+            jQuery("#info_goods").empty();
+            jQuery("#info_goods").append(text);
+        },
+        "text");
+}
+function photo_switch(id,obj) {
+    jQuery.post("$!webPath/admin/information_goods_imgs.htm", {
+        "goods_id": id,
+    },
+    function(text) {
+		jQuery("#info_goods").hide();
+        jQuery("#info_goods_imgs").empty();
+        jQuery("#info_goods_imgs").append(text);
+    },
+    "text");
+    jQuery("#info_goods_imgs").show();
+}
+
+/*Ajax分页*/
+function ajaxPage(url,currentPage,obj){
+	var gc_id=jQuery("#gc_id").val();
+	var goods_name=jQuery("#goods_name").val();
+     jQuery.post("$!webPath/admin/information_goods.htm",{"currentPage":currentPage,"gc_id":gc_id,
+		"goods_name":goods_name},function(text){
+       jQuery("#info_goods").empty();
+        jQuery("#info_goods").append(text);
+     },"text");
+}
+function show_goods(){
+	jQuery("#info_goods").show();
+    jQuery("#info_goods_imgs").hide();
+}
+function editor_add(obj, id) {
+    var html = "<a href='$!webPath/goods_" + id + ".htm' target='_blank'><img src='" + obj + "' width='200' heigh='200'/></a>";
+    editor.insertHtml(html);
+}
+</script>
+</head><body>
+<form action="$!webPath/admin/check_group_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="listUrl" type="hidden" id="list_url" value="$!webPath/admin/check_group_list.htm" />
+  <input name="addUrl" type="hidden" id="add_url" value="$!webPath/admin/check_group_add.htm" />
+  <input name="oldClassId" type="hidden" id="oldClassId" value="$!obj.classId"/>
+  <div class="cont">
+    <h1 class="seth">自测题管理</h1>
+    <div class="nav_list">
+      <ul>
+        <li><a href="$!webPath/admin/check_group_list.htm" ><b>自测套题列表</b></a></li>
+      	<li><a href="$!webPath/admin/check_group_add.htm" #if(!$!edit) class="this" #end><b>新增套题</b></a></li>
+        #if($!edit)
+        <li><a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+        #end
+        <li><a href="$!webPath/admin/check_class_list.htm"><b>自测题分类列表</b></a></li>
+        <li><a href="$!webPath/admin/check_class_add.htm"><b>新增自测题分类</b></a></li>
+      </ul>
+    </div>
+    <div class="edit">
+      <div class="editul setcont" >
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>套题标题</li>
+          <li><span class="webname">
+            <input name="groupTitle" type="text" id="groupTitle" value="$!obj.groupTitle" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>套题分类</li>
+          <li><span class="webname">
+            <select name="classId" id="classId" >
+	      		<option value="">请选择类型</option>
+	      		 #foreach($classObj in $classList)
+	      		 	<option value="$!{classObj.id}" #if($obj.classId == $classObj.id)selected = "selected"#end #if($classObj.isParent == 'yes')disabled="disabled"  #end >$!classObj.className</option>
+		         #end
+	      	</select>
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>自测题封面</li>
+          <li><span class="webname"> <span class="eidt_li_a" style="position:relative; width:50px; height:22px; line-height:22px;margin-top: 3px; color:#333; border:1px solid #ccc; padding:2px 5px; border-radius:3px;">选择图片
+            <input type="file" id="cover" onchange="changePic('cover')" style="opacity: 0;top:0;left:1px;position:absolute; z-index:100;width:60px; " name="cover" />
+            </span> </span><span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span><span id="nothis"><strong class="q"></strong><strong class="w">封面图用来显示在自测题列表(630*292)</strong><strong class="c"></strong></span>
+            #if($!obj.thumbnail)
+            #set($img=$!imageTools.queryImg($!obj.thumbnail))
+            <div class="bigimgpre" id="logoImg" style="display:none; left:270px;"><img src="$!obj.thumbnail"  width="200" height="200" id="thumbnailimg"/> </div>
+            #end
+            <div class="pic-view"><img id="preview" alt="" name="pic" /></div>
+            </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>自测题概述</li>
+          <li><span class="webname">
+            <textarea id="summary" name="summary" style="width:320px; height:70px; padding:5px;">$!obj.summary</textarea>
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>自测题详细内容</li>
+          <li><span class="webname">
+            <textarea name="content" style="width:100%;height:400px;" id="content">$!obj.content</textarea>        </span></li>
+          <label id="show" class="error" generated="true" style="display:none">详细内容不能为空</label>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="submit"> <span class="pad120">
+      <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/>
+      </span> </div>
+  </div>
+</form>
+</body>
+</html>

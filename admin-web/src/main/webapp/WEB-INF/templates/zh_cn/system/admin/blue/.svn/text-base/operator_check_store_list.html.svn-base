@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+
+
+<body>
+  <div class="cont">
+    <h1 class="seth">未审核商户</h1>
+	<FORM name="ListForm" id="ListForm"  action="$!webPath/admin/operator_check_store_list.htm" method="post">
+	<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <div class="search">
+      	  <span>
+      	  	 商户名称
+          </span>
+      	  <span class="size150">
+          	<input name="storeName" type="text" value="$!storeName" />
+          </span>
+      	  <span>
+      	  	 运营商名称
+          </span>
+      	  <span class="size150">
+          	<input name="operatorName" type="text" value="$!operatorName" />
+          </span>
+      	  <span>
+      	  	 运营商姓名
+          </span>
+      	  <span class="size150">
+          	<input name="operatorUserName" type="text" value="$!operatorUserName" />
+          </span>
+      	  <span>
+      	  	 运营商代码
+          </span>
+      	  <span class="size150">
+          	<input name="operatorCode" type="text" value="$!operatorCode" />
+          </span>
+          <span>
+          <input name="" type="submit"  value="搜索" style="cursor:pointer;" title="搜索"  class="search_btn"/>
+          </span>
+    </div>
+
+    <div class="fshoptb page-fixed-mb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="10%" align="left"><span class="form_btna">编码</span></th>
+		  <th width="10%" align="center"><span class="form_btna">名称</span></th>
+		  <th width="10%" align="center"><span class="form_btna">姓名</span></th>
+		  <th width="10%" align="center"><span class="form_btna">电话</span></th>
+          <th width="12%" align="center"><span class="form_btna">运营地</span></th>
+          <th width="6%" align="center"><span class="form_btna">商户名称</span></th>
+          <th width="5%" align="center"><span class="form_btna">状态</span></th>
+          <th width="12%" align="center"><span class="form_btna">创建时间</span></th>
+        </tr>
+        #foreach($!obj in $objs)
+					<tr>
+						<td class="lightred">$!obj.operatorCode</td>
+						<td class="lightred">$!obj.operatorName</td>
+						<td class="lightred">$!obj.operatorUserName</td>
+						<td class="lightred">$!obj.operatorPhone</td>
+						<td class="lightred">$!obj.operatorAreaName</td>
+						<td class="lightred">$!obj.storeName</td>
+						<td class="lightred">审核中</td>
+						<td>$!CommUtil.formatLongDate($!obj.addTime)</td>
+					</tr>
+					#end
+        <tr>
+        <td colspan="11" style="border-bottom:0px; padding:0px;">
+        	<div class="operate_bar page-fixed">
+				<div class="fenye">$!gotoPageFormHTML</div>
+			</div>
+		</td>
+        </tr>
+      </table>
+    </div>
+	</FORM>
+  </div>
+</body>
+</html>

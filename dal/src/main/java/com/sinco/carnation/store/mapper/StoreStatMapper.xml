@@ -1,0 +1,950 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.store.mapper.StoreStatMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.store.model.StoreStat">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="all_commission_amount" property="allCommissionAmount"
+			jdbcType="INTEGER" />
+		<result column="all_goods" property="allGoods" jdbcType="INTEGER" />
+		<result column="all_payoff_amount" property="allPayoffAmount"
+			jdbcType="INTEGER" />
+		<result column="all_payoff_amount_reality" property="allPayoffAmountReality"
+			jdbcType="INTEGER" />
+		<result column="all_sale_amount" property="allSaleAmount"
+			jdbcType="INTEGER" />
+		<result column="all_store" property="allStore" jdbcType="INTEGER" />
+		<result column="all_user" property="allUser" jdbcType="INTEGER" />
+		<result column="all_user_balance" property="allUserBalance"
+			jdbcType="DECIMAL" />
+		<result column="delivery_audit_count" property="deliveryAuditCount"
+			jdbcType="INTEGER" />
+		<result column="goods_audit" property="goodsAudit" jdbcType="INTEGER" />
+		<result column="information_audit_count" property="informationAuditCount"
+			jdbcType="INTEGER" />
+		<result column="next_time" property="nextTime" jdbcType="TIMESTAMP" />
+		<result column="not_grouplife_refund" property="notGrouplifeRefund"
+			jdbcType="INTEGER" />
+		<result column="not_payoff_num" property="notPayoffNum"
+			jdbcType="INTEGER" />
+		<result column="not_refund" property="notRefund" jdbcType="INTEGER" />
+		<result column="order_amount" property="orderAmount" jdbcType="DECIMAL" />
+		<result column="self_activity_goods" property="selfActivityGoods"
+			jdbcType="INTEGER" />
+		<result column="self_all_order" property="selfAllOrder"
+			jdbcType="INTEGER" />
+		<result column="self_free_goods" property="selfFreeGoods"
+			jdbcType="INTEGER" />
+		<result column="self_goods" property="selfGoods" jdbcType="INTEGER" />
+		<result column="self_goods_consult" property="selfGoodsConsult"
+			jdbcType="INTEGER" />
+		<result column="self_group_goods" property="selfGroupGoods"
+			jdbcType="INTEGER" />
+		<result column="self_group_life" property="selfGroupLife"
+			jdbcType="INTEGER" />
+		<result column="self_grouplife_refund" property="selfGrouplifeRefund"
+			jdbcType="INTEGER" />
+		<result column="self_order_evaluate" property="selfOrderEvaluate"
+			jdbcType="INTEGER" />
+		<result column="self_order_pay" property="selfOrderPay"
+			jdbcType="INTEGER" />
+		<result column="self_order_shipping" property="selfOrderShipping"
+			jdbcType="INTEGER" />
+		<result column="self_return_apply" property="selfReturnApply"
+			jdbcType="INTEGER" />
+		<result column="self_storage_goods" property="selfStorageGoods"
+			jdbcType="INTEGER" />
+		<result column="store_audit" property="storeAudit" jdbcType="INTEGER" />
+		<result column="week_circle" property="weekCircle" jdbcType="INTEGER" />
+		<result column="week_complaint" property="weekComplaint"
+			jdbcType="INTEGER" />
+		<result column="week_delivery" property="weekDelivery"
+			jdbcType="INTEGER" />
+		<result column="week_goods" property="weekGoods" jdbcType="INTEGER" />
+		<result column="week_goods_group" property="weekGoodsGroup"
+			jdbcType="INTEGER" />
+		<result column="week_information" property="weekInformation"
+			jdbcType="INTEGER" />
+		<result column="week_invitation" property="weekInvitation"
+			jdbcType="INTEGER" />
+		<result column="week_life_group" property="weekLifeGroup"
+			jdbcType="INTEGER" />
+		<result column="week_live_user" property="weekLiveUser"
+			jdbcType="INTEGER" />
+		<result column="week_order" property="weekOrder" jdbcType="INTEGER" />
+		<result column="week_store" property="weekStore" jdbcType="INTEGER" />
+		<result column="week_user" property="weekUser" jdbcType="INTEGER" />
+		<result column="week_ztc" property="weekZtc" jdbcType="INTEGER" />
+		<result column="ztc_audit_count" property="ztcAuditCount"
+			jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.store.bo.StoreStatBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, all_commission_amount, all_goods,
+		all_payoff_amount,
+		all_payoff_amount_reality, all_sale_amount, all_store, all_user, all_user_balance,
+		delivery_audit_count, goods_audit, information_audit_count, next_time,
+		not_grouplife_refund,
+		not_payoff_num, not_refund, order_amount, self_activity_goods, self_all_order,
+		self_free_goods,
+		self_goods, self_goods_consult, self_group_goods, self_group_life,
+		self_grouplife_refund,
+		self_order_evaluate, self_order_pay, self_order_shipping, self_return_apply,
+		self_storage_goods,
+		store_audit, week_circle, week_complaint, week_delivery, week_goods,
+		week_goods_group,
+		week_information, week_invitation, week_life_group, week_live_user, week_order,
+		week_store,
+		week_user, week_ztc, ztc_audit_count
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.store.model.StoreStatExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_store_stat
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_store_stat
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_store_stat
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.store.model.StoreStatExample">
+		delete from shop_store_stat
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.store.model.StoreStat"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_store_stat (id, add_time, delete_status,
+		all_commission_amount, all_goods, all_payoff_amount,
+		all_payoff_amount_reality, all_sale_amount,
+		all_store, all_user, all_user_balance,
+		delivery_audit_count, goods_audit, information_audit_count,
+		next_time, not_grouplife_refund, not_payoff_num,
+		not_refund, order_amount, self_activity_goods,
+		self_all_order, self_free_goods, self_goods,
+		self_goods_consult, self_group_goods, self_group_life,
+		self_grouplife_refund, self_order_evaluate,
+		self_order_pay, self_order_shipping, self_return_apply,
+		self_storage_goods, store_audit, week_circle,
+		week_complaint, week_delivery, week_goods,
+		week_goods_group, week_information, week_invitation,
+		week_life_group, week_live_user, week_order,
+		week_store, week_user, week_ztc,
+		ztc_audit_count)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{allCommissionAmount,jdbcType=INTEGER}, #{allGoods,jdbcType=INTEGER}, #{allPayoffAmount,jdbcType=INTEGER},
+		#{allPayoffAmountReality,jdbcType=INTEGER},
+		#{allSaleAmount,jdbcType=INTEGER},
+		#{allStore,jdbcType=INTEGER}, #{allUser,jdbcType=INTEGER}, #{allUserBalance,jdbcType=DECIMAL},
+		#{deliveryAuditCount,jdbcType=INTEGER},
+		#{goodsAudit,jdbcType=INTEGER},
+		#{informationAuditCount,jdbcType=INTEGER},
+		#{nextTime,jdbcType=TIMESTAMP},
+		#{notGrouplifeRefund,jdbcType=INTEGER},
+		#{notPayoffNum,jdbcType=INTEGER},
+		#{notRefund,jdbcType=INTEGER}, #{orderAmount,jdbcType=DECIMAL},
+		#{selfActivityGoods,jdbcType=INTEGER},
+		#{selfAllOrder,jdbcType=INTEGER}, #{selfFreeGoods,jdbcType=INTEGER},
+		#{selfGoods,jdbcType=INTEGER},
+		#{selfGoodsConsult,jdbcType=INTEGER}, #{selfGroupGoods,jdbcType=INTEGER},
+		#{selfGroupLife,jdbcType=INTEGER},
+		#{selfGrouplifeRefund,jdbcType=INTEGER},
+		#{selfOrderEvaluate,jdbcType=INTEGER},
+		#{selfOrderPay,jdbcType=INTEGER},
+		#{selfOrderShipping,jdbcType=INTEGER},
+		#{selfReturnApply,jdbcType=INTEGER},
+		#{selfStorageGoods,jdbcType=INTEGER}, #{storeAudit,jdbcType=INTEGER},
+		#{weekCircle,jdbcType=INTEGER},
+		#{weekComplaint,jdbcType=INTEGER}, #{weekDelivery,jdbcType=INTEGER}, #{weekGoods,jdbcType=INTEGER},
+		#{weekGoodsGroup,jdbcType=INTEGER},
+		#{weekInformation,jdbcType=INTEGER},
+		#{weekInvitation,jdbcType=INTEGER},
+		#{weekLifeGroup,jdbcType=INTEGER}, #{weekLiveUser,jdbcType=INTEGER}, #{weekOrder,jdbcType=INTEGER},
+		#{weekStore,jdbcType=INTEGER}, #{weekUser,jdbcType=INTEGER},
+		#{weekZtc,jdbcType=INTEGER},
+		#{ztcAuditCount,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.store.model.StoreStat"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_store_stat
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="allCommissionAmount != null">
+				all_commission_amount,
+			</if>
+			<if test="allGoods != null">
+				all_goods,
+			</if>
+			<if test="allPayoffAmount != null">
+				all_payoff_amount,
+			</if>
+			<if test="allPayoffAmountReality != null">
+				all_payoff_amount_reality,
+			</if>
+			<if test="allSaleAmount != null">
+				all_sale_amount,
+			</if>
+			<if test="allStore != null">
+				all_store,
+			</if>
+			<if test="allUser != null">
+				all_user,
+			</if>
+			<if test="allUserBalance != null">
+				all_user_balance,
+			</if>
+			<if test="deliveryAuditCount != null">
+				delivery_audit_count,
+			</if>
+			<if test="goodsAudit != null">
+				goods_audit,
+			</if>
+			<if test="informationAuditCount != null">
+				information_audit_count,
+			</if>
+			<if test="nextTime != null">
+				next_time,
+			</if>
+			<if test="notGrouplifeRefund != null">
+				not_grouplife_refund,
+			</if>
+			<if test="notPayoffNum != null">
+				not_payoff_num,
+			</if>
+			<if test="notRefund != null">
+				not_refund,
+			</if>
+			<if test="orderAmount != null">
+				order_amount,
+			</if>
+			<if test="selfActivityGoods != null">
+				self_activity_goods,
+			</if>
+			<if test="selfAllOrder != null">
+				self_all_order,
+			</if>
+			<if test="selfFreeGoods != null">
+				self_free_goods,
+			</if>
+			<if test="selfGoods != null">
+				self_goods,
+			</if>
+			<if test="selfGoodsConsult != null">
+				self_goods_consult,
+			</if>
+			<if test="selfGroupGoods != null">
+				self_group_goods,
+			</if>
+			<if test="selfGroupLife != null">
+				self_group_life,
+			</if>
+			<if test="selfGrouplifeRefund != null">
+				self_grouplife_refund,
+			</if>
+			<if test="selfOrderEvaluate != null">
+				self_order_evaluate,
+			</if>
+			<if test="selfOrderPay != null">
+				self_order_pay,
+			</if>
+			<if test="selfOrderShipping != null">
+				self_order_shipping,
+			</if>
+			<if test="selfReturnApply != null">
+				self_return_apply,
+			</if>
+			<if test="selfStorageGoods != null">
+				self_storage_goods,
+			</if>
+			<if test="storeAudit != null">
+				store_audit,
+			</if>
+			<if test="weekCircle != null">
+				week_circle,
+			</if>
+			<if test="weekComplaint != null">
+				week_complaint,
+			</if>
+			<if test="weekDelivery != null">
+				week_delivery,
+			</if>
+			<if test="weekGoods != null">
+				week_goods,
+			</if>
+			<if test="weekGoodsGroup != null">
+				week_goods_group,
+			</if>
+			<if test="weekInformation != null">
+				week_information,
+			</if>
+			<if test="weekInvitation != null">
+				week_invitation,
+			</if>
+			<if test="weekLifeGroup != null">
+				week_life_group,
+			</if>
+			<if test="weekLiveUser != null">
+				week_live_user,
+			</if>
+			<if test="weekOrder != null">
+				week_order,
+			</if>
+			<if test="weekStore != null">
+				week_store,
+			</if>
+			<if test="weekUser != null">
+				week_user,
+			</if>
+			<if test="weekZtc != null">
+				week_ztc,
+			</if>
+			<if test="ztcAuditCount != null">
+				ztc_audit_count,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="allCommissionAmount != null">
+				#{allCommissionAmount,jdbcType=INTEGER},
+			</if>
+			<if test="allGoods != null">
+				#{allGoods,jdbcType=INTEGER},
+			</if>
+			<if test="allPayoffAmount != null">
+				#{allPayoffAmount,jdbcType=INTEGER},
+			</if>
+			<if test="allPayoffAmountReality != null">
+				#{allPayoffAmountReality,jdbcType=INTEGER},
+			</if>
+			<if test="allSaleAmount != null">
+				#{allSaleAmount,jdbcType=INTEGER},
+			</if>
+			<if test="allStore != null">
+				#{allStore,jdbcType=INTEGER},
+			</if>
+			<if test="allUser != null">
+				#{allUser,jdbcType=INTEGER},
+			</if>
+			<if test="allUserBalance != null">
+				#{allUserBalance,jdbcType=DECIMAL},
+			</if>
+			<if test="deliveryAuditCount != null">
+				#{deliveryAuditCount,jdbcType=INTEGER},
+			</if>
+			<if test="goodsAudit != null">
+				#{goodsAudit,jdbcType=INTEGER},
+			</if>
+			<if test="informationAuditCount != null">
+				#{informationAuditCount,jdbcType=INTEGER},
+			</if>
+			<if test="nextTime != null">
+				#{nextTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="notGrouplifeRefund != null">
+				#{notGrouplifeRefund,jdbcType=INTEGER},
+			</if>
+			<if test="notPayoffNum != null">
+				#{notPayoffNum,jdbcType=INTEGER},
+			</if>
+			<if test="notRefund != null">
+				#{notRefund,jdbcType=INTEGER},
+			</if>
+			<if test="orderAmount != null">
+				#{orderAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="selfActivityGoods != null">
+				#{selfActivityGoods,jdbcType=INTEGER},
+			</if>
+			<if test="selfAllOrder != null">
+				#{selfAllOrder,jdbcType=INTEGER},
+			</if>
+			<if test="selfFreeGoods != null">
+				#{selfFreeGoods,jdbcType=INTEGER},
+			</if>
+			<if test="selfGoods != null">
+				#{selfGoods,jdbcType=INTEGER},
+			</if>
+			<if test="selfGoodsConsult != null">
+				#{selfGoodsConsult,jdbcType=INTEGER},
+			</if>
+			<if test="selfGroupGoods != null">
+				#{selfGroupGoods,jdbcType=INTEGER},
+			</if>
+			<if test="selfGroupLife != null">
+				#{selfGroupLife,jdbcType=INTEGER},
+			</if>
+			<if test="selfGrouplifeRefund != null">
+				#{selfGrouplifeRefund,jdbcType=INTEGER},
+			</if>
+			<if test="selfOrderEvaluate != null">
+				#{selfOrderEvaluate,jdbcType=INTEGER},
+			</if>
+			<if test="selfOrderPay != null">
+				#{selfOrderPay,jdbcType=INTEGER},
+			</if>
+			<if test="selfOrderShipping != null">
+				#{selfOrderShipping,jdbcType=INTEGER},
+			</if>
+			<if test="selfReturnApply != null">
+				#{selfReturnApply,jdbcType=INTEGER},
+			</if>
+			<if test="selfStorageGoods != null">
+				#{selfStorageGoods,jdbcType=INTEGER},
+			</if>
+			<if test="storeAudit != null">
+				#{storeAudit,jdbcType=INTEGER},
+			</if>
+			<if test="weekCircle != null">
+				#{weekCircle,jdbcType=INTEGER},
+			</if>
+			<if test="weekComplaint != null">
+				#{weekComplaint,jdbcType=INTEGER},
+			</if>
+			<if test="weekDelivery != null">
+				#{weekDelivery,jdbcType=INTEGER},
+			</if>
+			<if test="weekGoods != null">
+				#{weekGoods,jdbcType=INTEGER},
+			</if>
+			<if test="weekGoodsGroup != null">
+				#{weekGoodsGroup,jdbcType=INTEGER},
+			</if>
+			<if test="weekInformation != null">
+				#{weekInformation,jdbcType=INTEGER},
+			</if>
+			<if test="weekInvitation != null">
+				#{weekInvitation,jdbcType=INTEGER},
+			</if>
+			<if test="weekLifeGroup != null">
+				#{weekLifeGroup,jdbcType=INTEGER},
+			</if>
+			<if test="weekLiveUser != null">
+				#{weekLiveUser,jdbcType=INTEGER},
+			</if>
+			<if test="weekOrder != null">
+				#{weekOrder,jdbcType=INTEGER},
+			</if>
+			<if test="weekStore != null">
+				#{weekStore,jdbcType=INTEGER},
+			</if>
+			<if test="weekUser != null">
+				#{weekUser,jdbcType=INTEGER},
+			</if>
+			<if test="weekZtc != null">
+				#{weekZtc,jdbcType=INTEGER},
+			</if>
+			<if test="ztcAuditCount != null">
+				#{ztcAuditCount,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.store.model.StoreStatExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_store_stat
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_store_stat
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.allCommissionAmount != null">
+				all_commission_amount =
+				#{record.allCommissionAmount,jdbcType=INTEGER},
+			</if>
+			<if test="record.allGoods != null">
+				all_goods = #{record.allGoods,jdbcType=INTEGER},
+			</if>
+			<if test="record.allPayoffAmount != null">
+				all_payoff_amount = #{record.allPayoffAmount,jdbcType=INTEGER},
+			</if>
+			<if test="record.allPayoffAmountReality != null">
+				all_payoff_amount_reality =
+				#{record.allPayoffAmountReality,jdbcType=INTEGER},
+			</if>
+			<if test="record.allSaleAmount != null">
+				all_sale_amount = #{record.allSaleAmount,jdbcType=INTEGER},
+			</if>
+			<if test="record.allStore != null">
+				all_store = #{record.allStore,jdbcType=INTEGER},
+			</if>
+			<if test="record.allUser != null">
+				all_user = #{record.allUser,jdbcType=INTEGER},
+			</if>
+			<if test="record.allUserBalance != null">
+				all_user_balance = #{record.allUserBalance,jdbcType=DECIMAL},
+			</if>
+			<if test="record.deliveryAuditCount != null">
+				delivery_audit_count = #{record.deliveryAuditCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsAudit != null">
+				goods_audit = #{record.goodsAudit,jdbcType=INTEGER},
+			</if>
+			<if test="record.informationAuditCount != null">
+				information_audit_count =
+				#{record.informationAuditCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.nextTime != null">
+				next_time = #{record.nextTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.notGrouplifeRefund != null">
+				not_grouplife_refund = #{record.notGrouplifeRefund,jdbcType=INTEGER},
+			</if>
+			<if test="record.notPayoffNum != null">
+				not_payoff_num = #{record.notPayoffNum,jdbcType=INTEGER},
+			</if>
+			<if test="record.notRefund != null">
+				not_refund = #{record.notRefund,jdbcType=INTEGER},
+			</if>
+			<if test="record.orderAmount != null">
+				order_amount = #{record.orderAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.selfActivityGoods != null">
+				self_activity_goods = #{record.selfActivityGoods,jdbcType=INTEGER},
+			</if>
+			<if test="record.selfAllOrder != null">
+				self_all_order = #{record.selfAllOrder,jdbcType=INTEGER},
+			</if>
+			<if test="record.selfFreeGoods != null">
+				self_free_goods = #{record.selfFreeGoods,jdbcType=INTEGER},
+			</if>
+			<if test="record.selfGoods != null">
+				self_goods = #{record.selfGoods,jdbcType=INTEGER},
+			</if>
+			<if test="record.selfGoodsConsult != null">
+				self_goods_consult = #{record.selfGoodsConsult,jdbcType=INTEGER},
+			</if>
+			<if test="record.selfGroupGoods != null">
+				self_group_goods = #{record.selfGroupGoods,jdbcType=INTEGER},
+			</if>
+			<if test="record.selfGroupLife != null">
+				self_group_life = #{record.selfGroupLife,jdbcType=INTEGER},
+			</if>
+			<if test="record.selfGrouplifeRefund != null">
+				self_grouplife_refund =
+				#{record.selfGrouplifeRefund,jdbcType=INTEGER},
+			</if>
+			<if test="record.selfOrderEvaluate != null">
+				self_order_evaluate = #{record.selfOrderEvaluate,jdbcType=INTEGER},
+			</if>
+			<if test="record.selfOrderPay != null">
+				self_order_pay = #{record.selfOrderPay,jdbcType=INTEGER},
+			</if>
+			<if test="record.selfOrderShipping != null">
+				self_order_shipping = #{record.selfOrderShipping,jdbcType=INTEGER},
+			</if>
+			<if test="record.selfReturnApply != null">
+				self_return_apply = #{record.selfReturnApply,jdbcType=INTEGER},
+			</if>
+			<if test="record.selfStorageGoods != null">
+				self_storage_goods = #{record.selfStorageGoods,jdbcType=INTEGER},
+			</if>
+			<if test="record.storeAudit != null">
+				store_audit = #{record.storeAudit,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekCircle != null">
+				week_circle = #{record.weekCircle,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekComplaint != null">
+				week_complaint = #{record.weekComplaint,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekDelivery != null">
+				week_delivery = #{record.weekDelivery,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekGoods != null">
+				week_goods = #{record.weekGoods,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekGoodsGroup != null">
+				week_goods_group = #{record.weekGoodsGroup,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekInformation != null">
+				week_information = #{record.weekInformation,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekInvitation != null">
+				week_invitation = #{record.weekInvitation,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekLifeGroup != null">
+				week_life_group = #{record.weekLifeGroup,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekLiveUser != null">
+				week_live_user = #{record.weekLiveUser,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekOrder != null">
+				week_order = #{record.weekOrder,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekStore != null">
+				week_store = #{record.weekStore,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekUser != null">
+				week_user = #{record.weekUser,jdbcType=INTEGER},
+			</if>
+			<if test="record.weekZtc != null">
+				week_ztc = #{record.weekZtc,jdbcType=INTEGER},
+			</if>
+			<if test="record.ztcAuditCount != null">
+				ztc_audit_count = #{record.ztcAuditCount,jdbcType=INTEGER},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_store_stat
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		all_commission_amount = #{record.allCommissionAmount,jdbcType=INTEGER},
+		all_goods = #{record.allGoods,jdbcType=INTEGER},
+		all_payoff_amount = #{record.allPayoffAmount,jdbcType=INTEGER},
+		all_payoff_amount_reality =
+		#{record.allPayoffAmountReality,jdbcType=INTEGER},
+		all_sale_amount = #{record.allSaleAmount,jdbcType=INTEGER},
+		all_store = #{record.allStore,jdbcType=INTEGER},
+		all_user = #{record.allUser,jdbcType=INTEGER},
+		all_user_balance = #{record.allUserBalance,jdbcType=DECIMAL},
+		delivery_audit_count = #{record.deliveryAuditCount,jdbcType=INTEGER},
+		goods_audit = #{record.goodsAudit,jdbcType=INTEGER},
+		information_audit_count = #{record.informationAuditCount,jdbcType=INTEGER},
+		next_time = #{record.nextTime,jdbcType=TIMESTAMP},
+		not_grouplife_refund = #{record.notGrouplifeRefund,jdbcType=INTEGER},
+		not_payoff_num = #{record.notPayoffNum,jdbcType=INTEGER},
+		not_refund = #{record.notRefund,jdbcType=INTEGER},
+		order_amount = #{record.orderAmount,jdbcType=DECIMAL},
+		self_activity_goods = #{record.selfActivityGoods,jdbcType=INTEGER},
+		self_all_order = #{record.selfAllOrder,jdbcType=INTEGER},
+		self_free_goods = #{record.selfFreeGoods,jdbcType=INTEGER},
+		self_goods = #{record.selfGoods,jdbcType=INTEGER},
+		self_goods_consult = #{record.selfGoodsConsult,jdbcType=INTEGER},
+		self_group_goods = #{record.selfGroupGoods,jdbcType=INTEGER},
+		self_group_life = #{record.selfGroupLife,jdbcType=INTEGER},
+		self_grouplife_refund = #{record.selfGrouplifeRefund,jdbcType=INTEGER},
+		self_order_evaluate = #{record.selfOrderEvaluate,jdbcType=INTEGER},
+		self_order_pay = #{record.selfOrderPay,jdbcType=INTEGER},
+		self_order_shipping = #{record.selfOrderShipping,jdbcType=INTEGER},
+		self_return_apply = #{record.selfReturnApply,jdbcType=INTEGER},
+		self_storage_goods = #{record.selfStorageGoods,jdbcType=INTEGER},
+		store_audit = #{record.storeAudit,jdbcType=INTEGER},
+		week_circle = #{record.weekCircle,jdbcType=INTEGER},
+		week_complaint = #{record.weekComplaint,jdbcType=INTEGER},
+		week_delivery = #{record.weekDelivery,jdbcType=INTEGER},
+		week_goods = #{record.weekGoods,jdbcType=INTEGER},
+		week_goods_group = #{record.weekGoodsGroup,jdbcType=INTEGER},
+		week_information = #{record.weekInformation,jdbcType=INTEGER},
+		week_invitation = #{record.weekInvitation,jdbcType=INTEGER},
+		week_life_group = #{record.weekLifeGroup,jdbcType=INTEGER},
+		week_live_user = #{record.weekLiveUser,jdbcType=INTEGER},
+		week_order = #{record.weekOrder,jdbcType=INTEGER},
+		week_store = #{record.weekStore,jdbcType=INTEGER},
+		week_user = #{record.weekUser,jdbcType=INTEGER},
+		week_ztc = #{record.weekZtc,jdbcType=INTEGER},
+		ztc_audit_count = #{record.ztcAuditCount,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.store.model.StoreStat">
+		update shop_store_stat
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="allCommissionAmount != null">
+				all_commission_amount = #{allCommissionAmount,jdbcType=INTEGER},
+			</if>
+			<if test="allGoods != null">
+				all_goods = #{allGoods,jdbcType=INTEGER},
+			</if>
+			<if test="allPayoffAmount != null">
+				all_payoff_amount = #{allPayoffAmount,jdbcType=INTEGER},
+			</if>
+			<if test="allPayoffAmountReality != null">
+				all_payoff_amount_reality =
+				#{allPayoffAmountReality,jdbcType=INTEGER},
+			</if>
+			<if test="allSaleAmount != null">
+				all_sale_amount = #{allSaleAmount,jdbcType=INTEGER},
+			</if>
+			<if test="allStore != null">
+				all_store = #{allStore,jdbcType=INTEGER},
+			</if>
+			<if test="allUser != null">
+				all_user = #{allUser,jdbcType=INTEGER},
+			</if>
+			<if test="allUserBalance != null">
+				all_user_balance = #{allUserBalance,jdbcType=DECIMAL},
+			</if>
+			<if test="deliveryAuditCount != null">
+				delivery_audit_count = #{deliveryAuditCount,jdbcType=INTEGER},
+			</if>
+			<if test="goodsAudit != null">
+				goods_audit = #{goodsAudit,jdbcType=INTEGER},
+			</if>
+			<if test="informationAuditCount != null">
+				information_audit_count = #{informationAuditCount,jdbcType=INTEGER},
+			</if>
+			<if test="nextTime != null">
+				next_time = #{nextTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="notGrouplifeRefund != null">
+				not_grouplife_refund = #{notGrouplifeRefund,jdbcType=INTEGER},
+			</if>
+			<if test="notPayoffNum != null">
+				not_payoff_num = #{notPayoffNum,jdbcType=INTEGER},
+			</if>
+			<if test="notRefund != null">
+				not_refund = #{notRefund,jdbcType=INTEGER},
+			</if>
+			<if test="orderAmount != null">
+				order_amount = #{orderAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="selfActivityGoods != null">
+				self_activity_goods = #{selfActivityGoods,jdbcType=INTEGER},
+			</if>
+			<if test="selfAllOrder != null">
+				self_all_order = #{selfAllOrder,jdbcType=INTEGER},
+			</if>
+			<if test="selfFreeGoods != null">
+				self_free_goods = #{selfFreeGoods,jdbcType=INTEGER},
+			</if>
+			<if test="selfGoods != null">
+				self_goods = #{selfGoods,jdbcType=INTEGER},
+			</if>
+			<if test="selfGoodsConsult != null">
+				self_goods_consult = #{selfGoodsConsult,jdbcType=INTEGER},
+			</if>
+			<if test="selfGroupGoods != null">
+				self_group_goods = #{selfGroupGoods,jdbcType=INTEGER},
+			</if>
+			<if test="selfGroupLife != null">
+				self_group_life = #{selfGroupLife,jdbcType=INTEGER},
+			</if>
+			<if test="selfGrouplifeRefund != null">
+				self_grouplife_refund = #{selfGrouplifeRefund,jdbcType=INTEGER},
+			</if>
+			<if test="selfOrderEvaluate != null">
+				self_order_evaluate = #{selfOrderEvaluate,jdbcType=INTEGER},
+			</if>
+			<if test="selfOrderPay != null">
+				self_order_pay = #{selfOrderPay,jdbcType=INTEGER},
+			</if>
+			<if test="selfOrderShipping != null">
+				self_order_shipping = #{selfOrderShipping,jdbcType=INTEGER},
+			</if>
+			<if test="selfReturnApply != null">
+				self_return_apply = #{selfReturnApply,jdbcType=INTEGER},
+			</if>
+			<if test="selfStorageGoods != null">
+				self_storage_goods = #{selfStorageGoods,jdbcType=INTEGER},
+			</if>
+			<if test="storeAudit != null">
+				store_audit = #{storeAudit,jdbcType=INTEGER},
+			</if>
+			<if test="weekCircle != null">
+				week_circle = #{weekCircle,jdbcType=INTEGER},
+			</if>
+			<if test="weekComplaint != null">
+				week_complaint = #{weekComplaint,jdbcType=INTEGER},
+			</if>
+			<if test="weekDelivery != null">
+				week_delivery = #{weekDelivery,jdbcType=INTEGER},
+			</if>
+			<if test="weekGoods != null">
+				week_goods = #{weekGoods,jdbcType=INTEGER},
+			</if>
+			<if test="weekGoodsGroup != null">
+				week_goods_group = #{weekGoodsGroup,jdbcType=INTEGER},
+			</if>
+			<if test="weekInformation != null">
+				week_information = #{weekInformation,jdbcType=INTEGER},
+			</if>
+			<if test="weekInvitation != null">
+				week_invitation = #{weekInvitation,jdbcType=INTEGER},
+			</if>
+			<if test="weekLifeGroup != null">
+				week_life_group = #{weekLifeGroup,jdbcType=INTEGER},
+			</if>
+			<if test="weekLiveUser != null">
+				week_live_user = #{weekLiveUser,jdbcType=INTEGER},
+			</if>
+			<if test="weekOrder != null">
+				week_order = #{weekOrder,jdbcType=INTEGER},
+			</if>
+			<if test="weekStore != null">
+				week_store = #{weekStore,jdbcType=INTEGER},
+			</if>
+			<if test="weekUser != null">
+				week_user = #{weekUser,jdbcType=INTEGER},
+			</if>
+			<if test="weekZtc != null">
+				week_ztc = #{weekZtc,jdbcType=INTEGER},
+			</if>
+			<if test="ztcAuditCount != null">
+				ztc_audit_count = #{ztcAuditCount,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.store.model.StoreStat">
+		update shop_store_stat
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		all_commission_amount = #{allCommissionAmount,jdbcType=INTEGER},
+		all_goods = #{allGoods,jdbcType=INTEGER},
+		all_payoff_amount = #{allPayoffAmount,jdbcType=INTEGER},
+		all_payoff_amount_reality = #{allPayoffAmountReality,jdbcType=INTEGER},
+		all_sale_amount = #{allSaleAmount,jdbcType=INTEGER},
+		all_store = #{allStore,jdbcType=INTEGER},
+		all_user = #{allUser,jdbcType=INTEGER},
+		all_user_balance = #{allUserBalance,jdbcType=DECIMAL},
+		delivery_audit_count = #{deliveryAuditCount,jdbcType=INTEGER},
+		goods_audit = #{goodsAudit,jdbcType=INTEGER},
+		information_audit_count = #{informationAuditCount,jdbcType=INTEGER},
+		next_time = #{nextTime,jdbcType=TIMESTAMP},
+		not_grouplife_refund = #{notGrouplifeRefund,jdbcType=INTEGER},
+		not_payoff_num = #{notPayoffNum,jdbcType=INTEGER},
+		not_refund = #{notRefund,jdbcType=INTEGER},
+		order_amount = #{orderAmount,jdbcType=DECIMAL},
+		self_activity_goods = #{selfActivityGoods,jdbcType=INTEGER},
+		self_all_order = #{selfAllOrder,jdbcType=INTEGER},
+		self_free_goods = #{selfFreeGoods,jdbcType=INTEGER},
+		self_goods = #{selfGoods,jdbcType=INTEGER},
+		self_goods_consult = #{selfGoodsConsult,jdbcType=INTEGER},
+		self_group_goods = #{selfGroupGoods,jdbcType=INTEGER},
+		self_group_life = #{selfGroupLife,jdbcType=INTEGER},
+		self_grouplife_refund = #{selfGrouplifeRefund,jdbcType=INTEGER},
+		self_order_evaluate = #{selfOrderEvaluate,jdbcType=INTEGER},
+		self_order_pay = #{selfOrderPay,jdbcType=INTEGER},
+		self_order_shipping = #{selfOrderShipping,jdbcType=INTEGER},
+		self_return_apply = #{selfReturnApply,jdbcType=INTEGER},
+		self_storage_goods = #{selfStorageGoods,jdbcType=INTEGER},
+		store_audit = #{storeAudit,jdbcType=INTEGER},
+		week_circle = #{weekCircle,jdbcType=INTEGER},
+		week_complaint = #{weekComplaint,jdbcType=INTEGER},
+		week_delivery = #{weekDelivery,jdbcType=INTEGER},
+		week_goods = #{weekGoods,jdbcType=INTEGER},
+		week_goods_group = #{weekGoodsGroup,jdbcType=INTEGER},
+		week_information = #{weekInformation,jdbcType=INTEGER},
+		week_invitation = #{weekInvitation,jdbcType=INTEGER},
+		week_life_group = #{weekLifeGroup,jdbcType=INTEGER},
+		week_live_user = #{weekLiveUser,jdbcType=INTEGER},
+		week_order = #{weekOrder,jdbcType=INTEGER},
+		week_store = #{weekStore,jdbcType=INTEGER},
+		week_user = #{weekUser,jdbcType=INTEGER},
+		week_ztc = #{weekZtc,jdbcType=INTEGER},
+		ztc_audit_count = #{ztcAuditCount,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

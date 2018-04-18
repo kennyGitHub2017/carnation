@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="format-detection" content="telephone=no">
+    	<meta name="format-detection" content="email=no">
+    	<link rel="stylesheet" type="text/css" href="$!webPath/resources/css/common.css"/>    	
+    	<link rel="stylesheet" type="text/css" href="$!webPath/resources/css/act_tmpl.css"/>
+		<script src="$!webPath/resources/js/headInit.js" type="text/javascript"></script>
+	   	<script src="$!webPath/resources/js/base64.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			document.title='$!saleMessage.title';
+			function is_weixin(){
+				var ua = navigator.userAgent.toLowerCase();
+				if(ua.match(/MicroMessenger/i)=="micromessenger") {
+					return true;
+			 	} else {
+					return false;
+				}
+			}
+			function getUrlPar(name) {
+				   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+				   var r = window.location.search.substr(1).match(reg);
+				   if (r!=null) return (r[2]); return null;
+			}
+			function wxlogin(){	
+				//alert("isflag = "+getUrlPar('isflag'));
+				if(is_weixin()&&getUrlPar('isflag')==null){
+					var url=Base64.encode(location.href);
+					var invitationCode=getUrlPar('invitationCode');
+					if(parseInt(invitationCode)==NaN) return;
+					var domain;
+					if(location.href.indexOf("ysysgo.com")>-1){
+						domain="http://mobile.ysysgo.com";
+					}else if(location.href.indexOf("ysysgo.cn")>-1){
+						domain="http://mobile.ysysgo.cn";
+					}
+					//alert(domain+"/user/loginUrl.htm?url='"+url+"'&invitationCode="+invitationCode+"&login=0");
+					location.href=domain+"/user/loginUrl.htm?url='"+url+"'&invitationCode="+invitationCode+"&login=0";
+				}
+			}
+			wxlogin();			
+		</script>
+		<script type="text/javascript" src="$!webPath/resources/js/jquery.min.js" ></script>
+		<script type="text/javascript" src="$!webPath/resources/js/common.js" ></script>
+		<script type="text/javascript" src="$!webPath/resources/js/tools.js" ></script>
+	</head>
+	<body>
+	<style>
+	html,body{width:100%;}
+	.top,.bottom{width:100%;font-size:0}
+	.top img,.bottom img{width:100%;vertical-align:top}
+	.goodsList{font-size:12px}
+	</style>
+		$!template.content
+		<div class="page">
+			<div class="top">
+				<img src="$hotSale.headImage" />
+			</div>			
+			<div class="goodsList" id="tmpl_container">
+				
+			</div>
+			<!-- <p class="loadingMore">正在加载更多</p>
+			<p class="nomore"><span class="left"></span>别扯了，快掉了<span class="right"></span></p> -->
+ 			<div class="bottom">
+				<img src="$hotSale.footImage" />
+			</div>
+		</div>
+		<div class="floatbtn">
+			<a href="javascript:;" class="share">分享</a>
+			<a href="javascript:;" class="top">顶部</a>
+		</div>
+		<input type="hidden" id="actId" value="$saleMessage.actId" />
+		<input type="hidden" id="requestUrl" value="$!webPath/load_act_goods.htm" />
+		<input type="hidden" id="zimg" value="$!webPath/resources/img/1px.png" />
+		<!-- 微信分享 -->
+		<script src="$!webPath/resources/js/jweixin-1.0.0.js" type="text/javascript"></script>
+		<script>
+		    wx.config({
+		        debug: false,
+		        appId: '${appId}',
+		        timestamp: '${timestamp}',
+		        nonceStr: '${nonceStr}',
+		        signature: '${signature}',
+		        jsApiList: [
+		         'checkJsApi',
+		          'onMenuShareTimeline',
+		          'onMenuShareAppMessage',
+		        ]
+		    });
+    	</script>
+		<script>
+		    wx.ready(function () {
+				    wx.onMenuShareTimeline(shareObj);
+				        wx.onMenuShareAppMessage(shareObj);
+		    });
+		    wx.error(function (res) {
+		    	//alert('xx' + res);
+		    });
+		</script>
+    	
+	   	<script type="text/javascript">
+		    var isWeixin=is_weixin();
+	        var isApp=fn.getQueryPar("ysysgo_app");
+	        var isAndroid=fn.mobileType.isAndroid;
+	        var isIos=fn.mobileType.isIos;
+	        var invitationCode=getUrlPar('invitationCode');
+	        function delQueStr(url, ref) //删除参数值
+	        {
+	            var str = "";
+
+	            if(url.indexOf('?') != -1){
+	            	str = url.substr(url.indexOf('?') + 1);
+	            }else{
+	            	return url;
+	            }	                
+	            var arr = "";
+	            var returnurl = "";
+	            var setparam = "";
+	            if (str.indexOf('&') != -1) {
+	                arr = str.split('&');
+	                for (i in arr) {
+	                    if (arr[i].split('=')[0] != ref) {
+	                        returnurl = returnurl + arr[i].split('=')[0] + "=" + arr[i].split('=')[1] + "&";
+	                    }
+	                }
+	                return url.substr(0, url.indexOf('?')) + "?" + returnurl.substr(0, returnurl.length - 1);
+	            }
+	            else {
+	                arr = str.split('=');
+	                if (arr[0] == ref)
+	                    return url.substr(0, url.indexOf('?'));
+	                else
+	                    return url;
+	            }
+	        }
+	       	var shareObj={
+	   	        	title:'$!saleMessage.shareTitle',
+	   	        	desc:'$!saleMessage.shareContent',
+	   	        	imgUrl:'$!saleMessage.sharePic',
+	   	        	link:delQueStr(location.href,"ysysgo_app"),
+	   	        	success:function(){
+	   	        		
+	   	        	},
+	   	        	cancel:function(){
+	   	        		
+	   	        	}
+	   	        }
+	        
+	       
+	   	
+	        function img_preLoad(obj){	        	
+	        	var imgObj=obj,count=imgObj.length;	        	
+	        	if(count!=0){
+	        		imgObj.each(function(){
+	        				if(!$(this).attr("data-src")) return;
+							var img=document.createElement("img");
+							var dataSrc=$(this).attr("data-src");							
+							if(img.complete){						
+								$(this).attr("src",dataSrc).removeAttr("data-src");
+							}else{						
+								img.onload=function(){							
+									$(this).attr("src",dataSrc).removeAttr("data-src");							
+								}
+							}
+							img.src=dataSrc;		
+	        		});        	
+	        	}	        	
+	        }
+	        
+	        
+	        $(".floatbtn .top").on("touchend",function(){
+	        	document.documentElement.scrollTop=0;
+	        	document.body.scrollTop=0;
+	        });
+	        
+	        $(".share").on('touchstart',function(){
+	        	if(isApp=='true'){
+	        		if(isAndroid){
+	        			java.requestCommonShare(shareObj.title,shareObj.desc,shareObj.imgUrl,shareObj.link);
+	        		}else if(isIos){
+	        			requestCommonShare(shareObj);
+	        		}
+	        	}
+	        });
+	        
+	        function is_weixin(){
+				var ua = navigator.userAgent.toLowerCase();
+				if(ua.match(/MicroMessenger/i)=="micromessenger") {
+					return true;
+			 	} else {
+					return false;
+				}
+			}	        
+	       
+	        function buy(id){
+	        	if(isApp=='true'){
+	        		if(isAndroid){
+	        			java.requestProDetails(id,"1","");
+	        		}else if(isIos){
+	        			requestProDetails(id,"1","");
+	        		}
+	        	}else if(isWeixin){
+	        		location.href="$!webPath/goods_"+id+".htm";
+	        	}else{
+	        		alert('请在云尚app或微信内抢购');
+	        	}        	
+	        }
+	        function buyJp(id,url){
+	        	if(isApp='true'){
+	        		if(isAndroid){
+	        			java.requestProDetails(id,"3",url);
+	        		}else if(isIos){
+	        			requestProDetails(id,"3",url);
+	        		}
+	        	}else{
+	        		location.href=url;
+	        	}
+	        }
+	        
+	        
+	        function formatTemplate(dta, tmpl) {  
+			    var format = {  
+			        name: function(x) {  
+			            return x  
+			        }  
+			    };  
+			    return tmpl.replace(/{(\w+)}/g, function(m1, m2) {			    	
+			        if (!m2) return "";  
+			        return (format && format[m2]) ? format[m2](dta[m2]) : dta[m2];  
+			    });  
+			}
+	        
+	        /* $(document).ready(function(){
+	        	if(isApp!='true'){
+	        		$(".share").hide();
+	        	}	        	
+	        	var html = $('script[type="text/template"]').html();  
+				
+				var actId=$saleMessage.actId;
+	        	$.ajax({
+	                type: "post",
+	                url: "$!webPath/load_act_goods.htm",
+	                data: {actId:actId},
+	                dataType: "json",
+	                anysc:false,
+	                success: function (data) {
+	                    if (data!=undefined && data.result=="success"&&data.goods.length>0) {
+	                    	var dta=data.goods;
+	                        var pageSize=10;
+	                        var pageNum=Math.ceil(dta.length/pageSize);
+	                        var nowPage=1;
+	                        appendData();
+	            	        function appendData(){
+	            	        	var arr = [];
+	            	        	var max=Math.min(dta.length,nowPage*pageSize);
+	            	        	if(pageNum<nowPage){
+	            	        		$(".loadingMore").hide();
+	            	        		$(".nomore").show();
+	            	        		window.onscroll=null;
+	            	        	}else{
+	            	        		for(var i=(nowPage-1)*pageSize;i<max;i++){
+		            	        		arr.push(formatTemplate(dta[i], html));
+		            	        	}	            	        	
+	            	    			$('#tmpl_container').append(arr.join(''));		            	        	
+	            	        	}
+	            	        	nowPage++;
+	            				setTimeout(function(){
+	            					img_preLoad($(".preload_img"));
+	            				},100);	            				
+	            	        }
+	            	        
+	            	   		var processor = {  
+	            				    timeoutId: null, 		 
+	            				    performProcessing: function(){	            				    	
+	            				    	var totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());
+	            			            if ($(document).height()-$(".bottom").height() <= totalheight) {	 
+            			                    	appendData();	            			              
+	            			            }
+	            				    },  		 
+	            				    process: function(){
+	            				        clearTimeout(this.timeoutId);  
+	            				        this.timeoutId  = setTimeout(function(){ 
+	            				            processor.performProcessing();  
+	            				        }, 100);  
+	            				    }  
+            				}; 
+	            		   	
+            		        window.onscroll=processor.process;
+	                        
+	                    }
+	                },
+	                error: function (XMLHttpRequest, textStatus, errorThrown) {
+	                    alert("服务器繁忙，请稍后..");
+	                    return;
+	                }
+	            });
+	        }); */
+	    </script>
+	</body>
+</html>

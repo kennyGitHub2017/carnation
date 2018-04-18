@@ -1,0 +1,28 @@
+<ul class="floor_sear_pro" style=" height:126px;">
+#foreach($obj in $objs)
+  #if($!obj.vo_main_photo_url)              
+   #set($img="$!{obj.vo_main_photo_url}")
+    #else
+    #set($img="$!{config.goodsImage}")
+    #end
+  
+  <li> <a href="javascript:void(0);" onclick="goods_list_set(this);" idxImg="$!obj.goodsIndexPhotoPath" 
+  img_uri="$!img" price="$!obj.vo_store_price" is_juanpi="$obj.vo_is_juanpi"
+  goods_name="$!obj.vo_title" 
+  #if($obj.vo_is_juanpi==1)
+  goods_id="jp_$!obj.vo_id"
+  #else
+  goods_id="$!obj.vo_id"
+  #end 
+  class="floor_sear_a">
+  
+    <span  class="floor_sear_img"> 
+ <img src="$!img" width="70" height="70" /> </span> <span class="floor_sear_name">$!obj.vo_title</span> </a> 
+  </li>
+#end  
+</ul>
+<div class="floor_page">
+
+<span>$!gotoPageFormHTML</span>
+
+</div>

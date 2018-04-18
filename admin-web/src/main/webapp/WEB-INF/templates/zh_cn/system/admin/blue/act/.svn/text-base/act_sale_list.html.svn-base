@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>热销活动管理</title>
+	
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	
+	<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+	
+	<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+	<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+	<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+	<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+	<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+	<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js" ></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/plugins/jquery.validatebox.js"></script>
+	<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+	<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+	<style type="text/css">
+		.calendar{padding: 0px;margin: 0px}
+		.easyui-datagrid tr{text-align: center;} 
+	</style>
+</head>
+<body>
+	<div class="cont">
+		<h3 class="seth">活动管理</h3>
+		 <div class="nav_list">
+			 <ul>
+			  	<li><a href="/admin/hot_sale_list.htm" class="this"><b>所有活动</b></a> </li>
+			 	<li><a href="/admin/hot_sale_add.htm"><b>添加活动</b></a> </li>
+			  </ul>
+		  </div>
+	</div>	
+	
+	<form action="/admin/hot_sale_list.htm" method="post" id="activityForm">
+		  <div style="padding:5px 5px;" >
+					<strong>查询</strong>
+					&nbsp;&nbsp;
+					<input id="startTimeStr" name="strStartTime" value="$!vo.strStartTime" class="easyui-datetimebox" data-options="prompt:'开始时间'" style="width:150px"/>
+					<strong>至</strong>
+					<input id="endTimeStr" name="strEndTime" value="$!vo.strEndTime" class="easyui-datetimebox" data-options="prompt:'结束时间'" style="width:150px"/>
+					&nbsp;&nbsp;					
+					<input id="schemeName" name="hotName" value="$!vo.hotName" class="easyui-textbox" type="text" style="width:100px;" data-options="prompt:'名称'"/>
+					&nbsp;&nbsp;
+	    			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="$(this).closest('form').submit()">查询</a>
+	    			
+	    	</div>
+	    	
+	    		<table id="listData" class="easyui-datagrid" style="width:100%;height:500px"
+			data-options="singleSelect:true,collapsible:true" toolbar="#opButtonsList">
+		<thead>
+			<tr>
+				<th data-options="halign:'center',field:'schemeName',width:120,align:'center'">活动名称</th>
+				<th data-options="halign:'center',field:'bouncedImg',width:120,align:'center'">弹框图片</th>
+				<th data-options="halign:'center',field:'floatboxImg',width:120,align:'center'">浮框图片</th>
+				<th data-options="halign:'center',field:'topImg',width:120,align:'center'">头部图片</th>
+				<th data-options="halign:'center',field:'footerImg',width:120,align:'right'">底部图片</th>
+				<th data-options="halign:'center',field:'getCount',width:190,align:'center'">H5链接</th>
+				<th data-options="halign:'center',field:'startTime',width:125,align:'center'">开始时间</th>
+				<th data-options="halign:'center',field:'endTime',width:125,align:'center'">结束时间</th>
+				<th data-options="halign:'center',field:'createTime',width:125,align:'center'">是否启用</th>
+				<th data-options="halign:'center',field:'currentGetCount',width:125,align:'center'">创建时间</th>
+				<th data-options="halign:'center',field:'operate',width:140,align:'center'">操作</th>
+			</tr>
+		</thead>
+	    <tbody>  
+	    	#foreach($obj in $objs)
+	        <tr>    
+	            <td>$!obj.hotName</td>
+	            
+	            <td><img src="$!{obj.alterPic}" width="50" height="50"></img></td>           
+	            <td><img src="$!{obj.floatPic}" width="104" height="24"></img></td>	            
+	            <td><img src="$!{obj.headImage}" width="104" height="48"></img></td>	 
+	            <td><img src="$!{obj.footImage}" width="104" height="24"></img></td>	
+	            
+	                        
+	            <td>$!{obj.adsUrl}</td> 
+	            
+	            
+	            <td>$!CommUtil.formatLongDate($!obj.startTime)</td>
+	            
+	            <td>$!CommUtil.formatLongDate($!obj.endTime)</td>	
+	            <td>
+	            	#if($obj.isEnabled==1)
+			         <span style="color:green;">启用</span>
+			        #else
+			         <span style="color:red;">停用 </span> 
+			        #end
+		        </td>
+	            <td>$!CommUtil.formatLongDate($!obj.createTime)</td>
+		        <td>
+			        <a href="$!webPath/admin/hot_sale_edit.htm?id=$!obj.id" class="easyui-linkbutton" data-options="iconCls:'icon-edit'">修改</a>
+			        <a href="javascript:void(0)" onclick="if(confirm('确定删除当前活动吗？')) location.href = '/admin/hot_sale_del.htm?id=$!obj.id'" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">删除</a>
+				</td>
+	        </tr>
+	        #end
+	      </tbody>
+	</table>
+	
+	<div class="operate_bar">
+	    <div class="fenye">
+	        <input type="hidden" name="mulitId" id="mulitId" />
+			<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+	        $!gotoPageFormHTML
+	    </div> 
+  	</div>
+	</form>
+	
+</body>
+</html>

@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.AdvertMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.Advert">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="ad_begin_time" property="adBeginTime" jdbcType="DATE" />
+		<result column="ad_click_num" property="adClickNum" jdbcType="INTEGER" />
+		<result column="ad_end_time" property="adEndTime" jdbcType="DATE" />
+		<result column="ad_gold" property="adGold" jdbcType="INTEGER" />
+		<result column="ad_slide_sequence" property="adSlideSequence"
+			jdbcType="INTEGER" />
+		<result column="ad_status" property="adStatus" jdbcType="INTEGER" />
+		<result column="ad_text" property="adText" jdbcType="VARCHAR" />
+		<result column="ad_title" property="adTitle" jdbcType="VARCHAR" />
+		<result column="ad_url" property="adUrl" jdbcType="VARCHAR" />
+		<result column="ad_Type" property="adType" jdbcType="VARCHAR" />
+		<result column="ad_img_path" property="adImgPath" jdbcType="VARCHAR" />
+		<result column="ad_ap_id" property="adApId" jdbcType="BIGINT" />
+		<result column="ad_user_id" property="adUserId" jdbcType="BIGINT" />
+		<result column="bg_color" property="bgColor" jdbcType="VARCHAR" />
+		<result column="area_id" property="areaId" jdbcType="BIGINT" />
+		<result column="nativeType" property="nativeType" jdbcType="INTEGER" />
+	</resultMap>
+	<!-- grey added begin -->
+	<resultMap id="BoResultMap" type="com.sinco.carnation.sns.bo.AdvertBO"
+		extends="BaseResultMap">
+		<result column="ap_title" property="apTitle" jdbcType="VARCHAR" />
+		<result column="ap_type" property="apType" jdbcType="VARCHAR" />
+		<result column="ap_code" property="apCode" jdbcType="VARCHAR" />
+		<result column="ap_status" property="apStatus" jdbcType="INTEGER" />
+		<result column="login_name" property="userName" jdbcType="VARCHAR" />
+		<result column="nowTime" property="nowTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<!-- grey added end -->
+
+	<update id="increaseClickNum" parameterType="Long">
+		update sns_advert
+		set ad_click_num=ad_click_num+1 where id=#{id}
+	</update>
+
+	<select id="findByApCode" resultMap="BoResultMap">
+		select sa.*, ss.id storeId,
+		ss.area_id stroeCity, ogg.id goodsId,
+		ogg.gg_ga_id goodsCity from
+		sns_advert sa
+		left join shop_store ss on ss.id=sa.ad_url and
+		sa.ad_type=5
+		left join o2o_group_goods ogg on ogg.id=sa.ad_url and
+		sa.ad_type=6
+		where sa.delete_status=0 and sa.ad_status=1
+		and sa.ad_ap_id
+		in (select id from sns_adv_pos where delete_status=0 and
+		ap_code=#{apCode})
+	</select>
+
+	<select id="selectBOByExample" resultMap="BoResultMap"
+		parameterType="com.sinco.carnation.sns.model.AdvertExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_advert
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, ad_begin_time, ad_click_num,
+		ad_end_time,
+		ad_gold, ad_slide_sequence,
+		ad_status, ad_text, ad_title,
+		ad_url, ad_type, ad_img_path, ad_ap_id,
+		ad_user_id, bg_color
+	</sql>
+	<!-- grey added begin -->
+	<sql id="Bo_Column_List">
+		sad.id, sad.add_Time, sad.delete_Status, sad.ad_begin_time,
+		sad.ad_click_num,
+		sad.ad_end_time,
+		sad.ad_gold, sad.ad_slide_sequence,
+		sad.ad_status, sad.ad_text, sad.ad_title,
+		sad.ad_url, sad.ad_type,
+		sad.ad_img_path,
+		sad.ad_ap_id, sad.ad_user_id, sad.bg_color,
+		sap.ap_title, sap.ap_type,
+		sap.ap_status, um.login_name,sad.area_id
+	</sql>
+	<sql id="Bo_Column">
+		sad.id, sad.add_Time, sad.delete_Status, sad.ad_begin_time,
+		sad.ad_click_num,
+		sad.ad_end_time,
+		sad.ad_gold, sad.ad_slide_sequence,
+		sad.ad_status, sad.ad_text, sad.ad_title,
+		sad.ad_url, sad.ad_type,
+		sad.ad_img_path,
+		sad.ad_ap_id, sad.ad_user_id, sad.bg_color,
+		sap.ap_title, sap.ap_type,
+		sap.ap_status,
+		sap.ap_code,sad.area_id,nativeType
+	</sql>
+	<!-- grey added end -->
+	<select id="selectCountByAddTime" resultType="int">
+		SELECT COUNT(a.id)
+		FROM sns_adv_pos p, sns_advert a WHERE p.id = a.ad_ap_id
+		AND p.ap_code
+		= #{sadCode} AND p.delete_Status = 0 AND a.delete_Status
+		= 0 AND
+		a.add_Time > #{timeStapm} and ad_status = 1 order by
+		ad_slide_sequence
+		asc
+	</select>
+
+	<select id="findAdByCode" resultMap="BoResultMap" parameterType="map">
+		SELECT
+		now() AS nowTime,
+		a.*
+		FROM
+		sns_adv_pos p,
+		sns_advert a
+		WHERE
+		p.id =
+		a.ad_ap_id
+		AND p.ap_code = #{sadCode}
+		AND p.delete_Status = 0
+		AND
+		a.delete_Status = 0
+		and ad_status = 1
+		<if test="cityId != null and cityId != 0 ">
+			and a.area_id=#{cityId}
+		</if>
+		
+		<if test=" cityId == 0 ">
+			and a.area_id IS NULL
+		</if>
+		
+		<if test="time == 'center' ">
+		AND a.ad_begin_time <![CDATA[ <  ]]> now()
+		AND  a.ad_end_time > now()
+		</if>
+		
+		order by ad_slide_sequence asc limit 5
+	</select>
+
+	<select id="findTopAdByApCode" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT ad.* FROM sns_advert AS ad
+		LEFT JOIN `sns_adv_pos`
+		AS ap ON ap.`id` = ad.`ad_ap_id`
+		WHERE ad.`delete_status` = 0
+		AND
+		ad.`ad_status` = 1
+		AND (NOW() BETWEEN ad.`ad_begin_time` AND
+		ad.`ad_end_time`)
+		AND ap_code = #{apCode}
+		Order By ad.ad_slide_sequence
+		limit #{count};
+	</select>
+
+
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sns.model.AdvertExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_advert
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sns_advert
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		sns_advert
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sns.model.AdvertExample">
+		delete from sns_advert
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.Advert">
+		insert into sns_advert (id,
+		add_Time, delete_Status,
+		ad_begin_time, ad_click_num, ad_end_time,
+		ad_gold, ad_slide_sequence, ad_status,
+		ad_text, ad_title, ad_url,
+		ad_type,
+		ad_img_path, ad_ap_id, ad_user_id,
+		bg_color)
+		values
+		(#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{adBeginTime,jdbcType=DATE},
+		#{adClickNum,jdbcType=INTEGER}, #{adEndTime,jdbcType=DATE},
+		#{adGold,jdbcType=INTEGER}, #{adSlideSequence,jdbcType=INTEGER},
+		#{adStatus,jdbcType=INTEGER},
+		#{adText,jdbcType=VARCHAR},
+		#{adTitle,jdbcType=VARCHAR}, #{adUrl,jdbcType=VARCHAR},
+		#{adImgPath,jdbcType=VARCHAR}, #{adApId,jdbcType=BIGINT},
+		#{adUserId,jdbcType=BIGINT},
+		#{bgColor,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.Advert"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into sns_advert
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="adBeginTime != null">
+				ad_begin_time,
+			</if>
+			<if test="adClickNum != null">
+				ad_click_num,
+			</if>
+			<if test="adEndTime != null">
+				ad_end_time,
+			</if>
+			<if test="adGold != null">
+				ad_gold,
+			</if>
+			<if test="adSlideSequence != null">
+				ad_slide_sequence,
+			</if>
+			<if test="adStatus != null">
+				ad_status,
+			</if>
+			<if test="adText != null">
+				ad_text,
+			</if>
+			<if test="adTitle != null">
+				ad_title,
+			</if>
+			<if test="adUrl != null">
+				ad_url,
+			</if>
+			<if test="adType != null">
+				ad_type,
+			</if>
+			<if test="adImgPath != null">
+				ad_img_path,
+			</if>
+			<if test="adApId != null">
+				ad_ap_id,
+			</if>
+			<if test="adUserId != null">
+				ad_user_id,
+			</if>
+			<if test="bgColor != null">
+				bg_color,
+			</if>
+			<if test="areaId != null">
+				area_id,
+			</if>
+			<if test="nativeType != null">
+				nativeType
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="adBeginTime != null">
+				#{adBeginTime,jdbcType=DATE},
+			</if>
+			<if test="adClickNum != null">
+				#{adClickNum,jdbcType=INTEGER},
+			</if>
+			<if test="adEndTime != null">
+				#{adEndTime,jdbcType=DATE},
+			</if>
+			<if test="adGold != null">
+				#{adGold,jdbcType=INTEGER},
+			</if>
+			<if test="adSlideSequence != null">
+				#{adSlideSequence,jdbcType=INTEGER},
+			</if>
+			<if test="adStatus != null">
+				#{adStatus,jdbcType=INTEGER},
+			</if>
+			<if test="adText != null">
+				#{adText,jdbcType=VARCHAR},
+			</if>
+			<if test="adTitle != null">
+				#{adTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="adUrl != null">
+				#{adUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="adType != null">
+				#{adType,jdbcType=VARCHAR},
+			</if>
+			<if test="adImgPath != null">
+				#{adImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="adApId != null">
+				#{adApId,jdbcType=BIGINT},
+			</if>
+			<if test="adUserId != null">
+				#{adUserId,jdbcType=BIGINT},
+			</if>
+			<if test="bgColor != null">
+				#{bgColor,jdbcType=VARCHAR},
+			</if>
+			<if test="areaId != null">
+				#{areaId,jdbcType=BIGINT},
+			</if>
+			<if test="nativeType != null">
+				#{nativeType,jdbcType=BIGINT}
+			</if>
+
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sns.model.AdvertExample"
+		resultType="java.lang.Integer">
+		select count(*) from sns_advert
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sns_advert
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.adBeginTime != null">
+				ad_begin_time = #{record.adBeginTime,jdbcType=DATE},
+			</if>
+			<if test="record.adClickNum != null">
+				ad_click_num = #{record.adClickNum,jdbcType=INTEGER},
+			</if>
+			<if test="record.adEndTime != null">
+				ad_end_time = #{record.adEndTime,jdbcType=DATE},
+			</if>
+			<if test="record.adGold != null">
+				ad_gold = #{record.adGold,jdbcType=INTEGER},
+			</if>
+			<if test="record.adSlideSequence != null">
+				ad_slide_sequence =
+				#{record.adSlideSequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.adStatus != null">
+				ad_status = #{record.adStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.adText != null">
+				ad_text = #{record.adText,jdbcType=VARCHAR},
+			</if>
+			<if test="record.adTitle != null">
+				ad_title = #{record.adTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="record.adUrl != null">
+				ad_url = #{record.adUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.adType != null">
+				ad_Type = #{record.adType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.adImgPath != null">
+				ad_img_path = #{record.adImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.adApId != null">
+				ad_ap_id = #{record.adApId,jdbcType=BIGINT},
+			</if>
+			<if test="record.adUserId != null">
+				ad_user_id = #{record.adUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.bgColor != null">
+				bg_color = #{record.bgColor,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sns_advert
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status =
+		#{record.deleteStatus,jdbcType=INTEGER},
+		ad_begin_time =
+		#{record.adBeginTime,jdbcType=DATE},
+		ad_click_num =
+		#{record.adClickNum,jdbcType=INTEGER},
+		ad_end_time =
+		#{record.adEndTime,jdbcType=DATE},
+		ad_gold =
+		#{record.adGold,jdbcType=INTEGER},
+		ad_slide_sequence =
+		#{record.adSlideSequence,jdbcType=INTEGER},
+		ad_status =
+		#{record.adStatus,jdbcType=INTEGER},
+		ad_text =
+		#{record.adText,jdbcType=VARCHAR},
+		ad_title =
+		#{record.adTitle,jdbcType=VARCHAR},
+		ad_url =
+		#{record.adUrl,jdbcType=VARCHAR},
+		ad_type =
+		#{record.adType,jdbcType=VARCHAR},
+		ad_img_path =
+		#{record.adImgPath,jdbcType=VARCHAR},
+		ad_ap_id =
+		#{record.adApId,jdbcType=BIGINT},
+		ad_user_id =
+		#{record.adUserId,jdbcType=BIGINT},
+		bg_color =
+		#{record.bgColor,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.Advert">
+		update sns_advert
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="adBeginTime != null">
+				ad_begin_time = #{adBeginTime,jdbcType=DATE},
+			</if>
+			<if test="adClickNum != null">
+				ad_click_num = #{adClickNum,jdbcType=INTEGER},
+			</if>
+			<if test="adEndTime != null">
+				ad_end_time = #{adEndTime,jdbcType=DATE},
+			</if>
+			<if test="adGold != null">
+				ad_gold = #{adGold,jdbcType=INTEGER},
+			</if>
+			<if test="adSlideSequence != null">
+				ad_slide_sequence = #{adSlideSequence,jdbcType=INTEGER},
+			</if>
+			<if test="adStatus != null">
+				ad_status = #{adStatus,jdbcType=INTEGER},
+			</if>
+			<if test="adText != null">
+				ad_text = #{adText,jdbcType=VARCHAR},
+			</if>
+			<if test="adTitle != null">
+				ad_title = #{adTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="adUrl != null">
+				ad_url = #{adUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="adType != null">
+				ad_Type = #{adType,jdbcType=VARCHAR},
+			</if>
+			<if test="adImgPath != null">
+				ad_img_path = #{adImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="adApId != null">
+				ad_ap_id = #{adApId,jdbcType=BIGINT},
+			</if>
+			<if test="adUserId != null">
+				ad_user_id = #{adUserId,jdbcType=BIGINT},
+			</if>
+			<if test="bgColor != null">
+				bg_color = #{bgColor,jdbcType=VARCHAR},
+			</if>
+			<if test="areaId != null">
+				area_id = #{areaId,jdbcType=BIGINT},
+			</if>
+			<if test="nativeType != null">
+				nativeType = #{nativeType,jdbcType=INTEGER}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.Advert">
+		update sns_advert
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status =
+		#{deleteStatus,jdbcType=INTEGER},
+		ad_begin_time =
+		#{adBeginTime,jdbcType=DATE},
+		ad_click_num =
+		#{adClickNum,jdbcType=INTEGER},
+		ad_end_time =
+		#{adEndTime,jdbcType=DATE},
+		ad_gold = #{adGold,jdbcType=INTEGER},
+		ad_slide_sequence = #{adSlideSequence,jdbcType=INTEGER},
+		ad_status =
+		#{adStatus,jdbcType=INTEGER},
+		ad_text = #{adText,jdbcType=VARCHAR},
+		ad_title = #{adTitle,jdbcType=VARCHAR},
+		ad_url =
+		#{adUrl,jdbcType=VARCHAR},
+		ad_type = #{adType,jdbcType=VARCHAR},
+		ad_img_path = #{adImgPath,jdbcType=VARCHAR},
+		ad_ap_id =
+		#{adApId,jdbcType=BIGINT},
+		ad_user_id = #{adUserId,jdbcType=BIGINT},
+		bg_color = #{bgColor,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- grey added begin -->
+	<select id="selectListByVo" resultMap="BoResultMap">
+		SELECT
+		<include refid="Bo_Column_List" />
+		FROM sns_advert sad
+		LEFT JOIN sns_adv_pos sap ON sad.ad_ap_id = sap.id
+		LEFT JOIN sys_user_account um ON (sad.ad_user_id = um.uid and
+		um.account_type = 9)
+		<include refid="selectListByVoWhere" />
+		ORDER BY sad.id DESC
+	</select>
+	<select id="selectBoByPrimaryKey" resultMap="BoResultMap"
+		parameterType="java.lang.Long">
+		SELECT
+		<include refid="Bo_Column" />
+		FROM sns_advert sad
+		LEFT JOIN sns_adv_pos sap ON sad.ad_ap_id = sap.id
+		WHERE sad.id = #{id,jdbcType=BIGINT}
+	</select>
+	<sql id="selectListByVoWhere">
+		<where>
+			<if test="vo.adTitle != null and vo.adTitle !=''">
+				sad.ad_title like concat('%',#{vo.adTitle},'%' )
+			</if>
+			<if test="vo.adStatus != null ">
+				AND sad.ad_status = #{vo.adStatus}
+			</if>
+			<if test="vo.adApId != null and vo.adApId > 0">
+				AND sad.ad_ap_id = #{vo.adApId}
+			</if>
+			<if test="vo.adApCode != null and vo.adApCode != ''">
+				AND sap.ap_code = #{vo.adApCode}
+			</if>
+			<if test="vo.adUserId != null and vo.adUserId > 0">
+				AND sad.ad_user_id = #{vo.adUserId}
+			</if>
+		</where>
+	</sql>
+	<update id="updateAdSlideSequenceAddOne">
+		UPDATE sns_advert dest,
+		(SELECT max( ad_slide_sequence
+		)+1 AS maxVal FROM sns_advert WHERE ad_ap_id =
+		#{adApId}) src
+		SET
+		dest.ad_slide_sequence = src.maxVal WHERE dest.id=#{id}
+	</update>
+	<!-- grey added end -->
+</mapper>

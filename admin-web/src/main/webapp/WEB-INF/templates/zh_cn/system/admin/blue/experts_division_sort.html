@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+function saveSort(){
+	var patt=new RegExp("^[0-9]*$");
+	var idVal = "";
+	var myArray=new Array();
+	var i = 0
+	var hadError = false;
+	jQuery("input[name='expertIndex']").each(function(element) {
+		if(!this.value) {
+			alert("温馨提示：序号不能为空");
+			hadError = true;
+			return false;
+		} else {
+			if(!patt.test(this.value)) {
+				alert("温馨提示：只能输入数字");
+				hadError = true;
+				return false;
+			}
+			if(this.value < 0) {
+				alert("温馨提示：请输入大于0的数字");
+				hadError = true;
+				return false;
+			}
+						
+			myArray[i] = this.value;
+			i++;
+			
+			idVal += this.id+","+this.value+";"
+		}		
+	});
+	if(hadError)
+		return false;
+	
+	var sortArr = myArray.sort();
+	for(var j=0; j<sortArr.length-1; j++) {
+		if(sortArr[j] == sortArr[j+1]) {
+			alert("温馨提示：序号不能相同，请重输入");
+			return false;
+		}
+	}
+	jQuery("#idVals").val(idVal);
+	jQuery("#ListForm").submit();
+}
+</script>
+<body>
+  <div class="cont">
+    <h1 class="seth">专家管理</h1>
+    <div class="nav_list">
+    <ul> 
+    <li><a href="$!webPath/admin/experts_list.htm" ><b>专家列表</b></a> </li>
+    <li><a href="$!webPath/admin/experts_add.htm" ><b>新增专家</b></a></li>
+     <li><a href="$!webPath/admin/experts_sort.htm"><b>抗衰老专家排序</b></a></li>
+     <li><a href="$!webPath/admin/experts_division_sort.htm" class="this"><b>健康管理师排序</b></a></li>
+     </ul> 
+     </div>
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/admin/experts_sort_save.htm" method="post">
+  <input type="hidden" id="idVals" name="idVals" value=""/>
+    <div class="operation">
+		<h3>友情提示</h3>
+		<ul>
+			<li>推荐排序按照序号升序排列，即数字越大排在越后面。</li>
+		</ul>
+	</div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="15%" align="center"><span class="form_btna">账号</span></th>
+          <th width="15%" align="center"><span class="form_btna">专家姓名</span></th>
+          <th width="15%" align="center"><span class="form_btna">职称</span></th>
+          <th width="5%" align="center"><span class="form_btna">性别</span></th>
+          <th width="10%" align="center"><span class="form_btna">电话</span></th>
+          <th width="20%" align="center"><span class="form_btna">注册邮箱</span></th>
+          <th width="10%" align="center"><span class="form_btna">创建时间</span></th>
+          <th width="10%" align="center"><span class="form_btna">序号</span></th>
+        </tr>
+       #foreach($!obj in $objs) 
+        <tr>
+          <td class="lightred">$!obj.loginName</td>
+          <td class="lightred">$!obj.name</td>
+          <td class="lightred">$!obj.title</td>
+          <td class="lightred">
+          #if($!obj.sex=='1')
+          	男
+          #elseif($!obj.sex=='2')
+          	女                    
+          #end
+          </td>
+          <td class="lightred">$!obj.mobile</td>
+          <td align="center">$!obj.email</td>
+          <td align="center">$!CommUtil.formatShortDate($!obj.createTime)</td>
+          <td class="lightred">
+          	<input id="$!obj.uid" name="expertIndex" type="text" value="$!obj.expertIndex" style="width:30px"/>
+          </td>
+        </tr>
+       #end
+        <tr>
+          <td colspan="9" style="border-bottom:0px; padding:0px;">
+			<div class="operate_bar">
+				#if($!objs && $objs.size()>1)
+				<center style="margin-top: 6px; margin-bottom: 2px;">
+					<input name="" onclick="saveSort()" type="button" value="保存" style="cursor: pointer;" class="search_btn" />
+				</center>
+				#end
+			</div>
+		  </td>
+        </tr>
+      </table>
+    </div>
+  </FORM>
+  </div>
+</body>
+</html>

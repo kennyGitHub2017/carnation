@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+	<title>云尚收银台</title>
+	<link href="$!webPath/resources/shop/css/style.css" rel="stylesheet" type="text/css"  />
+	<script src="$!webPath/resources/js/jquery.min.js" type="text/javascript"></script>
+	<script src="$!webPath/resources/js/goToHtml.js" type="text/javascript"></script>
+	<script src="$!webPath/resources/js/tools.js" type="text/javascript"></script>
+	<script src="$!webPath/resources/js/headInit.js" type="text/javascript"></script>
+	<script src="$!webPath/resources/js/tipsbox.js"></script>
+	<style>
+	html{
+		background-color:#fff;
+	}
+	</style>
+	<style>
+    		html,body{height: 100%;font-size: 14px;color: #4A4A4A;font-family: sans-serif;}
+    		.page{width: 100%;background: #F7F7F7;height: 100%;}
+    		.orderInfo{background: #FFFFFF;height: 1.4rem;}
+    		.orderInfo .no,.orderInfo .amount{line-height: 0.7rem;text-indent: 0.36rem;color: #C0C0C0;}
+    		.orderInfo #orderno{color: #4A4A4A;margin-left: 5px;}
+    		.orderInfo #orderAmount{color: #ff5b00;margin-left: 5px;}
+    		.payInfo{margin-top: 10px;background: #FFFFFF;overflow: hidden;}
+    		.payInfo .ygbInfo{overflow: hidden;padding-bottom: 9px;border-bottom: solid 1px #F7F7F7;margin:0 0.36rem;}
+    		.payInfo .ygbInfo .icon{width: 0.8rem;height: 0.8rem;float: left;margin-top: 0.22rem;background: #95c530;border-radius: 5px;color: #FFFFFF;font-size: 0.56rem;text-align: center;line-height: 0.8rem;}    
+    		.payInfo .ygbInfo .right{float: left;margin-left: 0.22rem;margin-top: 0.22rem;}
+    		.payInfo .ygbInfo .right .tit{line-height: 18px;}
+    		.payInfo .ygbInfo .right .tit span{font-size: 12px;color: #c0c0c0;margin-left: 5px;}
+    		.payInfo .ygbInfo .right .con{margin-top: 5px;}
+    		.payInfo .ygbInfo .right .con .color{color: #FF5B00;}
+    		.payInfo .cash_info{margin: 0px 0.36rem 0 0.36rem;border-bottom: solid 1px #F7F7F7;}
+    		.payInfo .cash_info .tit{line-height: 0.7rem;font-size: 16px;}
+    		.payInfo .cash_info .ye_num,.payInfo .cash_info .pay_num{overflow: hidden;}
+    		.payInfo .cash_info .pay_num{margin-top: 0.1rem;margin-bottom: 0.2rem;}
+    		.payInfo .cash_info .ti{width: 1.8rem;float: left;}
+    		.payInfo .cash_info .num{float: left;}
+    		.payInfo .cash_info .fn-rmb{font-family: arial;float:left;margin-left: 4px;}
+    		.payInfo .cash_info .number{float: left;margin-left: 2px;}
+    		.color{color: #FF5B00;}
+    		.green{color: #5BBA52;}
+    		.zfpsw{height: 1rem;overflow: hidden;background: #FFFFFF;margin-top: 10px;}
+    		.zfpsw .tit{float: left;line-height: 1rem;margin-left: 0.36rem;}
+    		.zfpsw .pass{float: left;line-height: 1rem;margin-left: 0.2rem;}
+    		.zfpsw .pass input{border:1px solid #f7f7f7;border-radius:4px;width:4rem;height:0.6rem;}
+    		.submit_ygb{background:#5bba52;border-radius:6px;width:90%;height:48px;font-size: 20px;color: #FFFFFF;text-align: center;line-height: 48px;display: block;margin: 0 auto;margin-top: 40px;}
+    		
+    		.wxpay{overflow: hidden;margin: 10px 0 0 0;background: #FFFFFF;height: 1rem;position: relative;}
+    		.wxpay .icon{width: 0.8rem;height: 0.8rem;float: left;margin: 0.1rem 0 0 0.36rem;}
+    		.wxpay .icon img{width: 100%;height: 100%;}
+    		.wxpay .right{float: left;margin-left: 6px;margin-top: 0.1rem;}
+    		.wxpay .right .title{line-height:14px}
+    		.wxpay .right .des{color: #C0C0C0;margin-top: 5px;line-height:14px}
+    		.ybpay{height: 1rem;background: #FFFFFF;margin-top: 10px;text-indent: 0.36rem;line-height: 1rem;position: relative;white-space: nowrap;}
+    		.choose_icon{position: absolute;width:0.34rem;height:0.34rem;top:0.33rem;right: 0.36rem;background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAMAAADW3miqAAAAQlBMVEUAAADLzczMzs3MzszOzs7R0dHU1NTMzs3MzczLzszMzczMzszMzc3MzszNz83Nz83Lz8/Q0NDQ0NDR0dHNzc3Mzs3KhA41AAAAFXRSTlMA961zTR4L8/DZw7+knIl6QDEmFlfzP7s5AAAAz0lEQVQ4y5WU6w6DIAyFx1XlNgTP+7/qjHMamVDsjyYkX0pvp6/HpqW30zBM1ktdQWbOcBjj8w2iHAAjYtI6RWEAOFUycgQL+XznwDDKKyMArorQHBAF8/7P4H2hJLDclbIA8gg8nnHKWOMvCQde6xyH2/sDpmqQYph3OtSHEL6/aIZchzKY3kozrXmarUAP0YIE/OotYguKsKufkFpQwrT6AboFaQy9EP1db+J0C3qbSY+lc8D0qvQvHb2+tBD6JUWLk5Y5fTDo0/P8iNH2AVZVDx2b0nXdAAAAAElFTkSuQmCC) no-repeat center center;background-size: 0.34rem 0.34rem;}
+    		.curr .choose_icon{background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAMAAADW3miqAAAARVBMVEUAAABixFtbvFNcu1Ncu1JdvFRculNdu1JivlNcu1Ncu1Jcu1Ncu1Jcu1JculNevVReu1Nd0V1cu1NbulNcvFRdu1dbulLOBchKAAAAFnRSTlMAE/L4zlD9dB7V2b+vpJxJMQuEkT0ph/3WUQAAANRJREFUOMud1FsSgyAMBVANopSn2Db7X2qZmmrlYWrvFx+HmUxC6C4nSm80gDZexgaZrcAtws4VohxmcSo3AbAIhKOZRqxknA4GG/lSYWyhMWw1AzYDipDDkzjqD55m7ZdtlEOF2vcsRNXc1HNVIiYk66bvFN2WCfmG6Qc6+4QMY9AkpBmDOiH4TGASVYOwIjpKURpCms4LqdygpsJ3VRo01IJdDYVBT83cVVcYlNlYlooRMR/w/ZEbtL8/Ff7R8c/3yiLwK8UvJ7/m/Ifxx9fDf2J8XlC5RdjpmAyyAAAAAElFTkSuQmCC) no-repeat center center;background-size: 0.34rem 0.34rem;}
+   			.readonly{opacity:0.4}
+   	</style>
+	<script>
+		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+		document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+    </script>
+</head>
+<iframe id="__WeixinJSBridgeIframe_SetResult" style="display: none;"></iframe>
+<iframe id="__WeixinJSBridgeIframe" style="display: none;"></iframe>
+<body>
+
+<form action="$!webPath/weixinwapPay" method="get" id="createOrder_form_id">
+<input type="hidden" name="orderId" value="$!{orderId}">
+<input type="hidden" name="totalPrice" value="$!{totalPrice}">
+<input type="hidden" name="amount" value="$!{totalPrice}">
+</form>
+
+<div class="page">
+	<div class="orderInfo">
+		<div class="no">订单编号:<span id="orderno">$!{orderNo}</span></div>
+		<div class="amount">订单金额:<span id="orderAmount">$!{totalPrice}元</span></div>
+	</div>
+	#set($orderType= $orderInfo.orderTypeFlag)
+	<!-- 2表示云购币订单 -->
+	#if($orderType==2)
+		#set($myMoney = $!cnBonus + $!customer.availableBalance)
+		#set($allYg = $orderInfo.allygPrice)
+		#set($allCash = $orderInfo.allCashPrice)
+		#set($actuaYg = $orderInfo.actualygPrice)
+	
+	<input type="hidden" name="isYunGouMoney" value="true" id="isYunGouMoney_id"/>
+	
+	<div class="payInfo">
+		<div class="ygbInfo" id="type_ygb">
+			<span class="icon">购</span>
+			<div class="right">
+				<div class="tit">云购币支付<span>(云购币余额为:$!cnRepeat)</span></div>
+				<div class="con">本次支付：<span class="color" id="number1">
+							
+				#if($!cnRepeat > $allYg)
+					$allYg
+				#elseif($cnRepeat >0 && $cnRepeat < $allYg)
+					$cnRepeat
+				#elseif($cnRepeat <= 0)
+					0.00
+				#end
+				
+				</span></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="paytype ybpay" id="cash_con">
+		您的云豆余额为$number.format("0.00", $myMoney)，还需支付:<span class="green" id="cash">
+		
+				#set($showMoney = $allCash)
+				#if($!cnRepeat <= 0)
+					#set($showMoney =  $allYg + $allCash)
+					$number.format("0.00", $showMoney)
+				#elseif($!cnRepeat >0 && $cnRepeat < $allYg)
+					#set($showMoney =  $allYg + $allCash - $cnRepeat)
+					$number.format("0.00", $showMoney)
+				#else
+					$number.format("0.00", $allCash)
+				#end
+		
+		</span>元
+		<span class="choose_icon"></span>
+	</div>
+		
+	<div class="paytype wxpay" id="wx_con">
+		<span class="icon"><img src="$!webPath/resources/shop/images/wxzf.png"/></span>
+		<div class="right">
+			<div class="title">微信支付</div>
+			<div class="des">推荐安装微信5.0及以上的版本使用</div>
+		</div>
+		<span class="choose_icon"></span>
+	</div>
+	
+	<div class="zfpsw" style="display:none">
+		<div class="tit">支付密码：</div>
+		<div class="pass"><input type="password" id="pwdValue" placeholder="请输入您的直销二级密码" autocomplete="off"/></div>
+	</div>
+	<script type="text/javascript">
+	jQuery(function(){
+		console.log(Number(jQuery("#cash").html()))
+		if(Number($myMoney)<Number(jQuery("#cash").html())){
+			jQuery("#cash_con").addClass("readonly");
+		}
+		if(Number(jQuery("#cash").html())<=0){
+			jQuery("#wx_con").addClass("readonly");
+			$('#payType').val('');
+		}
+		if(Number(jQuery("#cash").html())<=0){
+			jQuery("#cash_con").addClass("readonly");
+		}
+		
+		#if($!actuaYg)
+			if(Number($actuaYg)>0){//云购币已支付
+				jQuery("#cash_con").addClass("readonly");
+			}
+		#end
+		
+		if(Number(jQuery('#number1').html())>0){//还需要支付云购币时
+			jQuery('.zfpsw').show();
+		}
+		
+		
+		jQuery('.paytype').click(function(){
+			if(jQuery(this).hasClass("readonly")) return;
+			jQuery(this).addClass("curr").siblings().removeClass("curr");
+			if(jQuery(this).hasClass('wxpay')){
+				$("input[name=payType]").val("wxpay");
+				if(Number(jQuery("#number1").html())<=0){
+					jQuery('.zfpsw').hide();
+				}
+			} else if(jQuery(this).hasClass('ybpay')) {
+				$("input[name=payType]").val('');
+				$("#isAvailableBalance_id").val("true");				
+				jQuery('.zfpsw').show();				
+			}
+		});
+	});
+	
+	function checkOpenId(){
+		
+		if(Number(jQuery("#cash").html())>0){
+			if(!jQuery(".paytype").hasClass("curr")){
+				tipsbox("请选择支付方式！");
+				return;
+			}
+		}
+			
+			var val = $('#pwdValue').val();
+			$('#paymentPassword_id').val(val);
+			
+			
+	 		$.ajax({  
+	            type : "POST",  //提交方式  
+	            url : '$!webPath/check-openId',//路径  
+	            success : function(result) {
+	            	if ( result != null || result != '') {
+	            		$('#openId').val(result);
+	            		wxPay();
+	                }  else {
+	                	alert("请授权！"); 
+	                }
+	            },
+	            error: function(res, status){
+	            	alert("请授权！");
+	            }
+	        });   
+	}
+	</script>
+	
+	
+	
+	#else
+	<input name="orderTypeFlag" value="2" id="orderTypeFlag_id" type="hidden">
+	
+		#set($myMoney = $!cnBonus + $!customer.availableBalance)
+		<div class="paytype ybpay" id="cash_con">
+			您的云豆余额为$number.format("0.00", $myMoney) 还需支付:<span class="green" id="cash">
+			#if($!orderInfo.actualygPrice)
+				#set($myMoney2 =  $!{totalPrice} - $orderInfo.actualygPrice)
+					$number.format("0.00", $myMoney2)
+			#else
+					#if($!totalPrice > $myMoney)
+					 $number.format("0.00", $myMoney)
+					#else
+						$number.format("0.00", $!totalPrice)
+					#end
+			#end
+		</span>元
+		<span class="choose_icon"></span>
+	</div>
+	<div class="zfpsw" style="display:none;margin-top:0">
+		<div class="tit">支付密码：</div>
+		<div class="pass"><input type="password" id="pwdValue" placeholder="请输入您的云豆支付密码" autocomplete="off"/></div>
+	</div>
+	
+	<div class="paytype wxpay" id="wx_con">
+		<span class="icon"><img src="$!webPath/resources/shop/images/wxzf.png"/></span>
+		<div class="right">
+			<div class="title">微信支付</div>
+			<div class="des">推荐安装微信5.0及以上的版本使用</div>
+		</div>
+		<span class="choose_icon"></span>
+	</div>
+	<script type="text/javascript">
+		jQuery(function(){
+			$("input[name=payType]").val('');
+			if(Number($myMoney)==0){
+				jQuery(".ybpay").addClass("readonly");
+			}
+		});
+		jQuery('.paytype').click(function(){
+			if(jQuery(this).hasClass("readonly")) return;
+			if(Number($myMoney)>0&&Number($myMoney)<Number($!{totalPrice})){//再次点击取消				
+				if(jQuery(this).hasClass('ybpay')&&jQuery(this).hasClass('curr')){
+					$(".zfpsw").hide();
+					$("#isAvailableBalance_id").val("false");
+				}else{
+					$(".zfpsw").show();
+					$("#isAvailableBalance_id").val("true");
+				}
+				jQuery(this).toggleClass("curr");
+				$("input[name=payType]").val("wxpay");
+			}else{//单选
+				jQuery(this).addClass("curr").siblings().removeClass("curr");
+			    if(jQuery(this).hasClass('wxpay')){					
+					$(".zfpsw").hide();
+					$("input[name=payType]").val("wxpay");
+					$("#isAvailableBalance_id").val("false");
+				}else{
+					$(".zfpsw").show();
+					$("#isAvailableBalance_id").val("true");
+					$("input[name=payType]").val('');
+				} 
+			}
+			
+			
+			
+			/* if(jQuery(this).hasClass('wxpay')){
+				$("input[name=payType]").val("wxpay");
+				$(".zfpsw").hide();
+			}else{
+				$("input[name=payType]").val('');
+				$("#isAvailableBalance_id").val("true");
+				$(".zfpsw").show();
+			} */ 
+		});
+		
+		function checkOpenId(){
+			
+			
+			if(!jQuery(".paytype").hasClass("curr")){
+				tipsbox('请选择支付方式');
+				return;
+			}
+			
+			if(Number($myMoney)>0&&Number($myMoney)<Number($!{totalPrice})){
+				if(jQuery(".ybpay").hasClass("curr")&&!jQuery(".wxpay").hasClass("curr")){
+					tipsbox("剩余部分使用微信支付");
+					return;
+				}
+			}
+			if(jQuery(".ybpay").hasClass("curr")&&jQuery("#pwdValue").val()==""){
+				tipsbox('请输入云豆支付密码');
+				return;
+			}
+			
+				
+			var val = $('#pwdValue').val();
+			$('#paymentPassword_id').val(val);
+				
+				
+	 		$.ajax({  
+	            type : "POST",  //提交方式  
+	            url : '$!webPath/check-openId',//路径  
+	            success : function(result) {
+	            	if ( result != null || result != '') {
+	            		$('#openId').val(result);
+	            		wxPay();
+	                }  else {
+	                	alert("请授权！"); 
+	                }
+	            },
+	            error: function(res, status){
+	            	alert("请授权！");
+	            }
+	        });   
+		}
+	</script>
+	#end
+	
+<a href="javascript:;" class="submit_ygb" id="submit_ygb_id"  onclick="checkOpenId()">确认付款</a>
+	
+</div>
+<input id="orderId" type="hidden" value="$!{orderId}" name="orderId">
+<input id="orderNo" type="hidden" value="$!{orderNo}" name="orderNo">
+<input id="totalPrice" type="hidden" value="$!{totalPrice}" name="totalPrice">
+<input id="payType" type="hidden" name="payType" value="$!{payType}">
+<input id="serverName" type="hidden" name="serverName" value="$!{serverName}">
+<input id="userId" type="hidden" name="userId" value="$!{userId}">
+<input id='openId' type="hidden" value ="$!{openId}" />
+<!-- 	<input id='qrPayUrl' type="hidden" value ="$!{webPath}/q/wx_qr_pay_goods_order.htm" />      -->
+<input id='qrPayUrl' type="hidden" value ="$!{webPath}/q/order_yg_pay.htm"/> 
+
+<input type="hidden" name="isAvailableBalance" value="false" id="isAvailableBalance_id"/>
+<input type="hidden" name="paymentPassword" value="" id="paymentPassword_id"/>
+<input type="hidden" name="yunGouPassword" value="" id="yunGouPassword_id"/>
+
+<!-- --------将 以前的代码屏蔽---以后删除-- -->
+<div style="display: none;">
+	<div class="main update-password-yb syt">
+		<ul>
+			<li>
+				<label for="">订单编号：</label>
+				<span>$!{orderNo}</span>
+			</li>
+			<li>
+				<label for="">订单金额：</label>
+				<span>¥$!{totalPrice}元</span>
+			</li>
+		</ul>
+		<div class="daosanjiao"></div>		
+ 		
+ 		
+
+		
+		
+		<div class="syt-ul-img">
+			<ul>
+					<form action="$!webPath/weixinwapPay" method="get" id="weixin_form_id">
+						<li onclick="checkOpenId()">
+						
+			
+						
+						
+						<img src="$!webPath/resources/shop/images/wxzf.png" alt="">
+						<div class="syt-ul-img-mes">
+							<div>微信支付</div>
+							<div>微信安全支付</div>
+						</div>
+						<span></span>
+				</li>
+					</form>
+				
+			</ul>
+			
+		</div>
+		
+		<form action="$!webPath/order_yg_pay.htm" method="post">
+			<ul style="background:#f7f7f7">
+				<li>
+					<label for="">云豆：</label>
+					<span>¥ $!cnBonus + $!customer.availableBalance</span>
+				</li>
+				<li>
+					<label for="">云购币：</label>
+					<span>¥ $!cnRepeat</span>
+				</li>
+			</ul>
+<!-- 			<input id="orderId" type="hidden" value="$!{orderId}" name="order_id">
+			<input type="" name="isAvailableBalance" value="true">
+			<input type="" name="paymentPassword" value="">
+			<input type="" name="isYunGouMoney" value="true">
+			<input type="" name="yunGouPassword" value="">
+			<input value="确认提交" type="submit"> -->
+		</form>
+		
+		
+		
+	</div>
+	<!-- 设置云豆支付密码 -->
+	<div id="fade-ybzf" class="black_overlay-ybzfmm">
+	</div>
+	 <div id="MyDiv-ybzfmm" class="white_content-ybzfmm">
+	  <div class="sz-password">
+	   <span style="" id="close-ybzfmm"></span>
+	   设置云豆支付密码
+	  </div>
+	  <div class="pwd">
+	  	<ul>
+	  		<li><input type="password" maxlength="1"></li>
+	  		<li><input type="password" maxlength="1"></li>
+	  		<li><input type="password" maxlength="1"></li>
+	  		<li><input type="password" maxlength="1"></li>
+	  		<li><input type="password" maxlength="1"></li>
+	  		<li><input type="password" maxlength="1"></li>
+	  	</ul>
+	  </div>
+	  <div class="input-pwd">请输入六位数字密码</div>
+	  <div class="ture-btn">
+	  	<a href="">确定</a>
+	  </div>
+	 </div> 
+	 <!-- 输入云豆支付密码 -->
+	 <div id="MyDiv-yb-pwd" class="white_content-ybzfmm">
+	  <div class="sz-password">
+	   <span style="" id="close-yb-pwd"></span>
+	   请输入云豆支付密码
+	  </div>
+	  <div class="zhif-price">
+	  		<div>云豆支付</div>
+	  		<div>¥ 236.80</div>
+	  </div>
+	  <div class="pwd input-ybpwd2">
+	  	<ul>
+	  		<li><input type="password" maxlength="1"></li>
+	  		<li><input type="password" maxlength="1"></li>
+	  		<li><input type="password" maxlength="1"></li>
+	  		<li><input type="password" maxlength="1"></li>	
+	  		<li><input type="password" maxlength="1"></li>
+	  		<li><input type="password" maxlength="1"></li>
+	  	</ul>
+	  </div>
+	 </div>
+	 <!-- 云豆支付密码错误 -->
+	 
+	 <div id="MyDiv-pwd-yb" class="white_content-ybzfmm white_content-falsepwd">
+	  <div class="sz-password">
+	   云豆支付密码错误
+	  </div>
+	  <div class="pwd-false-bin2">
+	  	<ul>
+	  		<li><a href="">忘记密码</a></li>
+	  		<li><a href="">重试</a></li>
+	  	</ul>
+	  </div>
+	 </div>
+	 
+	 </div>
+	
+	<script>	
+
+
+
+//微信支付
+function wxPay(){
+        var uid_ = $('#userId').val();
+        var openId_ = $('#openId').val();
+        var userId_ = $('#userId').val();
+        var qrPayUrl_ = $("#qrPayUrl").val();
+        var serverName_ = $("#serverName").val();
+        var payType_ = $("#payType").val();
+        var orderId_ = $("#orderId").val();
+        var totalPrice_ = $("#totalPrice").val();
+        var isAvailableBalance_ = $("#isAvailableBalance_id").val();
+       	var isYunGouMoney_ = $("#isYunGouMoney_id").val();
+       	var paymentPassword_=$("#paymentPassword_id").val();
+        var orderNo_ = $("#orderNo").val();
+        var orderFlag_ = $('#orderTypeFlag_id').val();
+        
+        // 下单
+        $.ajax({
+            type: 'POST',
+            url: qrPayUrl_,
+            async:false,
+            data: {
+                money: totalPrice_,
+                
+                orderNo: orderNo_,
+                payType: payType_,
+                serverName: serverName_,
+                uid: uid_,
+                userId: userId_,
+                openId: openId_,
+                isAvailableBalance:isAvailableBalance_,
+                isYunGouMoney:isYunGouMoney_,
+                orderId:orderId_,
+                paymentPassword:paymentPassword_,
+                orderFlag:orderFlag_
+            },
+            dataType: 'json',
+            
+            success: function (data) {
+            	
+             	if(data.code == 3) {
+             		//var url = '$!webPath/order-detail?orderId='+orderId_;
+        			//window.open(url);
+					//alert('支付成功');//表示云购币或加云豆支付成功，跳转需要产品定
+					console.log(data.code)
+					console.log(window.location.href)
+					window.location.href='$!webPath/order-detail?orderId='+orderId_;
+					console.log(1)
+				}else if (data.code == 0) {
+                    // 其他错误
+                    alert(data.errMsg);
+                    $("#weixin_form_id>li").unbind("click");
+                    
+                } else if (data.code == 1) {
+                	
+                	
+                    var order = data.data;
+                     function onBridgeReady() { 
+                        WeixinJSBridge.invoke(
+                            'getBrandWCPayRequest', {
+                                "appId": order.appId,     //公众号名称，由商户传入
+                                "timeStamp": String(order.timeStamp),        //时间戳，自1970年以来的秒数
+                                "nonceStr": order.nonceStr, //随机串
+                                "package": "prepay_id=" + order.prepayId,
+                                "signType": "MD5",      //微信签名方式：
+                                "paySign": order.sign,//微信签名
+                            },
+                            function (res) {
+                                //alert(JSON.stringify(res));
+								
+                                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                                    wx.ready(function () {
+                                        wx.closeWindow();
+                                    });
+                                    location.href = "$!webPath/index.htm";
+                                } else {   
+
+                                    alert("支付失败");
+                                }
+                            }
+                        );
+                    } 
+
+                     if (typeof('WeixinJSBridge') == "undefined") {
+                        if (document.addEventListener) {
+                            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                        } else if (document.attachEvent) {
+                            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                        }
+                    } else {
+                        onBridgeReady();
+                    } 
+
+                } else {
+                	alert("付款出错了");
+                    alert(data.msg);
+                    $("#weixin_form_id>li").unbind("click");
+                }
+            },
+            error: function () {
+                alert('支付出现问题！');
+            }
+        });
+}
+	
+
+	
+	
+	</script>
+	<script src="$!{webPath}/resources/wx_red_package/images/zepto.min.js"></script>
+	<script src="$!{webPath}/resources/mch_wx_qr_pay/common.js?v=$!{version}"></script>
+	<script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	<script>
+		var weixinSdkConf = JSON
+		//		.parse('{"appId":"$!{appId}","timestamp":$!{timestamp},"nonceStr":"$!{nonceStr}","signature":"$!{signature}"}');
+		wx.config({
+			debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			appId : weixinSdkConf.appId, // 必填，公众号的唯一标识
+			timestamp : weixinSdkConf.timestamp, // 必填，生成签名的时间戳
+			nonceStr : weixinSdkConf.nonceStr, // 必填，生成签名的随机串
+			signature : weixinSdkConf.signature,// 必填，签名，见附录1
+			jsApiList : [ 'hideOptionMenu', 'closeWindow', 'chooseWXPay' ]
+		// 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+		});
+		wx.ready(function() {
+			wx.hideOptionMenu();
+		});
+	</script>
+</body>
+</html>

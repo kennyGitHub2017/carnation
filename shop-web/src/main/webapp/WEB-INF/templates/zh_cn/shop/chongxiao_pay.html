@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>重消支付</title>
+<link
+	href="$!webPath/resources/style/system/front/default/css/goods2.css"
+	type="text/css" rel="stylesheet" />
+<link
+	href="$!webPath/resources/style/system/front/default/css/public2.css"
+	type="text/css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css"
+	href="$!webPath/resources/shop/yugou/css/yunGo.css" />
+<link href="$!webPath/resources/style/common/css/overlay.css"
+	type="text/css" rel="stylesheet" />
+<style>
+.white_content {
+	left: 50%;
+	margin-left: -210px
+}
+
+.nav {
+	padding-top: 10px
+}
+
+.order_info {
+	width: auto;
+}
+</style>
+</head>
+<body>
+	<script src="$!webPath/resources/js/jquery.min.js"></script>
+	$!httpInclude.include("/top.htm") $!httpInclude.include("/head.htm")
+	$!httpInclude.include("/downnav.htm")
+	<!-- <form action="$!webPath/yg_order_pay.htm" method="post" target="_blank"id="theForm"> -->
+	<form action="$!webPath/cx_order_pay.htm" method="post" target="_blank"
+		id="theForm">
+		<div class="yungoBg">
+			<div class="yg_main">
+				<input type="hidden" name="orderId" value="$!actualBO.order.id">
+				<input type="hidden" name="payCash" id="payCash" value="wxqrpay">
+				<div class="shopping_step" style="float: none;">
+					<ul>
+						<li class="shopping_step_a"><span></span><i></i><strong>我的购物车</strong></li>
+						<li class="shopping_step_bthree"><span></span><i></i><strong>填写核对订单信息</strong></li>
+						<li class="shopping_step_cthis"><span></span><i></i><strong>成功提交订单</strong></li>
+					</ul>
+				</div>
+
+				<div class="order_info">
+					<div class="info">
+						<div class="info_success">
+							订单提交成功,请您尽快付款！<span class="orderno">订单号：$!actualBO.order.orderId</span>
+						</div>
+						<div class="order_no">
+							请您在 <span>72小时</span> 内完成支付，否则订单会被自动取消（商品支付时限以订单详情页为准）。
+						</div>
+						<div class="order_prize">
+							<span>应付金额:</span><span class="fn-rmb">&yen;</span><span
+								class="prize"> #if($!actualBO.order.orderStatus!=18)
+								$!actualBO.order.totalPrice #else $!actualBO.order.shipPrice
+								#end </span>
+						</div>
+					</div>
+				</div>
+				<div class="payWay_text">支付方式</div>
+				<div class="pay_detail">
+					<div class="yun_pay">
+						#if($!actualBO.order.orderStatus!=18)
+						<div class="name">重消账户支付</div>
+						<div class="right">
+
+							#if($!actualBO.yGWallet_status==5)
+							<div class="yun_remainder">您的重消账户已冻结，请用现金支付订单金额，当前重消余额:$!actualBO.currentYgBalance</div>
+							#else
+							<div class="yun_remainder">您当前的重消账户余额为:&nbsp;$!actualBO.currentYgBalance</div>
+							#end
+							<div class="yun_text">支付重消</div>
+							<div class="pay_num">$!actualBO.actualygPrice</div>
+							#if($!actualBO.actualygPrice!=0)
+							<div class="psw">
+								<span class="psw_text">支付密码</span><input class="psw_input"
+									name="password" type="password" autocomplete="off" /><span
+									id="ym_err_tips" class="err_tips"></span>
+							</div>
+							#else
+							<div class="yun_remainder">您已支付重消，请尽快支付以下现金</div>
+							#end
+						</div>
+						#end
+					</div>
+
+
+
+
+
+					<div class="crash_pay_type">
+						<div class="name">现金支付</div>
+						<div class="right">
+							<div class="choose_text">
+								请使用以下付款方式支付余额：<span class="crash_num"><span
+									class="fn-rmb">&yen;&nbsp;</span>$!actualBO.order.shipPrice</span>
+							</div>
+							<div class="paytype">
+								<a href="javascript:;" class="wxPay curr" value="wxqrpay"><span
+									class="icon_wxpay"></span><span class="choosed"></span></a> <a
+									href="javascript:;" class="aliPay" value="alipay"><span
+									class="icon_alipay"></span><span class="choosed"></span></a>
+							</div>
+						</div>
+					</div>
+
+
+					<a href="javascript:;" class="icon_comfirmPay pos_comfirmPay"
+						id="cashPay"
+						onclick="document.getElementById('hideSubmit').click()">确认支付</a>
+
+				</div>
+			</div>
+		</div>
+		<div class="model"></div>
+		<input type="submit" id="hideSubmit" style="display: none" />
+
+	</form>
+	<script src="$!webPath/resources/js/jquery.min.js"></script>
+	<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+	<script type="text/javascript">
+		$(document)
+				.ready(
+						function() {
+							$(".model").css("height", $(document).height());
+							
+							$(".psw_input").on('change',function(){
+								if($(this).hasClass("valid")){
+									$("#ym_err_tips").hide();
+								}
+							});
+
+							$(".pay_result_show .close,.pay_result_show .pay")
+									.click(
+											function() {
+												jQuery('#pay_overlay').hide();
+												document.getElementById(
+														'theForm').reset();
+												jQuery('#ym_err_tips').hide();
+											});
+
+							$("#theForm")
+									.validate(
+											{
+												errorPlacement : function(
+														error, element) {
+													if (element.attr("name") == "password") {
+														$("#ym_err_tips").html("请输入密码").show();
+													}
+												},
+												rules : {
+													password : {
+														required : true
+													}
+												},
+												messages : {
+													password : {
+														required : "密码不能为空"
+													}
+												},
+												submitHandler : function(form) { //支付云购币+工资或者充值账户
+													var h = Math.max(jQuery(
+															window).height(),
+															jQuery("body")
+																	.height());
+													var top = document.documentElement.scrollTop;
+													jQuery('.black_overlay')
+															.css("height", h);
+													jQuery('#pay_overlay')
+															.show();
+													$(".model,.pswBox").hide();
+													unlockScreen();
+													form.submit();
+													$("#countDown").html("30分");
+													var total = 30 * 60;
+													function timeout() {
+														setTimeout(
+																function() {
+																	total--;
+																	var minute = parseInt(total / 60);
+																	var second = total % 60;
+																	var html = "";
+																	html += (minute == 0) ? ""
+																			: minute
+																					+ "分";
+																	html += (second == 0) ? ""
+																			: second
+																					+ "秒";
+																	if (html == "") {
+																		html == "0秒";
+																	}
+																	$(
+																			"#countDown")
+																			.html(
+																					html);
+																	if (total >= 1) {
+																		timeout();
+																	}
+																}, 1000)
+													}
+													timeout();
+												}
+											});
+
+							$(".paytype a")
+									.click(
+											function() {
+												$(this).addClass("curr")
+														.siblings()
+														.removeClass("curr");
+												var index = $(".paytype a")
+														.index(this) == 0 ? 'wxqrpay'
+														: 'alipay';
+												$("#payCash").val(index);
+											});
+
+							$("#bounsPay").click(function() {
+								$(".model,.pswBox").show();
+								lockScreen();
+							});
+
+							function lockScreen() {
+								document.body.onkeydown = keyFunc;
+								disabledMouseWheel();
+							}
+							function unlockScreen() {
+								document.body.onkeydown = null;
+								removeDisabledMouseWheel();
+							}
+
+							function disabledMouseWheel() {
+								if (document.addEventListener) {
+									document.addEventListener('DOMMouseScroll',
+											scrollFunc, false);
+								}//W3C  
+								window.onmousewheel = document.onmousewheel = scrollFunc;//IE/Opera/Chrome  
+							}
+							function removeDisabledMouseWheel() {
+								if (document.addEventListener) {
+									document
+											.removeEventListener(
+													'DOMMouseScroll',
+													scrollFunc, false);
+								}//W3C  
+								window.onmousewheel = document.onmousewheel = null;//IE/Opera/Chrome  
+							}
+							function scrollFunc(evt) {
+								evt = evt || window.event;
+								if (evt.preventDefault) {
+									// Firefox  
+									evt.preventDefault();
+									evt.stopPropagation();
+								} else {
+									// IE  
+									evt.cancelBubble = true;
+									evt.returnValue = false;
+								}
+								return false;
+							}
+
+							var move = function(e) {
+								e.preventDefault && e.preventDefault();
+								e.returnValue = false;
+								e.stopPropagation && e.stopPropagation();
+								return false;
+							}
+							var keyFunc = function(e) {
+								if (37 <= e.keyCode && e.keyCode <= 40) {
+									return move(e);
+								}
+							}
+
+							$(".cancel").click(function(event) {
+								$(".model,.pswBox").hide();
+								$(".pswBox .err_tips").html("").hide();
+								unlockScreen();
+							});
+						});
+	</script>
+	$!httpInclude.include("/footer.htm")
+	<div style="display: none;" id="pay_overlay">
+		<div class="pay_result_show">
+			<a href="javascript:;" class="close"></a>
+			<div class="tit">
+				请于<span id="countDown"></span>内，在新开的页面完成支付
+			</div>
+			<div class="giveup">
+				对产品有疑问，可选择:<a href="javascript:;" class="pay payResultBtn btn1">放弃付款</a>
+			</div>
+			<div class="completePay">
+				如已支付成功，请点击:<a
+					href="$!webPath/order_finish.htm?order_id=$!actualBO.order.id"
+					class="payResultBtn btn2">已完成付款</a>
+			</div>
+			<div class="repay">
+				付款遇到问题，你可以:<a href="javascript:;" class="pay payResultBtn btn3">重新支付</a>
+			</div>
+			<div class="tel">支付常见问题，请联系客服电话:4008-355-788</div>
+		</div>
+		<div class="black_overlay"></div>
+	</div>
+</body>
+</html>

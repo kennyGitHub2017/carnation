@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.EcCommonMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.EcCommon">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="ecc_code" property="eccCode" jdbcType="VARCHAR" />
+		<result column="ecc_default" property="eccDefault" jdbcType="INTEGER" />
+		<result column="ecc_ec_id" property="eccEcId" jdbcType="BIGINT" />
+		<result column="ecc_ec_type" property="eccEcType" jdbcType="VARCHAR" />
+		<result column="ecc_from_type" property="eccFromType" jdbcType="INTEGER" />
+		<result column="ecc_name" property="eccName" jdbcType="VARCHAR" />
+		<result column="ecc_store_id" property="eccStoreId" jdbcType="BIGINT" />
+		<result column="ecc_template_heigh" property="eccTemplateHeigh"
+			jdbcType="INTEGER" />
+		<result column="ecc_template_width" property="eccTemplateWidth"
+			jdbcType="INTEGER" />
+		<result column="ecc_type" property="eccType" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.EcCommon"
+		extends="BaseResultMap">
+		<result column="ecc_template" property="eccTemplate" jdbcType="LONGVARCHAR" />
+		<result column="ecc_template_offset" property="eccTemplateOffset"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.EcCommonBO"
+		extends="ResultMapWithBLOBs" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, ecc_code, ecc_default, ecc_ec_id,
+		ecc_ec_type, ecc_from_type,
+		ecc_name, ecc_store_id, ecc_template_heigh, ecc_template_width, ecc_type
+	</sql>
+	<sql id="Blob_Column_List">
+		ecc_template, ecc_template_offset
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.shop.model.EcCommonExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_ec_common
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.shop.model.EcCommonExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_ec_common
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_ec_common
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_ec_common
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.EcCommonExample">
+		delete from shop_ec_common
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.EcCommon"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_ec_common (id, add_time, delete_status,
+		ecc_code, ecc_default, ecc_ec_id,
+		ecc_ec_type, ecc_from_type, ecc_name,
+		ecc_store_id, ecc_template_heigh, ecc_template_width,
+		ecc_type, ecc_template, ecc_template_offset
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{eccCode,jdbcType=VARCHAR}, #{eccDefault,jdbcType=INTEGER}, #{eccEcId,jdbcType=BIGINT},
+		#{eccEcType,jdbcType=VARCHAR}, #{eccFromType,jdbcType=INTEGER},
+		#{eccName,jdbcType=VARCHAR},
+		#{eccStoreId,jdbcType=BIGINT}, #{eccTemplateHeigh,jdbcType=INTEGER},
+		#{eccTemplateWidth,jdbcType=INTEGER},
+		#{eccType,jdbcType=INTEGER}, #{eccTemplate,jdbcType=LONGVARCHAR},
+		#{eccTemplateOffset,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.EcCommon"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_ec_common
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="eccCode != null">
+				ecc_code,
+			</if>
+			<if test="eccDefault != null">
+				ecc_default,
+			</if>
+			<if test="eccEcId != null">
+				ecc_ec_id,
+			</if>
+			<if test="eccEcType != null">
+				ecc_ec_type,
+			</if>
+			<if test="eccFromType != null">
+				ecc_from_type,
+			</if>
+			<if test="eccName != null">
+				ecc_name,
+			</if>
+			<if test="eccStoreId != null">
+				ecc_store_id,
+			</if>
+			<if test="eccTemplateHeigh != null">
+				ecc_template_heigh,
+			</if>
+			<if test="eccTemplateWidth != null">
+				ecc_template_width,
+			</if>
+			<if test="eccType != null">
+				ecc_type,
+			</if>
+			<if test="eccTemplate != null">
+				ecc_template,
+			</if>
+			<if test="eccTemplateOffset != null">
+				ecc_template_offset,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="eccCode != null">
+				#{eccCode,jdbcType=VARCHAR},
+			</if>
+			<if test="eccDefault != null">
+				#{eccDefault,jdbcType=INTEGER},
+			</if>
+			<if test="eccEcId != null">
+				#{eccEcId,jdbcType=BIGINT},
+			</if>
+			<if test="eccEcType != null">
+				#{eccEcType,jdbcType=VARCHAR},
+			</if>
+			<if test="eccFromType != null">
+				#{eccFromType,jdbcType=INTEGER},
+			</if>
+			<if test="eccName != null">
+				#{eccName,jdbcType=VARCHAR},
+			</if>
+			<if test="eccStoreId != null">
+				#{eccStoreId,jdbcType=BIGINT},
+			</if>
+			<if test="eccTemplateHeigh != null">
+				#{eccTemplateHeigh,jdbcType=INTEGER},
+			</if>
+			<if test="eccTemplateWidth != null">
+				#{eccTemplateWidth,jdbcType=INTEGER},
+			</if>
+			<if test="eccType != null">
+				#{eccType,jdbcType=INTEGER},
+			</if>
+			<if test="eccTemplate != null">
+				#{eccTemplate,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="eccTemplateOffset != null">
+				#{eccTemplateOffset,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.EcCommonExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_ec_common
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_ec_common
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.eccCode != null">
+				ecc_code = #{record.eccCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.eccDefault != null">
+				ecc_default = #{record.eccDefault,jdbcType=INTEGER},
+			</if>
+			<if test="record.eccEcId != null">
+				ecc_ec_id = #{record.eccEcId,jdbcType=BIGINT},
+			</if>
+			<if test="record.eccEcType != null">
+				ecc_ec_type = #{record.eccEcType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.eccFromType != null">
+				ecc_from_type = #{record.eccFromType,jdbcType=INTEGER},
+			</if>
+			<if test="record.eccName != null">
+				ecc_name = #{record.eccName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.eccStoreId != null">
+				ecc_store_id = #{record.eccStoreId,jdbcType=BIGINT},
+			</if>
+			<if test="record.eccTemplateHeigh != null">
+				ecc_template_heigh = #{record.eccTemplateHeigh,jdbcType=INTEGER},
+			</if>
+			<if test="record.eccTemplateWidth != null">
+				ecc_template_width = #{record.eccTemplateWidth,jdbcType=INTEGER},
+			</if>
+			<if test="record.eccType != null">
+				ecc_type = #{record.eccType,jdbcType=INTEGER},
+			</if>
+			<if test="record.eccTemplate != null">
+				ecc_template = #{record.eccTemplate,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.eccTemplateOffset != null">
+				ecc_template_offset = #{record.eccTemplateOffset,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_ec_common
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		ecc_code = #{record.eccCode,jdbcType=VARCHAR},
+		ecc_default = #{record.eccDefault,jdbcType=INTEGER},
+		ecc_ec_id = #{record.eccEcId,jdbcType=BIGINT},
+		ecc_ec_type = #{record.eccEcType,jdbcType=VARCHAR},
+		ecc_from_type = #{record.eccFromType,jdbcType=INTEGER},
+		ecc_name = #{record.eccName,jdbcType=VARCHAR},
+		ecc_store_id = #{record.eccStoreId,jdbcType=BIGINT},
+		ecc_template_heigh = #{record.eccTemplateHeigh,jdbcType=INTEGER},
+		ecc_template_width = #{record.eccTemplateWidth,jdbcType=INTEGER},
+		ecc_type = #{record.eccType,jdbcType=INTEGER},
+		ecc_template = #{record.eccTemplate,jdbcType=LONGVARCHAR},
+		ecc_template_offset = #{record.eccTemplateOffset,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_ec_common
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		ecc_code = #{record.eccCode,jdbcType=VARCHAR},
+		ecc_default = #{record.eccDefault,jdbcType=INTEGER},
+		ecc_ec_id = #{record.eccEcId,jdbcType=BIGINT},
+		ecc_ec_type = #{record.eccEcType,jdbcType=VARCHAR},
+		ecc_from_type = #{record.eccFromType,jdbcType=INTEGER},
+		ecc_name = #{record.eccName,jdbcType=VARCHAR},
+		ecc_store_id = #{record.eccStoreId,jdbcType=BIGINT},
+		ecc_template_heigh = #{record.eccTemplateHeigh,jdbcType=INTEGER},
+		ecc_template_width = #{record.eccTemplateWidth,jdbcType=INTEGER},
+		ecc_type = #{record.eccType,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.EcCommon">
+		update shop_ec_common
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="eccCode != null">
+				ecc_code = #{eccCode,jdbcType=VARCHAR},
+			</if>
+			<if test="eccDefault != null">
+				ecc_default = #{eccDefault,jdbcType=INTEGER},
+			</if>
+			<if test="eccEcId != null">
+				ecc_ec_id = #{eccEcId,jdbcType=BIGINT},
+			</if>
+			<if test="eccEcType != null">
+				ecc_ec_type = #{eccEcType,jdbcType=VARCHAR},
+			</if>
+			<if test="eccFromType != null">
+				ecc_from_type = #{eccFromType,jdbcType=INTEGER},
+			</if>
+			<if test="eccName != null">
+				ecc_name = #{eccName,jdbcType=VARCHAR},
+			</if>
+			<if test="eccStoreId != null">
+				ecc_store_id = #{eccStoreId,jdbcType=BIGINT},
+			</if>
+			<if test="eccTemplateHeigh != null">
+				ecc_template_heigh = #{eccTemplateHeigh,jdbcType=INTEGER},
+			</if>
+			<if test="eccTemplateWidth != null">
+				ecc_template_width = #{eccTemplateWidth,jdbcType=INTEGER},
+			</if>
+			<if test="eccType != null">
+				ecc_type = #{eccType,jdbcType=INTEGER},
+			</if>
+			<if test="eccTemplate != null">
+				ecc_template = #{eccTemplate,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="eccTemplateOffset != null">
+				ecc_template_offset = #{eccTemplateOffset,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.EcCommon">
+		update shop_ec_common
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		ecc_code = #{eccCode,jdbcType=VARCHAR},
+		ecc_default = #{eccDefault,jdbcType=INTEGER},
+		ecc_ec_id = #{eccEcId,jdbcType=BIGINT},
+		ecc_ec_type = #{eccEcType,jdbcType=VARCHAR},
+		ecc_from_type = #{eccFromType,jdbcType=INTEGER},
+		ecc_name = #{eccName,jdbcType=VARCHAR},
+		ecc_store_id = #{eccStoreId,jdbcType=BIGINT},
+		ecc_template_heigh = #{eccTemplateHeigh,jdbcType=INTEGER},
+		ecc_template_width = #{eccTemplateWidth,jdbcType=INTEGER},
+		ecc_type = #{eccType,jdbcType=INTEGER},
+		ecc_template = #{eccTemplate,jdbcType=LONGVARCHAR},
+		ecc_template_offset = #{eccTemplateOffset,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.EcCommon">
+		update shop_ec_common
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		ecc_code = #{eccCode,jdbcType=VARCHAR},
+		ecc_default = #{eccDefault,jdbcType=INTEGER},
+		ecc_ec_id = #{eccEcId,jdbcType=BIGINT},
+		ecc_ec_type = #{eccEcType,jdbcType=VARCHAR},
+		ecc_from_type = #{eccFromType,jdbcType=INTEGER},
+		ecc_name = #{eccName,jdbcType=VARCHAR},
+		ecc_store_id = #{eccStoreId,jdbcType=BIGINT},
+		ecc_template_heigh = #{eccTemplateHeigh,jdbcType=INTEGER},
+		ecc_template_width = #{eccTemplateWidth,jdbcType=INTEGER},
+		ecc_type = #{eccType,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="selectAllByCondition" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM shop_ec_common sec
+		<where>
+			<if test="eccType != null and eccType >= 0">
+				sec.ecc_type = #{eccType}
+			</if>
+			<if test="eccDefault != null and eccDefault >= 0">
+				and sec.ecc_default = #{eccDefault}
+			</if>
+			<if test="eccStoreId!=null and eccStoreId > 0">
+				and sec.ecc_store_id = #{eccStoreId}
+			</if>
+			<if test="eccEcId!=null and eccEcId > 0">
+				and sec.ecc_ec_id = #{eccEcId}
+			</if>
+		</where>
+		ORDER BY sec.id desc
+	</select>
+	<delete id="deleteSelfEcCommon">
+		delete from shop_ec_common
+		<where>
+			<if test="ids != null and ids.size() > 0">
+				ecc_ec_id in
+				<foreach collection="ids" item="id" open="(" close=")"
+					separator=",">
+					#{id}
+				</foreach>
+			</if>
+			<if test="eccType!=null and eccType != ''">
+				and ecc_type = #{eccType}
+			</if>
+		</where>
+	</delete>
+	<select id="findByIds" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_ec_common
+		<where>
+			<if test="ids!=null and ids.size()>0">
+				id in
+				<foreach collection="ids" item="id" open="(" close=")"
+					separator=",">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	<select id="findListByVo" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_ec_common
+		<where>
+			<if test="vo.eccType!=null and vo.eccType>0">
+				ecc_type = #{vo.eccType}
+			</if>
+			<if test="vo.storeId!=null and vo.storeId>0">
+				and ecc_store_id = #{vo.storeId}
+			</if>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.PaymentMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.Payment">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="alipay_rate" property="alipayRate" jdbcType="DECIMAL" />
+		<result column="chinabank_account" property="chinabankAccount"
+			jdbcType="VARCHAR" />
+		<result column="chinabank_key" property="chinabankKey"
+			jdbcType="VARCHAR" />
+		<result column="currency_code" property="currencyCode"
+			jdbcType="VARCHAR" />
+		<result column="install" property="install" jdbcType="BIT" />
+		<result column="interface_type" property="interfaceType"
+			jdbcType="INTEGER" />
+		<result column="mark" property="mark" jdbcType="VARCHAR" />
+		<result column="merchant_acctId" property="merchantAcctid"
+			jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="partner" property="partner" jdbcType="VARCHAR" />
+		<result column="paypal_user_id" property="paypalUserId"
+			jdbcType="VARCHAR" />
+		<result column="pid" property="pid" jdbcType="VARCHAR" />
+		<result column="poundage" property="poundage" jdbcType="DECIMAL" />
+		<result column="rmb_key" property="rmbKey" jdbcType="VARCHAR" />
+		<result column="safe_key" property="safeKey" jdbcType="VARCHAR" />
+		<result column="seller_email" property="sellerEmail" jdbcType="VARCHAR" />
+		<result column="spname" property="spname" jdbcType="VARCHAR" />
+		<result column="tenpay_key" property="tenpayKey" jdbcType="VARCHAR" />
+		<result column="tenpay_partner" property="tenpayPartner"
+			jdbcType="VARCHAR" />
+		<result column="trade_mode" property="tradeMode" jdbcType="INTEGER" />
+		<result column="wx_appSecret" property="wxAppsecret" jdbcType="VARCHAR" />
+		<result column="wx_appid" property="wxAppid" jdbcType="VARCHAR" />
+		<result column="wx_paySignKey" property="wxPaysignkey"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.Payment"
+		extends="BaseResultMap">
+		<result column="app_private_key" property="appPrivateKey"
+			jdbcType="LONGVARCHAR" />
+		<result column="app_public_key" property="appPublicKey"
+			jdbcType="LONGVARCHAR" />
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<resultMap id="BoResultMap" type="com.sinco.carnation.shop.bo.PaymentBO"
+		extends="ResultMapWithBLOBs">
+
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, alipay_rate, chinabank_account,
+		chinabank_key, currency_code,
+		install, interface_type, mark, merchant_acctId, name, partner, paypal_user_id,
+		pid,
+		poundage, rmb_key, safe_key, seller_email, spname, tenpay_key, tenpay_partner,
+		trade_mode,
+		wx_appSecret, wx_appid, wx_paySignKey
+	</sql>
+	<sql id="Blob_Column_List">
+		app_private_key, app_public_key, content
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="BoResultMap"
+		parameterType="com.sinco.carnation.shop.model.PaymentExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_payment
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.shop.model.PaymentExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_payment
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_payment
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_payment
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.PaymentExample">
+		delete from shop_payment
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.Payment">
+		insert into shop_payment (id, add_time, delete_status,
+		alipay_rate, chinabank_account, chinabank_key,
+		currency_code, install, interface_type,
+		mark, merchant_acctId, name,
+		partner, paypal_user_id, pid,
+		poundage, rmb_key, safe_key,
+		seller_email, spname, tenpay_key,
+		tenpay_partner, trade_mode, wx_appSecret,
+		wx_appid, wx_paySignKey, app_private_key,
+		app_public_key, content)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{alipayRate,jdbcType=DECIMAL}, #{chinabankAccount,jdbcType=VARCHAR},
+		#{chinabankKey,jdbcType=VARCHAR},
+		#{currencyCode,jdbcType=VARCHAR}, #{install,jdbcType=BIT}, #{interfaceType,jdbcType=INTEGER},
+		#{mark,jdbcType=VARCHAR}, #{merchantAcctid,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{partner,jdbcType=VARCHAR}, #{paypalUserId,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR},
+		#{poundage,jdbcType=DECIMAL}, #{rmbKey,jdbcType=VARCHAR},
+		#{safeKey,jdbcType=VARCHAR},
+		#{sellerEmail,jdbcType=VARCHAR}, #{spname,jdbcType=VARCHAR}, #{tenpayKey,jdbcType=VARCHAR},
+		#{tenpayPartner,jdbcType=VARCHAR}, #{tradeMode,jdbcType=INTEGER},
+		#{wxAppsecret,jdbcType=VARCHAR},
+		#{wxAppid,jdbcType=VARCHAR}, #{wxPaysignkey,jdbcType=VARCHAR},
+		#{appPrivateKey,jdbcType=LONGVARCHAR},
+		#{appPublicKey,jdbcType=LONGVARCHAR}, #{content,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.Payment">
+		insert into shop_payment
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="alipayRate != null">
+				alipay_rate,
+			</if>
+			<if test="chinabankAccount != null">
+				chinabank_account,
+			</if>
+			<if test="chinabankKey != null">
+				chinabank_key,
+			</if>
+			<if test="currencyCode != null">
+				currency_code,
+			</if>
+			<if test="install != null">
+				install,
+			</if>
+			<if test="interfaceType != null">
+				interface_type,
+			</if>
+			<if test="mark != null">
+				mark,
+			</if>
+			<if test="merchantAcctid != null">
+				merchant_acctId,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="partner != null">
+				partner,
+			</if>
+			<if test="paypalUserId != null">
+				paypal_user_id,
+			</if>
+			<if test="pid != null">
+				pid,
+			</if>
+			<if test="poundage != null">
+				poundage,
+			</if>
+			<if test="rmbKey != null">
+				rmb_key,
+			</if>
+			<if test="safeKey != null">
+				safe_key,
+			</if>
+			<if test="sellerEmail != null">
+				seller_email,
+			</if>
+			<if test="spname != null">
+				spname,
+			</if>
+			<if test="tenpayKey != null">
+				tenpay_key,
+			</if>
+			<if test="tenpayPartner != null">
+				tenpay_partner,
+			</if>
+			<if test="tradeMode != null">
+				trade_mode,
+			</if>
+			<if test="wxAppsecret != null">
+				wx_appSecret,
+			</if>
+			<if test="wxAppid != null">
+				wx_appid,
+			</if>
+			<if test="wxPaysignkey != null">
+				wx_paySignKey,
+			</if>
+			<if test="appPrivateKey != null">
+				app_private_key,
+			</if>
+			<if test="appPublicKey != null">
+				app_public_key,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="alipayRate != null">
+				#{alipayRate,jdbcType=DECIMAL},
+			</if>
+			<if test="chinabankAccount != null">
+				#{chinabankAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="chinabankKey != null">
+				#{chinabankKey,jdbcType=VARCHAR},
+			</if>
+			<if test="currencyCode != null">
+				#{currencyCode,jdbcType=VARCHAR},
+			</if>
+			<if test="install != null">
+				#{install,jdbcType=BIT},
+			</if>
+			<if test="interfaceType != null">
+				#{interfaceType,jdbcType=INTEGER},
+			</if>
+			<if test="mark != null">
+				#{mark,jdbcType=VARCHAR},
+			</if>
+			<if test="merchantAcctid != null">
+				#{merchantAcctid,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="partner != null">
+				#{partner,jdbcType=VARCHAR},
+			</if>
+			<if test="paypalUserId != null">
+				#{paypalUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="pid != null">
+				#{pid,jdbcType=VARCHAR},
+			</if>
+			<if test="poundage != null">
+				#{poundage,jdbcType=DECIMAL},
+			</if>
+			<if test="rmbKey != null">
+				#{rmbKey,jdbcType=VARCHAR},
+			</if>
+			<if test="safeKey != null">
+				#{safeKey,jdbcType=VARCHAR},
+			</if>
+			<if test="sellerEmail != null">
+				#{sellerEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="spname != null">
+				#{spname,jdbcType=VARCHAR},
+			</if>
+			<if test="tenpayKey != null">
+				#{tenpayKey,jdbcType=VARCHAR},
+			</if>
+			<if test="tenpayPartner != null">
+				#{tenpayPartner,jdbcType=VARCHAR},
+			</if>
+			<if test="tradeMode != null">
+				#{tradeMode,jdbcType=INTEGER},
+			</if>
+			<if test="wxAppsecret != null">
+				#{wxAppsecret,jdbcType=VARCHAR},
+			</if>
+			<if test="wxAppid != null">
+				#{wxAppid,jdbcType=VARCHAR},
+			</if>
+			<if test="wxPaysignkey != null">
+				#{wxPaysignkey,jdbcType=VARCHAR},
+			</if>
+			<if test="appPrivateKey != null">
+				#{appPrivateKey,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="appPublicKey != null">
+				#{appPublicKey,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.PaymentExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_payment
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_payment
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.alipayRate != null">
+				alipay_rate = #{record.alipayRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.chinabankAccount != null">
+				chinabank_account = #{record.chinabankAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="record.chinabankKey != null">
+				chinabank_key = #{record.chinabankKey,jdbcType=VARCHAR},
+			</if>
+			<if test="record.currencyCode != null">
+				currency_code = #{record.currencyCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.install != null">
+				install = #{record.install,jdbcType=BIT},
+			</if>
+			<if test="record.interfaceType != null">
+				interface_type = #{record.interfaceType,jdbcType=INTEGER},
+			</if>
+			<if test="record.mark != null">
+				mark = #{record.mark,jdbcType=VARCHAR},
+			</if>
+			<if test="record.merchantAcctid != null">
+				merchant_acctId = #{record.merchantAcctid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.partner != null">
+				partner = #{record.partner,jdbcType=VARCHAR},
+			</if>
+			<if test="record.paypalUserId != null">
+				paypal_user_id = #{record.paypalUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.pid != null">
+				pid = #{record.pid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.poundage != null">
+				poundage = #{record.poundage,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rmbKey != null">
+				rmb_key = #{record.rmbKey,jdbcType=VARCHAR},
+			</if>
+			<if test="record.safeKey != null">
+				safe_key = #{record.safeKey,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sellerEmail != null">
+				seller_email = #{record.sellerEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="record.spname != null">
+				spname = #{record.spname,jdbcType=VARCHAR},
+			</if>
+			<if test="record.tenpayKey != null">
+				tenpay_key = #{record.tenpayKey,jdbcType=VARCHAR},
+			</if>
+			<if test="record.tenpayPartner != null">
+				tenpay_partner = #{record.tenpayPartner,jdbcType=VARCHAR},
+			</if>
+			<if test="record.tradeMode != null">
+				trade_mode = #{record.tradeMode,jdbcType=INTEGER},
+			</if>
+			<if test="record.wxAppsecret != null">
+				wx_appSecret = #{record.wxAppsecret,jdbcType=VARCHAR},
+			</if>
+			<if test="record.wxAppid != null">
+				wx_appid = #{record.wxAppid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.wxPaysignkey != null">
+				wx_paySignKey = #{record.wxPaysignkey,jdbcType=VARCHAR},
+			</if>
+			<if test="record.appPrivateKey != null">
+				app_private_key = #{record.appPrivateKey,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.appPublicKey != null">
+				app_public_key = #{record.appPublicKey,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_payment
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		alipay_rate = #{record.alipayRate,jdbcType=DECIMAL},
+		chinabank_account = #{record.chinabankAccount,jdbcType=VARCHAR},
+		chinabank_key = #{record.chinabankKey,jdbcType=VARCHAR},
+		currency_code = #{record.currencyCode,jdbcType=VARCHAR},
+		install = #{record.install,jdbcType=BIT},
+		interface_type = #{record.interfaceType,jdbcType=INTEGER},
+		mark = #{record.mark,jdbcType=VARCHAR},
+		merchant_acctId = #{record.merchantAcctid,jdbcType=VARCHAR},
+		name = #{record.name,jdbcType=VARCHAR},
+		partner = #{record.partner,jdbcType=VARCHAR},
+		paypal_user_id = #{record.paypalUserId,jdbcType=VARCHAR},
+		pid = #{record.pid,jdbcType=VARCHAR},
+		poundage = #{record.poundage,jdbcType=DECIMAL},
+		rmb_key = #{record.rmbKey,jdbcType=VARCHAR},
+		safe_key = #{record.safeKey,jdbcType=VARCHAR},
+		seller_email = #{record.sellerEmail,jdbcType=VARCHAR},
+		spname = #{record.spname,jdbcType=VARCHAR},
+		tenpay_key = #{record.tenpayKey,jdbcType=VARCHAR},
+		tenpay_partner = #{record.tenpayPartner,jdbcType=VARCHAR},
+		trade_mode = #{record.tradeMode,jdbcType=INTEGER},
+		wx_appSecret = #{record.wxAppsecret,jdbcType=VARCHAR},
+		wx_appid = #{record.wxAppid,jdbcType=VARCHAR},
+		wx_paySignKey = #{record.wxPaysignkey,jdbcType=VARCHAR},
+		app_private_key = #{record.appPrivateKey,jdbcType=LONGVARCHAR},
+		app_public_key = #{record.appPublicKey,jdbcType=LONGVARCHAR},
+		content = #{record.content,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_payment
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		alipay_rate = #{record.alipayRate,jdbcType=DECIMAL},
+		chinabank_account = #{record.chinabankAccount,jdbcType=VARCHAR},
+		chinabank_key = #{record.chinabankKey,jdbcType=VARCHAR},
+		currency_code = #{record.currencyCode,jdbcType=VARCHAR},
+		install = #{record.install,jdbcType=BIT},
+		interface_type = #{record.interfaceType,jdbcType=INTEGER},
+		mark = #{record.mark,jdbcType=VARCHAR},
+		merchant_acctId = #{record.merchantAcctid,jdbcType=VARCHAR},
+		name = #{record.name,jdbcType=VARCHAR},
+		partner = #{record.partner,jdbcType=VARCHAR},
+		paypal_user_id = #{record.paypalUserId,jdbcType=VARCHAR},
+		pid = #{record.pid,jdbcType=VARCHAR},
+		poundage = #{record.poundage,jdbcType=DECIMAL},
+		rmb_key = #{record.rmbKey,jdbcType=VARCHAR},
+		safe_key = #{record.safeKey,jdbcType=VARCHAR},
+		seller_email = #{record.sellerEmail,jdbcType=VARCHAR},
+		spname = #{record.spname,jdbcType=VARCHAR},
+		tenpay_key = #{record.tenpayKey,jdbcType=VARCHAR},
+		tenpay_partner = #{record.tenpayPartner,jdbcType=VARCHAR},
+		trade_mode = #{record.tradeMode,jdbcType=INTEGER},
+		wx_appSecret = #{record.wxAppsecret,jdbcType=VARCHAR},
+		wx_appid = #{record.wxAppid,jdbcType=VARCHAR},
+		wx_paySignKey = #{record.wxPaysignkey,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.Payment">
+		update shop_payment
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="alipayRate != null">
+				alipay_rate = #{alipayRate,jdbcType=DECIMAL},
+			</if>
+			<if test="chinabankAccount != null">
+				chinabank_account = #{chinabankAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="chinabankKey != null">
+				chinabank_key = #{chinabankKey,jdbcType=VARCHAR},
+			</if>
+			<if test="currencyCode != null">
+				currency_code = #{currencyCode,jdbcType=VARCHAR},
+			</if>
+			<if test="install != null">
+				install = #{install,jdbcType=BIT},
+			</if>
+			<if test="interfaceType != null">
+				interface_type = #{interfaceType,jdbcType=INTEGER},
+			</if>
+			<if test="mark != null">
+				mark = #{mark,jdbcType=VARCHAR},
+			</if>
+			<if test="merchantAcctid != null">
+				merchant_acctId = #{merchantAcctid,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="partner != null">
+				partner = #{partner,jdbcType=VARCHAR},
+			</if>
+			<if test="paypalUserId != null">
+				paypal_user_id = #{paypalUserId,jdbcType=VARCHAR},
+			</if>
+			<if test="pid != null">
+				pid = #{pid,jdbcType=VARCHAR},
+			</if>
+			<if test="poundage != null">
+				poundage = #{poundage,jdbcType=DECIMAL},
+			</if>
+			<if test="rmbKey != null">
+				rmb_key = #{rmbKey,jdbcType=VARCHAR},
+			</if>
+			<if test="safeKey != null">
+				safe_key = #{safeKey,jdbcType=VARCHAR},
+			</if>
+			<if test="sellerEmail != null">
+				seller_email = #{sellerEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="spname != null">
+				spname = #{spname,jdbcType=VARCHAR},
+			</if>
+			<if test="tenpayKey != null">
+				tenpay_key = #{tenpayKey,jdbcType=VARCHAR},
+			</if>
+			<if test="tenpayPartner != null">
+				tenpay_partner = #{tenpayPartner,jdbcType=VARCHAR},
+			</if>
+			<if test="tradeMode != null">
+				trade_mode = #{tradeMode,jdbcType=INTEGER},
+			</if>
+			<if test="wxAppsecret != null">
+				wx_appSecret = #{wxAppsecret,jdbcType=VARCHAR},
+			</if>
+			<if test="wxAppid != null">
+				wx_appid = #{wxAppid,jdbcType=VARCHAR},
+			</if>
+			<if test="wxPaysignkey != null">
+				wx_paySignKey = #{wxPaysignkey,jdbcType=VARCHAR},
+			</if>
+			<if test="appPrivateKey != null">
+				app_private_key = #{appPrivateKey,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="appPublicKey != null">
+				app_public_key = #{appPublicKey,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.Payment">
+		update shop_payment
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		alipay_rate = #{alipayRate,jdbcType=DECIMAL},
+		chinabank_account = #{chinabankAccount,jdbcType=VARCHAR},
+		chinabank_key = #{chinabankKey,jdbcType=VARCHAR},
+		currency_code = #{currencyCode,jdbcType=VARCHAR},
+		install = #{install,jdbcType=BIT},
+		interface_type = #{interfaceType,jdbcType=INTEGER},
+		mark = #{mark,jdbcType=VARCHAR},
+		merchant_acctId = #{merchantAcctid,jdbcType=VARCHAR},
+		name = #{name,jdbcType=VARCHAR},
+		partner = #{partner,jdbcType=VARCHAR},
+		paypal_user_id = #{paypalUserId,jdbcType=VARCHAR},
+		pid = #{pid,jdbcType=VARCHAR},
+		poundage = #{poundage,jdbcType=DECIMAL},
+		rmb_key = #{rmbKey,jdbcType=VARCHAR},
+		safe_key = #{safeKey,jdbcType=VARCHAR},
+		seller_email = #{sellerEmail,jdbcType=VARCHAR},
+		spname = #{spname,jdbcType=VARCHAR},
+		tenpay_key = #{tenpayKey,jdbcType=VARCHAR},
+		tenpay_partner = #{tenpayPartner,jdbcType=VARCHAR},
+		trade_mode = #{tradeMode,jdbcType=INTEGER},
+		wx_appSecret = #{wxAppsecret,jdbcType=VARCHAR},
+		wx_appid = #{wxAppid,jdbcType=VARCHAR},
+		wx_paySignKey = #{wxPaysignkey,jdbcType=VARCHAR},
+		app_private_key = #{appPrivateKey,jdbcType=LONGVARCHAR},
+		app_public_key = #{appPublicKey,jdbcType=LONGVARCHAR},
+		content = #{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.Payment">
+		update shop_payment
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		alipay_rate = #{alipayRate,jdbcType=DECIMAL},
+		chinabank_account = #{chinabankAccount,jdbcType=VARCHAR},
+		chinabank_key = #{chinabankKey,jdbcType=VARCHAR},
+		currency_code = #{currencyCode,jdbcType=VARCHAR},
+		install = #{install,jdbcType=BIT},
+		interface_type = #{interfaceType,jdbcType=INTEGER},
+		mark = #{mark,jdbcType=VARCHAR},
+		merchant_acctId = #{merchantAcctid,jdbcType=VARCHAR},
+		name = #{name,jdbcType=VARCHAR},
+		partner = #{partner,jdbcType=VARCHAR},
+		paypal_user_id = #{paypalUserId,jdbcType=VARCHAR},
+		pid = #{pid,jdbcType=VARCHAR},
+		poundage = #{poundage,jdbcType=DECIMAL},
+		rmb_key = #{rmbKey,jdbcType=VARCHAR},
+		safe_key = #{safeKey,jdbcType=VARCHAR},
+		seller_email = #{sellerEmail,jdbcType=VARCHAR},
+		spname = #{spname,jdbcType=VARCHAR},
+		tenpay_key = #{tenpayKey,jdbcType=VARCHAR},
+		tenpay_partner = #{tenpayPartner,jdbcType=VARCHAR},
+		trade_mode = #{tradeMode,jdbcType=INTEGER},
+		wx_appSecret = #{wxAppsecret,jdbcType=VARCHAR},
+		wx_appid = #{wxAppid,jdbcType=VARCHAR},
+		wx_paySignKey = #{wxPaysignkey,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

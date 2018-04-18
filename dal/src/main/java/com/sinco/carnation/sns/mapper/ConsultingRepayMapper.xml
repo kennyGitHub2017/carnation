@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.ConsultingRepayMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.ConsultingRepay">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="consulting_id" property="consultingId"
+			jdbcType="BIGINT" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+	</resultMap>
+
+	<resultMap id="consultReplyListMap" type="com.sinco.carnation.sns.bo.ConsultingRepayBO"
+		extends="BaseResultMap">
+		<result column="eheadpath" property="expHeadPath" jdbcType="VARCHAR" />
+		<result column="ename" property="expName" jdbcType="VARCHAR" />
+		<result column="uheadpath" property="userHeadPath" jdbcType="VARCHAR" />
+		<result column="uname" property="userName" jdbcType="VARCHAR" />
+		<result column="unickname" property="userNickName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="consultReplyList" resultMap="consultReplyListMap">
+		SELECT e.head_img_path eheadpath,e.`name` ename,c.user_id,u.head_img_path
+		uheadpath,u.`name` uname,u.nickname unickname,r.* from
+		sns_consulting_reply r
+		LEFT JOIN sns_consulting c ON c.id=consulting_id
+		LEFT JOIN user_customer u ON c.user_id=u.uid
+		LEFT JOIN user_experts e ON e.uid=c.experts_user_id
+		WHERE r.consulting_id=#{conId} ORDER BY r.create_time
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, consulting_id, content, update_by, update_time, create_by,
+		create_time, is_deleted
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sns.model.ConsultingRepayExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_consulting_reply
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sns_consulting_reply
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sns_consulting_reply
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sns.model.ConsultingRepayExample">
+		delete from sns_consulting_reply
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.ConsultingRepay"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into sns_consulting_reply (id, consulting_id, content,
+		update_by, update_time, create_by,
+		create_time, is_deleted)
+		values (#{id,jdbcType=BIGINT}, #{consultingId,jdbcType=BIGINT},
+		#{content,jdbcType=VARCHAR},
+		#{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.ConsultingRepay"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into sns_consulting_reply
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="consultingId != null">
+				consulting_id,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="consultingId != null">
+				#{consultingId,jdbcType=BIGINT},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sns.model.ConsultingRepayExample"
+		resultType="java.lang.Integer">
+		select count(*) from sns_consulting_reply
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sns_consulting_reply
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.consultingId != null">
+				consulting_id = #{record.consultingId,jdbcType=BIGINT},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updateBy != null">
+				update_by = #{record.updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sns_consulting_reply
+		set id = #{record.id,jdbcType=BIGINT},
+		consulting_id = #{record.consultingId,jdbcType=BIGINT},
+		content = #{record.content,jdbcType=VARCHAR},
+		update_by = #{record.updateBy,jdbcType=VARCHAR},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		create_by = #{record.createBy,jdbcType=VARCHAR},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{record.isDeleted,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.ConsultingRepay">
+		update sns_consulting_reply
+		<set>
+			<if test="consultingId != null">
+				consulting_id = #{consultingId,jdbcType=BIGINT},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.ConsultingRepay">
+		update sns_consulting_reply
+		set consulting_id = #{consultingId,jdbcType=BIGINT},
+		content = #{content,jdbcType=VARCHAR},
+		update_by = #{updateBy,jdbcType=VARCHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_by = #{createBy,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{isDeleted,jdbcType=BIT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

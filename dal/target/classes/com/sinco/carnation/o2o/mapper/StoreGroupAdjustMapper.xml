@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.o2o.mapper.StoreGroupAdjustMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.o2o.model.StoreGroupAdjust">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="adjust_gc_main" property="adjustGcMain"
+			jdbcType="VARCHAR" />
+		<result column="adjust_gc_main_id" property="adjustGcMainId"
+			jdbcType="BIGINT" />
+		<result column="adjust_type" property="adjustType" jdbcType="VARCHAR" />
+		<result column="apply_status" property="applyStatus" jdbcType="INTEGER" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="refusedDesc" property="refusedDesc" jdbcType="VARCHAR" />
+
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.o2o.bo.StoreGroupAdjustBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.sinco.carnation.o2o.model.StoreGroupAdjust" extends="BaseResultMap">
+		<result column="adjust_gc_info" property="adjustGcInfo"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, adjust_gc_main,
+		adjust_gc_main_id,
+		adjust_type, apply_status,
+		store_id,
+		store_name,refusedDesc
+	</sql>
+	<sql id="Blob_Column_List">
+		adjust_gc_info
+	</sql>
+	<select id="selectByExampleWithBLOBs"
+		parameterType="com.sinco.carnation.o2o.model.StoreGroupAdjustExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_store_group_adjust
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.o2o.model.StoreGroupAdjustExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_store_group_adjust
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_store_group_adjust
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		shop_store_group_adjust
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.o2o.model.StoreGroupAdjustExample">
+		delete from shop_store_group_adjust
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.o2o.model.StoreGroupAdjust"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		shop_store_group_adjust (id, add_time, delete_status,
+		adjust_gc_main,
+		adjust_gc_main_id, adjust_type,
+		apply_status, store_id, store_name,
+		adjust_gc_info)
+		values (#{id,jdbcType=BIGINT},
+		#{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{adjustGcMain,jdbcType=VARCHAR}, #{adjustGcMainId,jdbcType=BIGINT},
+		#{adjustType,jdbcType=VARCHAR},
+		#{applyStatus,jdbcType=INTEGER},
+		#{storeId,jdbcType=BIGINT},
+		#{storeName,jdbcType=VARCHAR},
+		#{adjustGcInfo,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.o2o.model.StoreGroupAdjust"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_store_group_adjust
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="adjustGcMain != null">
+				adjust_gc_main,
+			</if>
+			<if test="adjustGcMainId != null">
+				adjust_gc_main_id,
+			</if>
+			<if test="adjustType != null">
+				adjust_type,
+			</if>
+			<if test="applyStatus != null">
+				apply_status,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="storeName != null">
+				store_name,
+			</if>
+			<if test="adjustGcInfo != null">
+				adjust_gc_info,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="adjustGcMain != null">
+				#{adjustGcMain,jdbcType=VARCHAR},
+			</if>
+			<if test="adjustGcMainId != null">
+				#{adjustGcMainId,jdbcType=BIGINT},
+			</if>
+			<if test="adjustType != null">
+				#{adjustType,jdbcType=VARCHAR},
+			</if>
+			<if test="applyStatus != null">
+				#{applyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="storeName != null">
+				#{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="adjustGcInfo != null">
+				#{adjustGcInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.o2o.model.StoreGroupAdjustExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_store_group_adjust
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_store_group_adjust
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.adjustGcMain != null">
+				adjust_gc_main = #{record.adjustGcMain,jdbcType=VARCHAR},
+			</if>
+			<if test="record.adjustGcMainId != null">
+				adjust_gc_main_id =
+				#{record.adjustGcMainId,jdbcType=BIGINT},
+			</if>
+			<if test="record.adjustType != null">
+				adjust_type = #{record.adjustType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.applyStatus != null">
+				apply_status = #{record.applyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.storeName != null">
+				store_name = #{record.storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.adjustGcInfo != null">
+				adjust_gc_info =
+				#{record.adjustGcInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_store_group_adjust
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=BIT},
+		adjust_gc_main =
+		#{record.adjustGcMain,jdbcType=VARCHAR},
+		adjust_gc_main_id =
+		#{record.adjustGcMainId,jdbcType=BIGINT},
+		adjust_type =
+		#{record.adjustType,jdbcType=VARCHAR},
+		apply_status =
+		#{record.applyStatus,jdbcType=INTEGER},
+		store_id =
+		#{record.storeId,jdbcType=BIGINT},
+		store_name =
+		#{record.storeName,jdbcType=VARCHAR},
+		adjust_gc_info =
+		#{record.adjustGcInfo,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_store_group_adjust
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=BIT},
+		adjust_gc_main =
+		#{record.adjustGcMain,jdbcType=VARCHAR},
+		adjust_gc_main_id =
+		#{record.adjustGcMainId,jdbcType=BIGINT},
+		adjust_type =
+		#{record.adjustType,jdbcType=VARCHAR},
+		apply_status =
+		#{record.applyStatus,jdbcType=INTEGER},
+		store_id =
+		#{record.storeId,jdbcType=BIGINT},
+		store_name =
+		#{record.storeName,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.o2o.model.StoreGroupAdjust">
+		update shop_store_group_adjust
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="adjustGcMain != null">
+				adjust_gc_main = #{adjustGcMain,jdbcType=VARCHAR},
+			</if>
+			<if test="adjustGcMainId != null">
+				adjust_gc_main_id = #{adjustGcMainId,jdbcType=BIGINT},
+			</if>
+			<if test="adjustType != null">
+				adjust_type = #{adjustType,jdbcType=VARCHAR},
+			</if>
+			<if test="applyStatus != null">
+				apply_status = #{applyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="storeName != null">
+				store_name = #{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="adjustGcInfo != null">
+				adjust_gc_info = #{adjustGcInfo,jdbcType=LONGVARCHAR},
+			</if>
+
+			<if test="refusedDesc != null">
+				refusedDesc = #{refusedDesc,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.o2o.model.StoreGroupAdjust">
+		update
+		shop_store_group_adjust
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		adjust_gc_main =
+		#{adjustGcMain,jdbcType=VARCHAR},
+		adjust_gc_main_id =
+		#{adjustGcMainId,jdbcType=BIGINT},
+		adjust_type =
+		#{adjustType,jdbcType=VARCHAR},
+		apply_status =
+		#{applyStatus,jdbcType=INTEGER},
+		store_id = #{storeId,jdbcType=BIGINT},
+		store_name = #{storeName,jdbcType=VARCHAR},
+		adjust_gc_info =
+		#{adjustGcInfo,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.o2o.model.StoreGroupAdjust">
+		update
+		shop_store_group_adjust
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		adjust_gc_main =
+		#{adjustGcMain,jdbcType=VARCHAR},
+		adjust_gc_main_id =
+		#{adjustGcMainId,jdbcType=BIGINT},
+		adjust_type =
+		#{adjustType,jdbcType=VARCHAR},
+		apply_status =
+		#{applyStatus,jdbcType=INTEGER},
+		store_id = #{storeId,jdbcType=BIGINT},
+		store_name = #{storeName,jdbcType=VARCHAR}
+		where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+	<select id="findListByVo" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM shop_store_group_adjust s
+		where 1=1
+		<if test="vo.storeId!= null ">
+			and s.store_id = #{vo.storeId,jdbcType=BIGINT}
+		</if>
+	</select>
+	<select id="findPageByVo" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM shop_store_group_adjust s
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="vo.storeName!= null and vo.storeName != ''">
+				and s.store_name = #{vo.storeName}
+			</if>
+			<if test="vo.applyStatus != null and vo.applyStatus >= 0">
+				and s.apply_status = #{vo.applyStatus}
+			</if>
+			<if test="vo.beginTime!= null and vo.beginTime != ''">
+				AND DATE_FORMAT(s.add_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.beginTime},'%Y-%m-%d')
+			</if>
+			<if test="vo.endTime!= null and vo.endTime != ''">
+				AND DATE_FORMAT(s.add_time,'%Y-%m-%d') <![CDATA[ < ]]>
+				DATE_FORMAT(#{vo.endTime},'%Y-%m-%d')
+			</if>
+		</trim>
+	</select>
+</mapper>

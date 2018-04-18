@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet"/>
+<link  href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#ListForm").validate({
+	    rules:{
+		   implementNumber:{
+			   maxlength:100
+		   },
+		   posType:{
+			    required :true
+		   },
+		   lineNumber:{
+			    required :true
+		   }
+		 },
+		messages:{
+			implementNumber:{maxlength:"最多输入100个字符"},
+			posType:{maxlength:"必选项"},
+			lineNumber:{maxlength:"必填项"}
+		}
+	 });	
+})
+
+function onCancel(){
+	window.location.href="$!webPath/admin/merchant_list.htm?currentPage=$!currentPage";
+}
+
+function posTypeChange(obj){
+	var posType=jQuery(obj).val();
+	if(posType=='4'){
+		jQuery("#addType").val('6');
+	}else{
+		jQuery("#addType").val('24');
+	}
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">商户管理</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/admin/merchant_list.htm?currentPage=$!currentPage"><b>管理</b></a></li>
+        #if($!edit)
+        <li><a href="javascript:void(0)" class="this"><b>修改机具编码</b></a></li>
+        #end
+    </ul>
+  </div>
+  <form action="$!webPath/admin/merchant_edit_num_save.htm" method="post" name="ListForm" id="ListForm">
+  <input type="hidden" id="currentPage" name="currentPage" value="$!currentPage" />
+  <input type="hidden" id="id" name="id" value="$!obj.id" />
+  <input type="hidden" name="addType" id="addType" value="$!obj.addType" />
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <td align="center" >
+        	<strong class="sred">*</strong>输入机具编码：
+        </td>
+        <td align="center">
+        	<span class="size250">
+        		<input name="implementNumber" type="text" id="implementNumber" value="$!obj.implementNumber" />
+        	</span>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" >
+        	<strong class="sred">*</strong>机具类型：
+        </td>
+        <td align="center">
+        	<span class="webnamesec sizese">
+        		<select name="posType" id="posType" onchange="posTypeChange(this)">
+		              <option value="4" #if($!obj.posType == 4) selected="selected"#end>移联商通</option>
+		              <option value="5" #if($!obj.posType == 5) selected="selected"#end>超级刷</option>
+		        </select>
+        	</span>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" >
+        	<strong class="sred">*</strong>联行行号：
+        </td>
+        <td align="center">
+        	<span class="size250">
+        		<input name="lineNumber" type="text" id="lineNumber" value="$!obj.lineNumber" />
+        	</span>
+        </td>
+      </tr>
+      <tr>
+        <td align="center" >
+        	开户行名称：
+        </td>
+        <td align="center">
+        	$!obj.bankName
+        </td>
+      </tr>
+      <tr>
+        <td align="center">
+	        <span>
+	        	<input class="enter" name="" type="submit" value="确定" style="cursor:pointer;"/>
+	        </span>
+        </td>
+        <td align="center">
+        	<span>
+	        	<input class="cancel" name="" type="button" value="取消" style="cursor:pointer;" onclick='onCancel();'/>
+	        </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+
+<script src="/resources/js/jquery-1.8.2.js"></script>
+<script src="/resources/js/jquery-ui.min.js"></script>
+<script src="/resources/js/common.js"></script>
+
+
+<script>
+function complaint_audit(){
+ if(confirm("确定要审核通过该订单吗?")){ 
+   $("#theForm").attr("action","$!webPath/admin/complaint_audit.htm");
+   $("#theForm").submit();
+ }
+}
+function complaint_close(){
+  $("div[id^=complaint_op_]").hide();
+  $("#complaint_close").show();
+  $('#complaint_handle').show();
+}
+function complaint_talk(){
+   var talk_content=$("#talkContent").val();
+  $.post("$!webPath/admin/complaint_talk.htm",{"talkContent":talk_content,"id":"$!obj.id"},function(data){
+    $("#talk_content_detail").empty();  
+      $.each(data, function(index,item){
+        $("#talk_content_detail").append("<li class='"+item.role+"'>"+item.content+"</li>");
+    })
+  },"json");
+   $("#talkContent").val("");
+   alert("发布对话成功！");
+}
+function complaint_talk_reload(){
+  $.post("$!webPath/admin/complaint_talk.htm",{"talkContent":"","id":"$!obj.id"},function(data){
+    $("#talk_content_detail").empty();  
+      $.each(data, function(index,item){
+        $("#talk_content_detail").append("<li class='"+item.role+"'>"+item.content+"</li>");
+    })
+  },"json");
+}
+function complaint_handle_close(){
+  if(confirm("处理后不可更改，确定处理该投诉吗？")){ 
+  if($("#handle_content").val()!=""){
+    $("#theForm").attr("action","$!webPath/operator/complaint_handle_close.htm");
+    $("#theForm").submit();
+  }else{
+      alert("请输入处理意见！");
+  }
+  }
+}
+</script>
+</head>
+
+
+<body>
+
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 服务投诉处理
+</div>
+
+<div class="main">
+    <ul class="m-menu">
+        <li><a href="/operator/complaint_new_list.htm">新投诉列表</a> </li>
+        <li><a href="/operator/complaint_deal_list.htm">已完成投诉列表</a> </li>
+        <li><a href="#"  class="active" >服务投诉处理</a> </li>
+    </ul>
+
+    <form class="form-control" action="" method="post" id="theForm">
+    <input name="id" type="hidden" id="id" value="$!order.groupComplaintBO.id" />
+  <div class="compback">
+    <div class="backcomp">
+      <div class="reputh">投诉进度</div>
+      <div class="comp_box_proces">
+        <ul>
+          <li id="complaint_0" #if($!order.groupComplaintBO.status == 1) class="this" #end>处理中</li>
+          <li id="complaint_1" #if($!order.groupComplaintBO.status == 3) class="this" #end>已处理</li>
+        </ul>
+      </div>
+    </div>
+    <div class="backcomp">
+      <div class="reputh">订单详情</div>
+      <div class="backcomp_box">
+        <dl class="backcomp_d">
+          <dt>订单信息</dt>
+          <dd>
+            <ul class="backcomp_u">
+              #if($!order.orderStatus==10)
+               #set($status="未支付")
+             #end
+             #if($!order.orderStatus==0)
+               #set($status="已取消")
+             #end
+             #if($!order.orderStatus==20)
+               #set($status="已支付")
+             #end
+             #if($!order.orderStatus==30)
+               #set($status="已使用")
+             #end
+             #if($!order.orderStatus>=50)
+               #set($status="已完成")
+             #end
+              <li> 订单状态：<strong>$!status</strong></li>
+              <li> 订单号：<b>$!order.orderId</b> </li>
+              <li> 下单时间：$!CommUtil.formatLongDate($!order.addTime)</li>
+              <li> 订单总额：¥$!{order.totalPrice}</li>
+            </ul>
+          </dd>
+        </dl>
+        <dl class="backcomp_d">
+          <dt>商户信息</dt>
+          <dd>
+            <ul class="backcomp_u">
+              <li>商户名称：<b>
+                <a>$!{order.store.storeName}</a></b>
+              </li>
+              <li>商户电话：<b>
+                <a>$!{order.storeMobile}</a></b>
+              </li>
+              <li>商户所在地：<b>
+                <a>$!{order.store.areaInfo}</a></b>
+              </li>
+              <li>商户详细地址：<b>
+                <a>$!{order.store.storeAddress}</a></b>
+              </li>
+            </ul>
+          </dd>
+        </dl>
+        <dl class="backcomp_d">
+          <dt>买家信息</dt>
+          <dd>
+            <ul class="backcomp_u">
+              <li> 买家名称：$!order.userCustomer.nickname</li>
+            </ul>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    <div class="backcomp">
+      <div class="reputh">投诉详情</div>
+      <div class="backcomp_box">
+        <dl class="backcomp_d">
+          <dt>投诉信息</dt>
+          <!--class="backcomp_hover"去掉背景消失-->
+          <dd class="backcomp_hover">
+            <ul class="backcomp_u">
+              <li>投诉状态：<strong>#if($!order.groupComplaintBO.status == 1) 处理中 #else 已处理 #end</strong></li>
+              <li>投诉人:<strong>$!order.userCustomer.nickname</strong></li>
+              <li>投诉证据:<b class="blue"><a href="/operator/complaintDetails_img.htm?orderId=$!order.id" target="_blank"> 查看图片</a></b></li>
+              <li>投诉时间:<strong>$!CommUtil.formatLongDate($!order.groupComplaintBO.addTime)</strong></li>
+            </ul>
+          </dd>
+        </dl>
+        <dl class="backcomp_d">
+          <dt>投诉的服务</dt>
+                <dd>
+                  <table width="850" border="0" cellspacing="0" cellpadding="0" class="compgoods_table">
+                    <tr class="compgoods_th">
+                      <td width="200">&nbsp;</td>
+                      <td width="300">服务信息</td>
+                      <td width="100" align="center">数量</td>
+                      <td align="center">单价</td>
+                    </tr>
+                      #set($map = $!orderFormTools.queryGroupInfo("$!order.groupInfo"))
+            #set($goods_id = "$!{map.get('goods_id')}") 
+            #set($goods_name = "$!{map.get('goods_name')}") 
+            #set($goods_begin_time = "$!{map.get('goods_begin_time')}")
+            #set($goods_end_time = "$!{map.get('goods_end_time')}")
+            #set($goods_total_price = "$!{map.get('goods_total_price')}")
+            #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+            #set($goods_price = "$!{map.get('goods_price')}")
+            #set($goods_count = "$!{map.get('goods_count')}")
+                    <tr>
+                    <input type="hidden" name="goods_gsp_ids" value="$!goods_gsp_ids"  />
+                      <td><b class="comp_tab_b">
+                        </b><em class="comp_tab_em"><span class="compimg_span tab_span">
+                        <p><img width="80" height="80" src="$!goods_mainphoto_path" /></p>
+                        </span></em></td>
+                      <td>
+                        服务名称：$!{goods_name}<br />
+                        商户名称：$!{order.store.storeName}</a>
+                      </td>
+                      <td align="center">$!{goods_count}</td>
+                      <td align="center"><b class="c_blue">¥$!{goods_price}</b></td>
+                    </tr>
+                      <tr>
+                        <td colspan="4"><div class="comp_question"><em class="question_desp"><span>问题描述：$!order.groupComplaintBO.problemDesc</span></em></div></td>
+                      </tr>
+                    </table>
+                  </dd>
+        </dl>
+        <dl class="backcomp_d">
+          <dt>投诉内容</dt>
+          <dd>
+            <div class="comp_text"> <span style="color:#F00">$!order.groupComplaintBO.fromUserContent</span> </div>
+          </dd>
+        </dl>
+      </div>
+    </div>
+   #if($!order.groupComplaintBO.status == 3)
+   <div class="backcomp">
+      <div class="reputh">仲裁详情</div>
+      <div class="backcomp_box">
+        <dl class="backcomp_d">
+          <dt>仲裁信息</dt>
+          <dd>
+            <ul class="backcomp_u">
+              <li>仲裁管理员：<strong>平台管理员</strong></li>
+              <li>仲裁时间：<strong>$!CommUtil.formatLongDate($!order.groupComplaintBO.handleTime)</strong></li>
+            </ul>
+          </dd>
+        </dl>
+        <dl class="backcomp_d">
+          <dt>仲裁内容</dt>
+          <dd>
+            <div class="backcomp_cont">$!order.groupComplaintBO.handleContent</div>
+          </dd>
+        </dl>  
+      </div>
+    </div>
+   #end
+   #if($!order.groupComplaintBO.status == 1)
+   <div class="backcomp" id="complaint_handle" style="display:none;">
+      <div class="reputh">处理意见</div>
+      <div class="backcomp_box">
+        <dl class="backcomp_d">
+          <dd>
+            <div class="backcomp_cont_text">
+              <textarea name="handle_content" cols="80" rows="4" id="handle_content"></textarea>
+            </div>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    #end
+    #if($!order.groupComplaintBO.status == 1)
+    <div class="backcomp">
+      <div class="reputh">投诉处理</div>
+      
+      <div class="comback_btn" id="complaint_op_0"><span class="submit">
+        <input name="" type="button" class="btn btn-blue btn-medium" value="处理" style="cursor:pointer;" onclick="complaint_close();"/>
+        </span>
+      </div>
+      
+        <div class="comback_btn" id="complaint_close" style="display:none;"><span class="submit">
+        <input name="" class="btn btn-blue btn-medium" type="button" value="提交" style="cursor:pointer;" onclick="complaint_handle_close();"/>
+        </span><span class="submit">
+        <input name="" type="button" class="btn btn-blue btn-medium" value="取消" style="cursor:pointer;" onclick="$('#complaint_op_0').show();$('#complaint_close').hide();$('#complaint_handle').hide();"/>
+        </span></div>
+    </div>
+    #end
+  </div>
+  </form>
+
+</div>
+</body>
+</html>

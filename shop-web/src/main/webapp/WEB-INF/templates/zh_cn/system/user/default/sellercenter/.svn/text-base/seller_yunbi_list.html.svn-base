@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-云豆明细-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#localReturnStatus").val("$!vo.localReturnStatus");
+  jQuery('#beginTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+   jQuery(".gift_icon_c").mouseenter(function(){
+		jQuery(this).siblings("div").show();									
+											});
+  jQuery(".gift_icon_center").mouseleave(function(){
+		jQuery(this).children(".gift_icon_main").hide();									
+											});
+  
+});
+function export_excel(){
+	#if($!objs.size()>0)	
+		var order_id = jQuery("#order_id").val();
+		var buyer_userName = jQuery("#buyer_userName").val();
+		var beginTime = jQuery("#beginTime").val();
+		var endTime = jQuery("#endTime").val();
+		var localReturnStatus = jQuery("#localReturnStatus").val();
+		if(beginTime!=""&&endTime!=""){
+			window.location.href="$!webPath/seller/group_order_local_excel.htm?orderId="+order_id+"&buyerUserName="+buyer_userName+"&startDate="+beginTime+"&endDate="+endTime+"&localReturnStatus="+localReturnStatus;
+		}else{
+			showDialog("msg_info","","请选择开始时间与结束时间",0,"warning",3);
+			}		
+	#else
+		showDialog("msg_info","","当前没有可以导出的数据！",0,"warning",3);
+	#end		
+}
+</script>
+<style>
+.user_sp_right{padding-top:30px}
+.user_title_txt{height:30px;}
+.fl{float:left}
+.c4a{color:#4a4a4a;font-size:14px;line-height:30px}
+.user_sp_right .c4a{margin-right:8px}
+#order_id{width:200px}
+#beginTime,#endTime{width:120px}
+#line1{width: 9px;background-color: #666;height: 2px;margin-right: 5px;margin-top: 14px;}
+.ml21{margin-left:21px}
+	::-webkit-input-placeholder { /* WebKit browsers */
+		font-size:14px;
+		color:#9b9b9b;
+　　}
+　　:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		font-size:14px;
+		color:#9b9b9b;
+　　}
+　　::-moz-placeholder { /* Mozilla Firefox 19+ */
+		font-size:14px;
+		color:#9b9b9b;
+　　}
+　　:-ms-input-placeholder { /* Internet Explorer 10+ */
+		font-size:14px;
+		color:#9b9b9b;
+　　}
+.seller_sear_btn{
+background:#7dba55;
+border-radius:3px;
+width:56px;
+height:32px;
+font-size:14px;
+color:#ffffff;
+text-align:center;
+border:1px solid #7dba55;
+}
+.seller_sear_btn:hover{ background:#7dba55; color:#fff;border:1px solid #7dba55;}
+.seller_title_right{top:31px}
+.seller_title_right a{
+background:#7dba55;
+border-radius:3px;
+width:94px;
+height:32px;
+font-size:14px;
+color:#ffffff;
+text-align:center;
+border:1px solid #7dba55;
+line-height:34px
+}
+.table_lifeorder{border-collapse: collapse;border: 1px solid #E6E6E6;border-top: 0px;border-bottom: 0px;text-align:center;font-family: arial;margin-top:10px;float:left}			
+.table_lifeorder td,.table_lifeorder th{border:1px solid #e2e2e2;text-align:center}
+.table_lifeorder th{color: #666666;font-size: 14px;background: #F9F9F9;font-weight: normal;height: 40px;}
+.table_lifeorder td{color: #4A4A4A;font-size: 13px;height: 50px;}
+.user_list{float:none}
+.total{font-size:14px;float:right}
+</style>
+</head>
+<body>
+$!httpInclude.include("/seller/top.htm")
+<div class="main">
+  <div class="seller_center"> $!httpInclude.include("/seller/nav.htm?op=yunbi_list")
+	<div class="user_list">
+        
+        #if($!objs.size()>0)
+        <form method="post" id="ListForm">
+          <div class="show_smallimg">
+         	<div class="total">云豆总额 :$!availableBalance</div>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="smallimg_table" >
+              <tr>
+                <th width="8%">编号</th>
+                <th width="12%">金额(元)</th>
+                <th width="15%" >提交时间</th>
+                <th width="12%" >类型</th>
+                <th width="12%" >余额</th> 
+                <th>描述  </th>
+              </tr>
+              #foreach($obj in $objs)
+              <tr>
+                <td align="center">$!obj.id</td>
+                <td align="center">¥
+                  #if($!obj.pdLogAmount < 0)
+                    $!obj.pdLogAmount
+                  #else
+                    +$!obj.pdLogAmount
+                  #end
+                </td>
+                <td  align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+                 	#if($!obj.pdPayment=="alipay")
+                      #set($pd_payment="支付宝")
+                    #end
+                    #if($!obj.pdPayment=="alipay")
+                    #set($pd_payment="支付宝")
+                    #end
+                    #if($!obj.pdPayment=="alipay_wap")
+                    #set($pd_payment="手机网页支付宝")
+                    #end
+                    #if($!obj.pdPayment=="alipay_app")
+                    #set($pd_payment="手机支付宝APP")
+                    #end
+                    #if($!obj.pdPayment=="bill")
+                      #set($pd_payment="快钱")
+                    #end
+                    #if($!obj.pdPayment=="chinabank")
+                      #set($pd_payment="网银在线")
+                    #end
+                    #if($!obj.pdPayment=="tenpay")
+                      #set($pd_payment="财付通")
+                    #end
+                <td  align="center">$!obj.pdOpType</td>
+                #if($!obj.pdStatus==0)
+                      #set($pd_status="等待支付")
+                    #end
+                    #if($!obj.pdStatus==1)
+                      #set($pd_status="支付完成")
+                    #end
+                
+                 <td  align="center">$!obj.balance </td>   
+                     
+                <td  align="center">$!obj.pdLogInfo</td>
+                #if($!obj.pdPayStatus==0)
+                      #set($pd_pay_status="等待支付")
+                    #end
+                    #if($!obj.pdPayStatus==1)
+                      #set($pd_pay_status="等待审核")
+                    #end
+                    #if($!obj.pdPayStatus==2)
+                      #set($pd_pay_status="支付完成")
+                  #end
+              </tr>
+              #end
+            </table>
+          </div>
+          <div class="userlist_allop">
+            <div class="user_list_page"><span class="user_page_sp">
+              <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+              $!gotoPageFormHTML</span> </div>
+          </div>
+        </form>
+         #else
+          <div class="nothing">
+            <div class="nothing_left"><img src="$!webPath/resources/style/system/front/default/images/nothing.png" /></div>
+            <div class="nothing_right">您目前还没有收支明细记录！</div>
+          </div>
+          #end
+      </div>
+   </div>
+  </div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

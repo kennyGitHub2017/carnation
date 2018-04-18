@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.BindingHistoryMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.BindingHistory">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="old_uid" property="oldUid" jdbcType="BIGINT" />
+		<result column="new_uid" property="newUid" jdbcType="BIGINT" />
+		<result column="addtime" property="addtime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sys.bo.BindingHistoryBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, old_uid, new_uid, addtime
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.sys.model.BindingHistoryExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_binding_history
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_binding_history
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sys_binding_history
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.BindingHistoryExample">
+		delete from sys_binding_history
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.BindingHistory"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_binding_history (id, old_uid, new_uid,
+		addtime)
+		values (#{id,jdbcType=BIGINT}, #{oldUid,jdbcType=BIGINT},
+		#{newUid,jdbcType=BIGINT},
+		#{addtime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.BindingHistory"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_binding_history
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="oldUid != null">
+				old_uid,
+			</if>
+			<if test="newUid != null">
+				new_uid,
+			</if>
+			<if test="addtime != null">
+				addtime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="oldUid != null">
+				#{oldUid,jdbcType=BIGINT},
+			</if>
+			<if test="newUid != null">
+				#{newUid,jdbcType=BIGINT},
+			</if>
+			<if test="addtime != null">
+				#{addtime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.BindingHistoryExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_binding_history
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_binding_history
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.oldUid != null">
+				old_uid = #{record.oldUid,jdbcType=BIGINT},
+			</if>
+			<if test="record.newUid != null">
+				new_uid = #{record.newUid,jdbcType=BIGINT},
+			</if>
+			<if test="record.addtime != null">
+				addtime = #{record.addtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sys_binding_history
+		set id = #{record.id,jdbcType=BIGINT},
+		old_uid = #{record.oldUid,jdbcType=BIGINT},
+		new_uid = #{record.newUid,jdbcType=BIGINT},
+		addtime = #{record.addtime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.BindingHistory">
+		update sys_binding_history
+		<set>
+			<if test="oldUid != null">
+				old_uid = #{oldUid,jdbcType=BIGINT},
+			</if>
+			<if test="newUid != null">
+				new_uid = #{newUid,jdbcType=BIGINT},
+			</if>
+			<if test="addtime != null">
+				addtime = #{addtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.BindingHistory">
+		update sys_binding_history
+		set old_uid = #{oldUid,jdbcType=BIGINT},
+		new_uid = #{newUid,jdbcType=BIGINT},
+		addtime = #{addtime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

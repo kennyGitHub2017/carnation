@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/jquery-ui.min.css">
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+    <style type="text/css">
+    
+    .return_goods{float:left; overflow:hidden;width: 350px;}
+.return_goods dt{ width:55px;float:left; margin-right:10px; margin-bottom:5px;}
+.return_goods_a{ height:15px; width:53px; margin:auto; line-height:15px; padding:2px 0px; background:#F93; border:1px solid #F60; text-align:center; color:#fff; display:block;}
+.return_goods_b{ height:15px; width:53px; margin:auto; line-height:15px; padding:2px 0px; background:#f1f1f1; border:1px solid #ddd; text-align:center; color:#999;display:block;}
+.return_goods dd.nameproduct{ float:left; width:239px;}
+    </style>
+</head>
+<body>
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 商户订单
+</div>
+
+<div class="main">
+    <ul class="m-menu">
+        <li><a href="/operator/register_shop_list.htm">注册商户</a> </li>
+        <li><a href="/operator/area_shop_list.htm">所属商户</a> </li>
+        <li><a href="javascript:void(0);" class="active">商户服务</a> </li>
+    </ul>
+
+    <form class="form-control pb-30" action="/operator/shop_group_list.htm" method="post" id="searchForm">
+    	<input type="hidden" name="storeId" value="$!vo.storeId" />
+    	<input type="hidden" name="currentPage" value="1" id="currentPage"/>
+        服务名称：<input type="text" name="ggName" value="$!vo.ggName" class="txt min-txt" /> &nbsp;
+        &nbsp;
+        <input type="submit" class="btn btn-blue btn-medium" value="搜索" />
+    </form>
+
+    <div class="table-scroll-wrap">
+    #if($!objs.size() > 0)
+        <table cellspacing="0" cellpadding="0" width="100%" class="table-simple table-scroll" >
+            <tr>
+                <th width="30%" >服务名称</th>
+	            <th width="30%">服务分类</th>
+	            <th width="20%">价格</th>
+	            <th width="20%">状态</th>
+            </tr>
+            #foreach($obj in $objs)
+            <tr>
+            	 #if($!obj.groupAccPath)
+                  #set($img="$!{obj.groupAccPath}_60x63")
+                  #else
+                  #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                  #end 
+               #set($goods_url="$!shopPath/group/view_$!{obj.id}.htm")
+               	<td ><dl class="return_goods">
+                    <dt><a href="$!{goods_url}" target="_blank"><img src="$!img" width="60" height="63" /></a></dt>
+                    <dd style="padding-top:8px;">
+                    	<a href="$!{goods_url}" target="_blank">$!obj.ggName</a>
+                    </dd>
+                  </dl></td>
+	            <td>$!{obj.groupClassName}</td>
+	               #*
+                #set($showPrice=$!{obj.groupPrice})
+                #if($!{obj.selfAddPrice})
+					#set($showPrice=$!{obj.goodsShowPrice} - $!{obj.selfAddPrice})          	
+                #end
+                *#
+	            <td>¥$!{obj.groupPrice}</td>
+	             #if($!obj.groupStatus==-1)
+                	#set($groupStatus="审核未通过")
+                #elseif($!obj.groupStatus==1)
+              	  #set($groupStatus="审核通过")	
+              	  #elseif($!obj.groupStatus==0)
+              	  #set($groupStatus="等待审核")	
+              	    #else
+              	  #set($groupStatus="未发布")	
+                #end
+	            <td>$!{groupStatus}</td>
+            </tr>
+            #end
+        </table>
+    </div>
+
+    <div class="fenye">
+        $!gotoPageFormHTML
+    </div>
+	#else
+		<div class="ui-warn text-center">
+			暂无记录！
+		</div>
+	#end
+</div>
+
+<script src="/resources/js/jquery-1.8.2.js"></script>
+<script src="/resources/js/jquery-ui.min.js"></script>
+<script src="/resources/js/jquery.blockUI.dialog.js"></script>
+<script src="/resources/js/common.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type=text/css rel=stylesheet />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/smallalert.js" charset="utf-8"></script>
+<style>
+.operation ul{
+	padding: 20px 0;
+}
+.amount-money{
+	overflow: hidden;
+}
+.amount-money li{
+	float:left;
+	width:30%;
+	text-align:center;
+	background:none;
+}
+.amount-money li p{
+	font-weight: bold;
+    background:none;
+}
+.amount-money li p:nth-child(1){
+	font-size: 22px;
+	line-height: 36px;
+	padding:0 10px;
+}
+.amount-money li p:nth-child(2){
+	font-size: 12px;
+	line-height: 16px;
+	padding:0 10px;
+	color: #9B9B9C;
+}
+.fontstyle1{
+	font-weight: bold;
+	color: red;
+	font-size: 17px;
+}
+.operation ul li{
+	background:none;
+}
+</style>
+<script>
+	jQuery(document).ready(function() {
+		jQuery('#beginTime_sx').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+		jQuery('#endTime_sx').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+		jQuery('#beginTime_xd').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+		jQuery('#endTime_xd').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+	});
+
+	// 导出报表
+	function export_excel(){
+// 		var status = $("#status").val();
+// 		var orderno = $("#orderno").val();
+// 		var platId = $("#platId").val();
+// 		var startTime = $("#beginTime_xd").val();
+// 		var endTime = $("#endTime_xd").val();
+		if(!checkFilter()){
+			alert("请选择导出条件!");
+			return;
+		}else{
+			#if($!objs.size()>0)
+				document.forms[1].action = "$!webPath/admin/total_order_export.htm";
+				document.forms[1].submit();
+			#else
+				alert("当前没有可导出的数据!");
+			#end
+		}
+	}
+	
+	function checkFilter(){
+	
+	if($("#status").val()==""
+				  & $("#platId").val()==""
+					  &$("#orderno").val()==""
+						  &$("#beginTime_xd").val()==""
+						   &$("#endTime_xd").val()==""){
+				return false;
+			}else{
+				return true;
+			}
+		
+	}
+	
+	function juanPiTotal(){
+		$.ajax({
+			url:'$!webPath/admin/juanpi_total.htm',
+			data:"startTimeTotal="+$("#beginTime_sx").val()+"&endTimeTotal="+$("#endTime_sx").val(),
+			type:"POST",
+			dataType:"json",
+			success:function(orderTotals){
+				if(orderTotals!=null){
+					$("#total").text(orderTotals.goodsmoney.toFixed(2)+"元");
+					$("#totalCom").text(orderTotals.commission.toFixed(2)+"元");
+					$("#totalYunCom").text(orderTotals.yunCommission.toFixed(2)+"元");
+					
+				}else{
+					$("#total").text("0.00元");
+					$("#totalCom").text("0.00元");
+					$("#totalYunCom").text("0.00元");
+				}
+			}
+		});
+}
+</script>
+</head>
+<body>
+
+	<div class="cont">
+		<h3 class="seth">结算管理</h3>
+		<form action="" method="post" id="queryForm1">
+			<input name="userId" type="hidden" value="$!vo.userId" />
+			<div class="search">
+				<ul>
+					<li>
+						<span>时间筛选</span>
+						<span class="size100">
+							<input name="startTimeTotal" type="text" id="beginTime_sx" value="$!vo.startTimeTotal" readonly="readonly" />
+						</span>
+						<span>—</span>
+						<span class="size100"> <input name="endTimeTotal"
+								type="text" value="$!vo.endTimeTotal" id="endTime_sx" readonly="readonly" />
+						</span> 
+						</span> 
+						<input name="" type="button" value="确定" onclick="juanPiTotal();" style="cursor: pointer; margin-left:24px" class="search_btn" />
+					</span>
+					
+					</li>
+				</ul>
+			</div>
+		</form>
+		
+		<div class="operation" style="background:#f0f9ff; border:1px solid #C2E8FF">
+		    <ul class="amount-money">
+				<li>
+					<p><span id="total">
+					#if($!orderTotals.goodsmoney)
+					$!orderTotals.goodsmoney
+					#else
+					0.00
+					#end
+					</span>
+					</p>
+					<p>总销售额 （元）</p>
+				</li>
+				<li>
+					
+					<p><span id="totalCom">
+					#if($!orderTotals.commission)
+					$!orderTotals.commission
+					#else
+					0.00
+					#end
+					</span>
+					</p>
+					<p>卷皮实得佣金金额 （元）</p>
+				</li>
+				<li>
+					<p><span id="totalYunCom">
+					#if($!orderTotals.yunCommission)
+					$!orderTotals.yunCommission
+					#else
+					0.00
+					#end
+					</span>
+					</p>
+					<p>云尚实得佣金金额 （元）</p>
+				</li>
+			</ul>
+	  	</div>
+
+		<div class="nav_list">
+		  	<ul>
+		    	<li><a href="javascript:void(0)" class="this"><b>结算管理</b></a></li>
+		    </ul>
+		</div>
+		<form action="$webPath/admin/juanpi_settlement.htm" method="post" id="queryForm">
+			<input name="userId" type="hidden" value="$!vo.userId" />
+			<div class="search">
+				<ul>
+					<li>
+						<span>结算状态</span>
+						<span>
+							<select name="status" id="status">
+								<option value="">全部</option>
+								<option value="1"  #if($!vo.status == 1) selected="selected" #end>待处理</option>
+								<option value="2"  #if($!vo.status == 2) selected="selected" #end>待结算</option>
+								<option value="3"  #if($!vo.status == 3) selected="selected" #end>已结算</option>
+								<option value="4"  #if($!vo.status == 4) selected="selected" #end>不可结算</option>
+							</select>
+						</span>
+						<span>来源</span>
+						<span> 
+							<select name="platId" id="platId">
+								<option value="">全部</option>
+								<option value="1" #if($!vo.platId == 1) selected="selected" #end>PC</option>
+								<option value="2" #if($!vo.platId == 2) selected="selected" #end>M站</option>
+								<option value="3" #if($!vo.platId == 3) selected="selected" #end>卷皮Android</option>
+								<option value="4" #if($!vo.platId == 4) selected="selected" #end>卷皮iPhone</option>
+								<option value="5" #if($!vo.platId == 5) selected="selected" #end>卷皮iPad</option>
+								<option value="6" #if($!vo.platId == 6) selected="selected" #end>九块邮Android</option>
+								<option value="7" #if($!vo.platId == 7) selected="selected" #end>九块邮iPhone</option>
+								<option value="8" #if($!vo.platId == 8) selected="selected" #end>九块邮iPad</option>
+								<option value="9" #if($!vo.platId == 9) selected="selected" #end>微信特卖</option>
+								<option value="10" #if($!vo.platId == 10) selected="selected" #end>安卓Pad</option>
+							</select>
+						</span> 
+						<span>订单号</span> 
+						<span class="size150"> 
+							<input name="orderno" type="text" id="orderno" value="$!vo.orderno" />
+						</span>
+						<span>下单时间</span>
+						<span class="size100"> 
+							<input name="startTime" type="text" id="beginTime_xd" value="$!vo.startTime" readonly="readonly" />
+						</span>
+						<span>—</span>
+						<span class="size100"> <input name="endTime" type="text" value="$!vo.endTime" id="endTime_xd" readonly="readonly" />
+						</span>
+						<span>
+							<input name="" type="submit" value="搜索" style="cursor: pointer;" class="search_btn" />
+						</span>
+						<span>
+							<input name="importExcel" onclick="export_excel()" type="button" value="导出Excel" style="cursor: pointer;" class="search_btn" />
+						</span>
+					</li>
+				</ul>
+			</div>
+		</form>
+
+		<form action="#" method="post" id="ListForm">
+			<div class="fshoptb">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					class="fshop_table">
+					<tr>
+						<!-- <th width="3%">&nbsp;</th> -->
+						<th width="12%"><span class="form_btna">订单号</span></th>
+						<th width="15%"><span class="form_btna">商品名称</span></th>
+						<th width="8%"><span class="form_btna">商品数量</span></th>
+						<th width="8%"><span class="form_btna">商品总价</span></th>
+						<th width="15%"><span class="form_btna">下单时间</span></th>
+						<th width="10%"><span class="form_btna">来源</span></th>
+						<th width="8%"><span class="form_btna">结算比例</span></th>
+						<th width="8%"><span class="form_btna">卷皮佣金</span></th>
+						<th width="8%"><span class="form_btna">云尚佣金</span></th>
+						<th align="center" width="18%"><b class="form_btnb">结算状态</b></th>
+					</tr>
+					#foreach($obj in $objs)
+					<tr>
+						<td align="center">$!obj.orderNo</td>
+						<td align="center">$!obj.goodstitle</td>
+						<td align="center">$!obj.goodsnumber</td>
+						<td align="center">&yen;$!obj.goodsmoney</td>
+						<td align="center">$!obj.addOrderTime</td>
+						<td align="center">
+							#if($!obj.platId==1)
+								#set($platIdName="PC")
+						    #end
+						    #if($!obj.platId==2)
+								#set($platIdName="M站")
+						    #end
+						    #if($!obj.platId==3)
+								#set($platIdName="卷皮Android")
+						    #end
+						    #if($!obj.platId==4)
+								#set($platIdName="卷皮iPhone")
+						    #end
+						    #if($!obj.platId==5)
+								#set($platIdName="卷皮iPad")
+						    #end
+						    #if($!obj.platId==6)
+								#set($platIdName="九块邮Android")
+						    #end
+						    #if($!obj.platId==7)
+								#set($platIdName="九块邮iPhone")
+						    #end
+						    #if($!obj.platId==8)
+								#set($platIdName="九块邮iPad")
+						    #end
+						    #if($!obj.platId==9)
+								#set($platIdName="微信特卖")
+						    #end
+						    #if($!obj.platId==10)
+								#set($platIdName="安卓pad")
+						    #end
+						    $!platIdName
+						</td>
+						<td align="center">$number.format("0.00",$!obj.brokerageratiocale)%</td>
+						<td align="center">$!obj.commission</td>
+						<td align="center" #if($!obj.commission!=$!obj.yunCommission) style="color:red;font-size:18px;font-weight:700;" #end>$!obj.yunCommission</td>
+						<td align="center">
+							#if($!obj.status==1)
+								#set($statusName="待处理")
+						    #end
+						    #if($!obj.status==2)
+								#set($statusName="待结算")
+						    #end
+						    #if($!obj.status==3)
+								#set($statusName="已结算")
+						    #end
+						    #if($!obj.status==4)
+								#set($statusName="不可结算")
+						    #end
+						    $!statusName
+						</td>
+					</tr>
+				#end				
+				</table>
+			</div>
+			
+			
+			<div class="operate_bar">
+				<div class="fenye">
+					<input name="endPrice" type="hidden" id="endPrice"
+						value="$!vo.endPrice" /> <input name="userId" type="hidden"
+						id="userId" value="$!vo.userId" /> <input name="beginPrice"
+						type="hidden" id="beginPrice" value="$!vo.beginPrice" /> <input
+						name="endTime" type="hidden" id="endTime" value="$!vo.endTime" />
+					<input name="beginTime" type="hidden" id="beginTime"
+						value="$!vo.beginTime" /> <input name="typeData" type="hidden"
+						id="typeData" value="$!vo.typeData" /> <input name="type"
+						type="hidden" id="type" value="$!vo.type" /> <input
+						name="orderStatus" type="hidden" id="orderStatus"
+						value="$!vo.orderStatus" /> <input name="currentPage"
+						type="hidden" id="currentPage" value="$!currentPage" /> <input
+						name="payment" type="hidden" id="payment" value="$!vo.payment" />
+					$!gotoPageFormHTML
+				</div>
+			</div>
+			<div class="fenye"></div>
+			
+		</form>
+	</div>
+</body>
+</html>

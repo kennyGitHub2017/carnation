@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security
+                        http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+	<beans:bean id="loggerListener"
+		class="org.springframework.security.authentication.event.LoggerListener" />
+
+	<beans:bean id="securityManager"
+		class="vc.thinker.b2b2c.core.security.support.SecurityManagerSupport">
+		<beans:property name="authKey" value="admin:"></beans:property>
+	</beans:bean>
+
+	<beans:bean id="userDetailsService"
+		class="vc.thinker.b2b2c.core.security.support.UserDetailsServiceSupport" />
+
+	<beans:bean id="sessionRegistry"
+		class="org.springframework.security.core.session.SessionRegistryImpl" />
+
+	<beans:bean id="loginUrlEntryPoint"
+		class="vc.thinker.b2b2c.core.security.support.LoginUrlEntryPoint" />
+
+	<global-method-security secured-annotations="enabled" />
+
+	<!--不用Filter去处理的url -->
+	<http pattern="/login.htm*" security="none" />
+	<http pattern="/domain_error.htm*" security="none" />
+	<http pattern="*.css" security="none" />
+	<http pattern="*.gif" security="none" />
+	<http pattern="*.jpg" security="none" />
+	<http pattern="*.jpeg" security="none" />
+	<http pattern="*.png" security="none" />
+	<http pattern="*.bmp" security="none" />
+
+	<http auto-config="false" entry-point-ref="loginUrlEntryPoint">
+		<intercept-url pattern="/admin/index.htm" access="IS_AUTHENTICATED_FULLY" />
+		<!-- max-sessions允许最大登录用户数，exception-if-maximum-exceeded为false时候第二个用户登录踢出第一个，为true拒绝第二个用户登录 -->
+		<session-management session-fixation-protection="none">
+			<concurrency-control error-if-maximum-exceeded="false"
+				max-sessions="2" expired-url="/outline.htm" session-registry-alias="sessionRegistry" />
+		</session-management>
+		<custom-filter ref="loginAuthenticationFilter" before="FORM_LOGIN_FILTER" />
+		<custom-filter ref="resourceSecurityInterceptor" after="LAST" />
+		<custom-filter ref="_logoutProcessingFilter" before="LOGOUT_FILTER" />
+		<custom-filter ref="exceptionFilter" after="EXCEPTION_TRANSLATION_FILTER" />
+	</http>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="shopAuthenticationProvider" />
+	</authentication-manager>
+
+	<beans:bean id="shopAuthenticationProvider"
+		class="vc.thinker.b2b2c.core.security.support.MyShopAuthenticationProvider">
+		<beans:property name="userDetailsService" ref="userDetailsService" />
+	</beans:bean>
+
+	<beans:bean id="accessDecisionManager"
+		class="org.springframework.security.access.vote.AffirmativeBased">
+		<beans:property name="allowIfAllAbstainDecisions"
+			value="false" />
+		<beans:property name="decisionVoters">
+			<beans:list>
+				<beans:bean class="org.springframework.security.access.vote.RoleVoter" />
+				<beans:bean
+					class="org.springframework.security.access.vote.AuthenticatedVoter" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="resourceSecurityInterceptor"
+		class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="accessDecisionManager" ref="accessDecisionManager" />
+		<beans:property name="securityMetadataSource"
+			ref="secureResourceFilterInvocationDefinitionSource" />
+		<beans:property name="observeOncePerRequest" value="false" />
+	</beans:bean>
+	<beans:bean id="secureResourceFilterInvocationDefinitionSource"
+		class="vc.thinker.b2b2c.core.security.interceptor.DatabaseFilterInvocationSecurityMetadataSource">
+		<beans:property name="jedisPool" ref="jedisPool" />
+		<beans:property name="authKey" value="admin:"></beans:property>
+	</beans:bean>
+	<!-- 自定义登录过滤器 -->
+	<beans:bean id="loginAuthenticationFilter"
+		class="vc.thinker.b2b2c.core.security.support.LoginAuthenticationFilter">
+		<beans:property name="usernameParameter" value="username" />
+		<beans:property name="passwordParameter" value="password" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="authenticationFailureHandler"
+			ref="failureHandler" />
+		<beans:property name="authenticationSuccessHandler"
+			ref="successHandler" />
+		<beans:property name="filterProcessesUrl" value="/admin_login.htm" />
+	</beans:bean>
+
+	<beans:bean id="successHandler"
+		class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/login_success.htm" />
+		<beans:property name="alwaysUseDefaultTargetUrl" value="true" />
+	</beans:bean>
+	<beans:bean id="failureHandler"
+		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<beans:property name="defaultFailureUrl" value="/login_error.htm" />
+	</beans:bean>
+
+	<!-- 自定义异常过滤器 -->
+	<beans:bean id="exceptionFilter"
+		class="org.springframework.security.web.access.ExceptionTranslationFilter">
+		<beans:property name="authenticationEntryPoint" ref="loginUrlEntryPoint" />
+		<beans:property name="accessDeniedHandler" ref="accessDeniedHandler" />
+	</beans:bean>
+	<beans:bean id="accessDeniedHandler"
+		class="vc.thinker.b2b2c.core.security.support.ShopAccessDeniedHandlerImpl">
+		<beans:property name="errorPage" value="/admin_logout.htm" />
+	</beans:bean>
+	<!-- 重写用户退出过滤器 -->
+	<beans:bean id="_logoutProcessingFilter"
+		class="vc.thinker.b2b2c.core.filter.NorLogoutFilter">
+		<beans:property name="filterProcessesUrl" value="/admin_logout.htm" />
+		<beans:constructor-arg index="0"
+			value="/logout_success.htm" />
+		<beans:constructor-arg index="1">
+			<beans:list>
+				<beans:bean
+					class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler">
+					<beans:property name="invalidateHttpSession" value="true" />
+				</beans:bean>
+			</beans:list>
+		</beans:constructor-arg>
+	</beans:bean>
+</beans:beans>

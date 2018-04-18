@@ -1,0 +1,49 @@
+<script>
+jQuery(document).ready(function(){
+	
+ });
+
+</script>
+
+<form action="operator_assigned_save.htm?sellerId=$!{sellerId}" method="post" id="assigedForm">
+	<table class="clear">
+		<tr>
+			<td height="30" align="right" width="100">运营商：</td>
+			<td align="left">
+				#if($!operatorList.size() > 0)
+				<select name="operatorCode" id="operatorCode">
+	             <option value="">请选择要分配的运营商...</option>
+	             #foreach($operator in $!operatorList)
+	             	<option value="$!operator.operatorCode">[#if($!operator.level == 2) 区级 #elseif($!operator.level == 3) 区域级 #end]$!{operator.operatorName}($!{operator.operatorCode});隶属商户($!{operator.countShop})</option>
+	             #end
+	           </select>
+	           #else
+	           	  该区没有任何运营商
+	           #end
+			</td>
+		</tr>
+	</table>
+	#if($!operatorList.size() > 0)
+		<input style="margin-top: 10px;" type="button" value="确定" style="cursor:pointer;" class="search_btn" onclick="submitForm();">
+	#end   	
+</form>
+<script>
+jQuery(document).ready(function(){
+	
+});////
+function submitForm()
+{
+	var operatorCode = jQuery("#operatorCode").val();
+	if(operatorCode != '' && operatorCode != null)
+	{
+		if(confirm('分配后将不能再修改商户隶属关系，确认分配？'))
+		{
+			jQuery("#assigedForm").submit();
+		}
+	}
+	else
+	{
+		alert("请选择要分配的运营商！");
+	}
+}
+</script>

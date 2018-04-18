@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="$!webPath/resources/elong/css/mainForPayment.css" />
+		<script type="text/javascript">
+			function showDialog(style){
+				document.getElementById("shareMark").style.display = style;
+				document.getElementById("cancel_dialog").style.display = style;
+			}
+			function toHotelList(){
+				location.href = '$!webPath/v1/elong_hotel_list.htm';
+			}
+			window.onload=function(){
+				if(history.length<2){
+					  document.getElementById("back").style.display="none";
+					  document.getElementById("page-content").style.paddingTop="0px"
+				}	
+			}
+		</script>
+	</head>
+	<body>
+		<div class="pages">
+        <div class="page page-on-center" data-blend="layer" data-blend-id="initpaymode" data-url="/payment/initpaymode/?key=f631a62c-d456-45f6-bc5d-1716ae1bc993" id="uniq22" data-title="支付订单" data-title-id="initpaymode">
+  
+		<header class="bar bar-nav" id="back">
+			 <a class="icon icon-left-nav pull-left icon-back" data-rel="back" href="javascript:;" onclick="showDialog('block')"></a>
+			 <h1 class="title">支付订单</h1>
+		</header>
+
+            <div class="page-content payment-page" id="page-content">
+                
+                <article class="guarantee-nav">
+
+                    <section class="choose-credit">
+                    	<!--秒杀支付订单 倒计时 dom start-->
+                        
+                        <!--秒杀支付订单 倒计时 dom end-->
+                        <div class="text-prompt">
+                            
+                                    <p>
+                                    <label class="c45" style="
+                                         color: #555;
+                                         font-size: 1.0rem;
+                                         ">
+                                        $!{orderDetail.hotelName}
+                                    </label>
+                                    <label style=" 
+                                         color: ;
+                                         font-size: ;
+                                         ">
+                                        
+                                    </label>
+                                    </p>
+                            
+                                    <p>
+                                    <label class="c45" style="
+                                         color: #555;
+                                         font-size: 0.8rem;
+                                         ">
+                                        $!{orderDetail.roomTypeName}
+                                    </label>
+                                    <label style=" 
+                                         color: #555;
+                                         font-size: 0.8rem;
+                                         ">
+                                        $!{orderDetail.numberOfRooms}间
+                                    </label>
+                                    <label style=" 
+                                         color: #555;
+                                         font-size: 0.8rem;
+                                         ">
+                                        $!{valueAdds}
+                                    </label>
+                                    </p>
+                            
+                                    <p>
+                                    <label class="c45" style="
+                                         color: #555;
+                                         font-size: 0.8rem;
+                                         ">
+                                        ${arrivalDate} 到 ${departureDate}
+                                    </label>
+                                    <label style=" 
+                                         color: #555;
+                                         font-size: 0.8rem;
+                                         ">
+                                        
+										共${intervalDay}晚
+                                    </label>
+                                    </p>
+                            
+                            </div>
+                            
+                        	
+                        		<div class="text-prompt prompt-border">
+    	                    			#if (${prepayRule})
+    			                        <p>
+                                            <label class="c45" style="
+                                                 color: #999;
+                                                 font-size: 0.8rem;
+                                                 ">
+                                                 	$!{prepayRule}
+                                            </label>
+                                        </p>
+                                        #end
+                                        #if (${guaranteeRule})
+                                        <p>
+                                            <label class="c45" style="
+                                                 color: #999;
+                                                 font-size: 0.8rem;
+                                                 ">
+                                                 	$!{guaranteeRule}
+                                            </label>
+                                        </p>
+    	                    			#end
+    	                    	</div>
+    	                     
+                       
+                        <dl class="amount-gua" style="margin-top:10px;">
+                            <dt>订单金额：</dt>
+                            <dd class="fe55" id="payamount" amount="110">
+                            	￥${totalPrice}
+                            	
+                            </dd>
+                        </dl>
+                        
+                        <!-- 如果先扣了现金账户，剩余的部分 -->
+                        
+	                        <dl id="needpay_dl" diff="false" class="amount-gua btddd" style="display:none">
+	                                <dt>还需支付：</dt>
+	                                <dd class="fe55" id="needpay" amount="110">￥${orderDetail.totalPrice}</dd>
+	                        </dl>
+                        
+                        <ul class="list">
+                   			<li class="recommend list-checkbox  selected pay_sin">
+                    			信用卡支付
+                    			<div class="checkbox checked" productid="40" catagory="6666" supportca="true" data="choosecardpay" bankid="0" productcode="0000" productsubcode="0"></div>
+                    		</li>
+                        </ul>
+                    </section>
+                    <section class="search">
+                        <input type="hidden" id="key" value="f631a62c-d456-45f6-bc5d-1716ae1bc993">
+                        <input type="hidden" id="isLogin" value="false">
+                        <input type="hidden" id="cancleUrl" value="https://m.elong.com/hotel/0101/nlist/">
+                        <input type="hidden" id="hasCardHistory" value="false">
+                        <input type="hidden" id="orderNo" value="229674940">
+                        <input type="hidden" id="indexBackBtnText" value="">
+                        <input type="hidden" id="appId" value="wxf5f19f298d69d701">
+                        <input type="hidden" id="isAuth" value="false">
+                        <input type="hidden" id="headTip" value="">
+                        <input type="hidden" id="deadline" value="0">
+                        <input type="hidden" id="bindMobileUrl" value="">
+                        <input type="hidden" id="failMessage" value="">
+                        <input type="hidden" id="bizType" value="1005">
+                        <input type="hidden" id="channelId" value="dmwh5">
+                        <input type="hidden" id="title" value="支付订单">
+                        <button class="btn btn-primary btn-block go_pay" id="gopay" onclick="location.href='$!webPath/v1/elong/order/toPay.htm?id=${orderDetail.id}&isNeedPay=true&paymentType=card'">去支付</button>
+                    </section>
+                </article>
+
+            </div>
+            <!-- layout after -->
+            <!-- 微信朋友代付 引导用户分享链接的弹层  默认不显示 -->
+            <div id="shareMark" onclick="showDialog('none')" style="display: none;background-image:none;"></div>
+            <div id="cancel_dialog" class="dialog plugin-inited dialog-active">
+            	<div class="content">您的订单已提交，尚未完成支付，确定放弃支付吗？</div>
+            	<div class="item-btn item-btn2" style="background: rgb(255, 255, 255); color: rgb(230, 87, 73);" onclick="toHotelList()">重新预订</div>
+            	<div class="item-btn item-btn2" style="background: rgb(230, 87, 73);" onclick="showDialog('none')">继续支付</div>
+            </div>
+        </div>
+    </div>
+	</body>
+</html>

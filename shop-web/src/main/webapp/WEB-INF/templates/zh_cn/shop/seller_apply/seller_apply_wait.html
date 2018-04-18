@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>商户入驻进度查询</title>
+    <link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/system/front/default/css/user2.css" type="text/css"
+          rel="stylesheet"/>
+    <link rel="stylesheet" href="$!webPath/resources/style/system/front/default/css/seller_apply.css">
+    <link href="$!webPath/resources/style/service/public2.css" type="text/css" rel="stylesheet"/>
+	<link href="$!webPath/resources/login/css/style.css" type="text/css" rel="stylesheet"/>
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+	<script type="text/javascript">
+		function toLogin(url){
+			var toUrl="$!webPath/user/merchantLogin.htm"
+			if(url){
+				toUrl=toUrl+"?url="+encodeURIComponent(url);
+			}
+			location.href=toUrl;
+		}
+	</script>
+	<style>
+	.ui-success_new .ui-success_new_tit.shenhezhong{background-position: 309px center;}
+	html,body{background:#f8faf9;}
+	.sh_footer{margin-top: 27px;border-top: 1px solid #0fbf83;}
+	</style>
+</head>
+<body>
+
+	#if($config.websiteLogo)
+    #set($img="$!{config.websiteLogo.path}")
+    #set($img="$!webPath/resources/style/system/front/default/images/logo.png")
+    #else
+    #set($img="$!webPath/resources/style/system/front/default/images/logo.png")
+    #end
+
+
+<div style="width: 100%;background: #fff;">
+<div class="sh_logo">
+		<a href="$!webPath"><img src="$!webPath/resources/login/img/logo.jpg" alt="云尚" /></a>
+		<span class="sh_title">商户入驻</span>
+		<span class="enter_help"><a href="$!webPath/doc.htm?mark=apply_help">入驻帮助</a></span>
+	</div>
+</div>	
+	<div class="enter_layout">
+		<div class="enter_step">
+			<div class="enter_step_tit">
+				<span class="tit">阅读入驻协议</span>
+				<span class="tit">填写申请入驻资料</span>
+				<span class="tit">审核日志查询</span>
+			</div>
+			<div class="enter_step_mes">
+				<ul>
+					<li class="curr2"><span class="step_1"></span></li>
+					<li class="curr2"><span class="step_2"></span></li>
+					<li class="curr"><span class="step_3"></span></li>
+				</ul>
+			</div>
+		</div>                                              
+		
+		
+	</div>
+
+<div class="main clearfix">
+
+  
+
+    <div class="cl">
+        <div class="mt-20">
+                #if($store.storeStatus >= 15)
+                	<div class="ui-success mt-20" style="text-align:left;display: none;" >
+                	恭喜您！您的商户申请已经审批通过，
+                	
+	                	<div style="margin-top: 15px;">
+	                	#if(${sec.anyGranted("user_center_seller")})
+	                	点击这里进入 <a class="c_blue" href="$webPath/seller/index.htm">商户首页</a>
+	                	#else
+	                	<a style="font-size: 12px;display: inline-block; background-color: red; margin-right:5px; color: white;border-radius: 5px;padding: 5px;" href="javascript:void(0)" onclick="toLogin('$webPath/user/merchantLogin.htm')">立即登录</a>或<a style="font-size: 12px;display: inline-block; background-color: red; margin-right:5px; color: white;border-radius: 5px;padding: 5px;" href="$!webPath">&nbsp;返回首页</a>
+	                	#end
+	                	</div>
+                	</div>
+                	
+                	<div class="ui-success_new">
+                		<span class="ui-success_new_tit">恭喜您！您的商户申请已经审批通过</span>
+                		<a class="ui-success_new_login" href="javascript:void(0)" onclick="toLogin('$webPath/user/merchantLogin.htm')">立即登录</a>
+                		<a class="ui-success_new_return" href="$webPath/seller/index.htm">返回会员首页</a>
+                	</div>
+               	#elseif($store.storeStatus == 5)
+               		<div class="ui-success_new">
+	             		<span class="ui-success_new_tit defeated shenhezhong">您的资料已提交成功，云尚平台审核中...</span>
+	             		<span style="display:block; font-size: 14px;color: #878787;">我们将在3-5个工作日内通过短信的方式通知您审核结果，请注意查收！</span>
+	             		<a style="display:inline-block; color: #0fbf83;margin-top: 20px;" class="ui-success_new_return" href="$webPath/seller/index.htm">返回会员首页</a>
+                	</div>
+               	#else
+               		<div class="ui-success_new">
+	             		<span class="ui-success_new_tit defeated">抱歉！您的商户申请资料未审批通过</span>
+	             		<span style="display:block; font-size: 16px;color: #3a3a3a;">未通过原因：$!store.failReseaon</span>
+	             		<a class="ui-success_new_login defeated" href="$webPath/seller_apply/group/step1_update.htm" >修改申请资料</a>
+	             		<a class="ui-success_new_return" href="$webPath/seller/index.htm">返回会员首页</a>
+                	</div>
+                #end
+             <div class="join_step_div">   
+	            <ul class="join_step">
+	                <li class="action">
+	                   <div class="title "> 提交入驻申请</div>
+	                    <div class="join_text">
+	               			<span>1. 审核时效，资质初审2个工作日，复审1-3个工作日，店铺授权3-5个工作日；</span>
+							<span>2. 您可登陆我要合作-商户入驻查看审核状态，也可拨打客服热线<span style="color: #0fbf83;display: inline;">400-888-2933 </span> 或联系QQ了解进度；</span>
+							<span>3. 店铺开通后，商户可通过注册时填写的手机号码及密码登陆到商户中心进行店铺设置；</span>	
+	                    </div>
+	                </li>
+	                <!-- <li #if($store.storeStatus > 1)  #if($store.storeStatus == 2)  class="failure" #else  class="action" #end #end>
+	                    <div class="title"> 运营商审核</div>
+	                    #if($store.storeStatus > 1)
+		                    #if($store.storeStatus == 2) 
+		                    	<div class="join_text">
+			                        <h4>运营商审核失败:</h4>
+			                       <div>$!store.failReseaon</div>
+			                       <a class="c_blue" style="display: inline-block;background-color: red;padding: 4px;border-radius:0px 4px 4px 4px;color: #fff;" href="$webPath/seller_apply/group/step1_update.htm">点击进行修改</a>
+			                    </div>
+		                    #else 
+		                    	<div class="join_text">
+			                        运营商审核成功!
+			                    </div>
+		                    #end
+		                #end
+	                </li> -->
+	                <li #if($store.storeStatus >5)  
+			                #if($store.storeStatus == 6)  class="failure" 
+			                #else class="action" 
+			                #end 
+			            #elseif($store.storeStatus == 5) class="inreview" 
+		                #end>
+	                    <div class="title"> 云尚平台审核</div>
+	                    #if($store.storeStatus > 5)
+		                    #if($store.storeStatus == 6) 
+		                    	<div class="join_text weitongguo">
+			                        <span>很抱歉，云尚平台审核未通过! </br> 原因：$!store.failReseaon</span>
+			                    </div>
+		                    #else 
+		                    	<div class="join_text">
+			                        云尚平台审核通过!
+			                    </div>
+		                    #end
+		                #end
+		                	#if($store.storeStatus == 5)
+		              		<div class="join_text">
+			                        	云尚平台审核中...
+			                    </div>
+		              	#end
+	                </li>
+	                 #if($store.storeStatus >= 15)
+			                <li  #if($store.storeStatus >= 15) class="action" #end>
+			                    <div class="title suess"> 入驻成功</div>
+			                    <div class="join_text">
+			               			入驻成功！	
+			                    </div>
+			                </li>
+                	#else
+			                <li  class="action">
+			                    <div class="title suess defeated"> 入驻成功</div>
+			                   
+			                </li>
+               		#end
+
+	            </ul>
+            </div>
+        </div>
+    </div>
+</div>
+$!httpInclude.include("/user/footer.htm")
+</body>
+</html>

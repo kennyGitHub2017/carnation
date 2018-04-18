@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.operation.mapper.ZTCGoldLogMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.operation.model.ZTCGoldLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="zgl_content" property="zglContent" jdbcType="VARCHAR" />
+		<result column="zgl_gold" property="zglGold" jdbcType="INTEGER" />
+		<result column="zgl_goods_id" property="zglGoodsId" jdbcType="BIGINT" />
+		<result column="zgl_type" property="zglType" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.operation.bo.ZTCGoldLogBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, goods_name, store_name, user_name,
+		zgl_content, zgl_gold,
+		zgl_goods_id, zgl_type
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.operation.model.ZTCGoldLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_ztc_gold_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_ztc_gold_log
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_ztc_gold_log
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.operation.model.ZTCGoldLogExample">
+		delete from shop_ztc_gold_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.operation.model.ZTCGoldLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_ztc_gold_log (id, add_time, delete_status,
+		goods_name, store_name, user_name,
+		zgl_content, zgl_gold, zgl_goods_id,
+		zgl_type)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{goodsName,jdbcType=VARCHAR}, #{storeName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+		#{zglContent,jdbcType=VARCHAR}, #{zglGold,jdbcType=INTEGER},
+		#{zglGoodsId,jdbcType=BIGINT},
+		#{zglType,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.operation.model.ZTCGoldLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_ztc_gold_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="goodsName != null">
+				goods_name,
+			</if>
+			<if test="storeName != null">
+				store_name,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="zglContent != null">
+				zgl_content,
+			</if>
+			<if test="zglGold != null">
+				zgl_gold,
+			</if>
+			<if test="zglGoodsId != null">
+				zgl_goods_id,
+			</if>
+			<if test="zglType != null">
+				zgl_type,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="goodsName != null">
+				#{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="storeName != null">
+				#{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="zglContent != null">
+				#{zglContent,jdbcType=VARCHAR},
+			</if>
+			<if test="zglGold != null">
+				#{zglGold,jdbcType=INTEGER},
+			</if>
+			<if test="zglGoodsId != null">
+				#{zglGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="zglType != null">
+				#{zglType,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.operation.model.ZTCGoldLogExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_ztc_gold_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_ztc_gold_log
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.goodsName != null">
+				goods_name = #{record.goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeName != null">
+				store_name = #{record.storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userName != null">
+				user_name = #{record.userName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.zglContent != null">
+				zgl_content = #{record.zglContent,jdbcType=VARCHAR},
+			</if>
+			<if test="record.zglGold != null">
+				zgl_gold = #{record.zglGold,jdbcType=INTEGER},
+			</if>
+			<if test="record.zglGoodsId != null">
+				zgl_goods_id = #{record.zglGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="record.zglType != null">
+				zgl_type = #{record.zglType,jdbcType=INTEGER},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_ztc_gold_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		goods_name = #{record.goodsName,jdbcType=VARCHAR},
+		store_name = #{record.storeName,jdbcType=VARCHAR},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		zgl_content = #{record.zglContent,jdbcType=VARCHAR},
+		zgl_gold = #{record.zglGold,jdbcType=INTEGER},
+		zgl_goods_id = #{record.zglGoodsId,jdbcType=BIGINT},
+		zgl_type = #{record.zglType,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.operation.model.ZTCGoldLog">
+		update shop_ztc_gold_log
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="goodsName != null">
+				goods_name = #{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="storeName != null">
+				store_name = #{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="zglContent != null">
+				zgl_content = #{zglContent,jdbcType=VARCHAR},
+			</if>
+			<if test="zglGold != null">
+				zgl_gold = #{zglGold,jdbcType=INTEGER},
+			</if>
+			<if test="zglGoodsId != null">
+				zgl_goods_id = #{zglGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="zglType != null">
+				zgl_type = #{zglType,jdbcType=INTEGER},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.operation.model.ZTCGoldLog">
+		update shop_ztc_gold_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		goods_name = #{goodsName,jdbcType=VARCHAR},
+		store_name = #{storeName,jdbcType=VARCHAR},
+		user_name = #{userName,jdbcType=VARCHAR},
+		zgl_content = #{zglContent,jdbcType=VARCHAR},
+		zgl_gold = #{zglGold,jdbcType=INTEGER},
+		zgl_goods_id = #{zglGoodsId,jdbcType=BIGINT},
+		zgl_type = #{zglType,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

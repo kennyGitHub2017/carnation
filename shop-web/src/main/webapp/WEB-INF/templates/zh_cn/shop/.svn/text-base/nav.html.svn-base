@@ -1,0 +1,159 @@
+<style>
+.left_menu_dl .index-right-img{float: right;margin-top: -15px;margin-right: 20px;width: 10px;height: 13px;background: url("$!webPath/resources/style/shop/images/index-right-kai.png")no-repeat center center;}
+.left_menu_dl_hover .index-right-img{float: right;margin-top: -15px;margin-right: 20px;width: 10px;height: 13px;background: url("$!webPath/resources/style/shop/images/index-right-yin.png")no-repeat center center;}
+
+</style>
+<script>
+jQuery(document).ready(function(){
+    jQuery("#navul li a").each(function(i){
+        var original_url=jQuery(this).attr("href");
+        if("$!{op}"!=""){
+            if(original_url.indexOf("$!{op}")>=0){
+                jQuery(this).parent().addClass("this");
+            }
+        } else if (i == 0) {
+            jQuery(this).parent().addClass("this");
+        }
+    });
+});
+$(function(){
+	if(location.href.indexOf("brandStore")>-1){
+		$("#navul li").eq(1).addClass("this").siblings().removeClass("this");
+	}else if(location.href.indexOf("integral")>-1){
+		$("#navul li").eq(2).addClass("this").siblings().removeClass("this");
+
+	}else if(location.href.indexOf("group")>-1){
+		$("#navul li").eq(3).addClass("this").siblings().removeClass("this");
+
+	}else if(location.href.indexOf("yunGou")>-1){
+		$("#navul li").eq(4).addClass("this").siblings().removeClass("this");
+
+	}else if(location.href.indexOf("appDownLoad")>-1){
+		$("#navul li").eq(5).addClass("this").siblings().removeClass("this");
+
+	}
+	
+});
+
+</script>
+
+<div class="nav">
+  <div class="nav_center">
+    <div class="nav_left">
+      <h2><a href="javascript:void(0)"><span>全部分类<em><img src="$!webPath/resources/style/system/front/default/images/nav_top.png" width="14" height="9" /></em></span></a> </h2>
+      <div class="index_topleft">
+        <div class="left_menu" id="left_menu"> 
+        #foreach($gc in $!gcViewTools.query_gc("",8))
+          #set($icon_img="$!webPath/resources/style/common/images/icon/default_icon.png")
+          <dl #if($!velocityCount%2==0)class="left_menu_dl double"  #else class="left_menu_dl" #end child_count="$!gc.childs.size()" #if($!{gc.gc_color}) gc_color="$!{gc.gc_color}" #else gc_color="#E60012" #end  id="$!gc.id" style="position:relative;">
+            <!--left_menu_this经过状态，和left_menu_dt不经状态过交换-->
+            #if($!gc.icon_type==0)
+	            #if($!gc.iconSys !="")
+	            #set($icon_img="$!{gc.iconSys}")
+	            #end
+            #else
+	            #if($!gc.iconAccId)
+	            #set($icon_img="$!gc.iconAccId")
+	            #end
+            #end
+             <!-- 鼠标经过父级时添加style="border:1px solid #F00; border-left:3px solid #F00;"添加底层颜色-->
+            <dt class="left_menu_dt" id="dts_$!gc.id"><i class="left_menu_i"><img src="$!icon_img" width="16" height="16" /></i><strong class="left_menu_str"><a href="$!webPath/store_goods_list_$!{gc.id}.htm">$!gc.className</a></strong>
+      		<s class="index-right-img" style=""></s>
+            <b class="left_menu_str_b">
+            #set($recommendCount = 0 )
+            #foreach($gc1 in $gc.childs)
+            	#foreach($gc2 in $!gc1.childs)
+	            	#if($recommendCount >= 4)
+	            		#break
+	            	#end 
+            		#if($gc2.recommend)
+            		<a href="$!webPath/store_goods_list_$!{gc2.id}.htm">$!{gc2.className}</a>
+            		#set($recommendCount = $recommendCount+1)
+            		#end
+            	#end
+            #end</b></dt>
+            <dd class="left_menu_dd" id="child_$!gc.id">
+            <!--存在广告时left_menu_con this   鼠标经过父级时添加style="border:1px solid #F00; border-left:3px solid #F00;"添加底层颜色-->
+             #set($adv_map=$!gcViewTools.query_gc_advert("$!gc.id","$!webPath"))
+              <div class="left_menu_con #if($!adv_map.get('advert_img')!="") this #end" id="left_menu_con_$!{gc.id}">
+              <span class="left_menu_sp">
+                 	
+                <div class="left_menu_con_center">
+                 #foreach($gc1 in $gc.childs)
+                	<div class="left_menu_con_center_left #if($velocityCount%3 == 1) clear #end">
+                    	<dl>
+                        	<dt><a href="$!webPath/store_goods_list_$!{gc1.id}.htm">$!gc1.className</a></dt>
+                            #foreach($gc2 in $!gc1.childs)
+                            <dd><a href="$!webPath/store_goods_list_$!{gc2.id}.htm">$!gc2.className</a></dd>
+                  			#end
+                        </dl>
+                    </div>
+                   #end 
+                </div>
+                </span> 
+             </div>
+            </dd>
+          </dl>
+          #end </div>
+      </div>
+    </div>
+      
+     
+    <style>
+
+    </style>  
+    <ul id="navul" style="overflow: visible;">
+      #set($navs=$!navTools.queryNav(0,-1))
+      #foreach($nav in $navs)
+	      
+	      #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+	      	#set($url="$!nav.url")
+	      #else
+	      	#set($url="$!webPath/$!{nav.url}")
+	      #end
+			<!-- 普通会员和CN会员都需要显示精品专区，登陆即可 -->
+	      #if(!$!isLogin)
+	      	
+	      	#if($!nav.title == '精选专区' )
+			
+			#elseif($!nav.title == 'APP下载')
+			<li id="appdownload_li"><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a>
+				<div class="download_dropdown">
+					<img src="$!webPath/resources/style/system/front/default/img/arraw_top.png" style="position:absolute;left:95px;top:-12px" />
+					<ul>
+						<li><a href="$!webPath/appDownLoad.htm">云尚App下载</a></li>
+						<li><a href="$!webPath/shdappDownLoad.htm">商户App下载</a></li>
+						<li><a href="$!webPath/yysappDownLoad.htm">运营商App下载</a></li>
+					</ul>
+				</div>
+			</li>
+	      	
+			
+	      	#else
+	      	<li><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a></li>
+	      	#end
+	      	
+	      #else
+	      	
+	      	#if($!nav.title == 'APP下载')
+			<li id="appdownload_li"><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a>
+				<div class="download_dropdown">
+					<img src="$!webPath/resources/style/system/front/default/img/arraw_top.png" style="position:absolute;left:95px;top:-12px" />
+					<ul>
+						<li><a href="$!webPath/appDownLoad.htm">云尚App下载</a></li>
+						<li><a href="$!webPath/shdappDownLoad.htm">商户App下载</a></li>
+						<li><a href="$!webPath/yysappDownLoad.htm">运营商App下载</a></li>
+					</ul>
+				</div>
+			</li>
+			#else
+	      	
+	      	<li><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a></li>
+	      	#end
+	
+	      #end
+	      
+      #end
+    </ul>
+  </div>
+</div>

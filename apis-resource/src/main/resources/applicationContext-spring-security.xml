@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security.xsd">
+	<http realm="Protected API" entry-point-ref="restAuthenticationEntryPoint"
+		use-expressions="true" auto-config="false" create-session="stateless">
+
+		<!-- 广告位 -->
+		<intercept-url pattern="/v1/get/ad/content" access="permitAll" />
+		<!-- 服务分类 -->
+		<intercept-url pattern="/v1/group/class/list" access="permitAll" />
+		
+		<intercept-url pattern="/v1/merchant/bindingUserAccount"
+			access="permitAll" />
+		<intercept-url pattern="/v1/merchant/weChatAutoAfter"
+			access="permitAll" />
+		<intercept-url pattern="/v1/merchant/registerUserAccount"
+			access="permitAll" />
+		<!-- 商品分类 -->
+		<intercept-url pattern="/v1/goods/class/list/all"
+			access="permitAll" />
+		<!-- 春雨医生回调接口 -->
+		<intercept-url pattern="/v1/chunyu/problem/reply_notice"
+			access="permitAll" />
+		<intercept-url pattern="/v1/chunyu/problem/close_notice"
+			access="permitAll" />
+		<!-- 热门城市 -->
+		<intercept-url pattern="/v1/personal/hot_city/list"
+			access="permitAll" />
+		<!-- APP版本控制 -->
+		<intercept-url pattern="/v1/versionControl/getNew"
+			access="permitAll" />
+		<!-- APP商品分享 -->
+		<intercept-url pattern="/v1/share/shareProduct" access="permitAll" />
+		<!-- APP商品分享 -->
+		<intercept-url pattern="/v1/count/userRegisterCount"
+			access="permitAll" />
+
+		<intercept-url pattern="/v1/binding/WeiXin" access="permitAll" />
+		<!-- 验证是否已绑定手机号 -->
+		<intercept-url pattern="/v1/binding/mobile/check"
+			access="permitAll" />
+		<!-- 第三方登录创建用户 -->
+		<intercept-url pattern="/v1/binding/creatUser" access="permitAll" />
+		<intercept-url pattern="/v1/physical/save" access="permitAll" />
+		<!-- Apple判断审核是否通过 -->
+		<intercept-url pattern="/v1/apple/Checked" access="permitAll" />
+		<!-- 每日翻牌 拼手气赚积分 -->
+		<intercept-url pattern="/v1/integral/integral_flip_cards"
+			access="permitAll" />
+		<intercept-url pattern="/v1/integral/integral_flip_cards_lost"
+			access="permitAll" />
+		<intercept-url pattern="/v1/integral/integral_flip_cards_get"
+			access="permitAll" />
+		<!-- add by yuleijia -->
+		<intercept-url pattern="/v1/wenjuan/*" access="permitAll" />
+		<!-- add by yuleijia -->
+		<intercept-url pattern="/v1/ht/*" access="permitAll" />
+		<!-- add by yuleijia -->
+		<intercept-url pattern="/v1/cm/*" access="permitAll" />
+		<!-- add by yuleijia -->
+		<intercept-url pattern="/v1/healthManage/index2" access="permitAll" />
+
+		<!--<intercept-url pattern="/v1/healthManage/index" access="permitAll" 
+			/> -->
+		<!-- 中医自测 -->
+		<intercept-url pattern="/v1/cm/*" access="permitAll" />
+		<!-- 疾病自测 -->
+		<intercept-url pattern="/v1/jibing/*" access="permitAll" />
+
+		<intercept-url pattern="/v1/physical/save" access="permitAll" />
+
+		<!-- add by yuleijia -->
+		<intercept-url pattern="/v1/healthManage/index2" access="permitAll" />
+		<intercept-url pattern="/v1/users/invitation/search"
+			access="permitAll" />
+		<intercept-url pattern="/v1/group/store_albun/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/users/circle/list" access="permitAll" />
+		<intercept-url pattern="/v1/users/circle_invitation/list"
+			access="permitAll" />
+		<!-- <intercept-url pattern="/v1/users/myself_invitation/list" access="permitAll" 
+			/> -->
+		<intercept-url pattern="/v1/users/circle/query" access="permitAll" />
+		<intercept-url pattern="/v1/sns/recommen_goods_and_store/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/like/you_goods/list" access="permitAll" />
+
+		<intercept-url pattern="/v1/verify_code/send" access="permitAll" />
+		<intercept-url pattern="/v1/password_forget/update"
+			access="permitAll" />
+		<intercept-url pattern="/v1/password_forget_to_source/update"
+			access="permitAll" />
+		<intercept-url pattern="/v1/register/users/create"
+			access="permitAll" />
+		<intercept-url pattern="/v1/register/account_exists"
+			access="permitAll" />
+		<intercept-url pattern="/v1/register/nickname_exists"
+			access="permitAll" />
+		<intercept-url pattern="/v1/verify_forgetcode/send"
+			access="permitAll" />
+		<intercept-url pattern="/v1/register/third/create"
+			access="permitAll" />
+		<intercept-url pattern="/v1/nvitationCode/exists"
+			access="permitAll" />
+		<intercept-url pattern="/v1/oper_code/send" access="permitAll" />
+		<intercept-url pattern="/v1/password_forget/operator/update"
+			access="permitAll" />
+		<intercept-url pattern="/v1/code/send" access="permitAll" />
+		<intercept-url pattern="/v1/image" access="permitAll" />
+
+		<intercept-url pattern="/v1/code/sendIfMobile" access="permitAll" />
+
+		<intercept-url pattern="/v1/openId_binding/check"
+			access="permitAll" />
+		<intercept-url pattern="/v1/binding/creatUser" access="permitAll" />
+		<intercept-url pattern="/v1/binding/mobile" access="permitAll" />
+		<intercept-url pattern="/v1/binding/register" access="permitAll" />
+		<intercept-url pattern="/v1/users/sys/help" access="permitAll" />
+		<intercept-url pattern="/v1/users/operator/notices"
+			access="permitAll" />
+		<intercept-url pattern="/v1/users/sys_notices/details"
+			access="permitAll" />
+		<intercept-url pattern="/v1/users/notices/details"
+			access="permitAll" />
+
+		<intercept-url pattern="/v1/sns/recommend/list" access="permitAll" />
+		<intercept-url pattern="/v1/sns/crc/list" access="permitAll" />
+		<intercept-url pattern="/v1/sns/information/page_list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/sns/information/all_list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/sns/information/class"
+			access="permitAll" />
+		<intercept-url pattern="/v1/sns/body/list" access="permitAll" />
+
+		<intercept-url pattern="/v1/users/experts/list" access="permitAll" />
+		<intercept-url pattern="/v1/sns/food/list" access="permitAll" />
+		<intercept-url pattern="/v1/food_calories/list" access="permitAll" />
+		<intercept-url pattern="/v1/sns/check/list" access="permitAll" />
+		<intercept-url pattern="/v1/sys/article/page_article_list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/sys/article/all_article_list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/sys/article/article_class"
+			access="permitAll" />
+		<intercept-url pattern="/v1/case/list" access="permitAll" />
+		<intercept-url pattern="/v1/goods/case/list" access="permitAll" />
+		<intercept-url pattern="/v1/goods/class/list" access="permitAll" />
+		<intercept-url pattern="/v1/goods/list" access="permitAll" />
+		<intercept-url pattern="/v1/like/goods/list" access="permitAll" />
+		<intercept-url pattern="/v1/goods/details" access="permitAll" />
+
+		<intercept-url pattern="/v1/goods/evaluate" access="permitAll" />
+		<intercept-url pattern="/v1/goods/consult/list" access="permitAll" />
+		<intercept-url pattern="/v1/shop/store_info/get" access="permitAll" />
+		<intercept-url pattern="/v1/shop/express/company/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/shop/express/trans/view"
+			access="permitAll" />
+		<intercept-url pattern="/v1/merch/store/list" access="permitAll" />
+		<intercept-url pattern="/v1/merch/store_common/info"
+			access="permitAll" />
+		<intercept-url pattern="/v1/search/class/goods" access="permitAll" />
+		<intercept-url pattern="/v1/search/goods/keyword"
+			access="permitAll" />
+		<intercept-url pattern="/v1/search/goods_hot/keyword"
+			access="permitAll" />
+		<intercept-url pattern="/v1/personal/city/get" access="permitAll" />
+		<intercept-url pattern="/v1/personal/promotion_goods/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/personal/hot_city/get"
+			access="permitAll" />
+
+		<intercept-url pattern="/v1/personal/store/info" access="permitAll" />
+		<intercept-url pattern="/v1/personal/group_goods/like"
+			access="permitAll" />
+		<intercept-url pattern="/v1/personal/class_find/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/personal/all_city/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/personal/keyword/search"
+			access="permitAll" />
+		<intercept-url pattern="/v1/personal/area_parent/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/personal/recomm_store/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/personal/away_store/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/personal/youlike_store/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/users/invitation_all/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/personal/hot/search" access="permitAll" />
+		<intercept-url pattern="/v1/integral/list" access="permitAll" />
+		<intercept-url pattern="/v1/integral/details" access="permitAll" />
+		<intercept-url pattern="/v1/group/group_class/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/sns/food_calories/list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/group/evaluate/list" access="permitAll" />
+		<intercept-url pattern="/v1/users/invitation/details"
+			access="permitAll" />
+
+
+		<intercept-url pattern="/v1/views/**" access="permitAll" />
+
+		<intercept-url pattern="/v1/salePromotion/activityAd/mainInfo"
+			access="permitAll" />
+
+		<intercept-url pattern="/v1/salePromotion/activityAd/goodsInfoList"
+			access="permitAll" />
+
+		<intercept-url pattern="/v1/integral/listByCriteria"
+			access="permitAll" />
+
+		<intercept-url pattern="/v1/salePromotion/ad/info"
+			access="permitAll" />
+
+		<intercept-url pattern="/v1/users/integral/getByUid"
+			access="permitAll" />
+		<!-- caibin start -->
+		<intercept-url pattern="/v1/post/page_post_list" access="permitAll" />
+		<intercept-url pattern="/v1/post/page_post_detail"
+			access="permitAll" />
+		<intercept-url pattern="/v1/post/page_post_listBylabelId"
+			access="permitAll" />
+		<!-- <intercept-url pattern="/v1/post/post_updatePraiseNum" access="permitAll" 
+			/> -->
+		<intercept-url pattern="/v1/post/post_postEvaluete"
+			access="permitAll" />
+		<!-- <intercept-url pattern="/v1/post/post_postsave" access="permitAll" 
+			/> -->
+		<intercept-url pattern="/v1/post/page_label_list"
+			access="permitAll" />
+		<intercept-url pattern="/v1/post/push_label_list"
+			access="permitAll" />
+		<!-- <intercept-url pattern="/v1/post/test" access="permitAll" /> -->
+		<!-- <intercept-url pattern="/v1/post/page_label_add" access="permitAll" 
+			/> -->
+		<intercept-url pattern="/v1/post/page_post_listByUserId"
+			access="permitAll" />
+		<!-- <intercept-url pattern="/v1/post/post_canclePraise" access="permitAll" 
+			/> -->
+		<intercept-url pattern="/v1/post/post_replyEvaluete"
+			access="permitAll" />
+		<intercept-url pattern="/v1/mobile_binding/check"
+			access="permitAll" />
+		<intercept-url pattern="/v1/binding/CnWx" access="permitAll" />
+		<!-- <intercept-url pattern="/v1/post/post_delete" access="permitAll" /> -->
+		<intercept-url pattern="/v1/post/post_detail" access="permitAll" />
+		<intercept-url pattern="/v1/shop/juanpiShare" access="permitAll" />
+		<!-- <intercept-url pattern="/v1/cnuser/mobile" access="permitAll" /> <intercept-url 
+			pattern="/v1/cnuser/bind" access="permitAll" /> -->
+		<!-- caibin end -->
+
+		<!--==========test start ============ -->
+		<intercept-url pattern="/v1/aio/is/binding" access="permitAll" />
+		<intercept-url pattern="/v1/aio/save/binding" access="permitAll" />
+		<intercept-url pattern="/v1/aio/data/get/chol/list" access="permitAll" />
+		<intercept-url pattern="/v1/aio/data/get/ecg/list" access="permitAll" />
+		<intercept-url pattern="/v1/aio/data/get/glu/list" access="permitAll" />
+		<intercept-url pattern="/v1/aio/data/get/spo/list" access="permitAll" />
+		<intercept-url pattern="/v1/aio/data/get/tp/list" access="permitAll" />
+		<intercept-url pattern="/v1/aio/data/get/sys/dia/list" access="permitAll" />
+		<intercept-url pattern="/v1/aio/data/get/ua/list" access="permitAll" />
+		<intercept-url pattern="/v1/get/aio/data" access="permitAll" />
+		<intercept-url pattern="/v1/get/aio/data/by/time" access="permitAll" />
+		<intercept-url pattern="/v1/aio/get/binding/info" access="permitAll" />
+		<intercept-url pattern="/v1/jiuye/order/detail" access="permitAll" />
+		<intercept-url pattern="/v1/jiuye/state/check" access="permitAll" />
+<!-- 		<intercept-url pattern="/v1/massage/details/data/upload" access="permitAll" /> -->
+<!-- 		<intercept-url pattern="/v1/get/massage/details/data" access="permitAll" /> -->
+<!-- 		<intercept-url pattern="/v1/massage/data/upload" access="permitAll" /> -->
+<!-- 		<intercept-url pattern="/v1/get/massage/data" access="permitAll" /> -->
+<!-- 		<intercept-url pattern="/v1/elong/order/list" access="permitAll" /> -->
+<!-- 		<intercept-url pattern="/v1/get/elong/order/by/orderId" access="permitAll" /> -->
+<!-- 		<intercept-url pattern="/v1/elong/cancel/order" access="permitAll" /> -->
+<!-- 		<intercept-url pattern="/v1/elong/delete/order" access="permitAll" /> -->
+		
+	
+		<!--==========test end ============ -->
+
+		<custom-filter ref="authenticationTokenProcessingFilter"
+			position="FORM_LOGIN_FILTER" />
+		<intercept-url pattern="/v1/**" access="isAuthenticated()" />
+		<logout />
+	</http>
+
+	<beans:bean class="com.sinco.api.auth.CustomTokenAuthenticationFilter"
+		id="authenticationTokenProcessingFilter">
+		<!-- 配制url的过滤 ，目前使用的是正则配制 -->
+		<beans:constructor-arg value="/v1/[\s\S]+" />
+		<beans:constructor-arg ref="tokenAuthenticationManager" />
+		<beans:constructor-arg ref="tokenAuthenticationFailureHandler" />
+	</beans:bean>
+
+	<beans:bean id="restAuthenticationEntryPoint"
+		class="com.sinco.api.auth.RestAuthenticationEntryPoint"></beans:bean>
+
+	<beans:bean id="tokenAuthenticationManager"
+		class="com.sinco.api.auth.TokenAuthenticationManager">
+		<beans:constructor-arg value="${auth.authorizationServerUrl}" />
+		<beans:constructor-arg value="${auht.key}" />
+		<beans:constructor-arg value="${auth.secret}" />
+		<beans:property name="clientFactory" ref="jerseyClientFactory" />
+	</beans:bean>
+
+	<beans:bean id="tokenAuthenticationFailureHandler"
+		class="com.sinco.api.auth.TokenAuthenticationFailureHandler">
+		<beans:property name="errorResource" ref="errorResource" />
+	</beans:bean>
+
+	<authentication-manager>
+	</authentication-manager>
+
+</beans:beans>

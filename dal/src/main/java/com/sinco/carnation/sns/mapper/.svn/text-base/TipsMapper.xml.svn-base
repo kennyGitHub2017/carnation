@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.TipsMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.Tips">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="target_id" property="targetId" jdbcType="BIGINT" />
+		<result column="tips_type" property="tipsType" jdbcType="CHAR" />
+		<result column="from_user_id" property="fromUserId" jdbcType="BIGINT" />
+		<result column="from_ip" property="fromIp" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sns.bo.TipsBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, target_id, tips_type, from_user_id, from_ip,type
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.sns.model.TipsExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_tips
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sns_tips
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sns_tips
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sns.model.TipsExample">
+		delete from sns_tips
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.Tips"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sns_tips (id, add_time, target_id,
+		tips_type, from_user_id, from_ip,type
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{targetId,jdbcType=BIGINT},
+		#{tipsType,jdbcType=CHAR}, #{fromUserId,jdbcType=BIGINT},
+		#{fromIp,jdbcType=VARCHAR},#{type,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.Tips"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sns_tips
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="targetId != null">
+				target_id,
+			</if>
+			<if test="tipsType != null">
+				tips_type,
+			</if>
+			<if test="fromUserId != null">
+				from_user_id,
+			</if>
+			<if test="fromIp != null">
+				from_ip,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="targetId != null">
+				#{targetId,jdbcType=BIGINT},
+			</if>
+			<if test="tipsType != null">
+				#{tipsType,jdbcType=CHAR},
+			</if>
+			<if test="fromUserId != null">
+				#{fromUserId,jdbcType=BIGINT},
+			</if>
+			<if test="fromIp != null">
+				#{fromIp,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sns.model.TipsExample"
+		resultType="java.lang.Integer">
+		select count(*) from sns_tips
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sns_tips
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.targetId != null">
+				target_id = #{record.targetId,jdbcType=BIGINT},
+			</if>
+			<if test="record.tipsType != null">
+				tips_type = #{record.tipsType,jdbcType=CHAR},
+			</if>
+			<if test="record.fromUserId != null">
+				from_user_id = #{record.fromUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.fromIp != null">
+				from_ip = #{record.fromIp,jdbcType=VARCHAR},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=INTEGER},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sns_tips
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		target_id = #{record.targetId,jdbcType=BIGINT},
+		tips_type = #{record.tipsType,jdbcType=CHAR},
+		from_user_id = #{record.fromUserId,jdbcType=BIGINT},
+		from_ip = #{record.fromIp,jdbcType=VARCHAR},
+		type=#{record.type,jdbcType=INTEGER},
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.Tips">
+		update sns_tips
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="targetId != null">
+				target_id = #{targetId,jdbcType=BIGINT},
+			</if>
+			<if test="tipsType != null">
+				tips_type = #{tipsType,jdbcType=CHAR},
+			</if>
+			<if test="fromUserId != null">
+				from_user_id = #{fromUserId,jdbcType=BIGINT},
+			</if>
+			<if test="fromIp != null">
+				from_ip = #{fromIp,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type=#{type,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.Tips">
+		update sns_tips
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		target_id = #{targetId,jdbcType=BIGINT},
+		tips_type = #{tipsType,jdbcType=CHAR},
+		from_user_id = #{fromUserId,jdbcType=BIGINT},
+		from_ip = #{fromIp,jdbcType=VARCHAR},
+		type=#{type,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

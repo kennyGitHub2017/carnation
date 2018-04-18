@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>支付成功</title>
+	    <meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=1.0">
+		<meta name="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" type="text/css" href="$!{webPath}/resources/css/common.css">
+		<link rel="stylesheet" type="text/css" href="$!{webPath}/resources/css/exclusiveCode.css" />
+		<script>
+			var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+			document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+	        var isAndroid = window.navigator.appVersion.match(/android/gi);
+	        var isIPhone = window.navigator.appVersion.match(/iphone/gi);
+	        var devicePixelRatio = window.devicePixelRatio;
+	        if (isIPhone) {
+	            if (devicePixelRatio >= 3) {                
+	                dpr = 3;
+	            } else if (devicePixelRatio >= 2){
+	                dpr = 2;
+	            } else {
+	                dpr = 1;
+	            }
+	        } else {
+	            dpr = 1;
+	        }
+	    	document.documentElement.setAttribute('data-dpr', dpr);  
+		</script>
+	</head>
+	<body>
+		<div class="page_home page_success">
+			<div class="kong"></div>
+			<div class="main">
+				<div class="status">交易成功</div>
+				<div class="amount fn-rmb">
+					&yen;&nbsp;$!obj.totalFee
+				</div>
+				 <div class="provider">
+					由$!payInfo支付
+				</div>
+			</div>
+			<div class="orderInfo">
+				<div><span class="text">订单编号</span>
+					<div class="data">$!obj.payOrderNo</div>
+				</div>
+				<div><span class="text">交易时间</span>
+					<div class="data">$!obj.createTime</div>
+				</div>
+			</div>
+		</div>
+		
+	 	<script type="text/javascript" src="$!webPath/resources/js/jquery.min.js"></script>
+		<script type="text/javascript" src="$!webPath/resources/js/common.js"></script>
+	</body>
+</html>

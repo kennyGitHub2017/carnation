@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <script>
+        var jgGlobal={
+            screenWidth:window.innerWidth||document.documentElement.clientWidth,
+            screenHeight:window.innerHeight||document.documentElement.clientHeight,
+            isALlowTouchMove:true,
+            setFontSize:function(){
+                var sw=window.innerWidth||document.documentElement.clientWidth;
+                if (sw < 640) {
+                    document.documentElement.style.fontSize = parseInt(sw / 640 * 100) + "px";
+                }else{
+                    document.documentElement.style.fontSize="100px";
+                }
+            },
+            setTranslate:function(node, positionY,containCss, useAnimate) {
+                var cssText = [
+                    containCss,
+                    'display: block',
+                    'transform: translate3d(0, ' + positionY + 'px, 0)',
+                    '-webkit-transform: translate3d(0, ' + positionY + 'px, 0)',
+                ].join(';');
+                if (useAnimate) {
+                    cssText = [
+                        cssText,
+                        'transition: .5s transform ease',
+                        '-webkit-transition: .5s -webkit-transform ease'
+                    ].join(';');
+                }
+                node.style.cssText = cssText;
+            },
+            isTouchMove:function(){
+                var _this=this;
+                document.addEventListener("touchmove",function(e){
+                    if(!_this.isALlowTouchMove){
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                },false);
+                if (navigator.userAgent.toLowerCase().indexOf('firefox')>=0)
+                {
+
+                    addEventListener('DOMMouseScroll',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }else{
+                    addEventListener('mousewheel',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }
+            },
+            init:function(){
+                this.isTouchMove();
+                this.setFontSize();
+            }
+        }
+    </script>
+    <link type="text/css" href="css/tijian.css" rel="stylesheet">
+</head>
+<body>
+    <div class="history_wrap">
+        <div class="tit">
+            <span class="total">总测试次数:$physicalall.size() 次</span>
+            <span class="error">异常次数:<span class="red">$!unHealthNo</span> 次</span>
+        </div>
+        
+        <!-- <li>
+	        <span class="num"><em>mmHg</em>120/80</span>
+	        <span class="text">
+				#foreach($sKey in ${physicalResult.keySet()})
+					#if($!sKey==$!objs.resultType) ${physicalResult.get($sKey)} #end
+				#end
+			</span>
+			<span class="time">2016-1-10 15:30</span>
+		</li> -->
+		#foreach($result in $physicalall)
+			#if($physicalall.itemCode == 6)
+        		<li class="ex"><span class="num"><em>mmHg</em>$result.rangeMax/$result.rangeMin</span>
+        		<span class="text">
+	        		#foreach($sKey in ${physicalResult.keySet()})
+						#if($!sKey==$!objs.resultType) ${result.get($sKey)} #end
+					#end
+        		</span><span class="time">$CommUtil.formatLongDate($result.createTime)</span></li>
+        	#else
+        		<li class="ex"><span class="num"><em>mmHg</em>$result.rangeMax</span>
+        		<span class="text">
+	        		#foreach($sKey in ${physicalResult.keySet()})
+						#if($!sKey==$!objs.resultType) ${result.get($sKey)} #end
+					#end
+        		</span><span class="time">$CommUtil.formatShortDateCn($result.createTime) $result.createTime</span></li>
+        	#end
+       	#end
+    </div>
+</body>
+</html>

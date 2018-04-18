@@ -1,0 +1,302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [-1..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<style>
+.goodsNameCon{display:table}
+.goodsNameCon img{display:table-cell}
+.goodsNameCon span{display:table-cell;padding-left:10px;vertical-align:middle}
+</style>
+<script>
+jQuery(document).ready(function(){
+	#if($!brand_id)
+	jQuery("#brand_id").val("$!brand_id");
+	#end
+	#if($!gc_id)
+	jQuery("#gc_id").val("$!gc_id");
+	#end
+	#if($!goods_type)
+	jQuery("#goods_type").val("$!goods_type");
+	#end
+	
+	#if($!store_recommend)
+	jQuery("#store_recommend").val("$!store_recommend");
+	#end
+	
+	jQuery('#startDate').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	});
+	jQuery('#endDate').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	});
+	
+
+	$("#fgcId").change(function(){
+		console.log($(this).val());
+		var pid=$(this).val();
+		jQuery.ajax({
+			type : 'POST',
+			url : '$!webPath/admin/load_goods_class.htm',
+			data : {
+				"pid" : pid,
+				"level" : 1,
+				"session" : true
+			},
+			dataType : "json",
+			beforeSend : function() {
+				
+			},
+			success : function(data) {
+				console.log(data);
+				var str="";
+				str+="<option value=\"\">所有分类</option>";
+				jQuery.each(data,function(index, item) {
+					str+="<option value=\""+item.id+"\">"+item.className+"</option>";					
+				});
+				$("#sgcId").empty().append(str);
+				$("#tgcId").empty().append("<option value=\"\">所有分类</option>");
+			}
+		});
+	});
+	
+	$("#sgcId").change(function(){
+		var pid=$(this).val();
+		jQuery.ajax({
+			type : 'POST',
+			url : '$!webPath/admin/load_goods_class.htm',
+			data : {
+				"pid" : pid,
+				"level" : 2,
+				"session" : true
+			},
+			dataType : "json",
+			beforeSend : function() {
+				
+			},
+			success : function(data) {
+				console.log(data);
+				var str="";
+				str+="<option value=\"\">所有分类</option>";
+				jQuery.each(data,function(index, item) {
+					str+="<option value=\""+item.id+"\">"+item.className+"</option>";					
+				});
+				$("#tgcId").empty().append(str);
+			}
+		});
+	});
+	
+	});
+//
+function ajax_update(id,fieldName,obj,value){
+   var val;
+   if(value==undefined){
+	 val=jQuery(obj).val();
+   }else val=value; 
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/goods_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }    
+				 if(value!=undefined){
+				   jQuery(obj.parentNode.parentNode).remove();
+				 }
+              }
+	    });
+}
+</script>
+</head><body scroll="yes">
+<div class="cont">
+  <h3 class="seth">商品管理</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/admin/goods_list.htm" #if(!$!vo.goodsStatus)class="this"#end><b>出售中的商品</b></a></li>
+      <li><a href="$!webPath/admin/goods_list.htm?goodsStatus=-5" #if($!vo.goodsStatus==-5)class="this"#end><b>仓库中的商品</b></a></li>
+      <li><a href="$!webPath/admin/goods_outline.htm"><b>已下架商品</b></a></li>
+    </ul>
+  </div>
+  <form name="ListForm" id="ListForm" action="" method="post">
+    <div class="search">
+      	<span>商品分类</span> 
+		<span> 
+			<select name="fgcId" id="fgcId">
+					<option value="">所有分类</option> 
+					#foreach($obj in $gcs)
+					<option value="$!obj.id" #if($!vo.fgcId==$!obj.id) selected="selected" #end>$!obj.name</option> 
+					#end
+			</select>
+		</span>  
+		<span> 
+			<select name="sgcId" id="sgcId">
+					<option value="">所有分类</option> 
+					#foreach($obj in $gcs2)
+					<option value="$!obj.id" #if($!vo.sgcId==$!obj.id) selected="selected" #end>$!obj.name</option> 
+					#end
+			</select>
+		</span>  
+		<span> 
+			<select name="tgcId" id="tgcId">
+					<option value="">所有分类</option> 
+					#foreach($obj in $gcs3)
+					<option value="$!obj.id" #if($!vo.tgcId==$!obj.id) selected="selected" #end>$!obj.name</option> 
+					#end
+			</select>
+		</span>
+		<span>商品类型</span> 
+		<span>
+		      <select name="goodsType" id="goods_type">
+		        <option value="">所有类型</option>
+		        <option value="1" #if($!vo.goodsType == 1) selected="selected" #end>商家商品</option>
+		        <option value="0" #if($!vo.goodsType == 0) selected="selected" #end>自营商品</option>
+		      </select>
+      	</span>
+	  <span>商品名称</span> 
+	  <span class="size150">
+      	<input name="goodsName" type="text" id="goods_name" value="$!vo.goodsName" />
+      </span>
+	  <span>发布时间</span>
+		<span class="size150"> 
+			<input name="startDate" type="text" id="startDate" value="$!vo.startDate" readonly="readonly" />
+		</span>
+		<span>—</span>
+		<span class="size150"> 
+			<input name="endDate" type="text" id="endDate" value="$!vo.endDate" readonly="readonly" />
+		</span> 
+      <span>
+      	<input name="" type="button"  value="搜索" style="cursor:pointer;" onclick="query();" class="search_btn"/>
+      </span>
+
+     </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="3%">&nbsp;
+            </th>
+          <th width="15%"><span class="form_btna">商品名称</span></th>
+          <th width="10%"><span class="form_btna">分类名</span></th>
+          <th width="10%"><span class="form_btna">上架时间</span></th>
+          <th width="10%"><span class="form_btna">下架时间</span></th>
+          <th width="5%"><span class="form_btna">原价</span></th>
+          <th width="3%" align="center"><span class="form_btna">团购价</span></th>
+          <th width="3%" align="center"><span class="form_btna">销售价格</span></th>
+          <th width="3%" align="center"><span class="form_btna">销量</span></th>
+          <th width="3%" align="center"><span class="form_btna">显示</span></th>
+          <th align="center"><b class="form_btnb">操作</b></th>
+        </tr>
+        #foreach($obj in $objs)
+        #set($goods_url="$!{shopPath}/goods_$!{obj.id}.htm")
+        #if($!config.secondDomainOpen && $!obj.goodsType==1 && $!obj.goodsStore.storeSecondDomain!="")
+        #set($goods_url="http://$!{obj.goodsStore.storeSecondDomain}.$!{domainPath}/goods_$!{obj.id}.htm")
+        #end
+        <tr>
+          <td class="check_position"><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td>
+		  	  <div class="goodsNameCon">
+		  	  	<img src="" width="55" height="55" />
+		  	  	<span>$!obj.goodsName</span>
+		  	  </div>
+		  </td>
+          <td align="center">$!obj.goodsClassName</td>
+          <td align="center">$!obj.brandName</td>
+          
+          <td align="center">$!goods_status</td>
+          <td align="center"><img onclick="ajax_update('$!obj.id','goodsStatus',this,'-2')"  src="$!webPath/resources/style/system/manage/blue/images/weig.jpg"  border="0" style="cursor:pointer;" title="可编辑"/></td>
+          <td align="center">$!obj.goodsClick</td>
+          <td align="center">$!obj.goodsSalenum</td>
+          <td align="center">$!obj.goodsInventory</td>
+          <td align="center">$!CommUtil.formatShortDate($!obj.addTime)</td>
+          <td align="center">$!obj.sortWeight</td>
+		  <td class="hui oprate_con" align="center">
+				#if($!obj.goodsStatus==-5 || $!obj.goodsStatus==0) 
+					<a href="$!{goods_url}?admin_view=true" target="_blank" class="blue">查看</a> 
+					#if($!obj.goodsType==1)
+						<a href="javascript:void(0);" class="blue"
+							dialog_uri="$!webPath/admin/goods_check_form.htm?id=$!obj.id&status=$!{status}"
+							dialog_title="填写平台加价" dialog_width="950"
+							dialog_id="check_goods_add_price">
+							#if($!obj.goodsStatus==-5 && ${sec.anyGranted("ROLE_ADMIN_CHECK_GOODS")})
+								审核通过
+							#elseif($!obj.goodsStatus==0)
+								修改价格
+							#end
+							</a>
+							#if($!obj.goodsStatus==-5 && ${sec.anyGranted("ROLE_ADMIN_CHECK_GOODS")})
+								<a href="javascript:void(0);" class="blue"
+									dialog_uri="$!webPath/admin/goods_check_n_form.htm?id=$!obj.id&status=$!{status}"
+									dialog_title="审核不通过" dialog_width="600"
+									dialog_id="check_goods_n">
+									审核不通过
+								</a>
+							#end
+						
+					#end
+				#else 
+					<a href="$!{goods_url}?admin_view=true" target="_blank" class="blue">查看</a> 
+				#end
+					<a href="$!webPath/admin/goods_recommend.htm?id=$!obj.id" class="blue">推荐</a> 
+			</td>
+		</tr>
+        #end
+      </table>
+    </div>
+    <div class="operate_bar">
+      <div class="fenye"> <span id="queryCondition" style="display:none"> </span>
+        <input name="mulitId" type="hidden" id="mulitId" />
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML </div>
+      <div class="oper_sp"> <span class="oper_check">
+        <label>
+          <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+          全部</label>
+        </span> #if($!status==-5) <span class="oper_del">
+        <input name="" type="button" value="审核" onclick="cmd('$!webPath/admin/goods_audit.htm?status=$!{status}');" style="cursor:pointer;" />
+        </span> #end
+        
+        #if(!$!status) <span class="oper_del">
+        <input name="" type="button" value="删除" onclick="cmd('$!webPath/admin/goods_del.htm');" style="cursor:pointer;" />
+        </span> 
+        <span class="oper_del">
+        
+        <a href="javascript:void(0);" dialog_uri="$!webPath/admin/goods_types.htm?mulitId=1" dialog_title="批量移分类" 
+        dialog_width="1020" dialog_height="540" dialog_top="200" dialog_id="order_shipping">
+        	<input name="" type="button" value="批量移分类" style="cursor:pointer;" /></a>
+        </span> 
+        #end 
+        #if($!zero == true)
+        <span class="oper_del">
+        	<input name="" type="button" value="推到0元购" onclick="cmd('$!webPath/admin/zero_act/goods_zero_act_add.htm');" style="cursor:pointer;" />
+        </span>
+        #end 
+        </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

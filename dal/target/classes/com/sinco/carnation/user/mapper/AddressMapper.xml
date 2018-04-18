@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.AddressMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.Address">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="area_info" property="areaInfo" jdbcType="VARCHAR" />
+		<result column="default_val" property="defaultVal" jdbcType="BIT" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="telephone" property="telephone" jdbcType="VARCHAR" />
+		<result column="true_Name" property="trueName" jdbcType="VARCHAR" />
+		<result column="zip" property="zip" jdbcType="VARCHAR" />
+		<result column="area_id" property="areaId" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.AddressBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<select id="selectByTop100" resultType="map">
+		select * from
+		user_address where user_id=#{userId} limit 100
+	</select>
+
+	<sql id="Base_Column_List">
+		id, add_time, delete_Status, area_info, default_val, mobile, telephone,
+		true_Name,
+		zip, area_id, user_id
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.user.model.AddressExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_address
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_address
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_address
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.AddressExample">
+		delete from user_address
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.Address"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_address (id, add_time, delete_Status,
+		area_info, default_val, mobile,
+		telephone, true_Name, zip,
+		area_id, user_id)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{areaInfo,jdbcType=VARCHAR}, #{defaultVal,jdbcType=BIT}, #{mobile,jdbcType=VARCHAR},
+		#{telephone,jdbcType=VARCHAR}, #{trueName,jdbcType=VARCHAR},
+		#{zip,jdbcType=VARCHAR},
+		#{areaId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.Address"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_address
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="areaInfo != null">
+				area_info,
+			</if>
+			<if test="defaultVal != null">
+				default_val,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="telephone != null">
+				telephone,
+			</if>
+			<if test="trueName != null">
+				true_Name,
+			</if>
+			<if test="zip != null">
+				zip,
+			</if>
+			<if test="areaId != null">
+				area_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="areaInfo != null">
+				#{areaInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="defaultVal != null">
+				#{defaultVal,jdbcType=BIT},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				#{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="trueName != null">
+				#{trueName,jdbcType=VARCHAR},
+			</if>
+			<if test="zip != null">
+				#{zip,jdbcType=VARCHAR},
+			</if>
+			<if test="areaId != null">
+				#{areaId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.AddressExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_address
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_address
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.areaInfo != null">
+				area_info = #{record.areaInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.defaultVal != null">
+				default_val = #{record.defaultVal,jdbcType=BIT},
+			</if>
+			<if test="record.mobile != null">
+				mobile = #{record.mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.telephone != null">
+				telephone = #{record.telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.trueName != null">
+				true_Name = #{record.trueName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.zip != null">
+				zip = #{record.zip,jdbcType=VARCHAR},
+			</if>
+			<if test="record.areaId != null">
+				area_id = #{record.areaId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_address
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=BIT},
+		area_info = #{record.areaInfo,jdbcType=VARCHAR},
+		default_val = #{record.defaultVal,jdbcType=BIT},
+		mobile = #{record.mobile,jdbcType=VARCHAR},
+		telephone = #{record.telephone,jdbcType=VARCHAR},
+		true_Name = #{record.trueName,jdbcType=VARCHAR},
+		zip = #{record.zip,jdbcType=VARCHAR},
+		area_id = #{record.areaId,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.Address">
+		update user_address
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="areaInfo != null">
+				area_info = #{areaInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="defaultVal != null">
+				default_val = #{defaultVal,jdbcType=BIT},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="trueName != null">
+				true_Name = #{trueName,jdbcType=VARCHAR},
+			</if>
+			<if test="zip != null">
+				zip = #{zip,jdbcType=VARCHAR},
+			</if>
+			<if test="areaId != null">
+				area_id = #{areaId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.Address">
+		update user_address
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=BIT},
+		area_info = #{areaInfo,jdbcType=VARCHAR},
+		default_val = #{defaultVal,jdbcType=BIT},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		telephone = #{telephone,jdbcType=VARCHAR},
+		true_Name = #{trueName,jdbcType=VARCHAR},
+		zip = #{zip,jdbcType=VARCHAR},
+		area_id = #{areaId,jdbcType=BIGINT},
+		user_id = #{userId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="getDefaultByUserId" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_address where user_id= #{userId,jdbcType=BIGINT} and
+		default_val=1
+	</select>
+
+	<select id="queryByUserId" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_address where user_id= #{userId,jdbcType=BIGINT} order by
+		default_val desc
+	</select>
+</mapper>

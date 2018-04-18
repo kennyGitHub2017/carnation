@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-首页-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css?v=12" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script>
+function store_renew(){
+	jQuery.post("$!webPath/seller/store_renew.htm",function(data){
+				if(data){
+					showDialog("msg_info","","提交成功，客服会尽快与您联系！",2,"succeed",300,function(){
+						   location.reload();	
+						  });
+				}else{
+					showDialog("msg_info","","提交失败！",2,"error",300,function(){
+						   location.reload();	
+						  });
+				}				
+	},"text");
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/seller/top.htm")
+<div class="main clearfix">
+  <div class="seller_center">
+    $!httpInclude.include("/seller/nav.htm")
+    <div class="seller_right">
+      <div class="seller_position"><span><a href="$!webPath/seller/index.htm">商家中心</a>><b>首页</b></span></div>
+      <div class="seller_info" #if($!store.isO2o==true) style="width: auto;" #end> <span class="seller_info_img">
+       #if($!config.storeImage)
+       #set($store_logo="$!config.storeImage.path")
+       #end
+       #set($store_logo="$!webPath/resources/style/shop/images/store_default/logo.jpg")
+       #if($!store.storeLogoPath&&$!store.storeLogoPath!='')
+      	 #set($store_logo="$!store.storeLogoPath")
+       #end 
+      <strong><img src="$!store_logo"  width="120" height="53" /></strong>
+      <em><b></b></em></span> <span class="seller_info_time"><em>上次登录时间：#if($!userAccount.lastLoginTime)$!CommUtil.formatLongDate($!userAccount.lastLoginTime)#else 第一次登录 #end</em></span>
+        <ul class="seller_info_ul">
+          <li class="seller_info_h"><strong>店铺名称：<b>$!{store.storeName}</b></strong></li>
+		  <li class="seller_info_con">
+		  	<span>用户名：<b>$!{user.userName}</b></span>
+		  	#if($!store.isShop==true)
+		  	<span>店主姓名：<b>$!{store.storeOwer}</b></span>
+		  	<span>商家类型：<b>$!{store.gradeName}</b></span>
+		  	#end
+<!-- 		<span>店铺到期：<b>#if($!{store.validity}) -->
+<!-- 		$!CommUtil.formatShortDate($!{store.validity})#else 永久#end</b></span> -->
+		  </li>
+			#set($store_url="$!webPath/store_$!{store.id}.htm")
+            #if($!config.second_domain_open && $!store.storeSecondDomain!="")
+            #set($store_url="http://$!{user.store.store_second_domain}.$!{domainPath}")
+            #end
+            #set($groupStore_url="$!webPath/group/store.htm?id=$!{store.id}")
+         #if($!store.isShop==true)
+           <li class="shop_into"><a href="$!store_url" target="_blank">进入店铺</a></li>
+         #end
+         #if($!store.isO2o==true)
+           <li class="shop_into2"><a href="$!groupStore_url" target="_blank">进入商户</a></li>
+         #end
+          #if($!{store.storeStatus}==20)
+		  <li class="shop_past"><span>店铺已违规关闭</span></li>
+          #end
+          #if($!{store.storeStatus}==25)
+		  <li class="shop_past"><span>店铺已过期关闭</span><i><a href="javascript:void(0)" onclick="store_renew()">申请续费重开</a></i></li>
+          #end
+          #if($!{store.storeStatus}==26)
+		  <li class="shop_past"><span>店铺已申请续费</span><i><a href="javascript:void(0)" title="客服会尽快与您联系，完成续费流程！">客服会尽快与您联系</a></i></li>
+          #end
+        </ul>
+        #if($!store.isShop==true)
+        <div class="seller_info_pay">
+          <h3>本次结算</h3>
+          <ul>
+            <li><span>总销售金额：<b>#if(!$!{store.storeSaleAmount})0 #else $!{store.storeSaleAmount}#end 元</b></span></li>
+            <li><span>总订单佣金：<b>#if(!$!{store.storeCommissionAmount})0 #else $!{store.storeCommissionAmount}#end 元</b></span></li>
+            <li><span>应结算金额：<b>#if(!$!{store.storePayoffAmount})0 #else $!{store.storePayoffAmount}#end 元</b></span></li>
+          </ul>
+          <span class="seller_pay_sp"> <em><i><a href="$!webPath/seller/payofflog_ok_list.htm"></a></i><a href="$!webPath/seller/payofflog_ok_list.htm" class="must_get">马上结算</a></em> <b><i><a href="$!webPath/seller/payofflog_list.htm?tempStatus=already"></a></i><a href="$!webPath/seller/payofflog_list.htm?tempStatus=already" class="see_get">已结算账单</a></b> </span> 
+          </div>
+         #end
+        <div class="seller_info_list">
+			<div class="seller_info_list_box" >
+			 #if($!store.isShop==true)
+<!--          <span><a href="$!webPath/seller/consult.htm?reply=false"><strong>咨询提示：</strong>给商家的留言<b>($!{msgsCount})</b></a></span> -->
+<!--          <span><a href="$!webPath/seller/complaint.htm"><strong>投诉提示：</strong>新增投诉<b>($!{complaintsCount})</b></a></span> -->
+         <span> <a href="$!webPath/seller/goods.htm"><strong>出售中的商品：</strong><b>#if($!{goodsCountMap[0]}) ($!{goodsCountMap[0]})件 #else (0)件 #end</b></a></span>
+         <span> <a href="$!webPath/seller/goods_storage.htm"><strong>仓库中的商品：</strong><b>#if($!{goodsCountMap[1]}) ($!{goodsCountMap[1]})件 #else (0)件 #end</b></a></span>
+         <span> <a href="$!webPath/seller/goods_out.htm"><strong>违规下架的商品：</strong><b>#if($!{goodsCountMap[2]}) ($!{goodsCountMap[2]})件 #else (0)件 #end</b></a></span>
+          <span> <a href="$!webPath/seller/goods.htm"><strong>库存不足的商品：</strong><b>($!{warnGoodsCount})件</b></a></span>
+          #end
+          #if($!store.isO2o==true)
+         <span> <a href="$!webPath/seller/group_goods_list.htm"><strong>出售中的服务：</strong><b>#if($!{groupCountMap[0]}) ($!{groupCountMap[0]})件 #else (0)个 #end</b></a></span>
+         <span> <a href="$!webPath/seller/group_goods_list_warehouse.htm"><strong>仓库中的服务：</strong><b>#if($!{groupCountMap[1]}) ($!{groupCountMap[1]})件 #else (0)个 #end</b></a></span>
+         <span> <a href="$!webPath/seller/group_goods_list_out.htm"><strong>违规下架的服务：</strong><b>#if($!{groupCountMap[2]}) ($!{groupCountMap[2]})件 #else (0)个 #end</b></a></span>
+          <span> <a href="$!webPath/seller/group_goods_list.htm"><strong>库存不足的服务：</strong><b>($!{warnGroupCount})件</b></a></span>
+<!--          <span> <a href="$!webPath/seller/gold_record.htm"><strong>可用金币数：</strong><b>( $!user.gold )</b></a></span> -->
+			#end
+        	</div>
+        </div>
+      </div>
+
+       
+
+        #if($!store.isO2o==true)
+        <div class="store_o2o_notice">
+	        <div class="seller_bottom_right"> 
+	          <div class="seller_bright_one"> 
+	            <h3><span class="h3span">云尚平台最新公告</span><span class="noticemore"><a href="$!webPath/seller/articles_list.htm">更多</a></span></h3> 
+	            <ul> 
+	             #foreach($articles in $listArticles) 
+	               <li><a href="$!webPath/seller/articles_view.htm?id=$!{articles.id}" >$!{articles.title}</a></li> 
+	             #end 
+	             </ul> 
+	           </div>
+	         </div>
+	
+	      <div class="seller_bottom_right"> 
+	          <div class="seller_bright_one"> 
+	            <h3><span class="h3span">运营商最新公告</span><span class="noticemore"><a href="$!webPath/seller/notice_list.htm">更多</a></span></h3> 
+	            <ul> 
+	             #foreach($notice in $operatorNotices) 
+	               <li><a href="$!webPath/seller/notice_view.htm?id=$!{notice.id}" >$!{notice.ntTitle}</a></li> 
+	             #end 
+	             </ul> 
+	           </div>
+	         </div>
+         </div>
+      #end
+      
+      <div class="seller_bottom">
+        <div class="seller_bottom_left">
+          <div class="seller_bleft_box">
+          #set($order_pay_count=0)
+          #set($order_evaluate_count=0)
+          #set($order_ship_count=0)
+          #set($order_confirm_count=0)
+          #foreach($order in $orders)
+	          #if($!order.orderStatus==10)
+	          	#set($order_pay_count=$order_pay_count+1)
+	          #end
+	          #if($!order.orderStatus==20)
+	          	#set($order_ship_count=$order_ship_count+1)
+	          #end
+	          #if($!order.orderStatus==30)
+	          	#set($order_confirm_count=$order_confirm_count+1)
+	          #end
+	          #if($!order.orderStatus==40)
+	          	#set($order_evaluate_count=$order_evaluate_count+1)
+	          #end
+          #end
+          
+            <h3><span>交易提示</span></h3>
+             #if($!store.isShop==true)
+
+
+			<div class="seller_bleft_m" style="border-bottom:1px solid #c4d5df">
+				<span>近期商品销售：<a href="$!webPath/seller/order.htm">交易中的订单<b>($!{orders.size()})</b></a></span><span><a
+					href="$!webPath/seller/order.htm?orderStatus=order_submit"><strong>待付款订单：</strong><b>($!{order_pay_count})</b></a></span><span><a
+					href="$!webPath/seller/order.htm?orderSatus=order_evaluate"><strong>待评价订单：</strong><b>($!{order_evaluate_count})</b></a></span><span><a
+					href="$!webPath/seller/order.htm?orderStatus=order_pay"><strong>待发货：</strong>已付款待发货<b>($!{order_ship_count})</b></a></span><span><a
+					href="$!webPath/seller/order.htm?orderStatus=order_shipping"><strong>待买家收货：</strong><b>($!{order_confirm_count})</b></a></span><span><a
+					href="$!webPath/seller/return.htm"><strong>退货申请：</strong><b>($!{returnGoodsCount})</b></a></span><span><a
+					href="$!webPath/seller/complaint.htm"><strong>未完成的投诉：</strong><b>($!{returnGoodsCount})</b></a></span>
+			</div>
+			  <h3><span>投诉提示</span></h3>
+			  	<div class="seller_bleft_m" style="border-bottom:1px solid #c4d5df">
+				<span><a href="$!webPath/seller/complaint.htm?status=0">新投诉：<b>#if($!{complaintCountMap[0]}) ($!{complaintCountMap[0]}) #else (0) #end</b></a></span><span><a
+					href="$!webPath/seller/complaint.htm?status=1"><strong>待申诉：</strong><b>#if($!{complaintCountMap[1]}) ($!{complaintCountMap[1]}) #else (0) #end</b></a></span><span><a
+					href="$!webPath/seller/complaint.htm?status=2"><strong>对话中：</strong><b>#if($!{complaintCountMap[2]}) ($!{complaintCountMap[2]}) #else (0) #end</b></a></span><span><a
+					href="$!webPath/seller/complaint.htm?status=3"><strong>待仲裁：</strong><b>#if($!{complaintCountMap[3]}) ($!{complaintCountMap[3]}) #else (0) #end</b></a></span>
+			</div>
+			#end
+			#set($groupOrder_pay_count=0)
+          #set($groupOrder_evaluate_count=0)
+          #foreach($groupOrder in $groupOrder)
+          #if($!groupOrder.orderStatus==10)
+          #set($groupOrder_pay_count=$groupOrder_pay_count+1)
+          #end
+          #if($!groupOrder.orderStatus==30)
+          #set($groupOrder_evaluate_count=$groupOrder_evaluate_count+1)
+          #end
+          #end
+           #if($!store.isO2o==true)
+				<div class="seller_bleft_m" style="height: 60px;">
+				<span>近期服务销售：<a href="$!webPath/seller/group_order.htm">交易中的订单<b>($!{groupOrders.size()})</b></a></span><span><a
+					href="$!webPath/seller/group_order.htm?statusCode=order_submit"><strong>待付款订单：</strong><b>($!{groupOrder_pay_count})</b></a></span><span><a
+					href="$!webPath/seller/group_order.htm"><strong>待评价订单：</strong><b>($!{groupOrder_evaluate_count})</b></a></span><span><a
+					href="$!webPath/seller/group_return.htm"><strong>退款申请：</strong><b>($!{returnGroupCount})</b></a></span>
+			</div>
+			#end
+		</div>
+		 #if($!store.isShop==true)
+          <div class="seller_index_ranking">
+            <h3><span>商品销售排行</span></h3>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="seller_rank_table">
+              <tr>
+                <th width="80">排行</th>
+                <th width="70%">商品名称</th>
+                <th>商品销量</th>
+              </tr>
+              #foreach($goods in $goods_sale_list)
+              <tr>
+                <td align="center">$!{velocityCount}</td>
+                 #if($!goods.goodsMainPhotoPath)
+                    #set($img="$!{goods.goodsMainPhotoPath}")
+                 #else
+                    #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                 #end
+                 
+            #set($goods_url="$!webPath/goods_$!{goods.id}.htm")
+            #if($!config.secondDomainOpen && $!goods.goodsType==1 && $!store.storeSecondDomain!="")
+            #set($goods_url="http://$!{store.storeSecondDomain}.$!{domainPath}/goods_$!{goods.id}.htm")
+            #end 
+                <td align="center"><dl class="seller_shop"><dt><img src="$!{img}" width="50" height="50" /></dt><dd><a href="$!goods_url" target="_blank">$!{goods.goodsName}</a></dd></dl></td>
+                <td align="center">#if($!{goods.goodsSalenum}) $!{goods.goodsSalenum} #else 0 #end</td>
+              </tr>
+             #end
+            </table>
+          </div>
+          #end
+           #if($!store.isO2o==true)
+           <div class="seller_index_ranking">
+            <h3><span>服务销售排行</span></h3>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="seller_rank_table">
+              <tr>
+                <th width="80">排行</th>
+                <th width="70%" align="left">服务名称</th>
+                <th>服务销量</th>
+              </tr>
+              #foreach($group in $group_list)
+              <tr>
+                <td align="center">$!{velocityCount}</td>
+                 #if($!group.groupAccPath)
+                    #set($img="$!{group.groupAccPath}")
+                 #end
+                 
+                #set($group_url="$!webPath/group/view_$!{group.id}.htm")
+                <td align="center"><dl class="seller_shop"><dt><a href="$!group_url" target="_blank"><img src="$!{img}" width="50" height="50" /></a></dt><dd><a href="$!group_url" target="_blank">$!{group.ggName}</a></dd></dl></td>
+                <td align="center">#if($!{group.selledCount}) $!{group.selledCount} #else 0 #end</td>
+              </tr>
+             #end
+            </table>
+          </div>
+          #end
+        </div>
+
+
+    #if(!$!store.isO2o)
+      <div class="seller_bottom_right seller_right_notice"> 
+          <div class="seller_bright_one"> 
+            <h3><span class="h3span">云尚平台最新公告</span><span class="noticemore"><a href="$!webPath/seller/articles_list.htm">更多</a></span></h3> 
+            <ul> 
+             #foreach($articles in $listArticles) 
+               <li><a href="$!webPath/seller/articles_view.htm?id=$!{articles.id}" >$!{articles.title}</a></li> 
+             #end 
+             </ul> 
+           </div>
+         </div>
+        #end
+         <!--
+       <div class="seller_bottom_right"> 
+          <div class="seller_bright_one"> 
+            <h3><span>运营商最新公告</span></h3> 
+            <ul> 
+             #foreach($notice in $operatorNotices) 
+               <li><a href="$!webPath/article_$!{article.id}.htm" target="_blank">$!{notice.ntTitle}</a></li> 
+             #end 
+             </ul> 
+           </div>
+         </div>-->
+      </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

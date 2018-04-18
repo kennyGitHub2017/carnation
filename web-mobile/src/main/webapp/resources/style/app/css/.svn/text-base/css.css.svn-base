@@ -1,0 +1,227 @@
+html, body {
+    width:100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    margin: 0 auto;
+    position:relative;
+    font-family: sans-serif; /* 1 */
+    -webkit-text-size-adjust: 100%; /* 2 */
+    -ms-text-size-adjust: 100%; /* 2 */
+    -webkit-transform-style:preserve-3d;
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+}
+html { box-sizing: border-box; font-size:100px; }
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.textnone{text-indent:-9999px}
+.fr{float:right}
+.fl{float:left}
+
+body{
+    width:100%;
+    max-width:750px;
+    margin:0 auto;
+    display:block;
+}
+
+@font-face
+{
+    font-family: hw3;
+    src: url('../font/Hiragino Sans GB W3.ttf'),
+    url('../font/Hiragino Sans GB W3.eot'); /* IE9+ */
+}
+@font-face
+{
+    font-family: hw6;
+    src: url('../font/Hiragino Sans GB W6.ttf'),
+    url('../font/Hiragino Sans GB W6.eot'); /* IE9+ */
+}
+@font-face
+{
+    font-family: mf;
+    src: url('../font/MFBanHei_Noncommercial-Regular.ttf'),
+    url('../font/MFBanHei_Noncommercial-Regular.eot'); /* IE9+ */
+}
+
+
+*{margin:0;padding:0}
+ul{list-style-type:none}
+img{display: inline;vertical-align: middle;border:0;width:100%}
+a{-webkit-tap-highlight-color:rgba(0,0,0,0);border:none;text-decoration:none}
+p{text-align: center}
+.ovfHiden{overflow: hidden;height: 100%;}
+.hidden{display:none}
+
+.model{width: 100%; height: 100%; background-color: #000; opacity: 0.3; filter: alpha(opacity=30);z-index:99999998;position:absolute;left:0px; top:0px;display:none}
+
+.wrapper{background:#ea4857}
+.top{background: url(../images/piao.png) no-repeat center 0.77rem;background-size: 7.5rem;overflow: hidden;height: 3.51rem;position: relative; z-index: 2}
+.top .title1{font-family: hw3;font-size:0.3rem;color: #fff;margin-top: 0.6rem;letter-spacing: 0.03rem}
+.top .title1 .yellow{color:#fff391}
+.top .title2{font-family: hw6;font-size: 0.61rem;color:#fff;margin-top:0.1rem;letter-spacing: 0.02rem}
+.top .title2 span{letter-spacing: 0.05rem}
+.top .title3{font-family: mf;color:#fff;margin-top: 0.14rem;font-size:1.04rem;height: 0.8rem;line-height: 0.7rem}
+.top .title3 .yellow{color:#fff391}
+.top .title4{font-family: hw3;color:#fff;font-size: 0.39rem;margin-top: 0.12rem}
+
+.center{background: url(../images/centerbg.png) no-repeat center top;background-size: 7.5rem 8.1rem;position: relative;z-index: 1;height: 8.1rem;margin-top: -2.9rem;overflow: hidden}
+.center .redbutton{width: 2rem;height: 2rem;line-height: 2rem;background: #fd982b;border: solid 0.07rem rgba(0,0,0,0.3);background-clip: padding-box;color: #fff;border-radius: 50%;margin: 0 auto;text-align: center;box-shadow: 0 0.1rem 0.1rem 0.01rem #861418;font-family:hw6;font-size: 1.2rem; margin-top: 5rem}
+
+
+.quanDiv{position: relative;z-index: 2;margin-top: -0.52rem;overflow: hidden;}
+.quanDiv .bg{width: 7.16rem;height:0.16rem;margin: 0 auto;background: url(../images/mailerTop.png) no-repeat center top;background-size:7.16rem 0.16rem }
+.quanDiv .quan{width: 7.16rem;height: 4rem;margin: 0 auto;position: relative;background: #ffecc3}
+.quanDiv .quan .leftcir{width: 0.5rem;height: 0.5rem;border-radius: 50%;background: #d73d45;position: absolute;left: -0.25rem;top: 1.51rem}
+.quanDiv .quan .rightcir{width: 0.5rem;height: 0.5rem;border-radius: 50%;background: #d73d45;position: absolute;right: -0.25rem;top: 1.51rem}
+.quanDiv .quan .title{width: 6.88rem;border-bottom: solid 1px #e6462e;height: 0.48rem;line-height: 0.48rem;margin: 0 auto}
+.quanDiv .quan .title .friend{font-family: hw3;font-size: 0.24rem;color: #e6462e;display: block;text-indent: 0.4rem}
+.quanDiv .quan .title .download{float: right;height: 0.48rem;line-height: 0.48rem;color: #0668ad;font-size: 0.24rem;font-family: hw3}
+.quanDiv .quan .title .download span{width: 0.3rem;text-align: center;display: inline-block}
+.quanDiv .quan .title .rules{float: right;height: 0.48rem;line-height: 0.48rem;color: #3e3e3e;font-size: 0.24rem;font-family: hw3;letter-spacing: 0.05rem;margin-right: 0.43rem;margin-left: 0.2rem}
+.quan .userlist{width: 6.88rem;margin: 0 auto;height: 3rem}
+.quan .userlist ul{overflow: hidden}
+.quan .userlist ul li{width: 0.8rem;text-align: center;float: left;margin:0.1rem 0 0 0.26rem;}
+.quan .userlist ul li.none{width: 2rem;font-size:0.22rem}
+.quan .userlist ul li img{display: block;width: 0.8rem;height:0.8rem;border-radius: 50%;}
+.quan .userlist ul li div{display: block;margin-top: 0.05rem;font-family: hw3;font-size: 0.22rem;}
+
+.bottom1{position: relative;background: url(../images/bottom1.png) no-repeat center top;background-size:cover;z-index: 1;height: 4.18rem;margin-top: -3.1rem}
+.bottom{position: relative;background: url(../images/bottom.png) no-repeat center top;background-size: cover;z-index: 4;height: 2.3rem;margin-top: -2.1rem}
+.addbg{background:#d73d45;height: 4rem;position: relative;z-index: 1;margin-top: -4.93rem}
+
+.top2{background: #a01437}
+.top2 .container{background: #ffed87;width: 6.8rem;margin: 0 auto;overflow: hidden;height: 4rem}
+.top2 .container .title1{font-family: hw3;font-size:0.3rem;color: #d4303a;margin-top: 0.6rem;letter-spacing: 0.03rem}
+.top2 .container .title2{font-family: hw6;font-size: 0.61rem;color:#d4303a;margin-top:0.1rem;letter-spacing: 0.02rem}
+.top2 .container .title2 span{letter-spacing: 0.05rem}
+.top2 .container .title3{font-family: mf;color:#d4303a;margin-top: 0.14rem;font-size:1.04rem;height: 0.8rem;line-height: 0.7rem}
+.top2 .container .title4{font-family: hw3;color:#d4303a;font-size: 0.39rem;margin-top: 0.12rem}
+
+.corn{background: url(../images/corn.png) no-repeat center top; background-size: cover;height: 1.75rem;margin-top: -0.9rem}
+.rcontent{background: url(../images/ybg.png) repeat-y center bottom; background-size: contain;overflow: hidden;position: relative;top: -1px}
+.rcontent .congratu{font-family: hw3;font-size:0.3rem;margin-top: 1.2rem;color: #fff;letter-spacing: 2px}
+.rcontent .number{font-family: hw3;font-size: 0.3rem;margin-top: 0.2rem;color: #fff}
+.rcontent .number span{color: #fff474;font-size: 0.8rem;display: inline-block;padding: 0 0.05rem;text-align: center}
+.rcontent .tips1{font-family: hw3;font-size:0.3rem;color: #fff;margin-top: 0.8rem}
+.rcontent .tips2{font-family: hw3;font-size:0.3rem;color: #fff;margin-top: 0.15rem;text-indent: 0.2rem}
+
+.rcontent .logo{background: url(../images/logo.png) no-repeat;width: 1.66rem;height: 1rem;display: block;margin: 1.2rem auto 1rem auto;background-size: cover }
+
+#phone{border-radius: 0.13rem;width: 5rem;height: 0.4rem;line-height: 0.4rem;text-indent: 0.1rem;padding: 0.1rem 0 0.1rem 0.1rem;margin: 0 auto;display: block;font-size: 0.3rem;border:solid 1px #fff;outline: none;margin-top: 0.12rem}
+#btn{border-radius: 0.13rem;width: 5.12rem;height: 0.6rem;line-height: 0.4rem;text-indent: 0.1rem;padding: 0.1rem 0 0.1rem 0.1rem;margin: 0 auto;display: block;font-size: 0.3rem;border: none;margin-top: 0.12rem;background: #fffbcb;border: solid 1px #68181c;color: #d4303a;font-family: hw3}
+
+.alert{width: 5rem;
+    height: 2.2rem;
+    background: #fd253e;
+    border: solid 0.07rem rgba(0,0,0,0.3);
+    background-clip: padding-box;
+    color: #fff;
+    position: absolute;
+    left: 50%;
+    top:200px;
+    margin-left: -2.5rem;
+    font-size: 0.24rem;
+    z-index: 99999999;
+    border-radius: 0.1rem;
+    opacity: 0;
+    display:none;
+  }
+.alert .close{position: absolute;right: 0.12rem;top: 0.12rem;width: 0.3rem;height: 0.3rem}
+.alert .content{width: 4.8rem;margin: 0 auto;height: 1rem;margin-top: 0.2rem;display: table;border-bottom: solid 1px #fff;}
+.alert .content .pdiv{display: table-cell;vertical-align: middle;font-size: 0.24rem;line-height: 0.4rem;padding: 0 0.2rem;font-family: hw3}
+.alert .downloadlink{width: 2rem;height: 0.4rem;line-height: 0.4rem;text-align: center;font-family: hw3;font-size: 0.24rem;display: block;margin:0 auto;margin-top: 0.2rem;
+background: #f7ff9c;color: #fd253e;border-radius: 5px;
+}
+
+.bouncein{animation: bouncein .8s 0.2s ease-out forwards; -webkit-animation: bouncein .8s 0.2s ease-out forwards;display:block}
+/* µØ»Î */
+@-webkit-keyframes bouncein{
+    0%{opacity:0;-webkit-transform:scale(0.3);}
+    50%{opacity:1;-webkit-transform:scale(1.05);}
+    70%{-webkit-transform:scale(0.9);opacity:1}
+    100%{-webkit-transform:scale(1);opacity: 1}
+}
+@-moz-keyframes bouncein{
+    0%{opacity:0;-moz-transform:scale(0.3);}
+    50%{opacity:1;-moz-transform:scale(1.05);}
+    70%{-moz-transform:scale(0.9);opacity:1}
+    100%{-moz-transform:scale(1);opacity: 1}
+}
+@-ms-keyframes bouncein{
+    0%{opacity:0;-ms-transform:scale(0.3);}
+    50%{opacity:1;-ms-transform:scale(1.05);}
+    70%{-ms-transform:scale(0.9);opacity:1}
+    100%{-ms-transform:scale(1);opacity: 1}
+}
+@keyframes bouncein{
+    0%{opacity:0;transform:scale(0.3);}
+    50%{opacity:1;transform:scale(1.05);}
+    70%{transform:scale(0.9);opacity:1}
+    100%{transform:scale(1);opacity: 1}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

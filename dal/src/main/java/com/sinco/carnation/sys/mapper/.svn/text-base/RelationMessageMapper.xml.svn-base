@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.RelationMessageMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.RelationMessage">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="for_user_id" property="forUserId" jdbcType="BIGINT" />
+		<result column="to_user_id" property="toUserId" jdbcType="BIGINT" />
+		<result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+		<result column="rm_type" property="rmType" jdbcType="INTEGER" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sys.bo.RelationMessageBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, for_user_id, to_user_id, creat_time, rm_type, delete_status
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.sys.model.RelationMessageExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_relation_message
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_relation_message
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sys_relation_message
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sys.model.RelationMessageExample">
+		delete from sys_relation_message
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.RelationMessage"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_relation_message (id, for_user_id, to_user_id,
+		creat_time, rm_type, delete_status
+		)
+		values (#{id,jdbcType=BIGINT}, #{forUserId,jdbcType=BIGINT},
+		#{toUserId,jdbcType=BIGINT},
+		#{creatTime,jdbcType=TIMESTAMP}, #{rmType,jdbcType=INTEGER}, #{deleteStatus,jdbcType=BIT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.RelationMessage"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_relation_message
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="forUserId != null">
+				for_user_id,
+			</if>
+			<if test="toUserId != null">
+				to_user_id,
+			</if>
+			<if test="creatTime != null">
+				creat_time,
+			</if>
+			<if test="rmType != null">
+				rm_type,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="forUserId != null">
+				#{forUserId,jdbcType=BIGINT},
+			</if>
+			<if test="toUserId != null">
+				#{toUserId,jdbcType=BIGINT},
+			</if>
+			<if test="creatTime != null">
+				#{creatTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="rmType != null">
+				#{rmType,jdbcType=INTEGER},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sys.model.RelationMessageExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_relation_message
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_relation_message
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.forUserId != null">
+				for_user_id = #{record.forUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.toUserId != null">
+				to_user_id = #{record.toUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.creatTime != null">
+				creat_time = #{record.creatTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.rmType != null">
+				rm_type = #{record.rmType,jdbcType=INTEGER},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sys_relation_message
+		set id = #{record.id,jdbcType=BIGINT},
+		for_user_id = #{record.forUserId,jdbcType=BIGINT},
+		to_user_id = #{record.toUserId,jdbcType=BIGINT},
+		creat_time = #{record.creatTime,jdbcType=TIMESTAMP},
+		rm_type = #{record.rmType,jdbcType=INTEGER},
+		delete_status = #{record.deleteStatus,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.RelationMessage">
+		update sys_relation_message
+		<set>
+			<if test="forUserId != null">
+				for_user_id = #{forUserId,jdbcType=BIGINT},
+			</if>
+			<if test="toUserId != null">
+				to_user_id = #{toUserId,jdbcType=BIGINT},
+			</if>
+			<if test="creatTime != null">
+				creat_time = #{creatTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="rmType != null">
+				rm_type = #{rmType,jdbcType=INTEGER},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.RelationMessage">
+		update sys_relation_message
+		set for_user_id = #{forUserId,jdbcType=BIGINT},
+		to_user_id = #{toUserId,jdbcType=BIGINT},
+		creat_time = #{creatTime,jdbcType=TIMESTAMP},
+		rm_type = #{rmType,jdbcType=INTEGER},
+		delete_status = #{deleteStatus,jdbcType=BIT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="findById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_relation_message
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="findAllDelStatusFalse" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_relation_message
+		where delete_status = false
+	</select>
+</mapper>

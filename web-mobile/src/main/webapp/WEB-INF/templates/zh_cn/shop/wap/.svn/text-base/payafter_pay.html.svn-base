@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,inital-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>货到付款 - $!config.title</title>
+<link href="$!webPath/resources/style/mobile/css/style.css" rel="stylesheet" type="text/css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+function order_pay(){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+
+<body>
+<header>
+  <section>
+    <h3>云豆支付</h3>
+  </section>
+</header>
+<div class="info_form">
+  <form action="$!webPath/mobile/order_pay_payafter.htm" method="post" id="theForm">
+  <input type="hidden" name="order_id" id="order_id" value="$!{order_id}">
+  <input name="pay_session" type="hidden" id="pay_session" value="$!pay_session" />
+  <div class="mt50" style="height:49px;"></div>
+  <ul>
+      <li><span>确定使用“货到付款”吗？</span></li>
+    <li>
+    	<span class="form_left">送货说明:</span>
+        <span class="form_right"><b class="form_area">
+      	<textarea name="pay_msg" id="pay_msg" cols="" rows=""></textarea>
+      	</b></span>
+    </li>
+    <li>
+    	<div class="notice">
+        	&nbsp;&nbsp;&nbsp;&nbsp;留言有利于商家迅速辨别买家。
+        </div>
+    </li>
+    <li><span class="form_btn">
+      <input onClick="order_pay()" type="button" value="确定">
+      </span>
+    </li>
+  </ul>
+  </form>
+</div>
+</body>
+</html>

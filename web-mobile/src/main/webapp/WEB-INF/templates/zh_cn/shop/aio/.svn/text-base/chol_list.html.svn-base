@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>总胆固醇</title>
+<link rel="stylesheet" href="$!webPath/resources/aio/css/weui.min.css" />
+<link rel="stylesheet" href="$!webPath/resources/aio/css/jquery-weui.min.css" />
+<link rel="stylesheet" href="$!webPath/resources/aio/css/style.css" />
+</head>
+<body>
+	<div class='wrap' ontouchstart>
+		<!--  选择时间   -->
+		<div class="choose-time">
+			<div class="date-choose" id="open_popup">选择时间</div>
+		</div>
+
+		<!--  数据信息  -->
+		<div class="detailinfo">
+			 <!-- #if($!cholList.size()>0) #foreach($chol in $cholList)
+			<div class="detailinfo-list">
+				<div class="list-date">
+					<p>$!chol.date</p>
+					<p>$!chol.time</p>
+				</div>
+				<div class="list-info">
+					<span>总胆固醇：<font>$!chol.chol</font>mmol/L
+					</span>
+				</div>
+			</div>
+			#end #end -->
+		</div>
+	</div>
+
+	<div id="half" class='weui-popup__container popup-bottom'>
+      <div class="weui-popup__overlay"></div>
+      <div class="weui-popup__modal" >
+        <div class="toolbar">
+       		<div class="close-popup close-date">取消</div>
+       		<div class="date-sub">确定</div>
+        </div>
+        <div class="modal-content">
+         	<div class="date-input">
+         		<input class="date_start" readonly id="date_start" placeholder="开始时间" />
+         		<div class="popup-cen">至</div>
+         		<input class="date_end" readonly id="date_end" placeholder="结束时间" />
+         	</div> 
+         	<div id="time_container1" class="time-container"></div>
+         	<div id="time_container2" class="time-container"></div>
+        </div>
+      </div>
+    </div>
+
+	<script type="text/javascript" src="$!webPath/resources/aio/js/jquery-2.1.4.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/aio/js/jquery-weui.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/aio/js/fastclick.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/aio/js/weui.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var pageNum = 1; //起始页
+			var pageSize = 10;//每页显示数量
+			var startdate = "";
+			var enddate = "";
+			
+			ajaxPageNum(pageNum,"","");
+			
+			//点击确定提交选择时间段 刷新数据
+			$(".date-sub").click(function() {
+				startdate = getStartDateVal();
+				enddate = getEndDateVal();
+				if(istrue(startdate,enddate)){//判断是否合法
+					$.closePopup();
+					setTimeVal();
+					$(".detailinfo").empty();
+
+					loading = false;
+					$(".weui-loadmore").remove();
+					setLoadMore();
+					pageNum =1;
+					ajaxPageNum(pageNum,startdate,enddate,2);
+				}
+				else{
+					 $.toast("筛选日期有误！", "forbidden");
+				}
+			});
+
+			//下拉刷新数据 
+			$(".wrap").pullToRefresh().on("pull-to-refresh", function() {
+				var ele = this;
+				$(".detailinfo").empty();
+				setTimeout(function() {
+					$(ele).pullToRefreshDone();
+
+					loading = false;
+					$(".weui-loadmore").remove();
+					setLoadMore();
+					pageNum =1;
+					ajaxPageNum(pageNum,startdate,enddate);
+				}, 800);
+			});
+
+			//滚动到底部加载更多
+			var loading = false;
+			$(".wrap").infinite(200).on("infinite",function() {
+				if (loading){return;}
+				loading = true;
+				ajaxPageNum(++pageNum,startdate,enddate);
+			});
+			
+			//请求分页信息
+			function ajaxPageNum(num,startdate,enddate,type){
+				//console.log(num,startdate,enddate);
+				$.ajax({
+					url:'$!webPath/v1/get_chol_list_ajax.htm',
+					type:'get',
+					dataType:'json',
+					data:{
+						uid:$uid,
+						pageNum:num,
+						pageSize:pageSize,
+						startDate:startdate,
+						endDate:enddate
+					},
+					success:function(data){
+						//console.log(data);
+						setLastTime();
+						setHtml(data,type);
+					}
+				});
+			}
+			
+			//渲染html
+			function setHtml(data,type){
+				var html = '';
+				if(data.length > 0){
+					for(var i = 0; i< data.length; i++){
+						html += '<div class="detailinfo-list"><div class="list-date">';
+						html += '<p>'+data[i].date+'</p>';
+						html += '<p>'+data[i].time+'</p>';
+						html += '</div><div class="list-info">';
+						html += '<span>总胆固醇：<font>'+data[i].chol+'</font>mmol/L</span>';
+						html += '</div></div>';
+					}
+					$(".detailinfo").append(html);
+					if(data.length < pageSize){
+						//假如为末页去除加载更多插件
+						loading = true;
+						$(".weui-loadmore").remove();
+						$(".detailinfo").append('<div class="data-end">你的信息已全部加载完成</div>');
+					}
+					else{
+						loading = false;
+					}
+				}
+				else{
+					if(type == 2){
+						//假如数据为空去除加载更多插件  显示提示
+						loading = true;
+						$(".weui-loadmore").remove();
+						var html  = '';
+							html += '<div class="none-data-pig"><img src="$!webPath/resources/aio/img/nonedata.png"></div>';
+							html += '<div class="none-data-tip"><p>该时间段内未进行体检哦！</p></div>';
+						$(".detailinfo").append(html);
+					}
+					else{
+						//假如为末页去除加载更多插件
+						loading = true;
+						$(".weui-loadmore").remove();
+						$(".detailinfo").append('<div class="data-end">你的信息已全部加载完成</div>');
+					}
+				}
+			}
+		});
+	</script>
+
+</body>
+</html>

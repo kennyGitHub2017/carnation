@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html style="font-size:50px" lang="en" manifest="check_detail.manifest">
+<head>
+    <meta charset="UTF-8">
+    <title>体检</title>
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" type="text/css" href="../../css/tijian/common.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/tijian/tijian.css" />
+    <script>
+   		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+		document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+    </script>
+</head>
+<body>
+	<div class="pageholder">
+		<div class="quickTj">
+			<div class="quickBtn">
+				<a href="javascript:;" onclick="callback('Quick')">快速体检</a>
+				<span class="cir1"></span>
+				<span class="cir2"></span>
+			</div>
+		</div>
+		<div class="tjList">
+			<em></em>
+			<ul>
+				<li><a href="javascript:;" onclick="callback('Blood')">血压测试</a></li>
+				<li><a href="javascript:;" onclick="callback('HearRate')">心率测试</a></li>
+				<li><a href="javascript:;" onclick="callback('Pulmonary')">肺活量测试</a></li>
+				<li><a href="javascript:;" onclick="callback('Oximeter')">血氧测试</a></li>
+				<li><a href="javascript:;" onclick="callback('Eyesight')">视力测试</a></li>
+				<li><a href="javascript:;" onclick="callback('Ratings')">听力测试</a></li>
+			</ul>
+		</div>
+	</div>
+	<script type="text/javascript" src="../../js/tijian/jquery.min.js" ></script>
+	<script type="text/javascript" src="../../js/tijian/common.js" ></script>
+    <script type="text/javascript">
+		$(document).ready(function(){
+			function cir1Animate(){
+				var arg=arguments;
+				$(".cir1").removeAttr("style");
+				$(".cir1").animate({"width":"6rem","height":"6rem","opacity":"0","left":"-1rem","top":"-1rem"},2000,function(){
+					arg.callee();
+				});
+			}
+			function cir2Animate(){
+				var arg=arguments;
+				$(".cir2").removeAttr("style");
+				$(".cir2").animate({"width":"6rem","height":"6rem","opacity":"0","left":"-1rem","top":"-1rem"},2000,function(){
+					arg.callee();
+				});
+			}
+			cir1Animate();
+			setTimeout(function(){
+				cir2Animate();
+			},1000);
+		});
+		
+	    var isAndroid, isiOS;
+	    (function() {
+	        var u = navigator.userAgent, app = navigator.appVersion;
+	        isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+	        isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+	    }());
+        function callback(str) {           	
+       		if(isAndroid)
+       		{
+       			java.requestCheck(str);
+       		}else
+       		{ 
+       			requestCheck(str);
+       		} 
+       	}
+      	applicationCache.onupdateready = function(){
+			applicationCache.swapCache();
+			location.reload();
+		};
+
+    </script>
+</body>
+</html>

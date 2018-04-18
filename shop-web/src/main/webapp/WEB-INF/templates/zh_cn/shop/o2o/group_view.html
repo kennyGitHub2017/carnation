@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>$!{obj.ggName} - $!config.title - $!{config.poweredby}</title>
+    
+    <meta name="keywords" content="$!{obj.ggName}" />
+    <meta name="description" content="$!{obj.ggName}" />
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet" />
+    <link href="$!webPath/resources/style/common/css/jquery.jqzoom.css" type="text/css" rel="stylesheet" />
+    <link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+
+    <link href="$!webPath/resources/style/service/public.css?v=5" type="text/css" rel="stylesheet" />
+
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/jquery.cookie.js"></script>
+    <script src="$!webPath/resources/js/jquery.jqzoom-core.js"></script>
+    <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+    <script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=700b132845ef5b0b135066dfa0222a37"></script>
+    <script type="text/javascript">
+    	var goods_inventory=$!obj.groupCount;
+    	function goods_count_sub(){
+    	   var goods_count= jQuery("#goods_count").val();
+    	   if(goods_count>1){
+    			goods_count--;
+    			jQuery("#goods_count").val(goods_count);
+    		}
+    	}
+    	function goods_count_add(){
+    	   var goods_count= jQuery("#goods_count").val();
+    	   if(goods_count < goods_inventory){
+    			goods_count++;
+    			jQuery("#goods_count").val(goods_count);
+    		 }
+    	}
+    	
+    	//立即购物
+    	function buy(){
+    		#if($!userDetails.storeId && $!store.storeId && $!userDetails.storeId==$!store.storeId)
+    		  showDialog("msg_info","","不能购买自己的服务！",2,"warning",3,'');
+    		#else
+    		  var add=true;
+    		  var count=jQuery("#goods_count").val();
+    		  if(count==0){
+    		    add=false;
+    			showDialog("msg_info","","至少购买一件服务！",2,"warning",3,'');
+    			return;
+    		  }
+    		  if(goods_inventory==0){
+    		    add=false;
+    			showDialog("msg_info","","服务库存为0,不能购买！",2,"warning",3,'');
+    			return;
+    		  }
+    		  if(goods_inventory < count){
+    		    add=false;
+    			showDialog("msg_info","","购买数量不能大于库存！",2,"warning",3,'');
+    			return;
+    		  }
+    		  if("0" != "$!obj.ggStatus"){
+    		    add=false;
+    			showDialog("msg_info","","服务未上架！",2,"warning",3,'');
+    			return;
+    		  }
+    		  if("15"!="$!store.storeStatus"){
+    			add=false;
+    			showDialog("msg_info","","服务店铺已停业",2,"warning",3,'');
+    			return;
+    		  } 
+    		  if(add){
+    			  location.href="${webPath}/life_order.htm?gid=$!{obj.id}&number="+count;
+    		  }
+    		 #end
+    	}
+    	$(function (){
+	    	var collectCount = $!{obj.goodsCollect}-0;
+	    	jQuery(".collect_product a").click(function(){
+	    		#if($!isFavorite)
+	    			 showDialog("msg_info","","已经收藏该服务！",2,"warning",3,'');
+	    		#else
+	    		  jQuery.post("$!webPath/add_group_favorite.htm",{"id":"$!obj.id"},function(data){
+	    			 if(data==0){
+	    				 showDialog("msg_info","","服务收藏成功！",2,"succeed",3,'');
+	    				 collectCount = collectCount + 1; 
+	    				 jQuery(".collect_product").addClass("this").find("a").html("收藏服务("+collectCount+")")
+	    			 }
+	    			 if(data==1){
+	    			   showDialog("msg_info","","已经收藏该服务！",2,"warning",3,'');
+	    			   jQuery(".collect_product").addClass("this");
+	    			 }
+	    		  },"text");
+	    		#end
+	    	});
+    	})
+    </script>
+
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/group/head.htm")
+$!httpInclude.include("/group/nav.htm")
+
+<div class="main clearfix pt-20">
+<div style="color: #999;padding-bottom: 15px;">
+#foreach($nav in $groupClassNav)
+<a href="$!webPath/group/category/search.htm?classId=$!{nav.id}">$!nav.gcName</a> >
+#end $!obj.ggName
+</div>
+    <div class="pd-main">
+        <div class="product_details_img">
+            <div class="product_image"> <a href="${obj.groupAccPath}" class="jqzoom"  rel='gal1'  title="商品细节图" >
+            <img src="${obj.groupAccPath}"  title="商品细节图"  id="main_img" width="450" height="324" /> </a> </div>
+            <div class="product_imgs">
+                <a class="zoomThumbActive this" rel="{gallery: 'gal1', smallimage: '${obj.groupAccPath}',largeimage: '${obj.groupAccPath}'}" href="javascript:void(0);" class="zoomThumbActive">
+                    <span><img big_img="${obj.groupAccPath}" src="${obj.groupAccPath}"></span>
+                </a>
+            	#foreach($acc in $goodsAccList)
+                <a rel="{gallery: 'gal1', smallimage: '${acc.path}',largeimage: '${acc.path}'}" href="javascript:void(0);">
+                    <span><img big_img="${acc.path}" src="${acc.path}"></span>
+                </a>
+                #end
+            </div>
+        </div>
+        <div class="pd-info">
+            <div class="pd-title">
+                <h2>$!{obj.ggName}</h2>
+                #if($obj.goodsType == 1)
+	                <span class="tao">套</span>
+	            #else
+	                <span class="xian">现</span>
+                #end
+            </div>
+            <div class="pd-title">
+             <!-- #if( $!{obj.refusedReasonDesc} )
+	                <h3 style="color:red">审核不通过原因说明：$!{obj.refusedReasonDesc}</h3>
+             #else
+             #end -->
+                
+            </div>
+            <div class="pd-price">
+                <span class="currency">¥</span>
+                <span class="price">$!{obj.groupPrice}</span>
+                <del>价格：￥$!{obj.costPrice}</del>
+            </div>
+            <div class="pd-count c_gray">已售：<span class="c_blue">$!{obj.selledCount}</span></div>
+            <div class="pt-30 c_gray">有效期：$CommUtil.formatTime('yyyy-MM-dd',$!obj.beginTime) 至 $CommUtil.formatTime('yyyy-MM-dd',$!obj.endTime)</div>
+            <div class="pt-30 c_gray o-h">
+                <span class="fl lh-25">数量：</span> <span class="choose_right_three"> <a href="javascript:void(0);" onclick="goods_count_sub();" class="choose_num_up">-</a>
+                <input name="goods_count" id="goods_count" value="1" class="choose_num" type="text">
+                <a href="javascript:void(0);" onclick="goods_count_add();" class="choose_num_down">+</a>
+                </span> <span class="fl lh-25"> <span class="stockparts">（库存：<b id="goods_inventory">${obj.groupCount}</b> 件）<b id="notice" style="display:none; float:right;"><img src="$!webPath/resources/style/system/front/default/images/warning.png" height="25px" width="25px"></b></span> </span>
+            </div>
+            <div class="pt-30 o-h">
+	            	#if($!obj.groupStatus == 1)
+	            		#if($!obj.ggStatus == 0)
+		            		#if($!obj.groupCount <= 0)
+	                            <a href="javascript:void(0);" class="btn btn-orange-xlarge btn-gray-xlarge fl">已售完</a>
+		            		#else
+		            		    #if($!userDetails)
+					                <a href="javascript:void(0);" class="btn btn-orange-xlarge fl" onclick="buy()">立即购买</a>
+				            	#else
+				            		<a href="javascript:void(0);" class="btn btn-orange-xlarge fl" dialog_uri="$!current_webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" class="add_atonce_buy" id="buy_g">立即购买</a></span>
+				            	#end
+		            		#end
+	            		#else
+                    		<a href="javascript:void(0);" class="btn btn-orange-xlarge btn-gray-xlarge fl">已下架</a>
+            			#end
+	            	#else
+                        <a href="javascript:void(0);" class="btn btn-orange-xlarge btn-gray-xlarge fl">该服务还未开始</a>
+            		#end
+                <div class="share-collect-box">
+                    <!-- JiaThis Button BEGIN -->
+                    <span class="fl pt-5"> 分享到：</span>
+                    <div class="jiathis_style_24x24">
+                        <a class="jiathis_button_weixin"></a>
+                        <a class="jiathis_button_qzone"></a>
+                        <a class="jiathis_button_tsina"></a>
+                    </div>
+                    <script type="text/javascript" >
+                    function addIntegral(evt) {
+	                  	  jQuery.ajax({
+	                  		  				type:'POST',
+	                  		  				url:'$!webPath/buyer/share_addIntegral.htm'
+	                  	});
+                  	}
+                        var jiathis_config={
+                            url: location.href,
+                            summary:"$!{obj.ggName}",
+                            title:"$!{obj.ggName}",
+                            pic:"${obj.groupAccPath}",
+                            shortUrl:false,
+                            hideMore:false,
+                            evt:{
+                                "share":"addIntegral"
+                            }
+                        }
+                    </script>
+                    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+                    <!-- JiaThis Button END -->
+
+                    <div class="collect_product_wrap">
+                    	<div class="collect_product #if($!isFavorite) this #end">
+                    		<a href="javascript:void(0);" #if(!$!user)dialog_uri="$!webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login"#end>
+                    			收藏($!{obj.goodsCollect})
+                    		</a>
+                    	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pd-content">
+        <div class="mod-pd-title">
+            <span class="title">商家位置</span>
+        </div>
+        <div class="pd-address-box gray-bg-box o-h">
+            <div class="pd-min-map-wrap">
+                <div id="pd-min-map"></div>
+                <div class="view-map">
+                    <a href="javascript:void(0)"  
+                    dialog_uri="$!current_webPath/load_store_map.htm?storeId=$!{store.id}" dialog_title="查看完整地图" dialog_width="640" dialog_height="400"><i class="icon-zoom icon"></i> 查看完整地图</a>
+                </div>
+            </div>
+            <div class="pd-address-text">
+            	#set($storeEvaluationAverage = $!store.storeEvaluationAverage * 20)
+                <h3><a href="$webPath/group/store.htm?id=$!{store.id}"><font size="3">$!store.storeName</font></a></h3>
+                <div><div class="five_star"><b title="好评率：%" style="width:${storeEvaluationAverage}%;"></b></div></div>
+                <p>地址：$!store.storeAddress</p>
+                <p>电话：$!store.storeTelephone</p>
+            </div>
+        </div>
+
+        <div class="mod-pd-title pt-20">
+            <span class="title">购买须知</span>
+        </div>
+        <div class="pd-notice-box blue-bg-box">
+      		$!{obj.groupNotice}
+        </div>
+
+        <div class="mod-pd-title pt-20">
+            <span class="title">本单详情</span>
+        </div>
+        <div class="fz-12 lh-25">
+			$!{obj.groupDesc}
+        </div>
+    </div>
+
+    <div class="mod-col-bor">
+        <div class="title">猜你喜欢</div>
+        <div class="s-pro-list pro-list-side">
+            $!httpInclude.include("/goodslike_list.htm")
+        </div>
+    </div>
+
+</div>
+$!httpInclude.include("/footer.htm")
+<script>
+
+    jQuery('.jqzoom').jqzoom({
+        zoomType: 'standard',
+        zoomWidth:450,
+        zoomHeight:324,
+        lens:true,
+        preloadImages: false,
+        alwaysOn:false,
+        title:true,
+        preloadText:'努力加载'
+    });
+
+    // 百度地图API功能
+    var map = new BMap.Map("pd-min-map");
+    var point = new BMap.Point(#if($!store.storeLon) $!store.storeLon #else 0 #end,#if($!store.storeLat) $!store.storeLat #else 0 #end);
+    map.centerAndZoom(point,14);
+    // 创建地址解析器实例
+	map.addOverlay(new BMap.Marker(point));
+
+</script>
+<script>
+var good = {
+	id: $!{obj.id},
+	name:'$!obj.ggName',
+	pic:'$!obj.groupAccPath',
+	selledCount:'$!obj.selledCount',
+	storeName:'$!store.storeName',
+	groupPrice:'$!obj.groupPrice'
+}
+
+var goods=[];
+var goodsStr = jQuery.cookie('goodsStr');
+console.log('goodsStr:',goodsStr)
+
+if(goodsStr){
+	//解析json字符串
+	goods = jQuery.parseJSON(goodsStr);
+	
+/* 	if(goods.length>4){//超过4个
+		if(!has(good.id,goods)){
+			goods.shift()
+			goods.unshift(good)
+		}
+	}else{
+		if(!has(good.id,goods))
+			goods.unshift(good)
+	} */
+	console.log(goods)
+	var i =index(good.id,goods)
+	if(i>=0){
+		goods.splice(i,1)
+	}
+	if(goods.length>4){
+		goods.splice(goods.length-1,1)}
+	
+	goods.unshift(good)
+}else
+	goods.unshift(good)
+	
+function index(id,arr){
+	for(i in arr){
+		if(id == arr[i].id)
+			return i
+	}
+	return -1;
+}
+console.log(goods)
+//write cookie
+jQuery.cookie('goodsStr',JSON.stringify(goods),{ path: '/' });//转化json字符串，并存储到cookie
+</script>
+</body>
+</html>

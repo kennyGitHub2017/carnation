@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+
+<script>
+jQuery(document).ready(function(){
+	jQuery("select[id^=area]").change(function(){
+	     var level=jQuery(this).attr("level");
+		 var id=jQuery(this).val();
+		 changeArea(level, id, true);
+	 });
+	jQuery("#area2").change(function(){
+ 	   var id=jQuery(this).val();
+ 	   jQuery("#areaId").val(id);
+ 	});
+	jQuery("#area3").change(function(){
+ 	   var id=jQuery(this).val();
+ 	   if(id != '')
+ 	   {
+	 	   jQuery("#areaId").val(id);
+ 	   }
+ 	   else
+ 	   {
+ 	 	   jQuery("#areaId").val(jQuery("#area2").val());
+ 	   }
+ 	});
+	
+	#if($!vo.areaSheng)
+	  	 changeArea(2, jQuery("#area1").val(), false);
+     #end
+});
+function changeArea(level, id, needEmpty)
+{
+	if(needEmpty)
+		jQuery("#areaId").val("");
+	 for(var i=4;i>level;i--){
+	  jQuery("#area"+i).empty();
+	  jQuery("#area"+i).append("<option value=''>请选择</option>");
+	 }
+	 if(id!=""){
+	  jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	     jQuery("#area"+level).empty();
+		  jQuery("#area"+level).append("<option value=''>请选择</option>");
+	      jQuery.each(data, function(index,item){
+		    var option = "<option value='"+item.id+"' areaName='"+item.areaName+"'";
+	    	  if(level == 2)
+		      {
+		    	  #if($!vo.areaShi)
+		    	  	  if("$!vo.areaShi" == item.areaName)
+		    	  	  {
+			    	  	  option += " selected = 'selected'";
+		    	  	  }
+		          #end
+		      }
+	    	  else if(level == 3)
+		      {
+		    	  #if($!vo.areaXian)
+		    		  if("$!vo.areaXian" == item.areaName)
+		    	  	  {
+			    	  	  option += " selected = 'selected'";
+		    	  	  }
+		          #end
+		      }
+	    	  option += ">"+item.areaName+"</option>";
+	    	  jQuery("#area"+level).append(option);
+		  });
+	      if(level == 2)
+	      {
+	    	  #if($!vo.areaShi)
+	    	  	  changeArea(3, jQuery("#area2").val(), false);
+	          #end
+	      }
+	  },"json");
+	 }else{
+	   for(var i=level;i<=4;i++){
+	    jQuery("#area"+i).empty();
+	   }
+	 }
+}
+
+function submitFAssignedForm()
+{
+	if (jQuery("#area1").val() != '' && jQuery("#areaId").val() == '') 
+	{
+		alert("运营地搜索最少选择区级！");
+	}
+	else
+	{
+		jQuery("#ListForm").submit();
+	}	
+}
+</script>
+<body>
+  <div class="cont">
+    <h1 class="seth">运营商管理</h1>
+    <div class="nav_list">
+    <ul> 
+    <li><a href="$!webPath/admin/operator_list.htm"><b>管理</b></a> </li>
+    <li><a href="$!webPath/admin/operator_add.htm" ><b>新增</b></a></li>
+    <li><a href="$!webPath/admin/operator_assigned_list.htm" class="this"><b>商户分配</b></a> </li>
+     </ul> 
+     </div>
+	<FORM name="ListForm" id="ListForm"  action="$!webPath/admin/operator_assigned_list.htm" method="post">
+	<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <div class="search">
+      	  <span>
+      	  	 商户名称
+          </span>
+      	  <span class="size150">
+          	<input name="storeName" type="text" value="$!vo.storeName" />
+          </span>
+      	  <span>
+      	  	 运营地：
+          </span>
+      	  <span class="size150">
+          	<span>
+	          <select name="area1" id="area1" level="2">
+                <option value="">省份/自治区</option>
+		          #foreach($area in $areas)            
+		                <option value="$!area.id" areaName="$!area.areaName"  #if($!area.areaName==$!vo.areaSheng) selected="true" #end>$!area.areaName</option>
+		           #end          
+              </select>
+              <select name="area2" id="area2" level="3">
+              	#if($!vo.areaShi)
+              		<option>$!vo.areaShi</option>
+              	#else
+                	<option value="">市/区</option>
+                #end
+              </select>
+              <select name="area3" id="area3" level="4">
+              	#if($!vo.areaXian)
+              		<option>$!vo.areaXian</option>
+              	#else
+                	<option value="">县/区</option>
+                #end
+              </select>
+              <input id="areaId" name="areaId" type="hidden" value="$!vo.areaId" /></td>
+          </span>
+          </span>
+          <span>
+          <input name="" type="button" onclick="submitFAssignedForm();" value="搜索" style="cursor:pointer;" title="搜索"  class="search_btn"/>
+          </span>
+
+    </div>
+
+    <div class="fshoptb page-fixed-mb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="20%" align="left"><span class="form_btna">商户名称</span></th>
+		  <th width="10%" align="center"><span class="form_btna">店主用户名</span></th>
+		  <th width="10%" align="center"><span class="form_btna">店主姓名</span></th>
+		  <th width="20%" align="center"><span class="form_btna">所在地</span></th>
+          <th width="10%" align="center"><span class="form_btna">商户类型</span></th>
+          <th width="20%" align="center"><span class="form_btna">创建时间</span></th>
+          <th  align="center" style="min-width:100px"><span class="form_btna">操作</span></th>
+        </tr>
+        #foreach($!obj in $objs)
+		<tr>
+			<td class="lightred">$!obj.storeName</td>
+			<td class="lightred">$!obj.loginName</td>
+			<td class="lightred">$!obj.userName</td>
+			<td class="lightred">$!obj.areaName</td>
+			<td class="lightred">$!obj.gcName</td>
+			<td>$!CommUtil.formatLongDate($!obj.addTime)</td>
+			<td align="center" class="hui oprate_con">
+				<a href="javascript:void(0);" class="blue" dialog_uri="$!webPath/admin/operator_assigned.htm?sellerId=$!{obj.uid}&storeId=$!{obj.id}" dialog_title="商户分配运营商" dialog_width="500" dialog_id="shop_assigned_dialog">分配</a>
+			</td>
+		</tr>
+		#end
+        <tr>
+        <td colspan="7" style="border-bottom:0px; padding:0px;">
+        	<div class="operate_bar page-fixed">
+				<div class="fenye">$!gotoPageFormHTML</div>
+			</div>
+		</td>
+        </tr>
+      </table>
+    </div>
+	</FORM>
+  </div>
+</body>
+</html>

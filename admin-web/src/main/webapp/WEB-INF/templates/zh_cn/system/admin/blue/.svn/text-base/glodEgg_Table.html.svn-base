@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>拆金蛋-编辑</title>
+		<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+		<style type="text/css">
+			.eggTable{width: 500px;}
+			table tr{height: 40px;line-height: 40px;text-align: right;}
+			.eggTable input{width: 120px;height: 20px;line-height: 20px;}
+			.eggTable tr td span{color: red;}
+			.submit{display: block;background: #02ACFF;outline: none;width: 50px;height: 30px;text-align: center;color: #ffffff;margin-left: 238px;}
+		</style>
+	</head>
+	<body>
+		<form action="$!webPath/admin/modify_Gold_Egg.htm" method="post" id="from">
+			<table border="0" cellspacing="" cellpadding="" class="eggTable">
+			<tbody>
+				#foreach($!glodEgg in $!glodEggItemList)
+				<tr>
+					<td>
+						<span>*</span>
+						发行金额$!{velocityCount}：
+						<input type="text"  value="$!glodEgg.totalMoney" id="totalMoney_$!glodEgg.id"/>
+					</td>
+					<td>
+						<span>*</span>
+						发行量$!{velocityCount}：
+						<input type="text" value="$!glodEgg.totalCount" id="totalCount_$!glodEgg.id"/>
+						<input type="hidden" name="glodEggID" value="$!glodEgg.id"/>
+						<input type="hidden" name="glodEggItemArray"  id="reqArrsy_$!glodEgg.id"/>
+					</td>
+				</tr>
+				#end
+				<tr>
+					<td>发行总额：<input type="text" value="$!actGlodEggBO.totalMoney"/></td>
+					<td>发行总量：<input type="text" value="$!actGlodEggBO.totalCount"/></td>
+				</tr>
+				<tr>
+					<td>日限额：<input type="text" name="dayLimitMoney" value="$!actGlodEggBO.dayLimitMoney" /></td>
+				</tr>
+				<tr>
+					<td><span>*</span>中奖概率：<input type="text" name="priority" value="$!actGlodEggBO.priority" /></td>
+					<input type="hidden" name="actGlodEggID"  value="$!actGlodEggBO.id"/>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+		<div>
+			<input type="button" class="submit" text="提交"/>
+		</div>
+	</body>
+	<script type="text/javascript">
+	
+	    jQuery(document).ready(function(){
+	    	 jQuery(".submit").click(function(){
+	    		 var glodEggArray = new Array();
+	    		 var arr = jQuery("input[name='glodEggID']");
+	    		 var size = arr.length;
+	    		 for(var i=0;i < size;i++){
+	    			 var glodEggID = jQuery(arr[i]).val();
+	    			 var totalMoney = jQuery("#totalMoney_"+glodEggID).val();
+	    			 var totalCount = jQuery("#totalCount_"+glodEggID).val();
+	    			 var glodEggs = "{id:"+glodEggID+",totalCount:"+totalCount+",totalMoney:"+totalMoney+"}";
+	    			 console.log("<<<<<<<<< "+glodEggs);
+	    			 jQuery("#reqArrsy_"+glodEggID).val(glodEggs);
+	    		 }
+	    		 jQuery("#from").submit();
+			 });
+		});
+	
+	
+	</script>
+</html>

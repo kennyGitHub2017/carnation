@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!store.store_name -$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="#if($!store.store_seo_keywords!="") $!store.store_seo_keywords #else $!config.keywords #end" />
+<meta name="description" content="#if($!store.store_seo_description!="") $!store.store_seo_description #else $!config.description #end" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public.css" rel="stylesheet" type="text/css" />
+<link href="$!webPath/resources/style/shop/css/store_$!{store_theme}.css" rel="stylesheet" type="text/css" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<style>
+.pro_list .pro_list_one ul .pro_list_price b {
+    color: #ff2256;
+}
+.pro_list .pro_list_one ul .pro_list_price b.shopBv {
+    float: right;
+    margin-right: 12px;
+    font-size: 14px;
+    color: #757575;
+    font-weight: normal;
+    text-indent: 17px;
+    background: url("$!webPath/resources/img/shopbv.png")no-repeat left center;
+    height: 15px;
+    width: auto;
+    min-width: 30px;
+}
+</style>
+<script>
+jQuery(document).ready(function(e) {
+	
+	jQuery(".list_bar_a a").click(function(){
+		 var orderBy = jQuery(this).attr("orderBy");
+		 var orderType = jQuery(this).attr("orderType");
+		 jQuery("#orderBy").val(orderBy);
+		 jQuery("#orderType").val(orderType);
+		 var is_checkend = jQuery("#justBV").is(":checked");
+	     var ex_price_flag = jQuery("#ex_price_flag");
+	     if(is_checkend){
+	    	ex_price_flag.val("cn");
+	     }
+	     else{
+	    	ex_price_flag.val("");
+	     }
+		 jQuery("#ListForm").submit();
+	});
+	
+	#if($!orderBy)
+	    jQuery(".list_bar_a a").removeClass("this").find("i").removeClass("this");
+	    jQuery(".list_bar_a a[orderBy='$!orderBy']").addClass("this").find("i").addClass("this");
+	   #if($!orderBy=="goods_current_price"&& $!orderType=="asc")
+	     jQuery(".list_bar_a a[orderBy='$!orderBy']").attr("orderType","desc").find("i").addClass("up");
+	   #end
+	   #if($!orderBy=="goods_current_price"&& $!orderType=="desc")
+	     jQuery(".list_bar_a a[orderBy='$!orderBy']").attr("orderType","asc").find("i").addClass("down");
+	   #end
+	 #end
+	 
+	 jQuery(".pro_them_team b").mouseover(function(){
+	      var img_id="#"+jQuery(this).attr("goods_id")+"_main_img";
+		  var middle_img=jQuery(this).attr("middle_img");
+		  jQuery(img_id).attr("src",middle_img);
+		  jQuery(this).parent().find("b").removeClass("this_b");
+		  jQuery(this).addClass("this_b");
+		  jQuery(this).parent().find(".team_san").hide();
+		  jQuery(this).find(".team_san").show();
+	  });
+	   
+	 jQuery(".pro_list_img img").lazyload({effect:"fadeIn",width:208,height:208});
+	 jQuery(".pro_them_team img").lazyload({effect:"fadeIn",width:30,height:30});
+
+
+	
+	<!--收藏店铺-->
+	jQuery(".collection a").click(function(){
+    #if($!user)
+     #if($!user.id==$!store.user.id)
+	  showDialog("msg_info","","不能收藏自己的店铺！",2,"warning",3,'');
+	 #else
+	   jQuery.post("$!current_webPath/add_store_favorite.htm",{"id":"$!store.id"},function(data){
+		 if(data==0){
+		    showDialog("msg_info","","店铺收藏成功！",2,"warning",3,'');
+		 }
+		 if(data==1){
+		   showDialog("msg_info","","该店铺已经被收藏！",2,"warning",3,'');
+		 }
+	   },"text");
+	 #end
+   #end
+   });
+  //
+  jQuery(".twocoad").css("cursor","pointer").mouseover(function(){
+     jQuery(".shop_botmhbox").fadeIn('fast'); 
+  }).mouseleave(function(){
+     jQuery(".shop_botmhbox").fadeOut('fast'); 
+  });
+	jQuery("i[id^='i_']").click(function(){
+	  var str = jQuery(this).attr("id").substring(2);
+	  var child_show=jQuery(this).attr("child_show");
+	  if(child_show=="true"){
+	    jQuery(this).removeClass("i_cut");
+		jQuery(this).addClass("i_add");
+		jQuery(this).parent().next(".level_second").slideUp('normal');
+	    jQuery(this).attr("child_show","false");
+	  }else{
+	    jQuery(this).removeClass("i_add");
+		jQuery(this).addClass("i_cut");
+	   jQuery(this).parent().next(".level_second").slideDown('normal');
+	    jQuery(this).attr("child_show","true");
+	  }
+	});
+	<!--幻灯-->
+	var index = 0;
+// 	if($store.slides.size()>0){
+// 		var count = jQuery(".shopslider").children().length;
+// 	}else{
+// 		var count = 3;
+// 	}
+		var timer ;
+		 jQuery(".banner_circle a").click(function(){
+			index  = jQuery(".banner_circle a").index(this);
+			animateImg(index);
+		 }).eq(0).mouseover();
+		 
+		 jQuery(".banner_img").hover(function(){
+				 clearInterval(timer);
+			 },function(){
+				 timer = setInterval(function(){
+					animateImg(index)
+					index++;
+					if(index==count){index=0;}
+				  } , 4000);
+		 }).trigger("mouseleave");
+	 
+    jQuery("#store_head_box").css("cursor","pointer").mouseover(function(){
+		jQuery("#store_level").show();
+	})
+	jQuery("#store_head_box").mouseout(function(){
+		jQuery("#store_level").hide();
+	})
+	//默认幻灯
+	jQuery("#default_fullSlide").slide({ titCell:"#default_hd li", mainCell:"#default_bd ul", effect:"fold",  autoPlay:true, delayTime:700 });
+    
+    /* var bvList = jQuery("[name='bv']"); */
+    
+    jQuery("#justBV").click(function(){
+    	var is_checkend = jQuery(this).is(":checked");
+    	var ex_price_flag = jQuery("#ex_price_flag");;
+    	if(is_checkend){
+    		ex_price_flag.val("cn");
+    	}
+    	else{
+    		ex_price_flag.val("");
+    	}
+    	jQuery("#ListForm").submit();
+    });
+    
+    
+});<!--end-->
+function animateImg(index){
+			jQuery(".shopslider").children().animate({opacity:"0"}).stop(true,false).eq(index).animate({opacity:"1"});
+			jQuery(".banner_circle a").removeClass("this")
+				.eq(index).addClass("this");
+			jQuery(".shopslider").children().eq(index).siblings().animate({opacity:"0"});
+}
+function ugc_goods_list(ugc_id){
+// 	window.location.href="$!current_webPath/goods_list.htm?store_id="+$!store.id+"&ugc_id="+ugc_id+"&orderBy=goods_salenum&orderType=desc";
+	 jQuery("#ugcId").val(ugc_id);
+	 jQuery("#ListForm").submit();
+}
+
+
+</script>
+</head>
+<body>
+<!--顶部-->
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/store_head.htm?store_id=$!{store.id}")
+ #set($bg_img="")
+   #if($!bg.bgImgSrc)
+         #set($bg_img="$!imageWebServer/$!{bg.bgImgSrc}")
+        #end
+  #set($repeat="background-repeat:repeat;")
+   #if($!bg.repeat=="stretch")
+         #set($repeat="background-size: 100% auto;")
+        #end  
+<div class="shop_main" style="#if($!{bg_img}!='') background-image:url('$!{bg_img}');#end  #if($!{bg.bg_color}!='')background-color:$!{bg.bg_color}; #end $!{repeat}">
+  <!--店铺头部-->
+  <!--logo行-->
+  #if($!store.storeBannerPath)
+  #set($banner="$!{store.storeBannerPath}")
+  #else
+  #set($banner="$!webPath/resources/style/shop/images/store_default/banner.jpg")
+  #end
+  <div class="store_logo" style="background:url($!banner) no-repeat top center; "> #set($logo="$!webPath/resources/style/shop/images/store_default/logo.jpg")
+    #if($!config.storeImage)
+    #set($logo="$!imageWebServer/$!config.storeImage.path/$!config.storeImage.name")
+    #end
+    #if($!store.storeLogoPath)
+    #set($logo="$!{store.storeLogoPath}")
+    #end
+    <div class="main clearfix"><!-- <span style="clear:both;"><img src="$!logo" width="210" height="78" /></span> --></div>
+  </div>
+  <!--导航-->
+  <div class="store_nav_width">
+    <div class="main clearfix">
+      <div class="store_nav">
+        <ul>
+          <li class="this"><a href="javascript:void(0)">店铺首页</a></li>
+          #foreach($nav in $navs)
+          #set($url="$!webPath/store_url_$!{nav.id}.htm")
+          #if($!{nav.url}&&$!{nav.url}!="") 
+          #set($url="$!nav.url")
+          #end
+          <li><a href="$!url"#if($!nav.winType=="new_win") target="_blank" #end>$!nav.title</a></li>
+          #end
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!--大幻灯-->
+#if($!store.slides.size()>0)
+<div class="fullSlide" id="default_fullSlide">
+		<div class="bd" id="default_bd" style="margin: auto;">
+			<ul style="text-align: center;margin: auto;">
+            	#foreach($slide in $store.slides)
+				<li  style="text-align: center;margin: auto;"><a style="text-align:center; display: block;" #if($!slide.src!='')href="$!{slide.url}" target="_blank" #else href="javascript:void(0)" #end ><img src="$!{slide.accPath}" height="450" /></a></li>
+                #end
+			</ul>
+		</div>
+		<div class="hd" id="default_hd">
+			<ul>
+            	#foreach($slide in $store.slides)
+				<li #if($!velocityCount==1) class="on" #end>$!{velocityCount}</li>
+                #end 
+			</ul>
+		</div>
+	</div>
+#end
+
+  <!--主体-->
+  <div class="main clearfix" style="width:1002px">
+    <div class="store_main">
+      <div class="store_left">
+        <!--店铺信息-->
+        <div class="store_left_box">
+          <h1>店铺信息</h1>
+          <div class="store_infor"> <span class="full_name">$!store.storeName</span>
+          <ul class="pro_shop_date_c" style="display:;">
+          	<li><span>评分详细</span><i>与行业相比</i></li>
+            <li><span>描述相符：</span><b>#if(!$!{store.point.descriptionEvaluate})0 #else $!{store.point.descriptionEvaluate} #end分</b><i class="$!{description_css}">$!description_result</i></li>
+            <li><span>服务态度：</span><b>#if(!$!{store.point.serviceEvaluate})0 #else $!{store.point.serviceEvaluate} #end分</b><i class="$!{service_css}">$!service_result</i></li>
+            <li><span>发货速度：</span><b>#if(!$!{store.point.shipEvaluate})0 #else $!{store.point.shipEvaluate} #end分</b><i class="$!{ship_css}">$!ship_result</i></li>
+        </ul>
+            <ul class="information">
+              <li><span>公司名称：</span><b>$!store.licenseCName</b></li>
+              <li><span>所在地：</span><b>$!fullName</b></li>
+              <li><span>联系电话：</span><b>$!store.storeTelephone</b></li>
+            </ul>
+            <div class="shop_botm_hid">
+              <ul class="shopboh">
+                <li class="collection"  style="border-right:0px;"> <a href="javascript:void(0);" id="store_fav" #if(!$!user)dialog_uri="$!webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="450" dialog_height="100" dialog_id="user_login"#end><span>收藏店铺</span></a> </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!--商品分类-->
+        <div class="classify">
+          <h1><span>商品分类</span></h1>
+          <div class="classify_list"> 
+            <div class="level_li">
+              <div class="level_one">
+              	<span onclick="ugc_goods_list('')" style="cursor:pointer"  #if('' == $!ugcId) class="this" #end>所有分类</span></div>
+            </div>
+           #foreach($ugc in $ugcs)
+            <div class="level_li">
+              <div class="level_one"><i class="i_cut" id="i_$!{ugc.id}" child_show="true"></i><span onclick="ugc_goods_list($!ugc.id)" style="cursor:pointer"  #if($!ugc.id == $!ugcId) class="this" #end>$!ugc.classname</span></div>
+              <div class="level_second">
+                <ul>
+                  #foreach($child in $ugc.childs)
+                  <li><a href="javascript:void(0)" onclick="ugc_goods_list($!child.id)" #if($!child.id == $!ugcId) class="this" #end>$!child.classname</a></li>
+                  #end
+                </ul>
+              </div>
+            </div>
+            #end 
+            </div>
+        </div>
+      </div>
+      <div class="store_right store_def_right">
+        <div class="main_list_box">
+          <div class="main_list_function">
+            <div class="main_list_bar"> 
+	            <b class="list_bar_px">排序：</b> 
+	            <b class="list_bar_a"> 
+		            <a href="javascript:void(0);" orderBy="add_time"  orderType="asc">默认<i class="this"></i></a> 
+		            <a href="javascript:void(0);" orderBy="goods_salenum" orderType="desc">销量<i></i></a> 
+		            <a href="javascript:void(0);" orderBy="well_evaluate" orderType="desc">好评<i></i></a> 
+		            <a href="javascript:void(0);" orderBy="goods_current_price"  orderType="asc">价格<i class="price"></i></a>
+		            #if($!isCN==true)
+		            	<input name="justBV" type="checkbox" value="justBVRad" id="justBV" #if($!exPriceFlag)checked#end/>
+		            	&nbsp;只看BV值
+		            #end 
+	            </b>
+            </div>
+          </div>
+          #if($!objs.size()>0)
+          <div class="pro_list"> 
+            #foreach($obj in $objs)
+            <div class="pro_list_one" data-bind="$!obj.id">
+              <ul class="">
+                <li class="pro_list_img"> 
+                  #if($!obj.goodsMainPhotoPath)
+                  #set($small_img="$!{obj.goodsMainPhotoPath}")
+                  #set($middle_img="$!{obj.goodsMainPhotoPath}")
+                  #else
+                  #set($small_img="$!{config.goodsImage.path}")
+                  #set($middle_img="$!{config.goodsImage.path}")
+                  #end 
+                  
+                  #set($goods_url="$!webPath/goods_$!{obj.id}.htm")
+                  #if($!config.secondDomainOpen && $!obj.goods_type==1 && $!obj.goodsStore.storeSecondDomain!="")
+                  #set($goods_url="http://$!{obj.goodsStore.storeSecondDomain}.$!{domainPath}/goods_$!{obj.id}.htm")
+                  #end <a href="$!goods_url" target="_blank"><span class="img_cspan">
+                  <p><img id="$!{obj.id}_main_img" src="$!webPath/resources/style/common/images/loader.gif" original="$!middle_img" onerror="this.src='$!{config.goodsImage.path}';" width="28" height="28" data-bind="$!obj.id" /></p>
+                  </span></a></li>
+                <li class="pro_them">
+                  <div class="pro_them_team">
+                    <p style="position:absolute; width:700px; left:0px;display:block;"> <b class="pro_team_b this_b" goods_id="$!{obj.id}" middle_img="$!middle_img"> <img src="$!webPath/resources/style/common/images/loader.gif" original="$!small_img"  width="28" height="28"   onerror="this.src='$!{config.goodsImage.path}';"/> <i class="team_san"></i></b> #foreach($img in $obj.goodsPhotosList) <b  class="pro_team_b" goods_id="$!{obj.id}" middle_img="$!{img.accessory.path}"> <img original="$!{img.accessory.path}" src="$!webPath/resources/style/common/images/loader.gif"   onerror="this.src='$!{config.goodsImage.path}';" width="28" height="28" /> <i class="team_san" style="display:none"></i></b> #end </p>
+                  </div>
+                </li>
+                <li class="pro_list_name"><a href="$!goods_url" target="_blank">$!{obj.goodsName}</a></li>
+                <li class="pro_list_price">
+                	<b>¥$!{obj.goodsShowPrice}</b>
+                	#if($!obj.inventoryType=="spec" && $!obj.goodsType==1)
+                	<del class="details-o-price" style="font-size:14px">
+				      #set($thisPrice=$!{obj.goodsPrice}+$!{obj.selfAddPrice})
+	                   ¥${thisPrice}              
+                	</del>
+                	#else
+                	<del class="details-o-price" style="font-size:14px">
+				      #set($thisPrice=$!{obj.goodsPrice})
+	                   ¥${thisPrice}              
+                	</del>
+                	#end
+                	#if($!isCN==true && $!obj.exPriceFlag==1 && $!obj.cnSelfAddPrice>0)
+						<!-- CN用户显示BV值 -->
+						<b name="bv" class="shopBv" >$!obj.cnSelfAddPrice</b>
+					#end
+                #set($actName="")
+                #if($!obj.activityStatus==2)
+                #set($actName="促销")
+                #end
+                #if($!obj.groupBuy==2)
+                #set($actName="团购")
+                #end
+            	#if($!obj.combinStatus==1)
+                #set($actName="组合")
+                #end
+                #if($!obj.orderEnoughGiveStatus==1)
+                #set($actName="满送")
+                #end
+                #if($!obj.enoughReduce==1)
+                #set($actName="满减")
+                #end
+                #if($!obj.fSaleType==1)
+                #set($actName="F码")
+                #end
+                #if($!obj.advanceSaleType==1)
+                #set($actName="预售")
+                #end
+                #if($!actName!="")
+                <i>$!actName</i>
+                 #end
+                #if($!obj.hasMobilePrice)
+	                <i class="orange">手机专享</i>
+	            #end
+                #if($!obj.hasExchangeIntegral)
+    	            <i class="orange">积分兑换</i>
+                #end
+                  <li class="pl-10">商品销量: #if($!{obj.goodsSalenum}) $!{obj.goodsSalenum} #else 0 #end
+                </li>
+               
+              </ul>
+            </div>
+            #end </div>
+          <div class="fenye"><span> $!gotoPageFormHTML</span></div>
+          #else
+          <div class="main_list_box">
+            <div class="main_list_none"> <span class="main_none_box"> <i></i>
+              <p> 抱歉，没有找到商品！</p>
+              </span></div>
+          </div>
+          #end </div>
+      </div>
+    </div>
+     #set($store_url="$!webPath/store_$!{store.id}.htm")
+      #if($!config.secondDomainOpen && $!store.storeSecondDomain!="")
+      #set($store_url="http://$!{store.storeSecondDomain}.$!{domainPath}")
+      #end
+    <form action="$!store_url"  method="post" id="ListForm">
+      <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+      <input name="orderType" type="hidden" id="orderType" value="$!orderType" />
+      <input name="ugcId" type="hidden" id="ugcId" value="$!ugcId" />
+      <input name="ex_price_flag" type="hidden" id="ex_price_flag"/>
+    </form>
+    <!--底部-->
+  </div>
+  $!httpInclude.include("/footer.htm") </div>
+</body>
+</html>

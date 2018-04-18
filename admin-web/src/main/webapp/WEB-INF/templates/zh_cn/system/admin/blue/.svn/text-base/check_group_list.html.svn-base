@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+function displayState(id,type){
+	   var close_url = 'check_group_close.htm';
+	   var open_url = 'check_group_open.htm';
+	   var url  = type == 1 ? close_url : open_url;
+	   jQuery.ajax({type:'POST',
+		              url:'$!webPath/admin/'+url,
+					  data:{"mulitId":id,'currentPage':1},
+					beforeSend:function(){
+					  
+					},
+				   success:function(data){
+					   if(data == 1){
+						   //更新成功
+						   window.location.href='$!webPath/admin/check_group_list.htm';
+					   }
+	              }
+		    });
+	}
+
+function ajax_update(id,obj){
+	   var val=jQuery(obj).val();
+	 
+	   jQuery.ajax({type:'POST',
+		              url:'$!webPath/admin/check_group_update_ajax.htm',
+					  data:{"id":id,"checkGroupSequence":val},
+					beforeSend:function(){
+					  
+					},
+				   success:function(data){
+					   if(data == 1){
+						   //更新成功
+						   window.location.href='$!webPath/admin/check_group_list.htm';
+					   }else if(data == 0){
+						   alert("该权重值已存在，请重新设置");
+					   }else if(data == 3 ){
+						   alert("更新出现异常");
+					   }else if(data == 4){
+						   alert("权重值不能为空");
+					   }
+					   
+					   /*if(val==""){
+					   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+					 } else{
+					   jQuery(obj).val(val);
+					 }    
+					 if(value!=undefined){
+					   //jQuery(obj.parentNode.parentNode).remove();
+					   window.location.href='$!webPath/admin/check_group_list.htm';
+					 } */
+	              }
+		    });
+	}
+
+</script>
+<body>
+<div class="cont">
+  <h3 class="seth">自测套题管理</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/admin/check_group_list.htm" class="this"><b>自测套题列表</b></a></li>
+      <li><a href="$!webPath/admin/check_group_add.htm"><b>新增套题</b></a></li>
+      <li><a href="$!webPath/admin/check_class_list.htm"><b>自测题分类列表</b></a></li>
+      <li><a href="$!webPath/admin/check_class_add.htm"><b>新增自测题分类</b></a></li>
+    </ul>
+  </div>
+  <form action="$!webPath/admin/check_group_list.htm" id="ListForm" name="ListForm" method="post">
+    <div class="search"> <span>题组标题</span> <span class="size250">
+      <input name="groupTitle" type="text" id="groupTitle"  value="$!vo.groupTitle" />
+      </span>
+      <span>分类</span> <span class="size150">
+      	<select name="classId">
+      		<option value="">全部类型</option>
+      		 #foreach($obj in $classList)
+      		 	<option value="$!{obj.id}" #if($vo.classId == $obj.id)selected = "selected"#end  >$!obj.className</option>
+	         #end
+      	</select>
+      </span>
+
+      <span class="btn_search">
+      <input name="" type="submit"  value="搜索" style="cursor:pointer;"  class="search_btn"/>
+      </span> </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="5%">&nbsp;</th>
+          <th width="10%"><span class="form_btna">缩略图</span></th>
+          <th width="15%"><span class="form_btna">题组标题</span></th>
+           <th width="35%"><span class="form_btna">概述</span></th>
+          <th><b class="form_btnb">操作</span></th>
+          <th><b class="10%">权重</span></th>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+          <td class="check_position"><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td align="center">#if($!obj.thumbnail) <img src="$!obj.thumbnail"  width="200" />  #end
+          </td>
+          <td align="center">$!obj.groupTitle</td>
+          <td align="center">$!obj.summary</td>
+          <td class="hui oprate_con" align="center"><a href="$!webPath/admin/group_result_list.htm?groupId=$!obj.id"  class="blue">结果管理</a>
+	          |<a href="$!webPath/admin/question_list.htm?groupId=$!obj.id"  class="blue">题目管理</a>
+	          |<a href="$!webPath/admin/check_group_edit.htm?id=$!obj.id" class="blue">编辑</a>
+	          |<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/admin/check_group_delete.htm?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">删除</a>
+	          #if($!obj.isClosed == 0)
+	          	<!-- |已启用<a href="javascript:void(0);" onclick="if(confirm('是否关闭?'))window.location.href='$!webPath/admin/check_group_close.htm?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">关闭</a> -->
+	       	 	<img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="45" height="20" id="displayOff" onclick="displayState('$!obj.id',1);" style="cursor:pointer"/>
+	       	  #end
+	       	  #if($!obj.isClosed == 1)
+	       	  	<!-- |已关闭<a href="javascript:void(0);" onclick="if(confirm('是否启用?'))window.location.href='$!webPath/admin/check_group_open.htm?mulitId=$!obj.id&currentPage=$!currentPage'" class="blue">启用</a> -->
+	       	  	<img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="45" height="20" id="displayOn" onclick="displayState('$!obj.id',0);" style="cursor:pointer"/>
+	       	  #end
+	       	 <!--  <input name="checkGroupSequence" type="text"  value="" id="sequence" onblur="ajax_update('$!obj.id',this)"> -->
+       	  </td>
+       	  
+       	   <td align="center">
+          	<textarea name="textarea" cols="5" rows="1" title="可编辑" onblur="ajax_update('$!obj.id',this)">$!obj.checkGroupSequence</textarea>
+          </td>
+        </tr>
+        #end
+      </table>
+    </div>
+    <div class="operate_bar">
+      <div class="fenye">
+        <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+<!--          <input type="hidden" name="circleId" id="circleId" value="$!vo.circleId" /> -->
+        <input name="mulitId" type="hidden" id="mulitId" />
+        $!gotoPageFormHTML </div>
+      <div class="oper_sp"> <span class="oper_check">
+      <label>
+        <input type="checkbox" name="all" id="all" onclick="selectAll(this)" value="" />
+        全部
+       </label> </span> <span class="oper_del">
+        <input name="" type="button" value="删除" style="cursor:pointer;" onclick="cmd('$!webPath/admin/check_group_delete.htm')"/>
+        </span> </div>
+    </div>
+  </FORM>
+</div>
+</body>
+</html>

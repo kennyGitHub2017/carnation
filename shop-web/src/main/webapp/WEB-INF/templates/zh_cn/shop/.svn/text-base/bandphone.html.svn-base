@@ -1,0 +1,144 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>绑定手机号 - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/login.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-2.1.1.min.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<style>
+	html,body{background: #fff!important;}
+	.footBgWrap{border: none!important;}
+</style>
+<script>
+jQuery(document).ready(function(){
+	/*  var validateObj=jQuery("#theForm").validate({			 
+			errorPlacement:function(error, element) {
+		       error.appendTo(element.parent().parent());  
+		      },
+			  rules:{
+				  mobile:{
+				  required:true
+				},
+				code:{
+				  required:true
+				},
+				password:{
+			      required:true
+				}		     
+			  },
+			  messages:{
+				  mobile:{
+				  required:"手机不能为空"
+				},
+				code:{
+					  required:"手机验证码不能为空"
+				},
+				password:{
+					 required:"密码不能为空"
+				}
+			  }
+	}); */
+var time;
+function countDown(){
+	--time;
+	jQuery("#code_get_result").text(time+"秒后可重新获取");
+	if(time<=0){
+	   window.clearInterval(time_id);
+	   jQuery("#code_get_result").text("").hide();
+	   jQuery("#code_get").show();
+     }
+}
+$("#code_get").click(function (){
+	   jQuery("#code_get").hide();	
+	   var mobile=$("#mobile").val();
+	   alert(mobile);
+       jQuery("#code_get_result").text("......").show();
+       jQuery("#code_get").hide();
+	   jQuery.ajax({type:'POST',url:'$!webPath/cn_bind_code_get.htm',data:{"mobile":mobile},success:function(ret){
+	     if(ret=="1"){
+		   time=120;
+		   time_id=setInterval(countDown,500);
+		 }else{
+		 	alert("系统繁忙，发送失败!");
+		   jQuery("#code_get_result").hide();
+		   jQuery("#code_get").show();
+		 }
+	   }});
+});
+});
+</script>
+</head>
+<body>
+
+<div class="top" id="top">
+    <div class="top_page">
+        <div class="top_right"><a style="margin-right: 10px;" href="$!webPath/b2b2c_logout.htm">退出</a><!-- |<a style="margin-left: 10px;" href="$!webPath/register.htm">免费注册</a> --></div>
+
+       <a href="$!webPath" class="c_gray">云尚商城</a> &nbsp;  <a href="http://www.yunshangworld.com" class="c_gray c-left">云尚官网</a> &nbsp;  <!-- <a href="#" class="c_gray">APP下载</a> -->
+
+    </div>
+</div>
+
+<div class="login_bg">
+  <div class="login_head">
+    <h1><span>
+      #if($!config.websiteLogo) <a href="$!webPath/index.htm"> <img src="$!webPath/resources/style/system/front/default/images/logo.png" border="0" /> </a> #else <a href="$!webPath/index.htm"><img src="$!webPath/resources/style/system/front/default/images/logo.jpg"   /> </a> #end
+      </span><strong>登录</strong></h1>
+  </div>
+  <div class="login_box"> #set($img="$!imageWebServer/$!imageViewTools.random_login_img()")
+      <div class="cont-width login-box-cont">
+        <div class="login_left_adv"> <!--<img src="$!img" width="760" />--> <!-- <img src="$!webPath/resources/style/system/front/default/images/login-pic.jpg" width="760" /> --></div>
+        <div class="login_box_right">
+          <div class="login_box_left">
+           <h3 class="band_box_h3">绑定手机号</h3>
+            <form action="$!webPath/buyer/cn_bindMobile.htm" method="post" id="theForm" style="margin-top: 33px;overflow: hidden;">
+            	<div class="band-tit">手机号</div>
+            	<input class="band-fn" type="text" id="mobile" name="mobile" placeholder="请输入手机号码" />
+            	<div class="band-tit">验证码</div>
+            	<input class="band-fn" type="text" name="code" id="code" placeholder="请输入手机验证码" />
+            	<span class="yzm" id="code_get">发送验证码</span>
+            	<span class="yzm" id="code_get_result" style="display: none;"></span>        	
+            	      		
+            <!--  <div class="band-tit">新密码</div>
+            	<input class="band-fn" type="password" name="password" placeholder="输入手机登录密码" />
+            	<span class="pwd-xs-yc" id="pwd-xs-yc"></span> -->
+            	
+            	<div class="tishi">恭喜您，您已成功登录！绑定手机可以更快建立与好友的推荐关系，获取更多的推荐分润。</div>
+            	
+            	
+            	<div class="tijiao"><input class="band-tijiao" type="submit" ></div>
+            	
+            </form>
+         </div>
+        </div>
+      </div>
+  </div>
+</div>
+<script>
+ 	$("#pwd-xs-yc").click(function() {
+ 			var type=$(this).prev("input").attr("type");
+			if('password'==type){
+				$(this).prev("input").attr("type","text");
+				$(this).css("background-image","url('$!webPath/resources/style/system/front/default/images/xianshi.png')");
+			}
+			else{
+				$(this).prev("input").attr("type","password");
+				$(this).addClass('pwd-xs-yc');
+				$(this).css("background-image","url('$!webPath/resources/style/system/front/default/images/yingcang.png')");
+			}
+ 	});
+ 
+
+ 	
+ 	</script>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>API详情</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="/static/css/method/base-min.css" />
+<link rel="stylesheet" href="/static/css/method/common.css" />
+<link rel="stylesheet" href="/static/css/method/error.css" />
+
+<script type="text/javascript" src = "/static/js/method/kissy.js"></script>
+<script type="text/javascript" src = "/static/js/method/judge.js"> </script>
+<script type="text/javascript" src="/static/js/method/grade.js"></script>
+
+<link rel="stylesheet" href="/static/css/method/open-base.css" />
+
+<script type="text/javascript" src="/static/js/method/yahoo-dom-event.js"></script>	
+<script type="text/javascript" src="/static/js/method/doc.js"></script>
+<script type="text/javascript" src="/static/js/method/searchsuggest.js"></script>
+
+
+<script type="text/javascript" src="/static/js/method/sh.js"></script>
+<link rel="stylesheet" href="/static/css/method/sh.css"/>
+
+<link href="/static/css/method/editor-pkg-min-datauri.css" rel="stylesheet" />
+<link rel="stylesheet" href="/static/css/method/right-tools.css" />
+
+
+<script src="/static/js/method/a.js" type="text/javascript"></script>
+<script type="text/javascript" src="/static/js/method/editor-plugin-pkg-min.js"></script>
+
+</head>
+<body>
+	<!--header end-->	
+		<!--面包屑 begin-->	
+	<div class="crumbs">
+		<a href="/index.html">API文档</a>
+		<a href="/shop_trade/index.html">交易API</a>
+		<a class="last" href="#">ShopGoodsCart</a>	 <!--class with "last"-->		
+	</div>
+	<!--面包屑 end-->
+	<div class = 'container grid-s165m0 layout'>
+		<!--正文区 begin-->
+		<div class = "col-main bg_line">
+			<div class = "main-wrap">
+				<div class = "title-wrap">
+					<h1 class = "title">
+					ShopGoodsCart 
+										</h1>  
+				</div>
+
+				<div class="api-detail-bd" id="bd">
+					<!-- ued div start 不知何用-->
+					<div>
+						
+						<div class="content-first">
+							<h2 class = "head-title" id="">简要描述</h2>
+							<p class = "introduction">
+							我购物车列表
+							</p>
+						</div>
+						<h2 class = "api-content-title"><a name="testtool"></a></h2>
+					
+						
+						
+						<div>
+							<h2 class = "head-title" id="">属性								
+							</h2>
+							<table class = "api-table" cellspacing = '0'>
+								<thead>
+									<tr>
+										<th class = "left" width="20%">名称</th>
+		                          		<th class = "middle" width="10%">类型</th>
+		                          		<th class = "left" width="40%">描述</th>
+									</tr>
+								</thead>
+								<tbody>
+										<tr  class="odd" >
+											<td class = "left">id</td>
+											<td class = "middle">
+												<a href="#">
+													Long
+												</a>
+											</td>
+											<td class = "left">
+												购物车id
+											</td>
+										</tr>
+										<tr  class="even" >
+											<td class = "left">subtotalPrice</td>
+											<td class = "middle">
+												<a href="#">
+													BigDecimal
+												</a>
+											</td>
+											<td class = "left">
+												商品小计
+											</td>
+										</tr>
+										<tr  class="odd" >
+											<td class = "left">storeSecondDomain</td>
+											<td class = "middle">
+												<a href="#">
+													String
+												</a>
+											</td>
+											<td class = "left">
+												商铺名称
+											</td>
+										</tr>
+										<tr  class="even" >
+											<td class = "left">specInfo</td>
+											<td class = "middle">
+												<a href="#">
+													String
+												</a>
+											</td>
+											<td class = "left">
+												商品规格
+											</td>
+										</tr>
+										<tr  class="odd" >
+											<td class = "left">goods</td>
+											<td class = "middle">
+												<a href="../domain/Goods.html">
+													Goods
+												</a>
+											</td>
+											<td class = "left">
+												商品列表
+											</td>
+										</tr>
+										<tr  class="even" >
+											<td class = "left">count</td>
+											<td class = "middle">
+												<a href="#">
+													Integer
+												</a>
+											</td>
+											<td class = "left">
+												数量
+											</td>
+										</tr>
+										<tr  class="odd" >
+											<td class = "left">price</td>
+											<td class = "middle">
+												<a href="#">
+													BigDecimal
+												</a>
+											</td>
+											<td class = "left">
+												单价
+											</td>
+										</tr>
+										<tr  class="even" >
+											<td class = "left">whetherChooseGift</td>
+											<td class = "middle">
+												<a href="#">
+													Integer
+												</a>
+											</td>
+											<td class = "left">
+												是否选中了赠品 默认为0 未选择 1为已选择 
+											</td>
+										</tr>
+										<tr  class="odd" >
+											<td class = "left">exchangeIntegral</td>
+											<td class = "middle">
+												<a href="#">
+													Integer
+												</a>
+											</td>
+											<td class = "left">
+												兑换积分值，如果是0的话表示不设置积分兑购
+											</td>
+										</tr>
+										<tr  class="even" >
+											<td class = "left">goodsIntegralPrice</td>
+											<td class = "middle">
+												<a href="#">
+													BigDecimal
+												</a>
+											</td>
+											<td class = "left">
+												商品积分兑换后的价格，无兑换显示原价
+											</td>
+										</tr>
+										<tr  class="odd" >
+											<td class = "left">goodsMobilePrice</td>
+											<td class = "middle">
+												<a href="#">
+													BigDecimal
+												</a>
+											</td>
+											<td class = "left">
+												手机专享价，如果不设置手机专享价则留空
+											</td>
+										</tr>
+										<tr  class="even" >
+											<td class = "left">selfAddPrice</td>
+											<td class = "middle">
+												<a href="#">
+													BigDecimal
+												</a>
+											</td>
+											<td class = "left">
+												自营增加价格
+											</td>
+										</tr>
+										<tr  class="odd" >
+											<td class = "left">goodsStoreId</td>
+											<td class = "middle">
+												<a href="#">
+													Long
+												</a>
+											</td>
+											<td class = "left">
+												所属店铺
+											</td>
+										</tr>
+										<tr  class="even" >
+											<td class = "left">storeName</td>
+											<td class = "middle">
+												<a href="#">
+													String
+												</a>
+											</td>
+											<td class = "left">
+												店铺名称
+											</td>
+										</tr>
+							</table>
+						</div>
+					</div>
+					<!-- ued div end-->
+				</div>
+			</div>
+		</div>
+		<!--正文区 end-->
+		<!--左侧导航栏 begin-->
+		<div class = "col-sub">
+			<div class="APIgory">
+				<ul>
+					<li>
+						<div class= "APIgory-title" >
+							<a href="/shop_trade/index.html">返回&nbsp;<span class="APIgory-sub-title"> 交易API</span></a>
+						</div>
+					</li>
+						<li>						
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/ShopOrderStatusGet.html"
+									 title="/shop/order_status/get">/shop/order_status/get</a>
+									<p class = "APIgory-intro info-overflow">获取订单状态</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>						
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/ShopTradeOrderCreate.html"
+									 title="/shop/trade/order/create">/shop/trade/order/create</a>
+									<p class = "APIgory-intro info-overflow">创建商城订单</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>						
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/ShopTradePaymet.html"
+									 title="/shop/trade/paymet">/shop/trade/paymet</a>
+									<p class = "APIgory-intro info-overflow">订单支付</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>						
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/ShopTradePaymetView.html"
+									 title="/shop/trade/paymet/view">/shop/trade/paymet/view</a>
+									<p class = "APIgory-intro info-overflow">订单支付需的的详情</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>						
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/ShopTradeReturnApply.html"
+									 title="/shop/trade/return/apply">/shop/trade/return/apply</a>
+									<p class = "APIgory-intro info-overflow">订单退货申请</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>						
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/ShopTradeReturnCancel.html"
+									 title="/shop/trade/return/cancel">/shop/trade/return/cancel</a>
+									<p class = "APIgory-intro info-overflow">订单退货取消</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>						
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/ShopTradeReturnList.html"
+									 title="/shop/trade/return/list">/shop/trade/return/list</a>
+									<p class = "APIgory-intro info-overflow">商品退货记录列表</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>						
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/ShopTradeReturnShipSave.html"
+									 title="/shop/trade/return/ship/save">/shop/trade/return/ship/save</a>
+									<p class = "APIgory-intro info-overflow">订单退货物流信息保存</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>						
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/ShopTradeReturnView.html"
+									 title="/shop/trade/return/view">/shop/trade/return/view</a>
+									<p class = "APIgory-intro info-overflow">商品退货记录详情</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+					</ul>
+			</div>
+		</div>		
+		<!--左侧导航栏 end-->
+	</div>
+</body>
+</html>

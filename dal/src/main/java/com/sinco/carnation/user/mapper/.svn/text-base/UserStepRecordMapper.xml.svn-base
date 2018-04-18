@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.UserStepRecordMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.UserStepRecord">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="uid" property="uid" jdbcType="BIGINT" />
+		<result column="step_number" property="stepNumber" jdbcType="INTEGER" />
+		<result column="record_date" property="recordDate" jdbcType="DATE" />
+		<result column="total_Km" property="totalKm" jdbcType="DECIMAL" />
+		<result column="calories" property="calories" jdbcType="DECIMAL" />
+	</resultMap>
+	<resultMap id="BaseResultMapBO" type="com.sinco.carnation.user.bo.UserStepRecordBO"
+		extends="BaseResultMap">
+		<result column="mon" property="week" jdbcType="INTEGER" />
+		<result column="start_date" property="startDate" jdbcType="VARCHAR" />
+		<result column="end_date" property="endDate" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, uid, step_number, record_date, total_Km, calories
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.user.model.UserStepRecordExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_step_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from user_step_record
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_step_record
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.user.model.UserStepRecordExample">
+		delete from user_step_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.UserStepRecord">
+		insert into user_step_record (id, uid, step_number,
+		record_date, total_Km, calories
+		)
+		values (#{id,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT},
+		#{stepNumber,jdbcType=INTEGER},
+		#{recordDate,jdbcType=DATE}, #{totalKm,jdbcType=DECIMAL}, #{calories,jdbcType=DECIMAL}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.UserStepRecord">
+		insert into user_step_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="stepNumber != null">
+				step_number,
+			</if>
+			<if test="recordDate != null">
+				record_date,
+			</if>
+			<if test="totalKm != null">
+				total_Km,
+			</if>
+			<if test="calories != null">
+				calories,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="stepNumber != null">
+				#{stepNumber,jdbcType=INTEGER},
+			</if>
+			<if test="recordDate != null">
+				#{recordDate,jdbcType=DATE},
+			</if>
+			<if test="totalKm != null">
+				#{totalKm,jdbcType=DECIMAL},
+			</if>
+			<if test="calories != null">
+				#{calories,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.user.model.UserStepRecordExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_step_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_step_record
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.uid != null">
+				uid = #{record.uid,jdbcType=BIGINT},
+			</if>
+			<if test="record.stepNumber != null">
+				step_number = #{record.stepNumber,jdbcType=INTEGER},
+			</if>
+			<if test="record.recordDate != null">
+				record_date = #{record.recordDate,jdbcType=DATE},
+			</if>
+			<if test="record.totalKm != null">
+				total_Km = #{record.totalKm,jdbcType=DECIMAL},
+			</if>
+			<if test="record.calories != null">
+				calories = #{record.calories,jdbcType=DECIMAL},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_step_record
+		set id = #{record.id,jdbcType=BIGINT},
+		uid = #{record.uid,jdbcType=BIGINT},
+		step_number = #{record.stepNumber,jdbcType=INTEGER},
+		record_date = #{record.recordDate,jdbcType=DATE},
+		total_Km = #{record.totalKm,jdbcType=DECIMAL},
+		calories = #{record.calories,jdbcType=DECIMAL}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.UserStepRecord">
+		update user_step_record
+		<set>
+			<if test="uid != null">
+				uid = #{uid,jdbcType=BIGINT},
+			</if>
+			<if test="stepNumber != null">
+				step_number = #{stepNumber,jdbcType=INTEGER},
+			</if>
+			<if test="recordDate != null">
+				record_date = #{recordDate,jdbcType=DATE},
+			</if>
+			<if test="totalKm != null">
+				total_Km = #{totalKm,jdbcType=DECIMAL},
+			</if>
+			<if test="calories != null">
+				calories = #{calories,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.UserStepRecord">
+		update user_step_record
+		set uid = #{uid,jdbcType=BIGINT},
+		step_number = #{stepNumber,jdbcType=INTEGER},
+		record_date = #{recordDate,jdbcType=DATE},
+		total_Km = #{totalKm,jdbcType=DECIMAL},
+		calories = #{calories,jdbcType=DECIMAL}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="findByUidAndTime" resultMap="BaseResultMapBO">
+		select
+		<include refid="Base_Column_List" />
+		from user_step_record where uid=#{uid,jdbcType=BIGINT} AND
+		record_date=#{recordDate,jdbcType=DATE}
+	</select>
+
+	<select id="weekStepRecord" resultMap="BaseResultMapBO">
+		select
+		<include refid="Base_Column_List" />
+		,
+		DAYOFWEEK(record_date)-1 as mon,
+		DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE())+1 DAY),'%X/%m/%d') AS start_date,
+		DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL WEEKDAY(CURDATE())-5
+		DAY),'%X/%m/%d') AS end_date
+		from user_step_record where uid=#{uid,jdbcType=BIGINT} AND record_date <![CDATA[>=]]>
+		DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE())+1 DAY)
+		AND record_date <![CDATA[<=]]>
+		DATE_SUB(CURDATE(),INTERVAL WEEKDAY(CURDATE())-5 DAY) ORDER BY
+		FIELD(`mon`, 0,1,2,3,4,5,6)
+	</select>
+
+
+	<select id="queryStepByRange" resultMap="BaseResultMapBO">
+		SELECT * FROM user_step_record WHERE uid= #{uid,jdbcType=BIGINT} AND
+		record_date <![CDATA[>=]]>
+		DATE_FORMAT(#{startDate,jdbcType=VARCHAR},'%X/%m/%d')
+		AND record_date <![CDATA[<=]]>
+		DATE_FORMAT(#{endDate,jdbcType=VARCHAR},'%X/%m/%d')
+	</select>
+
+	<select id="equipStepQueryMonByYear" resultMap="BaseResultMapBO">
+		SELECT
+		DATE_FORMAT(record_date, '%m') month,
+		SUM(step_number) stepTotalMonth,SUM(total_Km) kmTotalMonth,
+		SUM(calories) calTotalMonth
+		FROM
+		user_step_record
+		WHERE uid= #{uid,jdbcType=BIGINT} AND record_date <![CDATA[>=]]>
+		DATE_FORMAT(#{startDate,jdbcType=VARCHAR},'%X/%m/%d')
+		AND record_date <![CDATA[<=]]>
+		DATE_FORMAT(#{endDate,jdbcType=VARCHAR},'%X/%m/%d')
+		GROUP BY month
+	</select>
+
+</mapper>

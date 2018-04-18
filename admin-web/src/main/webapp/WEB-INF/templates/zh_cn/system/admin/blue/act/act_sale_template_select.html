@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js" ></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+</head>
+
+<body>
+	<div id='opButtonsList' style="padding:5px 5px;">
+	 <form id="searchForm1" method="post" action="$!webPath/admin/red_package_get_list.htm" >
+			<div style="padding:5px 5px;">
+				<strong>查询</strong>
+    			<select id="states" class="easyui-combobox" name="status" style="width:100px;">
+	    			#foreach($sKey in ${statusMap.keySet()})
+						<option value="$!sKey" #if($!sKey==$!vo.status) selected="true" #end>${statusMap.get($sKey)}</option>
+					#end
+				</select>
+				&nbsp;&nbsp;
+    			<input id="createdTimeStr" class="easyui-datetimebox" data-options="prompt:'开始时间'" name="createdTimeStr" style="width:150px" value="$!vo.createdTimeStr"/>
+				<strong>至</strong>
+				<input id="offTimeStr" class="easyui-datetimebox" data-options="prompt:'结束时间'" name="offTimeStr" style="width:150px" value="$!vo.offTimeStr"/>
+				&nbsp;&nbsp;
+				<select id="select"  class="easyui-combobox" name="choose" style="width:100px;">
+					#foreach($sKey in ${terminalTypeMap.keySet()})
+					  <option value="$!sKey"  #if($!sKey==$!vo.choose) selected="true" #end>${terminalTypeMap.get($sKey)}</option>
+					#end
+				</select>
+				<input class="easyui-textbox" type="text" name="mation" style="width:100px;" data-options="prompt:'根据信息查询'"/>
+			   &nbsp;&nbsp;&nbsp;
+					<select id="select"  class="easyui-combobox" name="packageId" style="width:120px;">
+					 <option value="0">--选择红包名称--</option>
+					#foreach($reds in $!actRedPackageTools.findAll())
+					  <option value="$!reds.id"  #if($!reds.id==$!vo.packageId) selected="true" #end>$!reds.schemeName</option>
+					#end
+				</select>
+				&nbsp;&nbsp;
+				<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="formSubmit()">查询</a>
+	    	</div>
+			<input type="hidden" id="page" name="page" value="$!currentPage"></input>
+	    	<input type="hidden" id="size" name="size" value="$!pageSize"></input>
+	  </form>
+	</div>
+	
+	<table class="easyui-datagrid" style="width:100%;height:500px;"
+			data-options="singleSelect:true,collapsible:true,rownumbers:true" toolbar="#opButtonsList">
+				<thead>
+				<tr>
+				    <th data-options="halign:'center',field:'packageId',width:100,align:'center'">红包名称</th>
+					<th data-options="halign:'center',field:'phone',width:100,align:'center'">手机号</th>
+					<th data-options="halign:'center',field:'invitationCode',width:100,align:'right'">邀请码</th>
+					<th data-options="halign:'center',field:'nickname',width:100,align:'center'">昵称</th>
+					<th data-options="halign:'center',field:'getTime',width:100,align:'center'">领取时间</th>
+					<th data-options="halign:'center',field:'money',width:100,align:'right'">领取面值</th>
+					<th data-options="halign:'center',field:'status',width:100,align:'right'">状态</th>
+					<th data-options="halign:'center',field:'IP',width:130,align:'right'">IP地址</th>
+					<th data-options="halign:'center',field:'operate',width:100,align:'right'">操作</th>
+				</tr>
+				
+			</thead>
+		    <tbody>
+		      #foreach($obj in $objs)
+		        <tr> 
+		            <td>$!actRedPackageTools.findRedPackageById($!obj.packageId).schemeName</td>   
+		            <td>$!obj.phone</td>
+		            <td>$!obj.invitationCode</td>	            
+		            <td>$!obj.nickname</td>	
+					<td>$!CommUtil.formatShortDate($!obj.getTime)</td>
+		            <td>$!obj.money</td>          
+		            
+					 #set($status="未拆包")
+					#if($!obj.status == 0)
+						  #set($status="未拆包")
+					#end
+					#if($!obj.status == 1)
+						  #set($status="已拆包")
+					#end
+					#if($!obj.status == 2)
+						  #set($status="已领取")
+					#end
+					<td>$!status</td>       
+		            <td>$!obj.ip</td> 
+		             <td>
+		             #if($!obj.ip)      
+		             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="ipByDetails('$!obj.ip')">ip归属地</a>
+		             #end
+		            </td>
+		        </tr>
+		      #end
+		    </tbody>
+	</table>
+	<div id="pp" class="easyui-pagination" data-options="total:$!rows,pageSize:$!pageSize,pageNumber:$!currentPage,pageList:[10,20,50,100]" style="background:#efefef;border:1px solid #ccc;"></div> 
+</body>
+
+<script>
+
+        jQuery('#pp').pagination({
+        	onSelectPage:function(pageNumber, pageSize){
+        		jQuery(this).pagination('loading');
+        		jQuery('#page').attr("value",pageNumber);
+        		jQuery('#size').attr("value",pageSize);
+        		jQuery(this).pagination('loaded');
+				//var a = jQuery("#searchForm").submit();
+				formSubmit();
+        	},
+        });
+		
+	        function formSubmit(){
+        	jQuery("#searchForm1").submit();
+           }
+	     
+	        
+	   function ipByDetails(ip){
+		   if(ip!=undefined){  
+			   $.ajax({
+		              type: "post",
+		              url: "$!webPath/admin/red_package_get_ipdetail.htm",
+		              data:"ip="+ip,
+		             // dataType: "json",
+		             // async:false,//使用同步的Ajax请求
+		              success: function (result) {
+		              jQuery.messager.alert("提示",result);
+		              },error: function (XMLHttpRequest, textStatus, errorThrown) { 
+		              jQuery.messager.alert("提示",errorThrown); 
+		              }
+		          });
+		   }  
+	   } 
+	   
+</script>
+</html>
+

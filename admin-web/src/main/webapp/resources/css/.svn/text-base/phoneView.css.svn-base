@@ -1,0 +1,64 @@
+.device {
+    background-image: url("../img/device-sprite.png");
+    background-repeat: no-repeat;
+    width: 395px;
+    height: 813px;
+    background-position: -395px 0;
+    background-size: 300%;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin: -406px 0 0 -200px;
+    display: none;
+}
+.status-bar {
+    height: 20px;
+    width: 320px;
+    background: url("../img/status-bar.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    top: 117px;
+    position: absolute;
+    z-index: 99;
+    left: 37px;
+}
+.device .close-btn{position: absolute;right: -50px;top: 50%;color: #555;text-decoration: none;font-size: 32px;border: solid 2px #555;border-radius: 50%;width: 40px;height: 40px;text-align: center;line-height: 35px;}
+.window {
+    position: absolute;
+    top: 137px;
+    left: 37px;
+    width: 321px;
+    height: 549px;
+    overflow: hidden;
+    font-size: .85rem;
+    line-height: 1.05rem;
+    background: #fbfbfb;
+}
+#qrcode {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    z-index: 999;
+    bottom: 0;
+    left: 50%;
+    transform: translate3d(-50%, 100%, 0);
+    transition: .5s;
+}
+#qrcode.show {
+    transform: translate3d(-50%, 0, 0);
+}
+#qrcode-btn {
+    width: 67px;
+    height: 68px;
+    bottom: 39px;
+    position: absolute;
+    left: 50%;
+    margin-left: -33.5px;
+    cursor: pointer;
+    background-image: url("../img/home-btn.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    animation: spin 4s linear infinite;
+    transform-origin: 50% 50%;
+}
+@keyframes spin{100%{-webkit-transform:rotate(360deg);transform:rotate(360deg);transform-origin:50% 50%}}

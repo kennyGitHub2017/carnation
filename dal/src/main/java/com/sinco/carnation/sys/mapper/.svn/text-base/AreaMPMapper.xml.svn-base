@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.AreaMPMapper">
+	<resultMap id="areaMPResult" type="com.sinco.carnation.sys.bo.AreaMPBO">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="elong_area_city_code" property="elongAreaCityCode" />
+		<result column="elong_area_district_code" property="elongAreaDistractCode" />
+		<result column="ys_area_code" property="ysAreaCode" />
+	</resultMap>
+
+	<select id="selectYSAreaCode" resultMap="areaMPResult" parameterType="map">
+		SELECT
+		id,
+		elong_area_city_code,
+		elong_area_district_code,
+		ys_area_code
+		FROM dic_area_mp
+		WHERE 
+		1=1
+		AND elong_area_city_code=#{elongCityCode}
+		AND elong_area_district_code=#{elongDistrictCode}
+	</select>
+</mapper>

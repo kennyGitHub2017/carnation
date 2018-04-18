@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>年货节</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="format-detection" content="telephone=no">
+    	<meta name="format-detection" content="email=no">
+    	<link rel="stylesheet" type="text/css" href="$!webPath/resources/css/common.css"/>
+    	<link rel="stylesheet" type="text/css" href="$!webPath/resources/css/often.css?v=1"/>
+		<script>
+			var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+			document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+
+	        var isAndroid = window.navigator.appVersion.match(/android/gi);
+	        var isIPhone = window.navigator.appVersion.match(/iphone/gi);
+	        var devicePixelRatio = window.devicePixelRatio;
+	        if (isIPhone) {
+	            if (devicePixelRatio >= 3) {                
+	                dpr = 3;
+	            } else if (devicePixelRatio >= 2){
+	                dpr = 2;
+	            } else {
+	                dpr = 1;
+	            }
+	        } else {
+	            dpr = 1;
+	        }
+	    	document.documentElement.setAttribute('data-dpr', dpr);  
+		</script>
+	   	<script src="$!webPath/resources/js/base64.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			function is_weixin(){
+				var ua = navigator.userAgent.toLowerCase();
+				if(ua.match(/MicroMessenger/i)=="micromessenger") {
+					return true;
+			 	} else {
+					return false;
+				}
+			}
+			function getUrlPar(name) {
+				   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+				   var r = window.location.search.substr(1).match(reg);
+				   if (r!=null) return (r[2]); return null;
+			}
+			function wxlogin(){	
+				//alert("isflag = "+getUrlPar('isflag'));
+				if(is_weixin()&&getUrlPar('isflag')==null){
+					var url=Base64.encode(location.href);
+					var invitationCode=getUrlPar('invitationCode');
+					if(parseInt(invitationCode)==NaN) return;
+					var domain;
+					if(location.href.indexOf("ysysgo.com")>-1){
+						domain="http://mobile.ysysgo.com";
+					}else if(location.href.indexOf("ysysgo.cn")>-1){
+						domain="http://mobile.ysysgo.cn";
+					}
+					//alert(domain+"/user/loginUrl.htm?url='"+url+"'&invitationCode="+invitationCode+"&login=0");
+					location.href=domain+"/user/loginUrl.htm?url='"+url+"'&invitationCode="+invitationCode+"&login=0";
+				}
+			}
+			wxlogin();			
+		</script>
+		
+	</head>
+	<body>	
+		<div class="page">
+			<div class="goodsContainer" id="goodsContainer">
+				
+				
+			</div>
+			<p class="loadingMore">正在加载更多</p>
+			<p class="nomore"><span class="left"></span>别扯了，快掉了<span class="right"></span></p>
+		</div>
+		<div class="floatbtn">
+			<a href="javascript:;" class="share">分享</a>
+			<a href="javascript:;" class="top">顶部</a>
+		</div>
+				
+		<script type="text/javascript" src="$!webPath/resources/js/jquery.min.js" ></script>
+		<script type="text/javascript" src="$!webPath/resources/js/common.js" ></script>
+		<script type="text/javascript" src="$!webPath/resources/js/tools.js" ></script>
+		<!-- 微信分享 -->
+		<script src="$!webPath/resources/js/jweixin-1.0.0.js" type="text/javascript"></script>
+		<script>
+		    wx.config({
+		        debug: false,
+		        appId: '${appId}',
+		        timestamp: '${timestamp}',
+		        nonceStr: '${nonceStr}',
+		        signature: '${signature}',
+		        jsApiList: [
+		         'checkJsApi',
+		          'onMenuShareTimeline',
+		          'onMenuShareAppMessage',
+		        ]
+		    });
+    	</script>
+		<script>
+		    wx.ready(function () {
+				    wx.onMenuShareTimeline(shareObj);
+				    wx.onMenuShareAppMessage(shareObj);
+		    });
+		    wx.error(function (res) {
+		    	//alert('xx' + res);
+		    });
+		</script>
+    	
+	   	<script type="text/javascript">
+		    var isWeixin=is_weixin();
+	        var isApp=fn.getQueryPar("ysysgo_app");
+	        var isAndroid=fn.mobileType.isAndroid;
+	        var isIos=fn.mobileType.isIos;
+	        var shareObj={
+	        	title:'年货要购，年味才够！',
+	        	desc:'金鸡报喜，新春送好礼！年货节盛大开幕啦，快去告诉小伙伴！',
+	        	imgUrl:'$!webPath/resources/img/nhh_share_icon.png',
+	        	link:'$!webPath/activity/newYearPage',
+	        	success:function(){
+	        		
+	        	},
+	        	cancel:function(){
+	        		
+	        	}
+	        }
+	   	
+	        function img_preLoad(obj){	        	
+	        	var imgObj=obj,count=imgObj.length;	        	
+	        	if(count!=0){
+	        		imgObj.each(function(){						
+							var img=document.createElement("img");
+							var dataSrc=$(this).attr("data-src");							
+							if(img.complete){						
+								$(this).attr("src",dataSrc);
+							}else{						
+								img.onload=function(){							
+									$(this).attr("src",dataSrc);							
+								}
+							}
+							img.src=dataSrc;		
+	        		});        	
+	        	}	        	
+	        }
+	        
+	        
+	        $(".floatbtn .top").on("touchend",function(){
+	        	document.documentElement.scrollTop=0;
+	        	document.body.scrollTop=0;
+	        });
+	        
+	        $(".share").on('touchstart',function(){
+	        	if(isApp=='true'){
+	        		if(isAndroid){
+	        			java.requestCommonShare(shareObj.title,shareObj.desc,shareObj.imgUrl,shareObj.link);
+	        		}else if(isIos){
+	        			requestCommonShare(shareObj);
+	        		}
+	        	}
+	        });
+	        
+	        function is_weixin(){
+				var ua = navigator.userAgent.toLowerCase();
+				if(ua.match(/MicroMessenger/i)=="micromessenger") {
+					return true;
+			 	} else {
+					return false;
+				}
+			}	        
+	       
+	        function buy(id){
+	        	if(isApp=='true'){
+	        		if(isAndroid){
+	        			java.requestProDetails(id,"1");
+	        			java.requestZeroDetails(id);
+	        		}else if(isIos){
+	        			requestProDetails(id,"1");
+	        			requestZeroDetails(id,"1");
+	        		}
+	        	}else if(isWeixin){
+	        		location.href="$!webPath/goods_"+id+".htm";
+	        	}else{
+	        		alert('请在云尚app或微信内抢购');
+	        	}        	
+	        }
+	        
+	        $(document).ready(function(){
+	        	if(isApp!='true'){
+	        		$(".share").hide();
+	        	}
+	        	var obj=[];
+	        	$.ajax({
+	                type: "post",
+	                url: "$!webPath/activity/yearGoodsList",
+	                data: {},
+	                dataType: "json",
+	                anysc:false,
+	                success: function (data) {
+	                    if (data!=undefined && data.length > 0) {
+	                    	console.log(data);
+	                        obj=data;
+	                        var pageSize=7;
+	                        var pageNum=Math.ceil(obj.length/pageSize); //总页数
+	                        var currPage=1;
+	                        appendData();
+	            	        function appendData(){
+	            	        	var html="";
+	            	        	var max=Math.min(obj.length,currPage*pageSize);
+	            	        	if(pageNum==currPage){
+	            	        		$(".loadingMore").hide();
+	            	        		$(".nomore").show();
+	            	        	}
+	            	        	var flag=false;
+	            	        	for(var i=(currPage-1)*pageSize;i<max;i++){
+	            	        		var index=(i+1)%7;
+	            	        		var currPrice=obj[i].goodsCurrentPrice.toFixed(2).split('.');	            	        		
+	            	        		if(index==1||index==2||index==3||index==4){	            	        			
+	            	        			html+="<div class='goods'>";
+	            	        			html+="<a class='goods_pic' onclick=\"buy('"+obj[i].id+"')\">";
+	            	        			html+="	<img class=\"pre_load\" src='$!webPath/resources/img/loading@2x.png' data-src='"+obj[i].goodsMainPhotoPath+"'  />";
+	            	        			html+="	<span class='i_nhh'></span>";
+	            	        			html+="</a>";
+	            	        			html+="<div class='goods_desc'>";
+	            	        			html+="	<div class='tit' onclick=\"buy('"+obj[i].id+"')\">"+obj[i].goodsName+"</div>";
+	            	        			html+="	<div class='price'>";
+	            	        			html+="		<span class='fn-rmb'>&yen;</span>";
+	            	        			html+="			<span class='nowPrice'><span class='big'>"+currPrice[0]+"</span><span class='small'>."+currPrice[1]+"</span></span>";
+	            	        			html+="		<span class='originPrice'>&yen;"+obj[i].goodsPrice+"</span>";
+	            	        			html+="		</div>";
+	            	        			html+="		<div class='stock'>库存:"+obj[i].goodsInventory+"</div>";
+	            	        			html+="		<a href='javascript:;' class='buyNow' onclick=\"buy('"+obj[i].id+"')\">马上抢</a>";
+	            	        			html+="		<span class='i_bz'></span>";
+	            						html+="</div>";
+	            						html+="</div>";	            	        			
+	            	        		}else if(index==5){
+	            	        			flag=true;
+	            	        			html+="<div class='horizontal'>";
+	            	        			html+="<div class='hor_goods'>";
+	            	        			html+="	<a href='javascript:;' onclick=\"buy('"+obj[i].id+"')\">";
+	            	        			html+="		<img class=\"pre_load\" src='$!webPath/resources/img/loading@2x.png' data-src='"+obj[i].goodsMainPhotoPath+"' />";
+	            	        			html+="	</a>";
+            	        				html+="	<div class='price'>";
+           	        					html+="		<span class='fn-rmb'>&yen;</span>";
+       	        						html+="		<span class='nowPrice'><span class='big'>"+currPrice[0]+"</span><span class='small'>."+currPrice[1]+"</span></span>";
+   	        							html+="		<span class='originPrice'>&yen;"+obj[i].goodsPrice+"</span>";
+   	        							html+="	</div>";
+        								html+="</div>";
+	            	        		}else{
+	            	        			html+="<div class='hor_goods'>";
+	            	        			html+="	<a href='javascript:;' onclick=\"buy('"+obj[i].id+"')\">";
+	            	        			html+="		<img class=\"pre_load\" src='$!webPath/resources/img/loading@2x.png' data-src='"+obj[i].goodsMainPhotoPath+"' />";
+	            	        			html+="	</a>";
+            	        				html+="	<div class='price'>";
+           	        					html+="		<span class='fn-rmb'>&yen;</span>";
+       	        						html+="		<span class='nowPrice'><span class='big'>"+currPrice[0]+"</span><span class='small'>."+currPrice[1]+"</span></span>";
+   	        							html+="		<span class='originPrice'>&yen;"+obj[i].goodsPrice+"</span>";
+   	        							html+="	</div>";
+        								html+="</div>";	            	        			
+	            	        		}
+	            	        	}
+	            	        	if(flag){
+	            	        		html+="</div>";
+	            	        	}	            	        	
+	            	        	currPage++;
+	            				$("#goodsContainer").append(html);	            				
+            					img_preLoad($(".pre_load"));	
+	            	        }
+	            	        
+	            	   		var processor = {  
+	            				    timeoutId: null, 		 
+	            				    performProcessing: function(){	            				    	
+	            				    	var totalheight = parseFloat($(window).height()) + parseFloat($(window).scrollTop());
+	            			            if ($(document).height()-5 <= totalheight) {	            			                
+            			                    	appendData();	            			              
+	            			            }
+	            				    },  		 
+	            				    process: function(){
+	            				        clearTimeout(this.timeoutId);  
+	            				        this.timeoutId  = setTimeout(function(){ 
+	            				            processor.performProcessing();  
+	            				        }, 100);  
+	            				    }  
+            				}; 
+	            		   	
+            		        window.onscroll=processor.process;
+	                        
+	                    }
+	                },
+	                error: function (XMLHttpRequest, textStatus, errorThrown) {
+	                    alert("服务器繁忙，请稍后..");
+	                    return;
+	                }
+	            });
+	        });
+	    </script>
+	</body>
+</html>

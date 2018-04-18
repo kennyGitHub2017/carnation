@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=1.0">
+	<meta name="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="format-detection" content="email=no">
+	<link rel="stylesheet" type="text/css" href="$!{webPath}/resources/css/common.css">
+	<link rel="stylesheet" type="text/css" href="$!{webPath}/resources/css/exclusiveCode.css" />
+    <title></title>
+	<script>
+		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+		document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+        var isAndroid = window.navigator.appVersion.match(/android/gi);
+        var isIPhone = window.navigator.appVersion.match(/iphone/gi);
+        var devicePixelRatio = window.devicePixelRatio;
+        if (isIPhone) {
+            if (devicePixelRatio >= 3) {                
+                dpr = 3;
+            } else if (devicePixelRatio >= 2){
+                dpr = 2;
+            } else {
+                dpr = 1;
+            }
+        } else {
+            dpr = 1;
+        }
+    	document.documentElement.setAttribute('data-dpr', dpr);  
+	</script>  
+</head>
+<body>
+	<div class="page_home">
+		<div class="merchant_icon"></div>
+		<div class="merchantName">云尚大健康专卖店</div>
+		<div class="fourCode">
+			<ul>
+				<li class="mem"><a href="$!{webPath}/mobile_register.htm?invitationCode=$!{invitationCode}"><span class="icon"></span><p>会员注册</p></a></li>
+				<li class="ys"><a href="javascript:void(0)" onclick="window.location.href=decodeURIComponent('$!{jgQrPath}')"><span class="icon"></span><p>云尚支付</p></a></li>
+				<li class="wx"><a href="$!{wxQrPath}"><span class="icon"></span><p>微信支付</p></a></li>
+				<li class="ali"><a href="$!{aliQrPath}"><span class="icon"></span><p>支付宝支付</p></a></li>
+			</ul>				
+		</div>
+	</div>
+	<p class="provide">由云尚提供商户服务</p>
+
+<!--     <div class="merchantHomeContainer">
+        <div class="title">
+            <img src="$!{webPath}/resources/mch_wx_qr_pay/business_ico.png">
+            <span>云尚抗衰老中心</span>
+        </div>
+        <div class="link_icon">
+            <ul class="fn-clear">
+                <li>
+                    <a href="$!{webPath}/mobile_register.htm?invitationCode=$!{invitationCode}">
+                        <img src="$!{webPath}/resources/mch_wx_qr_pay/register_icon.png">
+                        <div>会员注册</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" onclick="window.location.href=decodeURIComponent('$!{jgQrPath}')">
+                        <img src="$!{webPath}/resources/mch_wx_qr_pay/pay_yes_icon.png">
+                        <div>会员支付</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="$!{wxQrPath}">
+                        <img src="$!{webPath}/resources/mch_wx_qr_pay/pay_wx_icon.png">
+                        <div>微信支付</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="$!{aliQrPath}">
+                        <img src="$!{webPath}/resources/mch_wx_qr_pay/pay_ali_icon.png">
+                        <div>支付宝支付</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="provid">由<span class="t1">云尚</span><span class="t2">TM</span>提供商户服务</div>
+    </div>
+ -->
+ 	<script type="text/javascript" src="$!webPath/resources/js/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/common.js"></script>
+</body>
+</html>

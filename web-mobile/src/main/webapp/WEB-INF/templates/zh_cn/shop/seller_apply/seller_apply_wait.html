@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>商家入驻进度查询</title>
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css"
+          rel="stylesheet"/>
+    <link rel="stylesheet" href="$!webPath/resources/style/system/front/default/css/seller_apply.css">
+    <link href="$!webPath/resources/style/service/public.css?v=3" type="text/css" rel="stylesheet"/>
+
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+	<script type="text/javascript">
+		function toLogin(url){
+			var toUrl="$!webPath/user/login.htm"
+			if(url){
+				toUrl=toUrl+"?url="+encodeURIComponent(url);
+			}
+			location.href=toUrl;
+		}
+	</script>
+</head>
+<body>
+
+	#if($config.websiteLogo)
+    #set($img="$!{config.websiteLogo.path}")
+    #else
+    #set($img="$!webPath/resources/style/system/front/default/images/logo.png")
+    #end
+
+<div class="head">
+    <h1 title="" class="logo">  <a href="$!webPath/group/index.htm" ><img src="$img" border="0" width="209" height="70"/> </a>  </h1>
+    <span class="head_into">商家入驻</span>
+</div>
+
+<div class="nav_into">
+    <ul>
+        <li><a  href="javascript:void(0)">入驻须知</a></li>
+        <li><a href="javascript:void(0)">提交入驻申请</a></li>
+        <li><a href="javascript:void(0)" class="this">查看审批进度</a></li>
+    </ul>
+</div>
+
+<div class="main clearfix">
+
+    <div class="shopping_step mt-20 clearfix">
+        <ul>
+            <li class="shopping_step_athis"><span></span><i></i><strong>1.入驻须知</strong></li>
+
+            <li class="shopping_step_bthis"><span></span><i></i><strong>2.提交入驻申请</strong></li>
+            <li class="shopping_step_cthis this"><span></span><i></i><strong>3.查看审批进度</strong></li>
+        </ul>
+    </div>
+
+    <div class="cl">
+        <div class="mt-20">
+                #if($store.storeStatus >= 15)
+                	<div class="ui-success mt-20">恭喜您！您的申请已经审批通过，
+                	#if(${sec.anyGranted("user_center_seller")})
+                	这点击这里进入 <a class="c_blue" href="$webPath/seller/index.htm">商户首页</a>
+                	#else
+                	这点击这里<a class="c_blue" href="javascript:void(0)" onclick="toLogin('$webPath/seller/index.htm')">重新登录，进入商户首页</a>
+                	#end
+                	</div>
+               	#else
+               		<div class="order_pay_note mt-20 lh-25 c_orange">
+				        1、	审核时效：资质初审7个工作日，复审1-15个工作日，店铺授1-3个工作日。<br>
+				        2、	您可登录查看审核状，也可通过商务联系人邮箱了解入驻进度。<br>
+				        3、	店铺开通后，登录商家管理后台的用户和密码会发送到您入驻时填写的联系人邮箱中。
+				
+				    </div>
+                #end
+            <ul class="join_step">
+                <li class="action">
+                   <div class="title "><span>1</span> 提交入驻申请</div>
+                    <div class="join_text">
+                        1、	审核时效：资质初审7个工作日，复审1-15个工作日，店铺授1-3个工作日。<br>
+                        2、	您可登录查看审核状，也可通过商务联系人邮箱了解入驻进度。<br>
+                        3、	店铺开通后，登录商家管理后台的用户和密码会发送到您入驻时填写的联系人邮箱中。
+                    </div>
+                </li>
+                <li #if($store.storeStatus > 1)  #if($store.storeStatus == 2)  class="failure" #else  class="action" #end #end>
+                    <div class="title"><span>2</span> 运营商审核</div>
+                    #if($store.storeStatus > 1)
+	                    #if($store.storeStatus == 2) 
+	                    	<div class="join_text">
+		                        <h4>运营商审核失败:</h4>
+		                       <div>$!store.failReseaon</div>
+		                       <a class="c_blue" href="$webPath/seller_apply/group/step1_update.htm">点击进行修改</a>
+		                    </div>
+	                    #else 
+	                    	<div class="join_text">
+		                        运营商审核成功!
+		                    </div>
+	                    #end
+	                #end
+                </li>
+                <li #if($store.storeStatus >5)  #if($store.storeStatus == 6)  class="failure" #else  class="action" #end #end>
+                    <div class="title"><span>3</span> 云尚平台审核</div>
+                    #if($store.storeStatus > 5)
+	                    #if($store.storeStatus == 6) 
+	                    	<div class="join_text">
+		                        <h4>云尚平台审核失败:</h4>
+		                       <div>$!store.failReseaon</div>
+		                       <a href="$webPath/seller_apply/group/step1_update.htm">点击进行修改</a>
+		                    </div>
+	                    #else 
+	                    	<div class="join_text">
+		                        云尚平台审核成功!
+		                    </div>
+	                    #end
+	                #end
+                </li>
+                <li  #if($store.storeStatus >= 15) class="action" #end>
+                    <div class="title"><span>5</span> 入驻成功</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

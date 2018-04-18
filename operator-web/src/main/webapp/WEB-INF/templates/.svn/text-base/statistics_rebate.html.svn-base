@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/jquery-ui.min.css">
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+	<style>
+		.view-box{border:none}
+		.statisticsContainer{width: 1135px;overflow: hidden;}
+		.statisticsContainer .title b{font-size: 16px;color: #666666;height: 28px;line-height: 28px;}			
+		.statisticsContainer .totalNum{overflow: hidden;background:rgba(248,248,248,0.64);border-radius:3px;width:1130px;height:137px;border:solid 1px #e9e9e9;margin-top: 19px;}
+		.statisticsContainer .totalNum>div{float: left;width: 33%;height: 137px;border-right: solid 1px #e9e9e9;font-size: 14px;overflow: hidden;}
+		.statisticsContainer .totalNum .totalCashback{border-right: none;}
+		.statisticsContainer .totalNum .tit{color: #666666;text-align: center;margin-top: 24px;height: 40px;line-height: 40px;}
+		.statisticsContainer .totalNum .number{font-size:38px;color:#666666;line-height:40px;text-align:center;}
+		.statisticsContainer .totalNum .totalCashback .number{color: #7AC30C;}
+		.statisticsContainer .totalNum .tit .unit{color: #ababab;}
+		.statisticsContainer .totalNum .tit .icon{display: inline-block;background-image: url(/resources/images/icon_tongji.png);margin-right: 4px;}
+		.statisticsContainer .totalNum .o2o .tit .icon{width: 22px;height: 17px;background-position: left top;}
+		.statisticsContainer .totalNum .shopReturn .tit .icon{width: 14px;height: 14px;background-position: -22px -2px;}
+		.statisticsContainer .totalNum .totalCashback .tit .icon{width: 14px;height: 17px;background-position: -38px 1px;}
+		.o2oDetail,.shopCashbackDetail{overflow: hidden;margin-top: 20px;}
+		.o2oDetail .tit,.shopCashbackDetail .tit{background:#f8f8f8;border-radius:3px 3px 0px 0px;width:1132px;height:40px;font-size:14px;color:#666666;line-height:40px;text-align:left;text-indent: 17px;border: solid 1px #E9E9E9;}
+		.o2oDetail .tit .unit,.shopCashbackDetail .tit .unit{color: #ababab;font-size: 12px;margin-left: 4px;}
+		.statisticsTable{border-left: solid 1px #efefef;width: 100%;}
+		.statisticsTable tr td{height: 50px;line-height: 50px;width: 165px;font-size: 14px;color: #666666;text-indent: 15px;text-align: left;border-right: solid 1px #efefef;border-bottom: solid 1px #efefef;}
+		.statisticsTable tr td.type{color: #a2a2a2;width: 100px;text-align: right;padding-right: 15px;}
+	</style>
+</head>
+<body>
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 收益统计
+</div>
+
+<div class="main">
+    <ul class="m-menu">
+        <li><a href="/operator/main.htm" target="mainFrame">运营商信息</a> </li>
+        <li><a href="/operator/statistics_relation.htm" target="mainFrame">关系统计</a> </li>
+        <li><a href="/operator/statistics_rebate.htm"  class="active" target="mainFrame">收益统计</a> </li>
+        #if(!$isCN)
+        <li><a href="/operator/change_password.htm" target="mainFrame">密码管理</a></li>
+        <li><a href="/operator/currency_password.htm" target="mainFrame">云豆密码管理</a> </li>
+        #end
+        <li><a href="/operator/change_mobile.html" target="mainFrame" >联系号码</a> </li>
+        <li><a href="/operator/operator_article_list.htm" target="mainFrame" >云尚平台公告</a> </li>
+        <li><a href="/operator/my_invitationInfo.htm"  target="mainFrame">我的二维码</a> </li>
+        <li><a href="/operator/my_invitation_list.htm" target="mainFrame" >邀请明细</a> </li>
+        <li><a href="/operator/merchant_bind.htm" target="mainFrame" >为商户注册会员</a> </li>
+    </ul>
+
+    <div class="view-box">
+<!--         <div class="view-title">
+        	<form action="/operator/statistics_rebate.htm" method="post" id="searchForm">
+        	<div class="fr form-control pr-20" id="selectTime" #if($queryType != "0") style="display:none;" #end>
+        		<input type="text" readonly="readonly" name="startTime" value="$!startTime" class="txt min-txt datepicker" /> -
+        		<input type="text" readonly="readonly" name="endTime" value="$!endTime" class="txt min-txt datepicker" />
+        		<input type="submit" class="btn btn-blue btn-medium" value="搜索">
+        	</div>
+        	<div class="fr form-control pr-20">
+        		<select name="queryType" id="querType" class="txt min-txt">
+        			<option value="0">时间段统计</option>
+        			<option value="w" #if($queryType == "w") selected="selected" #end>本周统计</option>
+        			<option value="m" #if($queryType == "m") selected="selected" #end>本月统计</option>
+        			<option value="q" #if($queryType == "q") selected="selected" #end>本季统计</option>
+        			<option value="h" #if($queryType == "h") selected="selected" #end>本半年统计</option>
+        			<option value="y" #if($queryType == "y") selected="selected" #end>本年统计</option>
+        		</select>
+        	</div>
+        	</form>
+       	统计信息</div> -->
+       	
+       	
+       	<div class="statisticsContainer">
+			<div class="title">
+				<form action="/operator/statistics_rebate.htm" method="post" id="searchForm">
+		        	<div class="fr form-control pr-20" id="selectTime" #if($queryType != "0") style="display:none;" #end>
+		        		<input onclick="WdatePicker()" type="text" readonly="readonly" name="startTime" value="$!startTime" class="txt min-txt datepicker" /> -
+		        		<input onclick="WdatePicker()" type="text" readonly="readonly" name="endTime" value="$!endTime" class="txt min-txt datepicker" />
+		        		<input type="submit" class="btn btn-blue btn-medium" value="搜索">
+		        	</div>
+		        	<div class="fr form-control pr-20">
+		        		<select name="queryType" id="querType" class="txt min-txt">
+		        			<option value="0">时间段统计</option>
+		        			<option value="w" #if($queryType == "w") selected="selected" #end>本周统计</option>
+		        			<option value="m" #if($queryType == "m") selected="selected" #end>本月统计</option>
+		        			<option value="q" #if($queryType == "q") selected="selected" #end>本季统计</option>
+		        			<option value="h" #if($queryType == "h") selected="selected" #end>本半年统计</option>
+		        			<option value="y" #if($queryType == "y") selected="selected" #end>本年统计</option>
+		        		</select>
+		        	</div>
+	        	</form>
+				<b>统计信息</b>
+			</div>
+			<div class="totalNum">
+				<div class="o2o">
+					<div class="tit"><span class="icon"></span>O2O返现收益<span class="unit">(单位:云豆)</span></div>
+					<div class="number">$!o2osum</div>
+				</div>
+				<div class="shopReturn">
+					<div class="tit"><span class="icon"></span>商城返现收益<span class="unit">(单位:云豆)</span></div>
+					<div class="number">$!b2csum</div>
+				</div>
+				<div class="totalCashback">
+					<div class="tit"><span class="icon"></span>总计返现收益<span class="unit">(单位:云豆)</span></div>
+					<div class="number">$!sum</div>
+				</div>
+			</div>
+			#if($!level==1)
+				<div class="shopCashbackDetail">
+					<div class="tit">O2O返现收益明细<span class="unit">(单位:云豆)</span></div>
+					<table class="statisticsTable">
+						<tbody>
+							<tr>
+								<td class="type">市级管理</td><td>$!o2OjmAmount</td>
+								<td class="type">市级服务</td><td>$!o2OjgAmount</td>
+								<td class="type">推荐辖区管理</td><td>$!o2OjrmAmount</td>
+								<td class="type">推荐辖区服务</td><td>$!o2OjrgAmount</td>
+							</tr>
+							<tr>
+								<td class="type">签约商户管理</td><td>$!o2OsgmAmount</td>
+								<td class="type">签约商户服务</td><td>$!o2OsggAmount</td>
+								<td class="type">推荐签约管理</td><td>$!o2OrsmAmount</td>
+								<td class="type">推荐签约服务</td><td>$!o2OrsgAmount</td>
+							</tr>
+							<tr>
+								<td class="type">注册会员</td><td>$!o2OrmAmount</td>
+								<td class="type">分享注册</td><td>$!o2OrsAmount</td>
+								<td class="type">运营注册会员</td><td>$!o2OormAmount</td>
+								<td class="type">推荐运营注册</td><td>$!o2OrormAmount</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>	
+				<div class="o2oDetail">
+					<div class="tit">商城返现收益明细<span class="unit">(单位:云豆) </span></div>
+					<table class="statisticsTable">
+						<tbody>
+							<tr>
+								<td class="type">市级分润</td><td>$!b2CAmountSum</td>
+								<td class="type">上传产品分润</td><td>$!b2CupAmount</td>
+								<td class="type">推荐上传分润</td><td>$!b2CrupAmount</td>
+								<td class="type">推荐辖区分润</td><td>$!b2CrjAmount</td>
+							</tr>
+							<tr>
+								<td class="type">商户注册分润</td><td>$!b2CgrAmount</td>
+								<td class="type">签约商户分润</td><td>$!b2CsgAmount</td>
+								<td class="type">推荐签约分润</td><td>$!b2crsCAmount</td>
+								<td class="type">注册会员分润</td><td>$!b2CrmAmount</td>
+							</tr>
+							<tr>
+								<td class="type">分享注册分润</td><td>$!b2CrsAmount</td>
+								<td class="type">运营注册会员</td><td>$!b2CormAmount</td>
+								<td class="type">推荐运营注册</td><td>$!b2CrormAmount</td>
+								<td class="type"></td><td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			#elseif($!level==2)	
+				<div class="shopCashbackDetail">
+					<div class="tit">O2O返现收益明细<span class="unit">(单位:云豆)</span></div>
+					<table class="statisticsTable">
+						<tbody>
+							<tr>
+								<td class="type">区级管理</td><td>$!o2OjmAmount</td>
+								<td class="type">区级服务</td><td>$!o2OjgAmount</td>
+								<td class="type">推荐辖区管理</td><td>$!o2OjrmAmount</td>
+								<td class="type">推荐辖区服务</td><td>$!o2OjrgAmount</td>
+							</tr>
+							<tr>
+								<td class="type">签约商户管理</td><td>$!o2OsgmAmount</td>
+								<td class="type">签约商户服务</td><td>$!o2OsggAmount</td>
+								<td class="type">推荐签约管理</td><td>$!o2OrsmAmount</td>
+								<td class="type">推荐签约服务</td><td>$!o2OrsgAmount</td>
+							</tr>
+							<tr>
+								<td class="type">注册会员</td><td>$!o2OrmAmount</td>
+								<td class="type">分享注册</td><td>$!o2OrsAmount</td>
+								<td class="type">运营注册会员</td><td>$!o2OormAmount</td>
+								<td class="type">推荐运营注册</td><td>$!o2OrormAmount</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>	
+				<div class="o2oDetail">
+					<div class="tit">商城返现收益明细<span class="unit">(单位:云豆) </span></div>
+					<table class="statisticsTable">
+						<tbody>
+							<tr>
+								<td class="type">区级分润</td><td>$!b2CAmountSum</td>
+								<td class="type">上传产品分润</td><td>$!b2CupAmount</td>
+								<td class="type">推荐上传分润</td><td>$!b2CrupAmount</td>
+								<td class="type">推荐辖区分润</td><td>$!b2CrjAmount</td>
+							</tr>
+							<tr>
+								<td class="type">商户注册分润</td><td>$!b2CgrAmount</td>
+								<td class="type">签约商户分润</td><td>$!b2CsgAmount</td>
+								<td class="type">推荐签约分润</td><td>$!b2crsCAmount</td>
+								<td class="type">注册会员分润</td><td>$!b2CrmAmount</td>
+							</tr>
+							<tr>
+								<td class="type">分享注册分润</td><td>$!b2CrsAmount</td>
+								<td class="type">运营注册会员</td><td>$!b2CormAmount</td>
+								<td class="type">推荐运营注册</td><td>$!b2CrormAmount</td>
+								<td class="type"></td><td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			#else
+				<div class="shopCashbackDetail">
+					<div class="tit">O2O返现收益明细<span class="unit">(单位:云豆)</span></div>
+					<table class="statisticsTable">
+						<tbody>
+							<tr>
+								<td class="type">推荐辖区管理</td><td>$!o2OjrmAmount</td>
+								<td class="type">推荐辖区服务</td><td>$!o2OjrgAmount</td>
+								<td class="type">签约商户管理</td><td>$!o2OsgmAmount</td>
+								<td class="type">签约商户服务</td><td>$!o2OsggAmount</td>
+							</tr>
+							<tr>
+								<td class="type">推荐签约管理</td><td>$!o2OrsmAmount</td>
+								<td class="type">推荐签约服务</td><td>$!o2OrsgAmount</td>
+								<td class="type">注册会员</td><td>$!o2OrmAmount</td>
+								<td class="type">分享注册</td><td>$!o2OrsAmount</td>
+							</tr>
+							<tr>
+								<td class="type">运营注册会员</td><td>$!o2OormAmount</td>
+								<td class="type">推荐运营注册</td><td>$!o2OrormAmount</td>
+								<td class="type"></td><td></td>
+								<td class="type"></td><td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>	
+				<div class="o2oDetail">
+					<div class="tit">商城返现收益明细<span class="unit">(单位:云豆) </span></div>
+					<table class="statisticsTable">
+						<tbody>
+							<tr>
+								<td class="type">上传产品分润</td><td>$!b2CupAmount</td>
+								<td class="type">推荐上传分润</td><td>$!b2CrupAmount</td>
+								<td class="type">推荐辖区分润</td><td>$!b2CrjAmount</td>
+								<td class="type">商户注册分润</td><td>$!b2CgrAmount</td>
+							</tr>
+							<tr>
+								<td class="type">签约商户分润</td><td>$!b2CsgAmount</td>
+								<td class="type">推荐签约分润</td><td>$!b2crsCAmount</td>
+								<td class="type">注册会员分润</td><td>$!b2CrmAmount</td>
+								<td class="type">分享注册分润</td><td>$!b2CrsAmount</td>
+							</tr>
+							<tr>
+								<td class="type">运营注册会员</td><td>$!b2CormAmount</td>
+								<td class="type">推荐运营注册</td><td>$!b2CrormAmount</td>
+								<td class="type"></td><td></td>
+								<td class="type"></td><td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>	
+			#end
+		</div>
+       	
+       	
+      <!--   #set($areaSum = ${resultMap['assAmount']} + ${resultMap['asoAmount']} + ${resultMap['aosAmount']})
+       	#set($ownSum = ${resultMap['ossAmount']} + ${resultMap['osoAmount']} + ${resultMap['oosAmount']})
+       	#set($registoerSum = ${resultMap['roAmount']} + ${resultMap['rsAmount']} + ${resultMap['rcAmount']})
+       	#set($paySum = ${resultMap['opAmount']} + ${resultMap['apAmount']} + ${resultMap['rpAmount']})
+        <div class="col-md-6 c_dark"><b>注册返润收益：$registoerSum 云豆</b></div>
+        <div class="col-md-3">&nbsp;</div>
+        <div class="col-md-3">
+            推荐运营商：${resultMap['roAmount']} 云豆
+        </div>
+        <div class="col-md-3">
+            推荐商户：${resultMap['rsAmount']} 云豆
+        </div>
+        <div class="col-md-3">
+            推荐会员：${resultMap['rcAmount']} 云豆
+        </div>
+        <div class="col-md-6  c_dark"><b>辖区返润收益：$areaSum 云豆</b></div>
+        <div class="col-md-3">&nbsp;</div>
+        <div class="col-md-3">
+            本辖本消：${resultMap['assAmount']} 云豆
+        </div>
+        <div class="col-md-3">
+            本辖外消：${resultMap['asoAmount']} 云豆
+        </div>
+        <div class="col-md-3">
+            外辖本消：${resultMap['aosAmount']} 云豆
+        </div>
+        <div class="col-md-6 c_dark"><b>隶属返润收益：$ownSum 云豆</b></div>
+        <div class="col-md-3">&nbsp;</div>
+        <div class="col-md-3">
+            本隶本消：${resultMap['ossAmount']} 云豆
+        </div>
+        <div class="col-md-3">
+            本隶外消：${resultMap['osoAmount']} 云豆
+        </div>
+        <div class="col-md-3">
+            外隶本消：${resultMap['oosAmount']} 云豆
+        </div>
+        <div class="col-md-6 c_dark"><b>支付手续收益：$paySum 云豆</b></div>
+        <div class="col-md-3">&nbsp;</div>
+        <div class="col-md-3">
+            隶属支付：${resultMap['opAmount']} 云豆
+        </div>
+        <div class="col-md-3">
+            辖区支付：${resultMap['apAmount']} 云豆
+        </div>
+        <div class="col-md-3">
+            推荐收益：${resultMap['rpAmount']} 云豆
+        </div>
+        #set($rSum = ${resultMap['rcRebate']} + ${resultMap['rsRebate']})
+        <div class="col-md-6 c_dark"><b>商城收益：$rSum 云豆</b></div>
+        <div class="col-md-3">&nbsp;</div>
+        <div class="col-md-3">
+            推荐购买分润：${resultMap['rcRebate']} 云豆
+        </div>
+        <div class="col-md-3">
+            推荐产品分润：${resultMap['rsRebate']} 云豆
+        </div>
+        <div class="col-md-6 c_dark">
+           <b style="font-size: 18px;color: #68ad39;"> 总计：${resultMap['totleAmount']} 云豆</b>
+        </div>
+         -->
+    </div>
+</div>
+<script src="/resources/js/jquery-1.8.2.js"></script>
+<script src="/resources/js/jquery-ui.min.js"></script>
+<script src="/resources/js/jquery.blockUI.dialog.js"></script>
+<script src="/resources/js/common.js"></script>
+<script src="/resources/js/WdatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+	jQuery("#querType").change(function(){
+		jQuery("#selectTime input").val("");
+		jQuery("#searchForm").submit();
+	});
+</script>
+</body>
+</html>

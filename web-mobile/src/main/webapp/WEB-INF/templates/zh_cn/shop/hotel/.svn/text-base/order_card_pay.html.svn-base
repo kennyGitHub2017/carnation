@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="$!webPath/resources/elong/css/mainForPayment.css" />
+	</head>
+	<body>
+		<a id="hiddenfocus" style="position:absolute;left:-9999px"></a>
+		  <div class="pages">
+   <!-- 新增 --> 
+   <div class="page page-on-center" data-blend="layer" data-blend-id="newcardpay" data-url="/payment/newcardpay/?key=5b962f6e-21ef-40f3-b1c1-c57497049d6c&amp;caFlag=false&amp;MNAME=historyCreditCardPay&amp;CNAME=PaymentController" id="uniq22" data-title="填写信用卡" data-title-id="newcardpay"> 
+    <!-- layout before --> 
+    <header class="bar bar-nav"> 
+     <a class="icon icon-left-nav pull-left icon-back" id="back" data-rel="back" href="javascript:history.back()"></a> 
+     <h1 class="title">填写信用卡</h1> 
+    </header> 
+    <input type="hidden" id="ccPayAmount" value="${orderDetail.totalPrice}" /> 
+    <input type="hidden" id="orderAmt" value="${orderDetail.totalPrice}" /> 
+    <div class="page-content payment-page"> 
+     <article class="addcredit-nav"> 
+      <section class="choose-credit"> 
+       <div class="payment-money"> 
+        <div class="payment-price">
+        	#if ($isGuarantee == "true")
+        	担保金额<span class="fe55">(离店后退还)</span>：
+         	#else
+         	支付金额：
+         	#end
+         <span>￥<label class="paymoney-add">${totalPrice}</label></span>
+        </div> 
+        <div class="payment-detail">订单详情<i class="off"></i></div> 
+        <div style="display: none;" class="payment-not">
+         (该行信用卡不可与现金账户一起支付)
+        </div> 
+       </div> 
+       <div class="order-info"> 
+        <p> <label class="c45" style="color: #555;font-size: 1.0rem;"> $!{orderDetail.hotelName} </label></p> 
+        <p> <label class="c45" style="color: #555;font-size: 0.8rem;"> $!{orderDetail.roomTypeName} </label> 
+        	<label style="color: #555;font-size: 0.8rem;"> $!{orderDetail.numberOfRooms}间 </label> 
+        	<label style="color: #555;font-size: 0.8rem;"> $!{valueAdds}</label>
+        </p> 
+        <p> <label class="c45" style="color: #555;font-size: 0.8rem;"> $arrivalDate 到  $departureDate </label> 
+        	<label style="color: #555;font-size: 0.8rem;"> 共$intervalDay晚 </label> </p> 
+       </div> 
+       <input type="hidden" id="bankInfoList" value="" /> 
+       <input type="hidden" id="idTypeJsonArray" value="[{&quot;id&quot;:0,&quot;text&quot;:&quot;身份证&quot;},{&quot;id&quot;:4,&quot;text&quot;:&quot;护照&quot;},{&quot;id&quot;:6,&quot;text&quot;:&quot;其它&quot;}]" /> 
+       <input type="hidden" id="fastpayIdTypeArray" value="[{&quot;id&quot;:0,&quot;text&quot;:&quot;身份证&quot;}]" /> 
+       <ul class="list"> 
+        <li> 
+         <div class="label">
+          卡号：
+         </div> 
+         <div class="content list-input"> 
+          <input type="text" id="creditCardNo" maxlength="20" class="name" placeholder="请输入13～16位卡号" /> 
+         </div> </li> 
+        <li id="bank_name_li" style="display: none;"> <label for="bankInfo"></label> 
+         <div class="label">
+          发卡行：
+         </div> 
+         <div class="content list-input"> 
+          <input type="text" readonly="readonly" class="cert-type" id="bankInfo" /> 
+         </div> </li> 
+        <li> 
+         <div class="label">
+          持卡人姓名：
+         </div> 
+         <div class="content list-input"> 
+          <input type="text" id="holderName" maxlength="20" class="name" placeholder="例：张三" /> 
+         </div> </li> 
+        <li> 
+         <div class="label">
+          有效期：
+         </div> 
+         <div class="content list-input"> 
+          <input type="tel" id="expireDate" maxlength="20" class="name" placeholder="月年,例：0118" /> 
+         </div> </li> 
+        <li id="cvv_li" style="display: none;" > 
+         <div class="label">
+          安全验证码：
+         </div> 
+         <div class="content list-input"> 
+          <input type="text" id="verifyCode" maxlength="3" class="name" placeholder="卡背面后三位数字" /> 
+         </div> </li> 
+        <li id="id_type_li"> 
+         <div class="label">
+          证件类型：
+         </div> 
+         <div class="content list-input"> 
+         <!--<input id="idType" disabled="disabled" readonly="readonly" type="text" class="cast-type" placeholder="选择证件类型" /> -->
+         <div id="idType" class="cast-type" placeholder="选择证件类型" style="display:inline-block;color:#cacaca">选择证件类型</div> 
+          <span><i class="cert"></i></span> 
+         </div> </li> 
+        <li id="id_no_li"> 
+         <div class="label">
+          证件号：
+         </div> 
+         <div class="content list-input"> 
+          <input id="idNo" type="text" maxlength="20" class="name" placeholder="输入证件号" /> 
+         </div> </li> 
+       </ul> 
+       <ul id="fast_pay_input" class="list user" style="display: none;"> 
+        <li> 
+         <div class="label">
+          预留手机号：
+         </div> 
+         <div class="content list-input"> 
+          <input id="phone" type="tel" class="name" placeholder="银行卡预留手机号" /> 
+         </div> </li> 
+        <li class="code"> 
+         <div class="label">
+          短信验证码：
+         </div> 
+         <div class="content list-input list-input-s"> 
+          <!-- button class="button not-allow">120秒后重发</button --> 
+          <button id="smsBtn" class="button">获取验证码</button> 
+          <!--不能点击not-allow--> 
+          <input id="smsCode" type="tel" maxlength="6" class="name" placeholder="点此输入" /> 
+         </div> </li> 
+       </ul> 
+      </section> 
+      <section class="search"> 
+       <input type="hidden" id="key" value="5b962f6e-21ef-40f3-b1c1-c57497049d6c" /> 
+       <input type="hidden" id="caFlag" value="false" /> 
+       <button id="submit" class="btn btn-primary btn-block">确认支付</button> 
+      </section> 
+     </article> 
+    </div> 
+    <!-- layout after --> 
+    <div class="advanced-mask-layer" style="display: none"></div>
+    <div class="slide-selector plugin-inited">
+     <header class="bar-nav">
+      <div class="radio-title">
+       <span class="title">证件类型</span>
+       <span class="cancel">取消</span>
+      </div>
+     </header>
+     <ul class="page-content">
+      <li class="radio-item " value="undefined"><label class="label-radio clearfix">
+        <div class="radio-icon">
+         <span class="radio"></span>
+        </div>
+        <div class="radio-text">
+         身份证
+        </div>
+        <div class="check"></div></label></li>
+      <li class="radio-item " value="undefined"><label class="label-radio clearfix">
+        <div class="radio-icon">
+         <span class="radio"></span>
+        </div>
+        <div class="radio-text">
+         护照
+        </div>
+        <div class="check"></div></label></li>
+      <li class="radio-item " value="undefined"><label class="label-radio clearfix">
+        <div class="radio-icon">
+         <span class="radio"></span>
+        </div>
+        <div class="radio-text">
+         其它
+        </div>
+        <div class="check"></div></label></li>
+     </ul>
+     <div class="arrow up left"></div>
+     <div class="describe" style="display: none;"></div>
+    </div>
+   </div> 
+  </div>
+  
+	<div class="dialog plugin-inited">
+		<div class="content">请输入正确的入住人姓名</div>
+		<div class="item-btn" style="background: rgb(230, 87, 73);">确定</div>
+	</div>
+  <script type="text/javascript" src="$!webPath/resources/elong/js/jquery-2.0.0.min.js" ></script>
+  <script type="text/javascript" src="$!webPath/resources/elong/js/jquery.plug.js"></script>
+  <script type="text/javascript" src="$!webPath/resources/elong/js/loading.js"></script>
+  <script type="text/javascript">
+  if(history.length<2){
+	  $("#back").hide();
+  }
+  
+	  function showTab(tip){
+	   	if(!tip)return;
+	   	$(".advanced-mask-layer").show();
+	    $(".dialog.plugin-inited").addClass('page-transitioning').addClass('dialog-active').find("div.content").html(tip);
+	  }
+	  
+		$(".item-btn").tap(function(){
+			$(this).parent(".dialog").removeClass('dialog-active').removeClass('plugin-show');
+			$(".advanced-mask-layer").hide();
+		});
+		$(".advanced-mask-layer").tap(function(){
+			$(".dialog.plugin-inited").removeClass('dialog-active').removeClass('plugin-show');
+			$(this).hide();
+			$(".slide-selector").removeClass("selector-active plugin-show");
+		});
+		
+	$("#id_type_li").tap(function(){
+		$("input").blur();
+		$(".advanced-mask-layer").show();
+		$(".slide-selector").addClass("selector-active plugin-show");
+	});
+	
+	$(".slide-selector .bar-nav").tap(function(){
+		$(".advanced-mask-layer").hide();
+		$(".slide-selector").removeClass("selector-active plugin-show");
+	});
+	
+	//选择证件类型
+	$(".slide-selector .page-content .radio-item").tap(function(){
+		$("#idType").css("color","#454545").html($(this).find(".radio-text").html());
+		
+		$(".advanced-mask-layer").hide();
+		$(".slide-selector").removeClass("selector-active plugin-show");
+	});
+  
+  	jQuery(function($){
+  		$(".payment-detail").click(function(){
+  	  		$(".order-info").toggleClass("order-info-show");
+  	  		$(".payment-detail i").hasClass("on")?$(".payment-detail i").removeClass("on").addClass("off"):$(".payment-detail i").removeClass("off").addClass("on");
+  	  	});
+  		$("#creditCardNo").change(function(){
+  			//校验卡号
+            var cardNo = $.trim($(this).val()); //信用卡号
+            if(cardNo == "" || cardNo.replace(/[ ]/g, "") == ""){
+                showTab("请输入卡号");
+                return;
+            }
+
+            //正则对象，规则：全部且只能为数字
+            var numberReg  =/^[0-9]*$/;
+            //检查卡号是否都是数字
+            if(!numberReg.test(cardNo)){
+            	showTab("卡号只能为数字");
+                return;
+            }
+
+            if(cardNo.length > 16 || cardNo.length < 13){
+            	showTab("卡号长度必须在13至16位之间");
+                return;
+            }
+            //这里要有等待提示
+            loadingShow();
+  			$.ajax({  
+  	            type : "POST",  //提交方式  
+  	            url : '$!webPath/elong/order/cardValidate.htm',//路径  
+  	            data: {"cardNo": cardNo}, 
+  	            dataType: "json",
+  	            success : function(result) {
+  	            	if (result.state) {
+  	            		if(result.data){
+  	            			$("#cvv_li").show();
+  	            		}else{
+  	            			$("#cvv_li").hide();
+  	            			$("#cvv_li").find("input").val("");
+  	            		}
+  	            		//获取发卡行
+  	            		$("#submit").addClass("btn-red");
+  	                }  else {
+  	                	showTab(result.msg); 
+  	                	$("#submit").removeClass("btn-red");
+  	                }
+  	            },
+  	            error: function(res, status){
+  	            	showTab("信用卡验证失败！");
+  	            },
+  	            complete: function(){
+  	            	//去掉等待
+  	            	loadingHide();
+  	            }
+  	        }); 
+  		});
+  		$("#submit").click(function(){
+  			//数据验证
+  			if(!$("#submit").hasClass("btn-red")){
+                //提交按钮若为灰色，则不做提交动作
+                return;
+            }
+            if(!validateForm(false)){
+                //校验表单，若失败则不提交
+                return;
+            }
+            $("#submit").removeClass("btn-red");
+  			var id = "$orderDetail.id";
+  			var orderId = "$orderDetail.orderId";
+  			var amount = "$totalPrice";
+  			var cardNo = $.trim($("#creditCardNo").val());
+  			var expiration = $.trim($("#expireDate").val());
+  			var holderName = $.trim($("#holderName").val());
+  			var idType = $.trim($("#idType").html());
+  			var idNo = $.trim($("#idNo").val());
+  			var cvv = $.trim($("#verifyCode").val());
+  			//var bankInfo = $("#bankInfo").val();
+  			//var phone = $("#phone").val();
+  			//var smsCode = $("#smsCode").val();
+  			expiration = "20" + expiration.substring(2) + expiration.substring(0,2);
+  			if(idType=="身份证"){
+  				idType="IdentityCard";
+  			}else if(idType=="护照"){
+  				idType="Passport";
+  			}else{
+  				idType="Other";
+  			}
+  			var data = {
+  					"id": id, 
+  					"orderId": orderId, 
+  					"amount": amount, 
+  					"cardNo": cardNo, 
+  					"expiration": expiration, 
+  					"holderName": holderName,
+  					"cvv": cvv,
+  					"idType": idType,
+  					"idNo": idNo
+  				};
+  			console.info(data);
+  			loadingShow();
+  			$.ajax({  
+  	            type : "POST",  //提交方式  
+  	            url : '$!webPath/elong/order/pay.htm',//路径  
+  	            data: data, 
+  	            dataType: "json",
+  	            success : function(result) {
+  	            	if (result.state) {
+  	            		location.href = '$!webPath/v1/elong/order/toPay.htm?id=$orderDetail.id&isNeedPay=false';
+  	                }  else {
+  	                	var msg = (result.msg || "").split("|");
+  	                	showTab(msg.length>1?msg[1]:msg[0]); 
+  	                }
+  	            },
+  	            error: function(res, status){
+  	            	showTab("订单支付失败！");
+  	            },
+  	            complete: function(){
+  	            	//去掉等待
+  	            	loadingHide();
+  	            	$("#submit").addClass("btn-red");
+  	            }
+  	        }); 
+  		});
+  	});
+  //==================== 表单校验函数定义 start  by ye.chen1 at 2016-08-18 =======================
+    /**
+     * 表单校验。
+     * 若ignoreSmsCheck传true，表示忽略短信验证码的校验，用于获取短信验证码的参数校验；
+     * 若ignoreSmsCheck传false或不传，表示不忽略短信验证码的校验，用于提交支付的参数校验。
+     * @param ignoreSmsCheck
+     * */
+    function validateForm(ignoreSmsCheck){
+        if(!$("#submit").hasClass("btn-red")){
+            //提交按钮为灰色，说明卡段校验未通过
+            return false;
+        }
+        
+      	//校验卡号
+        var cardNo = $("#creditCardNo").val(); //信用卡号
+        if(cardNo == "" || cardNo.replace(/[ ]/g, "") == ""){
+            showTab("请输入卡号");
+            return false;
+        }
+
+        //正则对象，规则：全部且只能为数字
+        var numberReg  =/^[0-9]*$/;
+        //检查卡号是否都是数字
+        if(!numberReg.test(cardNo)){
+        	showTab("卡号只能为数字");
+            return false;
+        }
+
+        if(cardNo.length > 16 || cardNo.length < 13){
+        	showTab("卡号长度必须在13至16位之间");
+            return false;
+        }
+
+        //只匹配数字的正则对象
+        var numberReg  =/^[0-9]*$/;
+
+        //检查持卡人
+        var cardHolder = $("#holderName").val();
+        if(cardHolder == "" || cardHolder.replace(/[ ]/g, "") == ""){
+            showTab("请输入持卡人姓名");
+            return false;
+        }
+
+        //校验失效日期
+        var expireStr = $("#expireDate").val();
+        if(expireStr == "" || expireStr.replace(/[ ]/g, "") == ""){
+            showTab("请输入有效期");
+            return false;
+        }
+        if(!numberReg.test(expireStr)){
+            showTab("有效期只能为数字");
+            return false;
+        }
+        if(expireStr.length != 4){
+            showTab("有效期必须是4位数字");
+            return false;
+        }
+        //检查失效日期是否小于当前日期，若小于则卡失效
+        var month = new Number(expireStr.substring(0, 2)) - 1; //月份从0 - 11，0表示一月
+        if(month < 0){
+            month = 0;
+        }
+        var year = new Number("20" + expireStr.substring(2));
+        var expireDate = new Date();
+        expireDate.setFullYear(year, month, 1);
+        var now = new Date();
+        if(expireDate.getTime() < now.getTime()){
+            //失效日期小于当前日期
+            showTab("该卡已过期");
+            return false;
+        }
+
+        //若展示CVV输入框，那么校验CVV
+        if($("#cvv_li").is(":visible")){
+            var cvv = $("#verifyCode").val();
+            if(cvv == "" || cvv.replace(/[ ]/g, "") == ""){
+                showTab("请输入验证码");
+                return false;
+            }
+            if(!numberReg.test(cvv)){
+                showTab("验证码只能为数字");
+                return false;
+            }
+            if(cvv.length > 3){
+                showTab("验证码不能超过3位数字");
+                return false;
+            }
+        }
+		if($("#id_type_li").is(":visible")){
+			if($.trim($("#idType").html()) == "选择证件类型"){
+				showTab("请选择证件类型");
+                return false;
+			}
+		}
+        //若展示证件号输入框，那么校验证件号码
+        if($("#id_no_li").is(":visible")){
+            var idNo = $("#idNo").val();
+            if(idNo == "" || idNo.replace(/[ ]/g, "") == ""){
+                showTab("请输入证件号码");
+                return false;
+            }
+            //校验是否包括特殊字符
+            var idNoReg  =/^[a-zA-Z0-9]*$/;
+            if(!idNoReg.test(idNo)){
+            	showTab("证件号码包含非法字符");
+                return false;
+            }
+            //若用户输入身份证号码，校验身份证号码
+            if("身份证" == $("#idType").html() && !validate.idCard(idNo)){
+            	showTab("请输入正确的身份证");
+                return false;
+            }
+        }
+       
+       var validate={};
+       validate.idCard = (function(){
+    		var vcity = {
+        		11:"北京",12:"天津",13:"河北",14:"山西",15:"内蒙古",  
+                 21:"辽宁",22:"吉林",23:"黑龙江",31:"上海",32:"江苏",  
+                 33:"浙江",34:"安徽",35:"福建",36:"江西",37:"山东",  
+                 41:"河南",42:"湖北",43:"湖南",44:"广东",45:"广西",  
+                 46:"海南",50:"重庆",51:"四川",52:"贵州",53:"云南",  
+                 54:"西藏",61:"陕西",62:"甘肃",63:"青海",64:"宁夏",  
+                 65:"新疆",71:"台湾",81:"香港",82:"澳门",91:"国外"  
+            };  
+      
+    		checkCard = function(card) {  
+    		    //是否为空  
+    		    if(card === '') {  
+    		        return false;  
+    		    }  
+    		    //校验长度，类型  
+    		    if(isCardNo(card) === false) {  
+    		        return false;  
+    		    }  
+    		    //检查省份  
+    		    if(checkProvince(card) === false) {  
+    		        return false;  
+    		    }  
+    		    //校验生日  
+    		    if(checkBirthday(card) === false) {  
+    		        return false;  
+    		    }  
+    		    //检验位的检测  
+    		    if(checkParity(card) === false)  
+    		    {  
+    		        return false;  
+    		    }  
+    		    return true;  
+    		};  
+    		  
+    		//检查号码是否符合规范，包括长度，类型  
+    		isCardNo = function(card) {  
+    		    //身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X  
+    		    var reg = /(^\d{15}$)|(^\d{17}(\d|X)$)/;  
+    		    if(reg.test(card) === false) {  
+    		        return false;  
+    		    }  
+    		    return true;  
+    		};  
+    		  
+    		//取身份证前两位,校验省份  
+    		checkProvince = function(card) {  
+    		    var province = card.substr(0,2);  
+    		    if(vcity[province] === undefined) {  
+    		        return false;  
+    		    }  
+    		    return true;  
+    		};  
+    		  
+    		//检查生日是否正确  
+    		checkBirthday = function(card) {  
+    		    var len = card.length;
+    		    var arr_data,year,month,day,birthday;
+    		    //身份证15位时，次序为省（3位）市（3位）年（2位）月（2位）日（2位）校验位（3位），皆为数字  
+    		    if(len == '15') {  
+    		        var re_fifteen = /^(\d{6})(\d{2})(\d{2})(\d{2})(\d{3})$/;   
+    		        arr_data = card.match(re_fifteen);  
+    		        year = arr_data[2];  
+    		        month = arr_data[3];  
+    		        day = arr_data[4];  
+    		        birthday = new Date('19'+year+'/'+month+'/'+day);  
+    		        return verifyBirthday('19'+year,month,day,birthday);  
+    		    }  
+    		    //身份证18位时，次序为省（3位）市（3位）年（4位）月（2位）日（2位）校验位（4位），校验位末尾可能为X  
+    		    if(len == '18') {  
+    		        var re_eighteen = /^(\d{6})(\d{4})(\d{2})(\d{2})(\d{3})([0-9]|X)$/;  
+    		        arr_data = card.match(re_eighteen);  
+    		        year = arr_data[2];  
+    		        month = arr_data[3];  
+    		        day = arr_data[4];  
+    		        birthday = new Date(year+'/'+month+'/'+day);  
+    		        return verifyBirthday(year,month,day,birthday);  
+    		    }  
+    		    return false;  
+    		};  
+    		  
+    		//校验日期  
+    		verifyBirthday = function(year,month,day,birthday) {  
+    		    var now = new Date();  
+    		    var now_year = now.getFullYear();  
+    		    //年月日是否合理  
+    		    if(birthday.getFullYear() == year && (birthday.getMonth() + 1) == month && birthday.getDate() == day) {  
+    		        //判断年份的范围（3岁到100岁之间)  
+    		        var time = now_year - year;  
+    		        if(time >= 3 && time <= 100) {  
+    		            return true;  
+    		        }  
+    		        return false;  
+    		    }  
+    		    return false;  
+    		};  
+    		  
+    		//校验位的检测  
+    		checkParity = function(card) {  
+    		    //15位转18位  
+    		    card = changeFivteenToEighteen(card);  
+    		    var len = card.length;  
+    		    if(len == '18') {  
+    		        var arrInt = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2);   
+    		        var arrCh = new Array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2');   
+    		        var cardTemp = 0, i, valnum;   
+    		        for(i = 0; i < 17; i ++) {   
+    		            cardTemp += card.substr(i, 1) * arrInt[i];   
+    		        }   
+    		        valnum = arrCh[cardTemp % 11];   
+    		        if (valnum == card.substr(17, 1)) {  
+    		            return true;  
+    		        }  
+    		        return false;  
+    		    }  
+    		    return false;  
+    		};  
+    		  
+    		//15位转18位身份证号  
+    		changeFivteenToEighteen = function(card) {  
+    		    if(card.length == '15') {  
+    		        var arrInt = new Array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2);   
+    		        var arrCh = new Array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2');   
+    		        var cardTemp = 0, i;     
+    		        card = card.substr(0, 6) + '19' + card.substr(6, card.length - 6);  
+    		        for(i = 0; i < 17; i ++) {   
+    		            cardTemp += card.substr(i, 1) * arrInt[i];   
+    		        }   
+    		        card += arrCh[cardTemp % 11];   
+    		        return card;  
+    		    }  
+    		    return card;  
+    		};
+
+    		return function(card){
+    			return checkCard(card);
+    		}
+    	}());
+        
+        
+
+        //若展示快捷支付输入框，那么校验手机号和短信验证码
+        if($("#fast_pay_input").is(":visible")){
+            var phone = $("#phone").val();
+            if(phone == "" || phone.replace(/[ ]/g, "") == ""){
+                showTab("请输入银行卡预留手机号");
+                return false;
+            }
+            if(!ignoreSmsCheck){
+                var smsCode = $("#smsCode").val();
+                if(smsCode == "" || smsCode.replace(/[ ]/g, "") == ""){
+                    showTab("请输入短信验证码");
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+  </script>
+	</body>
+</html>

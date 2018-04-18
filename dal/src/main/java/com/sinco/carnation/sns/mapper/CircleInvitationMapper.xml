@@ -1,0 +1,890 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.CircleInvitationMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.sns.model.CircleInvitation">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="circle_id" property="circleId" jdbcType="BIGINT" />
+		<result column="circle_name" property="circleName" jdbcType="VARCHAR" />
+		<result column="thumbnail" property="thumbnail" jdbcType="VARCHAR" />
+		<result column="invitaion_perfect" property="invitaionPerfect"
+			jdbcType="INTEGER" />
+		<result column="invitaion_top" property="invitaionTop"
+			jdbcType="INTEGER" />
+		<result column="praise_count" property="praiseCount" jdbcType="INTEGER" />
+		<result column="reply_count" property="replyCount" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="user_Name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="circle_type" property="circleType" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="replyName" property="reply_name" jdbcType="VARCHAR" />
+		<result column="favorites_count" property="favoritesCount"
+			jdbcType="INTEGER" />
+		<result column="appDownloadPic" property="appDownloadPic"
+			jdbcType="VARCHAR" />
+
+	</resultMap>
+
+	<resultMap id="CircleResultMap"
+		type="com.sinco.carnation.sns.model.CircleInvitationReply">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="addTime" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="deleteStatus" property="deleteStatus" jdbcType="INTEGER" />
+		<result column="invitation_id" property="invitationId"
+			jdbcType="BIGINT" />
+		<result column="level_count" property="levelCount" jdbcType="INTEGER" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="reply_count" property="replyCount" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_photo" property="userPhoto" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="myselfInvitationList" type="com.sinco.carnation.sns.bo.CircleInvitationBO"
+		extends="BaseResultMap">
+		<!--<result column="invitation_id" property="invitationId" jdbcType="BIGINT" 
+			/> -->
+		<result column="myname" property="replyName" jdbcType="VARCHAR" />
+		<association column="invitation_id" property="reply"
+			javaType="com.sinco.carnation.sns.bo.CircleInvitationBO" resultMap="CircleResultMap" />
+	</resultMap>
+
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.sinco.carnation.sns.model.CircleInvitation" extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+		<result column="item_info" property="itemInfo" jdbcType="LONGVARCHAR" />
+		<result column="photo_Info" property="photoInfo" jdbcType="LONGVARCHAR" />
+		<result column="praise_Info" property="praiseInfo" jdbcType="LONGVARCHAR" />
+		<result column="favorites_Info" property="favoritesInfo"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="QueryCircleInvitationMap" type="com.sinco.carnation.sns.bo.CircleInvitationBO"
+		extends="ResultMapWithBLOBs">
+		<result column="head_img_path" property="headImgPath" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="SearchInvitationAllMap" type="com.sinco.carnation.sns.bo.CircleInvitationBO"
+		extends="ResultMapWithBLOBs">
+		<result column="head_img_path" property="headImgPath" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<update id="updateInvitationPraise">
+		UPDATE sns_invitation
+		SET praise_count = praise_count + 1,
+		praise_Info = CONCAT(praise_Info, #{praiseInfo,jdbcType=VARCHAR}, ',')
+		WHERE
+		id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateInvitationUnPraise">
+		UPDATE sns_invitation
+		SET praise_count = praise_count - 1,
+		praise_Info = #{praiseInfo,jdbcType=VARCHAR}
+		WHERE
+		id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateInvitationUnFavo">
+		UPDATE sns_invitation
+		SET favorites_count = favorites_count - 1,
+		favorites_Info = #{favoritesInfo,jdbcType=VARCHAR}
+		WHERE
+		id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateFavo" parameterType="com.sinco.carnation.sns.model.CircleInvitation">
+		UPDATE sns_invitation
+		SET favorites_count = favorites_count + 1,
+		favorites_Info = CONCAT(favorites_Info, #{praiseInfo,jdbcType=VARCHAR}, ',')
+		WHERE
+		id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectInvitationDetail" resultMap="QueryCircleInvitationMap">
+		SELECT
+		*
+		FROM
+		sns_invitation i
+		left join user_customer u on i.user_id = u.uid
+		WHERE
+		i.delete_Status = 0
+		AND i.id = #{invitationId}
+		order by i.add_Time desc
+	</select>
+
+	<select id="queryByIds" resultMap="QueryCircleInvitationMap">
+		SELECT
+		i.id,i.title
+		FROM
+		sns_invitation i
+		WHERE
+		i.delete_Status = 0
+		AND i.id
+		in
+		<foreach collection="ids" index="index" item="id" open="("
+			separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+
+	<select id="selectInvitationByClassId" resultMap="BaseResultMap">
+		SELECT
+		i.*
+		FROM
+		sns_invitation i,
+		sns_invitation_r_class r
+		WHERE
+		i.delete_Status = 0
+		AND i.id = r.invitation_id
+		AND r.class_id = #{classId}
+		ORDER BY
+		r.create_time DESC
+	</select>
+	<select id="selectPageByVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sns_invitation
+		where delete_Status = 0 AND circle_type=1
+		<if test="vo.title != null and vo.title != ''">
+			and title like concat('%', #{vo.title}, '%')
+		</if>
+		<if test="vo.userName != null and vo.userName != ''">
+			and user_Name like concat('%', #{vo.userName}, '%')
+		</if>
+		<if test="vo.circleId != null">
+			and circle_id = #{vo.circleId}
+		</if>
+		order by add_Time desc
+	</select>
+
+	<select id="selectPageByOfficVO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sns_invitation
+		where delete_Status = 0 AND circle_type=2
+		<if test="vo.title != null and vo.title != ''">
+			and title like concat('%', #{vo.title}, '%')
+		</if>
+		<if test="vo.userName != null and vo.userName != ''">
+			and user_Name like concat('%', #{vo.userName}, '%')
+		</if>
+		<if test="vo.circleId != null">
+			and circle_id = #{vo.circleId}
+		</if>
+		order by add_Time desc
+	</select>
+
+	<select id="selectPageCountByVO" resultType="int">
+		select
+		count(0)
+		from sns_invitation
+		where delete_Status = 0
+		<if test="vo.title != null and vo.title != ''">
+			and title like concat('%', #{vo.title}, '%')
+		</if>
+		<if test="vo.userName != null and vo.userName != ''">
+			and user_Name like concat('%', #{vo.userName}, '%')
+		</if>
+		<if test="vo.circleId != null">
+			and circle_id = #{vo.circleId}
+		</if>
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, circle_id, circle_name, thumbnail,
+		invitaion_perfect, invitaion_top, thumbnail,
+		praise_count, reply_count, title, type, user_Name, user_id,
+		circle_type,update_time,reply_name,praise_Info,favorites_Info,photo_Info,favorites_count,
+		appDownloadPic
+	</sql>
+	<sql id="Invitation_Column_List">
+		a.id, a.add_Time, a.delete_Status, a.circle_id, a.circle_name,
+		a.invitaion_perfect, a.invitaion_top, a.thumbnail,
+		a.praise_count, a.reply_count, a.title, a.type, a.user_Name, a.user_id,
+		a.circle_type,a.update_time,a.reply_name,a.praise_Info,a.favorites_Info,
+		a.photo_Info,a.favorites_count,a.content
+	</sql>
+	<sql id="Base_Column_ListAndCustomer">
+		i.id, i.add_Time, i.delete_Status, i.circle_id, i.circle_name,
+		i.invitaion_perfect, i.invitaion_top, i.thumbnail
+		i.praise_count, i.reply_count, i.title, i.type, i.user_Name, i.user_id,
+		i.circle_type,i.update_time,i.photo_Info,i.favorites_count,u.head_img_path
+	</sql>
+	<sql id="Blob_Column_List">
+		content, item_info, photo_Info, praise_Info
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.sns.model.CircleInvitationExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_invitation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sns.model.CircleInvitationExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_invitation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_invitation
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sns_invitation
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sns.model.CircleInvitationExample">
+		delete from sns_invitation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.CircleInvitation"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into sns_invitation (id, add_Time, delete_Status,
+		circle_id, circle_name, thumbnail, invitaion_perfect,
+		invitaion_top, praise_count, reply_count,
+		title, type, user_Name,
+		user_id, circle_type, content,
+		item_info, photo_Info,
+		praise_Info,update_time,reply_name,favorites_Info,favorites_count
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{circleId,jdbcType=BIGINT}, #{circleName,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR},
+		#{invitaionPerfect,jdbcType=INTEGER},
+		#{invitaionTop,jdbcType=INTEGER}, #{praiseCount,jdbcType=INTEGER},
+		#{replyCount,jdbcType=INTEGER},
+		#{title,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+		#{userId,jdbcType=BIGINT}, #{circleType,jdbcType=INTEGER},
+		#{content,jdbcType=LONGVARCHAR},
+		#{itemInfo,jdbcType=LONGVARCHAR}, #{photoInfo,jdbcType=LONGVARCHAR},
+		#{praiseInfo,jdbcType=LONGVARCHAR},#{updateTime,jdbcType=TIMESTAMP,
+		#{replyName,jdbcType=VARCHAR},#{favoritesInfo,jdbcType=LONGVARCHAR,#{favoritesCount,jdbcType=INTEGER}}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.CircleInvitation"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into sns_invitation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="circleId != null">
+				circle_id,
+			</if>
+			<if test="circleName != null">
+				circle_name,
+			</if>
+			<if test="thumbnail != null">
+				thumbnail,
+			</if>
+			<if test="invitaionPerfect != null">
+				invitaion_perfect,
+			</if>
+			<if test="invitaionTop != null">
+				invitaion_top,
+			</if>
+			<if test="praiseCount != null">
+				praise_count,
+			</if>
+			<if test="replyCount != null">
+				reply_count,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="userName != null">
+				user_Name,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="circleType != null">
+				circle_type,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="itemInfo != null">
+				item_info,
+			</if>
+			<if test="photoInfo != null">
+				photo_Info,
+			</if>
+			<if test="praiseInfo != null">
+				praise_Info,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="replyName != null">
+				reply_name,
+			</if>
+			<if test="favoritesInfo != null">
+				favorites_Info,
+			</if>
+			<if test="favoritesCount != null">
+				favorites_count,
+			</if>
+			<if test="pic != null">
+				pic,
+			</if>
+			<if test="appDownloadPic != null">
+				appDownloadPic
+			</if>
+
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="circleId != null">
+				#{circleId,jdbcType=BIGINT},
+			</if>
+			<if test="circleName != null">
+				#{circleName,jdbcType=VARCHAR},
+			</if>
+			<if test="thumbnail != null">
+				#{thumbnail,jdbcType=VARCHAR},
+			</if>
+			<if test="invitaionPerfect != null">
+				#{invitaionPerfect,jdbcType=INTEGER},
+			</if>
+			<if test="invitaionTop != null">
+				#{invitaionTop,jdbcType=INTEGER},
+			</if>
+			<if test="praiseCount != null">
+				#{praiseCount,jdbcType=INTEGER},
+			</if>
+			<if test="replyCount != null">
+				#{replyCount,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="circleType != null">
+				#{circleType,jdbcType=INTEGER},
+			</if>
+			<if test="content != null">
+         <![CDATA[#{content,jdbcType=LONGVARCHAR}]]>,
+			</if>
+			<if test="itemInfo != null">
+				#{itemInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="photoInfo != null">
+				#{photoInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="praiseInfo != null">
+				#{praiseInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="replyName != null">
+				#{replyName,jdbcType=VARCHAR},
+			</if>
+			<if test="favoritesInfo != null">
+				#{favoritesInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="favoritesCount != null">
+				#{favoritesCount,jdbcType=INTEGER},
+			</if>
+
+			<if test="pic != null">
+				#{pic,jdbcType=VARCHAR},
+			</if>
+
+			<if test="appDownloadPic != null">
+				#{appDownloadPic,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sns.model.CircleInvitationExample"
+		resultType="java.lang.Integer">
+		select count(*) from sns_invitation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sns_invitation
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.circleId != null">
+				circle_id = #{record.circleId,jdbcType=BIGINT},
+			</if>
+			<if test="record.circleName != null">
+				circle_name = #{record.circleName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.thumbnail != null">
+				thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+			</if>
+			<if test="record.invitaionPerfect != null">
+				invitaion_perfect = #{record.invitaionPerfect,jdbcType=INTEGER},
+			</if>
+			<if test="record.invitaionTop != null">
+				invitaion_top = #{record.invitaionTop,jdbcType=INTEGER},
+			</if>
+			<if test="record.praiseCount != null">
+				praise_count = #{record.praiseCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.replyCount != null">
+				reply_count = #{record.replyCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userName != null">
+				user_Name = #{record.userName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.circleType != null">
+				circle_type = #{record.circleType,jdbcType=INTEGER},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.itemInfo != null">
+				item_info = #{record.itemInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.photoInfo != null">
+				photo_Info = #{record.photoInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.praiseInfo != null">
+				praise_Info = #{record.praiseInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.praiseInfo != null">
+				reply_name = #{record.replyName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.favoritesInfo != null">
+				praise_Info = #{record.favoritesInfo,jdbcType=LONGVARCHAR}
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+		<if test="record.updateTime != null">
+			add_Time = #{record.updateTime,jdbcType=TIMESTAMP},
+		</if>
+		<if test="record.favoritesCount != null">
+			favorites_count=#{record.favoritesCount,jdbcType=INTEGER},
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update sns_invitation
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		circle_id = #{record.circleId,jdbcType=BIGINT},
+		circle_name = #{record.circleName,jdbcType=VARCHAR},
+		thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+		invitaion_perfect = #{record.invitaionPerfect,jdbcType=INTEGER},
+		invitaion_top = #{record.invitaionTop,jdbcType=INTEGER},
+		praise_count = #{record.praiseCount,jdbcType=INTEGER},
+		reply_count = #{record.replyCount,jdbcType=INTEGER},
+		title = #{record.title,jdbcType=VARCHAR},
+		type = #{record.type,jdbcType=VARCHAR},
+		user_Name = #{record.userName,jdbcType=VARCHAR},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		circle_type = #{record.circleType,jdbcType=INTEGER},
+		content = #{record.content,jdbcType=LONGVARCHAR},
+		item_info = #{record.itemInfo,jdbcType=LONGVARCHAR},
+		photo_Info = #{record.photoInfo,jdbcType=LONGVARCHAR},
+		praise_Info = #{record.praiseInfo,jdbcType=LONGVARCHAR},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		reply_Name = #{record.replyName,jdbcType=VARCHAR},
+		favorites_Info = #{record.favoritesInfo,jdbcType=LONGVARCHAR},
+		favorites_count=#{record.favoritesCount,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sns_invitation
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		circle_id = #{record.circleId,jdbcType=BIGINT},
+		circle_name = #{record.circleName,jdbcType=VARCHAR},
+		thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+		invitaion_perfect = #{record.invitaionPerfect,jdbcType=INTEGER},
+		invitaion_top = #{record.invitaionTop,jdbcType=INTEGER},
+		praise_count = #{record.praiseCount,jdbcType=INTEGER},
+		reply_count = #{record.replyCount,jdbcType=INTEGER},
+		title = #{record.title,jdbcType=VARCHAR},
+		type = #{record.type,jdbcType=VARCHAR},
+		user_Name = #{record.userName,jdbcType=VARCHAR},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		circle_type = #{record.circleType,jdbcType=INTEGER},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		reply_Name = #{record.replyName,jdbcType=VARCHAR},
+		favorites_Info = #{record.favoritesInfo,jdbcType=LONGVARCHAR},
+		favorites_count=#{record.favoritesCount,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.CircleInvitation">
+		update sns_invitation
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="circleId != null">
+				circle_id = #{circleId,jdbcType=BIGINT},
+			</if>
+			<if test="circleName != null">
+				circle_name = #{circleName,jdbcType=VARCHAR},
+			</if>
+			<if test="thumbnail != null">
+				thumbnail = #{thumbnail,jdbcType=VARCHAR},
+			</if>
+			<if test="invitaionPerfect != null">
+				invitaion_perfect = #{invitaionPerfect,jdbcType=INTEGER},
+			</if>
+			<if test="invitaionTop != null">
+				invitaion_top = #{invitaionTop,jdbcType=INTEGER},
+			</if>
+			<if test="praiseCount != null">
+				praise_count = #{praiseCount,jdbcType=INTEGER},
+			</if>
+			<if test="replyCount != null">
+				reply_count = #{replyCount,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				user_Name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="circleType != null">
+				circle_type = #{circleType,jdbcType=INTEGER},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="itemInfo != null">
+				item_info = #{itemInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="photoInfo != null">
+				photo_Info = #{photoInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="praiseInfo != null">
+				praise_Info = #{praiseInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="replyName != null">
+				reply_Name = #{replyName,jdbcType=VARCHAR},
+			</if>
+			<if test="favoritesInfo != null">
+				favorites_Info = #{favoritesInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="favoritesCount">
+				favorites_count=#{favoritesCount,jdbcType=INTEGER},
+			</if>
+			<if test="appDownloadPic">
+				appDownloadPic=#{appDownloadPic,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.sns.model.CircleInvitation">
+		update sns_invitation
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		circle_id = #{circleId,jdbcType=BIGINT},
+		circle_name = #{circleName,jdbcType=VARCHAR},
+		thumbnail = #{thumbnail,jdbcType=VARCHAR},
+		invitaion_perfect = #{invitaionPerfect,jdbcType=INTEGER},
+		invitaion_top = #{invitaionTop,jdbcType=INTEGER},
+		praise_count = #{praiseCount,jdbcType=INTEGER},
+		reply_count = #{replyCount,jdbcType=INTEGER},
+		title = #{title,jdbcType=VARCHAR},
+		type = #{type,jdbcType=VARCHAR},
+		user_Name = #{userName,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=BIGINT},
+		circle_type = #{circleType,jdbcType=INTEGER},
+		content = #{content,jdbcType=LONGVARCHAR},
+		item_info = #{itemInfo,jdbcType=LONGVARCHAR},
+		photo_Info = #{photoInfo,jdbcType=LONGVARCHAR},
+		praise_Info = #{praiseInfo,jdbcType=LONGVARCHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		reply_Name = #{replyName,jdbcType=VARCHAR},
+		favorites_Info = #{favoritesInfo,jdbcType=LONGVARCHAR},
+		favorites_count=#{favoritesCount,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.CircleInvitation">
+		update sns_invitation
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		circle_id = #{circleId,jdbcType=BIGINT},
+		circle_name = #{circleName,jdbcType=VARCHAR},
+		thumbnail = #{thumbnail,jdbcType=VARCHAR},
+		invitaion_perfect = #{invitaionPerfect,jdbcType=INTEGER},
+		invitaion_top = #{invitaionTop,jdbcType=INTEGER},
+		praise_count = #{praiseCount,jdbcType=INTEGER},
+		reply_count = #{replyCount,jdbcType=INTEGER},
+		title = #{title,jdbcType=VARCHAR},
+		type = #{type,jdbcType=VARCHAR},
+		user_Name = #{userName,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=BIGINT},
+		circle_type = #{circleType,jdbcType=INTEGER},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		reply_Name = #{replyName,jdbcType=VARCHAR},
+		favorites_Info = #{favoritesInfo,jdbcType=LONGVARCHAR},
+		favorites_count=#{favoritesCount,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<!--<select id="queryCircleInvitation" resultMap="QueryCircleInvitation"> 
+		SELECT DISTINCT c.head_img_path,r.user_name,i.* from sns_invitation i INNER 
+		JOIN user_customer_favorites f ON i.id=f.fid INNER JOIN user_customer c ON 
+		c.uid=i.user_id INNER JOIN sns_invitation_replys r ON i.id=r.invitation_id 
+		WHERE f.type=#{type,jdbcType=INTEGER} AND f.uid=#{uid,jdbcType=INTEGER} AND 
+		i.circle_type=#{circleType,jdbcType=INTEGER} ORDER BY r.addTime desc </select> -->
+	<select id="queryCircleInvitation" resultMap="QueryCircleInvitationMap">
+		SELECT u.head_img_path,
+		<include refid="Invitation_Column_List" />
+		from sns_invitation a
+		LEFT JOIN user_customer_favorites f ON f.fid=a.id
+		LEFT JOIN user_customer u ON u.uid=a.user_id
+		WHERE f.uid=#{uid,jdbcType=INTEGER} AND f.type=#{type,jdbcType=INTEGER} AND
+		a.circle_type=#{circleType,jdbcType=INTEGER}
+		<if test="timeStamp != null and timeStamp != ''">
+			and a.update_time <![CDATA[<]]>
+			#{timeStamp,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY a.update_time DESC
+	</select>
+
+
+	<select id="circleInvitationList" resultMap="QueryCircleInvitationMap">
+		SELECT u.head_img_path,
+		<include refid="Invitation_Column_List" />
+		from sns_invitation a INNER JOIN user_customer u ON u.uid=a.user_id
+		WHERE a.user_id=#{uid,jdbcType=INTEGER} and a.delete_Status=0 ORDER BY
+		a.update_time desc
+	</select>
+
+	<select id="circleInvitationListCount" resultType="int">
+		SELECT
+		count(0) from sns_invitation a INNER JOIN user_customer u ON
+		u.uid=a.user_id
+		WHERE a.user_id=#{uid,jdbcType=INTEGER} and a.delete_Status=0 ORDER BY
+		a.update_time desc
+	</select>
+
+	<select id="circleList" resultMap="QueryCircleInvitationMap">
+		SELECT u.head_img_path,
+		<include refid="Invitation_Column_List" />
+		from sns_invitation a LEFT JOIN user_customer u ON a.user_id=u.uid
+		WHERE a.circle_id=#{circleId,jdbcType=INTEGER} AND a.delete_Status=0
+		AND
+		a.circle_type=#{circleType,jdbcType=INTEGER}
+		<if test="timeStamp != null and timeStamp != ''">
+			AND a.add_Time <![CDATA[<]]>
+			#{timeStamp,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY a.randIndex DESC
+	</select>
+
+	<select id="circleListCount" resultType="int">
+		SELECT count(0) from
+		sns_invitation WHERE circle_id=#{circleId,jdbcType=INTEGER} AND
+		delete_Status=0 AND circle_type=#{circleType,jdbcType=INTEGER} ORDER
+		BY add_Time DESC
+	</select>
+
+	<select id="invitationAllListPage" resultMap="SearchInvitationAllMap">
+		SELECT u.head_img_path,
+		<include refid="Invitation_Column_List" />
+		FROM sns_invitation a INNER JOIN user_customer u ON a.user_id = u.uid
+		WHERE a.circle_type=#{invitationType,jdbcType=INTEGER} AND
+		a.delete_Status=0
+		<if test="timeStamp != null and timeStamp != ''">
+			AND a.add_Time <![CDATA[<]]>
+			#{timeStamp,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY a.randIndex DESC
+	</select>
+
+	<select id="invitationAllListPageCount" resultType="int">
+		SELECT
+		count(0)
+		FROM sns_invitation i INNER JOIN user_customer u ON i.user_id
+		= u.uid WHERE circle_type=#{invitationType,jdbcType=INTEGER} AND
+		i.delete_Status=0 ORDER BY i.add_Time DESC
+	</select>
+
+	<select id="searchInvitation" resultMap="SearchInvitationAllMap">
+		SELECT u.head_img_path,
+		<include refid="Invitation_Column_List" />
+		FROM sns_invitation a INNER JOIN user_customer u ON a.user_id=u.uid
+		WHERE a.delete_Status =0
+		<if test="timeStamp != null and timeStamp != ''">
+			and a.update_time <![CDATA[<]]>
+			#{timeStamp,jdbcType=TIMESTAMP}
+		</if>
+		<if test="title != null and title != ''">
+			and a.delete_Status=0 AND a.title LIKE
+			CONCAT('%',#{title,jdbcType=VARCHAR},'%')
+		</if>
+		ORDER BY a.update_time DESC
+	</select>
+
+	<select id="searchInvitationCount" resultType="int">
+		SELECT
+		count(0)
+		FROM sns_invitation i INNER JOIN user_customer u ON i.user_id=u.uid WHERE
+		i.delete_Status = 0
+		<if test="title != null and title != ''">
+			and i.delete_Status=0 AND i.title LIKE
+			CONCAT('%',#{title,jdbcType=VARCHAR},'%')
+		</if>
+	</select>
+
+</mapper>

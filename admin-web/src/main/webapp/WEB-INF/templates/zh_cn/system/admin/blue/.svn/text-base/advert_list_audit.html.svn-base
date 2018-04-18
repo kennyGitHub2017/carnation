@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">广告管理</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/admin/advert_list.htm"><b>所有广告</b></a></li>
+    	#if(${sec.anyGranted("ROLE_ADVERT_ADMIN_CHECK")})
+        <li><a href="$!webPath/admin/advert_list_audit.htm" class="this"><b>未审核广告</b></a></li>
+        #end
+        <li><a href="$!webPath/admin/advert_add.htm"  ><b>新增广告</b></a></li>
+        <li><a href="$!webPath/admin/adv_pos_list.htm"><b>所有广告位</b></a></li>
+        <li><a href="$!webPath/admin/adv_pos_add.htm" ><b>新增广告位</b></a></li>
+    </ul>
+  </div>
+  <form method="post" id="queryForm">
+  <div class="search">
+    <ul>
+      <li>
+      	<span>广告名称</span> <span class="size250">
+        	<input name="adTitle" type="text" id="adTitle" value="$!vo.adTitle" />
+        </span>
+        <span>广告位名称</span> 
+      	<span class="size250">
+        	<select name="adApId" id="adApId">
+	          <option value="">全部</option>
+	          #foreach($ap in $aps)
+	          	<option value="$!ap.id" ap_type="$!ap.apType" #if($!ap.id==$!vo.adApId) selected="selected"#end>$!{ap.apTitle}</option>
+	          #end
+	        </select>
+        </span>
+        <span>
+        	<input name="" type="submit"  value="搜索" style="cursor:pointer;"class="search_btn" />
+        </span>
+      </li>
+    </ul>
+  </div>
+  </form>
+  <form method="post" id="ListForm">
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+      	<th width="30%"><span class="form_btna">广告名称</span></th>
+        <th  width="25%"><span class="form_btna">所属广告位</span></th>
+        <th  width="8%" align="center"><span class="form_btna">类别</span></th>
+<!--         <th  width="8%" align="center"><span class="form_btna">开始时间</span></th> -->
+<!--         <th  width="8%" align="center"><span class="form_btna">结束时间</span></th> -->
+        <th  width="8%" align="center"><span class="form_btna">点击率</span></th>
+        <th  width="8%"><span class="form_btna">广告用户</span></th>
+        <th  align="center"><b class="form_btnb">操作</b></th>
+      </tr>
+      #foreach($obj in $objs)
+      <tr>
+        <td align="center">$!obj.adTitle</td>
+        <td align="center">$!obj.apTitle</td>
+       #if($!obj.apType=="img")
+          #set($type="图片")
+        #end
+        #if($!obj.apType=="scroll")
+          #set($type="滚动")
+        #end
+        #if($!obj.apType=="slide")
+          #set($type="幻灯")
+        #end
+       #if($!obj.apType=="bg_slide")
+          #set($type="背景幻灯")
+        #end 
+        #if($!obj.apType=="text")
+          #set($type="文字")
+        #end 
+        <td align="center">$!type</td>
+<!--         <td align="center">$!CommUtil.formatShortDate($!obj.adBeginTime)</td> -->
+<!--         <td align="center">$!CommUtil.formatShortDate($!obj.adEndTime)</td> -->
+        <td align="center" class="blue">$!obj.adClickNum</td>
+        <td align="center">$!obj.userName</td>
+        <td  align="center" class="hui oprate_con">
+           #if(${sec.anyGranted("ROLE_ADVERT_ADMIN_CHECK")})
+           <a href="$!webPath/admin/advert_view.htm?id=$!obj.id&currentPage=$!currentPage" class="blue">审核</a>|
+           #end
+            <a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/admin/advert_del.htm?mulitId=$!obj.id'" class="blue">删除</a>
+        </td>
+      </tr>
+      #end
+    </table>
+  </div>
+  <div class="operate_bar">
+    <div class="fenye">
+<!--     	<input name="ad_status" type="hidden" id="ad_status" value="$!ad_status" /> -->
+        <input name="adTitle" type="hidden" id="adTitle" value="$!vo.adTitle" />
+         <input name="adApId" type="hidden" id="adApId" value="$!vo.adApId" />
+        <input type="hidden" name="mulitId" id="mulitId" />
+		<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML</div> 
+  </div>
+  </form>
+</div>
+</body>
+</html>

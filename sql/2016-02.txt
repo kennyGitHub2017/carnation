@@ -1,0 +1,264 @@
+#*********************************来源林补 ,自测题管理2016-02-16*********BEGIN
+ALTER TABLE `check_group`  ADD COLUMN `is_closed` BIT(1) NULL DEFAULT NULL COMMENT '1:已关闭,0:已启用是否关闭--控制app自测题的显示';
+
+ALTER TABLE `check_group`  ADD COLUMN `checkGroupSequence` BIGINT(20) DEFAULT NULL COMMENT '自测题权重排序值';
+
+
+UPDATE check_group SET is_closed =  0;
+
+#*********************************来源林补 ,自测题管理2016-02-16*********END
+
+
+
+#*********************************陈舟 ,权限调整 2016-02-19*********BEGIN
+
+
+
+# 创建用户组表
+DROP TABLE IF EXISTS `sys_user_group`;
+CREATE TABLE `sys_user_group` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `group_name` VARCHAR(255) DEFAULT NULL COMMENT '名称',
+  `is_system`TINYINT DEFAULT 0 COMMENT '是否系统默认',
+  `delete_status` TINYINT(4) DEFAULT '0' COMMENT '删除状态 0 正常数据(默认值),1 删除状态',
+  `create_by` BIGINT(20) DEFAULT NULL,
+  `create_time` DATETIME DEFAULT NULL,
+  `modify_by` BIGINT(20) DEFAULT NULL,
+  `modify_time` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='用户组表';
+
+
+# 创建用户组权限表
+DROP TABLE IF EXISTS `sys_user_group_role`;
+CREATE TABLE `sys_user_group_role` (
+  `user_group_id` BIGINT(20) NOT NULL,
+  `role_id` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`user_group_id`,`role_id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='用户组权限';
+
+# 创建用户组-用户映射
+DROP TABLE IF EXISTS `sys_user_group_map`;
+CREATE TABLE `sys_user_group_map` (
+  `user_group_id` BIGINT(20) NOT NULL,
+  `user_id` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`user_group_id`,`user_id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='用户组-用户映射';
+
+
+# 1.添加一个 role_code备用
+ALTER TABLE `sys_user_role`   
+  ADD COLUMN `role_code` VARCHAR(255) DEFAULT NULL COMMENT '角色编码，ss根据该编码来识别角色';
+  
+UPDATE sys_user_role ur,`sys_role` r SET ur.`role_code` = r.`role_code`
+WHERE r.`id` = ur.`role_id`;
+
+
+# 2.将用户每一个导出一个角色
+DELETE FROM sys_user_group;
+INSERT INTO sys_user_group (id,group_name,create_time)
+SELECT uid AS id, `name` AS group_name,NOW() AS create_time  FROM `user_manager` WHERE uid IN (
+SELECT DISTINCT user_id FROM `sys_user_role`
+);
+
+DELETE FROM `sys_user_group_map`;
+INSERT INTO sys_user_group_map (user_group_id,user_id)
+SELECT id AS user_group_id, id AS user_id  FROM sys_user_group;
+
+
+UPDATE sys_user_group SET is_system  = 1 WHERE group_name = '超级管理员';
+
+# 3.将每一个用户组的权限导出来
+DELETE FROM sys_user_group_role;
+INSERT INTO sys_user_group_role(user_group_id,role_id)
+SELECT user_id,ur.role_id
+FROM `sys_user_role` AS ur;
+
+#*********************************陈舟 ,权限调整 2016-02-19*********END
+
+
+#*********************************陈舟 ,体检调整 2016-02-16*********BEGIN
+# 体检项目类别
+# 1视力表2视力检测3色盲测试4散光测试5听力6血压7心率8肺活量9血氧
+DROP TABLE IF EXISTS `check_physical_type`;
+CREATE TABLE `check_physical_type` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `type_name`   VARCHAR(100) DEFAULT NULL COMMENT '类别名称',
+  `code`   VARCHAR(50) DEFAULT NULL COMMENT '类别code',
+  `unit` VARCHAR(50) DEFAULT NULL COMMENT '单位',
+  `profile` TEXT DEFAULT NULL COMMENT '类别简介',
+  `memo`   TEXT DEFAULT NULL COMMENT '详细内容',
+  `sort_index` INT(11) DEFAULT 0 COMMENT '排序', 
+  `delete_status` TINYINT(4) DEFAULT '0' COMMENT '删除状态 0 正常数据(默认值),1 删除状态',
+  `create_by` BIGINT(20) DEFAULT NULL,
+  `create_time` DATETIME DEFAULT NULL,
+  `modify_by` BIGINT(20) DEFAULT NULL,
+  `modify_time` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='体检类别';
+
+INSERT INTO `check_physical_type` (`id`, `type_name`,`code`,`profile`,`memo`, `sort_index`, `create_by`, `create_time`, `modify_by`, `modify_time`) 
+VALUES('1','视力表','eye',NULL,NULL,'1',NULL,NOW(),NULL,NOW());
+INSERT INTO `check_physical_type` (`id`, `type_name`,`code`,`profile`, `memo`, `sort_index`, `create_by`, `create_time`, `modify_by`, `modify_time`) 
+VALUES('2','视力检测','eye_tes',NULL,NULL,'1',NULL,NOW(),NULL,NOW());
+INSERT INTO `check_physical_type` (`id`, `type_name`,`code`,`profile`, `memo`, `sort_index`, `create_by`, `create_time`, `modify_by`, `modify_time`) 
+VALUES('3','色盲测试','eye_un_color',NULL,NULL,'1',NULL,NOW(),NULL,NOW());
+INSERT INTO `check_physical_type` (`id`, `type_name`,`code`,`profile`, `memo`, `sort_index`, `create_by`, `create_time`, `modify_by`, `modify_time`) 
+VALUES('4','散光测试','eye_flash',NULL,NULL,'1',NULL,NOW(),NULL,NOW());
+INSERT INTO `check_physical_type` (`id`, `type_name`,`code`,`profile`, `memo`, `sort_index`, `create_by`, `create_time`, `modify_by`, `modify_time`) 
+VALUES('5','听力','hearing',NULL,NULL,'1',NULL,NOW(),NULL,NOW());
+INSERT INTO `check_physical_type` (`id`, `type_name`, `code`,`profile`,`memo`, `sort_index`, `create_by`, `create_time`, `modify_by`, `modify_time`) 
+VALUES('6','血压','blood_pressure',NULL,NULL,'1',NULL,NOW(),NULL,NOW());
+INSERT INTO `check_physical_type` (`id`, `type_name`,`code`, `profile`,`memo`, `sort_index`, `create_by`, `create_time`, `modify_by`, `modify_time`) 
+VALUES('7','心率','heart_rate',NULL,NULL,'1',NULL,NOW(),NULL,NOW());
+INSERT INTO `check_physical_type` (`id`, `type_name`,`code`, `profile`,`memo`, `sort_index`, `create_by`, `create_time`, `modify_by`, `modify_time`) 
+VALUES('8','肺活量','vital_capacity',NULL,NULL,'1',NULL,NOW(),NULL,NOW());
+INSERT INTO `check_physical_type` (`id`, `type_name`,`code`,`profile`,`memo`, `sort_index`, `create_by`, `create_time`, `modify_by`, `modify_time`) 
+VALUES('9','血氧','oxygen',NULL,NULL,'1',NULL,NOW(),NULL,NOW());
+
+# 体检结果参考值
+DROP TABLE IF EXISTS `check_physical_valuation`;
+CREATE TABLE `check_physical_valuation` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `physical_type_id` BIGINT(20) NOT NULL DEFAULT 0 COMMENT '体检项目id',
+  `sex` INT(11) DEFAULT 0 COMMENT '性别 1:男, 2:女 0:所有',
+  `min_age` INT(11) DEFAULT 0 COMMENT '年龄范围最小值',
+  `max_age` INT(11) DEFAULT 0 COMMENT '年龄范围最大值',   
+  `range_min` FLOAT(11,3) DEFAULT NULL COMMENT '范围最小值(血压，存储高压范围)',
+  `range_max` FLOAT(11,3) DEFAULT NULL COMMENT '范围最大值(血压，存储高压范围)',
+  `range_min2` FLOAT(11,3) DEFAULT NULL COMMENT '范围最小值(血压，存储低压范围)',
+  `range_max2` FLOAT(11,3) DEFAULT NULL COMMENT '范围最大值(血压，存储低压范围)',
+  `range_min3` FLOAT(11,3) DEFAULT NULL COMMENT '范围最小值(血压，存储脉压差范围)',
+  `range_max3` FLOAT(11,3) DEFAULT NULL COMMENT '范围最大值(血压，存储脉压差范围)',  
+  `result_type`  INT(11) DEFAULT 0  COMMENT '结果说明  常量存储',
+  `memo` TEXT DEFAULT NULL COMMENT '描述',
+  `is_enabled` INT(11) DEFAULT '0' COMMENT '参考值状态 是否启用 1：是 0：否',
+  `delete_status` TINYINT(4) DEFAULT '0' COMMENT '删除状态 0 正常数据(默认值),1 删除状态',
+  `create_by` BIGINT(20) DEFAULT NULL,
+  `create_time` DATETIME DEFAULT NULL,
+  `modify_by` BIGINT(20) DEFAULT NULL,
+  `modify_time` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='体检参考值';
+
+
+# 体检建议  体检建议和体检结果通过 id 和结果说明关联
+DROP TABLE IF EXISTS `check_physical_suggest`;
+CREATE TABLE `check_physical_suggest` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `physical_type_id` BIGINT(20) NOT NULL COMMENT '体检项目类别',
+  `result_type`  INT(11) DEFAULT 0  COMMENT '结果说明  常量存储',
+  `is_enabled` INT(11) DEFAULT '0' COMMENT '是否启用 1：是 0：否',
+  `suggest_type` INT(11) DEFAULT 0 COMMENT '建议类别 1:饮食 2:运动 3:生活 4:医疗 5：其他',
+  `content` TEXT DEFAULT NULL COMMENT '建议内容',  
+  `task_content` TEXT DEFAULT NULL COMMENT '任务内容',
+  `priority` INT(11) DEFAULT NULL COMMENT '权重',
+  `delete_status` TINYINT(4) DEFAULT '0' COMMENT '删除状态 0 正常数据(默认值),1 删除状态',
+  `create_by` BIGINT(20) DEFAULT NULL,
+  `create_time` DATETIME DEFAULT NULL,
+  `modify_by` BIGINT(20) DEFAULT NULL,
+  `modify_time` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='体检建议';
+
+
+# 提醒任务
+DROP TABLE IF EXISTS `sys_reminder_task`;
+CREATE TABLE `sys_reminder_task` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `task_name` VARCHAR(100) DEFAULT NULL COMMENT '任务名称',
+  `content` TEXT DEFAULT NULL COMMENT '任务内容',
+  `task_type` INT(11) DEFAULT '0' COMMENT '任务类型，1表示改进建议',
+  `is_top` INT(11) DEFAULT '0' COMMENT '是否推荐 1：是 0：否',
+  `is_enabled` INT(11) DEFAULT '0' COMMENT '任务状态,是否启用 1：是 0：否',
+  `default_day` VARCHAR(50) DEFAULT NULL COMMENT '默认周期 用逗号隔开 0:星期天，1:星期一，...',
+  `default_time` DATETIME DEFAULT NULL COMMENT '默认时间',
+  `priority` INT(11) DEFAULT NULL COMMENT '权重',
+  `delete_status` TINYINT(4) DEFAULT '0' COMMENT '删除状态 0 正常数据(默认值),1 删除状态',
+  `create_by` BIGINT(20) DEFAULT NULL,
+  `create_time` DATETIME DEFAULT NULL,
+  `modify_by` BIGINT(20) DEFAULT NULL,
+  `modify_time` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='提醒任务';
+
+#关键字关联映射表
+DROP TABLE IF EXISTS `sys_key_word_map`;
+CREATE TABLE `sys_key_word_map` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `type_code` BIGINT(20) NOT NULL COMMENT '关联类型 1:体检建议 2:任务 3:帖子 4:商品 5:服务', 
+  `type_id`  BIGINT(20) NOT NULL COMMENT '关联表的id', 
+  `key_word_id` BIGINT(20) NOT NULL COMMENT '关键字Id',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='提醒任务';
+
+
+#用户任务流水
+DROP TABLE IF EXISTS `sys_task_log`;
+CREATE TABLE `sys_task_log` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `task_id` BIGINT(20) NOT NULL COMMENT '任务Id',
+  `user_id` BIGINT(20) NOT NULL COMMENT '用户id',
+  `task_content` TEXT DEFAULT NULL COMMENT '任务内容',
+  `remind_day` VARCHAR(50) DEFAULT NULL COMMENT '提醒周期 用逗号隔开 0:星期天，1:星期一，...',
+  `remind_time` DATETIME DEFAULT NULL COMMENT '提醒时间',
+  `completed_time` DATETIME DEFAULT NULL COMMENT '完成时间',
+  `status` TINYINT(4) DEFAULT '0' COMMENT '0 未开始, 1 已完成',
+  `delete_status` TINYINT(4) DEFAULT '0' COMMENT '删除状态 0 正常数据(默认值),1 删除状态',
+  `create_by` BIGINT(20) DEFAULT NULL,
+  `create_time` DATETIME DEFAULT NULL,
+  `modify_by` BIGINT(20) DEFAULT NULL,
+  `modify_time` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='提醒任务';
+
+
+# 检查结果调整
+ALTER TABLE  `check_physical_result`   
+  CHANGE `create_time` `create_time` DATETIME NULL  COMMENT '创建时间',
+  ADD COLUMN `terminal_type` TINYINT DEFAULT 0  NULL  COMMENT '终端类型：0:PC，1:android，2:ios' AFTER `range_middle`;
+
+
+ALTER TABLE  `check_physical_result`   
+  ADD COLUMN `valuation_id` BIGINT(20) DEFAULT NULL COMMENT '体检结果 id' AFTER `terminal_type`;
+
+# 关键字
+DROP TABLE IF EXISTS `sys_key_word`;
+CREATE TABLE `sys_key_word` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) DEFAULT NULL COMMENT '名称',
+  `type` INT(11) DEFAULT '0' COMMENT '关键字类型',
+  `is_top` INT(11) DEFAULT '0' COMMENT '是否推荐 1：是 0：否',
+  `is_system` INT(11) DEFAULT '0' COMMENT '是否系统标签 1：是 0：否',
+  `is_enabled` INT(11) DEFAULT '0' COMMENT '是否启用 1：是 0：否',
+  `priority` INT(11) DEFAULT NULL COMMENT '权重',
+  `delete_status` TINYINT(4) DEFAULT '0' COMMENT '删除状态 0 正常数据(默认值),1 删除状态',
+  `create_by` BIGINT(20) DEFAULT NULL,
+  `create_time` DATETIME DEFAULT NULL,
+  `modify_by` BIGINT(20) DEFAULT NULL,
+  `modify_time` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='关键字';
+
+
+#关键字类型
+DROP TABLE IF EXISTS `sys_key_word_type`;
+CREATE TABLE `sys_key_word_type` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) DEFAULT NULL COMMENT '名称',
+  `delete_status` TINYINT(4) DEFAULT '0' COMMENT '删除状态 0 正常数据(默认值),1 删除状态',
+  `create_by` BIGINT(20) DEFAULT NULL,
+  `create_time` DATETIME DEFAULT NULL,
+  `modify_by` BIGINT(20) DEFAULT NULL,
+  `modify_time` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='关键字类型';
+
+#关键字类型，初始化
+DELETE FROM sys_key_word_type;
+INSERT `sys_key_word_type` (`id`,`name`, `create_time`) 
+VALUES
+(1,'关键字类型一',NOW()),
+(2,'关键字类型二',NOW());
+
+#*********************************陈舟 ,体检调整 2016-02-16*********END

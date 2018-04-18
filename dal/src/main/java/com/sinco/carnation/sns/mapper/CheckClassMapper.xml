@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.CheckClassMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.CheckClass">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="class_name" property="className" jdbcType="VARCHAR" />
+		<result column="class_desc" property="classDesc" jdbcType="VARCHAR" />
+		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BOResultMap" extends="BaseResultMap"
+		type="com.sinco.carnation.sns.bo.CheckClassBO">
+	</resultMap>
+
+	<select id="selectAll" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from check_class
+	</select>
+
+	<select id="findByIds" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from check_class
+		where id in
+		<foreach collection="ids" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<update id="updateDeleteStatusByIds">
+		update check_class
+		set is_deleted = 1
+		where id in
+		<foreach collection="ids" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, parent_id, class_name, class_desc, update_by, update_time, create_by,
+		create_time,
+		is_deleted, level, sequence
+	</sql>
+
+	<select id="selectCheckClaaaList" resultMap="BOResultMap">
+		SELECT * FROM check_class WHERE parent_id =#{parentId} and is_deleted=0 and
+		`level` =1
+	</select>
+
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sns.model.CheckClassExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from check_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="Long">
+		select
+		<include refid="Base_Column_List" />
+		from check_class
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="findPageByVO" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from check_class where is_deleted = 0
+		<if test="vo.parentId != null and vo.parentId >= 0">
+			and parent_id = #{vo.parentId}
+		</if>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="Long">
+		delete from check_class
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sns.model.CheckClassExample">
+		delete from check_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.CheckClass">
+		insert into check_class (id, parent_id, class_name,
+		class_desc, update_by, update_time,
+		create_by, create_time, is_deleted, level, sequence
+		)
+		values (#{id,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT},
+		#{className,jdbcType=VARCHAR},
+		#{classDesc,jdbcType=VARCHAR}, #{updateBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP},
+		#{createBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+		#{isDeleted,jdbcType=BIT},
+		#{level}, #{sequence}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.CheckClass">
+		insert into check_class
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="className != null">
+				class_name,
+			</if>
+			<if test="classDesc != null">
+				class_desc,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="className != null">
+				#{className,jdbcType=VARCHAR},
+			</if>
+			<if test="classDesc != null">
+				#{classDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+			<if test="level != null">
+				#{level},
+			</if>
+			<if test="sequence != null">
+				#{sequence},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sns.model.CheckClassExample"
+		resultType="java.lang.Integer">
+		select count(*) from check_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update check_class
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=BIGINT},
+			</if>
+			<if test="record.className != null">
+				class_name = #{record.className,jdbcType=VARCHAR},
+			</if>
+			<if test="record.classDesc != null">
+				class_desc = #{record.classDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updateBy != null">
+				update_by = #{record.updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+			<if test="record.level != null">
+				level = #{record.level},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update check_class
+		set id = #{record.id,jdbcType=BIGINT},
+		parent_id = #{record.parentId,jdbcType=BIGINT},
+		class_name = #{record.className,jdbcType=VARCHAR},
+		class_desc = #{record.classDesc,jdbcType=VARCHAR},
+		update_by = #{record.updateBy,jdbcType=BIGINT},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{record.isDeleted,jdbcType=BIT},
+		level = #{record.level},
+		sequence = #{record.sequence}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.CheckClass">
+		update check_class
+		<set>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="className != null">
+				class_name = #{className,jdbcType=VARCHAR},
+			</if>
+			<if test="classDesc != null">
+				class_desc = #{classDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIT},
+			</if>
+			<if test="level != null">
+				level = #{level},
+			</if>
+			<if test="isDeleted != null">
+				sequence = #{sequence},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.CheckClass">
+		update check_class
+		set parent_id = #{parentId,jdbcType=BIGINT},
+		class_name = #{className,jdbcType=VARCHAR},
+		class_desc = #{classDesc,jdbcType=VARCHAR},
+		update_by = #{updateBy,jdbcType=BIGINT},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{isDeleted,jdbcType=BIT},
+		level = #{level},
+		sequence = #{sequence}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

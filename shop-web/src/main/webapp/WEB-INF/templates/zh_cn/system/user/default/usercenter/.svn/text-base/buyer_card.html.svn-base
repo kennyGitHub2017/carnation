@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>我的线下服务订单</title>
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/service/public.css?v=5" type="text/css" rel="stylesheet"/>
+	<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+    <script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+    <script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+$(function() {
+	jQuery('#beginTime, #endTime').datepicker({
+	    dateFormat:"yy-mm-dd",
+	    changeMonth: true,
+	    changeYear: true
+	  });
+});
+</script>
+<style>
+.orderlist_one{padding-bottom:10px}
+.user_order_table th{background-color:#f5f5f5;border:solid 1px #e8e8e8;height:28px;border-left:0;border-right:0;color:#4a4a4a}
+.orderlist_one_h4{background:#f5f5f5;border:1px solid #e8e8e8;height:28px;line-height:28px;color:#4a4a4a}
+.user_order_table td{padding:0;height:93px;text-align:center;}
+.font14{font-size:14px}
+.marchant_pic{background:#d8d8d8;width:98px;height:60px;float:left;margin-left:15px}
+.marchant_pic img{width:100%;height:100%}
+.marchant_name{float:left;margin-left:14px;font-size:14px;width:126px;height:60px;text-align:left;display:table}
+.marchant_name span{display:table-cell;vertical-align:middle}
+.fn-rmb{font-family:arial;color:#f6582a}
+.operate a{display:block;width:78px;height:28px;border:solid 1px #e8e8e8;line-height:28px}
+.operate .yiping{color:#888}
+.operate .yiping:hover{border:solid 1px #e8e8e8}
+.operate a:hover{border:solid 1px #19bf96}
+.operate .orderInfo{margin-top:10px}
+</style>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm")
+$!httpInclude.include("/nav1.htm")
+
+<div class="main clearfix">
+    <div class="usercenter"> $!httpInclude.include("/buyer/nav.htm?op=type2")
+        <div class="usercenter_right">
+            <div class="myorder">
+                <h4><span class="myorder_fright"></span><strong>我的线下服务订单</strong></h4>
+            </div>
+            <form id="ListForm" method="post" action="$!webPath/buyer/group.htm?orderType=2">
+                <div class="user_list">
+                    <div class="user_list_title">
+              <span class="user_title_sp">
+                <span style="float:left; line-height:24px;">订单编号：</span>
+                <input type="text" placeholder="订单编号" value="$!vo.orderId" class="user_title_txt" id="order_id" name="orderId">
+                <span style="float:left; line-height:24px;">下单时间：</span>
+                <input type="text" placeholder="开始时间" style="width:70px" class="user_title_txt"
+                       readonly="readonly" value="$!vo.startDate" id="beginTime" name="startDate">
+                <span style="float:left; line-height:24px; padding-right:5px;">&mdash;</span>
+                <input type="text" placeholder="结束时间" style="width:70px" class="user_title_txt"
+                       readonly="readonly" value="$!vo.endDate" id="endTime" name="endDate">
+                <input type="submit" value="查询" class="user_sear_btn" name="">
+              </span>
+                        <ul class="user_title_ul">
+                            <li class="this"><i></i>
+                                <a href="$!webPath/buyer/group.htm?orderType=2">全部订单</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="user_list_box">
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-bottom:10px"
+                               class="user_order_table user_table_title">
+                            <tbody>
+                            <tr>
+                                <th width="305">购买信息</th>
+                                <th width="110">支付类型</th>
+                                <th width="110">消费金额</th>
+                                <th width="120">实付金额</th>
+                                <th width="185">支付时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    #foreach($obj in $objs)
+                    <div class="orderlist_one">
+                        <h4 class="orderlist_one_h4">
+                            <span>
+                                订单号： <a href="javascript:void(0)">$!obj.orderId</a>
+                            </span>
+                        </h4>
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" class="user_order_table">
+                            <tbody>
+                               <tr>
+	                                <td width="305" class="font14">
+	                                	<a href="$!webPath/group/store.htm?id=$!obj.storeId" target="_blank" class="marchant_pic"><img src="$!{obj.groupAccPath}" /></a>
+	                                	<a href="$!webPath/group/store.htm?id=$!obj.storeId" target="_blank" class="marchant_name"><span>$!{obj.storeName}</span></a>
+	                                </td>
+	                                <td width="110" class="font14">$!{obj.localGroupName}</td>
+	                                <td width="110" class="fn-rmb font14">¥ $!{obj.originalPrice}</td>
+	                                <td width="120" class="fn-rmb font14">¥ $!{obj.totalPrice}</td>
+	                                <td width="185" class="font14">$!CommUtil.formatLongDate($!obj.payTime)</td>
+	                                <td class="operate">
+	                                	
+	                                	#if($!obj.orderStatus==30)
+						                  <a href="$!webPath/group/group_order_evaluation.htm?type=down&orderId=$!obj.id">评价</a>
+						                #else
+						                  <a href="javascript:void(0)" class="yiping">已评价</a> 
+						                #end
+	                                	<a href="$!webPath/buyer/lifeorder_view.htm?id=$!obj.id&type=down" class="orderInfo">订单详情</a>
+                                	</td>
+	                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    #end
+                    <div class="fenye">
+			            <span class="user_page_sp">
+			              <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+			                  $!gotoPageFormHTML
+			            </span>
+			          </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+$!httpInclude.include("/footer.htm")
+
+<script>
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title></title>
+	<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css" rel="stylesheet" type="text/css" />
+	<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+	<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+	<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+	<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+	<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+	<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+	<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+	<script src="$!webPath/resources/js/smallalert.js" charset="utf-8"></script>
+</head>
+
+<body>
+	<div class="cont">
+	
+		<h3 class="seth">类目管理</h3>
+		<div class="nav_list">
+		  	<ul>
+		    	<li><a href="javascript:void(0)" class="this"><b>类目管理</b></a></li>
+		        <li><a href="$!webPath/admin/juanpi_leimu_add.htm"><b>绑定类目</b></a></li>
+		    </ul>
+		</div>
+		
+		<form action="$!webPath/admin/juanpi_leimu.htm" method="post" id="queryForm">
+			<input name="userId" type="hidden" value="$!vo.userId" />
+			<div class="search">
+				<ul>
+					<li>
+						<span>卷皮类目</span> 
+						<span class="size150"> 
+							<input name="jpName" type="text" id="jpName" value="$!vo.jpName" />
+						</span>
+						<span>云尚类目</span> 
+						<span class="size150"> 
+							<input name="ysName" type="text" id="ysName" value="$!vo.ysName" />
+						</span>
+						<span>
+							<input name="" type="submit" value="搜索" style="cursor: pointer;" class="search_btn" />
+						</span>
+					</li>
+				</ul>
+			</div>
+		</form>
+
+		<form action="$!webPath/admin/juanpi_leimu.htm" method="post" id="ListForm">
+		
+			<div class="fshoptb">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+					<tr>
+						<th width="3%">&nbsp;</th>
+						<th width="35%"><span class="form_btna">卷皮类目</span></th>
+						<th width="35%"><span class="form_btna">云尚类目</span></th>
+						<th width="27%"><span class="form_btna">操作</span></th>
+					</tr>
+					#if($!objs && $!objs.size()>0)
+						#foreach($obj in $objs)
+						<tr>
+							<td class="check_position"><input name="checkbox" type="checkbox" value="$!obj.id" />
+							</td>
+							<td align="center">$!obj.cateName>$!obj.cate2Name>$!obj.cate3Name</td>
+							<td align="center">$!obj.className>$!obj.class2Name>$!obj.class3Name</td>
+							<td align="center">
+								<a href="$!webPath/admin/juanpi_leimu_edit.htm?mulitId=$!obj.id&type=class" class="blue">更改</a>
+							</td>
+						</tr>
+						#end
+					#else
+						<tr>
+							<td colspan="4" style="text-align:center" >完了</td>
+						</tr>
+					#end
+				</table>
+			</div>
+			
+			<div class="operate_bar">
+				<div class="fenye">
+					<input name="ysName" type="hidden" id="ysName" value="$!vo.ysName" />
+					<input name="jpName" type="hidden" id="jpName" value="$!vo.jpName" />
+					<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+					$!gotoPageFormHTML
+				</div>
+				<div class="oper_sp"> 
+			      <span class="oper_check">
+			        <label>
+			          <input data-group="jp" type="checkbox" name="all" id="alltype" value="" onchange="changeCheckbox()"/>
+			          全部</label>
+			      </span>
+			    </div> 
+			    <span class="oper_del">
+		        <a href="javascript:leimu_edit()" >
+		        	<input name="" type="button" value="更改" style="cursor:pointer;" /></a>
+		        </span>
+			</div>
+			
+		</form>
+		
+	</div>
+	
+	<script>
+	//全选/反选
+	function changeCheckbox(){
+		if($("#alltype").is(":checked")){
+			$('input[name="checkbox"]').attr("checked",true);
+		}
+		else{
+			$('input[name="checkbox"]').attr("checked",false);
+		}
+	}
+	//批量类目编辑
+	function leimu_edit(){
+		if($('input[name="checkbox"]:checked').length > 0){
+			var mulitId = '';
+			$('input[name="checkbox"]:checked').each(function(){ 
+				mulitId += $(this).val() + ',';
+			}); 
+			mulitId = "'" + mulitId.substring(0,mulitId.length-1) + "'";
+			location.href = '$!webPath/admin/juanpi_leimu_edit.htm?mulitId='+ mulitId +'&type=class';
+		}
+		else{
+			alert("请选择分类");
+		}
+	}
+	
+	</script>
+</body>
+</html>

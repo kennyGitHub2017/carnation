@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.goods.mapper.GoodsFloorMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.goods.model.GoodsFloor">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus" />
+		<result column="gf_css" property="gfCss" jdbcType="VARCHAR" />
+		<result column="gf_display" property="gfDisplay" jdbcType="BIT" />
+		<result column="gf_goods_count" property="gfGoodsCount"
+			jdbcType="INTEGER" />
+		<result column="gf_level" property="gfLevel" jdbcType="INTEGER" />
+		<result column="gf_name" property="gfName" jdbcType="VARCHAR" />
+		<result column="gf_sequence" property="gfSequence" jdbcType="INTEGER" />
+		<result column="gf_style" property="gfStyle" jdbcType="VARCHAR" />
+		<result column="icon_id" property="iconId" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.goods.model.GoodsFloor"
+		extends="BaseResultMap">
+		<result column="gf_brand_list" property="gfBrandList" jdbcType="LONGVARCHAR" />
+		<result column="gf_gc_goods" property="gfGcGoods" jdbcType="LONGVARCHAR" />
+		<result column="gf_gc_list" property="gfGcList" jdbcType="LONGVARCHAR" />
+		<result column="gf_left_adv" property="gfLeftAdv" jdbcType="LONGVARCHAR" />
+		<result column="gf_list_goods" property="gfListGoods" jdbcType="LONGVARCHAR" />
+		<result column="gf_right_adv" property="gfRightAdv" jdbcType="LONGVARCHAR" />
+		<result column="gf_style2_goods" property="gfStyle2Goods"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="BoResultMap" type="com.sinco.carnation.goods.bo.GoodsFloorBO"
+		extends="ResultMapWithBLOBs">
+	</resultMap>
+
+	<select id="selectBOByPrimaryKey" resultMap="BoResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods_floor
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectBOByExample" resultMap="BoResultMap"
+		parameterType="com.sinco.carnation.goods.model.GoodsFloorExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods_floor
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="findByPage" resultMap="BoResultMap" parameterType="map">
+		select
+		<include refid="Base_Column_List" />
+		from shop_goods_floor
+		where gf_level =#{level}
+		order by gf_sequence asc
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, gf_css, gf_display, gf_goods_count,
+		gf_level, gf_name,
+		gf_sequence, gf_style, icon_id, parent_id
+	</sql>
+	<sql id="Blob_Column_List">
+		gf_brand_list, gf_gc_goods, gf_gc_list, gf_left_adv, gf_list_goods, gf_right_adv,
+		gf_style2_goods
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.goods.model.GoodsFloorExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods_floor
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.goods.model.GoodsFloorExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_goods_floor
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods_floor
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_goods_floor
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.goods.model.GoodsFloorExample">
+		delete from shop_goods_floor
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.goods.model.GoodsFloor">
+		insert into shop_goods_floor (id, add_time, delete_status,
+		gf_css, gf_display, gf_goods_count,
+		gf_level, gf_name, gf_sequence,
+		gf_style, icon_id, parent_id,
+		gf_brand_list, gf_gc_goods, gf_gc_list,
+		gf_left_adv, gf_list_goods, gf_right_adv,
+		gf_style2_goods)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{gfCss,jdbcType=VARCHAR}, #{gfDisplay,jdbcType=BIT}, #{gfGoodsCount,jdbcType=INTEGER},
+		#{gfLevel,jdbcType=INTEGER}, #{gfName,jdbcType=VARCHAR},
+		#{gfSequence,jdbcType=INTEGER},
+		#{gfStyle,jdbcType=VARCHAR}, #{iconId,jdbcType=VARCHAR}, #{parentId,jdbcType=BIGINT},
+		#{gfBrandList,jdbcType=LONGVARCHAR},
+		#{gfGcGoods,jdbcType=LONGVARCHAR}, #{gfGcList,jdbcType=LONGVARCHAR},
+		#{gfLeftAdv,jdbcType=LONGVARCHAR},
+		#{gfListGoods,jdbcType=LONGVARCHAR},
+		#{gfRightAdv,jdbcType=LONGVARCHAR},
+		#{gfStyle2Goods,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.goods.model.GoodsFloor">
+		insert into shop_goods_floor
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="gfCss != null">
+				gf_css,
+			</if>
+			<if test="gfDisplay != null">
+				gf_display,
+			</if>
+			<if test="gfGoodsCount != null">
+				gf_goods_count,
+			</if>
+			<if test="gfLevel != null">
+				gf_level,
+			</if>
+			<if test="gfName != null">
+				gf_name,
+			</if>
+			<if test="gfSequence != null">
+				gf_sequence,
+			</if>
+			<if test="gfStyle != null">
+				gf_style,
+			</if>
+			<if test="iconId != null">
+				icon_id,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="gfBrandList != null">
+				gf_brand_list,
+			</if>
+			<if test="gfGcGoods != null">
+				gf_gc_goods,
+			</if>
+			<if test="gfGcList != null">
+				gf_gc_list,
+			</if>
+			<if test="gfLeftAdv != null">
+				gf_left_adv,
+			</if>
+			<if test="gfListGoods != null">
+				gf_list_goods,
+			</if>
+			<if test="gfRightAdv != null">
+				gf_right_adv,
+			</if>
+			<if test="gfStyle2Goods != null">
+				gf_style2_goods,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="gfCss != null">
+				#{gfCss,jdbcType=VARCHAR},
+			</if>
+			<if test="gfDisplay != null">
+				#{gfDisplay,jdbcType=BIT},
+			</if>
+			<if test="gfGoodsCount != null">
+				#{gfGoodsCount,jdbcType=INTEGER},
+			</if>
+			<if test="gfLevel != null">
+				#{gfLevel,jdbcType=INTEGER},
+			</if>
+			<if test="gfName != null">
+				#{gfName,jdbcType=VARCHAR},
+			</if>
+			<if test="gfSequence != null">
+				#{gfSequence,jdbcType=INTEGER},
+			</if>
+			<if test="gfStyle != null">
+				#{gfStyle,jdbcType=VARCHAR},
+			</if>
+			<if test="iconId != null">
+				#{iconId,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="gfBrandList != null">
+				#{gfBrandList,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="gfGcGoods != null">
+				#{gfGcGoods,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="gfGcList != null">
+				#{gfGcList,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="gfLeftAdv != null">
+				#{gfLeftAdv,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="gfListGoods != null">
+				#{gfListGoods,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="gfRightAdv != null">
+				#{gfRightAdv,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="gfStyle2Goods != null">
+				#{gfStyle2Goods,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.goods.model.GoodsFloorExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_goods_floor
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_goods_floor
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.gfCss != null">
+				gf_css = #{record.gfCss,jdbcType=VARCHAR},
+			</if>
+			<if test="record.gfDisplay != null">
+				gf_display = #{record.gfDisplay,jdbcType=BIT},
+			</if>
+			<if test="record.gfGoodsCount != null">
+				gf_goods_count = #{record.gfGoodsCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.gfLevel != null">
+				gf_level = #{record.gfLevel,jdbcType=INTEGER},
+			</if>
+			<if test="record.gfName != null">
+				gf_name = #{record.gfName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.gfSequence != null">
+				gf_sequence = #{record.gfSequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.gfStyle != null">
+				gf_style = #{record.gfStyle,jdbcType=VARCHAR},
+			</if>
+			<if test="record.iconId != null">
+				icon_id = #{record.iconId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=BIGINT},
+			</if>
+			<if test="record.gfBrandList != null">
+				gf_brand_list = #{record.gfBrandList,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.gfGcGoods != null">
+				gf_gc_goods = #{record.gfGcGoods,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.gfGcList != null">
+				gf_gc_list = #{record.gfGcList,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.gfLeftAdv != null">
+				gf_left_adv = #{record.gfLeftAdv,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.gfListGoods != null">
+				gf_list_goods = #{record.gfListGoods,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.gfRightAdv != null">
+				gf_right_adv = #{record.gfRightAdv,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.gfStyle2Goods != null">
+				gf_style2_goods = #{record.gfStyle2Goods,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_goods_floor
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		gf_css = #{record.gfCss,jdbcType=VARCHAR},
+		gf_display = #{record.gfDisplay,jdbcType=BIT},
+		gf_goods_count = #{record.gfGoodsCount,jdbcType=INTEGER},
+		gf_level = #{record.gfLevel,jdbcType=INTEGER},
+		gf_name = #{record.gfName,jdbcType=VARCHAR},
+		gf_sequence = #{record.gfSequence,jdbcType=INTEGER},
+		gf_style = #{record.gfStyle,jdbcType=VARCHAR},
+		icon_id = #{record.iconId,jdbcType=VARCHAR},
+		parent_id = #{record.parentId,jdbcType=BIGINT},
+		gf_brand_list = #{record.gfBrandList,jdbcType=LONGVARCHAR},
+		gf_gc_goods = #{record.gfGcGoods,jdbcType=LONGVARCHAR},
+		gf_gc_list = #{record.gfGcList,jdbcType=LONGVARCHAR},
+		gf_left_adv = #{record.gfLeftAdv,jdbcType=LONGVARCHAR},
+		gf_list_goods = #{record.gfListGoods,jdbcType=LONGVARCHAR},
+		gf_right_adv = #{record.gfRightAdv,jdbcType=LONGVARCHAR},
+		gf_style2_goods = #{record.gfStyle2Goods,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_goods_floor
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		gf_css = #{record.gfCss,jdbcType=VARCHAR},
+		gf_display = #{record.gfDisplay,jdbcType=BIT},
+		gf_goods_count = #{record.gfGoodsCount,jdbcType=INTEGER},
+		gf_level = #{record.gfLevel,jdbcType=INTEGER},
+		gf_name = #{record.gfName,jdbcType=VARCHAR},
+		gf_sequence = #{record.gfSequence,jdbcType=INTEGER},
+		gf_style = #{record.gfStyle,jdbcType=VARCHAR},
+		icon_id = #{record.iconId,jdbcType=VARCHAR},
+		parent_id = #{record.parentId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.goods.model.GoodsFloor">
+		update shop_goods_floor
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="gfCss != null">
+				gf_css = #{gfCss,jdbcType=VARCHAR},
+			</if>
+			<if test="gfDisplay != null">
+				gf_display = #{gfDisplay,jdbcType=BIT},
+			</if>
+			<if test="gfGoodsCount != null">
+				gf_goods_count = #{gfGoodsCount,jdbcType=INTEGER},
+			</if>
+			<if test="gfLevel != null">
+				gf_level = #{gfLevel,jdbcType=INTEGER},
+			</if>
+			<if test="gfName != null">
+				gf_name = #{gfName,jdbcType=VARCHAR},
+			</if>
+			<if test="gfSequence != null">
+				gf_sequence = #{gfSequence,jdbcType=INTEGER},
+			</if>
+			<if test="gfStyle != null">
+				gf_style = #{gfStyle,jdbcType=VARCHAR},
+			</if>
+			<if test="iconId != null">
+				icon_id = #{iconId,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="gfBrandList != null">
+				gf_brand_list = #{gfBrandList,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="gfGcGoods != null">
+				gf_gc_goods = #{gfGcGoods,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="gfGcList != null">
+				gf_gc_list = #{gfGcList,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="gfLeftAdv != null">
+				gf_left_adv = #{gfLeftAdv,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="gfListGoods != null">
+				gf_list_goods = #{gfListGoods,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="gfRightAdv != null">
+				gf_right_adv = #{gfRightAdv,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="gfStyle2Goods != null">
+				gf_style2_goods = #{gfStyle2Goods,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.goods.model.GoodsFloor">
+		update shop_goods_floor
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		gf_css = #{gfCss,jdbcType=VARCHAR},
+		gf_display = #{gfDisplay,jdbcType=BIT},
+		gf_goods_count = #{gfGoodsCount,jdbcType=INTEGER},
+		gf_level = #{gfLevel,jdbcType=INTEGER},
+		gf_name = #{gfName,jdbcType=VARCHAR},
+		gf_sequence = #{gfSequence,jdbcType=INTEGER},
+		gf_style = #{gfStyle,jdbcType=VARCHAR},
+		icon_id = #{iconId,jdbcType=VARCHAR},
+		parent_id = #{parentId,jdbcType=BIGINT},
+		gf_brand_list = #{gfBrandList,jdbcType=LONGVARCHAR},
+		gf_gc_goods = #{gfGcGoods,jdbcType=LONGVARCHAR},
+		gf_gc_list = #{gfGcList,jdbcType=LONGVARCHAR},
+		gf_left_adv = #{gfLeftAdv,jdbcType=LONGVARCHAR},
+		gf_list_goods = #{gfListGoods,jdbcType=LONGVARCHAR},
+		gf_right_adv = #{gfRightAdv,jdbcType=LONGVARCHAR},
+		gf_style2_goods = #{gfStyle2Goods,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.goods.model.GoodsFloor">
+		update shop_goods_floor
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		gf_css = #{gfCss,jdbcType=VARCHAR},
+		gf_display = #{gfDisplay,jdbcType=BIT},
+		gf_goods_count = #{gfGoodsCount,jdbcType=INTEGER},
+		gf_level = #{gfLevel,jdbcType=INTEGER},
+		gf_name = #{gfName,jdbcType=VARCHAR},
+		gf_sequence = #{gfSequence,jdbcType=INTEGER},
+		gf_style = #{gfStyle,jdbcType=VARCHAR},
+		icon_id = #{iconId,jdbcType=VARCHAR},
+		parent_id = #{parentId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

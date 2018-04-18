@@ -1,0 +1,1282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.SellerMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.Seller">
+		<id column="uid" property="uid" jdbcType="BIGINT" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="nickname" property="nickname" jdbcType="VARCHAR" />
+		<result column="MSN" property="msn" jdbcType="VARCHAR" />
+		<result column="QQ" property="qq" jdbcType="VARCHAR" />
+		<result column="WW" property="ww" jdbcType="VARCHAR" />
+		<result column="company_address" property="companyAddress"
+			jdbcType="VARCHAR" />
+		<result column="company_name" property="companyName" jdbcType="VARCHAR" />
+		<result column="company_nature" property="companyNature"
+			jdbcType="VARCHAR" />
+		<result column="company_person_num" property="companyPersonNum"
+			jdbcType="VARCHAR" />
+		<result column="company_purpose" property="companyPurpose"
+			jdbcType="VARCHAR" />
+		<result column="company_trade" property="companyTrade"
+			jdbcType="VARCHAR" />
+		<result column="company_url" property="companyUrl" jdbcType="VARCHAR" />
+		<result column="contact_user" property="contactUser" jdbcType="VARCHAR" />
+		<result column="department" property="department" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="report" property="report" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="store_apply_step" property="storeApplyStep"
+			jdbcType="INTEGER" />
+		<result column="telephone" property="telephone" jdbcType="VARCHAR" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="photo_path" property="photoPath" jdbcType="VARCHAR" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="implement_number" property="implementNumber"
+			jdbcType="VARCHAR" />
+			<result column="id" property="id" jdbcType="BIGINT"/>
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.user.model.Seller"
+		extends="BaseResultMap">
+		<result column="staple_gc" property="stapleGc" jdbcType="LONGVARCHAR" />
+		<result column="user_Mark" property="userMark" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<resultMap type="com.sinco.carnation.user.bo.SellerBO" id="BoResultMap"
+		extends="ResultMapWithBLOBs">
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="gc_name" property="gcName" jdbcType="VARCHAR" />
+		<result column="rebateConsumeAmount" property="rebateConsumeAmount" />
+		<result column="rebateFeeAmount" property="rebateFeeAmount" />
+		<result column="userCount" property="userCount" jdbcType="BIGINT" />
+		<association property="store"
+			javaType="com.sinco.carnation.store.model.Store" resultMap="com.sinco.carnation.store.mapper.StoreMapper.BaseResultMap"
+			columnPrefix="ss_">
+		</association>
+	</resultMap>
+
+	<select id="selectSellerRegisterUserCount" resultType="int">
+		SELECT COUNT(0) FROM user_relation
+		WHERE referee_user_id IN(
+		SELECT seller_user_id FROM user_owns WHERE own_operator_id = #{operaid})
+		<if test="startTime != null and startTime != ''">
+			AND DATE_FORMAT(user_relation.create_time ,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{startTime} ,'%Y-%m-%d')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND DATE_FORMAT(user_relation.create_time ,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{endTime} ,'%Y-%m-%d')
+		</if>
+	</select>
+
+	<select id="findSellerMemberById" resultType="int">
+		SELECT COUNT(0) FROM user_relation WHERE seller_user_id = #{sellerId}
+	</select>
+	<select id="findSellerOwnMemberById" resultType="int">
+		SELECT COUNT(0) FROM user_relation r, user_customer c WHERE r.user_id =
+		c.uid AND c.is_deleted = 0 AND r.referee_user_id = #{sellerId}
+	</select>
+	<select id="findSellerOwnSellerById" resultType="int">
+		SELECT COUNT(0) FROM user_relation r, user_seller s WHERE r.user_id = s.uid
+		AND r.referee_user_id = #{sellerId}
+	</select>
+	<select id="findSellerAllOrderCount" resultType="int">
+		SELECT COUNT(0) FROM o2o_group_order o, shop_store s WHERE o.store_id
+		= s.id AND order_status <![CDATA[ >= ]]>
+		20 AND s.create_user_id = #{sellerId}
+	</select>
+	<select id="findSellerWeekOrderCount" resultType="int">
+		SELECT COUNT(0) FROM o2o_group_order o, shop_store s WHERE o.store_id
+		= s.id AND order_status <![CDATA[ >= ]]>
+		20 AND s.create_user_id = #{sellerId} AND
+		DATE_FORMAT(o.add_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+		DATE_FORMAT(DATE_SUB(curdate(),INTERVAL WEEKDAY(curdate())
+		DAY),'%Y-%m-%d') AND DATE_FORMAT(o.add_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+		DATE_FORMAT(DATE_SUB(curdate(),INTERVAL WEEKDAY(curdate())-6
+		DAY),'%Y-%m-%d')
+	</select>
+	<select id="findSellerRebateOrderCount" resultType="java.math.BigDecimal">
+		SELECT SUM(rebate_amount) FROM user_rebate_record WHERE rebate_status = 1
+		AND user_id = #{sellerId} AND rebate_type BETWEEN 100 AND 200
+	</select>
+	<select id="findSellerWeekRebateOrderCount" resultType="java.math.BigDecimal">
+		SELECT SUM(rebate_amount) FROM user_rebate_record WHERE rebate_status
+		= 1 AND user_id = #{sellerId} AND (rebate_type BETWEEN 100 AND 200)
+		AND DATE_FORMAT(create_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+		DATE_FORMAT(DATE_SUB(curdate(),INTERVAL WEEKDAY(curdate())
+		DAY),'%Y-%m-%d') AND DATE_FORMAT(create_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+		DATE_FORMAT(DATE_SUB(curdate(),INTERVAL WEEKDAY(curdate())-6
+		DAY),'%Y-%m-%d')
+	</select>
+	<select id="findSellerMonthRebateOrderCount" resultType="java.math.BigDecimal">
+		SELECT SUM(rebate_amount) FROM user_rebate_record WHERE rebate_status
+		= 1 AND user_id = #{sellerId} AND (rebate_type BETWEEN 100 AND 200)
+		AND DATE_FORMAT(create_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+		CONCAT(DATE_FORMAT(LAST_DAY(now()),'%Y-%m-'),'01') AND
+		DATE_FORMAT(create_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+		LAST_DAY(now())
+	</select>
+
+	<select id="selectOperatorSellerCount" resultType="int">
+		SELECT
+		count(0)
+		FROM
+		user_seller s
+		INNER JOIN shop_store ss ON ss.id = s.store_id
+		INNER JOIN user_owns
+		own ON s.uid = own.seller_user_id
+		WHERE
+		ss.store_status = 15 AND ss.is_o2o = 1
+		<choose>
+			<when test="vo.isOwn == 1">
+				AND own.own_operator_id = #{vo.operatorId}
+			</when>
+			<when test="vo.isOwn == 0">
+				<choose>
+					<when test="vo.userLevel == 1">
+						AND (SELECT count(0) FROM dic_area a WHERE a.id = ss.area_id AND
+						a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+						0
+						AND (own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.userLevel == 2">
+						AND ss.area_id = #{vo.operatorAreaId}
+						AND
+						(own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.userLevel == 3">
+						AND 1=2
+					</when>
+					<when test="vo.userLevel == 7">
+						AND 1=2
+					</when>
+					<when test="vo.userLevel == 8">
+						AND 1=2
+					</when>
+					<when test="vo.userLevel == 9">
+						AND 1=2
+					</when>
+				</choose>
+			</when>
+		</choose>
+
+		<if test="vo.startTime != null and vo.startTime != ''">
+			AND DATE_FORMAT(s.create_time ,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.startTime} ,'%Y-%m-%d')
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+			AND DATE_FORMAT(s.create_time ,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{vo.endTime} ,'%Y-%m-%d')
+		</if>
+	</select>
+	<select id="selectOperatorRegisterSellerCount" resultType="int">
+		SELECT
+		COUNT(0)
+		FROM
+		user_seller us
+		INNER JOIN shop_store s ON s.id = us.store_id
+		INNER JOIN user_owns
+		uo ON us.uid = uo.seller_user_id
+		WHERE uo.own_operator_id =
+		#{vo.operatorUserId} AND s.store_status = 15
+		AND s.is_o2o = 1
+		<if test="vo.startTime != null and vo.startTime != ''">
+			AND DATE_FORMAT(us.create_time ,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.startTime} ,'%Y-%m-%d')
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+			AND DATE_FORMAT(us.create_time ,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{vo.endTime} ,'%Y-%m-%d')
+		</if>
+	</select>
+
+
+	<select id="selectOperatorRegisterGoodsSellerCount" resultType="int">
+		SELECT
+		count(0)
+		FROM
+		user_seller us
+		INNER JOIN shop_store s ON s.id = us.store_id
+		INNER JOIN
+		user_relation r ON us.uid = r.user_id
+		WHERE r.referee_user_id =
+		#{vo.operatorUserId} AND s.store_status = 15
+		AND s.is_shop = 1
+		<if test="vo.startTime != null and vo.startTime != ''">
+			AND DATE_FORMAT(us.create_time ,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.startTime} ,'%Y-%m-%d')
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+			AND DATE_FORMAT(us.create_time ,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{vo.endTime} ,'%Y-%m-%d')
+		</if>
+	</select>
+
+	<select id="selectOperatorSellerPageList" resultMap="BoResultMap">
+		SELECT
+		s.*, ss.store_name as ss_store_name, ss.area_id as ss_area_id,
+		ss.store_address as ss_store_address, gc.gc_name, a.login_name,
+		<!-- (SELECT SUM(rr.rebate_amount) FROM user_rebate_record rr WHERE rr.rebate_status 
+			= 1 AND rr.user_id = #{vo.operatorUserId} AND rr.seller_user_id = s.uid AND 
+			rr.rebate_type BETWEEN 100 AND 200) rebateConsumeAmount, -->
+		(SELECT SUM(rr.rebate_amount) FROM user_rebate_record rr WHERE
+		rr.rebate_status = 1 AND rr.user_id = #{vo.operatorUserId} AND
+		rr.seller_user_id = s.uid AND rr.rebate_type BETWEEN 303 AND 331)
+		rebateFeeAmount
+		FROM
+		user_seller s
+		INNER JOIN shop_store ss ON ss.id = s.store_id
+		INNER JOIN user_owns
+		own ON s.uid = own.seller_user_id
+		INNER JOIN sys_user_account a ON
+		(s.uid = a.uid and a.account_type = 2)
+		LEFT JOIN o2o_group_class gc ON
+		gc.id = ss.group_main_id
+		WHERE
+		ss.store_status = 15
+		<if test="vo.storeName != null and vo.storeName != ''">
+			AND ss.store_name LIKE CONCAT('%',#{vo.storeName},'%')
+		</if>
+		<if test="vo.gcId != null and vo.gcId != ''">
+			AND gc.id = #{vo.gcId}
+		</if>
+		<if test="vo.startTime != null and vo.startTime != ''">
+			AND DATE_FORMAT(s.create_time ,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.startTime} ,'%Y-%m-%d')
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+			AND DATE_FORMAT(s.create_time ,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{vo.endTime} ,'%Y-%m-%d')
+		</if>
+		<choose>
+			<when test="vo.isOwn != null and vo.isOwn != '' and vo.isOwn == 1">
+				AND own.own_operator_id = #{vo.operatorId}
+			</when>
+			<when test="vo.isOwn != null and vo.isOwn != '' and vo.isOwn == 0">
+				<choose>
+					<when test="vo.userLevel == 1">
+						AND (SELECT count(0) FROM dic_area a WHERE a.id = ss.area_id AND
+						a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+						0
+						AND (own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.userLevel == 2">
+						AND ss.area_id = #{vo.operatorAreaId}
+						AND
+						(own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.userLevel == 3">
+						AND 1=2
+					</when>
+					<when test="vo.userLevel == 7">
+						AND 1=2
+					</when>
+					<when test="vo.userLevel == 8">
+						AND 1=2
+					</when>
+					<when test="vo.userLevel == 9">
+						AND 1=2
+					</when>
+				</choose>
+			</when>
+			<otherwise>
+				<choose>
+					<when test="vo.userLevel == 1">
+						AND (SELECT count(0) FROM dic_area a WHERE a.id = ss.area_id AND
+						a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+						0
+					</when>
+					<when test="vo.userLevel == 2">
+						AND (ss.area_id = #{vo.operatorAreaId}
+						OR
+						(own.own_operator_id = #{vo.operatorId}))
+					</when>
+					<when test="vo.userLevel == 3">
+						AND own.own_operator_id = #{vo.operatorId}
+					</when>
+					<when test="vo.userLevel == 7">
+						AND own.own_operator_id = #{vo.operatorId}
+					</when>
+					<when test="vo.userLevel == 8">
+						AND own.own_operator_id = #{vo.operatorId}
+					</when>
+					<when test="vo.userLevel == 9">
+						AND own.own_operator_id = #{vo.operatorId}
+					</when>
+				</choose>
+			</otherwise>
+		</choose>
+		ORDER BY s.uid DESC
+	</select>
+	<!-- 这里没有返利计算，比三个个方法简单 -->
+	<select id="selectOperatorSellerSimplePageList" resultMap="BoResultMap">
+		SELECT
+		s.*, ss.store_name as ss_store_name, ss.area_id as ss_area_id,
+		ss.store_address as ss_store_address, gc.gc_name,
+		a.login_name
+		FROM
+		user_seller s
+		INNER JOIN shop_store ss ON ss.id = s.store_id
+		INNER JOIN user_owns
+		own ON s.uid = own.seller_user_id
+		INNER JOIN sys_user_account a ON
+		(s.uid = a.uid and a.account_type =2)
+		LEFT JOIN o2o_group_class gc ON
+		gc.id = ss.group_main_id
+		WHERE
+		ss.store_status = 15
+		<if test="vo.storeName != null and vo.storeName != ''">
+			AND ss.store_name LIKE CONCAT('%',#{vo.storeName},'%')
+		</if>
+		<if test="vo.gcId != null and vo.gcId != ''">
+			AND gc.id = #{vo.gcId}
+		</if>
+		<if test="vo.startTime != null and vo.startTime != ''">
+			AND DATE_FORMAT(s.create_time ,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.startTime} ,'%Y-%m-%d')
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+			AND DATE_FORMAT(s.create_time ,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{vo.endTime} ,'%Y-%m-%d')
+		</if>
+		<choose>
+			<when test="vo.isOwn != null and vo.isOwn != '' and vo.isOwn == 1">
+				AND own.own_operator_id = #{vo.operatorId}
+			</when>
+			<when test="vo.isOwn != null and vo.isOwn != '' and vo.isOwn == 0">
+				<choose>
+					<when test="vo.userLevel == 1">
+						AND (SELECT count(0) FROM dic_area a WHERE a.id = ss.area_id AND
+						a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+						0
+						AND (own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.userLevel == 2">
+						AND ss.area_id = #{vo.operatorAreaId}
+						AND
+						(own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.userLevel == 3">
+						AND 1=2
+					</when>
+					<when test="vo.userLevel == 7">
+						AND 1=2
+					</when>
+					<when test="vo.userLevel == 8">
+						AND 1=2
+					</when>
+					<when test="vo.userLevel == 9">
+						AND 1=2
+					</when>
+				</choose>
+			</when>
+			<otherwise>
+				<choose>
+					<when test="vo.userLevel == 1">
+						AND (SELECT count(0) FROM dic_area a WHERE a.id = ss.area_id AND
+						a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+						0
+					</when>
+					<when test="vo.userLevel == 2">
+						AND (ss.area_id = #{vo.operatorAreaId}
+						OR
+						(own.own_operator_id = #{vo.operatorId}))
+					</when>
+					<when test="vo.userLevel == 3">
+						AND own.own_operator_id = #{vo.operatorId}
+					</when>
+					<when test="vo.userLevel == 7">
+						AND own.own_operator_id = #{vo.operatorId}
+					</when>
+					<when test="vo.userLevel == 8">
+						AND own.own_operator_id = #{vo.operatorId}
+					</when>
+					<when test="vo.userLevel == 9">
+						AND own.own_operator_id = #{vo.operatorId}
+					</when>
+				</choose>
+			</otherwise>
+		</choose>
+		ORDER BY s.uid DESC
+	</select>
+
+	<select id="selectOperatorRegisterSellerPageList" resultMap="BoResultMap">
+		SELECT
+		us.*, a.login_name, c.gc_name, s.area_id as ss_area_id, s.store_name
+		ss_store_name, s.store_address ss_store_address, s.id ss_id,
+		(SELECT COUNT(0) FROM user_relation r2 WHERE r2.seller_user_id = us.uid)
+		userCount,
+		(SELECT SUM(rr.rebate_amount) FROM user_rebate_record rr WHERE
+		rr.rebate_status = 1 AND rr.user_id = #{vo.operatorUserId} AND
+		rr.seller_user_id = us.uid AND rr.rebate_type BETWEEN 100 AND 200)
+		rebateConsumeAmount
+		FROM
+		user_seller us
+		INNER JOIN shop_store s ON s.id = us.store_id
+		INNER JOIN
+		user_relation r ON us.uid = r.user_id
+		INNER JOIN sys_user_account a ON
+		(us.uid = a.uid and a.account_type=2)
+		LEFT JOIN o2o_group_class c ON
+		c.id = s.group_main_id
+		WHERE r.referee_user_id = #{vo.operatorUserId}
+		AND s.store_status = 15
+		AND s.is_o2o = 1
+		<if test="vo.storeName != null and vo.storeName != ''">
+			AND s.store_name LIKE CONCAT('%',#{vo.storeName},'%')
+		</if>
+		<if test="vo.isOwn != null and vo.isOwn != ''">
+			<choose>
+				<when test="vo.isOwn == 0">
+					<choose>
+						<when test="vo.userLevel == 1">
+							AND (SELECT count(0) FROM dic_area a WHERE a.id = s.area_id AND
+							a.parent_id = #{vo.operatorAreaId}) <![CDATA[ = ]]>
+							0
+						</when>
+						<otherwise>
+							AND (SELECT count(0) FROM dic_area a WHERE a.id =
+							#{vo.operatorAreaId}) <![CDATA[ = ]]>
+							0
+						</otherwise>
+					</choose>
+				</when>
+				<when test="vo.isOwn == 1">
+					<choose>
+						<when test="vo.userLevel == 1">
+							AND (SELECT count(0) FROM dic_area a WHERE a.id = s.area_id AND
+							a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+							0
+						</when>
+						<otherwise>
+							AND (SELECT count(0) FROM dic_area a WHERE a.id =
+							#{vo.operatorAreaId}) <![CDATA[ > ]]>
+							0
+						</otherwise>
+					</choose>
+				</when>
+			</choose>
+		</if>
+		ORDER BY us.create_time DESC
+	</select>
+	<select id="findSessionById" resultMap="BoResultMap">
+		SELECT
+		us.*, ss.store_status as ss_store_status
+		FROM
+		user_seller us
+		LEFT JOIN shop_store ss ON us.store_id = ss.id
+		WHERE
+		us.uid=#{uid}
+		<if test="group != null">
+			AND ss.is_o2o = #{group}
+		</if>
+		<if test="shop != null">
+			AND ss.is_shop = #{shop}
+		</if>
+		
+	</select>
+
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		uid, user_name, name, nickname, MSN, QQ, WW, company_address,
+		company_name, company_nature, company_person_num,
+		company_purpose, company_trade, company_url, contact_user, department, email, mobile,
+		report, status, store_apply_step, telephone, parent_id, photo_path,
+		store_id,implement_number,id
+	</sql>
+	<sql id="Blob_Column_List">
+		staple_gc, user_Mark
+	</sql>
+	<sql id="BO_Column_List">
+		us.user_name, us.name, us.nickname, us.MSN, us.QQ, us.WW, us.company_address,
+		us.company_name, us.company_nature,
+		us.company_person_num, us.company_purpose, us.company_trade, us.company_url,
+		us.contact_user, us.department, us.email, us.mobile,
+		us.report, us.status, us.store_apply_step, us.telephone, us.parent_id,
+		us.photo_path, us.store_id, us.staple_gc, us.user_Mark,
+		sua.login_name , sua.uid
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.user.model.SellerExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_seller
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="selectByStore" resultMap="BoResultMap">
+		select * from user_seller
+		where store_id=#{storeId}
+	</select>
+
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.user.model.SellerExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_seller
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BoResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_seller
+		where uid = #{uid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_seller
+		where uid = #{uid,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.SellerExample">
+		delete from user_seller
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.Seller">
+		insert into user_seller (uid, user_name, name, nickname, MSN, QQ,
+		WW, company_address, company_name,
+		company_nature, company_person_num, company_purpose,
+		company_trade, company_url, contact_user,
+		department, email, mobile,
+		report, status, store_apply_step,
+		telephone, parent_id, photo_path,
+		store_id, staple_gc, user_Mark
+		)
+		values (#{uid,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR},
+		#{msn,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR},
+		#{ww,jdbcType=VARCHAR}, #{companyAddress,jdbcType=VARCHAR},
+		#{companyName,jdbcType=VARCHAR},
+		#{companyNature,jdbcType=VARCHAR}, #{companyPersonNum,jdbcType=VARCHAR},
+		#{companyPurpose,jdbcType=VARCHAR},
+		#{companyTrade,jdbcType=VARCHAR}, #{companyUrl,jdbcType=VARCHAR}, #{contactUser,jdbcType=VARCHAR},
+		#{department,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+		#{mobile,jdbcType=VARCHAR},
+		#{report,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{storeApplyStep,jdbcType=INTEGER},
+		#{telephone,jdbcType=VARCHAR}, #{parentId,jdbcType=BIGINT},
+		#{photoPath,jdbcType=VARCHAR},
+		#{storeId,jdbcType=BIGINT}, #{stapleGc,jdbcType=LONGVARCHAR}, #{userMark,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.Seller">
+		insert into user_seller
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="nickname != null">
+				nickname,
+			</if>
+			<if test="msn != null">
+				MSN,
+			</if>
+			<if test="qq != null">
+				QQ,
+			</if>
+			<if test="ww != null">
+				WW,
+			</if>
+			<if test="companyAddress != null">
+				company_address,
+			</if>
+			<if test="companyName != null">
+				company_name,
+			</if>
+			<if test="companyNature != null">
+				company_nature,
+			</if>
+			<if test="companyPersonNum != null">
+				company_person_num,
+			</if>
+			<if test="companyPurpose != null">
+				company_purpose,
+			</if>
+			<if test="companyTrade != null">
+				company_trade,
+			</if>
+			<if test="companyUrl != null">
+				company_url,
+			</if>
+			<if test="contactUser != null">
+				contact_user,
+			</if>
+			<if test="department != null">
+				department,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="report != null">
+				report,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="storeApplyStep != null">
+				store_apply_step,
+			</if>
+			<if test="telephone != null">
+				telephone,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="photoPath != null">
+				photo_path,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="stapleGc != null">
+				staple_gc,
+			</if>
+			<if test="userMark != null">
+				user_Mark,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				#{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="msn != null">
+				#{msn,jdbcType=VARCHAR},
+			</if>
+			<if test="qq != null">
+				#{qq,jdbcType=VARCHAR},
+			</if>
+			<if test="ww != null">
+				#{ww,jdbcType=VARCHAR},
+			</if>
+			<if test="companyAddress != null">
+				#{companyAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="companyName != null">
+				#{companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="companyNature != null">
+				#{companyNature,jdbcType=VARCHAR},
+			</if>
+			<if test="companyPersonNum != null">
+				#{companyPersonNum,jdbcType=VARCHAR},
+			</if>
+			<if test="companyPurpose != null">
+				#{companyPurpose,jdbcType=VARCHAR},
+			</if>
+			<if test="companyTrade != null">
+				#{companyTrade,jdbcType=VARCHAR},
+			</if>
+			<if test="companyUrl != null">
+				#{companyUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="contactUser != null">
+				#{contactUser,jdbcType=VARCHAR},
+			</if>
+			<if test="department != null">
+				#{department,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="report != null">
+				#{report,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="storeApplyStep != null">
+				#{storeApplyStep,jdbcType=INTEGER},
+			</if>
+			<if test="telephone != null">
+				#{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="photoPath != null">
+				#{photoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="stapleGc != null">
+				#{stapleGc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="userMark != null">
+				#{userMark,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.SellerExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_seller
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_seller
+		<set>
+			<if test="record.uid != null">
+				uid = #{record.uid,jdbcType=BIGINT},
+			</if>
+			<if test="record.userName != null">
+				user_name = #{record.userName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.nickname != null">
+				nickname = #{record.nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="record.msn != null">
+				MSN = #{record.msn,jdbcType=VARCHAR},
+			</if>
+			<if test="record.qq != null">
+				QQ = #{record.qq,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ww != null">
+				WW = #{record.ww,jdbcType=VARCHAR},
+			</if>
+			<if test="record.companyAddress != null">
+				company_address = #{record.companyAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="record.companyName != null">
+				company_name = #{record.companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.companyNature != null">
+				company_nature = #{record.companyNature,jdbcType=VARCHAR},
+			</if>
+			<if test="record.companyPersonNum != null">
+				company_person_num = #{record.companyPersonNum,jdbcType=VARCHAR},
+			</if>
+			<if test="record.companyPurpose != null">
+				company_purpose = #{record.companyPurpose,jdbcType=VARCHAR},
+			</if>
+			<if test="record.companyTrade != null">
+				company_trade = #{record.companyTrade,jdbcType=VARCHAR},
+			</if>
+			<if test="record.companyUrl != null">
+				company_url = #{record.companyUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.contactUser != null">
+				contact_user = #{record.contactUser,jdbcType=VARCHAR},
+			</if>
+			<if test="record.department != null">
+				department = #{record.department,jdbcType=VARCHAR},
+			</if>
+			<if test="record.email != null">
+				email = #{record.email,jdbcType=VARCHAR},
+			</if>
+			<if test="record.mobile != null">
+				mobile = #{record.mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.report != null">
+				report = #{record.report,jdbcType=INTEGER},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.storeApplyStep != null">
+				store_apply_step = #{record.storeApplyStep,jdbcType=INTEGER},
+			</if>
+			<if test="record.telephone != null">
+				telephone = #{record.telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=BIGINT},
+			</if>
+			<if test="record.photoPath != null">
+				photo_path = #{record.photoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.stapleGc != null">
+				staple_gc = #{record.stapleGc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.userMark != null">
+				user_Mark = #{record.userMark,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update user_seller
+		set uid = #{record.uid,jdbcType=BIGINT},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		name = #{record.name,jdbcType=VARCHAR},
+		nickname = #{record.nickname,jdbcType=VARCHAR},
+		MSN = #{record.msn,jdbcType=VARCHAR},
+		QQ = #{record.qq,jdbcType=VARCHAR},
+		WW = #{record.ww,jdbcType=VARCHAR},
+		company_address = #{record.companyAddress,jdbcType=VARCHAR},
+		company_name = #{record.companyName,jdbcType=VARCHAR},
+		company_nature = #{record.companyNature,jdbcType=VARCHAR},
+		company_person_num = #{record.companyPersonNum,jdbcType=VARCHAR},
+		company_purpose = #{record.companyPurpose,jdbcType=VARCHAR},
+		company_trade = #{record.companyTrade,jdbcType=VARCHAR},
+		company_url = #{record.companyUrl,jdbcType=VARCHAR},
+		contact_user = #{record.contactUser,jdbcType=VARCHAR},
+		department = #{record.department,jdbcType=VARCHAR},
+		email = #{record.email,jdbcType=VARCHAR},
+		mobile = #{record.mobile,jdbcType=VARCHAR},
+		report = #{record.report,jdbcType=INTEGER},
+		status = #{record.status,jdbcType=INTEGER},
+		store_apply_step = #{record.storeApplyStep,jdbcType=INTEGER},
+		telephone = #{record.telephone,jdbcType=VARCHAR},
+		parent_id = #{record.parentId,jdbcType=BIGINT},
+		photo_path = #{record.photoPath,jdbcType=VARCHAR},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		staple_gc = #{record.stapleGc,jdbcType=LONGVARCHAR},
+		user_Mark = #{record.userMark,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_seller
+		set uid = #{record.uid,jdbcType=BIGINT},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		name = #{record.name,jdbcType=VARCHAR},
+		nickname = #{record.nickname,jdbcType=VARCHAR},
+		MSN = #{record.msn,jdbcType=VARCHAR},
+		QQ = #{record.qq,jdbcType=VARCHAR},
+		WW = #{record.ww,jdbcType=VARCHAR},
+		company_address = #{record.companyAddress,jdbcType=VARCHAR},
+		company_name = #{record.companyName,jdbcType=VARCHAR},
+		company_nature = #{record.companyNature,jdbcType=VARCHAR},
+		company_person_num = #{record.companyPersonNum,jdbcType=VARCHAR},
+		company_purpose = #{record.companyPurpose,jdbcType=VARCHAR},
+		company_trade = #{record.companyTrade,jdbcType=VARCHAR},
+		company_url = #{record.companyUrl,jdbcType=VARCHAR},
+		contact_user = #{record.contactUser,jdbcType=VARCHAR},
+		department = #{record.department,jdbcType=VARCHAR},
+		email = #{record.email,jdbcType=VARCHAR},
+		mobile = #{record.mobile,jdbcType=VARCHAR},
+		report = #{record.report,jdbcType=INTEGER},
+		status = #{record.status,jdbcType=INTEGER},
+		store_apply_step = #{record.storeApplyStep,jdbcType=INTEGER},
+		telephone = #{record.telephone,jdbcType=VARCHAR},
+		parent_id = #{record.parentId,jdbcType=BIGINT},
+		photo_path = #{record.photoPath,jdbcType=VARCHAR},
+		store_id = #{record.storeId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.Seller">
+		update user_seller
+		<set>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				nickname = #{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="msn != null">
+				MSN = #{msn,jdbcType=VARCHAR},
+			</if>
+			<if test="qq != null">
+				QQ = #{qq,jdbcType=VARCHAR},
+			</if>
+			<if test="ww != null">
+				WW = #{ww,jdbcType=VARCHAR},
+			</if>
+			<if test="companyAddress != null">
+				company_address = #{companyAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="companyName != null">
+				company_name = #{companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="companyNature != null">
+				company_nature = #{companyNature,jdbcType=VARCHAR},
+			</if>
+			<if test="companyPersonNum != null">
+				company_person_num = #{companyPersonNum,jdbcType=VARCHAR},
+			</if>
+			<if test="companyPurpose != null">
+				company_purpose = #{companyPurpose,jdbcType=VARCHAR},
+			</if>
+			<if test="companyTrade != null">
+				company_trade = #{companyTrade,jdbcType=VARCHAR},
+			</if>
+			<if test="companyUrl != null">
+				company_url = #{companyUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="contactUser != null">
+				contact_user = #{contactUser,jdbcType=VARCHAR},
+			</if>
+			<if test="department != null">
+				department = #{department,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="report != null">
+				report = #{report,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="storeApplyStep != null">
+				store_apply_step = #{storeApplyStep,jdbcType=INTEGER},
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="photoPath != null">
+				photo_path = #{photoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="implementNumber != null">
+				implement_number = #{implementNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="stapleGc != null">
+				staple_gc = #{stapleGc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="userMark != null">
+				user_Mark = #{userMark,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByCondition" parameterType="com.sinco.carnation.user.model.Seller">
+		update user_seller
+		<set>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				nickname = #{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="msn != null">
+				MSN = #{msn,jdbcType=VARCHAR},
+			</if>
+			<if test="qq != null">
+				QQ = #{qq,jdbcType=VARCHAR},
+			</if>
+			<if test="ww != null">
+				WW = #{ww,jdbcType=VARCHAR},
+			</if>
+			<if test="companyAddress != null">
+				company_address = #{companyAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="companyName != null">
+				company_name = #{companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="companyNature != null">
+				company_nature = #{companyNature,jdbcType=VARCHAR},
+			</if>
+			<if test="companyPersonNum != null">
+				company_person_num = #{companyPersonNum,jdbcType=VARCHAR},
+			</if>
+			<if test="companyPurpose != null">
+				company_purpose = #{companyPurpose,jdbcType=VARCHAR},
+			</if>
+			<if test="companyTrade != null">
+				company_trade = #{companyTrade,jdbcType=VARCHAR},
+			</if>
+			<if test="companyUrl != null">
+				company_url = #{companyUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="contactUser != null">
+				contact_user = #{contactUser,jdbcType=VARCHAR},
+			</if>
+			<if test="department != null">
+				department = #{department,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="report != null">
+				report = #{report,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="storeApplyStep != null">
+				store_apply_step = #{storeApplyStep,jdbcType=INTEGER},
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="photoPath != null">
+				photo_path = #{photoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="stapleGc != null">
+				staple_gc = #{stapleGc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="userMark != null">
+				user_Mark = #{userMark,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="implementNumber != null">
+				implement_number = #{implementNumber,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where 1=1
+		<if test="uid != null">
+			and uid = #{uid,jdbcType=BIGINT}
+		</if>
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.user.model.Seller">
+		update user_seller
+		set user_name = #{userName,jdbcType=VARCHAR},
+		name = #{name,jdbcType=VARCHAR},
+		nickname = #{nickname,jdbcType=VARCHAR},
+		MSN = #{msn,jdbcType=VARCHAR},
+		QQ = #{qq,jdbcType=VARCHAR},
+		WW = #{ww,jdbcType=VARCHAR},
+		company_address = #{companyAddress,jdbcType=VARCHAR},
+		company_name = #{companyName,jdbcType=VARCHAR},
+		company_nature = #{companyNature,jdbcType=VARCHAR},
+		company_person_num = #{companyPersonNum,jdbcType=VARCHAR},
+		company_purpose = #{companyPurpose,jdbcType=VARCHAR},
+		company_trade = #{companyTrade,jdbcType=VARCHAR},
+		company_url = #{companyUrl,jdbcType=VARCHAR},
+		contact_user = #{contactUser,jdbcType=VARCHAR},
+		department = #{department,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		report = #{report,jdbcType=INTEGER},
+		status = #{status,jdbcType=INTEGER},
+		store_apply_step = #{storeApplyStep,jdbcType=INTEGER},
+		telephone = #{telephone,jdbcType=VARCHAR},
+		parent_id = #{parentId,jdbcType=BIGINT},
+		photo_path = #{photoPath,jdbcType=VARCHAR},
+		store_id = #{storeId,jdbcType=BIGINT},
+		staple_gc = #{stapleGc,jdbcType=LONGVARCHAR},
+		user_Mark = #{userMark,jdbcType=LONGVARCHAR}
+		where uid = #{uid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.Seller">
+		update user_seller
+		set user_name = #{userName,jdbcType=VARCHAR},
+		name = #{name,jdbcType=VARCHAR},
+		nickname = #{nickname,jdbcType=VARCHAR},
+		MSN = #{msn,jdbcType=VARCHAR},
+		QQ = #{qq,jdbcType=VARCHAR},
+		WW = #{ww,jdbcType=VARCHAR},
+		company_address = #{companyAddress,jdbcType=VARCHAR},
+		company_name = #{companyName,jdbcType=VARCHAR},
+		company_nature = #{companyNature,jdbcType=VARCHAR},
+		company_person_num = #{companyPersonNum,jdbcType=VARCHAR},
+		company_purpose = #{companyPurpose,jdbcType=VARCHAR},
+		company_trade = #{companyTrade,jdbcType=VARCHAR},
+		company_url = #{companyUrl,jdbcType=VARCHAR},
+		contact_user = #{contactUser,jdbcType=VARCHAR},
+		department = #{department,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		report = #{report,jdbcType=INTEGER},
+		status = #{status,jdbcType=INTEGER},
+		store_apply_step = #{storeApplyStep,jdbcType=INTEGER},
+		telephone = #{telephone,jdbcType=VARCHAR},
+		parent_id = #{parentId,jdbcType=BIGINT},
+		photo_path = #{photoPath,jdbcType=VARCHAR},
+		store_id = #{storeId,jdbcType=BIGINT}
+		where uid = #{uid,jdbcType=BIGINT}
+	</update>
+	<select id="selectByUsername" resultMap="BoResultMap">
+		SELECT
+		<include refid="BO_Column_List" />
+		FROM sys_user_account sua
+		LEFT JOIN user_seller us ON us.uid = sua.uid
+		WHERE sua.login_name = #{username} and sua.account_type =2
+	</select>
+	<select id="findByUid" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_seller
+		where uid = #{uid}
+	</select>
+
+
+	<select id="selectSellerinUIDList" resultMap="BaseResultMap">
+		SELECT
+		uid,
+		user_name,
+		name,
+		nickname,
+		status,
+		store_id,
+		implement_number
+		from
+		user_seller
+		where
+		uid in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="sellerIsO2oByUid" resultType="java.lang.Integer">
+		SELECT ss.is_o2o FROM `user_seller` us
+		LEFT JOIN `shop_store` ss ON us.store_id = ss.id
+		WHERE uid = #{uid}
+		LIMIT 0,1
+	</select>
+	
+	<select id="sellerIsB2CByUid" resultType="java.lang.Integer">
+		SELECT ss.is_shop FROM `user_seller` us
+		LEFT JOIN `shop_store` ss ON us.store_id = ss.id
+		WHERE uid = #{uid}
+		LIMIT 0,1
+	</select>
+	
+	<select id="listAllSeller" resultMap="ResultMapWithBLOBs">
+		select uid from user_seller order by uid desc
+	</select>
+	
+	<select id="findSellerByUIdList" resultMap="BaseResultMap">
+		SELECT
+		us.*, ss.store_status as ss_store_status
+		FROM
+		user_seller us
+		LEFT JOIN shop_store ss ON us.store_id = ss.id
+		WHERE us.uid=#{uid}
+	</select>
+</mapper>

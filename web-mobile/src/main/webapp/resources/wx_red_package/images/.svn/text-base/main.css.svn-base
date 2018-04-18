@@ -1,0 +1,63 @@
+@charset "utf-8";
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,
+form,fieldset,input,textarea,p,blockquote,th,td,section,canvas {
+    padding: 0;
+    margin: 0;
+}
+li{ list-style: none;}
+
+html,body {
+    font-size: 22px;
+    color: #000;
+    font-family: 'Microsoft YaHei', Arial;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
+    -webkit-touch-callout:none; /* 禁用长触弹出的下载图片菜单 */
+    -webkit-user-select:none; /* 禁用长触选择文字等功能 */
+}
+
+.hide{ display: none;}
+
+.main{ width: 100%; height: auto; position: relative;overflow-x: hidden;}
+/*.main .top{ width: 100%; height: 67px; border: 1px solid #e8e7ec; background: #f0eff5;}*/
+/*.top .tct{ width: 80%; height: 42px; border: 1px solid #e8e7ec; border-radius:5px; background: #FFFFFF;margin: 0 auto;}*/
+
+.content{width: 100%; height: auto;overflow-x: hidden;}
+.content .message{width: 100%; height: 107px; position: relative;}
+.message>div{position: relative;}
+.message .head{margin:13px 0 0 15px; float: left;}
+.message .text{margin: 16px 0 0 17px; float: left;}
+.message .time{position: absolute!important; right: 16px; top: 24px; color: #787878;}
+/*.message .line{background: url('../images/line.jpg'); background-repeat: repeat-x width: 90%; height: 1px; top: 105px; left: 13px;}*/
+.message hr{width: 90%;position: relative; color: #ededed; border-width: thin;}
+.message .num{ position: absolute; margin: 0 0 0 77px;}
+
+.message .text .name{font-size: 26px}
+.message .text .name2{font-size: 26px;color:#07286a;}
+.message .text .hua{font-size: 22px; color: #787878; margin: 10px 0 0 0;}
+.message .text .hua2{font-size: 22px; color: #ac0000; margin: 10px 0 0 0;}
+
+.kong{width: 100%; height: 180px;}
+.top{margin:0 0 0 -320px; left: 50%; height: 67px; position: relative;}
+.bottom{margin:0 0 0 -320px; position: fixed; left: 50%; bottom: 0px; height: 76px;}
+
+/*分享浮层*/
+.sharemask{ width: 100%; height: 100%; background: rgba(0,0,0,0.7); position: absolute; left: 0; top: 0;}
+.sharemask img{ display: block; position: absolute; right: 35px; top: 5px;}
+/*分享浮层*/
+
+/*音乐按钮*/
+.musicicon{ background: url("../images/musicicon.png") no-repeat; width: 42px; height: 43px; position: absolute; top: 20px; right: 20px;}
+/*按钮旋转*/
+.musicrotate{-webkit-animation: xuanzhuan 5s infinite linear; animation: xuanzhuan 5s infinite linear;}
+@keyframes xuanzhuan {
+    0% { transform: rotate(0deg)}
+    100% { transform: rotate(360deg)}
+}
+@-webkit-keyframes xuanzhuan {
+    0% { -webkit-transform: rotate(0deg)}
+    100% { -webkit-transform: rotate(360deg)}
+}
+/*按钮旋转*/

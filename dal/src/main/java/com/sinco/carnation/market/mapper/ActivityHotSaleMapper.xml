@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.market.mapper.ActivityHotSaleMapper" >
+  <resultMap id="BaseResultMap" type="com.sinco.carnation.market.model.ActivityHotSale" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="hot_name" property="hotName" jdbcType="VARCHAR" />
+    <result column="first_image" property="firstImage" jdbcType="VARCHAR" />
+    <result column="head_image" property="headImage" jdbcType="VARCHAR" />
+    <result column="foot_image" property="footImage" jdbcType="VARCHAR" />
+    <result column="vcode" property="vcode" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="is_enabled" property="isEnabled" jdbcType="TINYINT" />
+    <result column="create_by" property="createBy" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="BIGINT" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="delete_status" property="deleteStatus" jdbcType="TINYINT" />
+    <result column="act_type" property="actType" jdbcType="VARCHAR" />
+    <result column="backgroundcolor" property="backgroundcolor" jdbcType="VARCHAR" />
+    <result column="ads_url" property="adsUrl" jdbcType="VARCHAR" />
+    <result column="image_size" property="imageSize" jdbcType="BIGINT" />
+    <result column="update_mark" property="updateMark" jdbcType="INTEGER" />
+    <result column="alter_pic" property="alterPic" jdbcType="VARCHAR" />
+    <result column="first_open" property="firstOpen" jdbcType="BIT" />
+    <result column="custom_open" property="customOpen" jdbcType="BIT" />
+    <result column="float_pic" property="floatPic" jdbcType="VARCHAR" />
+    <result column="float_pic_show" property="floatPicShow" jdbcType="BIT" />
+    <result column="open_start_time" property="openStartTime" jdbcType="INTEGER" />
+    <result column="open_end_time" property="openEndTime" jdbcType="INTEGER" />
+  </resultMap>    
+  
+  <resultMap id="activityHotSaleGoodsInfoResultMap" type="com.sinco.carnation.market.bo.ActivityHotSaleGoodsInfoBO" >
+    <id column="goodsId" property="goodsId" jdbcType="BIGINT" />
+     <result column="adId" property="adId" jdbcType="BIGINT" />
+    <result column="goods_current_price" property="goodsCurrentPrice" jdbcType="DECIMAL" />
+    <result column="goods_mobile_price" property="goodsMobilePrice" jdbcType="DECIMAL" />
+    <result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+    <result column="ad_title" property="adTitle" jdbcType="VARCHAR" />
+    <result column="ad_img_path" property="adImgPath" jdbcType="VARCHAR" />
+    <result column="goods_salenum" property="goodsSalenum" jdbcType="INTEGER" />
+    <result column="goods_inventory" property="goodsInventory" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="BOResultMap" type="com.sinco.carnation.market.bo.ActivityHotSaleBO" extends="BaseResultMap" />
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, hot_name, first_image, head_image, foot_image, vcode, start_time, end_time, is_enabled, 
+    create_by, create_time, modify_by, modify_time, delete_status, act_type, backgroundcolor, 
+    ads_url, image_size, update_mark, alter_pic, first_open, custom_open, float_pic, 
+    float_pic_show, open_start_time, open_end_time
+  </sql>
+  <select id="selectByExample" parameterType="com.sinco.carnation.market.model.ActivityHotSaleExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from act_app_hot_sale
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      limit ${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from act_app_hot_sale
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from act_app_hot_sale
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.market.model.ActivityHotSaleExample" >
+    delete from act_app_hot_sale
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinco.carnation.market.model.ActivityHotSale" useGeneratedKeys="true" keyProperty="id" >
+    insert into act_app_hot_sale (id, hot_name, first_image, 
+      head_image, foot_image, vcode, 
+      start_time, end_time, is_enabled, 
+      create_by, create_time, modify_by, 
+      modify_time, delete_status, act_type, 
+      backgroundcolor, ads_url, image_size, 
+      update_mark, alter_pic, first_open, 
+      custom_open, float_pic, float_pic_show, 
+      open_start_time, open_end_time)
+    values (#{id,jdbcType=BIGINT}, #{hotName,jdbcType=VARCHAR}, #{firstImage,jdbcType=VARCHAR}, 
+      #{headImage,jdbcType=VARCHAR}, #{footImage,jdbcType=VARCHAR}, #{vcode,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{isEnabled,jdbcType=TINYINT}, 
+      #{createBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=BIGINT}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{deleteStatus,jdbcType=TINYINT}, #{actType,jdbcType=VARCHAR}, 
+      #{backgroundcolor,jdbcType=VARCHAR}, #{adsUrl,jdbcType=VARCHAR}, #{imageSize,jdbcType=BIGINT}, 
+      #{updateMark,jdbcType=INTEGER}, #{alterPic,jdbcType=VARCHAR}, #{firstOpen,jdbcType=BIT}, 
+      #{customOpen,jdbcType=BIT}, #{floatPic,jdbcType=VARCHAR}, #{floatPicShow,jdbcType=BIT}, 
+      #{openStartTime,jdbcType=INTEGER}, #{openEndTime,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinco.carnation.market.model.ActivityHotSale" useGeneratedKeys="true" keyProperty="id" >
+    insert into act_app_hot_sale
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="hotName != null" >
+        hot_name,
+      </if>
+      <if test="firstImage != null" >
+        first_image,
+      </if>
+      <if test="headImage != null" >
+        head_image,
+      </if>
+      <if test="footImage != null" >
+        foot_image,
+      </if>
+      <if test="vcode != null" >
+        vcode,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="isEnabled != null" >
+        is_enabled,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status,
+      </if>
+      <if test="actType != null" >
+        act_type,
+      </if>
+      <if test="backgroundcolor != null" >
+        backgroundcolor,
+      </if>
+      <if test="adsUrl != null" >
+        ads_url,
+      </if>
+      <if test="imageSize != null" >
+        image_size,
+      </if>
+      <if test="updateMark != null" >
+        update_mark,
+      </if>
+      <if test="alterPic != null" >
+        alter_pic,
+      </if>
+      <if test="firstOpen != null" >
+        first_open,
+      </if>
+      <if test="customOpen != null" >
+        custom_open,
+      </if>
+      <if test="floatPic != null" >
+        float_pic,
+      </if>
+      <if test="floatPicShow != null" >
+        float_pic_show,
+      </if>
+      <if test="openStartTime != null" >
+        open_start_time,
+      </if>
+      <if test="openEndTime != null" >
+        open_end_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="hotName != null" >
+        #{hotName,jdbcType=VARCHAR},
+      </if>
+      <if test="firstImage != null" >
+        #{firstImage,jdbcType=VARCHAR},
+      </if>
+      <if test="headImage != null" >
+        #{headImage,jdbcType=VARCHAR},
+      </if>
+      <if test="footImage != null" >
+        #{footImage,jdbcType=VARCHAR},
+      </if>
+      <if test="vcode != null" >
+        #{vcode,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isEnabled != null" >
+        #{isEnabled,jdbcType=TINYINT},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        #{deleteStatus,jdbcType=TINYINT},
+      </if>
+      <if test="actType != null" >
+        #{actType,jdbcType=VARCHAR},
+      </if>
+      <if test="backgroundcolor != null" >
+        #{backgroundcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="adsUrl != null" >
+        #{adsUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageSize != null" >
+        #{imageSize,jdbcType=BIGINT},
+      </if>
+      <if test="updateMark != null" >
+        #{updateMark,jdbcType=INTEGER},
+      </if>
+      <if test="alterPic != null" >
+        #{alterPic,jdbcType=VARCHAR},
+      </if>
+      <if test="firstOpen != null" >
+        #{firstOpen,jdbcType=BIT},
+      </if>
+      <if test="customOpen != null" >
+        #{customOpen,jdbcType=BIT},
+      </if>
+      <if test="floatPic != null" >
+        #{floatPic,jdbcType=VARCHAR},
+      </if>
+      <if test="floatPicShow != null" >
+        #{floatPicShow,jdbcType=BIT},
+      </if>
+      <if test="openStartTime != null" >
+        #{openStartTime,jdbcType=INTEGER},
+      </if>
+      <if test="openEndTime != null" >
+        #{openEndTime,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinco.carnation.market.model.ActivityHotSaleExample" resultType="java.lang.Integer" >
+    select count(*) from act_app_hot_sale
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update act_app_hot_sale
+    <trim prefix="set" suffixOverrides=",">
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.hotName != null" >
+        hot_name = #{record.hotName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstImage != null" >
+        first_image = #{record.firstImage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.headImage != null" >
+        head_image = #{record.headImage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.footImage != null" >
+        foot_image = #{record.footImage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vcode != null" >
+        vcode = #{record.vcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null" >
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null" >
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isEnabled != null" >
+        is_enabled = #{record.isEnabled,jdbcType=TINYINT},
+      </if>
+      <if test="record.createBy != null" >
+        create_by = #{record.createBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyBy != null" >
+        modify_by = #{record.modifyBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifyTime != null" >
+        modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteStatus != null" >
+        delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.actType != null" >
+        act_type = #{record.actType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.backgroundcolor != null" >
+        backgroundcolor = #{record.backgroundcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adsUrl != null" >
+        ads_url = #{record.adsUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imageSize != null" >
+        image_size = #{record.imageSize,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateMark != null" >
+        update_mark = #{record.updateMark,jdbcType=INTEGER},
+      </if>
+      <if test="record.alterPic != null" >
+        alter_pic = #{record.alterPic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstOpen != null" >
+        first_open = #{record.firstOpen,jdbcType=BIT},
+      </if>
+      <if test="record.customOpen != null" >
+        custom_open = #{record.customOpen,jdbcType=BIT},
+      </if>
+      <if test="record.floatPic != null" >
+        float_pic = #{record.floatPic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.floatPicShow != null" >
+        float_pic_show = #{record.floatPicShow,jdbcType=BIT},
+      </if>
+      <if test="record.openStartTime != null" >
+        open_start_time = #{record.openStartTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.openEndTime != null" >
+        open_end_time = #{record.openEndTime,jdbcType=INTEGER},
+      </if>
+    </trim>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update act_app_hot_sale
+    set id = #{record.id,jdbcType=BIGINT},
+      hot_name = #{record.hotName,jdbcType=VARCHAR},
+      first_image = #{record.firstImage,jdbcType=VARCHAR},
+      head_image = #{record.headImage,jdbcType=VARCHAR},
+      foot_image = #{record.footImage,jdbcType=VARCHAR},
+      vcode = #{record.vcode,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      is_enabled = #{record.isEnabled,jdbcType=TINYINT},
+      create_by = #{record.createBy,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      modify_by = #{record.modifyBy,jdbcType=BIGINT},
+      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+      act_type = #{record.actType,jdbcType=VARCHAR},
+      backgroundcolor = #{record.backgroundcolor,jdbcType=VARCHAR},
+      ads_url = #{record.adsUrl,jdbcType=VARCHAR},
+      image_size = #{record.imageSize,jdbcType=BIGINT},
+      update_mark = #{record.updateMark,jdbcType=INTEGER},
+      alter_pic = #{record.alterPic,jdbcType=VARCHAR},
+      first_open = #{record.firstOpen,jdbcType=BIT},
+      custom_open = #{record.customOpen,jdbcType=BIT},
+      float_pic = #{record.floatPic,jdbcType=VARCHAR},
+      float_pic_show = #{record.floatPicShow,jdbcType=BIT},
+      open_start_time = #{record.openStartTime,jdbcType=INTEGER},
+      open_end_time = #{record.openEndTime,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.market.model.ActivityHotSale" >
+    update act_app_hot_sale
+    <trim prefix="set" suffixOverrides=",">
+      <if test="hotName != null" >
+        hot_name = #{hotName,jdbcType=VARCHAR},
+      </if>
+      <if test="firstImage != null" >
+        first_image = #{firstImage,jdbcType=VARCHAR},
+      </if>
+      <if test="headImage != null" >
+        head_image = #{headImage,jdbcType=VARCHAR},
+      </if>
+      <if test="footImage != null" >
+        foot_image = #{footImage,jdbcType=VARCHAR},
+      </if>
+      <if test="vcode != null" >
+        vcode = #{vcode,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isEnabled != null" >
+        is_enabled = #{isEnabled,jdbcType=TINYINT},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status = #{deleteStatus,jdbcType=TINYINT},
+      </if>
+      <if test="actType != null" >
+        act_type = #{actType,jdbcType=VARCHAR},
+      </if>
+      <if test="backgroundcolor != null" >
+        backgroundcolor = #{backgroundcolor,jdbcType=VARCHAR},
+      </if>
+      <if test="adsUrl != null" >
+        ads_url = #{adsUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imageSize != null" >
+        image_size = #{imageSize,jdbcType=BIGINT},
+      </if>
+      <if test="updateMark != null" >
+        update_mark = #{updateMark,jdbcType=INTEGER},
+      </if>
+      <if test="alterPic != null" >
+        alter_pic = #{alterPic,jdbcType=VARCHAR},
+      </if>
+      <if test="firstOpen != null" >
+        first_open = #{firstOpen,jdbcType=BIT},
+      </if>
+      <if test="customOpen != null" >
+        custom_open = #{customOpen,jdbcType=BIT},
+      </if>
+      <if test="floatPic != null" >
+        float_pic = #{floatPic,jdbcType=VARCHAR},
+      </if>
+      <if test="floatPicShow != null" >
+        float_pic_show = #{floatPicShow,jdbcType=BIT},
+      </if>
+      <if test="openStartTime != null" >
+        open_start_time = #{openStartTime,jdbcType=INTEGER},
+      </if>
+      <if test="openEndTime != null" >
+        open_end_time = #{openEndTime,jdbcType=INTEGER},
+      </if>
+    </trim>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.market.model.ActivityHotSale" >
+    update act_app_hot_sale
+    set hot_name = #{hotName,jdbcType=VARCHAR},
+      first_image = #{firstImage,jdbcType=VARCHAR},
+      head_image = #{headImage,jdbcType=VARCHAR},
+      foot_image = #{footImage,jdbcType=VARCHAR},
+      vcode = #{vcode,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      is_enabled = #{isEnabled,jdbcType=TINYINT},
+      create_by = #{createBy,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=BIGINT},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=TINYINT},
+      act_type = #{actType,jdbcType=VARCHAR},
+      backgroundcolor = #{backgroundcolor,jdbcType=VARCHAR},
+      ads_url = #{adsUrl,jdbcType=VARCHAR},
+      image_size = #{imageSize,jdbcType=BIGINT},
+      update_mark = #{updateMark,jdbcType=INTEGER},
+      alter_pic = #{alterPic,jdbcType=VARCHAR},
+      first_open = #{firstOpen,jdbcType=BIT},
+      custom_open = #{customOpen,jdbcType=BIT},
+      float_pic = #{floatPic,jdbcType=VARCHAR},
+      float_pic_show = #{floatPicShow,jdbcType=BIT},
+      open_start_time = #{openStartTime,jdbcType=INTEGER},
+      open_end_time = #{openEndTime,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+   <!--  <select id="findActHotSaleGoodsList" parameterType="map" resultMap="activityHotSaleGoodsInfoResultMap" >
+    
+    SELECT sg.id AS goodsId,sg.goods_current_price,sg.goods_mobile_price,sg.goods_price, ad.ad_title,ad.ad_img_path,
+    	sg.goods_salenum, sg.goods_inventory
+		FROM (SELECT vcode FROM act_app_hot_sale WHERE id = #{id,jdbcType=BIGINT} ) a 
+		LEFT JOIN sns_adv_pos pos ON a.vcode = pos.ap_code
+		LEFT JOIN sns_advert ad ON pos.id = ad.ad_ap_id
+		LEFT JOIN shop_goods sg ON ad.ad_url = sg.id
+		WHERE a.vcode = #{vcode,jdbcType=VARCHAR}
+  </select> -->
+ 
+   
+    <select id="findActHotSaleGoodsListByPage" parameterType="map" resultMap="activityHotSaleGoodsInfoResultMap" >
+    
+    SELECT ad.id as adId ,sg.id AS goodsId,sg.goods_current_price,sg.goods_mobile_price,sg.goods_price, ad.ad_title,sg.goods_main_photo_path as ad_img_path,
+    	sg.goods_salenum, sg.goods_inventory
+		FROM  sns_adv_pos pos
+		LEFT JOIN sns_advert ad ON pos.id = ad.ad_ap_id
+		LEFT JOIN shop_goods sg ON ad.ad_url = sg.id
+		WHERE pos.ap_code = #{vcode,jdbcType=VARCHAR}
+		ORDER BY ad.add_Time DESC
+		
+  </select>
+  
+        <select id="queryActHotSaleGoodsListByPage" parameterType="map" resultMap="activityHotSaleGoodsInfoResultMap" >
+	    
+	    SELECT ad.id as adId , sg.id AS goodsId,sg.goods_current_price,sg.goods_mobile_price,sg.goods_price, ad.ad_title,sg.goods_main_photo_path as ad_img_path,
+	    	sg.goods_salenum, sg.goods_inventory
+			FROM  sns_adv_pos pos
+			LEFT JOIN sns_advert ad ON pos.id = ad.ad_ap_id
+			LEFT JOIN shop_goods sg ON ad.ad_url = sg.id
+			WHERE pos.ap_code = #{vcode,jdbcType=VARCHAR}
+			<if test="maxId != null">
+				AND ad.id <![CDATA[ <= ]]> #{maxId} 
+			</if>
+			ORDER BY ad.add_Time DESC
+			LIMIT #{start}, #{pageSize}
+		
+  	</select>
+    
+   
+   <select id="findAllByPage" resultMap="BOResultMap" >
+  SELECT
+    <include refid="Base_Column_List" />
+    FROM act_app_hot_sale
+    WHERE delete_status = 0 
+    <if test="vo.hotName != null and vo.hotName != '' " >
+    AND hot_name like  "%"#{vo.hotName}"%"
+    </if>
+    <if test="vo.vcode != null and vo.vcode != '' " >
+    AND vcode =#{vo.vcode}
+    </if>
+    <if test="vo.strStartTime != null  and vo.strStartTime != '' " >
+    AND start_time <![CDATA[ >= ]]> #{vo.strStartTime}
+    </if>
+     <if test="vo.strEndTime != null  and vo.strEndTime != '' " >
+    AND end_time <![CDATA[ <= ]]> #{vo.strEndTime}
+    </if>
+      ORDER BY create_time DESC
+  </select>
+  
+  <select id="findByActHotSaleGoodsList" parameterType="com.sinco.carnation.market.model.ActivityHotSale" resultMap="BOResultMap">
+  	SELECT
+    	<include refid="Base_Column_List" />
+    FROM 
+    	act_app_hot_sale
+    WHERE 
+    	delete_status = 0
+    <if test="hotName != null">
+		and hot_name = #{hotName,jdbcType=VARCHAR}
+	</if>
+	<if test="firstImage != null">
+		and first_image = #{firstImage,jdbcType=VARCHAR}
+	</if>
+	<if test="headImage != null">
+		and head_image = #{headImage,jdbcType=VARCHAR}
+	</if>
+	<if test="footImage != null">
+		and foot_image = #{footImage,jdbcType=VARCHAR}
+	</if>
+	<if test="vcode != null">
+		and vcode = #{vcode,jdbcType=VARCHAR}
+	</if>
+	<if test="startTime != null">
+		and start_time = #{startTime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="endTime != null">
+		and end_time = #{endTime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="isEnabled != null">
+		and is_enabled = #{isEnabled,jdbcType=TINYINT}
+	</if>
+	<if test="createBy != null">
+		and create_by = #{createBy,jdbcType=BIGINT}
+	</if>
+	<if test="createTime != null">
+		and create_time = #{createTime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="modifyBy != null">
+		and modify_by = #{modifyBy,jdbcType=BIGINT}
+	</if>
+	<if test="modifyTime != null">
+		and modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="deleteStatus != null">
+		and delete_status = #{deleteStatus,jdbcType=TINYINT}
+	</if>
+	<if test="actType != null">
+		and act_type = #{actType,jdbcType=VARCHAR}
+	</if>
+	<if test="backgroundcolor != null">
+		and backgroundcolor = #{backgroundcolor,jdbcType=VARCHAR}
+	</if>
+	<if test="adsUrl != null">
+		and ads_url = #{adsUrl,jdbcType=VARCHAR}
+	</if>
+	<if test="imageSize != null">
+		and image_size = #{imageSize,jdbcType=BIGINT}
+	</if>
+	<if test="updateMark != null">
+		and update_mark = #{updateMark,jdbcType=INTEGER}
+	</if>
+    order by 
+    	create_time desc
+  </select>
+  
+  <select id="findNewAppHotSaleInfo" resultMap="BOResultMap" >
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM act_app_hot_sale
+    WHERE is_enabled=1 AND delete_status=0 AND vcode=#{vcode} AND start_time &lt;= #{currentTime} AND end_time &gt; #{currentTime} AND (first_open=1 OR (custom_open=1 AND open_start_time &lt;= #{dayOfMinutes} AND open_end_time &gt; #{dayOfMinutes}))
+    LIMIT 1
+  </select>
+  
+</mapper>

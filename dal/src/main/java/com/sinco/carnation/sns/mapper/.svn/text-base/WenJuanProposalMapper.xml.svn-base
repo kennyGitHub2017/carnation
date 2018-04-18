@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.WenJuanProposalMapper">
+
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.WenJuanProposal">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
+		<result column="wj_group_result_id" property="wjGroupResultId"
+			jdbcType="BIGINT" />
+		<result column="proposal_title" property="proposalTitle"
+			jdbcType="VARCHAR" />
+		<result column="proposal_type" property="proposalType"
+			jdbcType="INTEGER" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIGINT" />
+		<result column="describes" property="describes" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sns.bo.WenJuanProposalBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		update_time,
+		create_by,
+		update_by,
+		wj_group_result_id,
+		proposal_title,
+		proposal_type,
+		is_deleted,
+		describes
+	</sql>
+
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.sns.model.WenJuanProposalExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from wj_proposal
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+
+	<select id="selectByWJGroupResultID" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from wj_proposal
+		where
+		1=1
+		and
+		is_deleted = 0
+		and
+		wj_group_result_id = #{resultID,jdbcType=BIGINT}
+	</select>
+
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from wj_proposal
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from wj_proposal
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sns.model.WenJuanProposalExample">
+		delete from wj_proposal
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.WenJuanProposal"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into wj_proposal (id, create_time, update_time,
+		create_by, update_by, wj_group_result_id,
+
+		proposal_title, proposal_type, is_deleted
+		)
+		values (#{id,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT}, #{wjGroupResultId,jdbcType=BIGINT},
+		#{
+		proposalTitle,jdbcType=VARCHAR}, #{proposalType,jdbcType=INTEGER}, #{isDeleted,jdbcType=BIGINT}
+		)
+	</insert>
+
+
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.WenJuanProposal"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into wj_proposal
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="wjGroupResultId != null">
+				wj_group_result_id,
+			</if>
+			<if test="
+proposalTitle != null">
+
+				proposal_title,
+			</if>
+			<if test="proposalType != null">
+				proposal_type,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="wjGroupResultId != null">
+				#{wjGroupResultId,jdbcType=BIGINT},
+			</if>
+			<if test="
+proposalTitle != null">
+				#{
+				proposalTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="proposalType != null">
+				#{proposalType,jdbcType=INTEGER},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sns.model.WenJuanProposalExample"
+		resultType="java.lang.Integer">
+		select count(*) from wj_proposal
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update wj_proposal
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.updateBy != null">
+				update_by = #{record.updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.wjGroupResultId != null">
+				wj_group_result_id = #{record.wjGroupResultId,jdbcType=BIGINT},
+			</if>
+			<if test="record.
+proposalTitle != null">
+
+				proposal_title = #{record.
+				proposalTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="record.proposalType != null">
+				proposal_type = #{record.proposalType,jdbcType=INTEGER},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update wj_proposal
+		set id = #{record.id,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		update_by = #{record.updateBy,jdbcType=BIGINT},
+		wj_group_result_id = #{record.wjGroupResultId,jdbcType=BIGINT},
+
+		proposal_title = #{record.
+		proposalTitle,jdbcType=VARCHAR},
+		proposal_type = #{record.proposalType,jdbcType=INTEGER},
+		is_deleted = #{record.isDeleted,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.WenJuanProposal">
+		update wj_proposal
+		<set>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="wjGroupResultId != null">
+				wj_group_result_id = #{wjGroupResultId,jdbcType=BIGINT},
+			</if>
+			<if test="
+proposalTitle != null">
+
+				proposal_title = #{
+				proposalTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="proposalType != null">
+				proposal_type = #{proposalType,jdbcType=INTEGER},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.WenJuanProposal">
+		update wj_proposal
+		set create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_by = #{createBy,jdbcType=BIGINT},
+		update_by = #{updateBy,jdbcType=BIGINT},
+		wj_group_result_id = #{wjGroupResultId,jdbcType=BIGINT},
+
+		proposal_title = #{
+		proposalTitle,jdbcType=VARCHAR},
+		proposal_type = #{proposalType,jdbcType=INTEGER},
+		is_deleted = #{isDeleted,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="select_proposal_by_groupResultID" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		wj_proposal
+		where
+		1=1
+		and
+		wj_group_result_id = #{id,jdbcType=BIGINT}
+		and
+		is_deleted = 0
+	</select>
+
+	<select id="select_By_groupResultID_Type" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		wj_proposal
+		where
+		1=1
+		and
+		wj_group_result_id = #{groupResultID,jdbcType=BIGINT}
+		<if test="type!=null">
+			and
+			proposal_type = #{type,jdbcType=BIGINT}
+		</if>
+
+		and
+		is_deleted = 0
+	</select>
+
+
+	<select id="select_proposal_By_In_groupResultID" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		wj_proposal
+		where
+		1=1
+		and
+		wj_group_result_id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		and
+		is_deleted = 0
+	</select>
+
+
+</mapper>

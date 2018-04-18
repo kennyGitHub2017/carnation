@@ -1,0 +1,306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js" ></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/plugins/jquery.validatebox.js"></script>
+	
+	
+	<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+	<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+	 
+</head>
+<body>
+	 <div id='opButtonsList' style="padding:5px 5px;">
+	
+	 <form id="searchForm" method="post" action="$!webPath/admin/message_list.htm" >
+	    	<div style="padding:5px 5px;" >
+					<strong>查询：</strong>
+	    			
+	    			<select id="receiveLocation" name="receiveLocation" class="easyui-combobox" name="state" style="width:100px;">
+	    			#foreach($sKey in ${receiveLocationMap.keySet()})
+						<option value="$!sKey" #if($!sKey==$!vo.receiveLocation) selected="true" #end >${receiveLocationMap.get($sKey)}</option>
+					#end
+					</select>
+					&nbsp;&nbsp;
+					<select id="receiveType" name="receiveType" class="easyui-combobox" name="terminalType" style="width:100px;">
+					#foreach($sKey in ${receiveTypeMap.keySet()})
+						<option value="$!sKey" #if($!sKey==$!vo.receiveType) selected="true" #end >${receiveTypeMap.get($sKey)}</option>
+					#end
+					</select>
+					&nbsp;&nbsp;
+					<select id="sendStatus" name="sendStatus" class="easyui-combobox" style="width:100px;">
+					#foreach($sKey in ${sendStatusMap.keySet()})
+						<option value="$!sKey" #if($!sKey==$!vo.sendStatus) selected="true" #end>${sendStatusMap.get($sKey)}</option>
+					#end
+					</select>
+					&nbsp;&nbsp;
+					<select id="topIndex" name="topIndex" class="easyui-combobox" style="width:100px;">
+						<option value="-1" #if($!sKey==$!vo.topIndex) selected="true" #end>是否置顶</option>
+						<option value="1" #if($!sKey==$!vo.topIndex) selected="true" #end>置顶消息</option>
+						<option value="0" #if($!sKey==$!vo.topIndex) selected="true" #end>未置顶消息</option>
+					</select>
+					&nbsp;&nbsp;
+					<input id="title" name="title" value="$!vo.title" class="easyui-textbox" type="text" style="width:100px;" data-options="prompt:'消息标题'"/>
+					&nbsp;&nbsp;
+					<input id="createName" name="createName" value="$!vo.createName" class="easyui-textbox" type="text" style="width:100px;" data-options="prompt:'创建人'"/>
+					&nbsp;&nbsp;
+
+					发送时间：
+					<input id="startTimeStr" name="startTimeStr" value="$!vo.startTimeStr" class="easyui-datetimebox"  style="width:150px"/>
+					<strong>至</strong>
+					<input id="endTimeStr" name="endTimeStr" value="$!vo.endTimeStr" class="easyui-datetimebox"  style="width:150px"/>
+					&nbsp;&nbsp;
+	    			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="formSubmit()">查询</a>
+	    	</div>
+	    	<input type="hidden" id="pageNumber" name="page" value="$!currentPage"></input>
+	    	<input type="hidden" id="pageSize" name="size" value="$!pageSize"></input>
+	</form>
+	    
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="edit(0)">添加</a>
+		<!-- <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="batchSendMsg()">发送</a> -->
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="batchGoTop(true)">置顶</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="batchGoTop(false)">取消置顶</a>
+	</div>
+	<table id="listData" class="easyui-datagrid" 	
+			data-options="collapsible:true,rownumbers:true,remoteSort:false" toolbar="#opButtonsList">
+		<thead>
+			<tr>
+				<th data-options="halign:'center',field:'id',align:'left'" checkbox="true">选择</th>
+				<th data-options="halign:'center',field:'noticeTitle',width:160,align:'left'">通知栏内容</th>
+				<th data-options="halign:'center',field:'title',width:160,align:'left'">消息标题</th>
+				<th data-options="halign:'center',field:'receiveLocation',width:120,align:'left'">发送位置</th>
+				<th data-options="halign:'center',field:'sendStatus',width:120,align:'left'">发送状态</th>
+				<th data-options="halign:'center',field:'sendTime',width:120,align:'left'">发送时间</th>
+				<th data-options="halign:'center',field:'createName',width:100,align:'left'">创建人</th>
+				<th data-options="halign:'center',field:'operate',width:230,align:'center'">操作</th>
+			</tr>
+		</thead>
+	    <tbody>  
+	      #foreach($obj in $objs)
+	        <tr>    
+	        	<td>$!obj.id</td>
+	            <td>$!obj.noticeTitle</td>
+	            <td>$!obj.title</td>
+	            <td>
+	            #foreach($sKey in ${receiveLocationMap.keySet()})
+	            	#if($!sKey==$!obj.receiveLocation) ${receiveLocationMap.get($sKey)} #end	            	
+	            #end
+	            </td>	            
+	            <td>
+	            	#foreach($sKey in ${sendStatusMap.keySet()})
+						#if($!sKey==$!obj.sendStatus) 
+							${sendStatusMap.get($sKey)}
+						#end
+					#end					
+				</td>
+	            <td>$!CommUtil.formatLongDate($!obj.sendTime)</td>	
+	            <td>$!obj.createName</td>
+		        <td>
+			        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit'" onclick="sendMsg($!obj.id)">发送</a>
+			        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit'" onclick="edit($!obj.id)">查看</a>
+			        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="goTop($!obj.id , #if(1==$!obj.topIndex) false #else true #end )">
+			        	#if(1==$!obj.topIndex)取消#end置顶   
+			        	</a>
+			 	</td>
+	   		</tr>
+	      #end
+	      </tbody>
+	</table>
+
+	<div id="listPager" class="easyui-pagination" data-options="total:$!rows,pageSize:$!pageSize,pageNumber:$!currentPage,pageList:[10,20,50,100]" style="background:#efefef;border:1px solid #ccc;"></div> 
+
+</body>
+
+<!-- 弹出层页面 -->
+	<div id="dlg" class="easyui-dialog" data-options="closed:true">
+	</div>
+	
+ 	<script type="text/javascript">	 	
+	    jQuery('#listPager').pagination({
+	    	onSelectPage:function(pageNumber, pageSize){
+	    		jQuery(this).pagination('loading');
+	    		jQuery('#pageNumber').attr("value",pageNumber);
+	    		jQuery('#pageSize').attr("value",pageSize);
+	    		jQuery(this).pagination('loaded');
+				formSubmit();
+	    	},
+	    });
+    function edit(id) {
+    	//	alert(id);
+    	var op = 'add';
+    	if(id > 0){
+    		op = 'modify';
+    	}
+    	jQuery("#dlg").dialog({
+            title: op=='add'?'添加消息':'编辑消息',
+            href:  'message_add.htm?id=' + id,
+            width:'860',
+ 	    	height:'600',
+            top:(jQuery(window).height() - 600) * 0.5,   
+            left:(jQuery(window).width() - 860) * 0.5,
+            iconCls: 'icon-edit',
+            modal: true,
+            closed: false,
+         	onLoad:function(){
+            	loadEditor();
+            	var v = jQuery('input[name="receiveType"]:checked').val();
+    			radioReceiveTypeClick(v);
+            }, 
+            buttons: [{
+				text:'保存',
+				iconCls:'icon-save',
+				handler:function(){
+					var flag =  jQuery('#theForm').form('validate');
+
+					if (flag){
+					    //alert('验证通过！');
+  						editor.sync();  						
+						jQuery("#theForm").submit();
+						jQuery("#dlg").dialog('close');
+						
+					}
+				}
+			},{
+				text:'关闭',
+				iconCls:'icon-cancel',
+				handler:function(){
+					jQuery("#dlg").dialog('close');
+				}
+			}],                
+        });
+    }
+
+    function formSubmit(){
+    	jQuery("#searchForm").submit();
+    }
+    
+    // 获取列表的ID集合
+    function getIds(){
+		var row = jQuery('#listData').datagrid('getSelections');  
+        var i = 0;  
+        var strId = "";  
+        for(i;i<row.length;i++){  
+        	strId += row[i].id;  
+            if(i < row.length-1){  
+            	strId += ',';  
+            }else{  
+                break;  
+            }  
+        }
+        return strId;
+    }
+
+    function del(id){        	
+			jQuery.messager.confirm('确认', '删除后不可恢复，是否继续？', function (r) {
+			    if (r) {
+			    	window.location.href='$!webPath/admin/message_del.htm?id='+ id +'&currentPage=$!currentPage';  
+			    }
+		  });
+		}
+    
+    function batchDel(){
+    	var strId = getIds();
+        if(strId != ''){
+        	del(strId);
+        }
+    }
+
+		// 发送消息
+    function batchSendMsg(){
+		var strId = getIds();
+        if(strId != ''){
+        	sendMsg(strId);
+        }
+        else{
+        	showConfirm("您未选择数据");
+        }
+    }
+
+    // 发送消息
+    function sendMsg(id){
+    	if(showConfirm("您确定发送消息？")){
+			window.location.href = '$!webPath/admin/message_send.htm?id='+ id; 
+    	}
+    }
+
+    function batchGoTop(isTop){
+    	var strId = getIds();
+        if(strId != ''){
+        	goTop(strId,isTop);
+        }
+        else{
+        	showConfirm("您未选择数据");
+        }
+    }
+
+    // 置顶
+    function goTop(id,isTop){
+    		window.location.href =
+    		'$!webPath/admin/message_go_top.htm?id='+ id +'&currentPage=$!currentPage&topIndex=' + (isTop ?'1':'0'); 
+    }
+
+    function showConfirm(msg) {
+		return jQuery.messager.confirm('确认', msg, function (r) {
+		    if (r) {
+		        return true;
+		    }
+		});
+	}
+    
+	 function loadEditor() {
+		
+	    var options = {
+	            cssPath : '$!webPath/resources/editor/themes/default/default.css',
+	            filterMode : true,
+	    		uploadJson:'$!webPath/upload.htm',
+	    		width : '300px',
+	    		height:'400px',
+	    		resizeType: 1,
+	    		syncType:"form",
+	    		afterCreate : function() {
+	    							var self = this;
+	    							self.sync();
+	    						},
+	    		afterChange : function() {
+	    							var self = this;
+	    							self.sync();
+	    						},
+	    		afterBlur:function() {
+	    							var self = this;
+	    							self.sync();
+	    						},
+	    		items:['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+	    			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+	    			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+	    			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+	    			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+	    			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+	    };
+
+	    editor = KindEditor.create('#content', options);
+	}
+	
+	function radioReceiveTypeClick(key){
+		jQuery('#linkUrlDiv').hide();
+		jQuery('#contentDiv').hide();
+
+		if(key == 1){
+
+		}
+		else if (key == 2){
+			jQuery('#linkUrlDiv').show();
+		}
+		else if(key == 3){
+			jQuery('#contentDiv').show();
+		}
+	}
+</script>
+  
+</html>

@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.goods.mapper.GoodsTypePropertyMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.goods.model.GoodsTypeProperty">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="display" property="display" jdbcType="BIT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="goods_Type_id" property="goodsTypeId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.sinco.carnation.goods.model.GoodsTypeProperty" extends="BaseResultMap">
+		<result column="hc_value" property="hcValue" jdbcType="LONGVARCHAR" />
+		<result column="value" property="value" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.goods.bo.GoodsTypePropertyBO" extends="ResultMapWithBLOBs">
+
+	</resultMap>
+
+	<select id="selectBOByExample" resultMap="BOResultMap"
+		parameterType="com.sinco.carnation.goods.model.GoodsTypePropertyExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods_type_property
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, display, name, sequence, goods_Type_id
+	</sql>
+	<sql id="Blob_Column_List">
+		hc_value, value
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.goods.model.GoodsTypePropertyExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods_type_property
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.goods.model.GoodsTypePropertyExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_goods_type_property
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods_type_property
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_goods_type_property
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.goods.model.GoodsTypePropertyExample">
+		delete from shop_goods_type_property
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.goods.model.GoodsTypeProperty">
+		insert into shop_goods_type_property (id, add_Time, delete_Status,
+		display, name, sequence,
+		goods_Type_id, hc_value, value
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{display,jdbcType=BIT}, #{name,jdbcType=VARCHAR}, #{sequence,jdbcType=INTEGER},
+		#{goodsTypeId,jdbcType=BIGINT}, #{hcValue,jdbcType=LONGVARCHAR},
+		#{value,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.goods.model.GoodsTypeProperty">
+		insert into shop_goods_type_property
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="display != null">
+				display,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="goodsTypeId != null">
+				goods_Type_id,
+			</if>
+			<if test="hcValue != null">
+				hc_value,
+			</if>
+			<if test="value != null">
+				value,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="display != null">
+				#{display,jdbcType=BIT},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="goodsTypeId != null">
+				#{goodsTypeId,jdbcType=BIGINT},
+			</if>
+			<if test="hcValue != null">
+				#{hcValue,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="value != null">
+				#{value,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.goods.model.GoodsTypePropertyExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_goods_type_property
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_goods_type_property
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.display != null">
+				display = #{record.display,jdbcType=BIT},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsTypeId != null">
+				goods_Type_id = #{record.goodsTypeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.hcValue != null">
+				hc_value = #{record.hcValue,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.value != null">
+				value = #{record.value,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_goods_type_property
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		display = #{record.display,jdbcType=BIT},
+		name = #{record.name,jdbcType=VARCHAR},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		goods_Type_id = #{record.goodsTypeId,jdbcType=BIGINT},
+		hc_value = #{record.hcValue,jdbcType=LONGVARCHAR},
+		value = #{record.value,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_goods_type_property
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		display = #{record.display,jdbcType=BIT},
+		name = #{record.name,jdbcType=VARCHAR},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		goods_Type_id = #{record.goodsTypeId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.goods.model.GoodsTypeProperty">
+		update shop_goods_type_property
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="display != null">
+				display = #{display,jdbcType=BIT},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="goodsTypeId != null">
+				goods_Type_id = #{goodsTypeId,jdbcType=BIGINT},
+			</if>
+			<if test="hcValue != null">
+				hc_value = #{hcValue,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="value != null">
+				value = #{value,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.goods.model.GoodsTypeProperty">
+		update shop_goods_type_property
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		display = #{display,jdbcType=BIT},
+		name = #{name,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=INTEGER},
+		goods_Type_id = #{goodsTypeId,jdbcType=BIGINT},
+		hc_value = #{hcValue,jdbcType=LONGVARCHAR},
+		value = #{value,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.goods.model.GoodsTypeProperty">
+		update shop_goods_type_property
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		display = #{display,jdbcType=BIT},
+		name = #{name,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=INTEGER},
+		goods_Type_id = #{goodsTypeId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

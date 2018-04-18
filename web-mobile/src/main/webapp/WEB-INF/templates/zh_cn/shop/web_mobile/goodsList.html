@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="viewport"
+	content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="full-screen" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>商品列表</title>
+<link href="$!webPath/resources/shop/css/style.css" rel="stylesheet"
+	type="text/css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<style type="text/css">
+body,html {
+	background-color: #fff;
+}
+
+.p_filter .dd {
+	font-size: 0.32rem;
+	width: 25%;
+	color: #999;
+	position: relative;
+	text-align: center;
+	float: left;
+}
+
+.p_filter a.selected i {
+	width: 1.42rem;
+	background: #19BF96;
+	height: 1px;
+	position: absolute;
+	left: 0.26rem;
+	bottom: 0px;
+}
+
+.p_filter a.selected {
+	color: #19BF96;
+	font-weight: normal;
+}
+
+.p_filter .dd a {
+	display: block;
+	text-decoration: none;
+	width: 1.54rem;
+	margin: 0 auto;
+	font-size: 0.32rem;
+}
+
+.p_filter .dd a {
+	font-size: 0.32rem;
+	color: #a4a4a4;
+}
+
+.p_filter .dd a.selected {
+	color: #19BF96;
+	font-weight: normal;
+}
+
+.p_filter {
+	top: 0rem;
+}
+
+.m_touch {
+	top: 0.82rem;
+}
+.filtrate_div a {
+    font-size: 0.28rem;
+    color: #fff;
+    display: inline-block;
+    background: #5bba52;
+    border-radius: 0.06rem;
+    width: 1.64rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    text-align: center;
+    float: right;
+    margin-right: 0.36rem;
+    margin-top: 0.24rem;
+}
+</style>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?5ec07b377284cf8ef95ebaa33fa298f5";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<script>
+    jQuery(document).ready(function(){
+
+        jQuery(".list_bar_a a").add(".filtrate_btn").click(function(){
+        	//点击筛选不提交
+        	if(this.id == "filtrate"){
+        		return false;
+        	}
+        	 var orderBy = jQuery(this).attr("orderBy");
+        	 var orderType = jQuery(this).attr("orderType");
+        	 jQuery("#orderBy").val(orderBy);
+        	 jQuery("#orderType").val(orderType);
+        	 
+        	 //筛选功能
+        	 jQuery("#goodsInventory").val("");
+        	 jQuery("#goodsTransfee").val("");
+        	 jQuery("#exPriceFlag").val("");
+        	 if(jQuery(".filtrate_div li:eq(0)").hasClass("curr")){
+        		 jQuery("#goodsInventory").val(0);
+        	 }else if(jQuery(".filtrate_div li:eq(1)").hasClass("curr")){
+        		 jQuery("#goodsTransfee").val(1);
+        	 }else if(jQuery(".filtrate_div li:eq(2)").hasClass("curr")){
+        		 jQuery("#exPriceFlag").val(1);
+        	 }
+        	
+        	 jQuery("#ListForm").submit(); 
+        	 });
+        	 #if($!orderBy)
+        	    jQuery(".list_bar_a a").removeClass("this").find("i").removeClass("this");
+        	    jQuery(".list_bar_a a[orderBy='$!orderBy']").addClass("this").find("i").addClass("this");
+        	    //价格
+         	   #if($!orderBy=="goods_current_price"&& $!orderType=="asc")
+          	     jQuery(".list_bar_a a[orderBy='$!orderBy']").attr("orderType","desc").find("i").addClass("up");
+          	   #end
+          	   #if($!orderBy=="goods_current_price"&& $!orderType=="desc")
+          	     jQuery(".list_bar_a a[orderBy='$!orderBy']").attr("orderType","asc").find("i").addClass("down");
+          	   #end
+          	   //销量
+        	   #if($!orderBy=="goods_salenum"&& $!orderType=="asc")
+          	     jQuery(".list_bar_a a[orderBy='$!orderBy']").attr("orderType","desc").find("i").addClass("up");
+          	   #end
+          	   #if($!orderBy=="goods_salenum"&& $!orderType=="desc")
+          	     jQuery(".list_bar_a a[orderBy='$!orderBy']").attr("orderType","asc").find("i").addClass("down");
+          	   #end
+          	   //时间
+        	   #if($!orderBy=="add_time"&& $!orderType=="asc")
+          	     jQuery(".list_bar_a a[orderBy='$!orderBy']").attr("orderType","desc").find("i").addClass("up");
+          	   #end
+          	   #if($!orderBy=="add_time"&& $!orderType=="desc")
+          	     jQuery(".list_bar_a a[orderBy='$!orderBy']").attr("orderType","asc").find("i").addClass("down");
+          	   #end
+        	 #end
+        	 
+        	//筛选功能
+        	 #if($!vo.goodsInventory == 0)
+        		 jQuery(".filtrate_div li:eq(0)").addClass("curr");
+        	 #end
+        	 #if($!vo.goodsTransfee == "1")
+        		 jQuery(".filtrate_div li:eq(1)").addClass("curr");
+           	 #end
+             #if($!vo.exPriceFlag == 1)
+            	 jQuery(".filtrate_div li:eq(2)").addClass("curr"); 
+             #end
+             
+        	  jQuery(".pro_list_one").mouseenter(function(){
+        	    jQuery(".pro_list_one ul").removeClass("this");		
+        		jQuery(".pro_list_shop").hide();
+        		jQuery(".pro_list_evaluate").hide();
+        	    jQuery(this).find("ul").addClass("this");
+        		jQuery(this).find(".pro_list_shop").show();
+        		jQuery(this).find(".pro_list_evaluate").show();
+        		jQuery(this).find(".list_contrast").show();	
+        	  }).mouseleave(function(){
+        	    jQuery(this).find("ul").removeClass("this");
+        		jQuery(".pro_list_one ul").removeClass("this");		
+        		jQuery(".pro_list_shop").hide();
+        		jQuery(".pro_list_evaluate").hide();
+        		jQuery(this).find(".list_contrast").hide();
+        	  });
+    $('#select_div_id2 .dd a[orderBy=$!orderBy]').addClass("selected").parent().siblings(".dd").find("a").removeClass("selected"); 
+    })
+
+    </script>
+
+</head>
+<body>
+	<form action="$!webPath/store_goods_list_$!{gc.id}.htm" method="post"
+		id="ListForm">
+
+		<!--     重新开始 -->
+		<div class="area groom">
+			<div class="p_filter fc_title list_bar_a" id="select_div_id2">
+				<div class="dd">
+					<a href="javascript:;" orderBy="add_time" orderType="asc"><i></i>综合排序</a>
+				</div>
+				<div class="dd">
+					<a href="javascript:;" orderBy="goods_salenum" orderType="desc"
+						class=""><i></i>销量</a>
+				</div>
+				<div class="dd">
+					<a class="orderby" href="javascript:;"
+						orderBy="goods_current_price" orderType="asc"><i></i>价格<img
+						class="orderby-img" src="$!webPath/resources/shop/images/jx.png"
+						alt=""></a>
+				</div>
+				<div class="dd"><a href="javascript:;" id="filtrate"><i></i>筛选</a></div>
+				
+				<div class="filtrate_div">
+				<ul>
+					<li>
+						有库存
+					</li>
+					<li>
+						包邮
+					</li>
+					#if($!isCN==true)
+					<li>
+						只看BV值
+					</li>
+					#end
+				</ul>
+				<a class="filtrate_btn" href="javascript:;">确定</a>
+				</div>
+			</div>
+			<div class="div_gray"></div>
+
+			<div id="fc_con" class="m_touch">
+				<div class="touch_content">
+					<div class="touch_con">
+						<div class="touch_tab" style="">
+
+							<div class="goods-list-goods">
+								<ul>
+									#if($!objs.size()>0) #foreach($obj in $objs)
+									#set($goods_url="$!webPath/goods_$!{obj.id}.htm")
+									<li><a href="$goods_url"> <img
+											data-original="${obj.goodsMainPhotoPath}_240x240" alt="">
+											<div class="lb-right-mes">
+												<div class="tit">
+													$!CommUtil.substring("$!obj.goodsName",26)</div>
+												<div class="price">
+													<span class="jiage"><small>¥</small>$!{obj.goodsShowPrice}</span>
+													#if($!obj.inventoryType=="spec" && $!obj.goodsType==1)
+														  #set($thisPrice=$!{obj.goodsPrice}+$!{obj.selfAddPrice})
+														   <span class="old-price">¥${thisPrice}</span>            
+													#else
+														  #set($thisPrice=$!{obj.goodsPrice})
+														  <span class="old-price">¥${thisPrice}</span>            
+													#end
+												</div>
+												<div class="ziying">
+													<!-- #if($!{obj.goodsType} == 0) <span class="zyby">自营</span> #end 
+													#if($!{obj.goodsTransfee}==1) <span class="zyby">包邮</span> #end  -->
+													#if($!isCN==true && $!obj.exPriceFlag==1 && $!obj.cnSelfAddPrice>0)
+							     						<span class="bvzhi">$!obj.cnSelfAddPrice</span>
+							     					#end
+												</div>
+											</div>
+									</a></li> #end #else
+									<li>
+										<p>
+											抱歉，没有找到符合条件的商品！<a href="$!webPath/index.htm">查看全部商品</a>
+										</p>
+									</li> #end
+
+								</ul>
+							</div>
+
+
+
+						</div>
+
+
+
+
+					</div>
+				</div>
+			</div>
+			<!--     重新结束 -->
+
+			<input name="gs_ids" type="hidden" id="gs_ids" value="$!gs_ids" /> <input
+				name="brand_ids" type="hidden" id="brand_ids" value="$!brand_ids" />
+			<input name="properties" type="hidden" id="properties"
+				value="$!properties" /> <input name="currentPage" type="hidden"
+				id="currentPage" value="$!currentPage" /> <input name="orderBy"
+				type="hidden" id="orderBy" value="$!orderBy" /> <input
+				name="orderType" type="hidden" id="orderType" value="$!orderType" />
+			<input name="all_property_status" type="hidden"
+				id="all_property_status" value="$!all_property_status" /> <input
+				name="detail_property_status" type="hidden"
+				id="detail_property_status" value="$!detail_property_status" />
+			<input type="hidden" name="goodsInventory" id="goodsInventory" value="$!vo.goodsInventory" />
+			<input type="hidden" name="goodsTransfee" id="goodsTransfee" value="$!vo.goodsTransfee" />
+			<input type="hidden" name="exPriceFlag" id="exPriceFlag" value="$!vo.exPriceFlag" />
+	</form>
+	<div class="actGotop">
+		<img src="$!webPath/resources/shop/images/addcar.png" alt=""
+			style="display: block;"> <a href="javascript:;" title="返回顶部"></a>
+		<img src="$!webPath/resources/shop/images/dinzhi.png" alt="">
+	</div>
+	<script src="$!webPath/resources/js/jquery.min.js"
+		type="text/javascript"></script>
+	<script src="$!webPath/resources/js/touchSlider.js"
+		type="text/javascript"></script>
+	<script src="$!webPath/resources/js/common.js"></script>
+	<script src="$!webPath/resources/js/srcolltop.js"
+		type="text/javascript"></script>
+	<script src="$!webPath/resources/js/jquery.lazyload2.js"
+		type="text/javascript"></script>
+
+	<script>
+	$('img').lazyload();
+   
+    $("em").each(function(){
+        var num=$(this).attr("data-width");
+        $(this).width((22*Math.floor(num)+(num-Math.floor(num))*12)+"%");
+	 });
+	 var m1=new m_Touch("fc_con","fc_title");
+	 $(".fenlei_title ul li").on("touchstart",function(){
+		$(this).addClass("curr").siblings().removeClass("curr");
+	});
+	
+	 $(".jiage").each(function(){			
+		var html=$(this).html().split('.').join(".</span><span class=\"small\">");
+		$(this).html(html);
+	});
+	 
+	 $(".old-price").each(function(){			
+		var html=$(this).html().split('.').join(".</span><span class=\"small\">");
+		$(this).html(html);
+	});
+	 $("#filtrate").click(function(){
+			$(".filtrate_div").show();
+			$(".div_gray").show();
+		});
+		$(".div_gray").click(function(){
+			$(".filtrate_div").hide();
+			$(this).hide();
+		});
+		$(".filtrate_div ul li").on("touchstart",function(){
+			$(this).addClass("curr").siblings().removeClass("curr");
+		});
+    </script>
+	$!httpInclude.include("/wx_foot2.htm")
+</body>
+</html>

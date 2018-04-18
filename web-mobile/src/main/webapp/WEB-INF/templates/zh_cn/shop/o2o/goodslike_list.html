@@ -1,0 +1,17 @@
+<ul>
+#foreach($goods in $your_like_goods)
+    <li>
+        <a href="$!webPath/group/view_${goods.id}.htm">
+            <div class="pic"><img src="$!goods.groupAccPath" /></div>
+            <div class="cont">
+                <div class="name ell">$!goods.ggName</div>
+                <div class="name address">$!goods.storeName</div>
+                <div class="fl price">￥$!goods.groupPrice</div>
+                <div class="part text-right c_gray">
+                    已售#if($goods.selledCount)$goods.selledCount#else 0 #end
+                </div>
+            </div>
+        </a>
+    </li>
+#end
+</ul>

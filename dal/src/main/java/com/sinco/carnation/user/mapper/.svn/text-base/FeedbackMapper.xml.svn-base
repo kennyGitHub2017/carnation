@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.FeedbackMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.Feedback">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="source" property="source" jdbcType="INTEGER" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="deal_time" property="dealTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.FeedbackBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, user_id, source, content, create_time, status, deal_time
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.user.model.FeedbackExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from feedback
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		SELECT
+		a.*,
+		CASE c.user_type
+		WHEN 1 THEN (SELECT login_name FROM sys_user_account sa
+		WHERE sa.uid = c.id AND sa.account_type=2)
+		WHEN 4 THEN 
+		(
+			SELECT 
+			CASE 
+				WHEN phone IS NOT NULL THEN phone 
+				ELSE (SELECT login_name FROM sys_user_account sa WHERE sa.uid = c.id AND sa.account_type=2)  
+			END  
+			FROM user_operator o WHERE o.user_id = c.id
+		)
+		END
+		AS `mobile`,
+		CASE c.user_type
+		WHEN 1 THEN (SELECT nickname FROM user_customer c WHERE
+		c.uid = c.id)
+		WHEN 4 THEN (SELECT operator_name FROM user_operator o
+		WHERE o.user_id = c.id)
+		END
+		AS `nickname`
+		FROM
+		feedback a
+		LEFT JOIN sys_user c ON a.user_id=c.id
+		LEFT JOIN user_customer b ON a.user_id = b.uid
+		where a.id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from feedback
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.FeedbackExample">
+		delete from feedback
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.Feedback"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into feedback (id, user_id, source,
+		content, create_time, status,
+		deal_time)
+		values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+		#{source,jdbcType=INTEGER},
+		#{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER},
+		#{dealTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.Feedback"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into feedback
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="source != null">
+				source,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="dealTime != null">
+				deal_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="source != null">
+				#{source,jdbcType=INTEGER},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="dealTime != null">
+				#{dealTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.FeedbackExample"
+		resultType="java.lang.Integer">
+		select count(*) from feedback
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update feedback
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.source != null">
+				source = #{record.source,jdbcType=INTEGER},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.dealTime != null">
+				deal_time = #{record.dealTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update feedback
+		set id = #{record.id,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		source = #{record.source,jdbcType=INTEGER},
+		content = #{record.content,jdbcType=VARCHAR},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		status = #{record.status,jdbcType=INTEGER},
+		deal_time = #{record.dealTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.Feedback">
+		update feedback
+		<set>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="source != null">
+				source = #{source,jdbcType=INTEGER},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="dealTime != null">
+				deal_time = #{dealTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.Feedback">
+		update feedback
+		set user_id = #{userId,jdbcType=BIGINT},
+		source = #{source,jdbcType=INTEGER},
+		content = #{content,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		status = #{status,jdbcType=INTEGER},
+		deal_time = #{dealTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="query" parameterType="com.sinco.carnation.user.vo.FeedbackVO"
+		resultType="com.sinco.carnation.user.bo.FeedbackBO">
+		SELECT
+		a.*,
+		CASE c.user_type
+		WHEN 1 THEN (SELECT login_name FROM sys_user_account sa
+		WHERE sa.uid = c.id and account_type = '4')
+		WHEN 4 THEN (SELECT phone
+		FROM user_operator o WHERE o.user_id = c.id)
+		END
+		as `mobile`,
+		CASE c.user_type
+		WHEN 1 THEN (SELECT nickname FROM user_customer c WHERE
+		c.uid = c.id)
+		WHEN 4 THEN (SELECT operator_name FROM user_operator o
+		WHERE o.user_id = c.id)
+		END
+		as `nickname`
+		FROM
+		feedback a
+		LEFT JOIN sys_user c ON a.user_id=c.id
+		LEFT JOIN user_customer b ON a.user_id = b.uid
+		where 1=1
+		<if test="vo.source != null and vo.source != ''">
+			AND a.source =#{vo.source,jdbcType=BIGINT}
+		</if>
+		<if test="vo.status != null">
+			AND a.status =#{vo.status,jdbcType=BIGINT}
+		</if>
+		<if test="vo.mobile != null and vo.mobile != ''">
+			AND mobile =#{vo.mobile,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.nickName != null and vo.nickName != ''">
+			AND b.nickname LIKE
+			CONCAT('%',#{vo.nickName,jdbcType=VARCHAR},'%')
+		</if>
+		order by a.create_time desc
+	</select>
+</mapper>

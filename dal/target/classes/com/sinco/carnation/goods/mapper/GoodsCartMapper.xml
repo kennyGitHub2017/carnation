@@ -1,0 +1,726 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinco.carnation.goods.mapper.GoodsCartMapper">
+  <resultMap id="BaseResultMap" type="com.sinco.carnation.goods.model.GoodsCart">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
+    <result column="cart_mobile_id" jdbcType="VARCHAR" property="cartMobileId" />
+    <result column="cart_session_id" jdbcType="VARCHAR" property="cartSessionId" />
+    <result column="cart_status" jdbcType="INTEGER" property="cartStatus" />
+    <result column="cart_type" jdbcType="VARCHAR" property="cartType" />
+    <result column="combin_main" jdbcType="INTEGER" property="combinMain" />
+    <result column="combin_mark" jdbcType="VARCHAR" property="combinMark" />
+    <result column="combin_suit_ids" jdbcType="VARCHAR" property="combinSuitIds" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="cart_gsp" jdbcType="VARCHAR" property="cartGsp" />
+    <result column="combin_version" jdbcType="VARCHAR" property="combinVersion" />
+    <result column="whether_choose_gift" jdbcType="INTEGER" property="whetherChooseGift" />
+    <result column="exchange_integral" jdbcType="INTEGER" property="exchangeIntegral" />
+    <result column="goods_integral_price" jdbcType="DECIMAL" property="goodsIntegralPrice" />
+    <result column="goods_mobile_price" jdbcType="DECIMAL" property="goodsMobilePrice" />
+    <result column="self_add_price" jdbcType="DECIMAL" property="selfAddPrice" />
+    <result column="goods_version" jdbcType="INTEGER" property="goodsVersion" />
+    <result column="ex_price_flag" jdbcType="INTEGER" property="exPriceFlag" />
+  </resultMap>
+<resultMap id="BOResultMap" type="com.sinco.carnation.goods.bo.GoodsCartBO" extends="ResultMapWithBLOBs">
+  	<result column="store_name" property="storeName"/>
+  	<result column="store_second_domain" property="storeSecondDomain" />
+  	<result column="store_status" property="storeStatus" />
+  	<result column="is_ygb" property="isYgb"/>
+  	<association property="goods" javaType="com.sinco.carnation.goods.model.Goods"
+  	resultMap="com.sinco.carnation.goods.mapper.GoodsMapper.ResultMapWithBLOBs">
+  	</association>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.goods.model.GoodsCart" extends="BaseResultMap" >
+    <result column="combin_suit_info" property="combinSuitInfo" jdbcType="LONGVARCHAR" />
+    <result column="spec_info" property="specInfo" jdbcType="LONGVARCHAR" />
+    <result column="gift_info" property="giftInfo" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <select id="findMyByIdCart" resultMap="BOResultMap">
+  	select gc.*,g.has_exchange_integral,g.exchange_integral,g.goods_integral_price,g.has_mobile_price,g.goods_mobile_price,g.goods_current_price,g.goods_type,g.goods_store_id,g.gc_id,g.goods_name,
+	g.order_enough_give_status,g.buy_gift_id,g.enough_reduce,g.f_sale_type,g.group_buy,g.activity_status,
+	g.goods_cod,g.goods_choice_type,g.tax_invoice,g.goods_inventory,g.store_price,g.goods_inventory_detail,
+	g.goods_main_photo_path,g.goods_status,store.store_second_domain,store.store_status,store.store_name
+	from shop_goods_cart gc
+	INNER join shop_goods g on gc.goods_id=g.id
+    left join shop_store store ON store.id=g.goods_store_id
+	where g.delete_status=0 and gc.id =#{cartId,jdbcType=BIGINT}
+	order by gc.add_time desc
+  </select>
+  
+  <select id="findMyCart" resultMap="BOResultMap">
+  	select gc.*,
+  	g.has_exchange_integral,
+  	g.exchange_integral,
+  	g.goods_integral_price,
+  	g.has_mobile_price,
+  	g.goods_mobile_price,
+  	g.goods_current_price,
+  	g.goods_type,
+  	g.goods_store_id,
+  	g.gc_id,g.goods_name,
+	g.order_enough_give_status,
+	g.buy_gift_id,
+	g.enough_reduce,
+	g.f_sale_type,
+	g.group_buy,
+	g.activity_status,
+	g.goods_cod,
+	g.goods_choice_type,
+	g.tax_invoice,
+	g.goods_inventory,
+	g.store_price,
+	g.goods_inventory_detail,
+	g.goods_main_photo_path,
+	g.goods_status,
+	store.store_second_domain,
+	store.store_status,
+	store.store_name,
+	g.inventory_type,
+	g.ex_price_flag,
+	g.cn_self_add_price,
+	g.need_ygb,
+	g.need_money,
+	g.need_integral
+	from 
+		shop_goods_cart gc
+	INNER join 
+		shop_goods g on gc.goods_id=g.id
+    left join 
+    	shop_store store ON store.id=g.goods_store_id
+	where 
+		g.delete_status=0
+		and g.goods_status=0
+	<if test="cartSessionId != null">
+		and gc.cart_session_id=#{cartSessionId}
+	</if>
+	<if test="cartStatus != null">
+		and gc.cart_status=#{cartStatus}
+	</if>
+	<if test="userId != null">
+		and gc.user_id=#{userId}
+	</if>
+	<if test="ids != null and ids.size() > 0">
+		and gc.id in 
+       <foreach collection="ids" item="listItem" open="(" close=")" separator="," >
+         #{listItem}
+       </foreach>
+	</if>
+	<if test="isYgb != null ">
+		 and gc.is_ygb = #{isYgb}
+	</if>
+	order by gc.add_time desc
+  </select>
+  
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, 
+    add_time, 
+    delete_status, 
+    cart_mobile_id, 
+    cart_session_id, 
+    cart_status, 
+    cart_type, 
+    combin_main, 
+    combin_mark, 
+    combin_suit_ids, 
+    count, price, 
+    goods_id, 
+    user_id, 
+    cart_gsp, 
+    combin_version, 
+    whether_choose_gift, 
+    exchange_integral, 
+    goods_integral_price, 
+    goods_mobile_price, 
+    self_add_price, 
+    goods_version,
+    ex_price_flag
+  </sql>
+  <sql id="Blob_Column_List">
+    combin_suit_info, spec_info, gift_info
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.goods.model.GoodsCartExample" resultMap="BOResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from shop_goods_cart
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.sinco.carnation.goods.model.GoodsCartExample" resultMap="BOResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from shop_goods_cart
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from shop_goods_cart
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from shop_goods_cart
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.goods.model.GoodsCartExample">
+    delete from shop_goods_cart
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" keyProperty="id" parameterType="com.sinco.carnation.goods.model.GoodsCart" useGeneratedKeys="true">
+    insert into shop_goods_cart (id, add_time, delete_status, 
+      cart_mobile_id, cart_session_id, cart_status, 
+      cart_type, combin_main, combin_mark, 
+      combin_suit_ids, count, price, 
+      goods_id, user_id, cart_gsp, 
+      combin_version, whether_choose_gift, exchange_integral, 
+      goods_integral_price, goods_mobile_price, self_add_price, 
+      goods_version, combin_suit_info, spec_info, 
+      gift_info)
+    values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP}, #{deleteStatus,jdbcType=INTEGER}, 
+      #{cartMobileId,jdbcType=VARCHAR}, #{cartSessionId,jdbcType=VARCHAR}, #{cartStatus,jdbcType=INTEGER}, 
+      #{cartType,jdbcType=VARCHAR}, #{combinMain,jdbcType=INTEGER}, #{combinMark,jdbcType=VARCHAR}, 
+      #{combinSuitIds,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, 
+      #{goodsId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{cartGsp,jdbcType=VARCHAR}, 
+      #{combinVersion,jdbcType=VARCHAR}, #{whetherChooseGift,jdbcType=INTEGER}, #{exchangeIntegral,jdbcType=INTEGER}, 
+      #{goodsIntegralPrice,jdbcType=DECIMAL}, #{goodsMobilePrice,jdbcType=DECIMAL}, #{selfAddPrice,jdbcType=DECIMAL}, 
+      #{goodsVersion,jdbcType=INTEGER}, #{combinSuitInfo,jdbcType=LONGVARCHAR}, #{specInfo,jdbcType=LONGVARCHAR}, 
+      #{giftInfo,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" keyProperty="id" parameterType="com.sinco.carnation.goods.model.GoodsCart" useGeneratedKeys="true">
+    insert into shop_goods_cart
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="deleteStatus != null">
+        delete_status,
+      </if>
+      <if test="cartMobileId != null">
+        cart_mobile_id,
+      </if>
+      <if test="cartSessionId != null">
+        cart_session_id,
+      </if>
+      <if test="cartStatus != null">
+        cart_status,
+      </if>
+      <if test="cartType != null">
+        cart_type,
+      </if>
+      <if test="combinMain != null">
+        combin_main,
+      </if>
+      <if test="combinMark != null">
+        combin_mark,
+      </if>
+      <if test="combinSuitIds != null">
+        combin_suit_ids,
+      </if>
+      <if test="count != null">
+        count,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="cartGsp != null">
+        cart_gsp,
+      </if>
+      <if test="combinVersion != null">
+        combin_version,
+      </if>
+      <if test="whetherChooseGift != null">
+        whether_choose_gift,
+      </if>
+      <if test="exchangeIntegral != null">
+        exchange_integral,
+      </if>
+      <if test="goodsIntegralPrice != null">
+        goods_integral_price,
+      </if>
+      <if test="goodsMobilePrice != null">
+        goods_mobile_price,
+      </if>
+      <if test="selfAddPrice != null">
+        self_add_price,
+      </if>
+      <if test="goodsVersion != null">
+        goods_version,
+      </if>
+      <if test="combinSuitInfo != null">
+        combin_suit_info,
+      </if>
+      <if test="specInfo != null">
+        spec_info,
+      </if>
+      <if test="giftInfo != null">
+        gift_info,
+      </if>
+      <if test="isYgb != null">
+       is_ygb,
+      </if>
+      <if test="exPriceFlag != null">
+       ex_price_flag
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null">
+        #{deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="cartMobileId != null">
+        #{cartMobileId,jdbcType=VARCHAR},
+      </if>
+      <if test="cartSessionId != null">
+        #{cartSessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="cartStatus != null">
+        #{cartStatus,jdbcType=INTEGER},
+      </if>
+      <if test="cartType != null">
+        #{cartType,jdbcType=VARCHAR},
+      </if>
+      <if test="combinMain != null">
+        #{combinMain,jdbcType=INTEGER},
+      </if>
+      <if test="combinMark != null">
+        #{combinMark,jdbcType=VARCHAR},
+      </if>
+      <if test="combinSuitIds != null">
+        #{combinSuitIds,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="cartGsp != null">
+        #{cartGsp,jdbcType=VARCHAR},
+      </if>
+      <if test="combinVersion != null">
+        #{combinVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="whetherChooseGift != null">
+        #{whetherChooseGift,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeIntegral != null">
+        #{exchangeIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="goodsIntegralPrice != null">
+        #{goodsIntegralPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsMobilePrice != null">
+        #{goodsMobilePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="selfAddPrice != null">
+        #{selfAddPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsVersion != null">
+        #{goodsVersion,jdbcType=INTEGER},
+      </if>
+      <if test="combinSuitInfo != null">
+        #{combinSuitInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="specInfo != null">
+        #{specInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="giftInfo != null">
+        #{giftInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="isYgb != null">
+        #{isYgb,jdbcType=INTEGER},
+      </if>
+      <if test="exPriceFlag != null">
+        #{exPriceFlag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinco.carnation.goods.model.GoodsCartExample" resultType="java.lang.Integer">
+    select count(*) from 
+    ( select shop_goods_cart.* from shop_goods_cart  LEFT JOIN shop_goods  ON shop_goods.id=shop_goods_cart.goods_id
+    where shop_goods.delete_status = 0) as shop_goods_cart
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update shop_goods_cart
+    <trim prefix="set" suffixOverrides=",">
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.addTime != null">
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteStatus != null">
+        delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.cartMobileId != null">
+        cart_mobile_id = #{record.cartMobileId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cartSessionId != null">
+        cart_session_id = #{record.cartSessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cartStatus != null">
+        cart_status = #{record.cartStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.cartType != null">
+        cart_type = #{record.cartType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.combinMain != null">
+        combin_main = #{record.combinMain,jdbcType=INTEGER},
+      </if>
+      <if test="record.combinMark != null">
+        combin_mark = #{record.combinMark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.combinSuitIds != null">
+        combin_suit_ids = #{record.combinSuitIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.count != null">
+        count = #{record.count,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.goodsId != null">
+        goods_id = #{record.goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.cartGsp != null">
+        cart_gsp = #{record.cartGsp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.combinVersion != null">
+        combin_version = #{record.combinVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.whetherChooseGift != null">
+        whether_choose_gift = #{record.whetherChooseGift,jdbcType=INTEGER},
+      </if>
+      <if test="record.exchangeIntegral != null">
+        exchange_integral = #{record.exchangeIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="record.goodsIntegralPrice != null">
+        goods_integral_price = #{record.goodsIntegralPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.goodsMobilePrice != null">
+        goods_mobile_price = #{record.goodsMobilePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.selfAddPrice != null">
+        self_add_price = #{record.selfAddPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.goodsVersion != null">
+        goods_version = #{record.goodsVersion,jdbcType=INTEGER},
+      </if>
+      <if test="record.combinSuitInfo != null">
+        combin_suit_info = #{record.combinSuitInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.specInfo != null">
+        spec_info = #{record.specInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.giftInfo != null">
+        gift_info = #{record.giftInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update shop_goods_cart
+    set id = #{record.id,jdbcType=BIGINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      cart_mobile_id = #{record.cartMobileId,jdbcType=VARCHAR},
+      cart_session_id = #{record.cartSessionId,jdbcType=VARCHAR},
+      cart_status = #{record.cartStatus,jdbcType=INTEGER},
+      cart_type = #{record.cartType,jdbcType=VARCHAR},
+      combin_main = #{record.combinMain,jdbcType=INTEGER},
+      combin_mark = #{record.combinMark,jdbcType=VARCHAR},
+      combin_suit_ids = #{record.combinSuitIds,jdbcType=VARCHAR},
+      count = #{record.count,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DECIMAL},
+      goods_id = #{record.goodsId,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      cart_gsp = #{record.cartGsp,jdbcType=VARCHAR},
+      combin_version = #{record.combinVersion,jdbcType=VARCHAR},
+      whether_choose_gift = #{record.whetherChooseGift,jdbcType=INTEGER},
+      exchange_integral = #{record.exchangeIntegral,jdbcType=INTEGER},
+      goods_integral_price = #{record.goodsIntegralPrice,jdbcType=DECIMAL},
+      goods_mobile_price = #{record.goodsMobilePrice,jdbcType=DECIMAL},
+      self_add_price = #{record.selfAddPrice,jdbcType=DECIMAL},
+      goods_version = #{record.goodsVersion,jdbcType=INTEGER},
+      combin_suit_info = #{record.combinSuitInfo,jdbcType=LONGVARCHAR},
+      spec_info = #{record.specInfo,jdbcType=LONGVARCHAR},
+      gift_info = #{record.giftInfo,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update shop_goods_cart
+    set id = #{record.id,jdbcType=BIGINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      cart_mobile_id = #{record.cartMobileId,jdbcType=VARCHAR},
+      cart_session_id = #{record.cartSessionId,jdbcType=VARCHAR},
+      cart_status = #{record.cartStatus,jdbcType=INTEGER},
+      cart_type = #{record.cartType,jdbcType=VARCHAR},
+      combin_main = #{record.combinMain,jdbcType=INTEGER},
+      combin_mark = #{record.combinMark,jdbcType=VARCHAR},
+      combin_suit_ids = #{record.combinSuitIds,jdbcType=VARCHAR},
+      count = #{record.count,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DECIMAL},
+      goods_id = #{record.goodsId,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      cart_gsp = #{record.cartGsp,jdbcType=VARCHAR},
+      combin_version = #{record.combinVersion,jdbcType=VARCHAR},
+      whether_choose_gift = #{record.whetherChooseGift,jdbcType=INTEGER},
+      exchange_integral = #{record.exchangeIntegral,jdbcType=INTEGER},
+      goods_integral_price = #{record.goodsIntegralPrice,jdbcType=DECIMAL},
+      goods_mobile_price = #{record.goodsMobilePrice,jdbcType=DECIMAL},
+      self_add_price = #{record.selfAddPrice,jdbcType=DECIMAL},
+      goods_version = #{record.goodsVersion,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.goods.model.GoodsCart">
+    update shop_goods_cart
+    <trim prefix="set" suffixOverrides=",">
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null">
+        delete_status = #{deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="cartMobileId != null">
+        cart_mobile_id = #{cartMobileId,jdbcType=VARCHAR},
+      </if>
+      <if test="cartSessionId != null">
+        cart_session_id = #{cartSessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="cartStatus != null">
+        cart_status = #{cartStatus,jdbcType=INTEGER},
+      </if>
+      <if test="cartType != null">
+        cart_type = #{cartType,jdbcType=VARCHAR},
+      </if>
+      <if test="combinMain != null">
+        combin_main = #{combinMain,jdbcType=INTEGER},
+      </if>
+      <if test="combinMark != null">
+        combin_mark = #{combinMark,jdbcType=VARCHAR},
+      </if>
+      <if test="combinSuitIds != null">
+        combin_suit_ids = #{combinSuitIds,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null">
+        count = #{count,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="cartGsp != null">
+        cart_gsp = #{cartGsp,jdbcType=VARCHAR},
+      </if>
+      <if test="combinVersion != null">
+        combin_version = #{combinVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="whetherChooseGift != null">
+        whether_choose_gift = #{whetherChooseGift,jdbcType=INTEGER},
+      </if>
+      <if test="exchangeIntegral != null">
+        exchange_integral = #{exchangeIntegral,jdbcType=INTEGER},
+      </if>
+      <if test="goodsIntegralPrice != null">
+        goods_integral_price = #{goodsIntegralPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsMobilePrice != null">
+        goods_mobile_price = #{goodsMobilePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="selfAddPrice != null">
+        self_add_price = #{selfAddPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsVersion != null">
+        goods_version = #{goodsVersion,jdbcType=INTEGER},
+      </if>
+      <if test="combinSuitInfo != null">
+        combin_suit_info = #{combinSuitInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="specInfo != null">
+        spec_info = #{specInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="giftInfo != null">
+        gift_info = #{giftInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.goods.model.GoodsCart">
+    update shop_goods_cart
+    set add_time = #{addTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=INTEGER},
+      cart_mobile_id = #{cartMobileId,jdbcType=VARCHAR},
+      cart_session_id = #{cartSessionId,jdbcType=VARCHAR},
+      cart_status = #{cartStatus,jdbcType=INTEGER},
+      cart_type = #{cartType,jdbcType=VARCHAR},
+      combin_main = #{combinMain,jdbcType=INTEGER},
+      combin_mark = #{combinMark,jdbcType=VARCHAR},
+      combin_suit_ids = #{combinSuitIds,jdbcType=VARCHAR},
+      count = #{count,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      goods_id = #{goodsId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      cart_gsp = #{cartGsp,jdbcType=VARCHAR},
+      combin_version = #{combinVersion,jdbcType=VARCHAR},
+      whether_choose_gift = #{whetherChooseGift,jdbcType=INTEGER},
+      exchange_integral = #{exchangeIntegral,jdbcType=INTEGER},
+      goods_integral_price = #{goodsIntegralPrice,jdbcType=DECIMAL},
+      goods_mobile_price = #{goodsMobilePrice,jdbcType=DECIMAL},
+      self_add_price = #{selfAddPrice,jdbcType=DECIMAL},
+      goods_version = #{goodsVersion,jdbcType=INTEGER},
+      combin_suit_info = #{combinSuitInfo,jdbcType=LONGVARCHAR},
+      spec_info = #{specInfo,jdbcType=LONGVARCHAR},
+      gift_info = #{giftInfo,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.goods.model.GoodsCart">
+    update shop_goods_cart
+    set add_time = #{addTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=INTEGER},
+      cart_mobile_id = #{cartMobileId,jdbcType=VARCHAR},
+      cart_session_id = #{cartSessionId,jdbcType=VARCHAR},
+      cart_status = #{cartStatus,jdbcType=INTEGER},
+      cart_type = #{cartType,jdbcType=VARCHAR},
+      combin_main = #{combinMain,jdbcType=INTEGER},
+      combin_mark = #{combinMark,jdbcType=VARCHAR},
+      combin_suit_ids = #{combinSuitIds,jdbcType=VARCHAR},
+      count = #{count,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      goods_id = #{goodsId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      cart_gsp = #{cartGsp,jdbcType=VARCHAR},
+      combin_version = #{combinVersion,jdbcType=VARCHAR},
+      whether_choose_gift = #{whetherChooseGift,jdbcType=INTEGER},
+      exchange_integral = #{exchangeIntegral,jdbcType=INTEGER},
+      goods_integral_price = #{goodsIntegralPrice,jdbcType=DECIMAL},
+      goods_mobile_price = #{goodsMobilePrice,jdbcType=DECIMAL},
+      self_add_price = #{selfAddPrice,jdbcType=DECIMAL},
+      goods_version = #{goodsVersion,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="getByUserAndGoodsId" resultMap="BOResultMap">
+  select * from shop_goods_cart where cart_status=0 and user_id=#{userId} and goods_Id=#{goodsId} 
+  </select>
+</mapper>

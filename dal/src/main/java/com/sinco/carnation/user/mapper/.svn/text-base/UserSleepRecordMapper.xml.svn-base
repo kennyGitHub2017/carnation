@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.UserSleepRecordMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.user.model.UserSleepRecord">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="uid" property="uid" jdbcType="BIGINT" />
+		<result column="sleep_second" property="sleepSecond" jdbcType="INTEGER" />
+		<result column="deep_sleep_second" property="deepSleepSecond"
+			jdbcType="INTEGER" />
+		<result column="shallow_sleep_second" property="shallowSleepSecond"
+			jdbcType="INTEGER" />
+		<result column="record_date" property="recordDate" jdbcType="DATE" />
+	</resultMap>
+
+	<resultMap id="BaseResultMapBO" type="com.sinco.carnation.user.bo.UserSleepRecordBO"
+		extends="BaseResultMap">
+		<result column="mon" property="week" jdbcType="INTEGER" />
+		<result column="start_date" property="startDate" jdbcType="VARCHAR" />
+		<result column="end_date" property="endDate" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, uid, sleep_second, deep_sleep_second, shallow_sleep_second,
+		record_date
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.user.model.UserSleepRecordExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_sleep_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from user_sleep_record
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_sleep_record
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.user.model.UserSleepRecordExample">
+		delete from user_sleep_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.UserSleepRecord">
+		insert into user_sleep_record (id, uid, sleep_second,
+		deep_sleep_second, shallow_sleep_second, record_date
+		)
+		values (#{id,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT},
+		#{sleepSecond,jdbcType=INTEGER},
+		#{deepSleepSecond,jdbcType=INTEGER}, #{shallowSleepSecond,jdbcType=INTEGER}, #{recordDate,jdbcType=DATE}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.UserSleepRecord">
+		insert into user_sleep_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="sleepSecond != null">
+				sleep_second,
+			</if>
+			<if test="deepSleepSecond != null">
+				deep_sleep_second,
+			</if>
+			<if test="shallowSleepSecond != null">
+				shallow_sleep_second,
+			</if>
+			<if test="recordDate != null">
+				record_date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="sleepSecond != null">
+				#{sleepSecond,jdbcType=INTEGER},
+			</if>
+			<if test="deepSleepSecond != null">
+				#{deepSleepSecond,jdbcType=INTEGER},
+			</if>
+			<if test="shallowSleepSecond != null">
+				#{shallowSleepSecond,jdbcType=INTEGER},
+			</if>
+			<if test="recordDate != null">
+				#{recordDate,jdbcType=DATE},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.user.model.UserSleepRecordExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_sleep_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_sleep_record
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.uid != null">
+				uid = #{record.uid,jdbcType=BIGINT},
+			</if>
+			<if test="record.sleepSecond != null">
+				sleep_second = #{record.sleepSecond,jdbcType=INTEGER},
+			</if>
+			<if test="record.deepSleepSecond != null">
+				deep_sleep_second = #{record.deepSleepSecond,jdbcType=INTEGER},
+			</if>
+			<if test="record.shallowSleepSecond != null">
+				shallow_sleep_second = #{record.shallowSleepSecond,jdbcType=INTEGER},
+			</if>
+			<if test="record.recordDate != null">
+				record_date = #{record.recordDate,jdbcType=DATE},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_sleep_record
+		set id = #{record.id,jdbcType=BIGINT},
+		uid = #{record.uid,jdbcType=BIGINT},
+		sleep_second = #{record.sleepSecond,jdbcType=INTEGER},
+		deep_sleep_second = #{record.deepSleepSecond,jdbcType=INTEGER},
+		shallow_sleep_second = #{record.shallowSleepSecond,jdbcType=INTEGER},
+		record_date = #{record.recordDate,jdbcType=DATE}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.UserSleepRecord">
+		update user_sleep_record
+		<set>
+			<if test="uid != null">
+				uid = #{uid,jdbcType=BIGINT},
+			</if>
+			<if test="sleepSecond != null">
+				sleep_second = #{sleepSecond,jdbcType=INTEGER},
+			</if>
+			<if test="deepSleepSecond != null">
+				deep_sleep_second = #{deepSleepSecond,jdbcType=INTEGER},
+			</if>
+			<if test="shallowSleepSecond != null">
+				shallow_sleep_second = #{shallowSleepSecond,jdbcType=INTEGER},
+			</if>
+			<if test="recordDate != null">
+				record_date = #{recordDate,jdbcType=DATE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.UserSleepRecord">
+		update user_sleep_record
+		set uid = #{uid,jdbcType=BIGINT},
+		sleep_second = #{sleepSecond,jdbcType=INTEGER},
+		deep_sleep_second = #{deepSleepSecond,jdbcType=INTEGER},
+		shallow_sleep_second = #{shallowSleepSecond,jdbcType=INTEGER},
+		record_date = #{recordDate,jdbcType=DATE}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="findByUidAndTime" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM user_sleep_record WHERE uid=#{uid} AND
+		record_date=#{recordDate,jdbcType=DATE}
+	</select>
+
+	<select id="weekSleepRecord" resultMap="BaseResultMapBO">
+		select
+		<include refid="Base_Column_List" />
+		,DAYOFWEEK(record_date)-1 as mon,
+		DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE())+1 DAY),'%X/%m/%d') AS start_date,
+		DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL WEEKDAY(CURDATE())-5
+		DAY),'%X/%m/%d') AS end_date
+		from user_sleep_record where uid=#{uid} AND record_date <![CDATA[>=]]>
+		DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE())+1 DAY)
+		AND record_date <![CDATA[<=]]>
+		DATE_SUB(CURDATE(),INTERVAL WEEKDAY(CURDATE())-5 DAY) ORDER BY
+		FIELD(`mon`, 0,1,2,3,4,5,6)
+	</select>
+
+	<select id="equipSleepQueryByRange" resultMap="BaseResultMapBO">
+		SELECT * FROM user_sleep_record WHERE uid= #{uid,jdbcType=BIGINT} AND
+		record_date <![CDATA[>=]]>
+		DATE_FORMAT(#{startDateStr,jdbcType=VARCHAR},'%X/%m/%d')
+		AND record_date <![CDATA[<=]]>
+		DATE_FORMAT(#{endDateStr,jdbcType=VARCHAR},'%X/%m/%d')
+	</select>
+</mapper>

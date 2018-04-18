@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.juanpi.mapper.JuanpiGoodsClassMapper" >
+  <resultMap id="BaseResultMap" type="com.sinco.carnation.juanpi.model.JuanpiGoodsClass" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="delete_status" property="deleteStatus" jdbcType="INTEGER" />
+    <result column="cate_name" property="cateName" jdbcType="VARCHAR" />
+    <result column="cate_id" property="cateId" jdbcType="BIGINT" />
+    <result column="cate2_name" property="cate2Name" jdbcType="VARCHAR" />
+    <result column="cate2_id" property="cate2Id" jdbcType="BIGINT" />
+    <result column="cate3_name" property="cate3Name" jdbcType="VARCHAR" />
+    <result column="cate3_id" property="cate3Id" jdbcType="BIGINT" />
+    <result column="is_join" property="isJoin" jdbcType="INTEGER" />
+    <result column="class_id" property="classId" jdbcType="BIGINT" />
+    <result column="class_name" property="className" jdbcType="VARCHAR" />
+    <result column="class2_id" property="class2Id" jdbcType="BIGINT" />
+    <result column="class2_name" property="class2Name" jdbcType="VARCHAR" />
+    <result column="class3_id" property="class3Id" jdbcType="BIGINT" />
+    <result column="class3_name" property="class3Name" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BOResultMap" type="com.sinco.carnation.juanpi.bo.JuanpiGoodsClassBO" extends="BaseResultMap">
+    <result column="jpGcId" property="jpGcId" jdbcType="BIGINT" />
+    <result column="jpGcName" property="jpGcName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, add_time, update_time, delete_status, cate_name, cate_id, cate2_name, cate2_id, 
+    cate3_name, cate3_id, is_join, class_id, class_name, class2_id, class2_name, class3_id, 
+    class3_name
+  </sql>
+  <select id="selectByExample" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoodsClassExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from juanpi_goods_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      limit ${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from juanpi_goods_class
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from juanpi_goods_class
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <update id="deleteUnsynJuanpiClass" >
+    update juanpi_goods_class set delete_status=1 
+    where update_time &lt; #{lastUpdateTime}
+  </update>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoodsClassExample" >
+    delete from juanpi_goods_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoodsClass" useGeneratedKeys="true" keyProperty="id" >
+    insert into juanpi_goods_class (id, add_time, update_time, 
+      delete_status, cate_name, cate_id, 
+      cate2_name, cate2_id, cate3_name, 
+      cate3_id, is_join, class_id, 
+      class_name, class2_id, class2_name, 
+      class3_id, class3_name)
+    values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{deleteStatus,jdbcType=INTEGER}, #{cateName,jdbcType=VARCHAR}, #{cateId,jdbcType=BIGINT}, 
+      #{cate2Name,jdbcType=VARCHAR}, #{cate2Id,jdbcType=BIGINT}, #{cate3Name,jdbcType=VARCHAR}, 
+      #{cate3Id,jdbcType=BIGINT}, #{isJoin,jdbcType=INTEGER}, #{classId,jdbcType=BIGINT}, 
+      #{className,jdbcType=VARCHAR}, #{class2Id,jdbcType=BIGINT}, #{class2Name,jdbcType=VARCHAR}, 
+      #{class3Id,jdbcType=BIGINT}, #{class3Name,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoodsClass" useGeneratedKeys="true" keyProperty="id" >
+    insert into juanpi_goods_class
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status,
+      </if>
+      <if test="cateName != null" >
+        cate_name,
+      </if>
+      <if test="cateId != null" >
+        cate_id,
+      </if>
+      <if test="cate2Name != null" >
+        cate2_name,
+      </if>
+      <if test="cate2Id != null" >
+        cate2_id,
+      </if>
+      <if test="cate3Name != null" >
+        cate3_name,
+      </if>
+      <if test="cate3Id != null" >
+        cate3_id,
+      </if>
+      <if test="isJoin != null" >
+        is_join,
+      </if>
+      <if test="classId != null" >
+        class_id,
+      </if>
+      <if test="className != null" >
+        class_name,
+      </if>
+      <if test="class2Id != null" >
+        class2_id,
+      </if>
+      <if test="class2Name != null" >
+        class2_name,
+      </if>
+      <if test="class3Id != null" >
+        class3_id,
+      </if>
+      <if test="class3Name != null" >
+        class3_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        #{deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="cateName != null" >
+        #{cateName,jdbcType=VARCHAR},
+      </if>
+      <if test="cateId != null" >
+        #{cateId,jdbcType=BIGINT},
+      </if>
+      <if test="cate2Name != null" >
+        #{cate2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="cate2Id != null" >
+        #{cate2Id,jdbcType=BIGINT},
+      </if>
+      <if test="cate3Name != null" >
+        #{cate3Name,jdbcType=VARCHAR},
+      </if>
+      <if test="cate3Id != null" >
+        #{cate3Id,jdbcType=BIGINT},
+      </if>
+      <if test="isJoin != null" >
+        #{isJoin,jdbcType=INTEGER},
+      </if>
+      <if test="classId != null" >
+        #{classId,jdbcType=BIGINT},
+      </if>
+      <if test="className != null" >
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="class2Id != null" >
+        #{class2Id,jdbcType=BIGINT},
+      </if>
+      <if test="class2Name != null" >
+        #{class2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="class3Id != null" >
+        #{class3Id,jdbcType=BIGINT},
+      </if>
+      <if test="class3Name != null" >
+        #{class3Name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoodsClassExample" resultType="java.lang.Integer" >
+    select count(*) from juanpi_goods_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update juanpi_goods_class
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteStatus != null" >
+        delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.cateName != null" >
+        cate_name = #{record.cateName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cateId != null" >
+        cate_id = #{record.cateId,jdbcType=BIGINT},
+      </if>
+      <if test="record.cate2Name != null" >
+        cate2_name = #{record.cate2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cate2Id != null" >
+        cate2_id = #{record.cate2Id,jdbcType=BIGINT},
+      </if>
+      <if test="record.cate3Name != null" >
+        cate3_name = #{record.cate3Name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cate3Id != null" >
+        cate3_id = #{record.cate3Id,jdbcType=BIGINT},
+      </if>
+      <if test="record.isJoin != null" >
+        is_join = #{record.isJoin,jdbcType=INTEGER},
+      </if>
+      <if test="record.classId != null" >
+        class_id = #{record.classId,jdbcType=BIGINT},
+      </if>
+      <if test="record.className != null" >
+        class_name = #{record.className,jdbcType=VARCHAR},
+      </if>
+      <if test="record.class2Id != null" >
+        class2_id = #{record.class2Id,jdbcType=BIGINT},
+      </if>
+      <if test="record.class2Name != null" >
+        class2_name = #{record.class2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.class3Id != null" >
+        class3_id = #{record.class3Id,jdbcType=BIGINT},
+      </if>
+      <if test="record.class3Name != null" >
+        class3_name = #{record.class3Name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update juanpi_goods_class
+    set id = #{record.id,jdbcType=BIGINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      cate_name = #{record.cateName,jdbcType=VARCHAR},
+      cate_id = #{record.cateId,jdbcType=BIGINT},
+      cate2_name = #{record.cate2Name,jdbcType=VARCHAR},
+      cate2_id = #{record.cate2Id,jdbcType=BIGINT},
+      cate3_name = #{record.cate3Name,jdbcType=VARCHAR},
+      cate3_id = #{record.cate3Id,jdbcType=BIGINT},
+      is_join = #{record.isJoin,jdbcType=INTEGER},
+      class_id = #{record.classId,jdbcType=BIGINT},
+      class_name = #{record.className,jdbcType=VARCHAR},
+      class2_id = #{record.class2Id,jdbcType=BIGINT},
+      class2_name = #{record.class2Name,jdbcType=VARCHAR},
+      class3_id = #{record.class3Id,jdbcType=BIGINT},
+      class3_name = #{record.class3Name,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoodsClass" >
+    update juanpi_goods_class
+    <set >
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status = #{deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="cateName != null" >
+        cate_name = #{cateName,jdbcType=VARCHAR},
+      </if>
+      <if test="cateId != null" >
+        cate_id = #{cateId,jdbcType=BIGINT},
+      </if>
+      <if test="cate2Name != null" >
+        cate2_name = #{cate2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="cate2Id != null" >
+        cate2_id = #{cate2Id,jdbcType=BIGINT},
+      </if>
+      <if test="cate3Name != null" >
+        cate3_name = #{cate3Name,jdbcType=VARCHAR},
+      </if>
+      <if test="cate3Id != null" >
+        cate3_id = #{cate3Id,jdbcType=BIGINT},
+      </if>
+      <if test="isJoin != null" >
+        is_join = #{isJoin,jdbcType=INTEGER},
+      </if>
+      <if test="classId != null" >
+        class_id = #{classId,jdbcType=BIGINT},
+      </if>
+      <if test="className != null" >
+        class_name = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="class2Id != null" >
+        class2_id = #{class2Id,jdbcType=BIGINT},
+      </if>
+      <if test="class2Name != null" >
+        class2_name = #{class2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="class3Id != null" >
+        class3_id = #{class3Id,jdbcType=BIGINT},
+      </if>
+      <if test="class3Name != null" >
+        class3_name = #{class3Name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="synClass" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoodsClass" >
+    update juanpi_goods_class
+    <set >
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status = #{deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="cateName != null" >
+        cate_name = #{cateName,jdbcType=VARCHAR},
+      </if>
+      <if test="cateId != null" >
+        cate_id = #{cateId,jdbcType=BIGINT},
+      </if>
+      <if test="cate2Name != null" >
+        cate2_name = #{cate2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="cate2Id != null" >
+        cate2_id = #{cate2Id,jdbcType=BIGINT},
+      </if>
+      <if test="cate3Name != null" >
+        cate3_name = #{cate3Name,jdbcType=VARCHAR},
+      </if>
+      <if test="isJoin != null" >
+        is_join = #{isJoin,jdbcType=INTEGER},
+      </if>
+      <if test="classId != null" >
+        class_id = #{classId,jdbcType=BIGINT},
+      </if>
+      <if test="className != null" >
+        class_name = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="class2Id != null" >
+        class2_id = #{class2Id,jdbcType=BIGINT},
+      </if>
+      <if test="class2Name != null" >
+        class2_name = #{class2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="class3Id != null" >
+        class3_id = #{class3Id,jdbcType=BIGINT},
+      </if>
+      <if test="class3Name != null" >
+        class3_name = #{class3Name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where cate3_id = #{cate3Id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoodsClass" >
+    update juanpi_goods_class
+    set add_time = #{addTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=INTEGER},
+      cate_name = #{cateName,jdbcType=VARCHAR},
+      cate_id = #{cateId,jdbcType=BIGINT},
+      cate2_name = #{cate2Name,jdbcType=VARCHAR},
+      cate2_id = #{cate2Id,jdbcType=BIGINT},
+      cate3_name = #{cate3Name,jdbcType=VARCHAR},
+      cate3_id = #{cate3Id,jdbcType=BIGINT},
+      is_join = #{isJoin,jdbcType=INTEGER},
+      class_id = #{classId,jdbcType=BIGINT},
+      class_name = #{className,jdbcType=VARCHAR},
+      class2_id = #{class2Id,jdbcType=BIGINT},
+      class2_name = #{class2Name,jdbcType=VARCHAR},
+      class3_id = #{class3Id,jdbcType=BIGINT},
+      class3_name = #{class3Name,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+	<select id="pageByVO" parameterType="com.sinco.carnation.juanpi.vo.JuanpiGoodsClassVO" resultMap="BOResultMap" >
+	    select 
+		<include refid="Base_Column_List" /> 
+		from juanpi_goods_class jgc
+		where 1=1
+	    <if test="vo.id != null and vo.id != '' " >
+		  and jgc.id = #{vo.id}
+		</if>
+		<if test="vo.addTime != null" >
+		  and jgc.add_time = #{vo.addTime}
+		</if>
+		<if test="vo.updateTime != null" >
+		  and jgc.update_time = #{vo.updateTime}
+		</if>
+		<if test="vo.deleteStatus != null" >
+		  and jgc.delete_status = #{vo.deleteStatus}
+		</if>
+		<if test="vo.cateName != null and vo.cateName != '' " >
+		  and jgc.cate_name = #{vo.cateName}
+		</if>
+		<if test="vo.cateId != null and vo.cateId != '' " >
+		  and jgc.cate_id = #{vo.cateId}
+		</if>
+		<if test="vo.cate2Name != null and vo.cate2Name != '' " >
+		  and jgc.cate2_name = #{vo.cate2Name}
+		</if>
+		<if test="vo.cate2Id != null" >
+		  and jgc.cate2_id = #{vo.cate2Id}
+		</if>
+		<if test="vo.cate3Name != null and vo.cate3Name != '' " >
+		  and jgc.cate3_name = #{vo.cate3Name}
+		</if>
+		<if test="vo.cate3Id != null" >
+		  and jgc.cate3_id = #{vo.cate3Id}
+		</if>
+		<if test="vo.isJoin != null" >
+		  and jgc.is_join = #{vo.isJoin}
+		</if>
+		<if test="vo.classId != null" >
+		  and jgc.class_id = #{vo.classId}
+		</if>
+		<if test="vo.className != null and vo.className != '' " >
+		  and jgc.class_name = #{vo.className}
+		</if>
+		<if test="vo.class2Id != null" >
+		  and jgc.class2_id = #{vo.class2Id}
+		</if>
+		<if test="vo.class2Name != null and vo.class2Name != '' " >
+		  and jgc.class2_name = #{vo.class2Name}
+		</if>
+		<if test="vo.class3Id != null" >
+		  and jgc.class3_id = #{vo.class3Id}
+		</if>
+		<if test="vo.class3Name != null and vo.class3Name != '' " >
+		  and jgc.class3_name = #{vo.class3Name}
+		</if>
+		
+		<if test="vo.jpName != null and vo.jpName != '' ">
+		  AND (cate_name LIKE "%"#{vo.jpName}"%" OR cate2_name LIKE "%"#{vo.jpName}"%" OR cate3_name LIKE "%"#{vo.jpName}"%")
+		</if>
+		<if test="vo.ysName != null and vo.ysName != '' ">
+		  AND (class_name LIKE "%"#{vo.ysName}"%" OR class2_name LIKE "%"#{vo.ysName}"%" OR class3_name LIKE "%"#{vo.ysName}"%")
+		</if>
+	</select>
+	
+	<select id="listByLevelId" resultMap="BOResultMap" >
+	    select id,
+	    <choose>  
+            <when test="level == 1 ">  
+                cate_id jpGcId,cate_name jpGcName
+            </when >  
+            <when test="level == 2 ">  
+                cate2_id jpGcId,cate2_name jpGcName
+            </when >  
+            <when test="level == 3 ">  
+                cate3_id jpGcId,cate3_name jpGcName 
+            </when >  
+            <otherwise>
+            	*
+            </otherwise>  
+        </choose> 
+	    from juanpi_goods_class
+	    where 1=1
+		<if test="isJoin != null" >
+		  and is_join = #{isJoin}
+		</if>
+	    <choose>  
+            <when test="level == 1 ">  
+                GROUP BY cate_id 
+            </when >  
+            <when test="level == 2 ">  
+				<if test="classId != null" >
+                	and cate2_id IN (SELECT cate2_id FROM juanpi_goods_class WHERE cate_id = #{classId}) GROUP BY cate2_id 
+                </if>
+            </when >  
+            <when test="level == 3 ">  
+				<if test="classId != null" >
+					and cate3_id IN (SELECT cate3_id FROM juanpi_goods_class WHERE cate2_id = #{classId})
+                </if>
+            </when >  
+            <otherwise>
+            </otherwise>  
+        </choose> 
+	</select>
+</mapper>

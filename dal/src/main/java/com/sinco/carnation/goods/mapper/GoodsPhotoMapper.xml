@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.goods.mapper.GoodsPhotoMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.goods.model.GoodsPhoto">
+		<id column="goods_id" property="goodsId" jdbcType="BIGINT" />
+		<id column="photo_id" property="photoId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.goods.bo.GoodsPhotoBO"
+		extends="BaseResultMap">
+		<association property="accessory"
+			javaType="com.sinco.carnation.sys.model.Accessory"
+			resultMap="com.sinco.carnation.sys.mapper.AccessoryMapper.BaseResultMap"></association>
+	</resultMap>
+	<select id="findBOByGoodsId" resultMap="BOResultMap">
+		select * from shop_goods_photo p, sys_accessory a where p.photo_id = a.id
+		and p.goods_id = ${goodsId}
+	</select>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		goods_id, photo_id
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.goods.model.GoodsPhotoExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_goods_photo
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete from shop_goods_photo
+		where goods_id = #{goodsId,jdbcType=BIGINT}
+		and photo_id = #{photoId,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.goods.model.GoodsPhotoExample">
+		delete from shop_goods_photo
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.goods.model.GoodsPhoto">
+		insert into shop_goods_photo (goods_id, photo_id)
+		values (#{goodsId,jdbcType=BIGINT}, #{photoId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.goods.model.GoodsPhoto">
+		insert into shop_goods_photo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="goodsId != null">
+				goods_id,
+			</if>
+			<if test="photoId != null">
+				photo_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="goodsId != null">
+				#{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="photoId != null">
+				#{photoId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.goods.model.GoodsPhotoExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_goods_photo
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_goods_photo
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.goodsId != null">
+				goods_id = #{record.goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="record.photoId != null">
+				photo_id = #{record.photoId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_goods_photo
+		set goods_id = #{record.goodsId,jdbcType=BIGINT},
+		photo_id = #{record.photoId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+</mapper>

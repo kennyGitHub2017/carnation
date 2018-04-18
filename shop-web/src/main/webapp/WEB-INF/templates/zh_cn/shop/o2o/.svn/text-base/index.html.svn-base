@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>云尚</title>
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet" />
+    <link href="$!webPath/resources/style/service/public.css?v=2" type="text/css" rel="stylesheet" />
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+
+
+</head>
+<body>
+$!httpInclude.include("/group/top.htm")
+$!httpInclude.include("/group/head.htm")
+<div class="menu-show">
+$!httpInclude.include("/group/nav.htm")
+</div>
+
+<div class="main clearfix">
+    <div class="s-h-banner">
+        <!-- <script src="$!webPath/advert_invoke.htm?apCode=GROUP_HOME_SLIDE"></script> -->
+        <script src="$!webPath/group/advert_invoke_group.htm"></script>
+    </div>
+
+	#if($!groupCase)
+    <div class="multipleColumn title-slide cl">
+        <div class="hd">
+            <a class="next"></a>
+            <ul></ul>
+            <a class="prev"></a>
+        </div>
+        <div class="h-title">
+            <i class="icon h-ico-01"></i>
+            $!groupCase.caseName
+        </div>
+        <div class="s-pro-list bd">
+            <ul class="ulWrap">
+            	#foreach($goods in $caseGoodsList)
+                <li>
+                    <a href="$webPath/group/view_$!{goods.id}.htm" target="_blank">
+                        <div class="pic"><img src="$!{goods.groupAccPath}_265x187" /></div>
+                        <div class="cont">
+                            <div class="name ell">$!goods.ggName</div>
+                            <div class="address ell">$!goods.store.storeName</div>
+                            <div class="fl price">$!goods.groupPrice</div>
+                            <div class="part text-right c_gray">
+                                	已售$!goods.selledCount
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                #end
+            </ul>
+        </div>
+    </div>
+	#end
+	#foreach($floor in $floorList)
+	<div class="cl">
+		<div class="h-title">
+			<a href="$webPath/group/category/search.htm?classId=$!floor.classId" class="more">更多 &gt;&gt;</a> <i class="icon h-ico-02"></i>
+			$!floor.gfName   --fllorId=$!floor.id / floor.classId= $!floor.classId
+		</div>
+		<div class="s-pro-list">
+			<ul>
+				#foreach($store in $floor.stores)
+					#if($!store.storeInfoPath)
+						#set($img=$store.storeInfoPath + "_267x185")
+					#else
+						#set($img=$config.storeImage.path)
+					#end
+					<li><a href="$webPath/group/store.htm?id=$!store.id"  target="_blank">
+							<div class="pic">
+								<img src="$!{img}" />
+							</div>
+							<div class="cont">
+								<div class="name ell">$!store.storeName</div>
+								<div class="address ell">地址：$!store.storeAddress</div>
+								<div class="part text-right c_gray">
+									<div class="five_star">
+										#set($storeEvaluationAverage = $!store.storeEvaluationAverage * 20)
+										<b style="width: ${storeEvaluationAverage}%;" title="好评率：%"></b>
+									</div>
+									$!{store.storeEvaluationCount} 人评价
+								</div>
+							</div>
+					</a></li>
+				#end
+			</ul>
+		</div>
+	</div>
+	#end
+</div>
+
+$!httpInclude.include("/footer.htm")
+
+<script>
+    jQuery(".left_menu_dl").hover(function(){
+        var $this = $(this), $dd = $this.find(".left_menu_dd"), top = $this.position().top, mtop = -1 - top, h;
+        $this.addClass("left_menu_dl_hover");
+        h = $this.find(".left_menu_con").height();
+        if (h > (top + 44)) {
+            $dd.css("margin-top", mtop);
+        } else {
+            mtop = - h + 33;
+            $dd.css("margin-top", mtop);
+        }
+    },function(){
+        $(this).removeClass("left_menu_dl_hover");
+    });
+
+
+    jQuery(".slideBox").slide( { mainCell:".bd ul", effect:"fade",autoPlay:true});
+
+    jQuery(".multipleColumn").slide({titCell:".hd ul",mainCell:".bd .ulWrap", autoPlay: true, autoPage:true,effect:"leftLoop",scroll:2,vis:4});
+
+</script>
+</body>
+</html>

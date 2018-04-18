@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+	<title>订单详情</title>
+	<link href="$!webPath/resources/shop/css/style.css" rel="stylesheet" type="text/css"  />
+	<script src="$!webPath/resources/js/jquery.min.js" type="text/javascript"></script>
+	<script src="$!webPath/resources/js/jquery.min.js" type="text/javascript"></script>
+	<script>
+		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+		document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+    </script>
+    <style>
+    	.order-goods-mes .num_price .price{color: #ff5c44;font-family: arial;}
+    	.addcar-ul .zffs .jiage{color: #FF5C44;font-family: arial;}
+    	#pay_total{color: #FF5C44;font-family: arial;}
+    	.order-goods .order-goods-mes .goods-title{color: #535353;height: 0.6rem;line-height: 0.3rem;overflow: hidden;padding-bottom: 0.05rem;}
+    	.spec{font-size:0.24rem;color:#adadad;text-indent: 0.1rem;height: 0.3rem;line-height: 0.3rem;}
+    	.order-goods-mes .num_price .price {float: left;font-size: 0.24rem;}
+    	.order-goods-mes .num_price .num{float: right;}
+    	.cn_price{font-size: 0.28rem;overflow: hidden;color: #7B7B7B;margin-left: 0.1rem;}
+    	.cn_price .left{float: left;text-indent: 2px;}
+    	.cn_price .left .icon{margin-right:2px;background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAMAAAANxBKoAAAAllBMVEUAAACVxTCWxTCWxTCWxjGVxTCYxjGZyDCWyTKVxTD////m8c6313Pr9Nm52Xir0VucyT2u0mHZ6rXR5aXJ4ZWXxjSZxzn3+u/9/vr5+/P1+erw9+LB3Yaoz1WlzlDo89Lh7sTd7Lyhy0f6/Pby+Obu9d7G4I+923601mzN5Jyw1GSdykHt9dvW6a/U56vD3om212+izUv7g92tAAAACXRSTlMA8+7YwJpDJD1Pxrw1AAABw0lEQVRIx5XV2XKqQBSFYQxishYyGGSewQE1epL3f7mDNBBTkCD/1S7qqwaaolpqWinyAr+3kJWV1PW6xHTLV4HfXvBML2/Nyi2e5vfVl3i2Zf2CeL6VpGC8zD0NrimS3E7Ge98WgOMxGmhZ6vZ5zT4VwCeZDPddQq9dqylr9JUBhj1oTQx6owOqm75iXNt2qw0+th3XKg2hszm6IiOz62NC2yFV9E3pA734W+//1qlLC6jSQ6cPf64dBQ5wY4amcEIjaXZcR9NuStdt6Dud/jepLV5hG/cpmNa2y3MRhKhzGU3pNXf3Z9jUo8/juN7zq9XZ/fYn3uqx/E27dISO6TpAQt8GPOqj2mYJoXPx/TSuAXI9qguGQh/pfUa3tCRzOGQ1qtdUhVYpCumZJnkeaPti4sqTGCzvI9/qsY2UUUEaAy2+g2HmRT04aNuqRkImY/rIABn3l4dLNnAmLyM6KWkh9qmZeCwiMdSFxtCpl/KY/9B7akOt+/QM8TztvxJvjDipcvI00BXp62J8p+s0b0hR6Aw0UvWrncxU/JTGzvVLX7NMfOsFnm8hyTO0LCkztDLvbJh17sw702adl3PP4nnn/H9KQ1emvFliGwAAAABJRU5ErkJggg==") no-repeat left center;background-size: 0.3rem 0.3rem;width: 0.3rem;height: 0.3rem;display: inline-block;vertical-align: text-bottom;}
+    	.cn_price .right{float: right;}
+    	.cn_price .right .icon{margin-right: 2px;background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAMAAAANxBKoAAAApVBMVEUAAABbu1NbulNcu1Ncu1Jbu1NbulRfu1NcvFRbulL///+IzYLR7M9ivVrr9+peu1WNz4dowGD2+/bb8NmZ1JNyxGplvlz8/vzu+O7l9OTh8t/d8Nt3xm9gvFj4/PjW7tR/yXh8yHXy+fHO6svL6cnD5sC947mu3aqh2Jye1pmDy31swWPo9eaz36+l2aBuwmfe8dzH58SR0Yvj8+G24LKn2qKS0YxmSctoAAAACXRSTlMA8+7YwJpDJD1Pxrw1AAAB1klEQVRIx5WV63KyMBRFoVbbbArIHREQ71at7Xd9/0drEnMpNkzN+uEcxjVhn0zIcTiT8cglw7ij8cSRPD2Sn3l8usrPD+QeHp75ylS+T2erG2OYw9AGyf1MnLGFPXZGFvbIcS1s1yE29OzweNi/pTnhRFNGN2TXuxaM+Dd/9MB4Mdv5FpLiSChdVQVD9vIMSrDdbQCcyRVvwO5iUHiEVwDvPdu/ouyay/B5dwBqbcsGMAuF7c+ApAQa9pAByA32Ua59AdYh7TIUST56ucPoA8BO5a6QNIS2x+pTAExvukyAMld22dK2Xrjd0VAH0rejFfCfKHu9pz8LFN1hAWBe39gbGpRoOw/56xSb6KudAvG7tCUVNMFJ21mss2mbBkY7XycFKAtlhwnNRr7ZAdppw3r6BcpS2nugqL/bJVaiYq2+CjsogDfDiY1RimoKauhDe24MdoFAVBmAvbY9YrCBmaiOOgllSwx2A1SivEB3iVVksnO1UX4AGkraKTHZJ7nJDdvBy9C3o1rj/+TpDMA8FHabme0aiJN5AMYfdU7+EbO9hGLnE2FX4YCdrcAp/+qXe0vSR9+DvpemqXfq3V03smt3x9rd33azwWru2M00q3lpO4vt5vwnPwZU2OGP8UsAAAAASUVORK5CYII=) no-repeat left center;background-size: 0.3rem 0.3rem;width: 0.3rem;height: 0.3rem;display: inline-block;vertical-align: text-bottom;}
+    </style>
+</head>
+<body>
+	<div class="main addcar-ul" style="background: none;padding:0rem">
+		<div class="orderdet-id">
+			<span>
+			 #if($!obj.orderStatus==0)
+                                  #set($status="已取消")
+                                  #end
+                                  
+                                  #if($!obj.orderStatus==10)
+                                  #set($status="待付款")
+                                  #end
+                                                                    
+                                  #if($!obj.orderStatus==16)
+                                  #set($status="货到付款待发货")
+                                  #end
+                                  
+                                  #if($!obj.orderStatus==20)
+                                  #set($status="已付款")
+                                  #end
+                                  
+                                  #if($!obj.orderStatus==30)
+                                  #set($status="已发货")        
+                                  #end 
+                                                 
+                                  #if($!obj.orderStatus==40)
+                                  #set($status="已收货")
+                                  #end
+                                  
+                                  #if($!obj.orderStatus==50)
+                                  #set($status="已完成,已评价")                                              
+                                  #end
+                                  
+                                  #if($!obj.orderStatus==60)
+                                  #set($status="已结束")                                              
+                                  #end 
+                                  
+                                  #if($!obj.orderStatus ==65)
+                                  #set($status="已结束，不可评价")                                              
+                                  #end
+			$!{status}
+			</span>
+			<span>订单编号：${obj.orderId}</span>
+		</div>
+		<div class="orderdet-man">
+			<ul>
+				<li>$!{obj.receiverName}<span>$!{obj.receiverMobile}</span></li>
+				<li>$!{obj.receiverArea}$!{obj.receiverAreaInfo}</li>
+			</ul>
+		</div>
+		
+
+		 	#foreach($map in $!orderFormTools.queryGoodsInfo("$!obj.goodsInfo"))
+		 	  				#set($goods_name = "$!{map.get('goods_name')}")
+                            #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+                            #set($goods_count = "$!{map.get('goods_count')}")
+                            #set($thisTotle_Amount = "$!{map.get('goods_all_price')}")
+                          	#set($needYgb = $!{map.get('needYgb')})
+                          	#set($needMoney = $!{map.get('needMoney')})
+                          	#set($cnSelfAddPrice = $!{map.get('cnSelfAddPrice')})
+                          	#set($exPriceFlag = "$!{map.get('ex_price_flag')}")
+                          	#set($goods_gsp_val = "$!{map.get('goods_gsp_val')}")
+           <div class="sj-name">订单商品 </div>            		
+           <div class="order-goods">
+			<img data-original="$!goods_mainphoto_path" alt="" src="$!goods_mainphoto_path">
+			<div class="order-goods-mes">
+				<div class="goods-title">$!goods_name</div>
+				#if($!goods_gsp_val!='')
+				<div class="spec">
+				规则:$!goods_gsp_val
+				</div>
+				#else
+				<div class="spec">
+					规则:无
+				</div>
+				#end
+				
+				#if($!isCN)
+				<div class="cn_price">
+					<div class="left">
+					#if($!needMoney > 0 && $!needYgb > 0)
+						<span class="icon"></span>$!needYgb+ $!needMoney元
+					#elseif($!needYgb > 0)
+						<span class="icon"></span>$!needYgb元
+					#elseif($!needMoney > 0)
+						<span class="icon"></span>$!needMoney元
+					#end
+					</div>
+					#if($!cnSelfAddPrice > 0)
+					<div class="right">
+						<span class="icon"></span>$!cnSelfAddPrice
+					</div>
+					#end
+				</div>
+				#end
+				<div class="num_price">
+					<span class="price">¥$thisTotle_Amount</span>
+					<span>$!goods_count</span>
+				</div>
+			</div>
+		</div>
+             #end	
+
+		<div class="zffs">
+			<span class="zxzhif">
+			<!-- #if($obj.payType == 'online')
+			线上
+			#end -->
+			#set($payment=$!PaymentConstants.getPaymentName($!obj.mark))
+			#if($!payment)
+				$!payment
+			#else
+				线上
+			#end
+			</span><span>支付方式</span>
+		</div>
+		<div class="orderdeta-btn">
+			<a href="">物流追踪<img src="$!webPath/resources/img/0.png" alt=""></a>
+		</div>
+		<div class="zffs zongjiage">
+			<span class="jiage">¥$!{obj.goodsAmount}</span><span>商品总额</span>
+		</div>
+		<div class="zffs zongjiage">
+			<span class="jiage">¥ $!{obj.shipPrice}</span><span>＋运费</span>
+		</div>
+		
+		<div class="shifk">
+			<span class="right">
+				<span>实付款：</span>
+				<span>¥ $!{obj.totalPrice}</span>
+			</span>
+		</div>
+		<div class="shifk order-time">
+			<span class="right">
+				<span>下单时间：$!date.format('yyyy-MM-dd HH:mm:ss ',$!obj.addTime)</span>
+			
+			</span>
+		</div>
+	</div>
+</body>
+</html>

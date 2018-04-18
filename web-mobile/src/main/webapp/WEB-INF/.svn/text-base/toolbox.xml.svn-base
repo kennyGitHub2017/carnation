@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================= @(#) toolbox.xml 
+	Copyright (c) 2005, HOBOKEN Project, All Rights Reserved. ============================================================= -->
+<tools>
+	<toolbox>
+
+		<tool class="org.apache.velocity.tools.generic.ContextTool" />
+
+		<tool>
+			<key>date</key>
+			<scope>application</scope>
+			<class>org.apache.velocity.tools.generic.ComparisonDateTool</class>
+			<parameter name="format" value="yyyy-MM-dd HH:mm:ss" />
+			<parameter name="bundle" value="org.apache.velocity.tools.generic.times" />
+			<parameter name="depth" value="1" />
+			<parameter name="skip" value="month,week,millisecond" />
+		</tool>
+
+		<tool>
+			<key>number</key>
+			<scope>application</scope>
+			<class>org.apache.velocity.tools.generic.NumberTool</class>
+		</tool>
+
+		<tool class="org.apache.velocity.tools.generic.ListTool" />
+	</toolbox>
+</tools>

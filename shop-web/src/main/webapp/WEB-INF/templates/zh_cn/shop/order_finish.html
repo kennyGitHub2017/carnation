@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>支付结果 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods2.css" type="text/css" rel="stylesheet" />
+
+<link rel="stylesheet" type="text/css"
+	href="$!webPath/resources/shop/yugou/css/yunGo.css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm")
+$!httpInclude.include("/nav1.htm")
+<div class="main clearfix">
+	<div class="shopping_step" style="float:none;">
+      <ul>
+        <li class="shopping_step_a"><span></span><i></i><strong>我的购物车</strong></li>
+        <li class="shopping_step_bthree"><span></span><i></i><strong>填写核对订单信息</strong></li>
+        <li class="shopping_step_cthis"><span></span><i></i><strong>成功提交订单</strong></li>
+      </ul>
+    </div>
+    
+    #if($!obj.orderStatus==20&&$!obj.isygOrder)
+    
+    <!-- 新支付成功页面start -->
+    <div class="order_pay_true">
+    	<ul>
+    		<li class="a">订单支付成功</li>
+    		<li class="b">您的订单：$!{obj.orderId}  已成功生成，请查看订单信息时刻关注订单状态。</li>
+    		 #if($!obj.payTypeFlag==1)
+    		 <li class="c">重消：<span>$!{obj.allygPrice}</span></li>
+    		<li class="d">现金支付：$!{obj.shipPrice}</li>
+    		 #else
+    		<li class="c">
+    		 #if($!isCN)
+    			购物积分：
+    		#else
+    			积分：
+    		#end
+    		<span>$number.format("0",$!{obj.allIntegral})</span></li>
+    		<li class="d">现金支付：$!{obj.allCashPrice}</li>
+    		#end
+    		<li class="e">
+    			<a href="$!webPath/buyer/order_view.htm?id=$!obj.id">查看订单信息</a>
+    		</li>
+    	</ul>
+    </div>
+    
+    <div class="deal_detail">
+    	<div class="tit">交易详情</div>
+    	<div class="mes">
+    		<ul>
+    			<li>
+    				<label>商品</label>
+    				<span>精品专区商品</span>
+    			</li>
+    			<li>
+    				<label>交易单号</label>
+    				<span>$!{obj.orderId}</span>
+    			</li>
+    			<li>
+    				<label>成交时间</label>
+    				<span>$!date.format('yyyy-MM-dd HH:mm:ss',$!{obj.payTime})</span>
+    			</li>
+    			<li>
+    				<label>支付方式</label>
+    				<span>$!{payMark}</span>
+    			</li>
+    			<li>
+    				<label>交易状态</label>
+    				<span>待发货</span>
+    			</li>
+    		</ul>
+    	</div>
+    </div>
+     <!-- 新支付成功页面end -->
+			
+    #else
+    
+     <div class="payfor_box">
+    <ul class="payfor_box_ul">
+      <li>订单编号：<i>$!{obj.orderId}</i></li>
+      <li>应付金额：<b>¥$!{all_price}</b></li>
+      #if($!obj.orderStatus==0)
+      #set($status="已取消")
+      #end
+      #if($!obj.orderStatus==10)
+      #set($status="待付款")
+      #end
+      #if($!obj.orderStatus==18)
+      #set($status="待付现金")
+      #end
+      #if($!obj.orderStatus==20)
+      #set($status="付款成功")
+      #end
+      #if($!obj.orderStatus==30)
+      #set($status="已发货")        
+      #end                
+      #if($!obj.orderStatus==40)
+      #set($status="已收货")
+      #end
+      #if($!obj.orderStatus==50)
+      #set($status="已完成,已评价")                                              
+      #end
+      #if($!obj.orderStatus==60)
+      #set($status="已结束")                                              
+      #end
+      <li>支付情况：<em>$!status</em></li>
+    </ul>
+    <span class="payfor_back">#if($!obj.orderStatus==10)<a href="$!webPath/order_pay_view.htm?id=$!obj.id" class="btn btn-blue"><i>返回重新支付</i></a> #end 
+    <a href="$!webPath/buyer/order_view.htm?id=$!obj.id" class="btn btn-blue"><i>查看订单信息</i></a>
+    </span> </div>
+    #end
+    
+ </div>
+ 
+   $!httpInclude.include("/footer.htm")
+</body>
+</html>

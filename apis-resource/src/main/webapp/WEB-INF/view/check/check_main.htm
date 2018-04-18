@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" manifest="check_detail.manifest">
+<head>
+    <meta charset="UTF-8">
+    <title>体检</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <script>
+        var jgGlobal={
+            screenWidth:window.innerWidth||document.documentElement.clientWidth,
+            screenHeight:window.innerHeight||document.documentElement.clientHeight,
+            isALlowTouchMove:true,
+            setFontSize:function(){
+                var sw=window.innerWidth||document.documentElement.clientWidth;
+                if (sw < 640) {
+                    document.documentElement.style.fontSize = parseInt(sw / 640 * 100) + "px";
+                }else{
+                    document.documentElement.style.fontSize="100px";
+                }
+            },
+            setTranslate:function(node, positionY,containCss, useAnimate) {
+                var cssText = [
+                    containCss,
+                    'display: block',
+                    'transform: translate3d(0, ' + positionY + 'px, 0)',
+                    '-webkit-transform: translate3d(0, ' + positionY + 'px, 0)',
+                ].join(';');
+                if (useAnimate) {
+                    cssText = [
+                        cssText,
+                        'transition: .5s transform ease',
+                        '-webkit-transition: .5s -webkit-transform ease'
+                    ].join(';');
+                }
+                node.style.cssText = cssText;
+            },
+            isTouchMove:function(){
+                var _this=this;
+                document.addEventListener("touchmove",function(e){
+                    if(!_this.isALlowTouchMove){
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                },false);
+                if (navigator.userAgent.toLowerCase().indexOf('firefox')>=0)
+                {
+
+                    addEventListener('DOMMouseScroll',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }else{
+                    addEventListener('mousewheel',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }
+            },
+            init:function(){
+                this.isTouchMove();
+                this.setFontSize();
+            }
+        }
+    </script>
+    <style>
+        html,body{width: 100%;height:100%;margin: 0;padding: 0;position: relative}
+        canvas{position: absolute;left:0;top: 0}
+        a,button,input,canvas{-webkit-tap-highlight-color:rgba(0,0,0,0)}
+    </style>
+</head>
+<body>
+    <canvas id="canvas">
+        浏览器不支持canvas
+    </canvas>
+    <canvas id="cirCanvas">
+        浏览器不支持canvas
+    </canvas>
+    <canvas id="eventCanvas">
+        浏览器不支持canvas
+    </canvas>
+    <script>
+        function ImageMonitor(){
+            var imgArray = [];
+            return {
+                createImage : function(src){
+                    return typeof imgArray[src] != 'undefined' ? imgArray[src] : (imgArray[src] = new Image(), imgArray[src].src = src, imgArray[src])
+                },
+                loadImage : function(arr, callback){
+                    for(var i=0,l=arr.length; i<l; i++){
+                        var callback=callback;
+                        var img = arr[i];
+                        imgArray[img] = new Image();
+                        imgArray[img].onload = function(){
+                            if(i==l && typeof callback=='function'){
+                                callback.call(imgArray[img]);
+                            }
+                        }
+                        imgArray[img].src = img;
+                    }
+                }
+            }
+        }
+    </script>
+    <script type="text/javascript">
+	    var isAndroid, isiOS;
+	    (function() {
+	        var u = navigator.userAgent, app = navigator.appVersion;
+	        isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+	        isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+	    }());
+	        
+        window.onload=function(){
+            var RAF = (function () {
+                return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+                            return window.setTimeout(callback, 1000 / 60);
+                        };
+            })();
+            var canvas=document.getElementById("canvas"),
+                    ctx=canvas.getContext("2d");
+            var cirCanvas=document.getElementById("cirCanvas"),
+                    ctx2=cirCanvas.getContext("2d");
+            var eventCanvas=document.getElementById("eventCanvas"),
+            		ctx4=eventCanvas.getContext("2d");
+            
+            var tScale  = window.devicePixelRatio,
+            	tWidth=	jgGlobal.screenWidth,
+            	tHeight=jgGlobal.screenHeight;
+            
+                        
+            canvas.style.width = tWidth + "px";
+            canvas.style.height = tHeight + "px";
+            canvas.width = tWidth * tScale;
+            canvas.height = tHeight * tScale;            
+            
+            cirCanvas.style.width=tWidth + "px";
+            cirCanvas.style.height=tHeight + "px";
+            cirCanvas.width = tWidth * tScale;
+            cirCanvas.height = tHeight * tScale;            
+            
+            
+            eventCanvas.width= tWidth;
+            eventCanvas.height = tHeight;
+            
+            var bigCirRadius=(tWidth/2-50)*tScale,bigBtnRadius=tWidth/6*tScale;
+            //增量角度
+            var angle= 0,opacity=0.8;
+            var angle2= 42,opacity2=0.5;
+            var angle3= 84,opacity3=0.2;
+            ctx.translate(canvas.width/2,canvas.height/2);
+            ctx2.translate(canvas.width/2,canvas.height/2);
+            var im=new ImageMonitor();
+
+            var cirArr=[],bgColorArr=["#698aff","#47cff6","#85cc85","#f36c60","#a287e7","#fb6e94"],
+                    iconArr=["${staticPath}/static/app/check/ico_xueyang.png","${staticPath}/static/app/check/ico_tingli.png","${staticPath}/static/app/check/ico_shili.png","${staticPath}/static/app/check/ico_feihuoliang.png","${staticPath}/static/app/check/ico_xueya.png","${staticPath}/static/app/check/ico_xinlv.png"];
+            for(var i=0;i<6;i++){
+                var cirObj={
+                    bgColor:bgColorArr[i],
+                    angle:60*i,
+                    r:canvas.width/12
+                }
+                cirArr.push(cirObj);
+            }
+            //绘图
+            drawBigCir();            
+            for(var i=0;i<cirArr.length;i++){
+                drawSmallCir(cirArr[i]);
+                drawIcon(cirArr[i],iconArr[i]);
+            }
+            clearLine();
+            drawListText();   
+            function run(){
+            	cirCanvas.width=cirCanvas.width;
+                ctx2.translate(canvas.width/2,canvas.height/2);
+                //部分手机失效 
+                //ctx2.clearRect(-canvas.width/2,-canvas.height/2,canvas.width,canvas.height);
+                	if(angle>angle2){
+                		drawAnimateBtn();
+                        drawAnimateBtn2();
+                	}else{                		
+                        drawAnimateBtn2();
+                        drawAnimateBtn();
+                	}
+               	drawCenterBtn(); 
+               	ctx2.save();
+                ctx2.fillStyle="#fff";
+                ctx2.font=24*tScale + "px Arial";
+                ctx2.textAlign="center";
+                ctx2.textBaseline="bottom";
+                ctx2.fillText("快速",0,0);
+                ctx2.textBaseline="top";
+                ctx2.fillText("体检",0,0);
+                ctx2.restore();
+                RAF(run);
+            }
+			run();
+            
+            
+            //事件
+            eventCanvas.onclick=function(e){
+            	var mx=e.layerX;
+                var my=e.layerY;
+                for (var i=0; i<cirArr.length; i++) {
+                    var event=new AddEvent(cirArr[i],function() {                    
+                        switch(i){
+                        case 0:
+                        	callback("Oximeter");
+                        	break;
+                        case 1:
+                        	callback("Ratings");
+                        	break;
+                        case 2:
+                        	callback("Eyesight");
+                        	break;
+                        case 3:
+                        	callback("Pulmonary");
+                        	break;
+                        case 4:
+                        	callback("Blood");
+                        	break;
+                        case 5:
+                        	callback("HearRate");
+                        	break;
+                        }
+                    });
+                    event.add(mx,my);
+            	}
+                var btncirObj={
+                        bgColor:"#fff",
+                        angle:0,
+                        r:bigBtnRadius,
+                        btn:true
+                    }
+                var btnEvent=new AddEvent(btncirObj,function(){
+                	callback("Quick");
+                });
+                btnEvent.add(mx,my);
+            }
+            
+            
+
+            //画中间按钮的动画
+            function drawAnimateBtn(){
+                if(angle>=90){
+                    angle=0;
+                    opacity=0.8;
+                }else{
+                    angle+=0.7;
+                }
+                ctx2.save();
+                ctx2.beginPath();
+                ctx2.arc(0,0, bigBtnRadius+ Math.sin(angle*Math.PI/180)*30*tScale,0,360*Math.PI/180,false);
+                opacity-=0.006;
+                ctx2.fillStyle= "rgba(255,185,103,"+opacity+")";                
+                ctx2.closePath();
+                ctx2.fill();
+                ctx2.restore();
+            }
+
+            function drawAnimateBtn2(){
+                if(angle2>=90){
+                    angle2=0;
+                    opacity2=0.8;
+                }else{
+                    angle2+=0.7;
+                }
+                ctx2.save();
+                ctx2.beginPath();
+                ctx2.arc(0,0,bigBtnRadius+ Math.sin(angle2*Math.PI/180)*30*tScale,0,360*Math.PI/180,false);
+                opacity2-=0.006;
+                ctx2.fillStyle= "rgba(255,185,103,"+opacity2+")";                
+                ctx2.closePath();
+                ctx2.fill();
+                ctx2.restore();
+            }
+
+            
+
+           
+            function clearLine(){
+            	ctx.clearRect(-canvas.width/2,canvas.width/12,canvas.width,22*tScale);
+            }
+            //小按钮添加文字
+            function drawListText(){
+                ctx.fillStyle="#333";
+                ctx.font=18*tScale + "px Arial";
+                ctx.textAlign="center";
+                ctx.textBaseline="top";
+                ctx.fillText("听力测量",Math.round(bigCirRadius*Math.cos(60*Math.PI/180)),Math.round(bigCirRadius*Math.sin(60*Math.PI/180))+canvas.width/12+10);
+                ctx.fillText("视力测量",Math.round(bigCirRadius*Math.cos(120*Math.PI/180)),Math.round(bigCirRadius*Math.sin(120*Math.PI/180))+canvas.width/12+10);
+                ctx.textBaseline="bottom";
+                ctx.fillText("血压测量",Math.round(bigCirRadius*Math.cos(240*Math.PI/180)),Math.round(bigCirRadius*Math.sin(240*Math.PI/180))-canvas.width/12-10);
+                ctx.fillText("心率测量",Math.round(bigCirRadius*Math.cos(300*Math.PI/180)),Math.round(bigCirRadius*Math.sin(300*Math.PI/180))-canvas.width/12-10);
+                ctx.textBaseline="top";
+                ctx.fillText("血氧测量",Math.round(bigCirRadius*Math.cos(0*Math.PI/180)),Math.round(bigCirRadius*Math.sin(0*Math.PI/180))+canvas.width/12+5);
+                ctx.fillText("肺活量测量",Math.round(bigCirRadius*Math.cos(180*Math.PI/180)),Math.round(bigCirRadius*Math.sin(180*Math.PI/180))+canvas.width/12+5);
+
+            }
+
+            //画中间按钮
+            function drawCenterBtn(){
+                ctx2.beginPath();
+                ctx2.arc(0,0,bigBtnRadius,0,360*Math.PI/180,false);
+                ctx2.fillStyle="#ffa53b";                
+                ctx2.closePath();
+                ctx2.fill();             
+                
+            }
+
+            //画大圆，路径就是小圆的中心
+            function drawBigCir(){
+                ctx.beginPath();
+                ctx.arc(0,0,bigCirRadius,0,360*Math.PI/180,false);
+                ctx.lineWidth=2*tScale;
+                ctx.strokeStyle="#fbddad";
+                ctx.stroke();
+                ctx.closePath();
+            }
+            //画小圆的方法
+            function drawSmallCir(cirObj){
+                ctx.beginPath();
+                ctx.arc(Math.round(bigCirRadius*Math.cos(cirObj.angle*Math.PI/180)),Math.round(bigCirRadius*Math.sin(cirObj.angle*Math.PI/180)),cirObj.r+10,0,360*Math.PI/180,false);
+                ctx.fillStyle="#fff";
+                ctx.fill();
+                ctx.closePath();
+
+                ctx.beginPath();
+                ctx.arc(Math.round(bigCirRadius*Math.cos(cirObj.angle*Math.PI/180)),Math.round(bigCirRadius*Math.sin(cirObj.angle*Math.PI/180)),cirObj.r,0,360*Math.PI/180,false);
+                ctx.fillStyle=cirObj.bgColor;
+                ctx.fill();
+                ctx.closePath();
+            }
+            //画图标
+            function drawIcon(cirObj,imgstr){
+                im.loadImage([imgstr],function(){
+                    ctx.drawImage(this,bigCirRadius*Math.cos(cirObj.angle*Math.PI/180)-canvas.width/20,bigCirRadius*Math.sin(cirObj.angle*Math.PI/180)-canvas.width/20,canvas.width/10,canvas.width/10);
+                });
+            }
+
+            function AddEvent (cirObj,callback) {
+                this.ctx=ctx4;
+                this.cirObj=cirObj;
+                this.callback=callback;
+                this.redraw();
+            }
+
+            AddEvent.prototype={
+                    redraw:function  () {
+                            this.ctx.save();
+                            this.ctx.translate(tWidth/2,tHeight/2);
+                            this.ctx.beginPath();
+                            if(!this.cirObj.btn) {
+                                this.ctx.arc((tWidth/2-50) * Math.cos(this.cirObj.angle * Math.PI / 180), (tWidth/2-50) * Math.sin(this.cirObj.angle * Math.PI / 180), this.cirObj.r/tScale, 0, 360 * Math.PI / 180, false);
+                            }else{
+                                this.ctx.arc(0,0, this.cirObj.r/tScale, 0, 360 * Math.PI / 180, false);
+                            }
+                            this.ctx.strokeStyle="rgba(0,0,0,0)";
+                            this.ctx.closePath();
+                            this.ctx.stroke();
+                            this.ctx.restore();
+                    },
+                    add:function  (mx,my) {
+                        if(this.ctx.isPointInPath(mx,my)){
+                            this.callback();
+                        }
+                    }
+            }
+            
+            
+            function callback(str) {
+            	
+        		if(isAndroid)
+        		{
+        			java.requestCheck(str);
+        		}else
+        		{ 
+        			requestCheck(str);
+        		} 
+        	}
+
+
+        }
+
+
+    </script>
+</body>
+</html>

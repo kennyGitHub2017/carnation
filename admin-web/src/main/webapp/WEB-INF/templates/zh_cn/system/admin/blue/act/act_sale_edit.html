@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/style/system/manage/blue/act.css">
+	<link  href="$!webPath/resources/style/common/css/jquery.imageview.css" type="text/css" rel="stylesheet"/>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js" ></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+	
+	<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+	<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+	<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/overlay.css" type="text/css" rel="stylesheet" />
+	<script src="$!webPath/resources/js/jquery-1.8.2.js"></script>
+	<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+	<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+	<script src="$!webPath/resources/js/jquery.imgareaselect.js"></script>
+	<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+	<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+	<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+	<script src="$!webPath/resources/js/jquery.imageview.js"></script>
+	<style>
+		select{padding:0;top:0}
+		.settings .content {width: auto;}
+		input.uploadPath {border-radius: 5px 0 0 5px;padding: 0 4px;border: 1px solid #d3d3d3;border-right:none}
+		input[type='text']{border: 1px solid #d3d3d3;}
+	</style>
+</head>
+
+<body>
+<div class="actmain">
+<form action="/admin/hot_sale_save.htm" id="theForm" method="post" enctype="application/x-www-form-urlencoded">
+	<input type="hidden" name="id" value="$!hotSale.id" />
+
+	<input type="hidden" name="saleMessage.id" value="$!saleMessage.id" />
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>活动名称:</div>
+		<div class="content"><input type="text" name="hotName" value="$!hotSale.hotName" class="input requied actName" /></div>
+	</div>
+	<div class="settings">
+		<div class="tit">状态:</div>
+		<div class="content">
+			#if($!hotSale.isEnabled==1)
+			<input class="checkbox" value="1" name="isEnabled" id="isUsed" type="checkbox" checked="checked" />
+			#else
+			<input class="checkbox" value="1" name="isEnabled" id="isUsed" type="checkbox" />
+			#end
+			<label for="isUsed" class="checkbox_label"></label><span class="check_des">是否启用</span>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>时间设置:</div>
+		<div class="content">
+		    <input type="text" name="strStartTime" value="$!CommUtil.formatLongDate($!hotSale.startTime)" class="input requied setTime" onclick="SetDate(this,'yyyy-MM-dd hh:mm:ss')" /> — <input type="text" name="strEndTime" value="$!CommUtil.formatLongDate($!hotSale.endTime)" class="input requied setTime" onclick="SetDate(this,'yyyy-MM-dd hh:mm:ss')" />
+<!--    <input name="txtDate" type="text" value="2008-12-15 23:34:23" style="padding-left:5px;" id="txtDate" onclick="SetDate(this,'yyyy-MM-dd hh:mm:ss')" readonly="readonly" />
+    <input name="txtDate1" type="text" style="padding-left:5px;" id="txtDate" onclick="SetDate(this,'yyyy-MM-dd hh:mm')" readonly="readonly" />
+    <input name="txtDate2" type="text" style="padding-left:5px;" id="txtDate" onclick="SetDate(this)" readonly="readonly" />
+    <input name="txtDate3" type="button" style="padding-left:5px;" id="txtDate" onclick="SetDate(document.all.txtDate2,'yyyy-MM-dd')" readonly="readonly" />-->
+		</div>
+	</div>
+	<div class="sectionTit">首页设置</div>
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>弹框图片:</div>
+		<div class="content">
+			<input class="input uploadPath" name="alterPic" type="text requied" value="$!{hotSale.alterPic}" readonly="readonly" id="src_tktp" /><div class="selectImage"><input id="tktp" class="file" type="file" name="imgFile" />选择弹框图片</div>
+			<div class="showUpload">
+				#if(!$!hotSale.alterPic)
+				<img src="" class="thumbnail" id="show_tktp" />
+				#else
+				<img src="$!{hotSale.alterPic}" class="thumbnail" id="show_tktp" />
+				#end
+			</div>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>弹框时间:</div>
+		<div class="content">
+			<div>
+				<input class="checkbox" name="firstOpen" value="true" id="isFirst" type="checkbox" #if($!hotSale.firstOpen) checked="checked" #end  /><label for="isFirst" class="checkbox_label"></label><span class="check_des">首次打开App弹框</span>
+			</div>
+			<div>
+				<input class="checkbox" name="customOpen" value="true" id="isUde" type="checkbox" #if($!hotSale.customOpen) checked="checked" #end /><label id="lb_ude" for="isUde" class="checkbox_label"></label><span class="check_des">自定义时间段</span>
+			</div>
+			<div id="forUde" #if($!hotSale.customOpen) style="display:block" #else style="display:none" #end>
+				<input type="text" name="strOpenStartTime" value="$!hotSale.strOpenStartTime" class="input requied time-ude time" readonly="readonly" onclick="_SetTime(this)"  /> — <input type="text" name="strOpenEndTime" value="$!hotSale.strOpenEndTime" class="input requied time-ude time" readonly="readonly" onclick="_SetTime(this)" />
+			</div>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>浮框图片:</div>
+		<div class="content">
+			<div>
+				<input name="floatPicShow" value="true" class="radio" id="fk_show" type="radio" #if($!hotSale.floatPicShow) checked="checked" #end /><label for="fk_show" class="radio_label"></label><span class="radio_des">显示</span>
+				<input name="floatPicShow" value="false" class="radio" id="fk_hide" type="radio" #if(!$!hotSale.floatPicShow) checked="checked" #end /><label for="fk_hide" class="radio_label"></label><span class="radio_des">不显示</span>
+			</div>
+			
+			<div id="fk_thumbnail" #if($!hotSale.floatPicShow) style="display:block" #else style="display:none" #end>
+				<input class="input requied uploadPath" name="floatPic" value="$!hotSale.floatPic" type="text" id="src_fktp" readonly="readonly" /><div class="selectImage"><input class="file" type="file" id="fktp" name="imgFile" />选择浮框图片</div>
+				<div class="showUpload">
+					#if(!$!hotSale.floatPic)
+					<img src="" class="thumbnail" id="show_fktp" />
+					#else
+					<img src="$!hotSale.floatPic" class="thumbnail" id="show_fktp" />
+					#end
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>H5链接:<!--  http://mobile.ysysgo.com/act_goods_list.htm?ysysgo_app=true&id=$!{saleMessage.id} --></div>
+		<div class="content"><input type="text" name="adsUrl" value="$!hotSale.adsUrl" class="input requied actName" /></div>
+	</div>
+	<div class="sectionTit">H5设置</div>
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>H5标题:</div>
+		<div class="content"><input type="text" name="saleMessage.title" value="$!saleMessage.title" class="input requied actName" /></div>
+	</div>
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>活动头部图片:</div>
+		<div class="content">
+			<input class="input requied uploadPath" id="src_topimg" name="headImage" value="$!hotSale.headImage" type="text" readonly="readonly" /><div class="selectImage"><input id="topimg" class="file" type="file" id="topimg" name="imgFile" />选择头部图片</div>
+			<div class="showUpload">
+				#if(!$!hotSale.headImage)
+				<img src="" class="thumbnail" id="show_topimg" />
+				#else
+				<img src="$!hotSale.headImage" class="thumbnail" id="show_topimg" />
+				#end
+			</div>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>活动底部图片:</div>
+		<div class="content">
+			<input class="input requied uploadPath" id="src_bottomimg" name="footImage" value="$!hotSale.footImage" type="text" readonly="readonly" /><div class="selectImage"><input id="bottomimg" class="file" type="file" id="bottomimg" name="imgFile" />选择底部图片</div>
+			<div class="showUpload">
+				#if(!$!hotSale.footImage)
+				<img src="" id="show_bottomimg" class="thumbnail"  />
+				#else
+				<img src="$!hotSale.footImage" class="thumbnail" id="show_bottomimg" />
+				#end
+			</div>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>H5分享标题:</div>
+		<div class="content"><input type="text" name="saleMessage.shareTitle" value="$!saleMessage.shareTitle" class="input requied actName" /></div>
+	</div>
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>H5分享内容:</div>
+		<div class="content"><input type="text" name="saleMessage.shareContent" value="$!saleMessage.shareContent" class="input requied actName" /></div>
+	</div>
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>H5分享图标:</div>
+		<div class="content">
+			<input class="input requied uploadPath" type="text" name="saleMessage.sharePic" value="$!saleMessage.sharePic" readonly="readonly" id="src_shareicon" /><div class="selectImage"><input id="shareicon" class="file" type="file" id="shareicon" name="imgFile" />选择分享图片</div>
+			<div class="showUpload">
+				
+				
+				
+				<img src="$!saleMessage.sharePic" class="thumbnail" id="show_shareicon" #if(!$!saleMessage.sharePic) style="display:none" #end  />
+				
+			</div>
+		</div>
+	</div>
+	<div class="settings">
+		<input type="hidden" id="templateId" name="saleMessage.templateId" value="$!saleMessage.templateId" />
+		<div class="tit"><span class="required">*</span>H5模板</div>
+		<div class="content">
+			<div><a href="javascript:;" dialog_uri="$!webPath/admin/act_sale_template_choose.htm?v=1" dialog_title="模板选择" dialog_width="840" dialog_top="150" dialog_height="200" dialog_id="templateChoose" id="choose_templ" class="choose_btn">选择H5模板</a><span class="choose_tmpl_desc">请选择H5模版或在模板管理中编辑所需模板后添加。</span></div>
+			<div id="div_tmpl_thumbnail" #if($!saleTemplate.picture) style="display:block" #else style="display:none" #end>				
+				<img src="$!saleTemplate.picture" class="tmpl_thumbnail"  />
+				<span class="thumbnail checkBig" src="images/image1.png">查看大图</span><span class="del_tmpl">删除</span>
+			</div>
+		</div>
+	</div> 
+	
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>H5商品</div>
+		<div class="content">
+			<input type="hidden" id="case_content" name="saleMessage.goodsId" value="$!saleMessage.goodsId" />
+			<a href="javascript:;" class="choose_btn" dialog_uri="$!webPath/admin/goods_case_goods.htm?goods_ids=$!saleMessage.goodsId" dialog_title="橱窗商品" dialog_width="750" dialog_top="150" dialog_height="200" dialog_id="case_goods" id="add_goods">添加商品</a><span class="total_goods" id="goods_count">您还未选择商品</span>	
+		</div>
+	</div>
+    <span class="submittable" style="margin-left:125px; margin-top:20px; float:left">
+      <input name="" type="button" onclick="saveForm()" value="提交"/>     
+    </span>
+</div>
+</form>
+<script src="$!webPath/resources/js/calender.js" type="text/javascript" language="javascript"></script>
+<script>
+	$(function(){
+		$("input[name='floatPicShow']").click(function(){
+			if($("input[name='floatPicShow']").index(this)==0){
+				$("#fk_thumbnail").show();
+			}else{
+				$("#fk_thumbnail").hide();
+			}
+		});
+		$("#lb_ude").click(function(){			
+			if(!$("#isUde").prop("checked")){
+				$("#forUde").show();
+			}else{
+				$("#forUde").hide();
+			}
+		});
+		
+		$(".del_tmpl").click(function(){
+			$("#div_tmpl_thumbnail").hide();
+			$("#templateId").val("");
+		});
+		
+		jQuery("img").imageview();
+		var show_imgs= jQuery("img[id^=show_]");
+		show_imgs.each(function(){
+			if(jQuery(this).attr("src")==""){
+				jQuery(this).hide();
+			}
+		});
+		
+		jQuery(".checkBig").click(function(){
+			$(".tmpl_thumbnail").trigger("dblclick");
+		});
+		var goodsNum=jQuery("#case_content").val().replace(/^,/,'').replace(/,$/,'');
+		if(goodsNum!=""){
+			var length=goodsNum.split(",").length;
+			jQuery("#goods_count").html("共"+length+"件商品");
+		}
+				
+	})
+	
+	function saveForm(){
+		var flag=true;
+		if(jQuery("#isFirst").attr("checked")!="checked"){
+			if(jQuery("#isUde").attr("checked")!="checked"||(jQuery("input[name=strOpenStartTime]").val()==""&&jQuery("input[name=strOpenEndTime]").val()=="")){
+				alert('请选择弹框时间');
+				return;
+			}
+		}
+		jQuery(".requied").each(function(){
+			var obj=jQuery(this);
+			
+			if(obj.attr("name")=="strOpenStartTime"||obj.attr("name")=="strOpenEndTime"){
+				if(jQuery('input[name=customOpen]').attr('checked')!="checked"){//没勾选自定义时间段
+					return;
+				}
+			}
+			
+			if(obj.attr("name")=="floatPic"&&jQuery("#fk_show").attr("checked")!="checked"){//弹框图片不显示
+				return;
+			}			
+			if(obj.val()==""){
+				console.log(obj);
+				alert('*号为必填项');
+				obj.focus();
+				flag=false;
+				return false;
+			}
+		});
+		if(flag){
+		}else{
+			return;
+		}
+		
+		if($("#templateId").val()==""){
+			alert('请选择模板');
+			return;
+		}
+		if($("#case_content").val()==""){
+			alert('还未添加商品');
+			return;
+		}
+		
+		jQuery("#theForm").submit();
+				
+	}
+	
+	//商品图片ajax上传
+	jQuery("input[type=file]").live('change',function(){
+		var that=this;
+		var id=this.id;
+		jQuery(this).parent().next("div").find("img").show().attr("src","$!webPath/resources/style/system/manage/blue/images/loading.gif");
+		console.log(1111);	
+		jQuery.ajaxFileUpload({
+			  url:'/upload.htm',
+			  dataType:'text',
+			  fileElementId:[that.id],
+			  secureuri: false, //一般设置为false
+			  success:function(data){						    
+				var json = eval('(' + data + ')');
+				jQuery("#src_"+id).val(json.url);
+				jQuery("#show_"+id).show().attr("src",json.url);			
+			  }
+		});
+	})
+	
+</script>
+<script type="text/javascript">
+	var str = ""; 
+	document.writeln("<div id=\"_contents\" style=\"padding:5px;background-color:#ECF7FE;font-size:12px;border:1px solid #CFD1D5;position:absolute;z-index:1;visibility:hidden\">"); 
+	str += "<select id=\"_hour\">"; 
+
+	for (h = 0; h <= 23; h++) { 
+		if(h >=0 && h<=9)
+		   str += "<option value=\"0" + h + "\">0" + h + "</option>";
+		else
+		   str += "<option value=\"" + h + "\">" + h + "</option>"; 
+	}
+
+	str += "</select> 时<select id=\"_minute\">"; 
+	for (m = 0; m <= 59; m++) { 
+		if(m >=0 && m<=9)
+		   str += "<option value=\"0" + m + "\">0" + m + "</option>";
+		else
+		   str += "<option value=\"" + m + "\">" + m + "</option>"; 
+	}
+
+	str += "</select> 分"; 
+	
+
+	str += " <input type=\"button\" onclick=\"_select()\" value=\"\确定\" /></div>"; 
+	document.writeln(str);
+
+	var _fieldname; 
+
+	function _SetTime(tt) { 
+		_fieldname = tt; 
+		var ttop = tt.offsetTop;    //TT控件的定位点高 
+		var thei = tt.clientHeight;    //TT控件本身的高 
+		var tleft = tt.offsetLeft;    //TT控件的定位点宽 
+		while (tt = tt.offsetParent) { 
+			ttop += tt.offsetTop; 
+			tleft += tt.offsetLeft; 
+		}
+		document.getElementById("_contents").style.top = ttop+"px"; 
+		document.getElementById("_contents").style.left = tleft+"px"; 
+		document.getElementById("_contents").style.visibility = "visible"; 
+	} 
+
+	function _select() { 
+		_fieldname.value = document.all._hour.value+ ":" + document.all._minute.value; 
+		document.all._contents.style.visibility = "hidden"; 
+	}
+			
+	document.onclick = function(e){		
+			document.all._contents.style.visibility = "hidden";		
+	};
+	jQuery("#_contents,.time-ude").click(function(e){
+		e.stopPropagation();
+	});
+</script>
+</html>
+

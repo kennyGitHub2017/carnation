@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-评价管理- $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+</head>
+
+<body>
+$!httpInclude.include("/seller/top.htm")
+<div class="main">
+<div class="seller_center">
+$!httpInclude.include("/seller/nav.htm?op=groupEvaluate")
+<!-- <div class="seller_center_left"> </div> -->
+<div class="seller_right">
+  <div class="seller_position"><span><b><a href="$!webPath/seller/index.htm">商家中心</a></b>><b>客户服务</b>><b>评价管理</b></span></div>
+		  <div class="seller_list">
+					    <div class="seller_list_title">
+						      <ul class="seller_title_ul">
+						        <li #if(!$!vo.status) class="this" #end><a href="$!webPath/group/evaluate_list.htm">所有评价</a></li>
+						        <li #if($!vo.status==2) class="this" #end><a href="$!webPath/group/evaluate_list.htm?status=2">未回复评价</a></li>
+						         <li #if($!vo.status==3) class="this" #end><a href="$!webPath/group/evaluate_list.htm?status=3">已回复评价</a></li>
+						      </ul>
+					    </div>
+					    <div  class="user_sp_right">
+								      <form method="post" name="ListForm" id="ListForm" action="$!webPath/group/evaluate_list.htm">
+								      	  <div class="user_sp_right"> <span>
+								            <input name="orderId" type="text" class="user_title_txt" id="order_id" placeholder="订单编号" value="$!vo.orderId"/>
+								             <input name="goodsName" type="text" class="user_title_txt" id="goodsName" placeholder="服务名称" value="$!vo.goodsName" />
+								            <input name="nickName" type="text" class="user_title_txt" id="nickName" placeholder="评价人" value="$!vo.nickName"  />
+								             <input type="hidden" name="status" id="status" value="$!vo.status" />
+								            <input name="" type="submit" class="seller_sear_btn" value="查询"/>
+								            </span>
+								          </div>
+								        <div class="operation"> #if($objs.size()>0)
+								          <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" class="user_order_table">
+								            <tr id="opertitle">
+								              <th align="center" width="18%">订单编号</th>
+								              <th width="25%" align="center">服务名称</th>
+								              <th width="12%" align="center">评价星级</th>
+								              <th width="10%" align="center">评价人</th>
+								              <th width="10%" align="center">回复状态</th>
+								              <th align="center">操作</th>
+								            </tr>
+								            #end
+								            #if($objs.size()>0)
+								            #foreach($obj in $objs)
+								            <tr >
+								              <td align="center">$!obj.orderNum</td>
+								              #set($order=$!orderService.fetch($!obj.orderId))
+								              #set($goodMap=$!orderFormTools.queryGroupInfo("$!order.groupInfo"))
+								              <td align="center">$!goodMap.goods_name</td>
+								              						
+								              <td align="center"><img src="$!webPath/resources/style/system/front/default/images/usercenter/eval_star$!{obj.score}.png" width="90" height="18" /></td>
+								              <td align="center">$!obj.nickName</td>
+								              #if($!obj.status==3)
+								              #set($reply="已回复")
+								              #end
+								              #if($!obj.status==2)
+								              #set($reply="未回复")
+								              #end
+								              <td align="center">$!reply</td>
+								              <td align="center" class="del_operate">
+								              <a href="javascript:void(0);" dialog_uri="$!webPath/group/evaluate_info.htm?id=$!obj.orderId" dialog_title="评价内容" dialog_width="410" dialog_height="100" dialog_id="evaluate_info" class="del_a">评价内容</a>
+								              #if($!obj.status==2)
+								              <a href="javascript:void(0);" dialog_uri="$!webPath/group/evaluate_reply.htm?id=$!obj.orderId" dialog_title="回复" dialog_width="410" dialog_height="100" dialog_id="evaluate_info" class="del_a">回复</a> 
+								              #else 
+								              <a href="javascript:void(0);" dialog_uri="$!webPath/group/evaluate_reply.htm?id=$!obj.orderId" dialog_title="回复内容" dialog_width="410" dialog_height="100" dialog_id="evaluate_info" class="del_a">回复内容</a>
+								              #end</td>
+								            </tr>
+								            #end
+								            #else
+								            <tr>
+								              <td colspan="6" align="center"><div class="seller_center_nothing">
+								                  <div class="seller_center_nothing_left"><img src="$!webPath/resources/style/system/front/default/images/seller_center_nothing.png" /></div>
+								                  <div class="seller_center_nothing_right">暂时没有数据</div>
+								                </div></td>
+								            </tr>
+								            #end
+								          </table>
+								        </div>
+								        #if($objs.size()>0)
+								         <div class="userlist_allop">
+								            <input name="currentPage" type="hidden" class="user_title_txt" id="currentPage"  value="$!currentPage"/>
+								            <div class="seller_list_page"><span class="seller_page_sp">$!gotoPageFormHTML</span> </div>
+								          </div>
+								        #end
+								      </form>
+					    </div>
+		  </div>
+</div>
+</div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

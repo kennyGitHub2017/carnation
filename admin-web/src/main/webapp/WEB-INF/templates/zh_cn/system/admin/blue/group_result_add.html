@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head></head>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" href="$!webPath/resources/editor/themes/default/default.css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+<script src="$!webPath/resources/js/jquery.imgareaselect.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.shop.base.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script>
+jQuery(document).ready(function() {
+    jQuery("#logoShow").mouseover(function() {
+        jQuery("#logoImg").css('display', 'block');
+    }).mouseout(function() {
+        jQuery("#logoImg").css('display', 'none');
+    });
+    jQuery.validator.addMethod("egs",
+    	    function(value, element) {
+    			var startScore=$("#startScore").val();
+    			var endScore=$("#endScore").val();
+    			if (parseInt(endScore) >= parseInt(startScore)){
+        			return true;
+        		}else{
+            		return false;
+            	}
+    		});
+    jQuery("#theForm").validate({
+        rules: {
+        	startScore: {
+                required: true,
+                digits:true,
+                max:999
+            },
+            endScore: {
+                required: true,
+                digits:true,
+                max:999,
+                egs:true
+            }
+//             ,
+//             resultDesc: {
+//                 required: true,
+//                 maxlength: 500
+//             }
+        },
+        messages: {
+        	startScore: {
+                required: "开始分数不能为空",
+                digits:"开始分数必须输入正整数",
+                max:"开始分数不能大于999"
+            },
+            endScore: {
+            	required: "结束分数不能为空",
+                digits:"结束分数必须输入正整数",
+                max:"结束分数不能大于999",
+                egs:"结束分数不能小于开始分数"
+            }
+//             ,
+//             resultDesc: {
+//                 required: "结果描述不能为空",
+//                 maxlength: "结果描述最多500字"
+//             }
+        }
+    });
+    //改变系统提示的样式
+    jQuery("span .w").mousemove(function() {
+        var id = jQuery(this.parentNode).attr("id");
+        if (id = "nothis") {
+            jQuery(this.parentNode).attr("id", "this")
+        }
+    }).mouseout(function() {
+        var id = jQuery(this.parentNode).attr("id");
+        if (id = "this") {
+            jQuery(this.parentNode).attr("id", "nothis")
+        }
+    });
+    //结果描述富文本编辑器
+    var options = {
+            cssPath : '$!webPath/resources/editor/themes/default/default.css',
+            filterMode : true,
+    		uploadJson:'$!webPath/upload.htm',
+    		width : '700px',
+    		height:'400px',
+    		resizeType: 1,
+    		syncType:"form",
+    		afterCreate : function() {
+    							var self = this;
+    							self.sync();
+    						},
+    		afterChange : function() {
+    							var self = this;
+    							self.sync();
+    						},
+    		afterBlur : function() {
+    							var self = this;
+    							self.sync();
+    						},
+    		items:[]
+    };
+
+    editor = KindEditor.create('#resultDesc', options);
+});
+
+function saveForm() {
+  var r = jQuery("#theForm").valid(); 
+  var textCountNum = editor.count('text');
+    if(jQuery("#resultDesc").val()=="") {
+		jQuery("#show").show();
+	} else if (textCountNum > 1000) {
+		jQuery("#showLengthError").show();
+	}
+    else {
+		editor.sync();
+  		jQuery("#theForm").submit();
+	}
+}
+</script>
+</head><body>
+<form action="$!webPath/admin/group_result_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="groupId" type="hidden" id="groupId" value="$groupId"/>
+  <input name="listUrl" type="hidden" id="list_url" value="$!webPath/admin/group_result_list.htm?groupId=$groupId" />
+  <input name="addUrl" type="hidden" id="add_url" value="$!webPath/admin/group_result_add.htm?groupId=$groupId" />
+  <div class="cont">
+    <h1 class="seth">自测题管理</h1>
+    <div class="nav_list">
+      <ul>
+        <li><a href="$!webPath/admin/group_result_list.htm?groupId=$groupId" ><b>套题结果列表</b></a></li>
+      	<li><a href="$!webPath/admin/group_result_add.htm?groupId=$groupId" #if(!$!edit) class="this" #end><b>新增结果</b></a></li>
+        #if($!edit)
+        <li><a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+        #end
+      </ul>
+    </div>
+    <div class="edit">
+      <div class="editul setcont" >
+        <ul class="set1">
+          <li ><span class="setcont_bg"></li>
+          <li><span class="webname">
+            题目分值范围：$!questScoreRange.minScore -- $!questScoreRange.maxScore
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>开始分数</li>
+          <li><span class="webname">
+          	 #if($!edit) $!obj.startScore  #else $!startScore  #end
+            <input name="startScore" type="hidden" id="startScore"  #if($!edit) value="$!obj.startScore"  #else value="$!startScore"  #end  />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>结束分数</li>
+          <li><span class="webname">
+          	#if($!edit) 
+          		$!obj.endScore 
+          	#else
+          		<input name="endScore" type="text" id="endScore" value="$!obj.endScore" />
+          	#end
+            </span></li>
+        </ul>
+         <ul class="set1">
+          <li class="setcont_bg">标签</li>
+          <li>
+            <span class="webname">
+              <textarea id="resultTarget" name="resultTarget" style="width:700px;height:100px;">$!obj.resultTarget</textarea>
+            </span>
+          </li>
+          <li style=" clear:both; margin-left:135px;">
+	        <label id="show" class="error" generated="true" style="display:none">标签描述不能为空</label>
+	      </li>
+          <li style=" clear:both; margin-left:135px;">
+	        <label id="showLengthError" class="error" generated="true" style="display:none">结果描述长度不能超过1000</label>
+	      </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>结果描述</li>
+          <li>
+            <span class="webname">
+              <textarea id="resultDesc" name="resultDesc" style="width:100%;height:300px;">$!obj.resultDesc</textarea>
+            </span>
+          </li>
+          <li style=" clear:both; margin-left:135px;">
+	        <label id="show" class="error" generated="true" style="display:none">结果描述不能为空</label>
+	      </li>
+          <li style=" clear:both; margin-left:135px;">
+	        <label id="showLengthError" class="error" generated="true" style="display:none">结果描述长度不能超过1000</label>
+	      </li>
+        </ul>
+      </div>
+    </div>
+    <div class="submit"> <span class="pad120">
+      <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/>
+      </span> </div>
+  </div>
+</form>
+</body>
+</html>

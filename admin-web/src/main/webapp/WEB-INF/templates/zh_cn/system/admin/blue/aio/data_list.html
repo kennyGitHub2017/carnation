@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css"
+	type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery.imageview.css"
+	type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/css/phoneView.css" type="text/css"
+	rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.8.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/qrcode.js"></script>
+<script src="$!webPath/resources/js/phoneView.js"></script>
+<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+<script src="$!webPath/resources/js/jquery.imageview.js"></script>
+<script src="$!webPath/resources/js/smallalert.js"></script>
+<script>
+	Date.prototype.Format = function (fmt) { 
+	    var o = {
+	        "M+": this.getMonth() + 1, //月份 
+	        "d+": this.getDate(), //日 
+	        "h+": this.getHours(), //小时 
+	        "m+": this.getMinutes(), //分 
+	        "s+": this.getSeconds(), //秒 
+	        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+	        "S": this.getMilliseconds() //毫秒 
+	    };
+	    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	    for (var k in o)
+	    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	    return fmt;
+	}
+
+	$(function() {
+		jQuery('#startDate').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+		jQuery('#endDate').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+	})
+
+	
+	function query(){
+		  var days= Math.ceil((new Date($("#endDate").val()).getTime()-new Date($("#startDate").val()).getTime())/60/60/1000/24)	
+		  if(days>60){
+			  smallalert('检测时间不能大于60天');
+			  return;
+		  }
+		  jQuery("#queryCondition").empty();
+		  jQuery.each(jQuery("#queryForm :input"),function(){
+			 	if(this.type!="button"&&this.value!=""){
+				  jQuery("#queryCondition").append("<input name='q_"+this.name+"'type='hidden' id='q_"+this.name+"' value='"+this.value+"' />");	
+				}	
+		  });
+		  jQuery("#currentPage").val(1);
+		 jQuery("#ListForm").submit();
+	}
+</script>
+</head>
+<body scroll="yes">
+	<div class="cont">
+		<h3 class="seth">一体机健康数据管理</h3>
+		<form name="ListForm" id="ListForm"
+			action="$!webPath/admin/aio_data_list.htm" method="post">
+			<div class="search">
+				<span>检测项目</span> <span> <select name="subject" id="subject">
+						<option value="ecg" #if($!vo.subject== "ecg") selected="selected"
+							#end>心电</option>
+						<option value="sysDia" #if($!vo.subject==
+							"sysDia") selected="selected" #end>血压</option>
+						<option value="glu" #if($!vo.subject== "glu") selected="selected"
+							#end>血糖</option>
+						<option value="spo" #if($!vo.subject== "spo") selected="selected"
+							#end>血氧</option>
+						<option value="ua" #if($!vo.subject== "ua") selected="selected"
+							#end>尿酸</option>
+						<option value="chol" #if($!vo.subject==
+							"chol") selected="selected" #end>总胆固醇</option>
+						<option value="tp" #if($!vo.subject== "tp") selected="selected"
+							#end>体温</option>
+				</select>
+				</span> <span>身份证号码</span> <span class="size150"> <input
+					name="idCard" type="text" id="idCard" value="$!vo.idCard" />
+				</span> <span>手机号码</span> <span class="size150"> <input
+					name="mobile" type="text" id="mobile" value="$!vo.mobile" />
+				</span>
+			</div>
+			<div class="search">
+				<span>检测时间</span> <span class="size150"> <input name="startTime"
+					type="text" id="startDate" value="$!vo.startTime"
+					readonly="readonly" />
+				</span> <span>—</span> <span class="size150"> <input name="endTime"
+					type="text" id="endDate" value="$!vo.endTime" readonly="readonly" />
+				</span> <span> <input name="endTime" type="button" value="搜索"
+					style="cursor: pointer;" onclick="query();" class="search_btn" />
+				</span>
+
+			</div>
+			<div class="fshoptb">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					class="fshop_table">
+					<tr>
+						<th width="5%">序号</th>
+						<th width="20%"><span class="form_btna">身份证号码</span></th>
+						<th width="15%"><span class="form_btna">手机号码</span></th>
+						<th width="10%"><span class="form_btna">会员年龄</span></th>
+						<th width="15%"><span class="form_btna">检测时间</span></th>
+						<th width="10%"><span class="form_btna">检测项目</span></th>
+						<th align="center"><b class="form_btnb">检测结果</b></th>
+					</tr>
+					#foreach($aioData in $aioDataList)
+					<tr>
+						<td align="center">$!aioData.id</td>
+						<td align="center">$!aioData.idCard</td>
+						<td align="center">$!aioData.mobile</td>
+						<td align="center">$!aioData.age</td>
+						<td align="center">$!aioData.time</td>
+						<td align="center">$!aioData.subject</td> 
+						#if($!vo.subject=="ecg")
+						<td align="left">#else
+						<td align="center">#end $!aioData.resultMessage</td>
+					</tr>
+					#end
+				</table>
+			</div>
+			<div class="operate_bar">
+				<div class="fenye">
+					<span id="queryCondition" style="display: none"> </span> <input
+						name="mulitId" type="hidden" id="mulitId" /> <input
+						name="currentPage" type="hidden" id="currentPage"
+						value="$!currentPage" /> $!gotoPageFormHTML
+				</div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

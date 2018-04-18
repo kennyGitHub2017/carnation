@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title> #macro ( genericTree $somelist ) #foreach ( $some in
+$somelist )
+<option value="$!some.id">#if($!some.level>0) #foreach($count
+	in [0..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) #end #end
+</head>
+<!--<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>-->
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css"
+	type="text/css" rel="stylesheet" />
+<link rel="stylesheet"
+	href="$!webPath/resources/editor/themes/default/default.css" />
+<script src="$!webPath/resources/js/jquery.shop.base.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+<script src="$!webPath/resources/js/jquery.imgareaselect.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.viewpic.js"></script>
+<script>
+jQuery(document).ready(function(){
+	
+	 jQuery("#logoShow").mouseover(function() {
+	        jQuery("#logoImg").css('display', 'block');
+	    }).mouseout(function() {
+	        jQuery("#logoImg").css('display', 'none');
+	    });
+	
+	 jQuery.validator.addMethod("verify",function(value,element){
+		  var re = /^[0-9a-zA-Z]*$/;
+	        if(re.test(jQuery("#loginName").val())){			
+				return true;
+			  } 
+			  else {
+			    return false;
+			}		  
+});
+
+	 jQuery.validator.addMethod("mobileNo",function(value,element){
+	        if(!isNaN(value) && value.length == 11){			
+				return true;
+			  } 
+			  else {
+			    return false;
+			}		  
+});
+	 jQuery.validator.addMethod("pwd",function(value,element){
+		 var pwds=jQuery("#password").val();
+	        if(pwds != ''){
+	        	if(pwds.length >=6 && pwds.length <= 20){
+	        		return true;
+	        	}
+				return false;
+			  } 
+			  else {
+			    return true;
+			}		  
+});
+	 
+	  jQuery("#theForm").validate({
+		    rules:{
+		    	loginName:{
+			    required :true,
+			    verify:true,
+			    minlength:6,
+				maxlength:20
+			  },
+			  name:{
+				required :true
+			  },
+			  title:{
+				  required :true
+			  },
+			  description:{
+				  required :true
+			  },
+			  email:{
+			    required :true,
+				email:true
+			  },
+			  password:{
+			    pwd:true
+			  },
+			  mobile:{
+			    required:true,
+			    mobileNo:true
+			  }
+			 },
+			messages:{
+				loginName:{
+				  required:"用户名不能为空",
+				  verify:"不可使用特殊字符",
+				  minlength:"用户名长度不能小于6位",
+				  maxlength:"用户名长度不能大于20位"
+				},
+			  name:{required:"姓名不能为空"},
+			  title:{required:"姓名不能为空"},
+			  description:{required:"简介不能为空"},
+			  email:{required:"电子邮箱不能为空",email:"邮箱格式不对"},
+			  password:{pwd:"密码不能小于6位数且不能小于20位"},
+			  mobile:{required:"手机号码不能为空",mobileNo:"手机号码格式不对"}
+			}
+});	
+	 
+	    var options = {
+	            cssPath: '$!webPath/resources/editor/plugins/code/prettify.css',
+	            filterMode: true,
+	            uploadJson: '$!webPath/upload.htm',
+	            width: '900px',
+	            height: '400px',
+	            resizeType: 1,
+	            allowFlashUpload: false,
+	            allowMediaUpload: false,
+	            allowFileManager: false,
+	            syncType: "form",
+	            afterCreate: function() {
+	                var self = this;
+	                self.sync();
+	            },
+	            afterChange: function() {
+	                var self = this;
+	                self.sync();
+	            },
+	            afterBlur: function() {
+	                var self = this;
+	                self.sync();
+	            },
+	            items: ['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste', 'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript', 'superscript', '|', 'selectall', 'clearhtml', 'quickformat', '|', 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage', 'flash', 'media', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+	        };
+
+	        editor = KindEditor.create('#description', options);
+
+});
+
+function saveForm(){
+   jQuery("#theForm").submit();
+}
+</script>
+<body>
+	<div class="cont">
+		<h1 class="seth">专家管理</h1>
+		<div class="nav_list">
+			<ul>
+				<li><a href="$!webPath/admin/experts_list.htm"><b>专家列表</b></a></li>
+				<li><a href="$!webPath/admin/experts_add.htm"
+					#if(!$!edit) class="this" #end><b>新增专家</b></a></li> #if($!edit)
+				<li><a href="javascript:void(0);" class="this"><b>编辑专家</b></a></li>
+				#end
+			</ul>
+
+		</div>
+		<form name="theForm" id="theForm"
+			action="$!webPath/admin/experts_save.htm" enctype="multipart/form-data" method="post" >
+			<input name="uid" type="hidden" id="uid" value="$!exp.uid" /> <input
+				name="currentPage" type="hidden" id="currentPage"
+				value="$!currentPage" /> <input name="list_url" type="hidden"
+				id="list_url" value="$!webPath/admin/experts_list.htm" /> <input
+				name="addUrl" type="hidden" id="addUrl"
+				value="$!webPath/admin/experts_add.htm" />
+			<div class="edit">
+				<div class="editul setcont">
+					<!--鼠标经过样式-->
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>用户名</li>
+						<li><span class="webname"> <input name="loginName" type="text" id="loginName"
+								value="$!exp.loginName" readonly="true" size="40" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">密码
+						</li>
+						<li><span class="webname"> <input name="password"
+								type="password" id="password" size="40" autocomplete="off" />
+						</span><span id="nothis"><strong class="q"></strong><strong
+								class="w">修改用户时候，密码留空表示不修改</strong><strong class="c"></strong></span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>真实姓名</li>
+						<li><span class="webname"> <input name="name"
+								type="text" id="name" value="$!exp.name" size="40" />
+						</span></li>
+					</ul>
+
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>职称</li>
+						<li><span class="webname"> <input name="title"
+								type="text" id="title" value="$!exp.title" size="40" />
+						</span></li>
+					</ul>
+					
+							<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>专家类型</li>
+						<li><span class="webname"> 
+						<select id="expertType" name="expertType">
+						#if($!exp.expertType == 2)
+						<option value="2" selected="selected">健康管理师</option>
+						<option value="1" >抗衰老专家</option>
+						 #else
+						 <option value="1" selected="selected">抗衰老专家</option>
+						 <option value="2">健康管理师</option>
+						 #end
+						</select>
+						</span></li>
+					</ul>
+					
+						<ul class="set1" id="advert_img" >
+		<li class="setcont_bg"><strong class="sred">*</strong>头像</li>
+		<li>
+		<span class="webname"> 
+		  <span class="eidt_li_a" style="position:relative; width:50px; height:22px; line-height:22px;margin-top: 3px; color:#333; border:1px solid #ccc; padding:2px 5px; border-radius:3px;">选择图片
+		    <input type="file" id=advertImg onchange="changePic('advertImg')" style="opacity: 0;top:0;left:1px;position:absolute; z-index:100;width:60px; " name="advertImg" />
+		  </span> 
+		</span>
+		<span class="preview"> 
+			<img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> 
+		</span>
+		#if($!exp.headImgPath)
+		#set($img=$!imageTools.queryImg($!exp.headImgPath))
+		<div class="bigimgpre" id="logoImg" style="display:none; left:270px;"><img src="$!exp.headImgPath"  width="200" height="200" id="headImgPath"/> </div>
+		#end
+		<div class="pic-view"><img id="preview" alt="" name="pic" /></div>
+		</li>
+	 </ul>
+					<ul class="set1">
+						<li class="setcont_bg">性别</li>
+						<li>#if($!exp.sex == 1)<span class="use_code"> <label> <strong><input
+										style="border: none; height: 16px; width: 16px;" name="sex"
+										id="sex" type="radio" value="1" checked="checked" /></strong> <strong
+									class="usecode"> 男</strong>
+							</label>
+						</span><span class="use_code"> <label> <strong><input
+										style="border: none; height: 16px; width: 16px;" type="radio"
+										id="sex" name="sex" value="2" /></strong><strong class="usecode">女</strong>
+							</label>
+						</span>
+						#else 
+						<span class="use_code"> <label> <strong><input
+										style="border: none; height: 16px; width: 16px;" name="sex"
+										id="sex" type="radio" value="1" /></strong> <strong
+									class="usecode"> 男</strong>
+							</label>
+						</span>
+						<span class="use_code"> <label> <strong><input
+										style="border: none; height: 16px; width: 16px;" type="radio"
+										id="sex" name="sex" value="2" checked="checked"  /></strong><strong class="usecode">女</strong>
+							</label>
+						</span>#end</li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>电子邮箱</li>
+						<li><span class="webname"> <input name="email"
+								type="text" id="email" value="$!exp.email" size="40" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>手机号码</li>
+						<li><span class="webname"> <input name="mobile"
+								type="text" id="mobile" value="$!exp.mobile" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>专家简介</li>
+						<li><span class="webname"> <textarea
+									name="description" style="width: 100%; height: 400px;"
+									id="description">$!exp.description</textarea>
+						</span></li>
+						<label id="show" class="error" generated="true"
+							style="display: none">简介内容不能为空</label>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</form>
+		<div class="submit">
+			<span class="pad120"><input name="save" type="button"
+				value="保存" onclick="saveForm()" /></span>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-服务管理 - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+</head>
+<body>
+$!httpInclude.include("/seller/top.htm")
+<div class="main">
+  <div class="seller_center"> 
+  $!httpInclude.include("/seller/nav.htm?op=group_goods_on_offer")
+    <div class="seller_right">
+      <div class="seller_position"> <span> <b><a href="$!webPath/seller/index.htm">商家中心</a></b>><b>服务管理</b> > <b>出售中的服务</b></span> </div>
+      <div class="seller_list">
+        <div class="seller_list_title">
+         <form action="$!webPath/seller/group_goods_list.htm" method="post">
+          <div  class="seller_title_sp">
+           <span>服务分类</span> <span>
+              <select name="goodsType" id="goods_type">
+              	<option value="">请选择服务分类...</option>
+              	<option value="1" #if($!vo.goodsType == 1) selected #end>套餐券</option>
+              	<option value="2" #if($!vo.goodsType == 2) selected #end>代金券</option>
+              </select>
+              </span> 
+              <span>服务名称</span> <span class="size150">
+              <input name="ggName" type="text" id="gg_name" value="$!vo.ggName"/>
+              </span> <span>
+              <input name="ggStatus" type="hidden" id="group_status" value="$!vo.ggStatus" />
+              <input name="" type="submit"  value="搜索" style="cursor:pointer;"   class="seller_sear_btn"/>
+              </span> </div>
+          </form>
+          #if($!objs.size()>0)
+          <div class="alldel_l"><label><span class="check_input">
+            <input name="all" type="checkbox" id="all" value="" onclick="selectAll(this)" />
+            </span> <span>
+            全选
+            </span></label> 
+            <span><a href="javascript:void(0);" onclick="cmd('$!webPath/seller/group_goods_batch_sale.htm','')" class="user_down_shop">下架</a></span>
+<!--             <span><a href="javascript:void(0);" onclick="cmd('$!webPath/seller/goods_qr.htm','')" class="user_down_shop">生成二维码</a></span> -->
+<!--             <span><a href="javascript:void(0);" ck_dialog_uri="$!webPath/seller/goods_format.htm?currentPage=$!currentPage" ck_dialog_title="关联版式" ck_dialog_width="400" ck_dialog_height="100" ck_dialog_id="link_goods_format" class="user_down_shop">关联版式</a></span> -->
+            </div>
+          #end
+        </div>
+        <form action="$!webPath/seller/group_goods_list.htm" method="post" name="ListForm" id="ListForm">
+          <div class="seller_list_box">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" id="opertable" class="user_order_table" >
+              <tr id="opertitle">
+                <th width="5%"></th>
+                <th width="33%">服务名称</th>
+                <th width="20%">服务分类</th>
+                <th width="10%">价格</th>
+                <th width="10%">总库存</th>
+<!--                 <th width="5%">推荐</th> -->
+                <th align="center">操作</th>
+              </tr>
+             #if($!objs.size()>0) 
+              #foreach($obj in $objs)
+              <tr>
+                <td align="center"><span class="checkpro">
+                  <input name="id" type="checkbox" id="id" value="$!obj.id" />
+                  #if($!obj.groupAccPath)
+                  #set($img="$!{obj.groupAccPath}_60x63")
+                  #else
+                  #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                  #end 
+                   #set($goods_url="$!webPath/group/view_$!{obj.id}.htm")
+                <td valign="middle"><dl class="return_goods">
+                    <dt><a href="$!{goods_url}" target="_blank"><img src="$!img" width="60" height="63" /></a></dt>
+                    <dd class="nameproduct" style="padding-top:8px;">
+                    	<a href="$!{goods_url}" target="_blank">$!obj.ggName #if($!obj.groupCount < 1)<b style="color:#F00">[缺货]</b>#end</a>
+                    </dd>
+                  </dl>
+                    <div class="goods_edit">
+                    </div>
+                  </td>
+                <td align="center">$!{obj.groupClassName}</td>
+                #*
+                #set($showPrice=$!{obj.groupPrice})
+                #if($!{obj.selfAddPrice})
+					#set($showPrice=$!{obj.goodsShowPrice} - $!{obj.selfAddPrice})          	
+                #end
+                *#
+                <td align="center">¥$!{obj.groupPrice}</td>                 
+                <td align="center">$!{obj.groupCount}</td>                 
+<!--                 <td align="center"><img src="$!webPath/resources/style/system/front/default/images/usercenter/$!{obj.goods_recommend}.jpg" width="16" height="16" /></td> -->
+                <td class="del_operate" align="center">
+                <a href="$!webPath/seller/group_goods_edit.htm?id=$!obj.id&ggStatus=$!vo.ggStatus" target="_blank" class="del_a">编辑</a>
+                <a href="$!webPath/seller/group_goods_sale.htm?id=$!obj.id" class="del_a">
+                	下架
+                </a>
+                <a href="javascript:void(0);" class="del_a" onclick="showDialog('msg_info','','确认删除该条数据吗？',1,'question',3,function(){window.location.href='$!webPath/seller/group_goods_del.htm?id=$!obj.id&ggStatus=$!vo.ggStatus'});">删除</a>
+                <a href="javascript:void(0);" class="del_a" dialog_uri="$!webPath/seller/group_goods_supplement.htm?id=$!{obj.id}" dialog_title="商品补货" dialog_width="550" dialog_id="goods_supplement">补货</a>
+                </td>
+              </tr>
+              #end
+             #else
+              <tr>
+                <td colspan="6" align="center"><div class="seller_center_nothing">
+                    <div class="seller_center_nothing_left"><img src="$!webPath/resources/style/system/front/default/images/seller_center_nothing.png" /></div>
+                    <div class="seller_center_nothing_right">暂时没有数据</div>
+                  </div></td>
+              </tr>
+              #end
+            </table>
+          </div>
+           #if($!objs.size()>0)
+          <div class="userlist_allop">
+            <div class="seller_list_page">
+              <div  class="seller_page_sp">
+                <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                <input name="mulitId" type="hidden" id="mulitId" />
+                <input name="ggName" type="hidden" id="goods_name" value="$!vo.ggName" />
+                <input name="ggStatus" type="hidden" id="gg_status" value="$!vo.ggStatus" />
+                <input name="goodsType" type="hidden" id="user_class_id" value="$!vo.goodsType" />
+                $!gotoPageFormHTML</div>
+              <div class="user_listoper_p"> <i>
+                 <label><input name="all1" type="checkbox" id="all1" onclick="selectAll(this)" value="" />
+               全选</label>
+                </i> <a href="javascript:void(0);" onclick="cmd('$!webPath/seller/group_goods_batch_sale.htm','')" class="seller_oper_all">下架</a></div>
+            </div>
+          </div>
+          #end
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

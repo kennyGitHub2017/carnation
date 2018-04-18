@@ -1,0 +1,161 @@
+<style>
+.left_menu { height: 496px; background: #00a37b;}
+.left_menu_con { min-height: 384px; max-height: 384px; max-width: 750px;text-align: left;}
+.left_menu_con_center,.left_menu_con_center_left dt,.left_menu_con_center_left { float: none; width: auto;}
+.left_menu_con_center_left{margin: 0;display: inline-block; padding:10px 20px;text-align: left;}
+.left_menu_dl a { color: #fff;}
+.left_menu_dt { border: none;}
+.nav_left h2 { padding-top: 3px;}
+.nav_left h2 em { top: 0; line-height: 40px;}
+.left_menu_dl,.left_menu_dt {/*  height: 47px; */}
+.left_menu_str { font-weight: normal;}
+.index_topleft { display: none;  position:absolute; top:auto; left:0;}
+.menu-show .index_topleft { display: block; }
+.other_menu { display: block;}
+.left_menu_con_center_left dt { margin: 0; font-size: 12px; font-weight: 100; text-align: left; background: none; color: #666; line-height: 28px;}
+.left_menu_con_center_left dt a:hover { color: #19bf96;}
+.left_menu_con_center_left { margin: 0;}
+.left_menu_title { padding-left: 10px; font-size: 16px;text-align: left;}
+
+.menu-arrow { position: absolute; right: 10px; top: 50%; margin-top: -9px; background-position: -190px 0;}
+.left_menu_dl_hover { border-bottom-color: #19bf96; border-top-color: #19bf96;}
+.left_menu_dl_hover .menu-arrow { background-position: -171px 0;}
+
+
+.left_menu_dl .index-right-img{float: right;margin-top: -15px;margin-right: 20px;width: 10px;height: 13px;background: url("$!webPath/resources/style/shop/images/index-right-kai.png")no-repeat center center;}
+.left_menu_dl_hover .index-right-img{float: right;margin-top: -15px;margin-right: 20px;width: 10px;height: 13px;background: url("$!webPath/resources/style/shop/images/index-right-yin.png")no-repeat center center;}
+
+.slideBox .bd ul li{display: none;}
+.slideBox .bd ul li:first-child{display: block;}
+
+.nav ul{overflow: visible;}
+.nav ul .download_dropdown{position:absolute;display:none;left:10px;top:39px;border: solid 1px #ECE9E9;border-radius:3px;box-shadow:0px 2px 4px 0px rgba(0,0,0,0.13);border-radius:3px 0px 0px 0px 3px 3px 3px;width:162px;height:142px;}
+.nav ul .download_dropdown ul{overflow:hidden;width:162px;height:142px;background:#ffffff;}
+.nav ul .download_dropdown ul li{float:left;width:162px}
+.nav ul .download_dropdown ul li a{padding:0;display:block;text-align:center;width:100%}
+.nav ul li#appdownload_li{background: url($!webPath/resources/style/system/front/default/img/icon.png) no-repeat 0 0;background-position:116px 20px;position:relative;z-index:999}
+#appdownload_li:hover .download_dropdown{display:block}
+</style>
+
+
+<div class="nav">
+<div class="nav_center">
+<div class="nav_left">
+<h2><a href="javascript:void(0)"><span>全部分类<em><img src="$!webPath/resources/style/system/front/default/images/nav_top.png" width="14" height="9" /></em></span></a> </h2>
+<div class="index_topleft">
+        <div class="left_menu" id="left_menu"> 
+        #foreach($gc in $!gcs)
+          <dl #if($!velocityCount%2==0)class="left_menu_dl double"  #else class="left_menu_dl" #end child_count="$!gc.childs.size()" #if($!{gc.gc_color}) gc_color="$!{gc.gc_color}" #else gc_color="#E60012" #end  id="$!gc.id" style="position:relative;">
+            <!--left_menu_this缁忚繃鐘舵�侊紝鍜宭eft_menu_dt涓嶇粡鐘舵�佽繃浜ゆ崲-->
+            <dt class="left_menu_dt" id="dts_$!gc.id">
+            	<i class="left_menu_i jiankang-img">  </i>
+            	<strong class="left_menu_str"><a href="$!webPath/group/category/search.htm?classId=$!{gc.id}">$!gc.gcName</a></strong>
+            	<s class="index-right-img" style=""></s>
+            </dt>
+            <dd class="left_menu_dd" id="child_$!gc.id">
+            <!--瀛樺湪骞垮憡鏃秎eft_menu_con this   榧犳爣缁忚繃鐖剁骇鏃舵坊鍔爏tyle="border:1px solid #F00; border-left:3px solid #F00;"娣诲姞搴曞眰棰滆壊-->
+              <div class="left_menu_con" id="left_menu_con_$!{gc.id}">
+                 <h3 class="left_menu_title"><a href="$!webPath/group/category/search.htm?classId=$!{gc.id}">$!gc.gcName</a></h3>
+	             <span class="left_menu_sp">
+	                <div class="left_menu_con_center">
+	                 #foreach($gc1 in $gc.childs)
+	                	<div class="left_menu_con_center_left #if($velocityCount%3 == 1) clear #end">
+	                    	<dl>
+	                        	<dt><a href="$!webPath/group/category/search.htm?classId=$!{gc1.id}">$!gc1.gcName</a></dt>
+	                        </dl>
+	                    </div>
+	                  #end 
+	               </div>
+	         	</span> 
+             </div>
+            </dd>
+          </dl>
+          #end </div>
+      </div>
+</div>
+
+<ul id="navul">
+    
+     <li><a href="$!webPath" id="1" original_url=""><span>首页</span></a></li>
+    <li><a href="$!webPath/brandStore/index" id="2" original_url=""><span>品牌馆</span></a></li>
+     <li><a href="$!webPath/integral/index.htm" id="3" original_url=""><span>积分商城</span></a></li>
+    <li><a href="$!webPath/group/index.htm" id="4" original_url=""><span>周边商户</span></a></li>
+     #if($!cnFlagFalse && $!cnFlagFalse == 1)
+    #else
+    <li><a href="$!webPath/yunGou/index.htm" id="5" original_url=""><span>精选专区</span></a></li>
+    <span style="display: inline-block;position:absolute;right:307px;top:6px; width: 35px;height: 19px;background: url('$!webPath/resources/style/shop/images/yg-cipimg.png') no-repeat center center #fff"></span>
+    
+    #end 
+    <li id="appdownload_li"><a href="$!webPath/appDownLoad.htm" id="6" original_url=""><span>APP下载</span></a>
+		<div class="download_dropdown">
+			<img src="$!webPath/resources/style/system/front/default/img/arraw_top.png" style="position:absolute;left:95px;top:-11px" />
+			<ul>
+				<li><a href="$!webPath/appDownLoad.htm">云尚App下载</a></li>
+				<li><a href="$!webPath/shdappDownLoad.htm">商户App下载</a></li>
+				<li><a href="$!webPath/yysappDownLoad.htm">运营商App下载</a></li>
+			</ul>
+		</div>
+	</li>
+</ul>
+</div>
+</div>
+<script>
+    jQuery(document).ready(function () {
+    	
+        jQuery("#navul li a").each(function (i) {
+            var original_url = jQuery(this).attr("href");
+            if ("" != "") {
+                if (original_url.indexOf("") >= 0) {
+                    jQuery(this).parent().addClass("this");
+                }
+            } else if (i == 0) {
+                jQuery(this).parent().addClass("this");
+            }
+        });
+
+        //榧犳爣缁忚繃宸︿晶鍒嗙被
+        jQuery(".left_menu_dl").hover(function(){
+            var $this = $(this), $dd = $this.find(".left_menu_dd"), top = $this.position().top, mtop = -1 - top, h;
+            $this.addClass("left_menu_dl_hover");
+            h = $this.find(".left_menu_con").height();
+            if (h > (top + 44)) {
+                $dd.css("margin-top", mtop);
+            } else {
+                mtop = - h + 33;
+                $dd.css("margin-top", mtop);
+            }
+        },function(){
+            $(this).removeClass("left_menu_dl_hover");
+        });
+
+        //
+        console.log(jQuery(".nav_left").length);
+        jQuery(".nav_left").mouseover(function(){
+            jQuery(this).find(".index_topleft").addClass("other_menu");
+        });
+        jQuery(".nav_left").mouseleave(function(){
+            jQuery(this).find(".index_topleft").removeClass("other_menu");
+        });
+
+    });
+    $(function(){
+    	if(location.href.indexOf("brandStore")>-1){
+    		$("#navul li").eq(1).addClass("this").siblings().removeClass("this");
+    	}else if(location.href.indexOf("integral")>-1){
+    		$("#navul li").eq(2).addClass("this").siblings().removeClass("this");
+
+    	}else if(location.href.indexOf("group")>-1){
+    		$("#navul li").eq(3).addClass("this").siblings().removeClass("this");
+
+    	}else if(location.href.indexOf("yunGou")>-1){
+    		$("#navul li").eq(4).addClass("this").siblings().removeClass("this");
+
+    	}else if(location.href.indexOf("appDownLoad")>-1){
+    		$("#navul li").eq(5).addClass("this").siblings().removeClass("this");
+
+    	}
+    	
+    });
+    
+    
+</script>

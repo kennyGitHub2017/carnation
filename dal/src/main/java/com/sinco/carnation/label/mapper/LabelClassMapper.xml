@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.label.mapper.LabelClassMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.label.model.LabelClass">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="class_Name" property="className" jdbcType="VARCHAR" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="mark" property="mark" jdbcType="VARCHAR" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.label.bo.LabelClassBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, class_Name, sequence, state, add_Time, parent_id, level, mark,
+		delete_status
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.label.model.LabelClassExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from label_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from label_class
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from label_class
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.label.model.LabelClassExample">
+		delete from label_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.label.model.LabelClass"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into label_class (id, class_Name, sequence,
+		state, add_Time, parent_id,
+		level, mark, delete_status
+		)
+		values (#{id,jdbcType=BIGINT}, #{className,jdbcType=VARCHAR},
+		#{sequence,jdbcType=INTEGER},
+		#{state,jdbcType=INTEGER}, #{addTime,jdbcType=TIMESTAMP}, #{parentId,jdbcType=BIGINT},
+		#{level,jdbcType=INTEGER}, #{mark,jdbcType=VARCHAR},
+		#{deleteStatus,jdbcType=BIT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.label.model.LabelClass"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into label_class
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="className != null">
+				class_Name,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+			add_Time,
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			<if test="mark != null">
+				mark,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="className != null">
+				#{className,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=INTEGER},
+			</if>
+			now(),
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="level != null">
+				#{level,jdbcType=INTEGER},
+			</if>
+			<if test="mark != null">
+				#{mark,jdbcType=VARCHAR},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.label.model.LabelClassExample"
+		resultType="java.lang.Integer">
+		select count(*) from label_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update label_class
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.className != null">
+				class_Name = #{record.className,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.state != null">
+				state = #{record.state,jdbcType=INTEGER},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=BIGINT},
+			</if>
+			<if test="record.level != null">
+				level = #{record.level,jdbcType=INTEGER},
+			</if>
+			<if test="record.mark != null">
+				mark = #{record.mark,jdbcType=VARCHAR},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update label_class
+		set id = #{record.id,jdbcType=BIGINT},
+		class_Name = #{record.className,jdbcType=VARCHAR},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		state = #{record.state,jdbcType=INTEGER},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		parent_id = #{record.parentId,jdbcType=BIGINT},
+		level = #{record.level,jdbcType=INTEGER},
+		mark = #{record.mark,jdbcType=VARCHAR},
+		delete_status = #{record.deleteStatus,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.label.model.LabelClass">
+		update label_class
+		<trim prefix="set" suffixOverrides=",">
+			<if test="className != null">
+				class_Name = #{className,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=INTEGER},
+			</if>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="level != null">
+				level = #{level,jdbcType=INTEGER},
+			</if>
+			<if test="mark != null">
+				mark = #{mark,jdbcType=VARCHAR},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.label.model.LabelClass">
+		update label_class
+		set class_Name = #{className,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=INTEGER},
+		state = #{state,jdbcType=INTEGER},
+		add_Time = #{addTime,jdbcType=TIMESTAMP},
+		parent_id = #{parentId,jdbcType=BIGINT},
+		level = #{level,jdbcType=INTEGER},
+		mark = #{mark,jdbcType=VARCHAR},
+		delete_status = #{deleteStatus,jdbcType=BIT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+
+	<resultMap id="ExtendResultMap" extends="BaseResultMap"
+		type="com.sinco.carnation.label.bo.LabelClassBO">
+	</resultMap>
+	<select id="findByPage" resultMap="ExtendResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from label_class
+		where parent_id is null
+		order by sequence asc
+	</select>
+	<select id="selectBOByExample" resultMap="ExtendResultMap"
+		parameterType="com.sinco.carnation.label.model.LabelClassExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from label_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="count != null">
+			limit 0,#{count}
+		</if>
+	</select>
+</mapper>

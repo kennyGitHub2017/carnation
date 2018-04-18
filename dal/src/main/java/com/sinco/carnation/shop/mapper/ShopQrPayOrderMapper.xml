@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.ShopQrPayOrderMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.ShopQrPayOrder">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="seller_id" property="sellerId" jdbcType="BIGINT" />
+		<result column="pay_order_no" property="payOrderNo" jdbcType="VARCHAR" />
+		<result column="wx_transaction_id" property="wxTransactionId"
+			jdbcType="VARCHAR" />
+		<result column="total_fee" property="totalFee" jdbcType="DECIMAL" />
+		<result column="original_price" property="originalPrice"
+			jdbcType="DECIMAL" />
+		<result column="prepay_id" property="prepayId" jdbcType="VARCHAR" />
+		<result column="order_id" property="orderId" jdbcType="VARCHAR" />
+		<result column="pay_status" property="payStatus" jdbcType="TINYINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="payment_id" property="paymentId" jdbcType="BIGINT" />
+		<result column="payment_type" property="paymentType" jdbcType="TINYINT" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="server_name" property="serverName" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.ShopQrPayOrderBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, seller_id, pay_order_no, wx_transaction_id, total_fee,
+		original_price, prepay_id, order_id, pay_status,
+		create_time, modify_time, payment_id, payment_type, phone, server_name, user_id
+	</sql>
+
+	<select id="findAllPaySuccessMoney" parameterType="java.lang.Long"
+		resultType="java.math.BigDecimal">
+		SELECT SUM(total_fee) FROM shop_qr_pay_order WHERE pay_status=1
+		<if test="sellerId != null">
+			and seller_id = #{sellerId}
+		</if>
+		<if test="startTime != null and startTime != ''">
+			AND DATE_FORMAT(create_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{startTime},'%Y-%m-%d')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND DATE_FORMAT(create_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{endTime},'%Y-%m-%d')
+		</if>
+		;
+	</select>
+
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.shop.model.ShopQrPayOrderExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_qr_pay_order
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_qr_pay_order
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_qr_pay_order
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.shop.model.ShopQrPayOrderExample">
+		delete from shop_qr_pay_order
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.ShopQrPayOrder"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_qr_pay_order (id, seller_id, pay_order_no,
+		wx_transaction_id, total_fee, original_price, prepay_id,
+		order_id, pay_status, create_time,
+		modify_time, payment_id, payment_type,
+		phone, server_name, user_id)
+		values (#{id,jdbcType=BIGINT}, #{sellerId,jdbcType=BIGINT},
+		#{payOrderNo,jdbcType=VARCHAR},
+		#{wxTransactionId,jdbcType=VARCHAR}, #{totalFee,jdbcType=DECIMAL}, #{originalPrice,jdbcType=DECIMAL},
+		#{prepayId,jdbcType=VARCHAR},
+		#{orderId,jdbcType=VARCHAR}, #{payStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
+		#{modifyTime,jdbcType=TIMESTAMP}, #{paymentId,jdbcType=BIGINT},
+		#{paymentType,jdbcType=TINYINT},
+		#{phone,jdbcType=VARCHAR}, #{serverName,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.ShopQrPayOrder"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_qr_pay_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="sellerId != null">
+				seller_id,
+			</if>
+			<if test="payOrderNo != null">
+				pay_order_no,
+			</if>
+			<if test="wxTransactionId != null">
+				wx_transaction_id,
+			</if>
+			<if test="totalFee != null">
+				total_fee,
+			</if>
+			<if test="originalPrice != null">
+				original_price,
+			</if>
+			<if test="prepayId != null">
+				prepay_id,
+			</if>
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="payStatus != null">
+				pay_status,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="modifyTime != null">
+				modify_time,
+			</if>
+			<if test="paymentId != null">
+				payment_id,
+			</if>
+			<if test="paymentType != null">
+				payment_type,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="serverName != null">
+				server_name,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="sellerId != null">
+				#{sellerId,jdbcType=BIGINT},
+			</if>
+			<if test="payOrderNo != null">
+				#{payOrderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="wxTransactionId != null">
+				#{wxTransactionId,jdbcType=VARCHAR},
+			</if>
+			<if test="totalFee != null">
+				#{totalFee,jdbcType=DECIMAL},
+			</if>
+			<if test="originalPrice != null">
+				#{originalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="prepayId != null">
+				#{prepayId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderId != null">
+				#{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="payStatus != null">
+				#{payStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyTime != null">
+				#{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="paymentId != null">
+				#{paymentId,jdbcType=BIGINT},
+			</if>
+			<if test="paymentType != null">
+				#{paymentType,jdbcType=TINYINT},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="serverName != null">
+				#{serverName,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.shop.model.ShopQrPayOrderExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_qr_pay_order
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_qr_pay_order
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.sellerId != null">
+				seller_id = #{record.sellerId,jdbcType=BIGINT},
+			</if>
+			<if test="record.payOrderNo != null">
+				pay_order_no = #{record.payOrderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.wxTransactionId != null">
+				wx_transaction_id = #{record.wxTransactionId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.totalFee != null">
+				total_fee = #{record.totalFee,jdbcType=DECIMAL},
+			</if>
+			<if test="record.originalPrice != null">
+				original_price = #{record.originalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.prepayId != null">
+				prepay_id = #{record.prepayId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.orderId != null">
+				order_id = #{record.orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.payStatus != null">
+				pay_status = #{record.payStatus,jdbcType=TINYINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.modifyTime != null">
+				modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.paymentId != null">
+				payment_id = #{record.paymentId,jdbcType=BIGINT},
+			</if>
+			<if test="record.paymentType != null">
+				payment_type = #{record.paymentType,jdbcType=TINYINT},
+			</if>
+			<if test="record.phone != null">
+				phone = #{record.phone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.serverName != null">
+				server_name = #{record.serverName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_qr_pay_order
+		set id = #{record.id,jdbcType=BIGINT},
+		seller_id = #{record.sellerId,jdbcType=BIGINT},
+		pay_order_no = #{record.payOrderNo,jdbcType=VARCHAR},
+		wx_transaction_id = #{record.wxTransactionId,jdbcType=VARCHAR},
+		total_fee = #{record.totalFee,jdbcType=DECIMAL},
+		original_price = #{record.originalPrice,jdbcType=DECIMAL},
+		prepay_id = #{record.prepayId,jdbcType=VARCHAR},
+		order_id = #{record.orderId,jdbcType=VARCHAR},
+		pay_status = #{record.payStatus,jdbcType=TINYINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+		payment_id = #{record.paymentId,jdbcType=BIGINT},
+		payment_type = #{record.paymentType,jdbcType=TINYINT},
+		phone = #{record.phone,jdbcType=VARCHAR},
+		server_name = #{record.serverName,jdbcType=VARCHAR},
+		user_id = #{record.userId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.ShopQrPayOrder">
+		update shop_qr_pay_order
+		<set>
+			<if test="sellerId != null">
+				seller_id = #{sellerId,jdbcType=BIGINT},
+			</if>
+			<if test="payOrderNo != null">
+				pay_order_no = #{payOrderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="wxTransactionId != null">
+				wx_transaction_id = #{wxTransactionId,jdbcType=VARCHAR},
+			</if>
+			<if test="totalFee != null">
+				total_fee = #{totalFee,jdbcType=DECIMAL},
+			</if>
+			<if test="originalPrice != null">
+				original_price = #{originalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="prepayId != null">
+				prepay_id = #{prepayId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderId != null">
+				order_id = #{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="payStatus != null">
+				pay_status = #{payStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="paymentId != null">
+				payment_id = #{paymentId,jdbcType=BIGINT},
+			</if>
+			<if test="paymentType != null">
+				payment_type = #{paymentType,jdbcType=TINYINT},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="serverName != null">
+				server_name = #{serverName,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.ShopQrPayOrder">
+		update shop_qr_pay_order
+		set seller_id = #{sellerId,jdbcType=BIGINT},
+		pay_order_no = #{payOrderNo,jdbcType=VARCHAR},
+		wx_transaction_id = #{wxTransactionId,jdbcType=VARCHAR},
+		total_fee = #{totalFee,jdbcType=DECIMAL},
+		original_price = #{originalPrice,jdbcType=DECIMAL},
+		prepay_id = #{prepayId,jdbcType=VARCHAR},
+		order_id = #{orderId,jdbcType=VARCHAR},
+		pay_status = #{payStatus,jdbcType=TINYINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+		payment_id = #{paymentId,jdbcType=BIGINT},
+		payment_type = #{paymentType,jdbcType=TINYINT},
+		phone = #{phone,jdbcType=VARCHAR},
+		server_name = #{serverName,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateByPayState">
+		update
+		shop_qr_pay_order
+		<set>
+			pay_status = #{obj.payStatus,jdbcType=TINYINT}
+		</set>
+		<where>
+			1=1
+			<if test="obj.sellerId != null">
+				and seller_id = #{obj.sellerId,jdbcType=BIGINT}
+			</if>
+			<if test="obj.payOrderNo != null">
+				and pay_order_no = #{obj.payOrderNo,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.paymentType != null">
+				and payment_type = #{obj.paymentType,jdbcType=TINYINT}
+			</if>
+		</where>
+	</update>
+
+</mapper>

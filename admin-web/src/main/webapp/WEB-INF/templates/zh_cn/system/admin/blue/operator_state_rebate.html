@@ -1,0 +1,90 @@
+#set($areaSum = ${resultMap['assAmount']} + ${resultMap['asoAmount']} + ${resultMap['aosAmount']})
+#set($ownSum = ${resultMap['ossAmount']} + ${resultMap['osoAmount']} + ${resultMap['oosAmount']})
+#set($registoerSum = ${resultMap['roAmount']} + ${resultMap['rsAmount']} + ${resultMap['rcAmount']})
+#set($paySum = ${resultMap['opAmount']} + ${resultMap['apAmount']} + ${resultMap['rpAmount']})
+#set($rSum = ${resultMap['rcRebate']} + ${resultMap['rsRebate']})
+<div id="container_rebate">
+	<table style="float: left; text-align: left; margin-left: 15px;" width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <th colspan="3">
+	    	<select name="queryType" id="queryType" class="txt min-txt">
+	  			<option value="0">时间段统计</option>
+	  			<option value="w" #if($queryType == "w") selected="selected" #end>本周统计</option>
+	  			<option value="m" #if($queryType == "m") selected="selected" #end>本月统计</option>
+	  			<option value="q" #if($queryType == "q") selected="selected" #end>本季统计</option>
+	  			<option value="h" #if($queryType == "h") selected="selected" #end>本半年统计</option>
+	  			<option value="y" #if($queryType == "y") selected="selected" #end>本年统计</option>
+	  		</select>
+	  		<input #if($queryType != "0") style="display:none;" #end type="text" readonly="readonly" name="startTime" id="startTime" value="$!startTime" class="txt min-txt datepicker" />
+	    	<input #if($queryType != "0") style="display:none;" #end type="text" readonly="readonly" name="endTime" id="endTime" value="$!endTime" class="txt min-txt datepicker" />
+	  		<input name="" type="button" value="搜索" style="cursor:pointer;" title="搜索" class="search_btn" onclick="queryStatistics();">
+		</th>
+	  </tr>
+	  <tr>
+	    <th colspan="3">注册返润收益：$registoerSum 云豆</th>
+	  </tr>
+	  <tr>
+	    <td >推荐运营商：${resultMap['roAmount']} 云豆</td>
+	    <td >推荐商户：${resultMap['rsAmount']} 云豆</td>
+	    <td >推荐会员：${resultMap['rcAmount']} 云豆</td>
+	  </tr>
+	  <tr>
+	    <th colspan="3">辖区返润收益：$areaSum 云豆</th>
+	  </tr>
+	  <tr>
+	    <td >本辖本消：${resultMap['assAmount']} 云豆</td>
+	    <td >本辖外消：${resultMap['asoAmount']} 云豆</td>
+	    <td >外辖本消：${resultMap['aosAmount']} 云豆</td>
+	  </tr>
+	  <tr>
+	    <th colspan="3">隶属返润收益：$ownSum 云豆</th>
+	  </tr>
+	  <tr>
+	    <td >本隶本消：${resultMap['ossAmount']} 云豆</td>
+	    <td >本隶外消：${resultMap['osoAmount']} 云豆</td>
+	    <td >外隶本消：${resultMap['oosAmount']} 云豆</td>
+	  </tr>
+	  <tr>
+	    <th colspan="3">支付手续收益：$paySum 云豆</th>
+	  </tr>
+	  <tr>
+	    <td >隶属支付：${resultMap['opAmount']} 云豆</td>
+	    <td >辖区支付：${resultMap['apAmount']} 云豆</td>
+	    <td >推荐收益：${resultMap['rpAmount']} 云豆</td>
+	  </tr>
+	  <tr>
+	    <th colspan="3">商城收益：$rSum 云豆</th>
+	  </tr>
+	  <tr>
+	    <td >推荐购买分润：${resultMap['rcRebate']} 云豆</td>
+	    <td  colspan="2">推荐产品分润：${resultMap['rsRebate']} 云豆</td>
+	  </tr>
+	  <tr>
+	    <th colspan="3">总计：${resultMap['totleAmount']} 云豆</th>
+	  </tr>
+	</table>
+	<script type="text/javascript">
+		jQuery(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+		jQuery("#queryType").change(function(){
+			if(jQuery(this).val() != '0')
+			{
+				queryStatistics();
+				jQuery("#startTime").hide();
+				jQuery("#endTime").hide();
+			}
+			else
+			{
+				jQuery("#startTime").show();
+				jQuery("#endTime").show();
+			}
+		});
+		function queryStatistics()
+		{
+			jQuery.ajax({type:'POST',url:'$!webPath/admin/operator_state_rebate.htm',data:{id:$!{id}, "queryType":jQuery("#queryType").val(),"startTime":jQuery("#startTime").val(),"endTime":jQuery("#endTime").val()},
+			  success:function(data){
+					jQuery("#container_rebate").empty().append(data);
+				} 
+			});
+		}
+	</script>
+</div>

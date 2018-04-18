@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+       <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+       <link type="text/css" rel="stylesheet" href="/resources/css/jquery-ui.min.css">
+</head>
+<body>
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 预期收益
+</div>
+
+<div class="main">
+    <ul class="m-menu">
+        <li><a href="/operator/operator_expect_income_list.htm"  class="active">预期收益</a> </li>
+    </ul>
+
+	<form class="form-control pb-30" action="/operator/operator_expect_income_list.htm" id="searchForm">
+    	<input type="hidden" name="currentPage" value="1" id="currentPage"/>
+    	商家店名:<input type="text" name="storeName" value="$!vo.storeName" class="txt min-txt">&nbsp;
+    	时间:<input onclick="WdatePicker()" type="text" readonly="readonly" name="beginTimeStr" value="$!vo.beginTimeStr" class="txt min-txt datepicker" /> -
+        	<input onclick="WdatePicker()" type="text" readonly="readonly" name="endTimeStr" value="$!vo.endTimeStr" class="txt min-txt datepicker" />
+        	<input type="submit" class="btn btn-blue btn-medium" value="搜索">
+	</form>
+    <div class="table-scroll-wrap">
+    <p style="margin: 0 0 10px 0;"><b>预期收益总值：$!{totle}云豆</b></p>
+    #if($!objs.size() > 0)
+    	<table cellspacing="0" cellpadding="0" width="100%" class="table-simple table-scroll">
+          <tr>
+            <th>商户店名</th>
+            <th>产生时间</th>
+            <th>收益时间</th>
+            <th>收益金额</th>
+            <th>收益类型</th>
+          </tr>
+          #foreach($obj in $objs)
+          <tr>
+            <td  align="center">$!obj.storeName</td>
+            <td  align="center">$!date.format($!obj.createTime)</td>
+            <td  align="center">$!date.format($!sendTime)</td>
+            <td  align="center">¥$!obj.rebateAmount</td>
+            <td  align="center">$!obj.rebateName</td>
+          </tr>
+          #end
+        </table>
+    </div>
+    <div class="fenye">
+        $!gotoPageFormHTML
+    </div>
+	#else
+		<div class="ui-warn text-center">
+			暂无记录！
+		</div>
+	#end
+</div>
+</body>
+<script src="/resources/js/jquery-1.8.2.js"></script>
+<script src="/resources/js/jquery-ui.min.js"></script>
+<script src="/resources/js/common.js"></script>
+<script src="/resources/js/jquery.blockUI.dialog.js"></script>
+<script src="/resources/js/WdatePicker/WdatePicker.js"></script>
+
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet"/>
+<link  href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+
+jQuery(document).ready(function(){
+	  jQuery('#startDate').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+	  jQuery('#endDate').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+	});
+</script>
+</head>
+<div class="cont">
+    <h1 class="seth">商户统计</h1>
+    <div class="nav_list">
+	  <ul>
+	    <li><a href="$!webPath/admin/merchant_list.htm" ><b>管理</b></a></li>
+	    <li><a href="javascript:void(0)" class="this"><b>商户统计</b></a></li>
+      </ul>
+    </div>
+    <form action="$!webPath/admin/merchant_stat.htm"  method="post" >
+  <div class="search">
+    <ul>
+      <li> 
+        <span class="size100">
+        </span>
+        <span class="size100">
+        </span>
+        <span class="size100">
+        <input type="hidden"  name="id" value="$!id"/>
+      <input name="startDate" type="text" id="startDate" value="$!startDate" readonly="readonly" placeholder="查询开始时间" />
+      </span> <span class="size100">
+      <input name="endDate" type="text" id="endDate" value="$!endDate" readonly="readonly" placeholder="查询结束时间"/>
+      </span>
+        <span>
+        	<input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn"/>
+        </span> 
+      </li>
+    </ul>
+   </div>
+   <div class="edit">
+    <div class="editul setcont">
+    
+      <ul class="set1">
+        <li class="setcont_bg">服务订单成交金额:</li>
+        <li>
+        	<span class="webname">￥$!{of_totalPrice}</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">服务订单成交总数:</li>
+        <li>
+        	<span class="webname">$!{of_totalCount}</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">总的反润金额:</li>
+        <li>
+        	<span class="webname">￥$!{of_totalRebate}</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">隶属于商户的会员:</li>
+        <li>
+        	<span class="webname">$!ownUser</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">总的推荐商户数:</li>
+        <li>
+        	<span class="webname">$!reSeller</span>
+        </li>
+      </ul>
+     
+    </div>
+</div>
+</form>
+</div>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+ <meta name="apple-mobile-web-app-capable" content="yes">
+ <meta name="apple-mobile-web-app-status-bar-style" content="black">
+ <title>供应商登录</title>
+ <link href="$!webPath/resources/login/css/style.css" type="text/css" rel="stylesheet"/>
+ <link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+ <style>
+	html,body{background:#fff;}
+	.ptb-10{text-align: left;padding-left: 0px;}
+	.sh_footer{border-top: none!important;}
+ </style>
+</head>
+<body> 
+	$!httpInclude.include("/user/top.htm")
+	<div class="sh_logo">
+		<a href="$!webPath"><img src="$!webPath/resources/login/img/logo.jpg" alt="云尚" /></a>
+		<span class="sh_title">供应商登录</span>
+	</div>
+	<div class="sh_login_big gys">
+		<div class="content-layout">
+			<div class="layout_right gys">
+				<div class="login-box gys">
+					<div class="login_tit">供应商登录</div>
+					<form action="$!webPath/b2b2c_login.htm" method="post" id="loginForm">
+						<!--提示语-->
+						<div id="J_Message" class="login-msg error">＊ 您输入的账号格式不正确，请重新输入</div>
+						<div class="username-field login_field">
+							<label for="">
+								<i class="iconfont" title="用户名"></i>
+							</label>
+							<input class="login_text" name="username" id="username" type="text" placeholder="请输入手机号码" />
+							<span class="close_user"><!--删除用户名的×--></span>
+						</div>
+						<div class="pwd-field login_field">
+							<label for="">
+								<i class="iconpwd" title="密码"></i>
+							</label>
+							<input class="login_text" name="password" id="password" type="password" placeholder="请输入登录密码" />
+							<span class="close_user"><!--删除密码的×--></span>
+							<input type="hidden" name="accountType" value="$!account_type"/>
+						</div>
+						<div class="yzm-field login_field">
+							<input class="login_text yzm" type="text" id="checkcode" name="code" placeholder="验证码" />
+							<span class="close_user"><!--删除验证码的×--></span>
+							<span class="login_yzm"><img  id="code_img" src="$!webPath/verify.htm" onclick="refreshCode();" alt="" /></span>
+
+						</div>
+						<div class="remember">
+							<input type="checkbox" />记住用户名
+							<a class="forget_pwd" href="$!webPath/forget1.htm?account_type=supplier">忘记密码？</a>
+						</div>
+						#if($!{message})
+						<p class="red ptb-10">$!{message}</p>
+						#end
+						<input name="account_type" type="hidden" id="login_role" value="${accountType}" />
+						<input type="submit" class="sh_login_btn gys" id="btn_submit"  value="登录" />
+						<div class="sh_login_nonumber gys">
+							<a href="$!webPath/seller/ruzhu_pingtai.htm">还没帐号？<span>申请供应商入驻</span></a>
+						</div>
+					</form>
+				</div>
+
+				
+			</div>
+		</div>
+	</div>
+	
+	<!-- 提示商户账号已经入驻了 -->
+	<div class="back_black" style="display: none"></div>
+	<div class="warning" style="display: none">
+		<span class="warning_close"></span>
+		<span class="warn_lan">该账号尚未申请入驻商户</span>
+		<span class="warn_lan">请前往“云尚商城”－“我要合作”申请入驻</span>
+		<a href="javascript:;" class="go gys">立即前往</a>
+	</div>
+	
+	
+	<!-- 提示还没入驻 -->
+	<div class="boss_hint id_band_boss_hint" style="display: none;">
+		<div class="boss_hint_tit">提   示<span class="boose_hint_colse"></span></div>
+		<div class="boss_hint_mes id_band_boss_hint_mes_login">老板，等不急了吧～可惜只差一步，请先入驻！</div>
+		<a href="javascript:;" class="id_band_btn">马上入驻</a>
+	</div>
+	
+	
+	<script src="$!webPath/resources/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="$!webPath/resources/login/js/login.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		jQuery(".warning_close").click(function(event) {
+			jQuery(".back_black").hide();$(".warning").hide();
+		});
+		
+		 function refreshCode(){
+             jQuery("#code_img").attr("src","$!webPath/verify.htm?d"+new Date().getTime());
+         }
+		 
+		 $(".boose_hint_colse").click(function(event) {
+				$(".boss_hint").hide();
+				$(".back_black").hide();
+		});
+	</script>
+
+$!httpInclude.include("/user/footer.htm")
+</body>
+</html>

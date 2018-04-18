@@ -1,0 +1,230 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.sinco.carnation</groupId>
+		<artifactId>carnation-parent</artifactId>
+		<version>0.0.3-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>carnation-apis-auth-server</artifactId>
+
+	<packaging>war</packaging>
+
+	<name>carnation-apis-auth-server</name>
+
+	<properties>
+		<jersey.version>1.12</jersey.version>
+		<surfnet.apis>1.0.0-SNAPSHOT</surfnet.apis>
+		<mysql.driver.version>5.1.34</mysql.driver.version>
+		<logback.version>1.0.6</logback.version>
+		<slf4j.version>1.7.2</slf4j.version>
+		<servlet-api.version>3.0.1</servlet-api.version>
+		<junit.version>4.10</junit.version>
+		<spring.version>4.1.1.RELEASE</spring.version>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>vc.thinker.apis</groupId>
+			<artifactId>apis-authorization-server</artifactId>
+			<version>${surfnet.apis}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-servlet</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-spring</artifactId>
+			<version>${jersey.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-web</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-beans</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-context</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-aop</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- LOGGING begin -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- common-logging 实际调用slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- java.util.logging 实际调用slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+		<!-- log4jdbc -->
+		<dependency>
+			<groupId>org.lazyluke</groupId>
+			<artifactId>log4jdbc-remix</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- LOGGING end -->
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.2</version><!--$NO-MVN-MAN-VER$-->
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>vc.thinker.apis</groupId>
+			<artifactId>apis-surfconext-authn</artifactId>
+			<version>${surfnet.apis}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jasig.cas.client</groupId>
+			<artifactId>cas-client-core</artifactId>
+			<version>3.3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sinco.carnation</groupId>
+			<artifactId>carnation-dal</artifactId>
+			<version>0.0.3-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sinco.carnation</groupId>
+			<artifactId>carnation-biz-sys</artifactId>
+			<version>0.0.3-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sinco.carnation</groupId>
+			<artifactId>carnation-biz-user</artifactId>
+			<version>0.0.3-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sinco.service</groupId>
+			<artifactId>manager-jmx</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>local-nexus</id>
+			<url>http://192.168.1.105:8081/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
+	<distributionManagement>
+		<repository>
+			<id>local-nexus</id>
+			<url>http://192.168.1.105:8081/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>local-nexus</id>
+			<url>http://192.168.1.105:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<id>openconext-releases</id>
+			<name>OpenConext public releases repository</name>
+			<url>https://build.surfconext.nl/repository/public/releases</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>

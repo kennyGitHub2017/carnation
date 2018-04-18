@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.recommend.mapper.RecommendItemMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.recommend.model.RecommendItem">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="show_text" property="showText" jdbcType="VARCHAR" />
+		<result column="show_desc" property="showDesc" jdbcType="VARCHAR" />
+		<result column="img_path" property="imgPath" jdbcType="VARCHAR" />
+		<result column="recommend_type" property="recommendType"
+			jdbcType="VARCHAR" />
+		<result column="link" property="link" jdbcType="VARCHAR" />
+		<result column="udpate_by" property="udpateBy" jdbcType="BIGINT" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, show_text, show_desc, img_path, recommend_type, link, udpate_by,
+		update_time,
+		create_by, create_time, is_deleted
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.recommend.model.RecommendItemExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from recommend_item
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="Long">
+		select
+		<include refid="Base_Column_List" />
+		from recommend_item
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="Long">
+		delete from recommend_item
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.recommend.model.RecommendItemExample">
+		delete from recommend_item
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.recommend.model.RecommendItem">
+		insert into recommend_item (id, show_text, show_desc,
+		img_path, recommend_type, link,
+		udpate_by, update_time, create_by,
+		create_time, is_deleted)
+		values (#{id,jdbcType=BIGINT}, #{showText,jdbcType=VARCHAR},
+		#{showDesc,jdbcType=VARCHAR},
+		#{imgPath,jdbcType=VARCHAR}, #{recommendType,jdbcType=VARCHAR}, #{link,jdbcType=VARCHAR},
+		#{udpateBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP},
+		#{createBy,jdbcType=BIGINT},
+		#{createTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.recommend.model.RecommendItem">
+		insert into recommend_item
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="showText != null">
+				show_text,
+			</if>
+			<if test="showDesc != null">
+				show_desc,
+			</if>
+			<if test="imgPath != null">
+				img_path,
+			</if>
+			<if test="recommendType != null">
+				recommend_type,
+			</if>
+			<if test="link != null">
+				link,
+			</if>
+			<if test="udpateBy != null">
+				udpate_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="showText != null">
+				#{showText,jdbcType=VARCHAR},
+			</if>
+			<if test="showDesc != null">
+				#{showDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="imgPath != null">
+				#{imgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendType != null">
+				#{recommendType,jdbcType=VARCHAR},
+			</if>
+			<if test="link != null">
+				#{link,jdbcType=VARCHAR},
+			</if>
+			<if test="udpateBy != null">
+				#{udpateBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.recommend.model.RecommendItemExample"
+		resultType="java.lang.Integer">
+		select count(*) from recommend_item
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update recommend_item
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.showText != null">
+				show_text = #{record.showText,jdbcType=VARCHAR},
+			</if>
+			<if test="record.showDesc != null">
+				show_desc = #{record.showDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.imgPath != null">
+				img_path = #{record.imgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.recommendType != null">
+				recommend_type = #{record.recommendType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.link != null">
+				link = #{record.link,jdbcType=VARCHAR},
+			</if>
+			<if test="record.udpateBy != null">
+				udpate_by = #{record.udpateBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update recommend_item
+		set id = #{record.id,jdbcType=BIGINT},
+		show_text = #{record.showText,jdbcType=VARCHAR},
+		show_desc = #{record.showDesc,jdbcType=VARCHAR},
+		img_path = #{record.imgPath,jdbcType=VARCHAR},
+		recommend_type = #{record.recommendType,jdbcType=VARCHAR},
+		link = #{record.link,jdbcType=VARCHAR},
+		udpate_by = #{record.udpateBy,jdbcType=BIGINT},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{record.isDeleted,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.recommend.model.RecommendItem">
+		update recommend_item
+		<trim prefix="set" suffixOverrides=",">
+			<if test="showText != null">
+				show_text = #{showText,jdbcType=VARCHAR},
+			</if>
+			<if test="showDesc != null">
+				show_desc = #{showDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="imgPath != null">
+				img_path = #{imgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendType != null">
+				recommend_type = #{recommendType,jdbcType=VARCHAR},
+			</if>
+			<if test="link != null">
+				link = #{link,jdbcType=VARCHAR},
+			</if>
+			<if test="udpateBy != null">
+				udpate_by = #{udpateBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIT},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.recommend.model.RecommendItem">
+		update recommend_item
+		set show_text = #{showText,jdbcType=VARCHAR},
+		show_desc = #{showDesc,jdbcType=VARCHAR},
+		img_path = #{imgPath,jdbcType=VARCHAR},
+		recommend_type = #{recommendType,jdbcType=VARCHAR},
+		link = #{link,jdbcType=VARCHAR},
+		udpate_by = #{udpateBy,jdbcType=BIGINT},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{isDeleted,jdbcType=BIT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

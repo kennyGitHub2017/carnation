@@ -1,0 +1,27 @@
+<form action="do_goods_check_n_form.htm?id=$!{id}" method="post" id="goodsCheckOrderForm">
+ <table style="float: left;" width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <td style="height: 50px;">
+			备注：
+	    </td>
+	    <td style="height: 50px;">
+			<textarea rows="3" cols="80" id="remark" name="remark">
+			</textarea>
+			<input type="hidden" name="id" value="$!id"/>
+			<input type="hidden" name="goodState" value="-6"/> <!-- 审核不通过 -->
+	    </td>
+	  </tr>
+</table>
+<input type="button" value="确定" style="cursor:pointer;" class="search_btn" onclick="submitForm();">   	
+</form>
+<script>
+function submitForm()
+{
+	var remark = jQuery("#remark").val();
+	if(remark==null || remark.length<=0){
+		alert("请输入备注！");
+		return false;
+	}
+	jQuery("#goodsCheckOrderForm").submit();
+}
+</script>

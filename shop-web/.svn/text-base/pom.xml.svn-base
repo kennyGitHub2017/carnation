@@ -1,0 +1,264 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.sinco.carnation</groupId>
+		<artifactId>carnation-parent</artifactId>
+		<version>0.0.3-SNAPSHOT</version>
+	</parent>
+	<artifactId>carnation-shop-web</artifactId>
+	<packaging>war</packaging>
+	<name>shop-web</name>
+	<dependencies>
+
+		<dependency>
+			<groupId>com.sinco.carnation</groupId>
+			<artifactId>carnation-biz-shop</artifactId>
+			<version>0.0.3-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sinco.carnation</groupId>
+			<artifactId>carnation-biz-check</artifactId>
+			<version>0.0.3-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sinco.carnation</groupId>
+			<artifactId>carnation-biz-sys</artifactId>
+			<version>0.0.3-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sinco.carnation</groupId>
+			<artifactId>carnation-biz-sns</artifactId>
+			<version>0.0.3-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sinco.carnation</groupId>
+			<artifactId>carnation-biz-user</artifactId>
+			<version>0.0.3-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sinco.carnation</groupId>
+			<artifactId>carnation-web-basic</artifactId>
+			<version>0.0.3-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sinco.carnation</groupId>
+			<artifactId>carnation-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.sinco.carnation</groupId>
+			<artifactId>carnation-lucene</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.javacsv</groupId>
+			<artifactId>javacsv</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>jcifs</groupId>
+			<artifactId>jcifs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mrbean</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.opensymphony.quartz</groupId>
+			<artifactId>quartz</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.tuckey</groupId>
+			<artifactId>urlrewritefilter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.htmlparser</groupId>
+			<artifactId>thumbelina</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-oxm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>opensymphony</groupId>
+			<artifactId>sitemesh</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<!-- WEB end -->
+
+		<!-- LOGGING begin -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- common-logging 实际调用slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- java.util.logging 实际调用slf4j -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+		<!-- log4jdbc -->
+		<dependency>
+			<groupId>org.lazyluke</groupId>
+			<artifactId>log4jdbc-remix</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- LOGGING end -->
+		<dependency>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.imgscalr</groupId>
+			<artifactId>imgscalr-lib</artifactId>
+			<version>4.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.baidu.ueditor</groupId>
+			<artifactId>ueditor</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.weedfs.client</groupId>
+			<artifactId>weed-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>vc.thinker</groupId>
+			<artifactId>web-velocity</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>com.alipay</groupId>
+		  <artifactId>alipay-sdk-java</artifactId>
+		  <version>20161121110022</version>
+		</dependency>
+		<dependency>
+		  <groupId>commons-logging</groupId>
+		  <artifactId>commons-logging</artifactId>
+		  <version>1.1.1</version>
+		</dependency>
+		
+
+	</dependencies>
+</project>

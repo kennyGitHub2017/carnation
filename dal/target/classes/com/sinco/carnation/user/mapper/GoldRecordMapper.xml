@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.GoldRecordMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.GoldRecord">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="gold_admin_time" property="goldAdminTime"
+			jdbcType="TIMESTAMP" />
+		<result column="gold_count" property="goldCount" jdbcType="INTEGER" />
+		<result column="gold_money" property="goldMoney" jdbcType="INTEGER" />
+		<result column="gold_pay_status" property="goldPayStatus"
+			jdbcType="INTEGER" />
+		<result column="gold_payment" property="goldPayment" jdbcType="VARCHAR" />
+		<result column="gold_sn" property="goldSn" jdbcType="VARCHAR" />
+		<result column="gold_status" property="goldStatus" jdbcType="INTEGER" />
+		<result column="gold_admin_id" property="goldAdminId" jdbcType="BIGINT" />
+		<result column="gold_user_id" property="goldUserId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.GoldRecordBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.user.model.GoldRecord"
+		extends="BaseResultMap">
+		<result column="gold_admin_info" property="goldAdminInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="gold_exchange_info" property="goldExchangeInfo"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, gold_admin_time, gold_count, gold_money,
+		gold_pay_status,
+		gold_payment, gold_sn, gold_status, gold_admin_id, gold_user_id
+	</sql>
+	<sql id="Blob_Column_List">
+		gold_admin_info, gold_exchange_info
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.user.model.GoldRecordExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_gold_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.user.model.GoldRecordExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_gold_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_gold_record
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_gold_record
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.GoldRecordExample">
+		delete from user_gold_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.GoldRecord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_gold_record (id, add_time, delete_status,
+		gold_admin_time, gold_count, gold_money,
+		gold_pay_status, gold_payment, gold_sn,
+		gold_status, gold_admin_id, gold_user_id,
+		gold_admin_info, gold_exchange_info
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{goldAdminTime,jdbcType=TIMESTAMP}, #{goldCount,jdbcType=INTEGER}, #{goldMoney,jdbcType=INTEGER},
+		#{goldPayStatus,jdbcType=INTEGER}, #{goldPayment,jdbcType=VARCHAR},
+		#{goldSn,jdbcType=VARCHAR},
+		#{goldStatus,jdbcType=INTEGER}, #{goldAdminId,jdbcType=BIGINT}, #{goldUserId,jdbcType=BIGINT},
+		#{goldAdminInfo,jdbcType=LONGVARCHAR},
+		#{goldExchangeInfo,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.GoldRecord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_gold_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="goldAdminTime != null">
+				gold_admin_time,
+			</if>
+			<if test="goldCount != null">
+				gold_count,
+			</if>
+			<if test="goldMoney != null">
+				gold_money,
+			</if>
+			<if test="goldPayStatus != null">
+				gold_pay_status,
+			</if>
+			<if test="goldPayment != null">
+				gold_payment,
+			</if>
+			<if test="goldSn != null">
+				gold_sn,
+			</if>
+			<if test="goldStatus != null">
+				gold_status,
+			</if>
+			<if test="goldAdminId != null">
+				gold_admin_id,
+			</if>
+			<if test="goldUserId != null">
+				gold_user_id,
+			</if>
+			<if test="goldAdminInfo != null">
+				gold_admin_info,
+			</if>
+			<if test="goldExchangeInfo != null">
+				gold_exchange_info,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="goldAdminTime != null">
+				#{goldAdminTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="goldCount != null">
+				#{goldCount,jdbcType=INTEGER},
+			</if>
+			<if test="goldMoney != null">
+				#{goldMoney,jdbcType=INTEGER},
+			</if>
+			<if test="goldPayStatus != null">
+				#{goldPayStatus,jdbcType=INTEGER},
+			</if>
+			<if test="goldPayment != null">
+				#{goldPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="goldSn != null">
+				#{goldSn,jdbcType=VARCHAR},
+			</if>
+			<if test="goldStatus != null">
+				#{goldStatus,jdbcType=INTEGER},
+			</if>
+			<if test="goldAdminId != null">
+				#{goldAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="goldUserId != null">
+				#{goldUserId,jdbcType=BIGINT},
+			</if>
+			<if test="goldAdminInfo != null">
+				#{goldAdminInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goldExchangeInfo != null">
+				#{goldExchangeInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.GoldRecordExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_gold_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_gold_record
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.goldAdminTime != null">
+				gold_admin_time = #{record.goldAdminTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.goldCount != null">
+				gold_count = #{record.goldCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.goldMoney != null">
+				gold_money = #{record.goldMoney,jdbcType=INTEGER},
+			</if>
+			<if test="record.goldPayStatus != null">
+				gold_pay_status = #{record.goldPayStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.goldPayment != null">
+				gold_payment = #{record.goldPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goldSn != null">
+				gold_sn = #{record.goldSn,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goldStatus != null">
+				gold_status = #{record.goldStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.goldAdminId != null">
+				gold_admin_id = #{record.goldAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goldUserId != null">
+				gold_user_id = #{record.goldUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goldAdminInfo != null">
+				gold_admin_info = #{record.goldAdminInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goldExchangeInfo != null">
+				gold_exchange_info = #{record.goldExchangeInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update user_gold_record
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		gold_admin_time = #{record.goldAdminTime,jdbcType=TIMESTAMP},
+		gold_count = #{record.goldCount,jdbcType=INTEGER},
+		gold_money = #{record.goldMoney,jdbcType=INTEGER},
+		gold_pay_status = #{record.goldPayStatus,jdbcType=INTEGER},
+		gold_payment = #{record.goldPayment,jdbcType=VARCHAR},
+		gold_sn = #{record.goldSn,jdbcType=VARCHAR},
+		gold_status = #{record.goldStatus,jdbcType=INTEGER},
+		gold_admin_id = #{record.goldAdminId,jdbcType=BIGINT},
+		gold_user_id = #{record.goldUserId,jdbcType=BIGINT},
+		gold_admin_info = #{record.goldAdminInfo,jdbcType=LONGVARCHAR},
+		gold_exchange_info = #{record.goldExchangeInfo,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_gold_record
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		gold_admin_time = #{record.goldAdminTime,jdbcType=TIMESTAMP},
+		gold_count = #{record.goldCount,jdbcType=INTEGER},
+		gold_money = #{record.goldMoney,jdbcType=INTEGER},
+		gold_pay_status = #{record.goldPayStatus,jdbcType=INTEGER},
+		gold_payment = #{record.goldPayment,jdbcType=VARCHAR},
+		gold_sn = #{record.goldSn,jdbcType=VARCHAR},
+		gold_status = #{record.goldStatus,jdbcType=INTEGER},
+		gold_admin_id = #{record.goldAdminId,jdbcType=BIGINT},
+		gold_user_id = #{record.goldUserId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.GoldRecord">
+		update user_gold_record
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="goldAdminTime != null">
+				gold_admin_time = #{goldAdminTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="goldCount != null">
+				gold_count = #{goldCount,jdbcType=INTEGER},
+			</if>
+			<if test="goldMoney != null">
+				gold_money = #{goldMoney,jdbcType=INTEGER},
+			</if>
+			<if test="goldPayStatus != null">
+				gold_pay_status = #{goldPayStatus,jdbcType=INTEGER},
+			</if>
+			<if test="goldPayment != null">
+				gold_payment = #{goldPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="goldSn != null">
+				gold_sn = #{goldSn,jdbcType=VARCHAR},
+			</if>
+			<if test="goldStatus != null">
+				gold_status = #{goldStatus,jdbcType=INTEGER},
+			</if>
+			<if test="goldAdminId != null">
+				gold_admin_id = #{goldAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="goldUserId != null">
+				gold_user_id = #{goldUserId,jdbcType=BIGINT},
+			</if>
+			<if test="goldAdminInfo != null">
+				gold_admin_info = #{goldAdminInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goldExchangeInfo != null">
+				gold_exchange_info = #{goldExchangeInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.user.model.GoldRecord">
+		update user_gold_record
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		gold_admin_time = #{goldAdminTime,jdbcType=TIMESTAMP},
+		gold_count = #{goldCount,jdbcType=INTEGER},
+		gold_money = #{goldMoney,jdbcType=INTEGER},
+		gold_pay_status = #{goldPayStatus,jdbcType=INTEGER},
+		gold_payment = #{goldPayment,jdbcType=VARCHAR},
+		gold_sn = #{goldSn,jdbcType=VARCHAR},
+		gold_status = #{goldStatus,jdbcType=INTEGER},
+		gold_admin_id = #{goldAdminId,jdbcType=BIGINT},
+		gold_user_id = #{goldUserId,jdbcType=BIGINT},
+		gold_admin_info = #{goldAdminInfo,jdbcType=LONGVARCHAR},
+		gold_exchange_info = #{goldExchangeInfo,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.GoldRecord">
+		update user_gold_record
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		gold_admin_time = #{goldAdminTime,jdbcType=TIMESTAMP},
+		gold_count = #{goldCount,jdbcType=INTEGER},
+		gold_money = #{goldMoney,jdbcType=INTEGER},
+		gold_pay_status = #{goldPayStatus,jdbcType=INTEGER},
+		gold_payment = #{goldPayment,jdbcType=VARCHAR},
+		gold_sn = #{goldSn,jdbcType=VARCHAR},
+		gold_status = #{goldStatus,jdbcType=INTEGER},
+		gold_admin_id = #{goldAdminId,jdbcType=BIGINT},
+		gold_user_id = #{goldUserId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

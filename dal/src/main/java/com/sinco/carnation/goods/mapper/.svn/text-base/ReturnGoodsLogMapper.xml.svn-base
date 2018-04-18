@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.goods.mapper.ReturnGoodsLogMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.goods.model.ReturnGoodsLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="express_code" property="expressCode" jdbcType="VARCHAR" />
+		<result column="goods_all_price" property="goodsAllPrice"
+			jdbcType="VARCHAR" />
+		<result column="goods_commission_rate" property="goodsCommissionRate"
+			jdbcType="DECIMAL" />
+		<result column="goods_count" property="goodsCount" jdbcType="VARCHAR" />
+		<result column="goods_id" property="goodsId" jdbcType="BIGINT" />
+		<result column="goods_mainphoto_path" property="goodsMainphotoPath"
+			jdbcType="VARCHAR" />
+		<result column="goods_gsp_ids" property="goodsGspIds" jdbcType="VARCHAR" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="goods_price" property="goodsPrice" jdbcType="VARCHAR" />
+		<result column="goods_return_status" property="goodsReturnStatus"
+			jdbcType="VARCHAR" />
+		<result column="goods_type" property="goodsType" jdbcType="INTEGER" />
+		<result column="refund_status" property="refundStatus"
+			jdbcType="INTEGER" />
+		<result column="return_content" property="returnContent"
+			jdbcType="VARCHAR" />
+		<result column="return_order_id" property="returnOrderId"
+			jdbcType="BIGINT" />
+		<result column="return_service_id" property="returnServiceId"
+			jdbcType="VARCHAR" />
+		<result column="self_address" property="selfAddress" jdbcType="VARCHAR" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.goods.bo.ReturnGoodsLogBO"
+		extends="BaseResultMap" />
+
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.sinco.carnation.goods.model.ReturnGoodsLog" extends="BaseResultMap">
+		<result column="return_express_info" property="returnExpressInfo"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap type="com.sinco.carnation.goods.bo.ReturnGoodsLogBO"
+		id="BOResultMapWithBLOBs" extends="ResultMapWithBLOBs">
+		<result column="store_id" property="storeId" />
+		<result column="store_name" property="storeName" />
+	</resultMap>
+
+	<select id="findBOById" resultMap="BOResultMapWithBLOBs">
+		select rgl.*,g.goods_store_id as store_id,s.store_name
+		from shop_return_goods_log rgl
+		left join shop_goods g on rgl.goods_id=g.id
+		left join shop_store s on g.goods_store_id=s.id
+		where rgl.id=#{id}
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, express_code, goods_all_price,
+		goods_commission_rate,
+		goods_count, goods_id,goods_gsp_ids, goods_mainphoto_path, goods_name,
+		goods_price, goods_return_status,
+		goods_type, refund_status, return_content, return_order_id, return_service_id,
+		self_address,
+		store_id, user_id, user_name
+	</sql>
+	<sql id="Blob_Column_List">
+		return_express_info
+	</sql>
+
+	<select id="queryReturnGoodsLogPageList" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_return_goods_log where goods_type=0
+		<if test="userName != null and userName != ''">
+			and user_name like concat('%',#{userName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="goodsName != null and goodsName != ''">
+			and goods_name like concat('%',#{goodsName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="returnServiceId != null and returnServiceId != ''">
+			and return_service_id like
+			concat('%',#{returnServiceId,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="status != null and status != ''">
+			and goods_return_status=#{status}
+		</if>
+		order by add_time desc
+	</select>
+
+	<select id="selectByExampleWithBLOBs"
+		parameterType="com.sinco.carnation.goods.model.ReturnGoodsLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_return_goods_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="search" resultMap="BOResultMapWithBLOBs">
+		select * from shop_return_goods_log where 1=1
+		<if test="vo.goodsName != null and vo.goodsName != ''">
+			and goods_name like CONCAT('%',#{vo.goodsName},'%')
+		</if>
+		<if test="vo.userName != null and vo.userName != ''">
+			and user_name=#{vo.userName}
+		</if>
+		<if test="vo.refundStatus != null">
+			and refund_status=#{vo.refundStatus}
+		</if>
+		<if
+			test="vo.goodsRefundStatusList != null and vo.goodsRefundStatusList.size() > 0">
+			and goods_return_status in
+			<foreach collection="vo.goodsRefundStatusList" item="listItem"
+				open="(" close=")" separator=",">
+				#{listItem}
+			</foreach>
+		</if>
+		order by id desc
+	</select>
+
+	<select id="selectByUser" resultMap="BOResultMapWithBLOBs">
+		select * from shop_return_goods_log where
+		user_id=#{userId} and
+		goods_return_status!=1
+		order by id desc
+	</select>
+
+	<delete id="cancelReturnGoods">
+		delete from shop_return_goods_log
+		where
+		goods_id=#{vo.goodsId}
+		and return_order_id=#{vo.returnOrderId}
+		and user_id=#{vo.userId}
+		<if test="vo.goodsGspIds != null and vo.goodsGspIds != ''">
+			and goods_gsp_ids=#{vo.goodsGspIds}
+		</if>
+	</delete>
+
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.goods.model.ReturnGoodsLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_return_goods_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="goodsUserIdCount" resultType="int">
+		select count(*) from
+		shop_return_goods_log where user_id=#{userId} and goods_id=#{goodsId}
+	</select>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_return_goods_log
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_return_goods_log
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.goods.model.ReturnGoodsLogExample">
+		delete from shop_return_goods_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.goods.model.ReturnGoodsLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_return_goods_log (id, add_time, delete_status,
+		express_code, goods_all_price, goods_commission_rate,
+		goods_count, goods_id,goods_gsp_ids, goods_mainphoto_path,
+		goods_name, goods_price, goods_return_status,
+		goods_type, refund_status, return_content,
+		return_order_id, return_service_id, self_address,
+		store_id, user_id, user_name,
+		return_express_info)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{expressCode,jdbcType=VARCHAR}, #{goodsAllPrice,jdbcType=VARCHAR},
+		#{goodsCommissionRate,jdbcType=DECIMAL},
+		#{goodsCount,jdbcType=VARCHAR},
+		#{goodsId,jdbcType=BIGINT},#{goodsGspIds}
+		#{goodsMainphotoPath,jdbcType=VARCHAR},
+		#{goodsName,jdbcType=VARCHAR}, #{goodsPrice,jdbcType=VARCHAR},
+		#{goodsReturnStatus,jdbcType=VARCHAR},
+		#{goodsType,jdbcType=INTEGER}, #{refundStatus,jdbcType=INTEGER}, #{returnContent,jdbcType=VARCHAR},
+		#{returnOrderId,jdbcType=BIGINT}, #{returnServiceId,jdbcType=VARCHAR},
+		#{selfAddress,jdbcType=VARCHAR},
+		#{storeId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR},
+		#{returnExpressInfo,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.goods.model.ReturnGoodsLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_return_goods_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="expressCode != null">
+				express_code,
+			</if>
+			<if test="goodsAllPrice != null">
+				goods_all_price,
+			</if>
+			<if test="goodsCommissionRate != null">
+				goods_commission_rate,
+			</if>
+			<if test="goodsCount != null">
+				goods_count,
+			</if>
+			<if test="goodsId != null">
+				goods_id,
+			</if>
+			<if test="goodsGspIds != null">
+				goods_gsp_ids,
+			</if>
+			<if test="goodsMainphotoPath != null">
+				goods_mainphoto_path,
+			</if>
+			<if test="goodsName != null">
+				goods_name,
+			</if>
+			<if test="goodsPrice != null">
+				goods_price,
+			</if>
+			<if test="goodsReturnStatus != null">
+				goods_return_status,
+			</if>
+			<if test="goodsType != null">
+				goods_type,
+			</if>
+			<if test="refundStatus != null">
+				refund_status,
+			</if>
+			<if test="returnContent != null">
+				return_content,
+			</if>
+			<if test="returnOrderId != null">
+				return_order_id,
+			</if>
+			<if test="returnServiceId != null">
+				return_service_id,
+			</if>
+			<if test="selfAddress != null">
+				self_address,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="returnExpressInfo != null">
+				return_express_info,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="expressCode != null">
+				#{expressCode,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsAllPrice != null">
+				#{goodsAllPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsCommissionRate != null">
+				#{goodsCommissionRate,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsCount != null">
+				#{goodsCount,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsId != null">
+				#{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsGspIds != null">
+				#{goodsGspIds},
+			</if>
+			<if test="goodsMainphotoPath != null">
+				#{goodsMainphotoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsName != null">
+				#{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsPrice != null">
+				#{goodsPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsReturnStatus != null">
+				#{goodsReturnStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsType != null">
+				#{goodsType,jdbcType=INTEGER},
+			</if>
+			<if test="refundStatus != null">
+				#{refundStatus,jdbcType=INTEGER},
+			</if>
+			<if test="returnContent != null">
+				#{returnContent,jdbcType=VARCHAR},
+			</if>
+			<if test="returnOrderId != null">
+				#{returnOrderId,jdbcType=BIGINT},
+			</if>
+			<if test="returnServiceId != null">
+				#{returnServiceId,jdbcType=VARCHAR},
+			</if>
+			<if test="selfAddress != null">
+				#{selfAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="returnExpressInfo != null">
+				#{returnExpressInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.goods.model.ReturnGoodsLogExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_return_goods_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_return_goods_log
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.expressCode != null">
+				express_code = #{record.expressCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsAllPrice != null">
+				goods_all_price = #{record.goodsAllPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsCommissionRate != null">
+				goods_commission_rate =
+				#{record.goodsCommissionRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.goodsCount != null">
+				goods_count = #{record.goodsCount,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsId != null">
+				goods_id = #{record.goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goodsGspIds != null">
+				goods_gsp_ids = #{record.goodsGspIds},
+			</if>
+			<if test="record.goodsMainphotoPath != null">
+				goods_mainphoto_path = #{record.goodsMainphotoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsName != null">
+				goods_name = #{record.goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsPrice != null">
+				goods_price = #{record.goodsPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsReturnStatus != null">
+				goods_return_status = #{record.goodsReturnStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsType != null">
+				goods_type = #{record.goodsType,jdbcType=INTEGER},
+			</if>
+			<if test="record.refundStatus != null">
+				refund_status = #{record.refundStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.returnContent != null">
+				return_content = #{record.returnContent,jdbcType=VARCHAR},
+			</if>
+			<if test="record.returnOrderId != null">
+				return_order_id = #{record.returnOrderId,jdbcType=BIGINT},
+			</if>
+			<if test="record.returnServiceId != null">
+				return_service_id = #{record.returnServiceId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.selfAddress != null">
+				self_address = #{record.selfAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userName != null">
+				user_name = #{record.userName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.returnExpressInfo != null">
+				return_express_info = #{record.returnExpressInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_return_goods_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		express_code = #{record.expressCode,jdbcType=VARCHAR},
+		goods_all_price = #{record.goodsAllPrice,jdbcType=VARCHAR},
+		goods_commission_rate = #{record.goodsCommissionRate,jdbcType=DECIMAL},
+		goods_count = #{record.goodsCount,jdbcType=VARCHAR},
+		goods_id = #{record.goodsId,jdbcType=BIGINT},
+		goods_mainphoto_path = #{record.goodsMainphotoPath,jdbcType=VARCHAR},
+		goods_name = #{record.goodsName,jdbcType=VARCHAR},
+		goods_price = #{record.goodsPrice,jdbcType=VARCHAR},
+		goods_return_status = #{record.goodsReturnStatus,jdbcType=VARCHAR},
+		goods_type = #{record.goodsType,jdbcType=INTEGER},
+		refund_status = #{record.refundStatus,jdbcType=INTEGER},
+		return_content = #{record.returnContent,jdbcType=VARCHAR},
+		return_order_id = #{record.returnOrderId,jdbcType=BIGINT},
+		return_service_id = #{record.returnServiceId,jdbcType=VARCHAR},
+		self_address = #{record.selfAddress,jdbcType=VARCHAR},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		return_express_info = #{record.returnExpressInfo,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_return_goods_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		express_code = #{record.expressCode,jdbcType=VARCHAR},
+		goods_all_price = #{record.goodsAllPrice,jdbcType=VARCHAR},
+		goods_commission_rate = #{record.goodsCommissionRate,jdbcType=DECIMAL},
+		goods_count = #{record.goodsCount,jdbcType=VARCHAR},
+		goods_id = #{record.goodsId,jdbcType=BIGINT},
+		goods_mainphoto_path = #{record.goodsMainphotoPath,jdbcType=VARCHAR},
+		goods_name = #{record.goodsName,jdbcType=VARCHAR},
+		goods_price = #{record.goodsPrice,jdbcType=VARCHAR},
+		goods_return_status = #{record.goodsReturnStatus,jdbcType=VARCHAR},
+		goods_type = #{record.goodsType,jdbcType=INTEGER},
+		refund_status = #{record.refundStatus,jdbcType=INTEGER},
+		return_content = #{record.returnContent,jdbcType=VARCHAR},
+		return_order_id = #{record.returnOrderId,jdbcType=BIGINT},
+		return_service_id = #{record.returnServiceId,jdbcType=VARCHAR},
+		self_address = #{record.selfAddress,jdbcType=VARCHAR},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		user_name = #{record.userName,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.goods.model.ReturnGoodsLog">
+		update shop_return_goods_log
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="expressCode != null">
+				express_code = #{expressCode,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsAllPrice != null">
+				goods_all_price = #{goodsAllPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsCommissionRate != null">
+				goods_commission_rate = #{goodsCommissionRate,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsCount != null">
+				goods_count = #{goodsCount,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsId != null">
+				goods_id = #{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsGspIds != null">
+				goods_gsp_ids = #{goodsGspIds},
+			</if>
+			<if test="goodsMainphotoPath != null">
+				goods_mainphoto_path = #{goodsMainphotoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsName != null">
+				goods_name = #{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsPrice != null">
+				goods_price = #{goodsPrice,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsReturnStatus != null">
+				goods_return_status = #{goodsReturnStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsType != null">
+				goods_type = #{goodsType,jdbcType=INTEGER},
+			</if>
+			<if test="refundStatus != null">
+				refund_status = #{refundStatus,jdbcType=INTEGER},
+			</if>
+			<if test="returnContent != null">
+				return_content = #{returnContent,jdbcType=VARCHAR},
+			</if>
+			<if test="returnOrderId != null">
+				return_order_id = #{returnOrderId,jdbcType=BIGINT},
+			</if>
+			<if test="returnServiceId != null">
+				return_service_id = #{returnServiceId,jdbcType=VARCHAR},
+			</if>
+			<if test="selfAddress != null">
+				self_address = #{selfAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="returnExpressInfo != null">
+				return_express_info = #{returnExpressInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.goods.model.ReturnGoodsLog">
+		update shop_return_goods_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		express_code = #{expressCode,jdbcType=VARCHAR},
+		goods_all_price = #{goodsAllPrice,jdbcType=VARCHAR},
+		goods_commission_rate = #{goodsCommissionRate,jdbcType=DECIMAL},
+		goods_count = #{goodsCount,jdbcType=VARCHAR},
+		goods_id = #{goodsId,jdbcType=BIGINT},
+		goods_mainphoto_path = #{goodsMainphotoPath,jdbcType=VARCHAR},
+		goods_name = #{goodsName,jdbcType=VARCHAR},
+		goods_price = #{goodsPrice,jdbcType=VARCHAR},
+		goods_return_status = #{goodsReturnStatus,jdbcType=VARCHAR},
+		goods_type = #{goodsType,jdbcType=INTEGER},
+		refund_status = #{refundStatus,jdbcType=INTEGER},
+		return_content = #{returnContent,jdbcType=VARCHAR},
+		return_order_id = #{returnOrderId,jdbcType=BIGINT},
+		return_service_id = #{returnServiceId,jdbcType=VARCHAR},
+		self_address = #{selfAddress,jdbcType=VARCHAR},
+		store_id = #{storeId,jdbcType=BIGINT},
+		user_id = #{userId,jdbcType=BIGINT},
+		user_name = #{userName,jdbcType=VARCHAR},
+		return_express_info = #{returnExpressInfo,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.goods.model.ReturnGoodsLog">
+		update shop_return_goods_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		express_code = #{expressCode,jdbcType=VARCHAR},
+		goods_all_price = #{goodsAllPrice,jdbcType=VARCHAR},
+		goods_commission_rate = #{goodsCommissionRate,jdbcType=DECIMAL},
+		goods_count = #{goodsCount,jdbcType=VARCHAR},
+		goods_id = #{goodsId,jdbcType=BIGINT},
+		goods_mainphoto_path = #{goodsMainphotoPath,jdbcType=VARCHAR},
+		goods_name = #{goodsName,jdbcType=VARCHAR},
+		goods_price = #{goodsPrice,jdbcType=VARCHAR},
+		goods_return_status = #{goodsReturnStatus,jdbcType=VARCHAR},
+		goods_type = #{goodsType,jdbcType=INTEGER},
+		refund_status = #{refundStatus,jdbcType=INTEGER},
+		return_content = #{returnContent,jdbcType=VARCHAR},
+		return_order_id = #{returnOrderId,jdbcType=BIGINT},
+		return_service_id = #{returnServiceId,jdbcType=VARCHAR},
+		self_address = #{selfAddress,jdbcType=VARCHAR},
+		store_id = #{storeId,jdbcType=BIGINT},
+		user_id = #{userId,jdbcType=BIGINT},
+		user_name = #{userName,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="selectListByVo" resultMap="BOResultMapWithBLOBs">
+		SELECT
+		s.*
+		FROM shop_return_goods_log s
+		WHERE 1=1 and s.goods_type =1
+		<if test="vo.storeId != null and vo.storeId != ''">
+			AND s.store_id = #{vo.storeId,jdbcType=BIGINT}
+		</if>
+		<if test="vo.userName != null and vo.userName != ''">
+			AND s.user_name like CONCAT('%',#{vo.userName},'%')
+		</if>
+		<if test="vo.goodsName != null and vo.goodsName !=''">
+			AND s.goods_name like CONCAT('%',#{vo.goodsName},'%')
+		</if>
+		<if test="vo.returnServiceId != null and vo.returnServiceId !=''">
+			AND s.return_service_id = #{vo.returnServiceId,jdbcType=VARCHAR}
+		</if>
+		ORDER BY s.add_time DESC
+	</select>
+</mapper>

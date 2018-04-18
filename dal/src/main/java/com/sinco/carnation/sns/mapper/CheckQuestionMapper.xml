@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.CheckQuestionMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.CheckQuestion">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="group_id" property="groupId" jdbcType="BIGINT" />
+		<result column="question_title" property="questionTitle"
+			jdbcType="VARCHAR" />
+		<result column="question_index" property="questionIndex"
+			jdbcType="INTEGER" />
+		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+	</resultMap>
+	<resultMap id="BOResultMap" extends="BaseResultMap"
+		type="com.sinco.carnation.sns.bo.CheckQuestionBO">
+		<result column="max_score" property="maxScore" jdbcType="INTEGER" />
+		<result column="min_score" property="minScore" jdbcType="INTEGER" />
+	</resultMap>
+	<select id="selectQuestionByGroupAndIndex" resultMap="BOResultMap"
+		parameterType="com.sinco.carnation.sns.vo.CheckQuestionVO">
+		SELECT
+		q.*,
+		(
+		SELECT
+		count(0)
+		FROM
+		check_question c
+		WHERE
+		c.group_id = #{vo.groupId}
+		AND c.is_deleted=0
+		) totleCount
+		FROM
+		check_question q
+		WHERE
+		q.group_id = #{vo.groupId}
+		AND q.question_index = #{vo.questionIndex}
+		AND q.is_deleted=0
+	</select>
+	<select id="selectAllByGroup" resultMap="BOResultMap"
+		parameterType="Long">
+		select
+		<include refid="Base_Column_List" />
+		from check_question
+		where group_id = #{groupId}
+		and is_deleted = 0
+		order by question_index asc
+	</select>
+	<select id="selectListByGroup" resultMap="BOResultMap"
+		parameterType="Long">
+		select
+		<include refid="Base_Column_List" />
+		from check_question
+		where group_id = #{groupId}
+		and is_deleted = 0
+		order by question_index asc
+	</select>
+	<select id="selectListCountByGroup" resultType="int"
+		parameterType="Long">
+		select
+		count(1)
+		from check_question
+		where group_id = #{groupId}
+	</select>
+	<select id="queryQuestionSorceRange" parameterType="Long"
+		resultMap="BOResultMap">
+		select sum(a.maxscore) as max_score,SUM(a.minscore) as min_score from (
+		select MAX(qo.score) as maxscore, MIN(qo.score) as minscore from
+		check_question_option qo
+		LEFT JOIN check_question cq on qo.question_id = cq.id
+		WHERE cq.group_id =
+		#{groupId}
+		and cq.is_deleted = 0
+		and qo.is_deleted = 0
+		GROUP BY
+		qo.question_id) as a
+	</select>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, group_id, question_title, question_index, update_by, update_time,
+		create_time,
+		create_by, is_deleted
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sns.model.CheckQuestionExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from check_question
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BOResultMap"
+		parameterType="Long">
+		select
+		<include refid="Base_Column_List" />
+		from check_question
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="Long">
+		delete from check_question
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sns.model.CheckQuestionExample">
+		delete from check_question
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.CheckQuestion">
+		insert into check_question (id, group_id, question_title,
+		question_index, update_by, update_time,
+		create_time, create_by, is_deleted
+		)
+		values (#{id,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT},
+		#{questionTitle,jdbcType=VARCHAR},
+		#{questionIndex,jdbcType=INTEGER}, #{updateBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP},
+		#{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT},
+		#{isDeleted,jdbcType=BIT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.CheckQuestion"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into check_question
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="groupId != null">
+				group_id,
+			</if>
+			<if test="questionTitle != null">
+				question_title,
+			</if>
+			<if test="questionIndex != null">
+				question_index,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="groupId != null">
+				#{groupId,jdbcType=BIGINT},
+			</if>
+			<if test="questionTitle != null">
+				#{questionTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="questionIndex != null">
+				#{questionIndex,jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sns.model.CheckQuestionExample"
+		resultType="java.lang.Integer">
+		select count(*) from check_question
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update check_question
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.groupId != null">
+				group_id = #{record.groupId,jdbcType=BIGINT},
+			</if>
+			<if test="record.questionTitle != null">
+				question_title = #{record.questionTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="record.questionIndex != null">
+				question_index = #{record.questionIndex,jdbcType=INTEGER},
+			</if>
+			<if test="record.updateBy != null">
+				update_by = #{record.updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update check_question
+		set id = #{record.id,jdbcType=BIGINT},
+		group_id = #{record.groupId,jdbcType=BIGINT},
+		question_title = #{record.questionTitle,jdbcType=VARCHAR},
+		question_index = #{record.questionIndex,jdbcType=INTEGER},
+		update_by = #{record.updateBy,jdbcType=BIGINT},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		is_deleted = #{record.isDeleted,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.CheckQuestion">
+		update check_question
+		<set>
+			<if test="groupId != null">
+				group_id = #{groupId,jdbcType=BIGINT},
+			</if>
+			<if test="questionTitle != null">
+				question_title = #{questionTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="questionIndex != null">
+				question_index = #{questionIndex,jdbcType=INTEGER},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.CheckQuestion">
+		update check_question
+		set group_id = #{groupId,jdbcType=BIGINT},
+		question_title = #{questionTitle,jdbcType=VARCHAR},
+		question_index = #{questionIndex,jdbcType=INTEGER},
+		update_by = #{updateBy,jdbcType=BIGINT},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		create_by = #{createBy,jdbcType=BIGINT},
+		is_deleted = #{isDeleted,jdbcType=BIT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

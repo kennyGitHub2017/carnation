@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">运营商公告管理</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/admin/operator_notice_list.htm" class="this"><b>运营商公告管理</b></a></li>
+    </ul>
+  </div>
+  <form method="post" id="queryForm" name="ListForm" action="$!webPath/admin/operator_notice_list.htm">
+  <div class="search">
+    <ul>
+      <li>
+      	<span>公告标题</span> 
+      	<span class="size250">
+        	<input name="ntTitle" type="text" id="ntTitle" value="$!vo.ntTitle" />
+        </span>
+        <span>审核状态</span> 
+        <span class="size250">
+        	<select name="ntStatus" id="ntStatus">
+	          <option value="">全部</option>
+	          <option value="0" #if($!vo.ntStatus==0) selected="selected"#end>等待审核</option>
+	          <option value="-1" #if($!vo.ntStatus==-1) selected="selected"#end>审核失败</option>
+	          <option value="1" #if($!vo.ntStatus==1) selected="selected"#end>审核通过</option>
+	        </select>
+        </span>
+        <span>
+        	<input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn" />
+        </span>
+      </li>
+    </ul>
+  </div>
+  </form>
+  <form method="post" id="ListForm" action="$!webPath/admin/operator_notice_list.htm">
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th  width="20%"><span class="form_btna">公告标题</span></th>
+        <th  width="20%"><span class="form_btna">运营商</span></th>
+        <th  width="8%"><span class="form_btna">公告排序</span></th>
+        <th  width="16%"><span class="form_btna">公告状态</span></th>
+        <th  width="12%"><span class="form_btna">创建时间</span></th>
+        <th  width="12%" align="center"><b class="form_btnb">操作</b></th>
+      </tr>
+      #foreach($obj in $objs)
+      <tr>
+        <td align="center">$!obj.ntTitle</td>
+        <td align="center">$!obj.operatorName</td>
+        <td align="center">$!obj.ntSort</td>
+        #if($!obj.ntStatus==0)
+          #set($ntStatus="等待审核")
+        #end
+        #if($!obj.ntStatus==1)
+          #set($ntStatus="审核通过")
+        #end
+        #if($!obj.ntStatus==-1)
+         #set($ntStatus="审核失败")
+        #end 
+        <td align="center">$ntStatus</td>
+        <td align="center">$!date.format($!obj.addTime)</td>
+        <td align="center" class="hui oprate_con">	
+        <a href='$!webPath/admin/operator_notice_detail.htm?id=$!obj.id' class="blue">查看</a>						   		
+        	#if($!obj.ntStatus==0)        	
+        		| <a href="javascript:void(0);" dialog_uri="$!webPath/admin/operator_notice_pre_audit.htm?id=$!obj.id"
+        		dialog_title="运营商公告审核" dialog_width="300" dialog_height="100" dialog_id="operator_notice_audit" class="blue">审核</a>
+        	#end
+        </td>
+      </tr>
+      #end
+    </table>
+  </div>
+  <div class="operate_bar">
+    <div class="fenye">
+		<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML
+    </div> 
+  </div>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<div id="marker_map" style="width: 650px; height: 370px;"></div>
+
+<div id="marker_map_btns" class="text-center"><input type="button" class="btn btn-blue btn-large ptb-10" value="确定" /> <input type="button" class="btn btn-gray btn-large ptb-10" value="取消" /> </div>
+
+<script>
+    // 百度地图API功能
+    var map = new BMap.Map("marker_map"), mapAddress = "", mapPointE = "", mapPointN = "", marker, oPoint;
+
+    var city = jQuery("#area1").find("option:selected").text() + jQuery("#area2").find("option:selected").text() + jQuery("#area3").find("option:selected").text() + jQuery("#address").val();
+
+    if ($("#maker_pos_E").val() != "" && $("#maker_pos_N").val() != "") {
+        oPoint = new BMap.Point($("#maker_pos_E").val(), $("#maker_pos_N").val());
+        map.centerAndZoom(oPoint, 14);
+        marker = new BMap.Marker(oPoint);
+        map.addOverlay(marker);
+    } else if(city != "") {
+        map.centerAndZoom(city, 16);   // 用城市名设置地图中心点
+    }
+
+    var geoc = new BMap.Geocoder();
+
+    map.addEventListener("click", function(e){
+        var pt = e.point;
+        geoc.getLocation(pt, function(rs){
+            map.removeOverlay(marker);
+            marker = new BMap.Marker(rs.point);
+            map.addOverlay(marker);
+            mapAddress = rs.address;
+
+            mapPointE = rs.point.lng;
+            mapPointN = rs.point.lat;
+        });
+    });
+
+    $("#marker_map_btns .btn").click(function(){
+        if ($(this).hasClass("btn-blue")) {
+            $("#maker_pos_E").val(mapPointE);
+            $("#maker_pos_N").val(mapPointN);
+
+            $("#marker_map_state").html("已标记");
+        }
+        $("#marker_dialog").remove();
+    });
+
+</script>

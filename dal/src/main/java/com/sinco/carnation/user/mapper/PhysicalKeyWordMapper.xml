@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.PhysicalKeyWordMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.user.model.PhysicalKeyWord">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="is_top" property="isTop" jdbcType="INTEGER" />
+		<result column="is_system" property="isSystem" jdbcType="INTEGER" />
+		<result column="is_enabled" property="isEnabled" jdbcType="INTEGER" />
+		<result column="priority" property="priority" jdbcType="INTEGER" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="TINYINT" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="BIGINT" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.PhysicalKeyWordBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, name, type, is_top, is_system, is_enabled, priority, delete_status,
+		create_by,
+		create_time, modify_by, modify_time
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalKeyWordExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_key_word
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_key_word
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sys_key_word
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalKeyWordExample">
+		delete from sys_key_word
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.PhysicalKeyWord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_key_word
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="isTop != null">
+				is_top,
+			</if>
+			<if test="isSystem != null">
+				is_system,
+			</if>
+			<if test="isEnabled != null">
+				is_enabled,
+			</if>
+			<if test="priority != null">
+				priority,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="modifyBy != null">
+				modify_by,
+			</if>
+			<if test="modifyTime != null">
+				modify_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="isTop != null">
+				#{isTop,jdbcType=INTEGER},
+			</if>
+			<if test="isSystem != null">
+				#{isSystem,jdbcType=INTEGER},
+			</if>
+			<if test="isEnabled != null">
+				#{isEnabled,jdbcType=INTEGER},
+			</if>
+			<if test="priority != null">
+				#{priority,jdbcType=INTEGER},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				#{modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="modifyTime != null">
+				#{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalKeyWordExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_key_word
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_key_word
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=INTEGER},
+			</if>
+			<if test="record.isTop != null">
+				is_top = #{record.isTop,jdbcType=INTEGER},
+			</if>
+			<if test="record.isSystem != null">
+				is_system = #{record.isSystem,jdbcType=INTEGER},
+			</if>
+			<if test="record.isEnabled != null">
+				is_enabled = #{record.isEnabled,jdbcType=INTEGER},
+			</if>
+			<if test="record.priority != null">
+				priority = #{record.priority,jdbcType=INTEGER},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.modifyBy != null">
+				modify_by = #{record.modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.modifyTime != null">
+				modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sys_key_word
+		set id = #{record.id,jdbcType=BIGINT},
+		name = #{record.name,jdbcType=VARCHAR},
+		type = #{record.type,jdbcType=INTEGER},
+		is_top = #{record.isTop,jdbcType=INTEGER},
+		is_system = #{record.isSystem,jdbcType=INTEGER},
+		is_enabled = #{record.isEnabled,jdbcType=INTEGER},
+		priority = #{record.priority,jdbcType=INTEGER},
+		delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		modify_by = #{record.modifyBy,jdbcType=BIGINT},
+		modify_time = #{record.modifyTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.PhysicalKeyWord">
+		update sys_key_word
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="isTop != null">
+				is_top = #{isTop,jdbcType=INTEGER},
+			</if>
+			<if test="isSystem != null">
+				is_system = #{isSystem,jdbcType=INTEGER},
+			</if>
+			<if test="isEnabled != null">
+				is_enabled = #{isEnabled,jdbcType=INTEGER},
+			</if>
+			<if test="priority != null">
+				priority = #{priority,jdbcType=INTEGER},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.PhysicalKeyWord">
+		update sys_key_word
+		set name = #{name,jdbcType=VARCHAR},
+		type = #{type,jdbcType=INTEGER},
+		is_top = #{isTop,jdbcType=INTEGER},
+		is_system = #{isSystem,jdbcType=INTEGER},
+		is_enabled = #{isEnabled,jdbcType=INTEGER},
+		priority = #{priority,jdbcType=INTEGER},
+		delete_status = #{deleteStatus,jdbcType=TINYINT},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		modify_by = #{modifyBy,jdbcType=BIGINT},
+		modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- 条件查询 -->
+	<select id="selectListByVo" resultMap="BOResultMap">
+		SELECT k.*, t.name keyWordTypeName FROM sys_key_word k left join
+		sys_key_word_type t on k.type = t.id
+
+		<where>
+			<if test="vo.name != null and vo.name != '' ">
+				and k.NAME = #{vo.name}
+			</if>
+			<if test="vo.isTop != null ">
+				and k.is_top = #{vo.isTop}
+			</if>
+			<if test="vo.isEnabled != null ">
+				and k.is_enabled = #{vo.isEnabled}
+			</if>
+			<if test="vo.type != null ">
+				and k.type = #{vo.type}
+			</if>
+		</where>
+		ORDER BY k.priority DESC
+	</select>
+
+	<!-- 查询所有 -->
+	<select id="selectAll" resultMap="BOResultMap">
+		SELECT * FROM sys_key_word
+	</select>
+
+	<!-- 关键字类型 ,暂时查询方式 -->
+	<select id="selectKeyWordTypeList" resultType="com.sinco.carnation.user.bo.PhysicalKeyWordTypeBO">
+		SELECT * FROM sys_key_word_type
+	</select>
+
+	<!-- 添加 -->
+	<insert id="insert">
+		INSERT INTO sys_key_word (
+		NAME,
+		TYPE,
+		is_top,
+		is_system,
+		is_enabled,
+		priority,
+		delete_status,
+		create_by,
+		create_time,
+		modify_by,
+		modify_time
+		)
+		VALUES
+		(
+		#{vo.name,jdbcType=VARCHAR}, #{vo.type,jdbcType=INTEGER},
+		#{vo.isTop,jdbcType=INTEGER}, #{vo.isSystem,jdbcType=INTEGER}, #{vo.isEnabled,jdbcType=INTEGER},
+		#{vo.priority,jdbcType=INTEGER}, #{vo.deleteStatus,jdbcType=TINYINT},
+		#{vo.createBy,jdbcType=BIGINT},
+		now(), #{vo.modifyBy,jdbcType=BIGINT}, now()
+		)
+	</insert>
+
+	<select id="findKeyWordByType" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_key_word WHERE type = #{type};
+	</select>
+
+	<select id="findByTypeCodeAndId" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM sys_key_word WHERE id IN
+		(SELECT key_word_id from sys_key_word_map WHERE type_code = #{typeCode} AND
+		type_id = #{typeId})
+	</select>
+</mapper>

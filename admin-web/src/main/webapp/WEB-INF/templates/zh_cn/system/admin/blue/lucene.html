@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+jQuery("#lucenen_queue_img").click(function(){
+	   var deposit=jQuery("#lucenen_queue").val();
+	   if(deposit=="1"){
+	      jQuery("#lucenen_queue_img").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+		  jQuery("#lucenen_queue").val("0");
+	   }else{
+	      jQuery("#lucenen_queue_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+		  jQuery("#lucenen_queue").val("1");
+	   }
+	});	
+#if($!config.lucenen_queue==1)
+	jQuery("#lucenen_queue_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	#else
+	jQuery("#lucenen_queue_img").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+	#end								
+								});
+function update_keyword(){
+  var hotSearch=jQuery("#hotSearch").val();
+  var lucenen_queue=jQuery("#lucenen_queue").val();
+  jQuery.ajax({type:'POST',
+			   url:'$!webPath/admin/lucene_hot_save.htm',
+			   data:{"id":"$!config.id","hotSearch":hotSearch,"lucenen_queue":lucenen_queue},
+			   beforeSend:function(){
+				    jQuery("#hot_wait").show();
+				   },
+			   success:function(data){
+				      jQuery("#hot_wait").hide();
+				      if(data=="true"){
+					    alert("保存成功");
+					  }else{
+						 alert("保存失败"); 
+					  }
+				   }
+			 });
+}
+function update_goods_lucene(btn){
+	if($(btn).data("syn") == "true"){
+		  return false;
+	  }
+  jQuery.ajax({type:'POST',url:'$!webPath/admin/update_goods_lucene.htm',data:'',dataType:"text",
+			  beforeSend:function(){
+				  			$(btn).data("syn", "true");
+				          jQuery("#lucene_wait").show();
+						 },
+			  success:function(text){
+				 		$(btn).data("syn", "false");
+				       jQuery("#lucene_wait").hide();
+					   jQuery("#lucene_update_result").text(text).show();
+					   jQuery("#lucene_update_result").fadeOut(8000);
+					  }
+			  });
+}
+function update_juanpi_goods(btn){
+	if($(btn).data("syn") == "true"){
+		  return false;
+	  }
+  jQuery.ajax({type:'POST',url:'$!webPath/admin/update_juanpi_goods.htm',data:'',dataType:"text",
+			  beforeSend:function(){
+				 	 		$(btn).data("syn", "true");
+				          jQuery("#lucene_wait").show();
+						 },
+			  success:function(text){
+				 	 	$(btn).data("syn", "false");
+				       jQuery("#lucene_wait").hide();
+					   jQuery("#lucene_update_result").text(text).show();
+					   jQuery("#lucene_update_result").fadeOut(8000);
+					  }
+			  });
+}
+function update_juanpi_order(btn){
+	if($(btn).data("syn") == "true"){
+		  return false;
+	  }
+  jQuery.ajax({type:'POST',url:'$!webPath/admin/update_juanpi_order.htm',data:'',dataType:"text",
+			  beforeSend:function(){
+				 	 		$(btn).data("syn", "true");
+				          jQuery("#lucene_wait").show();
+						 },
+			  success:function(text){
+				 	 	$(btn).data("syn", "false");
+				       jQuery("#lucene_wait").hide();
+					   jQuery("#lucene_update_result").text(text).show();
+					   jQuery("#lucene_update_result").fadeOut(8000);
+					  }
+			  });
+}
+function update_store_lucene(btn){
+  if($(btn).data("syn") == "true"){
+	  return false;
+  }
+  jQuery.ajax({type:'POST',url:'$!webPath/admin/update_store_lucene.htm',data:'',dataType:"text",
+			  beforeSend:function(){
+				 			$(btn).data("syn", "true");
+				          jQuery("#lucene_wait").show();
+						 },
+			  success:function(text){
+				  		$(btn).data("syn", "false");
+				       jQuery("#lucene_wait").hide();
+					   jQuery("#lucene_update_result").text(text).show();
+					   jQuery("#lucene_update_result").fadeOut(8000);
+					  }
+			  });
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">全文检索</h1>
+  
+  <div class="nav_list"> 
+ 
+<ul>
+<li>
+  <a href="javascript:void(0);" class="this" id="site_base"><b>基本设置</b></a>
+  </li>
+</ul>
+
+  </div>
+  
+
+  
+  <div class="operation">
+    <h3>Lucene全文检索</h3>
+    <ul>
+      <li>全文检索便于用户快速查询与关键字相关内容，减轻服务器检索压力</li>
+      <li>全文检索包括商品检索、团购检索，系统采用增量索引、删量索引，也可以手动更新全部索引数据</li>
+  </div>
+  <div style="color:#F00; display:none;" id="lucene_update_result">
+  </div>
+   <img id="lucene_wait"  style="vertical-align:middle; display:none;" src="$!webPath/resources/style/common/images/loader.gif" />
+  <div class="submit">
+      <input name="save" type="button" value="更新商品索引" onclick="update_goods_lucene(this)" />
+    </div>
+    <div class="submit">
+      <input name="save" type="button" value="更新店铺索引" onclick="update_store_lucene(this)" />
+    </div>
+    <!-- 
+	<div class="submit">
+      <input style="width:170px" name="save" type="button" value="更新卷皮商品&索引 - 测试专用" onclick="update_juanpi_goods(this)" />
+    </div>
+    <div class="submit">
+      <input style="width:170px" name="save" type="button" value="更新卷皮订单 - 测试专用" onclick="update_juanpi_order(this)" />
+    </div>
+     -->
+</div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/common/css/jquery.bigcolorpicker.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.bigcolorpicker.js"></script>
+<script>
+	jQuery(document).ready(function() {
+
+		jQuery("#theForm").validate({
+			rules : {
+				name : {
+					required : true
+				},
+				sequence : {
+					digits : true
+				}
+			},
+			messages : {
+				name : {
+					required : "分类名称不能为空",
+				},
+				sequence : {
+					digits : "请输入正整数"
+				}
+			},
+		});
+	});
+	
+	function saveForm() {
+		jQuery("#theForm").submit();
+	}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">新增食物分类</h1>
+  <div class="nav_list">
+    <ul>
+     	<li><a href="$!webPath/admin/food_calories_list.htm"><b>食物列表</b></a></li>
+   		<li><a href="$!webPath/admin/food_calories_add.htm"><b>新增食物</b></a></li>
+  		<li><a href="$!webPath/admin/food_class_list.htm"><b>食物分类列表</b></a></li>
+   		<li><a href="$!webPath/admin/food_class_add.htm" #if(!$!edit) class="this" #end><b>新增食物分类</b></a></li>
+   		#if($!edit)
+   		<li><a href="javascript:void(0);" class="this"><b>编辑食物分类</b></a></li>
+   		#end
+    </ul>
+  </div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/food_class_save.htm" method="post" enctype="multipart/form-data">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="listUrl" type="hidden" id="list_url" value="$!webPath/admin/food_class_list.htm" />
+    <input name="addUrl" type="hidden" id="add_url" value="$!webPath/admin/food_class_add.htm" />
+     <input name="iconType" id="type2"  type="radio" checked="checked" style="display: none">
+    <div class="edit">
+      <div class="setcont editul">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>分类名称</li>
+          <li><span class="webname">
+            <input name="name" type="text" id="name" value="$!obj.name" size="40" />
+            </span></li>
+        </ul>
+<!--         <ul class="set1"> -->
+<!--           <li  class="setcont_bg">上级分类</li> -->
+<!--           <li><span> -->
+<!--             <select name="parentId" id="parentId"> -->
+<!--               <option value="">请选择上级商品分类...</option> -->
+<!-- 			  #foreach($gc in $gcs) -->
+<!--               <option value="$!gc.id" #if($gc.id == $obj.parentId) selected="selected" #end>$!gc.name</option> -->
+<!--               #end -->
+<!--             </select> -->
+<!--             </span><span id="nothis"><strong class="q"></strong><strong class="w">如果选择上级分类，那么新增的分类则为被选择上级分类的子分类</strong><strong class="c"></strong></span></li> -->
+<!--         </ul> -->
+        <ul class="set1">
+          <li class="setcont_bg">排序</li>
+          <li><span class="webname">
+            <input name="sequence" type="text" id="sequence" value="$!obj.sequence" />
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小，分类显示越靠前</strong><strong class="c"></strong></span></li>
+        </ul>
+      </div>
+    </div>
+  </form>
+  <div class="submit"> <span class="pad120">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+    </span> </div>
+</div>
+</body>
+</html>

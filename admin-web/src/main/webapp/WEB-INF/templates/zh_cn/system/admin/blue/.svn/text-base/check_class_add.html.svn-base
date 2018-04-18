@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/common/css/jquery.bigcolorpicker.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.bigcolorpicker.js"></script>
+<script>
+jQuery(document).ready(function(){
+
+	jQuery.validator.addMethod("verify", function(value, element) {
+			var re = /^([0-9a-zA-Z]|[\u4E00-\u9FA5]|[.]{1}[0-9])+$/;
+		});
+	
+		jQuery("#theForm").validate({
+			rules : {
+				className : {
+					required : true,
+					remote : {
+						url : "$!webPath/admin/check_class_verify.htm", //后台处理程序
+						type : "post", //数据发送方式
+						dataType : "json", //接受数据格式   
+						data : { //要传递的数据
+							"className" : function() {
+								return jQuery("#className").val();
+							},
+							"id" : function() {
+								return jQuery("#id").val()
+							},
+							"parentId" : function() {
+								return jQuery("#parentId").val()
+							}
+						}
+					}
+				},
+				guarantee : {
+					digits : true,
+					maxlength : 12
+				},
+				sequence : {
+					digits : true
+				}
+			},
+			messages : {
+				className : {
+					required : "分类名称不能为空",
+					remote : "该分类已经存在"
+				},
+				guarantee : {
+					digits : "请正确输入保证金",
+					maxlength : "请正确输入保证金"
+				},
+				sequence : {
+					digits : "请输入正整数"
+				}
+			},
+		});
+
+	});
+function saveForm() {
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">商品分类</h1>
+  <div class="nav_list">
+    <ul>
+     	<li><a href="$!webPath/admin/check_group_list.htm"><b>自测套题列表</b></a></li>
+		<li><a href="$!webPath/admin/check_group_add.htm"><b>新增套题</b></a></li>
+		<li><a href="$!webPath/admin/check_class_list.htm"><b>自测题分类列表</b></a></li>
+		<li><a href="$!webPath/admin/check_class_add.htm" #if(!$!edit) class="this" #end><b>新增自测题分类</b></a></li>
+		#if($!edit)
+		<li><a href="javascript:void(0);" class="this"><b>编辑自测题分类</b></a></li>
+		#end
+    </ul>
+  </div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/check_class_save.htm" method="post" enctype="multipart/form-data">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="listUrl" type="hidden" id="list_url" value="$!webPath/admin/check_class_list.htm" />
+    <input name="addUrl" type="hidden" id="add_url" value="$!webPath/admin/check_class_add.htm" />
+     <input name="iconType" id="type2"  type="radio" checked="checked" style="display: none">
+    <div class="edit">
+      <div class="setcont editul">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>分类名称</li>
+          <li><span class="webname">
+            <input name="className" type="text" id="className" value="$!obj.className" size="40" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">分类描述</li>
+          <li><span class="webname">
+            <input name="classDesc" type="text" id="classDesc" value="$!obj.classDesc" size="100" />
+            </span></li>
+        </ul>
+        <!--鼠标未经过样式-->
+        <ul class="set1">
+          <li  class="setcont_bg">上级分类</li>
+          <li><span>
+            <select name="parentId" id="parentId">
+              <option value="">请选择上级商品分类...</option>
+			  #foreach($gc in $gcs)
+              <option value="$!gc.id" #if($gc.id == $obj.parentId) selected="selected" #end>$!gc.ClassName</option>
+              #end
+            </select>
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">如果选择上级分类，那么新增的分类则为被选择上级分类的子分类</strong><strong class="c"></strong></span></li>
+        </ul>
+<!--         <ul class="set1"> -->
+<!--           <li  class="setcont_bg">类型</li> -->
+<!--           <li> <span> -->
+<!--             <select name="goodsTypeId" id="goodsTypeId"> -->
+<!--               <option value="">请选择...</option> -->
+              
+              
+<!-- 		#foreach($gt in $!gts) -->
+          
+              
+<!--               <option value="$!gt.id">$!gt.name</option> -->
+              
+              
+<!-- 		#end   -->
+        
+            
+<!--             </select> -->
+<!--             </span><span class="use_code"><strong> -->
+<!--             <label> -->
+<!--               <input name="child_link" type="checkbox" id="child_link" value="true" /> -->
+<!--               关联类型到下级</label> -->
+<!--             </strong></span><span id="nothis"><strong class="q"></strong><strong class="w">如果当前下拉选项中没有适合的类型，可以去<a href="javascript:void(0);" onclick="window.parent.openURL('url','$!webPath/admin/goods_type_list.htm','main_workspace','goods_type_op','about_goods')" style="color:#fff; background-color:#FF6600; padding:2px 4px; border-radius:4px 4px 4px 4px;">类型管理</a>功能中新增新的类型</strong></span> <strong></strong></li> -->
+<!--         </ul> -->
+        <ul class="set1" id="goodsTypeBrand" style="display:none">
+          <li  class="setcont_bg">品牌</li>
+          <li> <span style="width:740px;"> </span><span class="use_code"><strong> </strong></span><span id="nothis"><strong class="q"></strong><strong class="w">设置后在首页分类弹出层中顶部显示</strong></span> <strong></strong></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">排序</li>
+          <li><span class="webname">
+            <input name="sequence" type="text" id="sequence" value="$!obj.sequence" />
+            </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小，分类显示越靠前</strong><strong class="c"></strong></span></li>
+        </ul>
+      </div>
+    </div>
+    <input name="gbs_ids" id="gbs_ids" type="hidden"   />
+  </form>
+  <div class="submit"> <span class="pad120">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+    </span> </div>
+</div>
+</body>
+</html>

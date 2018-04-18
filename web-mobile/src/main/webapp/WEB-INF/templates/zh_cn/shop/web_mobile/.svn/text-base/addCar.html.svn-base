@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>购物车</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="$!webPath/resources/shop/css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="$!webPath/resources/shop/css/common.css" />
+		<link href="$!webPath/resources/shop/css/car.css" rel="stylesheet"type="text/css" />
+		 <script>
+    		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+			document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+	    </script>
+	    <style>
+	     html,body{background:#f7f7f7;padding-bottom:1rem;padding-top: 0.2rem;}
+	     input{-webkit-appearance:none;}
+
+	    </style>
+	</head>
+
+	<body>
+		<input type="hidden" id="has_default_address" value="$hasDefaultAddress"/>
+		<form method="post" action="$!webPath/confirm-order-page" name="cart_form" id="cart_form">
+			<input type="hidden" name="gcs_id" id="gcs_id" />
+			<input type="hidden" name="goods_type" id="goods_type" />
+		</form>
+		<div class="mui-content">
+		#if($!cnCart && $!cnCart.size()>0)
+			<div class="car_shop">
+				<input type="checkbox" class="shop_checkbox" name="allCheckedShop">
+				<span class="shop_tit">云购币</span>
+				<span class="compile">编辑</span>
+				<span class="complete">完成</span>
+			</div>
+			<ul id="OA_task_1" class="OA_task_1 mui-table-view">
+			#foreach($obj in $cnCart)
+				#if($!obj.goods.goodsMainPhotoPath)
+					#set($img="$!{obj.goods.goodsMainPhotoPath}") 
+				#else
+					#set($img="$!{config.goodsImage.path}") 
+				#end
+				<li class="mui-table-view-cell" id="goods_$!obj.id" data-type="$!obj.goods.fSaleType">
+					<div class="mui-slider-handle">
+						<input type="checkbox" class="shop_goods_checkbox" name="choose" value="$!obj.id">
+						<img data-original="$!{img}_176x176"  alt="" />
+						<div class="shop_goods_mes">
+							<span class="tit">$!obj.goods.goodsName</span>
+							<span class="guige"><span>#if($!obj.specInfo!="") $!{obj.specInfo} #else 暂无 #end</span></span>
+							<div class="gouandbv">
+								#if($!obj.goods.needYgb > 0 && $!obj.goods.needMoney > 0)
+								<span class="gou">$!obj.goods.needYgb + $!obj.goods.needMoney</span>
+								#elseif($!obj.goods.needYgb > 0)
+								<span class="gou">$!obj.goods.needYgb</span>
+								#elseif($!obj.goods.needMoney > 0)
+								<span class="gou">$!obj.goods.needMoney</span>
+								#end
+								#if($!obj.goods.cnSelfAddPrice > 0)
+								<span class="bv">$!obj.goods.cnSelfAddPrice</span>
+								#end
+							</div>
+							<div class="priceandnum">
+								<span class="price">¥ $!obj.price</span><span class="num">$!obj.count</span>
+							</div>
+						</div>
+						<div class="shop_goods_mes2" style="display: none">
+							<div class='center'>
+								<span class='number'>
+									<input id='min'  type='button'/>
+									<input id='text_box'  type='text' value='$!obj.count'/>
+									<input id='add' type='button'/> 
+								</span>
+								<span class='nature'>#if($!obj.specInfo!="") $!{obj.specInfo} #else 暂无 #end</span>
+							</div>
+							<a class='mui-btn mui-btn-red'>删除</a>
+						</div>
+					</div>
+				</li>
+			#end
+			</ul>
+		</div>
+		#end
+		#if($!cart && $!cart.size()>0)
+		<div class="mui-content">
+			<div class="car_shop">
+				<input type="checkbox" class="shop_checkbox" name="allCheckedShop">
+				<span class="shop_tit">平台商家</span>
+				<span class="compile">编辑</span>
+				<span class="complete">完成</span>
+			</div>
+			<ul id="OA_task_1" class="OA_task_1 mui-table-view">
+			#foreach($obj in $cart)
+				#if($!obj.goods.goodsMainPhotoPath)
+					#set($img="$!{obj.goods.goodsMainPhotoPath}") 
+				#else
+					#set($img="$!{config.goodsImage.path}") 
+				#end
+				<li class="mui-table-view-cell" id="goods_$!obj.id" data-type="$!obj.goods.fSaleType">
+					<div class="mui-slider-handle">
+						<input type="checkbox" class="shop_goods_checkbox" name="choose" value="$!obj.id">
+						<img data-original="$!{img}_176x176" alt=""/>
+						<div class="shop_goods_mes ">
+							<span class="tit">$!obj.goods.goodsName</span>
+							<span class="guige"><span>#if($!obj.specInfo!="") $!{obj.specInfo} #else 暂无 #end</span></span>
+							<div class="priceandnum"><span class="price">¥ $!obj.price</span><span class="num">$!obj.count</span></div>
+						</div>
+						<div class="shop_goods_mes2" style="display: none">
+							<div class='center'>
+								<span class='number'>
+									<input id='min'  type='button'/>
+									<input id='text_box'  type='text' value='$!obj.count'/>
+									<input id='add' type='button'/> 
+								</span>
+								<span class='nature'>#if($!obj.specInfo!="") $!{obj.specInfo} #else 暂无 #end</span></span>
+							</div>
+							<a class='mui-btn mui-btn-red'>删除</a>
+						</div>
+					</div>
+				</li>
+			#end
+			</ul>
+		</div>
+		#end
+		#if($!yungouCart && $!yungouCart.size()>0)
+		<div class="mui-content">
+			<div class="car_shop">
+				<input type="checkbox" class="shop_checkbox" name="allCheckedShop">
+				<span class="shop_tit">云购币专区</span>
+				<span class="compile">编辑</span>
+				<span class="complete">完成</span>
+			</div>
+			<ul id="OA_task_1" class="OA_task_1 mui-table-view">
+			#foreach($obj in $yungouCart)
+				#if($!obj.goods.goodsMainPhotoPath)
+					#set($img="$!{obj.goods.goodsMainPhotoPath}") 
+				#else
+					#set($img="$!{config.goodsImage.path}") 
+				#end
+				<li class="mui-table-view-cell" id="goods_$!obj.id" data-type="$!obj.goods.fSaleType">
+					<div class="mui-slider-handle">
+						<input type="checkbox" class="shop_goods_checkbox" name="choose" value="$!obj.id">
+						<img data-original="$!{img}_176x176"  alt=""/>
+						<div class="shop_goods_mes ">
+							<span class="tit">$!obj.goods.goodsName</span>
+							<span class="guige"><span>#if($!obj.specInfo!="") $!{obj.specInfo} #else 暂无 #end</span></span>
+							<div class="priceandnum"><span class="price">¥ $!obj.price</span><span class="num">$!obj.count</span></div>
+						</div>
+						<div class="shop_goods_mes2" style="display: none">
+							<div class='center'>
+								<span class='number'>
+									<input id='min'  type='button'/>
+									<input id='text_box'  type='text' value='$!obj.count'/>
+									<input id='add' type='button'/> 
+								</span>
+								<span class='nature'>#if($!obj.specInfo!="") $!{obj.specInfo} #else 暂无 #end</span>
+							</div>
+							<a class='mui-btn mui-btn-red'>删除</a>
+						</div>
+					</div>
+				</li>
+			#end
+			</ul>
+		</div>
+		#end
+		<div class="car_footer">
+			<div class="account_btn">结算(<span id="total_num">0</span>)</div>
+			<div class="totalprices">
+				<span class="heji">合计：<span id="total_money">¥ 0.00</span></span>
+				<span class="yunfei">不含运费</span>
+			</div>
+		</div>
+		<script type="text/javascript" src="$!webPath/resources/js/jquery.min.js" ></script>
+		<script src="$!webPath/resources/js/jquery.lazyload.js" type="text/javascript"></script>
+		<script src="$!webPath/resources/js/mui.min.js"></script>
+		<script src="$!webPath/resources/js/newAddCar.js"></script>
+		<script>
+		$('img').lazyload();
+			(function($) {
+				$('.OA_task_1').on('tap', '.mui-btn', function(event) {
+					var elem = this;
+					var li = elem.parentNode.parentNode;
+					mui.confirm('确认要删除这个宝贝吗？', '', btnArray, function(e) {
+						if (e.index == 0) {
+							deleteCarGoods(li);
+						} else {
+							setTimeout(function() {
+								$.swipeoutClose(li);
+							}, 0);
+						}
+					});
+				});
+				var btnArray = ['确认', '取消'];
+			})(mui);
+
+			var webPath = "$!webPath";
+			function deleteCarGoods(li){
+				var $this = $(li);
+				var ids = $this.find(">input:eq(0)").val();
+				jQuery.post("$!webPath/remove_goods_cart.htm",{"ids": ids},function(data){
+					if(data.code == "100"){
+						$("#goods_"+ids).remove();
+						//调整商品数量
+				        goodsCountAdjust();
+					}else if(data.code=="200"){	
+					   	mui.alert("系统繁忙，请稍后重试！", "提示");	
+					}
+				},"json");
+			}
+		</script>
+	</body>
+
+</html>

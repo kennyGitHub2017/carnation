@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.market.mapper.ActivitySaleMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.sinco.carnation.market.model.ActivitySaleMessage" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="share_url" property="shareUrl" jdbcType="VARCHAR" />
+    <result column="share_title" property="shareTitle" jdbcType="VARCHAR" />
+    <result column="share_content" property="shareContent" jdbcType="VARCHAR" />
+    <result column="share_pic" property="sharePic" jdbcType="VARCHAR" />
+    <result column="template_id" property="templateId" jdbcType="BIGINT" />
+    <result column="goods_id" property="goodsId" jdbcType="VARCHAR" />
+    <result column="act_id" property="actId" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="BOResultMap" type="com.sinco.carnation.market.bo.ActivitySaleMessageBO" extends="BaseResultMap" />
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, title, share_url, share_title, share_content, share_pic, template_id, goods_id, 
+    act_id
+  </sql>
+  <select id="selectByExample" parameterType="com.sinco.carnation.market.model.ActivitySaleMessageExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from act_app_sale_message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      limit ${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from act_app_sale_message
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from act_app_sale_message
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.market.model.ActivitySaleMessageExample" >
+    delete from act_app_sale_message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinco.carnation.market.model.ActivitySaleMessage" useGeneratedKeys="true" keyProperty="id" >
+    insert into act_app_sale_message (id, title, share_url, 
+      share_title, share_content, share_pic, 
+      template_id, goods_id, act_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{shareUrl,jdbcType=VARCHAR}, 
+      #{shareTitle,jdbcType=VARCHAR}, #{shareContent,jdbcType=VARCHAR}, #{sharePic,jdbcType=VARCHAR}, 
+      #{templateId,jdbcType=BIGINT}, #{goodsId,jdbcType=VARCHAR}, #{actId,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinco.carnation.market.model.ActivitySaleMessage" useGeneratedKeys="true" keyProperty="id" >
+    insert into act_app_sale_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="shareUrl != null" >
+        share_url,
+      </if>
+      <if test="shareTitle != null" >
+        share_title,
+      </if>
+      <if test="shareContent != null" >
+        share_content,
+      </if>
+      <if test="sharePic != null" >
+        share_pic,
+      </if>
+      <if test="templateId != null" >
+        template_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="actId != null" >
+        act_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUrl != null" >
+        #{shareUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTitle != null" >
+        #{shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="shareContent != null" >
+        #{shareContent,jdbcType=VARCHAR},
+      </if>
+      <if test="sharePic != null" >
+        #{sharePic,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null" >
+        #{templateId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=VARCHAR},
+      </if>
+      <if test="actId != null" >
+        #{actId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinco.carnation.market.model.ActivitySaleMessageExample" resultType="java.lang.Integer" >
+    select count(*) from act_app_sale_message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update act_app_sale_message
+    <trim prefix="set" suffixOverrides=",">
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareUrl != null" >
+        share_url = #{record.shareUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareTitle != null" >
+        share_title = #{record.shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shareContent != null" >
+        share_content = #{record.shareContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sharePic != null" >
+        share_pic = #{record.sharePic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.templateId != null" >
+        template_id = #{record.templateId,jdbcType=BIGINT},
+      </if>
+      <if test="record.goodsId != null" >
+        goods_id = #{record.goodsId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actId != null" >
+        act_id = #{record.actId,jdbcType=BIGINT},
+      </if>
+    </trim>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update act_app_sale_message
+    set id = #{record.id,jdbcType=BIGINT},
+      title = #{record.title,jdbcType=VARCHAR},
+      share_url = #{record.shareUrl,jdbcType=VARCHAR},
+      share_title = #{record.shareTitle,jdbcType=VARCHAR},
+      share_content = #{record.shareContent,jdbcType=VARCHAR},
+      share_pic = #{record.sharePic,jdbcType=VARCHAR},
+      template_id = #{record.templateId,jdbcType=BIGINT},
+      goods_id = #{record.goodsId,jdbcType=VARCHAR},
+      act_id = #{record.actId,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.market.model.ActivitySaleMessage" >
+    update act_app_sale_message
+    <trim prefix="set" suffixOverrides=",">
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="shareUrl != null" >
+        share_url = #{shareUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="shareTitle != null" >
+        share_title = #{shareTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="shareContent != null" >
+        share_content = #{shareContent,jdbcType=VARCHAR},
+      </if>
+      <if test="sharePic != null" >
+        share_pic = #{sharePic,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null" >
+        template_id = #{templateId,jdbcType=BIGINT},
+      </if>
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=VARCHAR},
+      </if>
+      <if test="actId != null" >
+        act_id = #{actId,jdbcType=BIGINT},
+      </if>
+    </trim>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.market.model.ActivitySaleMessage" >
+    update act_app_sale_message
+    set title = #{title,jdbcType=VARCHAR},
+      share_url = #{shareUrl,jdbcType=VARCHAR},
+      share_title = #{shareTitle,jdbcType=VARCHAR},
+      share_content = #{shareContent,jdbcType=VARCHAR},
+      share_pic = #{sharePic,jdbcType=VARCHAR},
+      template_id = #{templateId,jdbcType=BIGINT},
+      goods_id = #{goodsId,jdbcType=VARCHAR},
+      act_id = #{actId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

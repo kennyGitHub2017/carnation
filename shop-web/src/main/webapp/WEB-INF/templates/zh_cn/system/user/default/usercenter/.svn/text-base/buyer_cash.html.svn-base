@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>提现申请-$!{config.title}-$!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<style>
+.back_black{ display:none; width: 100%;left: 0px;top: 0px;height: 100%;position: fixed;-webkit-user-select: none; z-index: 1001;background-color: #000;opacity: 0.45;filter:alpha(opacity=45);-moz-opacity:0.45;}
+.warning{display:none; position:fixed; background:#fff;border:none; background:#ffffff;border-radius:6px;width:506px;height:672px;z-index:1002;left:0; right:0; margin:0 auto; top:17%; padding:0px 17px; }
+.txsm{display:inline-block;width:100px; background: url("$!webPath/resources/img/txsm.png")no-repeat left center #fff; height: 32px;line-height: 31px;font-size: 12px;color: #a3a3a3;margin-left:29px; text-indent: 17px; cursor:pointer;}
+.warning .warning_close{cursor:pointer; width:21px;height:24px;background:url('$!webPath/resources/img/close_txsm.png')no-repeat center center; float:right;margin:25px 21px 0 0;}
+.warning .tit{z-index:-1; position:relative; font-size:20px;color:#464646;text-align：center; background:url('$!webPath/resources/img/txsmbig.png')no-repeat 185px center;width: auto;padding-left:55px; height: 83px; line-height:82px;text-align:center;font-weight:bold; border-bottom: 1px solid #e2e2e2;}
+.mess{width: 100%;overflow: hidden;margin-top:17px; font-size:14px;color:#4a4a4a;letter-spacing:0px;line-height:20px;text-align:left;}
+.mess span{float: left;display: inline-block;border: 1px solid #fff;margin-right: 9px;height: 39px;}.mess p{font-size: 14px;}
+</style>
+<script>
+jQuery(document).ready(function(){
+    jQuery.validator.addMethod("bei100",function(value,element){
+		var re =  /^[1-9]\d*00$/;
+        if(re.test(value)){			
+			return true;
+		  } else {
+		  	return false;
+		  }		 
+     });	
+  jQuery("#theForm").validate({
+       rules: {
+			cashPayment:{required:true},
+			cashAmount:{required:true,min:100,max:10000,bei100:true},
+			cashUserName:{required:true},
+			cashBank:{required:true},
+			cashAccount:{required:true},
+			branch:{required:true}
+		  },
+	   messages: {
+		    cashPayment:{required:"支付方式不能为空"},
+			cashAmount:{required:"提现金额不能为空",min:"最小金额为100",max:"最大金额为10000",bei100:"提现金额必须是100的整数倍"},
+			cashUserName:{required:"收款人不能为空"},
+			cashBank:{required:"收款银行不能为空"},
+			cashAccount:{required:"收款账号不能为空"},
+			branch:{required:"收款支行不能为空"}
+	     },
+		 submitHandler:function(){
+			 jQuery(".save").attr("disabled","disabled");
+		   var data=jQuery("#theForm").serialize();
+		   jQuery.ajax({type:'POST',url:'$!webPath/buyer/buyer_cash_save.htm',data:data,
+				   success:function(ret){
+					   showDialog("succeed","", ret,2,"warning",2, function(){window.location.reload();});
+				   }
+		    });
+		}
+  });
+ //
+ jQuery("#cash_payment").change(function(){
+    var val=jQuery(this).val();
+	if(val=="chinabank"){
+	  jQuery("tr[id^=cash_]").show();
+	  jQuery("tr[id^=cash_] input").show();
+	  #if($!predepositCash.cashPayment=='chinabank')
+		  jQuery("#cash_account").val('$!predepositCash.cashAccount');
+		  jQuery("#cash_userName").val('$!predepositCash.cashUserName');
+		  jQuery("#cash_bank").val('$!predepositCash.cashBank');
+		  jQuery("#branch").val('$!predepositCash.cashSubbranch');
+	  #else
+		  jQuery("#cash_account").val('');
+		  jQuery("#cash_userName").val('');
+		  jQuery("#cash_bank").val('');
+		  jQuery("#branch").val('');
+	  #end
+	}else{
+	  jQuery("tr[id^=cash_]").hide();
+	  jQuery("tr[id^=cash_] input").hide();
+	  #if($!predepositCash.cashPayment=='alipay')
+	  	jQuery("#cash_account").val('$!predepositCash.cashAccount');
+	  #else
+		jQuery("#cash_account").val('');
+	  #end
+	}
+  }).trigger("change");
+ 
+	$("#cash_amount").blur(function(){
+		if(!$(this).hasClass("error")&&$(this).val()!=""){
+			var val=$(this).val();
+			$.ajax({
+			    url:'$!webPath/load_getPoundages.htm',
+			    type:'POST', //GET
+			    async:false,    //或false,是否异步
+			    data:{
+			    	amount:val
+			    },
+			    timeout:5000,    //超时时间
+			    dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+			    beforeSend:function(xhr){
+			        $("#sxf").html('手续费计算中...');
+			    },
+			    success:function(data,textStatus,jqXHR){
+			        if(data.result=='success'){
+			        	$("#sxf").html('应付手续费'+data.poundage+'元');
+			        }
+			    },
+			    error:function(xhr,textStatus){
+			        console.log('错误');
+			    },
+			    complete:function(){
+			        console.log('结束');
+			    }
+			});
+		}
+	});
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm")
+$!httpInclude.include("/nav1.htm")
+<div class="main clearfix">
+  <div class="usercenter">
+    $!httpInclude.include("/buyer/nav.htm?op=buyer_cash")
+    <div class="usercenter_right">
+      <div class="myorder">
+        <h4><strong>提现管理</strong></h4>
+      </div>
+      <div class="user_list">
+        <div class="user_list_title">
+          <ul class="user_title_ul">
+            <li class="this"><i></i><a href='$!webPath/buyer/buyer_cash.htm'>提现申请</a></li>
+            <li><i></i><a href='$!webPath/buyer/buyer_cash_list.htm'>申请列表</a></li>
+          </ul>
+        </div>       
+        <div class="add_usercenter">      
+            <form action="$!webPath/buyer/buyer_cash_save.htm" autocomplete="off" method="post" name="theForm" id="theForm">
+	              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="user_base_table">
+	              <tr>
+	              #if($!{availableBalance} && $!{availableBalance}>0) #set($available = $!{availableBalance}) #else #set($available = 0) #end
+	              #if($!{recordBalance} && $!{recordBalance}>0) #set($record = $!{recordBalance}) #else #set($record = 0) #end
+	              #if($!{cnBonus} && $!{cnBonus}>0) #set($bonus = $!{cnBonus}) #else #set($bonus = 0) #end
+		          #set($money = $available + $bonus)
+		              <td align="right"><strong class="redstr"></strong>云豆：</td>
+		              <td>#if($money>0)  ¥$money #else  ¥0.00 #end</td>
+	              </tr>
+	              <tr>
+		              <td align="right"><strong class="redstr"></strong>可提余额：</td>
+		              <td><span>¥$available</span><span style="color: #a3a3a3;margin-left:20px">剩余免费额度：<span>$!poundage</span>元</span></td>
+	              </tr>
+	            <tr>
+	              <td width="170" align="right"><strong class="redstr">*</strong>提现方式：</td>
+	              <td><span style="color:#F00">
+	              			<select name="cashPayment" id="cash_payment"  class="base_select_check">
+	                          <option value="">请选择提现方式</option>                          
+	                          <option value="alipay">支付宝</option>
+	                          <option value="chinabank" selected="selected">网银在线</option>
+	                        </select></span></td>
+	            </tr>
+	            <tr>
+	              <td align="right"><strong class="redstr">*</strong>提现金额：</td>
+	              <td><span style="color:#F00"> <input name="cashAmount" type="text" id="cash_amount"  class="base_txt"/>
+	             
+	              	</span><span id="sxf"></span>
+	                </td>
+	            </tr>
+	            <tr id="cash_user_tr">
+	              <td align="right"><strong class="redstr">*</strong>收款人姓名： </td>
+	              <td><span style="color:#F00"> 	              
+	              		<input  name="cashUserName" autocomplete="off" type="text" id="cash_userName" class="base_txt saved"/></span>
+                	</td>
+	            </tr>
+	            <tr>
+	              <td align="right" ><strong class="redstr">*</strong>收款账号： </td>
+	              <td><span style="color:#F00"> <input name="cashAccount" type="text" id="cash_account" class="base_txt saved"/></span>
+	                </td>
+	            </tr>
+	            <tr id="cash_bank_tr">
+	              <td align="right"><strong class="redstr">*</strong>收款银行： </td>
+	              <td><span style="color:#F00"> <input name="cashBank" type="text" id="cash_bank"   class="base_txt saved"/></span>
+	                </td>
+	            </tr>
+	            
+	            <tr id="cash_zh_tr">
+	            	<td align="right"><strong class="redstr">*</strong>收款支行： </td>
+	              	<td>
+	              		<span style="color:#F00">
+	              		 <input name="cashSubbranch" type="text" id="branch" autocomplete="off" class="base_txt saved"/>
+	              		 <span style="color: #a3a3a3">如: **省**市***支行 (分行）</span>
+	              		</span>
+	                </td>
+	            </tr>
+	            
+	            <tr>
+	              <td align="right">提现备注：$!predepositCash.cashInfo</td>
+	              <td><span style="color:#F00"> <textarea style="box-shadow:2px 0px 5px #CCC; border:1px solid #CCC;" name="cashInfo" cols="40" rows="6" id="cash_info"></textarea></span>
+	                </td>
+	            </tr>
+	             <tr>
+	              <td align="right"><strong class="redstr">*</strong>提现密码：</td>
+	              <td><span style="color:#F00">           
+	                <input type="text" name="cashPassword" id="txpsw" class="base_txt"/>
+	              </span>
+	                </td>
+	            </tr>
+	            <tr>
+	              <td>&nbsp;</td>
+	              <td><input name="button" type="submit" value="提交" class="btn btn-blue plr-30" onclick="saveForm()" />
+	              	<span class="txsm">提现说明</span>
+	              </td>
+            	</tr> 
+	          </table>
+            </form>
+        </div> 
+      </div>
+    </div>
+  </div>
+
+</div>
+
+$!httpInclude.include("/footer.htm")
+
+</body>
+<div class="back_black"></div>
+<div class="warning">
+	<span class="warning_close"></span>
+	<div class="tit">提现说明</div>
+	<div class="mess">
+		<span>1.</span>
+		<p>单笔提现金额最低100元，限100的整数倍提取，最高限1万元；单次提现1万元时，工作人员需电话核实，请保持手机畅通；</p>
+	</div>
+	<div class="mess">
+		<span>2.</span>
+		<p>使用支付宝或网银提现时，请确认收款名与认证名一致；否则将导致提现不成功；</p>
+	</div>
+	<div class="mess">
+		<span>3.</span>
+		<p>银行卡充值后提现时，请保持提现的账户与充值的账户一致，否则将导致提现不成功；</p>
+	</div>
+	<div class="mess">
+		<span>4.</span>
+		<p>用户享有累计不超过1000元的免费提现额度； 超出后按单笔提现金额的 1%收取手续费（最低2元，无上限）；</p>
+	</div>
+	<div class="mess">
+		<span>5.</span>
+		<p>每月免手续费提现2次，未使用的提现次数当月底清零，当累计提现额超过1000元后，不再享有免费提现次数，并需按规则收取手续费用，不限提现次数；</p>
+	</div>
+	<div class="mess">
+		<span>6.</span>
+		<p>本周工作日内的提现申请，于下周工作日到账，所有法定节假日（含周末）均不处理提现；</p>
+	</div>
+	<div class="mess">
+		<span>7.</span>
+		<p>请尽量使用支付宝提现；长假等因素导致提现业务量大或其它情况时，到账均有延迟；</p>
+	</div>
+	<div class="mess">
+		<span>8.</span>
+		<p>严禁使用信用卡套现、虚假交易等行为，一经发现，将对该帐户进行冻结处理；</p>
+	</div>
+	<div class="mess">
+		<span>9.</span>
+		<p>如遇银行系统、微信和支付宝系统升级等特殊原因，提现金额可能会延迟到帐。</p>
+	</div>
+</div>
+<script>
+$(".txsm").click(function(event) {
+	$(".back_black").show();$(".warning").show();
+});
+$(".warning_close").click(function(event) {
+	$(".back_black").hide();$(".warning").hide();
+});
+
+
+$("#txpsw").focus(function(event) {
+   $(this)[0].type='password';
+});
+
+
+
+</script>
+</html>

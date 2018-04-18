@@ -1,0 +1,1435 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.UserCustomerMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.UserCustomer">
+		<id column="uid" property="uid" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="nickname" property="nickname" jdbcType="VARCHAR" />
+		<result column="allergic_history" property="allergicHistory"
+			jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="INTEGER" />
+		<result column="height" property="height" jdbcType="INTEGER" />
+		<result column="weight" property="weight" jdbcType="INTEGER" />
+		<result column="birthdate" property="birthdate" jdbcType="DATE" />
+		<result column="head_img_path" property="headImgPath" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+		<result column="trans_history" property="transHistory"
+			jdbcType="VARCHAR" />
+		<result column="trans_genetic" property="transGenetic"
+			jdbcType="VARCHAR" />
+		<result column="freeze_Blance" property="freezeBlance"
+			jdbcType="DECIMAL" />
+		<result column="user_goods_fee" property="userGoodsFee"
+			jdbcType="DECIMAL" />
+		<result column="integral" property="integral" jdbcType="INTEGER" />
+		<result column="gold" property="gold" jdbcType="INTEGER" />
+		<result column="invoice" property="invoice" jdbcType="VARCHAR" />
+		<result column="invoice_Type" property="invoiceType" jdbcType="INTEGER" />
+		<result column="delivery_id" property="deliveryId" jdbcType="BIGINT" />
+		<result column="blood" property="blood" jdbcType="VARCHAR" />
+		<result column="user_signature" property="userSignature"
+			jdbcType="VARCHAR" />
+		<result column="extend" property="extend" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="UserAccountBaseResultMap" type="com.sinco.carnation.sys.model.UserAccount">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="uid" property="uid" jdbcType="INTEGER" />
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="account_type" property="accountType" jdbcType="CHAR" />
+		<result column="last_login_time" property="lastLoginTime"
+			jdbcType="TIMESTAMP" />
+		<result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+	</resultMap>
+
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.UserCustomerBO"
+		extends="BaseResultMap">
+		<result column="available_balance" property="availableBalance"
+			jdbcType="DECIMAL" />
+		<result column="o2o_balance" property="o2oBalance" jdbcType="DECIMAL" />
+		<result column="b2c_balance	" property="b2cBalance	" jdbcType="DECIMAL" />
+		<result column="yys_balance" property="yysBalance" jdbcType="DECIMAL" />
+		<association property="userAccount" column="uid"
+			javaType="com.sinco.carnation.sys.model.UserAccount" resultMap="UserAccountBaseResultMap" />
+	</resultMap>
+
+	<resultMap id="CustomResultMap" type="com.sinco.carnation.user.bo.UserCustomerBO"
+		extends="BaseResultMap">
+		<result column="store_id" property="storeId" />
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="last_login_time" property="lastLoginTime"
+			jdbcType="TIMESTAMP" />
+		<result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" />
+		<result column="sellerNickName" property="sellerNickName"
+			jdbcType="VARCHAR" />
+		<result column="own_operator_id" property="ownOperatorId"
+			jdbcType="INTEGER" />
+		<result column="totlePrice" property="totlePrice" jdbcType="INTEGER" />
+		<result column="relation_type" property="relationType"
+			jdbcType="INTEGER" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="invitation_code" property="invitationCode"
+			jdbcType="VARCHAR" />
+		<result column="refreeUserId" property="refreeUserId" jdbcType="INTEGER" />
+		<result column="reUserName" property="reUserName" jdbcType="VARCHAR" />
+		<result column="reMobile" property="reMobile" jdbcType="VARCHAR" />
+		<result column="operatorName" property="operatorName" jdbcType="VARCHAR" />
+		<result column="reInvitationCode" property="reInvitationCode"
+			jdbcType="VARCHAR" />
+		<result column="seller_uid" property="sellerUid" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="CustomerAccountBO" type="com.sinco.carnation.user.bo.UserCustomerBO"
+		extends="BaseResultMap">
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="relation_type" property="relationType"
+			jdbcType="INTEGER" />
+		<result column="create_time" property="accountCreateTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap id="OperatorOwnsCustomersMap" type="com.sinco.carnation.user.bo.UserCustomerBO"
+		extends="BaseResultMap">
+		<result column="relation_type" property="relationType"
+			jdbcType="INTEGER" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="RelationListMap" type="com.sinco.carnation.user.bo.UserCustomerBO"
+		extends="BaseResultMap">
+		<result column="referee_user_id" property="refereeUserId"
+			jdbcType="BIGINT" />
+		<result column="register_time" property="registerTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<select id="queryRelationList" resultMap="RelationListMap">
+		SELECT * from (
+		SELECT a.create_time
+		register_time,r.referee_user_id,c.uid,c.`name`,c.nickname,c.head_img_path,c.mobile,r.create_time
+		FROM user_relation r
+		INNER JOIN user_customer c ON r.user_id=c.uid
+		INNER JOIN sys_user_account a ON a.uid=r.user_id AND a.account_type= 2
+		WHERE r.referee_user_id=#{uid}
+		UNION ALL
+		SELECT wx.create_time register_time,wx.owner_id as
+		referee_user_id,uc.uid,wx.nick_name AS `name`,wx.nick_name AS
+		nickname,wx.head_img_path AS head_img_path,'来自微信' AS
+		mobile,wx.create_time
+		FROM wx_invitation_relation wx
+		LEFT JOIN `sys_user_account` ua ON ua.account_type = 4 AND ua.login_name =
+		wx.union_id
+		LEFT JOIN user_relation ur ON ur.`user_id` = ua.uid
+		LEFT JOIN user_customer uc ON uc.uid = ua.uid
+		WHERE IFNULL(ur.referee_user_id,'') = '' AND wx.owner_id = #{uid}
+		) AS t
+		ORDER BY create_time DESC
+
+
+
+	</select>
+
+	<select id="queryUserCustomerByOperatorUserId" resultMap="OperatorOwnsCustomersMap">
+		SELECT
+		store.store_name,c.*,r.relation_type,s.uid sell_uid, s.nickname sellerNickName, own.own_operator_id,
+		(SELECT SUM(o.total_price) FROM o2o_group_order o WHERE o.order_status >= 20
+		AND o.user_id = c.uid) totlePrice
+		FROM
+		user_customer c
+		INNER JOIN user_relation r ON c.uid = r.user_id
+		INNER JOIN user_owns
+		own ON own.seller_user_id = r.seller_user_id
+		INNER JOIN user_seller s
+		ON s.uid = r.seller_user_id
+		INNER JOIN shop_store store ON store.id =
+		s.store_id
+		WHERE c.is_deleted = 0
+		<choose>
+			<when test="vo.isOwn != null and vo.isOwn != '' and vo.isOwn == 1">
+				AND own.own_operator_id = #{vo.operatorId}
+			</when>
+			<when test="vo.isOwn != null and vo.isOwn != '' and vo.isOwn == 0">
+				<choose>
+					<when test="vo.userLevel == 1">
+						AND (SELECT count(0) FROM dic_area a WHERE a.id = store.area_id
+						AND a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+						0
+						AND (own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.userLevel == 2">
+						AND store.area_id = #{vo.operatorAreaId}
+						AND
+						(own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.userLevel == 3">
+						AND 1=2
+					</when>
+            		<otherwise>
+						AND 1=2
+            		</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				<choose>
+					<when test="vo.userLevel == 1">
+						AND ((SELECT count(0) FROM dic_area a WHERE a.id = store.area_id
+						AND a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+						0
+						OR own.own_operator_id = #{vo.operatorId})
+					</when>
+					<when test="vo.userLevel == 2">
+						AND (store.area_id = #{vo.operatorAreaId}
+						OR
+						own.own_operator_id = #{vo.operatorId})
+					</when>
+					<when test="vo.userLevel == 3">
+						AND own.own_operator_id = #{vo.operatorId}
+					</when>
+            		<otherwise>
+						AND own.own_operator_id = #{vo.operatorId}
+            		</otherwise>
+				</choose>
+			</otherwise>
+		</choose>
+		ORDER BY c.create_time DESC
+	</select>
+
+	<select id="selectCustomerCountByArea" resultType="int">
+		SELECT count(0) FROM user_customer c
+		<if test="areaId != null and  areaId != ''">
+			INNER JOIN user_relation r ON c.uid = r.user_id
+			INNER JOIN
+			shop_store s ON r.seller_user_id = s.create_user_id
+			INNER JOIN
+			dic_area a ON s.area_id = a.id
+		</if>
+		WHERE c.status = 1
+		<if test="areaId != null and  areaId != ''">
+			AND s.store_status = 15 AND s.is_o2o = 1
+			AND (a.id =
+			#{areaId} OR a.parent_id = #{areaId})
+		</if>
+	</select>
+	<select id="queryStoreCustomer" resultMap="CustomerAccountBO">
+		SELECT l.relation_type,c.nickname,c.mobile,l.create_time FROM
+		user_customer c INNER JOIN sys_user_account a ON (c.uid=a.uid and
+		a.account_type = 4)
+		INNER JOIN user_relation r ON r.user_id=c.uid
+		LEFT JOIN user_relation l ON l.user_id=c.uid
+		WHERE r.seller_user_id=#{sellerUid}
+		<if test="mobile != null and mobile != ''">
+			and c.mobile=#{mobile}
+		</if>
+		ORDER BY l.create_time DESC
+	</select>
+
+	<select id="selectUserCustomerByOperatorUserId" resultMap="CustomResultMap">
+		SELECT
+		CASE WHEN store.store_name IS NULL THEN '店家未设置店铺名' ELSE store.store_name
+		END AS 'store_name',
+		c.*, s.nickname sellerNickName, o.own_operator_id,s.uid seller_uid
+		FROM
+		user_customer c
+		LEFT JOIN user_relation r ON r.user_id = c.uid
+		LEFT JOIN
+		user_seller s ON r.seller_user_id = s.uid
+		LEFT JOIN user_owns o ON
+		o.seller_user_id = r.seller_user_id
+		LEFT JOIN shop_store store ON
+		store.id = s.store_id
+		WHERE c.is_deleted = 0 AND r.referee_user_id =
+		#{vo.operatorUserId}
+		ORDER BY c.create_time DESC
+	</select>
+	<select id="selectOperatorCustomerCount" resultType="int">
+		SELECT
+		count(0)
+		FROM
+		user_customer c
+		INNER JOIN user_relation r ON r.user_id = c.uid
+		WHERE c.is_deleted =
+		0 AND r.referee_user_id = #{vo.operatorUserId}
+	</select>
+	<select id="selectOwnCustomerCount" resultType="int">
+		SELECT
+		count(0)
+		FROM
+		user_customer c
+		INNER JOIN user_relation r ON c.uid = r.user_id
+		INNER JOIN user_owns
+		own ON own.seller_user_id = r.seller_user_id
+		INNER JOIN user_seller s
+		ON s.uid = r.seller_user_id
+		INNER JOIN shop_store ss ON s.store_id =
+		ss.id
+		WHERE c.is_deleted = 0
+		<choose>
+			<when test="vo.isOwn != null and vo.isOwn != '' and vo.isOwn == 1">
+				AND own.own_operator_id = #{vo.operatorId}
+			</when>
+			<when test="vo.isOwn != null and vo.isOwn != '' and vo.isOwn == 0">
+				<choose>
+					<when test="vo.userLevel == 1">
+						AND (SELECT count(0) FROM dic_area a WHERE a.id = ss.area_id AND
+						a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+						0
+						AND (own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.userLevel == 2">
+						AND ss.area_id = #{vo.operatorAreaId}
+						AND
+						(own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.userLevel == 3">
+						AND 1=2
+					</when>
+            		<otherwise>
+						AND 1=2
+            		</otherwise>
+				</choose>
+			</when>
+		</choose>
+		<if test="vo.beginTime != null and vo.beginTime != ''">
+			<![CDATA[AND date(c.create_time) >=#{vo.beginTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+			<![CDATA[AND date(c.create_time) <= #{vo.endTime,jdbcType=TIMESTAMP}]]>
+		</if>
+
+	</select>
+	<select id="selectOwnCustomerByOperatorUserId" resultMap="CustomResultMap">
+		SELECT
+		c.*,r.relation_type,s.uid sell_uid, s.nickname sellerNickName, own.own_operator_id,
+		ss.store_name,
+		(SELECT SUM(o.total_price) FROM o2o_group_order o WHERE o.order_status >= 20
+		AND o.user_id = c.uid) totlePrice
+		FROM
+		user_customer c
+		INNER JOIN user_relation r ON c.uid = r.user_id
+		INNER JOIN user_owns
+		own ON own.seller_user_id = r.seller_user_id
+		INNER JOIN user_seller s
+		ON s.uid = r.seller_user_id
+		INNER JOIN shop_store ss ON s.store_id =
+		ss.id
+		WHERE c.is_deleted = 0
+		<choose>
+			<when test="vo.isOwn != null and vo.isOwn != '' and vo.isOwn == 1">
+				AND own.own_operator_id = #{vo.operatorId}
+			</when>
+			<when test="vo.isOwn != null and vo.isOwn != '' and vo.isOwn == 0">
+				<choose>
+					<when test="vo.userLevel == 1">
+						AND (SELECT count(0) FROM dic_area a WHERE a.id = ss.area_id AND
+						a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+						0
+						AND (own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.userLevel == 2">
+						AND ss.area_id = #{vo.operatorAreaId}
+						AND
+						(own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.userLevel == 3">
+						AND 1=2
+					</when>
+            		<otherwise>
+						AND 1=2
+            		</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				<choose>
+					<when test="vo.userLevel == 1">
+						AND ((SELECT count(0) FROM dic_area a WHERE a.id = ss.area_id AND
+						a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+						0
+						OR own.own_operator_id = #{vo.operatorId})
+					</when>
+					<when test="vo.userLevel == 2">
+						AND (ss.area_id = #{vo.operatorAreaId}
+						OR
+						own.own_operator_id = #{vo.operatorId})
+					</when>
+					<when test="vo.userLevel == 3">
+						AND own.own_operator_id = #{vo.operatorId}
+					</when>
+            		<otherwise>
+						AND own.own_operator_id = #{vo.operatorId}
+            		</otherwise>
+				</choose>
+			</otherwise>
+		</choose>
+		ORDER BY c.create_time DESC
+	</select>
+
+	<select id="queryUserByUid" resultMap="CustomResultMap">
+		SELECT a.login_name,c.*
+		from user_customer c LEFT JOIN sys_user_account a ON (c.uid=a.uid and
+		a.account_type = 2) WHERE c.uid=#{uid}
+	</select>
+
+	<update id="addIntegral" parameterType="map">
+		update
+		user_customer set integral=integral+#{integral}
+		where uid=#{uid}
+	</update>
+	<update id="subtractIntegral" parameterType="map">
+		update
+		user_customer set integral=integral-#{integral}
+		where uid=#{uid}
+	</update>
+
+	<select id="selectByNickname" resultMap="BOResultMap">
+		select * from
+		user_customer where nickname=#{nickname}
+	</select>
+
+	<select id="findBOByUserId" resultMap="CustomResultMap"
+		parameterType="Long">
+		SELECT
+		u.uid,
+		u.name,
+		u.nickname,
+		u.mobile,
+		u.allergic_history,
+		u.sex,
+		u.height,
+		u.weight,
+		u.birthdate,
+		u.email,
+		a.login_name,
+		u.status,
+		u.create_time,
+		u.trans_history,
+		u.integral,
+		u.trans_genetic,
+		u.blood,
+		u.create_time,
+		u.user_goods_fee,
+		m.available_balance,
+		m.o2o_balance,
+		m.b2c_balance,
+		m.yys_balance,
+		su.invitation_code,
+		<!-- s.nickname sellerNickName,
+		ss.store_name, -->
+		su.status userStatus,
+		a.last_login_time,
+		a.last_login_ip,
+		r.referee_user_id refreeUserId
+		FROM
+		user_customer u
+		LEFT JOIN sys_user_account a on u.uid=a.uid and a.account_type = 2
+		LEFT JOIN sys_user su on su.id=a.uid
+		LEFT JOIN user_money m on
+		u.uid=m.uid
+		LEFT JOIN user_relation r ON r.user_id = u.uid
+<!-- 		LEFT JOIN
+		user_seller s ON s.uid = r.seller_user_id
+		LEFT JOIN shop_store ss on
+		ss.id=s.store_id -->
+		where u.uid = #{uid,jdbcType=BIGINT}
+		
+	</select>
+	<select id="findSessionUser" resultMap="CustomResultMap"
+		parameterType="Long">
+		SELECT
+		u.uid,
+		u. NAME,
+		u.nickname,
+		u.allergic_history,
+		u.sex,
+		u.height,
+		u.weight,
+		u.birthdate,
+		u.head_img_path,
+		u.email,
+		u.mobile,
+		u. STATUS,
+		u.create_by,
+		u.create_time,
+		u.update_by,
+		u.update_time,
+		u.trans_history,
+		u.trans_genetic,
+		u.blood,
+		u.gold,
+		u.integral,
+		u.freeze_Blance,
+		u.create_time,
+		u.user_goods_fee,
+		s.store_id,
+		m.available_balance,
+		m.o2o_balance,
+		m.b2c_balance,
+		m.yys_balance
+		FROM
+		user_customer u
+		LEFT JOIN user_seller s on u.uid=s.uid
+		LEFT JOIN user_money m on
+		u.uid=m.uid
+		where u.uid = #{uid,jdbcType=BIGINT}
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		uid,
+		name,
+		nickname,
+		allergic_history,
+		sex,
+		height,
+		weight,
+		birthdate,
+		head_img_path,
+		email,
+		mobile,
+		status,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		is_deleted,
+		trans_history,
+		trans_genetic,
+		freeze_Blance,
+		integral,
+		gold,
+		invoice,
+		invoice_Type,
+		delivery_id,
+		blood,
+		user_goods_fee,
+		user_signature,
+		extend
+		<!-- ,level -->
+	</sql>
+
+	<sql id="Cuestomer_Column_List">
+		s.id,su.status as freezed,s.login_name,s.last_login_time,u.uid, u.name, u.nickname,
+		u.allergic_history, u.sex, u.height, u.weight, u.birthdate,
+		u.head_img_path,
+		u.email, u.mobile, u.status, u.create_by, u.create_time, u.update_by,
+		u.update_time, u.is_deleted,u.trans_history,u.trans_genetic,u.blood,
+		u.gold,u.integral,u.freeze_Blance,u.user_goods_fee,u.user_signature
+	</sql>
+
+	<select id="queryUserCuxtomerList" resultMap="CustomerAccountBO">
+		SELECT a.login_name,c.* from user_customer c , sys_user_account a
+		WHERE c.uid=a.uid GROUP BY c.uid
+	</select>
+
+	<select id="queryUserCuxtomerByLoginName" resultMap="CustomerAccountBO">
+		SELECT a.login_name,c.* from user_customer c , sys_user_account a
+		where c.uid=a.uid and a.login_name=#{loginName,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectByExampleBO" resultMap="BOResultMap"
+		parameterType="com.sinco.carnation.user.model.UserCustomerExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_customer
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.user.model.UserCustomerExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_customer
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="Long">
+		select
+		<include refid="Base_Column_List" />
+		from user_customer
+		where uid = #{uid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="Long">
+		delete from user_customer
+		where uid = #{uid,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.UserCustomerExample">
+		delete from user_customer
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.UserCustomer"
+		keyProperty="uid" useGeneratedKeys="true">
+		insert into user_customer (uid, name, nickname,
+		allergic_history, sex, height,
+		weight, birthdate, head_img_path,
+		email, mobile, status,
+		create_by, create_time, update_by,
+		update_time, is_deleted,trans_history,trans_genetic,
+		freeze_Blance,
+		integral, gold, invoice,
+		invoice_Type, delivery_id, user_Mark,blood,user_signature)
+		values (#{uid,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
+		#{nickname,jdbcType=VARCHAR},
+		#{allergicHistory,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{height,jdbcType=INTEGER},
+		#{weight,jdbcType=INTEGER}, #{birthdate,jdbcType=DATE},
+		#{headImgPath,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+		#{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateBy,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT},#{trans_history,jdbcType=VARCHAR}
+		,#{trans_genetic,jdbcType=VARCHAR}, #{freezeBlance,jdbcType=DECIMAL},
+		#{integral,jdbcType=INTEGER}, #{gold,jdbcType=INTEGER},
+		#{invoice,jdbcType=VARCHAR},
+		#{invoiceType,jdbcType=INTEGER}, #{deliveryId,jdbcType=BIGINT}, #{userMark,jdbcType=LONGVARCHAR},
+		#{blood,jdbcType=VARCHAR}, #{userSignature,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.UserCustomer"
+		keyProperty="uid" useGeneratedKeys="true">
+		insert into user_customer
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="nickname != null">
+				nickname,
+			</if>
+			<if test="allergicHistory != null">
+				allergic_history,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="height != null">
+				height,
+			</if>
+			<if test="weight != null">
+				weight,
+			</if>
+			<if test="birthdate != null">
+				birthdate,
+			</if>
+			<if test="headImgPath != null">
+				head_img_path,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+			<if test="transHistory != null">
+				trans_history,
+			</if>
+			<if test="transGenetic != null">
+				trans_genetic,
+			</if>
+			<if test="freezeBlance != null">
+				freeze_Blance,
+			</if>
+			<if test="integral != null">
+				integral,
+			</if>
+			<if test="gold != null">
+				gold,
+			</if>
+			<if test="invoice != null">
+				invoice,
+			</if>
+			<if test="invoiceType != null">
+				invoice_Type,
+			</if>
+			<if test="deliveryId != null">
+				delivery_id,
+			</if>
+			<if test="userMark != null">
+				user_Mark,
+			</if>
+			<if test="blood != null">
+				blood,
+			</if>
+			<if test="userSignature != null">
+				user_signature,
+			</if>
+			<if test="extend != null">
+				extend,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="nickname != null">
+				#{nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="allergicHistory != null">
+				#{allergicHistory,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=INTEGER},
+			</if>
+			<if test="height != null">
+				#{height,jdbcType=INTEGER},
+			</if>
+			<if test="weight != null">
+				#{weight,jdbcType=INTEGER},
+			</if>
+			<if test="birthdate != null">
+				#{birthdate,jdbcType=DATE},
+			</if>
+			<if test="headImgPath != null">
+				#{headImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+			<if test="transHistory != null">
+				#{transHistory,jdbcType=VARCHAR},
+			</if>
+			<if test="transGenetic != null">
+				#{transGenetic,jdbcType=VARCHAR},
+			</if>
+			<if test="freezeBlance != null">
+				#{freezeBlance,jdbcType=DECIMAL},
+			</if>
+			<if test="integral != null">
+				#{integral,jdbcType=INTEGER},
+			</if>
+			<if test="gold != null">
+				#{gold,jdbcType=INTEGER},
+			</if>
+			<if test="invoice != null">
+				#{invoice,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceType != null">
+				#{invoiceType,jdbcType=INTEGER},
+			</if>
+			<if test="deliveryId != null">
+				#{deliveryId,jdbcType=BIGINT},
+			</if>
+			<if test="userMark != null">
+				#{userMark,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="blood != null">
+				#{blood,jdbcType=VARCHAR},
+			</if>
+			<if test="userSignature != null">
+				#{userSignature,jdbcType=VARCHAR},
+			</if>
+			<if test="extend != null">
+				#{extend,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.UserCustomerExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_customer
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_customer
+		<set>
+			<if test="record.uid != null">
+				uid = #{record.uid,jdbcType=BIGINT},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.nickname != null">
+				nickname = #{record.nickname,jdbcType=VARCHAR},
+			</if>
+			<if test="record.allergicHistory != null">
+				allergic_history = #{record.allergicHistory,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sex != null">
+				sex = #{record.sex,jdbcType=INTEGER},
+			</if>
+			<if test="record.height != null">
+				height = #{record.height,jdbcType=INTEGER},
+			</if>
+			<if test="record.weight != null">
+				weight = #{record.weight,jdbcType=INTEGER},
+			</if>
+			<if test="record.birthdate != null">
+				birthdate = #{record.birthdate,jdbcType=DATE},
+			</if>
+			<if test="record.headImgPath != null">
+				head_img_path = #{record.headImgPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.email != null">
+				email = #{record.email,jdbcType=VARCHAR},
+			</if>
+			<if test="record.mobile != null">
+				mobile = #{record.mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updateBy != null">
+				update_by = #{record.updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+			<if test="record.transHistory != null">
+				trans_history = #{record.transHistory,jdbcType=VARCHAR},
+			</if>
+			<if test="record.transGenetic != null">
+				trans_genetic = #{record.transGenetic,jdbcType=VARCHAR},
+			</if>
+			<if test="record.freezeBlance != null">
+				freeze_Blance = #{record.freezeBlance,jdbcType=DECIMAL},
+			</if>
+			<if test="record.integral != null">
+				integral = #{record.integral,jdbcType=INTEGER},
+			</if>
+			<if test="record.gold != null">
+				gold = #{record.gold,jdbcType=INTEGER},
+			</if>
+			<if test="record.invoice != null">
+				invoice = #{record.invoice,jdbcType=VARCHAR},
+			</if>
+			<if test="record.invoiceType != null">
+				invoice_Type = #{record.invoiceType,jdbcType=INTEGER},
+			</if>
+			<if test="record.deliveryId != null">
+				delivery_id = #{record.deliveryId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userMark != null">
+				user_Mark = #{record.userMark,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+		<if test="record.blood != null">
+			email = #{record.blood,jdbcType=VARCHAR},
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_customer
+		set uid = #{record.uid,jdbcType=BIGINT},
+		name = #{record.name,jdbcType=VARCHAR},
+		nickname = #{record.nickname,jdbcType=VARCHAR},
+		allergic_history = #{record.allergicHistory,jdbcType=VARCHAR},
+		sex = #{record.sex,jdbcType=INTEGER},
+		height = #{record.height,jdbcType=INTEGER},
+		weight = #{record.weight,jdbcType=INTEGER},
+		birthdate = #{record.birthdate,jdbcType=DATE},
+		head_img_path = #{record.headImgPath,jdbcType=VARCHAR},
+		email = #{record.email,jdbcType=VARCHAR},
+		mobile = #{record.mobile,jdbcType=VARCHAR},
+		status = #{record.status,jdbcType=VARCHAR},
+		create_by = #{record.createBy,jdbcType=VARCHAR},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		update_by = #{record.updateBy,jdbcType=VARCHAR},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		is_deleted = #{record.isDeleted,jdbcType=BIT},
+		trans_history=#{record.transHistory,jdbcType=VARCHAR},
+		trans_genetic=#{record.transGenetic,jdbcType=VARCHAR},
+		freeze_Blance = #{record.freezeBlance,jdbcType=DECIMAL},
+		integral = #{record.integral,jdbcType=INTEGER},
+		gold = #{record.gold,jdbcType=INTEGER},
+		invoice = #{record.invoice,jdbcType=VARCHAR},
+		invoice_Type = #{record.invoiceType,jdbcType=INTEGER},
+		delivery_id = #{record.deliveryId,jdbcType=BIGINT},
+		user_Mark = #{record.userMark,jdbcType=LONGVARCHAR},
+		blood= #{record.blood,jdbcType=VARCHAR},
+		user_signature= #{record.userSignature,jdbcType=VARCHAR},
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.UserCustomer">
+		update
+		user_customer
+		<set>
+			update_time = now()
+			<if test="name != null">
+				,name = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="nickname != null">
+				,nickname = #{nickname,jdbcType=VARCHAR}
+			</if>
+			<if test="allergicHistory != null">
+				,allergic_history = #{allergicHistory,jdbcType=VARCHAR}
+			</if>
+			<if test="sex != null">
+				,sex = #{sex,jdbcType=INTEGER}
+			</if>
+			<if test="height != null">
+				,height = #{height,jdbcType=INTEGER}
+			</if>
+			<if test="weight != null">
+				,weight = #{weight,jdbcType=INTEGER}
+			</if>
+			<if test="birthdate != null">
+				,birthdate = #{birthdate,jdbcType=DATE}
+			</if>
+			<if test="headImgPath != null">
+				,head_img_path = #{headImgPath,jdbcType=VARCHAR}
+			</if>
+			<if test="email != null">
+				,email = #{email,jdbcType=VARCHAR}
+			</if>
+			<if test="mobile != null">
+				,mobile = #{mobile,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				,status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				,create_by = #{createBy,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				,update_by = #{updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				,update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="isDeleted != null">
+				,is_deleted = #{isDeleted,jdbcType=BIT}
+			</if>
+			<if test="transHistory != null">
+				,trans_history=#{transHistory,jdbcType=VARCHAR}
+			</if>
+			<if test="transGenetic != null">
+				,trans_genetic=#{transGenetic,jdbcType=VARCHAR}
+			</if>
+			<if test="freezeBlance != null">
+				,freeze_Blance = #{freezeBlance,jdbcType=DECIMAL}
+			</if>
+			<if test="integral != null">
+				,integral = #{integral,jdbcType=INTEGER}
+			</if>
+			<if test="gold != null">
+				,gold = #{gold,jdbcType=INTEGER}
+			</if>
+			<if test="invoice != null">
+				,invoice = #{invoice,jdbcType=VARCHAR}
+			</if>
+			<if test="invoiceType != null">
+				,invoice_Type = #{invoiceType,jdbcType=INTEGER}
+			</if>
+			<if test="deliveryId != null">
+				,delivery_id = #{deliveryId,jdbcType=BIGINT}
+			</if>
+			<if test="userMark != null">
+				,user_Mark = #{userMark,jdbcType=LONGVARCHAR}
+			</if>
+			<if test="blood != null and blood != ''">
+				,blood = #{blood,jdbcType=VARCHAR}
+			</if>
+			<if test="userSignature != null">
+				,user_signature=#{userSignature,jdbcType=VARCHAR}
+			</if>
+			<if test="extend != null">
+				,extend=#{extend,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where uid = #{uid,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.UserCustomer">
+		update user_customer
+		set name = #{name,jdbcType=VARCHAR},
+		nickname = #{nickname,jdbcType=VARCHAR},
+		allergic_history = #{allergicHistory,jdbcType=VARCHAR},
+		sex = #{sex,jdbcType=INTEGER},
+		height = #{height,jdbcType=INTEGER},
+		weight = #{weight,jdbcType=INTEGER},
+		birthdate = #{birthdate,jdbcType=DATE},
+		head_img_path = #{headImgPath,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR},
+		create_by = #{createBy,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_by = #{updateBy,jdbcType=VARCHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		is_deleted = #{isDeleted,jdbcType=BIT},
+		trans_history=#{transHistory,jdbcType=VARCHAR},
+		trans_genetic=#{transGenetic,jdbcType=VARCHAR},
+		freeze_Blance = #{freezeBlance,jdbcType=DECIMAL},
+		integral = #{integral,jdbcType=INTEGER},
+		gold = #{gold,jdbcType=INTEGER},
+		invoice = #{invoice,jdbcType=VARCHAR},
+		invoice_Type = #{invoiceType,jdbcType=INTEGER},
+		delivery_id = #{deliveryId,jdbcType=BIGINT},
+		user_Mark = #{userMark,jdbcType=LONGVARCHAR},
+		blood = #{blood,jdbcType=LONGVARCHAR},
+		user_signature = #{userSignature,jdbcType=VARCHAR}
+		where uid = #{uid,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateByPrimaryKeyForMobile" parameterType="com.sinco.carnation.user.model.UserCustomer">
+		update user_customer
+		set
+		mobile = #{mobile,jdbcType=VARCHAR}
+		,update_time=now()
+		where uid = #{uid,jdbcType=BIGINT}
+	</update>
+
+	<select id="queryCustomerPageList" resultMap="CustomResultMap">
+		select
+		u.uid, u.name, u.nickname,
+		u.allergic_history, u.sex, u.height, u.weight, u.birthdate,u.head_img_path,
+		u.email, u.mobile, u.status, u.create_by, u.create_time, u.update_by,
+		u.update_time, u.is_deleted,u.trans_history,u.trans_genetic,u.blood,
+		u.gold,u.integral,u.freeze_Blance,u.user_goods_fee,u.user_signature,
+		m.available_balance,
+		m.o2o_balance,
+		m.b2c_balance,
+		m.yys_balance,
+		su.invitation_code,
+		uc.nickname as reUserName,
+		uo.user_name as operatorName,
+		su2.invitation_code as reInvitationCode,
+		su.status as freezed
+		FROM user_customer u
+		<if test="vo.loginName != null and vo.loginName != ''">
+		INNER JOIN (SELECT * FROM sys_user_account WHERE login_name LIKE CONCAT('%',#{vo.loginName},'%') GROUP BY uid) s ON (u.uid=s.uid)
+		</if>
+		LEFT JOIN user_money m on u.uid=m.uid
+		LEFT JOIN sys_user su on u.uid=su.id
+		LEFT JOIN user_relation re on u.uid=re.user_id
+		LEFT JOIN user_customer uc on uc.uid=re.referee_user_id
+		LEFT JOIN user_operator uo on uo.user_id=re.referee_user_id
+		LEFT JOIN sys_user su2 on su2.id=re.referee_user_id
+		where u.is_deleted=0
+		<if test="vo.email != null and vo.email != ''">
+			and u.email LIKE CONCAT('%',#{vo.email},'%')
+		</if>
+		<if test="vo.name != null and vo.name != ''">
+			and u.name LIKE CONCAT('%',#{vo.name},'%')
+		</if>
+		<if test="vo.invitationCode != null and vo.invitationCode != ''">
+			and u.uid in (select user_id from user_relation where referee_user_id in
+			(select id from sys_user where invitation_code=#{vo.invitationCode}))
+		</if>
+		<if test="vo.myInvitationCode != null and vo.myInvitationCode != ''">
+			and su.invitation_code LIKE CONCAT('%',#{vo.myInvitationCode},'%')
+		</if>
+		<if test="vo.beginTime != null and vo.beginTime != ''">
+		<![CDATA[AND date(u.create_time) >=#{vo.beginTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+		<![CDATA[AND date(u.create_time) <= #{vo.endTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		ORDER BY u.create_time  DESC
+	</select>
+
+	<select id="queryCustomerPageList2" resultMap="CustomResultMap">
+		select
+		<include refid="Cuestomer_Column_List" />
+		,
+		m.available_balance,
+		m.o2o_balance,
+		m.b2c_balance,
+		m.yys_balance,
+		su.invitation_code,
+		uc.nickname as reUserName,
+		uo.user_name as operatorName,
+		su2.invitation_code as reInvitationCode
+		FROM user_customer u
+		INNER JOIN sys_user_account s ON (u.uid=s.uid and s.account_type = 2)
+		LEFT JOIN user_money m on u.uid=m.uid
+		LEFT JOIN sys_user su on u.uid=su.id
+		LEFT JOIN user_relation re on u.uid=re.user_id
+		LEFT JOIN user_customer uc on uc.uid=re.referee_user_id
+		LEFT JOIN user_operator uo on uo.user_id=re.referee_user_id
+		LEFT JOIN sys_user su2 on su2.id=re.referee_user_id
+		where 1=1
+		<if test="vo.loginName != null and vo.loginName != ''">
+			and s.login_name LIKE CONCAT('%',#{vo.loginName},'%')
+		</if>
+		<if test="vo.email != null and vo.email != ''">
+			and u.email LIKE CONCAT('%',#{vo.email},'%')
+		</if>
+		<if test="vo.name != null and vo.name != ''">
+			and u.name LIKE CONCAT('%',#{vo.name},'%')
+		</if>
+		<if test="vo.isDeleted != null">
+			and s.is_deleted =#{vo.isDeleted}
+		</if>
+		<if test="vo.invitationCode != null and vo.invitationCode != ''">
+			and u.uid in (select user_id from user_relation where referee_user_id in
+			(select id from sys_user where invitation_code=#{vo.invitationCode}))
+		</if>
+		<if test="vo.myInvitationCode != null and vo.myInvitationCode != ''">
+			and su.invitation_code LIKE CONCAT('%',#{vo.myInvitationCode},'%')
+		</if>
+		<if test="vo.beginTime != null and vo.beginTime != ''">
+		<![CDATA[AND date(u.create_time) >=#{vo.beginTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+		<![CDATA[AND date(u.create_time) <= #{vo.endTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		ORDER BY u.create_time DESC
+	</select>
+
+
+
+
+	<!--<select id="queryCustomerPageListCount" resultType="int"> select count(0) 
+		FROM user_customer u INNER JOIN sys_user_account s ON u.uid=s.uid <if test="vo.loginName 
+		!= null and vo.loginName != ''"> where and s.login_name=#{vo.loginName} </if> 
+		ORDER BY u.create_time DESC </select> -->
+
+	<select id="queryUserStatistics" resultType="com.sinco.carnation.user.bo.UserCustomerBO">
+		SELECT COUNT(1) AS num,sex FROM user_customer
+		GROUP BY sex
+	</select>
+
+	<select id="queryUserByRelation1" resultMap="CustomResultMap">
+		<!-- SELECT uc.* FROM user_customer AS uc RIGHT JOIN user_relation AS ur 
+			ON uc.uid = ur.user_id WHERE ur.referee_user_id = #{relationId} -->
+		SELECT
+		A2.`uid`,
+		A2.`name`,
+		A2.`nickname`,
+		A2.`allergic_history`,
+		A2.`sex`,
+		A2.`height`,
+		A2.`weight`,
+		A2.`birthdate`,
+		A2.`head_img_path`,
+		A2.`email`,
+		A2.`mobile`,
+		A2.`status`,
+		A2.`create_by`,
+		A2.`update_by`,
+		A2.`is_deleted`,
+		A2.`integral`,
+		A2.`blood`,
+		A2.`level`,
+		A2.`user_signature`,
+		ur.create_time
+		FROM user_customer A2
+		LEFT JOIN user_relation ur ON ur.user_id = A2.uid
+		WHERE A2.uid IN (
+		SELECT A1.user_id FROM user_relation A1 WHERE
+		A1.referee_user_id = #{relationId,jdbcType=BIGINT}) ORDER BY
+		create_time DESC
+	</select>
+
+	<select id="queryUserByRelation2" resultMap="CustomResultMap">
+		<!-- SELECT uc.* FROM user_customer AS uc RIGHT JOIN (SELECT USER_ID FROM 
+			user_relation WHERE referee_user_id IN (SELECT USER_ID FROM user_relation 
+			WHERE referee_user_id = #{relationId})) t ON uc.uid = t.USER_ID -->
+
+		SELECT
+		B2.`uid`,
+		B2.`name`,
+		B2.`nickname`,
+		B2.`allergic_history`,
+		B2.`sex`,
+		B2.`height`,
+		B2.`weight`,
+		B2.`birthdate`,
+		B2.`head_img_path`,
+		B2.`email`,
+		B2.`mobile`,
+		B2.`status`,
+		B2.`create_by`,
+		B2.`update_by`,
+		B2.`is_deleted`,
+		B2.`integral`,
+		B2.`blood`,
+		B2.`level`,
+		B2.`user_signature`,
+		ur.create_time
+		FROM user_customer B2
+		LEFT JOIN user_relation ur ON ur.user_id = B2.uid
+		WHERE B2.uid IN(
+		SELECT B1.user_id FROM user_relation B1 WHERE
+		B1.referee_user_id IN(
+		SELECT A2.uid FROM user_customer A2 WHERE A2.uid IN (
+		SELECT A1.user_id FROM user_relation A1 WHERE A1.referee_user_id =
+		#{relationId,jdbcType=BIGINT})
+		)
+		) ORDER BY create_time DESC
+	</select>
+
+	<select id="queryUserByRelation3" resultMap="CustomResultMap">
+		<!-- SELECT uc.* FROM user_customer AS uc RIGHT JOIN ( SELECT USER_ID FROM 
+			user_relation AS ur WHERE ur.referee_user_id IN ( SELECT USER_ID FROM user_relation 
+			WHERE referee_user_id IN ( SELECT USER_ID FROM user_relation WHERE referee_user_id 
+			= #{relationId})) )t ON uc.uid= t.user_id -->
+		SELECT
+		C2.`uid`,
+		C2.`name`,
+		C2.`nickname`,
+		C2.`allergic_history`,
+		C2.`sex`,
+		C2.`height`,
+		C2.`weight`,
+		C2.`birthdate`,
+		C2.`head_img_path`,
+		C2.`email`,
+		C2.`mobile`,
+		C2.`status`,
+		C2.`create_by`,
+		C2.`update_by`,
+		C2.`is_deleted`,
+		C2.`integral`,
+		C2.`blood`,
+		C2.`level`,
+		C2.`user_signature`,
+		ur.create_time
+
+		FROM user_customer C2
+		LEFT JOIN user_relation ur ON ur.user_id = C2.uid
+		WHERE C2.uid IN(
+		SELECT C1.user_id FROM user_relation C1 WHERE
+		C1.referee_user_id IN (
+		SELECT B2.uid FROM user_customer B2 WHERE B2.uid IN(
+		SELECT B1.user_id FROM user_relation B1 WHERE B1.referee_user_id IN(
+		SELECT A2.uid FROM user_customer A2 WHERE A2.uid IN (
+		SELECT A1.user_id FROM user_relation A1 WHERE A1.referee_user_id =
+		#{relationId,jdbcType=BIGINT})
+		)
+		)
+		)
+		) ORDER BY create_time DESC
+
+	</select>
+
+
+	<select id="queryUserByRelation1_count" resultType="java.lang.Integer">
+		SELECT COUNT(uid) FROM user_customer WHERE uid IN (
+		SELECT user_id FROM user_relation ur WHERE ur.referee_user_id =
+		#{relationId,jdbcType=BIGINT}
+		<if test="startTime != null and startTime != ''">
+			AND DATE_FORMAT(ur.create_time ,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{startTime} ,'%Y-%m-%d')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND DATE_FORMAT(ur.create_time ,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{endTime} ,'%Y-%m-%d')
+		</if>
+		)
+	</select>
+
+	<select id="queryUserByRelation2_count" resultType="java.lang.Integer">
+		SELECT COUNT(uid) FROM user_customer WHERE uid IN(
+		SELECT user_id FROM
+		user_relation ur WHERE ur.referee_user_id IN(
+		SELECT uid FROM
+		user_customer WHERE uid IN (
+		SELECT user_id FROM user_relation ur WHERE
+		ur.referee_user_id = #{relationId,jdbcType=BIGINT}))
+		<if test="startTime != null and startTime != ''">
+			AND DATE_FORMAT(ur.create_time ,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{startTime} ,'%Y-%m-%d')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND DATE_FORMAT(ur.create_time ,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{endTime} ,'%Y-%m-%d')
+		</if>
+		)
+	</select>
+
+	<select id="queryUserByRelation3_count" resultType="java.lang.Integer">
+		SELECT count(uid) FROM user_customer WHERE uid IN(
+		SELECT user_id FROM
+		user_relation WHERE referee_user_id IN (
+		SELECT uid FROM user_customer
+		WHERE uid IN(
+		SELECT user_id FROM user_relation ur WHERE
+		ur.referee_user_id IN(
+		SELECT uid FROM user_customer WHERE uid IN (
+		SELECT user_id FROM user_relation ur WHERE ur.referee_user_id =
+		#{relationId,jdbcType=BIGINT}))))
+		<if test="startTime != null and startTime != ''">
+			AND DATE_FORMAT(user_relation.create_time ,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{startTime} ,'%Y-%m-%d')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND DATE_FORMAT(user_relation.create_time ,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{endTime} ,'%Y-%m-%d')
+		</if>
+		)
+	</select>
+
+	<select id="queryUserByRelationByIn_RefereeUserId" resultMap="CustomResultMap">
+
+		SELECT * FROM user_customer WHERE uid IN (
+		SELECT user_id FROM user_relation ur WHERE ur.referee_user_id in
+		<foreach collection="list" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+		)
+	</select>
+
+	<update id="updateUserCustomerForIsDelete">
+		update
+		user_customer
+		set
+		is_deleted = #{isDeleted,jdbcType=BIT},
+		update_by = #{updateBy,jdbcType=VARCHAR},
+		update_time = now()
+		where
+		uid = #{uid,jdbcType=BIGINT}
+	</update>
+	<select id="findOneByUserId" resultMap="CustomResultMap">
+	select * from user_customer where uid = #{uid,jdbcType=BIGINT}
+	</select>
+</mapper>

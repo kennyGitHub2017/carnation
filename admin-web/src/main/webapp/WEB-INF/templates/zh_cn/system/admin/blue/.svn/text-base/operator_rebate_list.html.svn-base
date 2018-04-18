@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+
+<body>
+  <div class="cont">
+    <h1 class="seth">运营商返润明细</h1>
+	<FORM name="ListForm" id="ListForm"  action="$!webPath/admin/operator_rebate_list.htm" method="post">
+	<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <div class="search">
+      	  <span>
+      	  	 名称
+          </span>
+      	  <span class="size150">
+          	<input name="operatorName" type="text" value="$!vo.operatorName" />
+          </span>
+      	  <span>
+      	  	 编码
+          </span>
+      	  <span class="size150">
+          	<input name="operatorCode" type="text" value="$!vo.operatorCode" />
+          </span>
+      	  <span>
+      	  	 手机号
+          </span>
+      	  <span class="size150">
+          	<input name="operatorMobile" type="text" value="$!vo.operatorMobile" />
+          </span>
+          <span>
+          <input name="" type="submit" value="搜索" style="cursor:pointer;" title="搜索"  class="search_btn"/>
+          </span>
+
+    </div>
+
+    <div class="fshoptb page-fixed-mb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="10%" align="left"><span class="form_btna">编码</span></th>
+		  <th width="5%" align="center"><span class="form_btna">级别</span></th>
+		  <th width="10%" align="center"><span class="form_btna">名称</span></th>
+          <th width="8%" align="center"><span class="form_btna">电话</span></th>
+          <th width="12%" align="center"><span class="form_btna">运营地</span></th>
+          <th width="5%" align="center"><span class="form_btna">类型</span></th>
+          <th width="5%" align="center"><span class="form_btna">金额</span></th>
+          <th width="12%" align="center"><span class="form_btna">返润时间</span></th>
+        </tr>
+        #foreach($!obj in $objs)
+					<tr>
+						<td class="lightred">$!obj.operator.operatorCode</td>
+						<td class="lightred">#if($!obj.operator.level == 1) 市级 #elseif($!obj.operator.level == 2) 区级 #elseif($!obj.operator.level == 3) 区域级 #end</td>
+						<td class="lightred">$!obj.operator.operatorName</td>
+						<td class="lightred">$!obj.operator.phone</td>
+						<td class="lightred">$!obj.operatorAreaName</td>
+						<td class="lightred">$!obj.rebateName</td>
+						<td class="lightred">$!obj.rebateAmount</td>
+						<td>$!CommUtil.formatLongDate($!obj.createTime)</td>
+					</tr>
+					#end
+        <tr>
+        <td colspan="11" style="border-bottom:0px; padding:0px;">
+        	<div class="operate_bar page-fixed">
+				<div class="fenye">$!gotoPageFormHTML</div>
+			</div>
+		</td>
+        </tr>
+      </table>
+    </div>
+	</FORM>
+  </div>
+</body>
+</html>

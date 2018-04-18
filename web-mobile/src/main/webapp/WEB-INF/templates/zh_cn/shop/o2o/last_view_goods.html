@@ -1,0 +1,43 @@
+<scritp>
+var good = {
+	id: $!obj.{id},
+	name:$!obj.ggName+'',
+	pic:$!obj.groupAccPath+'',
+}
+
+var goods=[];
+var goodsStr = jQuery.cookie('goodsStr');
+//解析json字符串
+goods = jQuery.parseJSON(goodsStr);
+
+if(goods.length>6){//超过6个
+	if(!has(good.id,goods)){
+		goods.shift()
+		goods.unshift(good)
+	}
+}else{
+	if(!has(good.id,goods))
+		goods.unshift(good)
+}
+
+function has(id,arr){
+	for(i in arr){
+		if(id == arr[i])
+			return true
+	}
+	
+	return false;
+}
+
+functions write(){
+	//write cookie
+	var arr = jQuery.cookie('goodsStr',JSON.stringify(arr));//转化json字符串，并存储到cookie
+	//write html
+	var content = '';
+	for(i in arr){
+		var good = arr[i];
+		content += jQuery("<li><a href='$!webPath/group/view_"+good.id+"'><div class='pic'><img src='"+good.pic+"' /></div><div class='cont'><div class='name ell'>"+good.name+"</div></div></a></li>"); 
+	}
+	jQuery('#last_view').html(content);
+}
+</scritp>

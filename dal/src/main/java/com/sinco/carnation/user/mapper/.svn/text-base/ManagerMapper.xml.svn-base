@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.ManagerMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.Manager">
+		<id column="uid" property="uid" jdbcType="BIGINT" />
+		<result column="no" property="no" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="remarks" property="remarks" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+	</resultMap>
+
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.ManagerBO"
+		extends="BaseResultMap">
+		<association property="user" javaType="com.sinco.carnation.sys.model.User"
+			column="id" resultMap="com.sinco.carnation.sys.mapper.UserMapper.BaseResultMap"></association>
+		<association property="userAccount"
+			javaType="com.sinco.carnation.sys.model.UserAccount" column="id"
+			resultMap="com.sinco.carnation.sys.mapper.UserAccountMapper.BaseResultMap"></association>
+		<association property="userGroup"
+			javaType="com.sinco.carnation.user.model.UserGroup" column="id"
+			resultMap="com.sinco.carnation.user.mapper.UserGroupMapper.BaseResultMap"></association>
+	</resultMap>
+	<select id="selectManagePageByVO" resultMap="BOResultMap"
+		parameterType="com.sinco.carnation.user.vo.ManagerVO">
+		SELECT
+		*
+		FROM
+		`user_manager` m
+		INNER JOIN `sys_user_account` a ON m.uid = a.uid
+		INNER JOIN `sys_user` u ON u.id = m.uid
+		LEFT JOIN `sys_user_group_map` AS map ON map.user_id = m.uid
+		LEFT JOIN `sys_user_group` AS ug ON ug.id = map.user_group_id
+		WHERE
+		m.is_deleted = 0
+		AND a.is_deleted = 0
+		AND u.is_deleted = 0
+		AND u.user_type = 9
+		ORDER BY m.create_time DESC
+	</select>
+	<select id="selectManagePageCountByVO" resultType="int"
+		parameterType="com.sinco.carnation.user.vo.ManagerVO">
+		SELECT
+		count(0)
+		FROM
+		`user_manager` m
+		INNER JOIN `sys_user_account` a ON m.uid = a.uid
+		INNER JOIN `sys_user` u ON u.id = m.uid
+		WHERE
+		m.is_deleted = 0
+		AND a.is_deleted = 0
+		AND u.is_deleted = 0
+		AND u.user_type = 9
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		uid, no, name, email, phone, mobile, create_by, create_time, update_by,
+		update_time,
+		remarks, is_deleted
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.user.model.ManagerExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_manager
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BOResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from user_manager
+		where uid = #{uid,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_manager
+		where uid = #{uid,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.ManagerExample">
+		delete from user_manager
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.Manager">
+		insert into user_manager (uid, no, name,
+		email, phone, mobile,
+		create_by, create_time, update_by,
+		update_time, remarks, is_deleted
+		)
+		values (#{uid,jdbcType=BIGINT}, #{no,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+		#{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateBy,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR}, #{isDeleted,jdbcType=BIT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.Manager">
+		insert into user_manager
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="no != null">
+				no,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="remarks != null">
+				remarks,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="no != null">
+				#{no,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remarks != null">
+				#{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+		</trim>
+		ON DUPLICATE KEY UPDATE
+		<trim suffixOverrides=",">
+			<if test="no != null">
+				no = #{no,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remarks != null">
+				remarks = #{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.ManagerExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_manager
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_manager
+		<set>
+			<if test="record.uid != null">
+				uid = #{record.uid,jdbcType=BIGINT},
+			</if>
+			<if test="record.no != null">
+				no = #{record.no,jdbcType=VARCHAR},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.email != null">
+				email = #{record.email,jdbcType=VARCHAR},
+			</if>
+			<if test="record.phone != null">
+				phone = #{record.phone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.mobile != null">
+				mobile = #{record.mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updateBy != null">
+				update_by = #{record.updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.remarks != null">
+				remarks = #{record.remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_manager
+		set uid = #{record.uid,jdbcType=BIGINT},
+		no = #{record.no,jdbcType=VARCHAR},
+		name = #{record.name,jdbcType=VARCHAR},
+		email = #{record.email,jdbcType=VARCHAR},
+		phone = #{record.phone,jdbcType=VARCHAR},
+		mobile = #{record.mobile,jdbcType=VARCHAR},
+		create_by = #{record.createBy,jdbcType=VARCHAR},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		update_by = #{record.updateBy,jdbcType=VARCHAR},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		remarks = #{record.remarks,jdbcType=VARCHAR},
+		is_deleted = #{record.isDeleted,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.Manager">
+		update user_manager
+		<set>
+			<if test="no != null">
+				no = #{no,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remarks != null">
+				remarks = #{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		where uid = #{uid,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.Manager">
+		update user_manager
+		set no = #{no,jdbcType=VARCHAR},
+		name = #{name,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		phone = #{phone,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		create_by = #{createBy,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_by = #{updateBy,jdbcType=VARCHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		remarks = #{remarks,jdbcType=VARCHAR},
+		is_deleted = #{isDeleted,jdbcType=BIT}
+		where uid = #{uid,jdbcType=BIGINT}
+	</update>
+
+
+	<select id="getResultBySql" resultType="java.util.HashMap"
+		statementType="STATEMENT">
+		${sql}
+	</select>
+
+</mapper>

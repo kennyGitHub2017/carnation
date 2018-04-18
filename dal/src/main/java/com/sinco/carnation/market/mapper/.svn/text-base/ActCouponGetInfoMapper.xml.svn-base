@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.market.mapper.ActCouponGetInfoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.market.model.ActCouponGetInfo">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="cookies_id" property="cookiesId" jdbcType="VARCHAR" />
+		<result column="is_get" property="isGet" jdbcType="VARCHAR" />
+		<result column="get_time" property="getTime" jdbcType="TIMESTAMP" />
+		<result column="coupon_info_id" property="couponInfoId"
+			jdbcType="BIGINT" />
+		<result column="act_coupon_id" property="actCouponId" jdbcType="BIGINT" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+	</resultMap>
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.market.bo.ActCouponGetInfoBO" extends="BaseResultMap">
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="nickname" property="nickName" jdbcType="VARCHAR" />
+		<result column="scheme_name" property="schemeName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, user_id, cookies_id, is_get, get_time, coupon_info_id,
+		act_coupon_id,delete_status
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.market.model.ActCouponGetInfoExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from act_new_year_info
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from act_new_year_info
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from act_new_year_info
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.market.model.ActCouponGetInfoExample">
+		delete from act_new_year_info
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.market.model.ActCouponGetInfo"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into act_new_year_info (id, user_id, cookies_id,
+		is_get, get_time, coupon_info_id,
+		act_coupon_id)
+		values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+		#{cookiesId,jdbcType=VARCHAR},
+		#{isGet,jdbcType=VARCHAR}, #{getTime,jdbcType=TIMESTAMP}, #{couponInfoId,jdbcType=BIGINT},
+		#{actCouponId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.market.model.ActCouponGetInfo"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into act_new_year_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="cookiesId != null">
+				cookies_id,
+			</if>
+			<if test="isGet != null">
+				is_get,
+			</if>
+			<if test="getTime != null">
+				get_time,
+			</if>
+			<if test="couponInfoId != null">
+				coupon_info_id,
+			</if>
+			<if test="actCouponId != null">
+				act_coupon_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="cookiesId != null">
+				#{cookiesId,jdbcType=VARCHAR},
+			</if>
+			<if test="isGet != null">
+				#{isGet,jdbcType=VARCHAR},
+			</if>
+			<if test="getTime != null">
+				#{getTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="couponInfoId != null">
+				#{couponInfoId,jdbcType=BIGINT},
+			</if>
+			<if test="actCouponId != null">
+				#{actCouponId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.market.model.ActCouponGetInfoExample"
+		resultType="java.lang.Integer">
+		select count(*) from act_new_year_info
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update act_new_year_info
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.cookiesId != null">
+				cookies_id = #{record.cookiesId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.isGet != null">
+				is_get = #{record.isGet,jdbcType=VARCHAR},
+			</if>
+			<if test="record.getTime != null">
+				get_time = #{record.getTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.couponInfoId != null">
+				coupon_info_id = #{record.couponInfoId,jdbcType=BIGINT},
+			</if>
+			<if test="record.actCouponId != null">
+				act_coupon_id = #{record.actCouponId,jdbcType=BIGINT},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT}
+			</if>
+
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update act_new_year_info
+		set id = #{record.id,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		cookies_id = #{record.cookiesId,jdbcType=VARCHAR},
+		is_get = #{record.isGet,jdbcType=VARCHAR},
+		get_time = #{record.getTime,jdbcType=TIMESTAMP},
+		coupon_info_id = #{record.couponInfoId,jdbcType=BIGINT},
+		act_coupon_id = #{record.actCouponId,jdbcType=BIGINT},
+		delete_status = #{record.deleteStatus,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.market.model.ActCouponGetInfo">
+		update act_new_year_info
+		<trim prefix="set" suffixOverrides=",">
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="cookiesId != null">
+				cookies_id = #{cookiesId,jdbcType=VARCHAR},
+			</if>
+			<if test="isGet != null">
+				is_get = #{isGet,jdbcType=VARCHAR},
+			</if>
+			<if test="getTime != null">
+				get_time = #{getTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="couponInfoId != null">
+				coupon_info_id = #{couponInfoId,jdbcType=BIGINT},
+			</if>
+			<if test="actCouponId != null">
+				act_coupon_id = #{actCouponId,jdbcType=BIGINT},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT}
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.market.model.ActCouponGetInfo">
+		update act_new_year_info
+		set user_id = #{userId,jdbcType=BIGINT},
+		cookies_id = #{cookiesId,jdbcType=VARCHAR},
+		is_get = #{isGet,jdbcType=VARCHAR},
+		get_time = #{getTime,jdbcType=TIMESTAMP},
+		coupon_info_id = #{couponInfoId,jdbcType=BIGINT},
+		act_coupon_id = #{actCouponId,jdbcType=BIGINT},
+		delete_status = #{deleteStatus,jdbcType=BIT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+
+	<select id="findAllByPage" resultMap="BOResultMap">
+		SELECT a.*,uc.mobile,uc.name,uc.nickname,ye.scheme_name
+		FROM act_new_year_info a LEFT JOIN act_app_new_year ye ON
+		a.act_coupon_id=ye.id LEFT JOIN user_customer uc ON a.user_id = uc.uid
+		WHERE a.delete_status = 0 and ye.delete_status=0
+
+		<if test="vo.startGetTimeStr != null  and vo.startGetTimeStr != '' ">
+			AND a.get_time <![CDATA[ >= ]]>
+			#{vo.queryStartTime}
+		</if>
+		<if test="vo.endGetTimeStr != null  and vo.endGetTimeStr != '' ">
+			AND a.get_time <![CDATA[ <= ]]>
+			#{vo.queryEndTime}
+		</if>
+		<if test="vo.isGet != null  and vo.isGet != '' ">
+			AND a.is_get = #{vo.isGet}
+		</if>
+		<if test="vo.mobile != null  and vo.mobile != '' ">
+			AND uc.mobile like "%"#{vo.mobile}"%"
+		</if>
+		<if test="vo.name != null  and vo.name != '' ">
+			AND uc.name like "%"#{vo.name}"%"
+		</if>
+		<if test="vo.nickName != null  and vo.nickName != '' ">
+			AND uc.nickname like "%"#{vo.nickName}"%"
+		</if>
+		and a.act_coupon_id = #{vo.actCouponId}
+		ORDER BY a.get_time DESC
+	</select>
+
+</mapper>

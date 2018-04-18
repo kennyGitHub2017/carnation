@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+		<meta http-equiv="description" content="This is my page">
+		<meta http-equiv="X-UA-Compatible"content="IE=10; IE=9; IE=8; IE=EDGE">
+		<title>精选专区</title>
+		<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+		<link href="$!webPath/resources/style/system/front/default/css/index2.css" type="text/css" rel="stylesheet" />
+		<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+		<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+		<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+		<script src="$!webPath/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+		<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+		<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+		<script src="$!webPath/resources/js/jquery.custom.validate.js" type="text/javascript"></script>
+		<link href="$!webPath/resources/shop/ysysgo/css/style.css" rel="stylesheet" type="text/css" />
+		<style>
+		body{overflow-x:hidden; }
+/*  		.index_topleft{display: none;}
+		.nav_left{display: none;}
+		.nav #navul{margin-left: 235px;}  */
+		.choiceness_jifen.no{background: none;text-indent: 0;}
+		.jf-goods-jfnumber span.index-goods-mes-ri.no{border: none;}
+		</style>
+	</head>
+
+<body>
+	$!httpInclude.include("/top.htm")
+	<div id="head_unbomb"> $!httpInclude.include("/head.htm") </div>
+	$!httpInclude.include("/navYunGo.htm")
+	
+	<script src="$!webPath/invoke.htm?apCode=SHOP_YG_BG_SLIDE"></script>
+	
+	<div class="ppg-main">
+		
+	     <div id="float01" class="ppg-float">
+	     	#if(!$!isCN)
+	     	<div class="jx_userInfo">
+	     		<div class="integral">
+	     			<span class="tit">我的积分:</span>
+	     			<span class="num">$!{userCustomer.integral}</span>
+	     		</div>
+	     		<div class="info">
+	     			<img src="$!{userCustomer.headImgPath}" /><span>#if($!{userCustomer.nickname})$!{userCustomer.nickname}#else$!{userCustomer.name}#end</span>
+	     		</div>
+	     	</div>
+	     	#else
+	     	<div class="jx_userInfo">
+	     		<div class="integral">
+	     			<span class="tit">我的积分:</span>
+	     			<span class="num">$!{userCustomer.integral}</span>
+	     		</div>
+	     		<div class="integral gwjf">
+	     			<span class="tit">购物积分:</span>
+	     			<span class="num">$!{cnIntegral}</span>
+	     		</div>
+	     		<div class="integral cxb">
+	     			<span class="tit">重消:</span>
+	     			<span class="num">$!{cnBonusRepeat}</span>
+	     		</div>
+	     		<div class="info">
+	     			<img src="$!{userCustomer.headImgPath}" /><span>#if($!{userCustomer.nickname})$!{userCustomer.nickname}#else$!{userCustomer.name}#end</span>
+	     		</div>
+	     	</div>
+	     	#end
+	     	<!-- 热门搜索 -->
+	     	<div class="ppg-title">
+	     		<img style="width: auto;height: auto;" src="$!webPath/resources/shop/ysysgo/images/ppg-title-ht.png" alt="" />
+	     			<span>精选专区</span>
+	     		<img style="width: auto;height: auto;" src="$!webPath/resources/shop/ysysgo/images/ppg-title-ht.png" alt="" />
+	     	</div> 
+	     	<div class="jf-goodslist-ul index-goods">
+	     		<ul>
+	     			
+
+				#if($!objs.size()>0)
+					#foreach($obj in $!objs)
+
+	     			<li>
+	     				<a href="$!webPath/goods_$!{obj.id}_gcase.htm">
+	     				<!-- 	<img src="$!webPath/resources/shop/ysysgo/images/index-goods.png" alt="" /> -->
+	     				<img src="$!{obj.goodsMainPhotoPath}" alt="" /> 
+	     					<div class="jf-goods-tit">
+	     						$!{obj.goodsName}
+	     					</div>
+	     					<div class="jf-goods-jfnumber">
+	     					
+	     					#if($!obj.needYgb != 0 && $!isCN)
+	     					<span class="index-goods-mes-ri">
+	     					重消  $!{obj.needYgb}
+	     					</span>
+	     					#end
+	     					
+	     					<span class="index-goods-mes-price">
+	     						<span class="ygbzq-hui">¥$!{obj.storePrice}</span>
+	     						<span class="linshou">零售价：¥</span>
+	     						<span class="old-price">$!{obj.goodsPrice}</span>
+	     					</span>
+	     					</div>
+	     					
+	     					
+	     					
+	     					#if($!{obj.needIntegral} <= 0 && $!{obj.needMoney} <=0)
+	     					#else
+	     					<div class="choiceness_jifen">
+	     					$!CommUtil.formatInteger($!{obj.needIntegral}) <span class="yuan">＋$!{obj.needMoney}元</span>
+	     					</div>
+	     					#end
+	     					
+	     					
+	     					
+	     				</a>
+	     			</li>
+	     			#end
+	     			
+	     		#end
+	     			
+	     
+
+	     		</ul>
+	     	</div>
+	     </div>
+    </div>
+    
+    <script>
+	
+	$(function(){
+		$(".ygbzq-hui").each(function(){			
+			var html=$(this).html().split('.').join(".</span><span class=\"small\">");
+			$(this).html(html);
+		});
+	});
+	</script>
+     
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

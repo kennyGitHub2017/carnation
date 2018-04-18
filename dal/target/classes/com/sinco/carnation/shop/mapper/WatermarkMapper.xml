@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.WatermarkMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.Watermark">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="wm_image_alpha" property="wmImageAlpha"
+			jdbcType="INTEGER" />
+		<result column="wm_image_open" property="wmImageOpen" jdbcType="BIT" />
+		<result column="wm_image_pos" property="wmImagePos" jdbcType="INTEGER" />
+		<result column="wm_text" property="wmText" jdbcType="VARCHAR" />
+		<result column="wm_text_color" property="wmTextColor" jdbcType="VARCHAR" />
+		<result column="wm_text_font" property="wmTextFont" jdbcType="VARCHAR" />
+		<result column="wm_text_font_size" property="wmTextFontSize"
+			jdbcType="INTEGER" />
+		<result column="wm_text_open" property="wmTextOpen" jdbcType="BIT" />
+		<result column="wm_text_pos" property="wmTextPos" jdbcType="INTEGER" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="wm_image_id" property="wmImageId" jdbcType="BIGINT" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, wm_image_alpha, wm_image_open, wm_image_pos,
+		wm_text,
+		wm_text_color, wm_text_font, wm_text_font_size, wm_text_open, wm_text_pos, store_id,
+		user_id, wm_image_id
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.shop.model.WatermarkExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_watermark
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from shop_watermark
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_watermark
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.WatermarkExample">
+		delete from shop_watermark
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.Watermark">
+		insert into shop_watermark (id, add_time, delete_status,
+		wm_image_alpha, wm_image_open, wm_image_pos,
+		wm_text, wm_text_color, wm_text_font,
+		wm_text_font_size, wm_text_open, wm_text_pos,
+		store_id, user_id, wm_image_id
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{wmImageAlpha,jdbcType=INTEGER}, #{wmImageOpen,jdbcType=BIT}, #{wmImagePos,jdbcType=INTEGER},
+		#{wmText,jdbcType=VARCHAR}, #{wmTextColor,jdbcType=VARCHAR},
+		#{wmTextFont,jdbcType=VARCHAR},
+		#{wmTextFontSize,jdbcType=INTEGER}, #{wmTextOpen,jdbcType=BIT}, #{wmTextPos,jdbcType=INTEGER},
+		#{storeId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+		#{wmImageId,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.Watermark">
+		insert into shop_watermark
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="wmImageAlpha != null">
+				wm_image_alpha,
+			</if>
+			<if test="wmImageOpen != null">
+				wm_image_open,
+			</if>
+			<if test="wmImagePos != null">
+				wm_image_pos,
+			</if>
+			<if test="wmText != null">
+				wm_text,
+			</if>
+			<if test="wmTextColor != null">
+				wm_text_color,
+			</if>
+			<if test="wmTextFont != null">
+				wm_text_font,
+			</if>
+			<if test="wmTextFontSize != null">
+				wm_text_font_size,
+			</if>
+			<if test="wmTextOpen != null">
+				wm_text_open,
+			</if>
+			<if test="wmTextPos != null">
+				wm_text_pos,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="wmImageId != null">
+				wm_image_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="wmImageAlpha != null">
+				#{wmImageAlpha,jdbcType=INTEGER},
+			</if>
+			<if test="wmImageOpen != null">
+				#{wmImageOpen,jdbcType=BIT},
+			</if>
+			<if test="wmImagePos != null">
+				#{wmImagePos,jdbcType=INTEGER},
+			</if>
+			<if test="wmText != null">
+				#{wmText,jdbcType=VARCHAR},
+			</if>
+			<if test="wmTextColor != null">
+				#{wmTextColor,jdbcType=VARCHAR},
+			</if>
+			<if test="wmTextFont != null">
+				#{wmTextFont,jdbcType=VARCHAR},
+			</if>
+			<if test="wmTextFontSize != null">
+				#{wmTextFontSize,jdbcType=INTEGER},
+			</if>
+			<if test="wmTextOpen != null">
+				#{wmTextOpen,jdbcType=BIT},
+			</if>
+			<if test="wmTextPos != null">
+				#{wmTextPos,jdbcType=INTEGER},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="wmImageId != null">
+				#{wmImageId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.WatermarkExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_watermark
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_watermark
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.wmImageAlpha != null">
+				wm_image_alpha = #{record.wmImageAlpha,jdbcType=INTEGER},
+			</if>
+			<if test="record.wmImageOpen != null">
+				wm_image_open = #{record.wmImageOpen,jdbcType=BIT},
+			</if>
+			<if test="record.wmImagePos != null">
+				wm_image_pos = #{record.wmImagePos,jdbcType=INTEGER},
+			</if>
+			<if test="record.wmText != null">
+				wm_text = #{record.wmText,jdbcType=VARCHAR},
+			</if>
+			<if test="record.wmTextColor != null">
+				wm_text_color = #{record.wmTextColor,jdbcType=VARCHAR},
+			</if>
+			<if test="record.wmTextFont != null">
+				wm_text_font = #{record.wmTextFont,jdbcType=VARCHAR},
+			</if>
+			<if test="record.wmTextFontSize != null">
+				wm_text_font_size = #{record.wmTextFontSize,jdbcType=INTEGER},
+			</if>
+			<if test="record.wmTextOpen != null">
+				wm_text_open = #{record.wmTextOpen,jdbcType=BIT},
+			</if>
+			<if test="record.wmTextPos != null">
+				wm_text_pos = #{record.wmTextPos,jdbcType=INTEGER},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.wmImageId != null">
+				wm_image_id = #{record.wmImageId,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_watermark
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		wm_image_alpha = #{record.wmImageAlpha,jdbcType=INTEGER},
+		wm_image_open = #{record.wmImageOpen,jdbcType=BIT},
+		wm_image_pos = #{record.wmImagePos,jdbcType=INTEGER},
+		wm_text = #{record.wmText,jdbcType=VARCHAR},
+		wm_text_color = #{record.wmTextColor,jdbcType=VARCHAR},
+		wm_text_font = #{record.wmTextFont,jdbcType=VARCHAR},
+		wm_text_font_size = #{record.wmTextFontSize,jdbcType=INTEGER},
+		wm_text_open = #{record.wmTextOpen,jdbcType=BIT},
+		wm_text_pos = #{record.wmTextPos,jdbcType=INTEGER},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		wm_image_id = #{record.wmImageId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.Watermark">
+		update shop_watermark
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="wmImageAlpha != null">
+				wm_image_alpha = #{wmImageAlpha,jdbcType=INTEGER},
+			</if>
+			<if test="wmImageOpen != null">
+				wm_image_open = #{wmImageOpen,jdbcType=BIT},
+			</if>
+			<if test="wmImagePos != null">
+				wm_image_pos = #{wmImagePos,jdbcType=INTEGER},
+			</if>
+			<if test="wmText != null">
+				wm_text = #{wmText,jdbcType=VARCHAR},
+			</if>
+			<if test="wmTextColor != null">
+				wm_text_color = #{wmTextColor,jdbcType=VARCHAR},
+			</if>
+			<if test="wmTextFont != null">
+				wm_text_font = #{wmTextFont,jdbcType=VARCHAR},
+			</if>
+			<if test="wmTextFontSize != null">
+				wm_text_font_size = #{wmTextFontSize,jdbcType=INTEGER},
+			</if>
+			<if test="wmTextOpen != null">
+				wm_text_open = #{wmTextOpen,jdbcType=BIT},
+			</if>
+			<if test="wmTextPos != null">
+				wm_text_pos = #{wmTextPos,jdbcType=INTEGER},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="wmImageId != null">
+				wm_image_id = #{wmImageId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.Watermark">
+		update shop_watermark
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		wm_image_alpha = #{wmImageAlpha,jdbcType=INTEGER},
+		wm_image_open = #{wmImageOpen,jdbcType=BIT},
+		wm_image_pos = #{wmImagePos,jdbcType=INTEGER},
+		wm_text = #{wmText,jdbcType=VARCHAR},
+		wm_text_color = #{wmTextColor,jdbcType=VARCHAR},
+		wm_text_font = #{wmTextFont,jdbcType=VARCHAR},
+		wm_text_font_size = #{wmTextFontSize,jdbcType=INTEGER},
+		wm_text_open = #{wmTextOpen,jdbcType=BIT},
+		wm_text_pos = #{wmTextPos,jdbcType=INTEGER},
+		store_id = #{storeId,jdbcType=BIGINT},
+		user_id = #{userId,jdbcType=BIGINT},
+		wm_image_id = #{wmImageId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

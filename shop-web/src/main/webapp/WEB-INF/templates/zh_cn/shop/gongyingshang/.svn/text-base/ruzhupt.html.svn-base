@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<meta http-equiv="X-UA-Compatible"content="IE=10; IE=9; IE=8; IE=EDGE">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge8,chrome=1" >
+	<title>云尚商户入驻,云尚供应商入驻,云尚商户平台,云尚供应商平台,如何入驻云尚商户,如何入驻云尚供应商 - 云尚</title>
+    <meta name="keywords" content="云尚商户入驻,云尚供应商入驻,云尚商户平台,云尚供应商平台,如何入驻云尚商户,如何入驻云尚供应商" />
+    <meta name="description" content="提供商户或者供应商入驻的申请和入驻流程的引导，助力商户和供应商降低运营成本，提高销量，在云尚平台省心省时省力。云尚服务热线：400-888-2933 。">
+	<link rel="stylesheet" href="$!webPath/resources/gongyingshang/css/style.css">
+	<link href="$!webPath/resources/login/css/style.css" type="text/css" rel="stylesheet" />
+	<script src="$!webPath/resources/js/alertBox.js"></script>
+	<style>
+	html,body{background:#fcfcfc;}
+	.two_sh{background: #fff;width: 100%;margin: auto;border-bottom: 1px solid #19bf96;}
+	.ruzhu-btn-submit a.nogoto{background-color: gray;cursor:no-drop; }
+	</style>
+	
+</head>
+<body>
+	<div class="gysmain">
+		<div class="two_sh">
+			<div class="sh_logo">
+				<a href="$!webPath"><img src="$!webPath/resources/img/logo.jpg" alt="云尚" /></a>
+				<span class="sh_title">入驻平台</span>
+			</div>
+		</div>
+		<div class="jibenmes">选择入驻方式</div>
+		<div class="gys-nav ruzhu-top">
+			<ul>
+				<li>
+					<p class="pa1">线下联盟商户</p>
+					<p class="pa2">商户加盟线下联盟商户平台</p>
+					<img src="$!webPath/resources/gongyingshang/img/ruzhione.png" alt="" />
+					<div class="ruzhubottomul">
+						<ul>
+							<li>
+								<img src="$!webPath/resources/gongyingshang/img/bottomula.png" alt="" />
+								<span class="bottomulspan">专注健康领域商户</span>
+								<span class="bottomulspan">海量会员精准消费</span>
+							</li>
+
+							<li>
+								<img src="$!webPath/resources/gongyingshang/img/bottomulb.png" alt="" />
+								<span class="bottomulspan">线上线下一体</span>
+								<span class="bottomulspan">多渠道推广，收益广</span>
+							</li>
+
+							<li>
+								<img src="$!webPath/resources/gongyingshang/img/bottomulc.png" alt="" />
+								<span class="bottomulspan">手机在手，快易爽</span>
+								<span class="bottomulspan">实时查看店铺收益</span>
+							</li>
+						</ul>
+					</div>
+					<div class="ruzhu-btn-submit">
+					<!-- #if($!user)
+						<a href="$!webPath/seller_apply/group.htm">进入平台</a>
+					#else
+						<a href="$!webPath/user/login.htm">进入平台</a>
+					#end -->
+					#if($!user)
+						#if($!noRole==1)
+							<a href="javascript:;" id="shop_ruzhu_id" onclick="return validateSeller(1)">进入平台</a>
+						#else
+							<!-- <a class="nogoto" href="$!webPath/seller_apply/group.htm">进入平台</a> -->
+						<!-- 	<a href="$!webPath/seller_apply/group.htm">进入平台cn</a> -->
+								<a href="javascript:;" id="shop_ruzhu_id" onclick="return validateSeller(1)">进入平台</a>
+						#end
+					#else
+						<a href="$!webPath/user/login.htm">进入平台</a>
+					#end
+					</div>
+				</li>
+				<li class="ruzhu-top-li2">
+					<p class="pa1">线上产品供应商</p>
+					<p class="pa2">卖家加盟商城产品供应商平台</p>
+					<img src="$!webPath/resources/gongyingshang/img/ruzhutwo.png" alt=""  style="margin-top: 33px"/>
+					<div class="ruzhubottomul">
+						<ul>
+							<li>
+								<img src="$!webPath/resources/gongyingshang/img/bottomuld.png" alt="" />
+								<span class="bottomulspan">云服务、大数据</span>
+								<span class="bottomulspan">实现精准营销</span>
+							</li>
+
+							<li>
+								<img src="$!webPath/resources/gongyingshang/img/bottomule.png" alt="" />
+								<span class="bottomulspan">目标用户投放</span>
+								<span class="bottomulspan">高转化率、高粘度</span>
+							</li>
+
+							<li>
+								<img src="$!webPath/resources/gongyingshang/img/bottomulf.png" alt="" />
+								<span class="bottomulspan">专业化服务理念</span>
+								<span class="bottomulspan">360度全方位跟踪</span>
+							</li>
+						</ul>
+					</div>
+					<div class="ruzhu-btn-submit">
+					<!-- #if($!user)
+						<a href="$!webPath/seller/ruzhu_xuzhi.htm">进入平台</a>
+					#else
+						<a href="$!webPath/user/login.htm">进入平台</a>
+					#end -->
+					
+					#if($!user)
+						#if($!noRole==1)
+							<a href="javascript:;" id="shop_ruzhu_id" onclick="return validateSeller(2)">进入平台</a>
+						#else
+							<!-- <a class="nogoto" href="$!webPath/seller/ruzhu_xuzhi.htm">进入平台</a> -->
+							<!-- <a href="$!webPath/seller/ruzhu_xuzhi.htm">进入平台CN</a> -->
+							<a href="javascript:;" id="shop_ruzhu_id" onclick="return validateSeller(2)">进入平台</a>
+						#end
+					#else
+						<a href="$!webPath/user/login.htm">进入平台</a>
+					#end
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="jm-nav jmbz">
+			<div class="jmbz-tit">
+				云尚&nbsp;供应商标准
+			</div>
+			<p class="jmbz-pa">* 供应商必须为具有法人资格的合法经营的公司或企业；</p>
+			<p class="jmbz-pa">* 我们仅接受有一定知名度的品牌入驻，入驻企业须是品牌所有者或授权渠道商，并且确保所提供的商品为品牌正品，价格足够有竞争力。</p>
+			<p class="jmbz-pa">*入驻商家经营类目需是商城产品类目的一种或几种。</p>
+			<p class="jmbz-pa">*入驻商家成立时间需大于6个月，即商家营业执照有效期起始时间至商家提交入驻审核时间大于6个月。</p>
+			<p class="jmbz-pa">【公司资质要求】<span class="red-span">	(* 所有相关资质必须在有效期内，若为三证合一企业，只上传营业执照和法人证件即可)</span></p>
+			<table>
+				<tr class="table-one-line">
+					<td class="table-one-td tda"></td>
+					<td class="table-two-td tda">证件名称</td>
+					<td class="table-three-td tda">资质要求</td>
+				</tr>
+				<tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb">1</td>
+					<td class="table-two-td tdb">营业执照</td>
+					<td class="table-three-td tdb">需上传加盖公司公章的照片或到扫描件，必须具有法人资格，如为分支机构不具有法人资格的需提供总公司营业执照及其授权书；完成有效年检。<span class="red-span looklizi" data-img="$!webPath/resources/gongyingshang/img/yyzz.jpg">(查看样例)</span></td>
+				</tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb">2</td>
+					<td class="table-two-td tdb">税务登记证</td>
+					<td class="table-three-td tdb">国税、地税均可，需上传加盖公司公章的照片或到扫描件。<span data-img="$!webPath/resources/gongyingshang/img/swdjz.jpg" class="red-span looklizi">(查看样例)</span></td>
+				</tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb">3</td>
+					<td class="table-two-td tdb">组织机构代码证</td>
+					<td class="table-three-td tdb">需上传加盖公司公章的照片或到扫描件。<span data-img="$!webPath/resources/gongyingshang/img/zzjgdmz.jpg" class="red-span looklizi">(查看样例)</span></td>
+				</tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb">4</td>
+					<td class="table-two-td tdb">法人身份证</td>
+					<td class="table-three-td tdb">需上传法人正、反面身份证的照片或扫描件<span data-img="$!webPath/resources/gongyingshang/img/sfzyb.jpg" class="red-span looklizi" >(查看样例)</span></td>
+				</tr>
+			</table>
+			<p class="jmbz-pa">【品牌资质要求】</p>
+			<table>
+				<tr class="table-one-line">
+					<td class="table-one-td tda"></td>
+					<td class="table-two-td tda">证件名称</td>
+					<td class="table-three-td tda">资质要求</td>
+				</tr>
+				<tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb">1</td>
+					<td class="table-two-td tdb">商标注册证</td>
+					<td class="table-three-td tdb">需提供有效期内的商标注册证，仅接受R标。</td>
+				</tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb" style="height: 140px;line-height: 140px;">2</td>
+					<td class="table-two-td tdb"style="height: 140px;">品牌授权书</td>
+					<td class="table-three-td tdb"style="height: 140px;"><span class="spanblock">若品牌申请人为代理商，需提供满足以下条件的品牌授权书：</span><span class="spanblock">( 1) 授权书需注明授权期限、落款</span><span class="spanblock">( 2) 若商标注册人是个人，需提供商标注册人身份证正反面复印件</span></td>
+				</tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb">3</td>
+					<td class="table-two-td tdb"><span class="spanblock">质检报告或</span><span class="spanblock">3C认证证书</span></td>
+					<td class="table-three-td tdb">每个品牌须提供一份近2年的质检报告或有效期内的3C认证证书</td>
+				</tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb">4</td>
+					<td class="table-two-td tdb"><span class="spanblock">报关单和</span><span class="spanblock">检验检疫证明</span></td>
+					<td class="table-three-td tdb">若为进口产品，须提交近1年内海关进口报关单和检验检疫合格证明</td>
+				</tr>
+			</table>
+		</div>
+		<div class="jm-nav jmbz jmbz2">
+			<div class="jmbz-tit">
+				云尚&nbsp;商户加盟标准
+			</div>
+			<p class="jmbz-pa">* 供应商必须为具有法人资格的合法经营的公司或个体经营户；</p>
+			<p class="jmbz-pa">* 有符合特殊行业许可资质并能为会员提供优质到店体验的实体门面；</p>
+			<p class="jmbz-pa">* 有完善的服务团队，商家知名度高，用户消费体验好；</p>
+			<p class="jmbz-pa">*入驻商家成立时间需大于3个月，即商家营业执照有效期起始时间至商家提交入驻审核时间大于3个月。</p>
+
+			<p class="jmbz-pa">【公司资质要求】<span class="red-span">	(* 所有相关资质必须在有效期内，若为三证合一企业，只上传营业执照和法人证件即可)</span></p>
+			<table>
+				<tr class="table-one-line">
+					<td class="table-one-td tda"></td>
+					<td class="table-two-td tda">证件名称</td>
+					<td class="table-three-td tda">资质要求</td>
+				</tr>
+				<tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb">1</td>
+					<td class="table-two-td tdb">经营场所证明</td>
+					<td class="table-three-td tdb">需上传加盖公司公章的营业执照或租赁合同照片或到扫描件，必须具有法人资格，如为分支机构不具有法人资格的需提供总公司营业执照及其授权书；完成有效年检。<span data-img="$!webPath/resources/gongyingshang/img/jycszm.jpg" class="red-span looklizi">(查看样例)</span></td>
+				</tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb">2</td>
+					<td class="table-two-td tdb">税务登记证</td>
+					<td class="table-three-td tdb">国税、地税均可，需上传加盖公司公章的照片或到扫描件。<span data-img="$!webPath/resources/gongyingshang/img/swdjz.jpg" class="red-span looklizi"><a href="javascript:void(0)">(查看样例)</a></span></td>
+				</tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb">3</td>
+					<td class="table-two-td tdb">组织机构代码证</td>
+					<td class="table-three-td tdb">需上传加盖公司公章的照片或到扫描件。<span data-img="$!webPath/resources/gongyingshang/img/zzjgdmz.jpg" class="red-span looklizi">(查看样例)</span></td>
+				</tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb">4</td>
+					<td class="table-two-td tdb">法人身份证</td>
+					<td class="table-three-td tdb">需上传法人正、反面身份证的照片或扫描件，如没有需提供加盖公章的法人授权证明及被授权人正、
+反面身份证的照片或扫描件<span data-img="$!webPath/resources/gongyingshang/img/sfzyb.jpg" class="red-span looklizi">(查看样例)</span></td>
+				</tr>
+				<tr class="table-orter-line">
+					<td class="table-one-td tdb">5</td>
+					<td class="table-two-td tdb">法人银行卡</td>
+					<td class="table-three-td tdb">需上传法人正、反面银行卡照片或扫描件，若银行卡对私，银行卡反面必需本人签名</td>
+				</tr>
+			</table>
+		</div>	
+
+		<div class="jibenmes">客服咨询</div>
+		<div class="rzpt-bottm">
+			<div class="rzpt-bottm-tit">请根据您的问题咨询对应的客服，以便快速为您答疑解惑。</div>
+			<p class="rzpt-bottm-pa">联系电话：&nbsp;400-888-2933</p>
+			<p class="rzpt-bottm-pa">商户加盟：&nbsp;ysysgo_o2o@163.com  &nbsp;&nbsp;&nbsp;&nbsp;供应商加盟：&nbsp;ysysgo_shop@163.com</p>
+			<p class="rzpt-bottm-pa">
+			商城服务QQ：&nbsp;<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=3417880264&site=qq&menu=yes">3417880264</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			商户服务QQ：&nbsp;<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2201434696&site=qq&menu=yes">2201434696</a>
+			</p>
+
+		</div>
+		$!httpInclude.include("/footer.htm")
+	</div>
+	<script src="$!webPath/resources/js/jquery.min.js"></script>
+	<script type="text/javascript">
+			$(".looklizi").hover(function(e){
+				var that=this;
+				if(document.getElementById("showSL")){
+					
+				}else{
+					var ele=document.createElement("div");
+					ele.id="showSL";
+					document.body.appendChild(ele);
+				}
+				var div=document.getElementById("showSL");
+				div.style.display="block";
+				console.log(e.clientX);
+				div.style.left=e.clientX+10+"px";
+				div.style.top=e.clientY+10+"px";
+				var src=$(that).attr("data-img");
+				$(div).html("<img src="+src+" style='width:350px' />");
+				document.onmousemove=function(e){
+					div.style.left=e.clientX+10+"px";
+					div.style.top=e.clientY+10+"px";
+				}				
+			},function(e){
+				document.onmousemove=null;
+				document.getElementById("showSL").style.display="none";
+			});
+			
+			
+			$(".ruzhu-btn-submit a.nogoto").click(function(event) {
+				alert("CN账号不能入驻申请");
+				return false;
+			});
+			
+			
+			
+			function validateSeller(event) {
+				var flag=true;
+				$.ajax({
+			          type: "post",
+			          async:false,
+			          url: "$!webPath/seller_apply/validateUserSellerType.htm",
+			          dataType: "json",
+			          success: function (data) {
+			        	 
+			        	  if (data == 1) {//020
+			        		  if(event != 1) {
+			        			  alertBoxFn('提示','很抱歉，您已是商户身份，无法同时入驻供应商哦！有疑问可拨打客服电话400-888-2933',1);
+			        			  flag=false;
+			        		  } 
+			        		  
+			        	  }
+			        	  if (data==2 ) {//shop
+			        		  if(event != 2) {
+			        			  alertBoxFn('提示','很抱歉，您已是供应商身份，无法同时入驻商户哦！有疑问可拨打客服电话400-888-2933',1);
+			        			  flag=false;
+			        		  }
+			        	  }
+			                 
+			          },
+			          error: function (XMLHttpRequest, textStatus, errorThrown) {
+			                  alert(errorThrown);
+			          }
+	      		});
+				if(flag){
+					if(event==1){
+						location.href="$!webPath/seller_apply/group.htm";
+					}else{
+						location.href="$!webPath/seller/ruzhu_xuzhi.htm";
+					}
+				}
+			}
+			
+			
+			
+
+
+			
+			
+		</script>
+		
+</body>
+</html>

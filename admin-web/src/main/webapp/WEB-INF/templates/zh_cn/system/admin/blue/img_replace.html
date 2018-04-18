@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	 
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	
+	 <script type="text/javascript" src="$!webPath/resources/js/easyui/plugins/jquery.validatebox.js"></script>
+	 
+
+</head>
+<body>  
+		<div style="padding:10px 20px 20px 20px">
+	    <form id="theForm" name="theForm" method="post" action="$!webPath/admin/img_replace_save.htm" 
+	     data-options="validate:true" enctype="multipart/form-data">
+            
+	    	<table cellpadding="4">
+	    		<tr>
+	    			<td width=170><strong style="color:red;">*</strong>原图片路径:</td>
+	    			<td width=360>
+	    			<input class="easyui-textbox" type="text" name="imagePath" data-options="required:true">
+	    			</input>
+	    			</td>
+	    			<td width=170><strong style="color:red;">*</strong>替换的新图片:</td>
+	    			<td width=200>
+                    <input class="easyui-filebox" type="text" name="imgNew"  data-options="buttonText:'新图片',buttonAlign:'right'"></input>
+	    			</td>
+	    		
+	    		</tr>
+	    	</table>
+	    	<input class="easyui-button" type="submit" name="sb" >
+	    </form>
+	    </div >
+	    
+</body>
+</html>

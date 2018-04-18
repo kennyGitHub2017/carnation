@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title> #macro ( genericGroupClassTree $somelist) #foreach (
+$some in $somelist )
+<option value="$!some.id">
+	<!-- #if($!some.gcLevel>0) -->
+	<!-- #foreach($count in [0..$!some.gcLevel])&nbsp;&nbsp;#end #end  -->
+	$!some.gcName
+</option>
+<!-- #genericGroupClassTree($!some.childs)  -->
+#end #end
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	//设置默认状态以及判断初始显示状态
+	var state = jQuery("#display").val();
+	if(state==""){
+		jQuery("#display").val("true");
+		jQuery("#displayOff").hide();
+	}else{
+		 if(state=="true"){
+			jQuery("#displayOff").hide();
+		}else{
+			jQuery("#displayOn").hide();
+		}
+	}
+ 	//改变系统提示的样式
+	#if($!obj)
+	jQuery("#gc_type").val($!obj.gc_type);
+	#end
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+//
+  jQuery("#theForm").validate({
+    rules:{
+    	storeTarget:{
+	    required :false
+	   },
+	 },
+	messages:{
+		storeTarget:{required:"标签不能为空"},
+	}
+  });	
+  #if($!edit)
+	  jQuery("#textfield1").rules("remove", "required"); 	
+  	  jQuery("#textfield2").rules("remove", "required"); 	
+  #end
+  //
+  jQuery("#pid").val($!obj.parentId);
+  jQuery("input[type='file']").change(function(){
+	 jQuery(this).parent().parent().find("input[type='text']").val(jQuery(this).val());
+  })
+  jQuery("#logoShow").mouseover(function(){								
+	    jQuery("#logoImg").css('display','block');
+   }).mouseout(function(){
+		jQuery("#logoImg").css('display','none');
+   });
+  jQuery("#mobileLogoShow").mouseover(function(){								
+	    jQuery("#mobileLogoImg").css('display','block');
+  }).mouseout(function(){
+		jQuery("#mobileLogoImg").css('display','none');
+  });
+  /**#if($!obj.parentId)
+	  jQuery("#icon_acc_ul").hide();
+	  jQuery("#mobile_icon_acc_ul").hide();
+  #end
+  //图标
+  jQuery("#pid").change(function(){
+	 var val = jQuery(this).val();
+	  if(val==""){
+			 jQuery("#icon_acc_ul").show(); 
+			 jQuery("#mobile_icon_acc_ul").show(); 
+	  }else{ 
+		 jQuery("#icon_acc_ul").hide(); 
+		 jQuery("#mobile_icon_acc_ul").hide(); 
+	  }
+   });*/
+});
+
+//设置显示开关
+function displayState(){
+	var state = jQuery("#display").val();
+	if(state=="true"){
+		jQuery("#display").val("false");
+		jQuery("#displayOff").show();
+		jQuery("#displayOn").hide();
+	}else{
+		jQuery("#display").val("true");
+		jQuery("#displayOff").hide();
+		jQuery("#displayOn").show();
+	}
+}
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<!-- enctype="multipart/form-data" -->
+	<div class="cont">
+		<h1 class="seth">商户标签</h1>
+		<form name="theForm" id="theForm"
+			action="$!webPath/admin/merchant_target_save.htm" method=post>
+			<input name="id" type="hidden" id="id" value="$!obj.id" /> <input
+				name="currentPage" type="hidden" id="currentPage"
+				value="$!currentPage" /> <input name="gc_type" type="hidden"
+				id="gc_type" value="0" />
+			<div class="edit">
+				<div class="editul setcont">
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred"></strong>商户名称</li>
+						<li><span class="webname"> <input name="storeName"
+								type="text" readonly="readonly" id="storeName" value="$!obj.storeName" size="40" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">标签</li>
+						<li><span class="webname">
+						<textarea id="storeTarget" name="storeTarget" rows="8" cols="70">$!obj.storeTarget</textarea>
+						</br></>商户标签以","号隔开。</span></li>
+					</ul>
+				</div>
+			</div>
+		</form>
+		<div class="submit">
+			<span class="pad120"> <input name="save" type="button"
+				value="提交" onclick="saveForm()" /></span>
+		</div>
+	</div>
+</body>
+</html>

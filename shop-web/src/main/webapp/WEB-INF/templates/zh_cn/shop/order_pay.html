@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>订单提交成功 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/pay_list.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/yunGoPay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.validate_1_14.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<style>
+@media screen and (min-width:1024px) {
+.main{ width:1200px;}
+}
+</style>
+<script>
+//返回当前页面高度
+
+
+jQuery(document).ready(function(){
+   jQuery(":radio[value=$!of.payment.mark]").attr("checked",true);
+	
+  	jQuery("#theForm").validate({
+		 debug:true,
+		 submitHandler: function(form) {
+			 var selt=$("input[name='isAvailableBalance']");
+			 var isChecked= selt.is(":checked");
+			 var isCheckedygb=$("input[name='isYunGouMoney']").is(":checked");
+			 var availableBalance=parseFloat(selt.attr("availableBalance"));
+			 var allOfPrice=parseFloat(selt.attr("allOfPrice"));
+			 if(!isChecked ||  (isChecked && availableBalance < allOfPrice)){
+				 if(!$("input[name='payType']").is(":checked")&&!isCheckedygb){
+					 showDialog("msg_info","","请选择支付方式",2,"error",3,function(){});
+					 return false;
+				 }
+			 }
+			 
+			  var h= Math.max(jQuery(window).height(), jQuery("body").height());;
+			  var top= document.documentElement.scrollTop;
+			  jQuery('.black_overlay').css("height",h);
+			  jQuery('#pay_overlay').show();
+			  form.submit();
+		}
+	}); 
+	 
+});
+
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm")
+$!httpInclude.include("/nav1.htm")
+<div class="main clearfix">
+  <div class="shopping_step" style="float:none;">
+     <ul>
+       <li class="shopping_step_a"><span></span><i></i><strong>我的购物车</strong></li>
+       <li class="shopping_step_bthree"><span></span><i></i><strong>填写核对订单信息</strong></li>
+       <li class="shopping_step_cthis"><span></span><i></i><strong>成功提交订单</strong></li>
+     </ul>
+   </div>
+  <div class="shopping_cart">
+     <form action="$!webPath/order_pay.htm" method="post" target="_blank" id="theForm">
+  	  <div class="shopping_payfor">
+		<div class="order_info_yg">
+			<div class="info">
+				<div class="info_success">订单提交成功，请您尽快付款！<span class="f14">订单号：$!{order.orderId}</span></div>
+				<div class="order_no">请您在 <span class="time">72小时</span> 内完成支付，否则订单会被自动取消（商品支付时限以订单详情页为准）。</div>
+				<div class="order_prize"><span>应付金额:</span><span class="fn-rmb"><span class="prize">$number.format("￥0.00",$!{all_of_price})</span></span></div>
+			</div>
+		</div>
+
+     $!httpInclude.include("/pay.htm?allOfPrice=$!{all_of_price}")
+      <div class="shopping_payfor_next">
+           <input name="" type="submit"  value="确认支付" style="cursor:pointer;"/>
+            <input name="order_id" type="hidden" id="order_id" value="$!{order.id}" />
+      </div>
+    </div>
+  </form>
+  </div>
+
+</div>
+$!httpInclude.include("/footer.htm")
+<div style="display:none;" id="pay_overlay">
+  <div class="white_content"> <a href="javascript:void(0);" onclick="javascript:jQuery('#pay_overlay').hide();" class="white_close"><img src="$!webPath/resources/style/system/front/default/images/close.jpg" width="14" height="14" /></a>
+    <div class="white_box">
+      <h1>支付提醒</h1>
+      <dl class="white_dl">
+        <dt></dt>
+        <dd>
+          <div class="payf"><a href="$!webPath/order_finish.htm?order_id=$!{order.id}">已经完成支付！</a></div>
+          <div class="payf"><a href="javascript:void(0);"  onclick="javascript:jQuery('#pay_overlay').hide();" >支付出现问题！</a></div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="black_overlay"></div>
+</div>
+</body>
+</html>

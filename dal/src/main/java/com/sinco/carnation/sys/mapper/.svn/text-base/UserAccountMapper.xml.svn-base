@@ -1,0 +1,806 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.UserAccountMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.UserAccount">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="uid" property="uid" jdbcType="INTEGER" />
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="seller_password" property="sellerPassword"
+			jdbcType="VARCHAR" />
+		<result column="supplier_password" property="supplierPassword"
+			jdbcType="VARCHAR" />
+		<result column="operator_password" property="operatorPassword"
+			jdbcType="VARCHAR" />
+		<result column="account_type" property="accountType" jdbcType="CHAR" />
+		<result column="last_login_time" property="lastLoginTime"
+			jdbcType="TIMESTAMP" />
+		<result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+		<result column="appShareInfo" property="appShareInfo" jdbcType="VARCHAR" />
+		<result column="open_id" property="openId" jdbcType="VARCHAR" />
+		<result column="third_nick_name" property="thirdNickName"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sys.bo.UserAccountBO"
+		extends="BaseResultMap">
+		<result column="userID" property="userID" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="findUserAccount" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from sys_user_account where uid=#{uid} and account_type=#{accountType}
+		and is_deleted = 0
+	</select>
+
+	<select id="findUserAccount2" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from sys_user_account where login_name=#{loginName,jdbcType=VARCHAR}
+		and account_type=#{accountType} and is_deleted = 0
+	</select>
+
+
+
+	<select id="queryAccountByOpenId" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		FROM sys_user_account WHERE login_name=#{openId} and
+		account_type=#{type} and is_deleted = 0
+	</select>
+	<!-- add by yuleijia -->
+	<select id="queryAccountByOpenId2" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		FROM sys_user_account WHERE open_id=#{openId} and account_type=#{type}
+		and is_deleted = 0
+	</select>
+
+	<select id="queryAccountByUnionid" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		sys_user_account
+		WHERE
+		login_name=#{unionid}
+		and
+		account_type=#{type}
+		and
+		is_deleted = 0
+	</select>
+
+	<select id="queryByUserAccount" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		sys_user_account
+		where
+		1=1
+		<if test="vo.id != null">
+			and id = #{vo.id,jdbcType=INTEGER}
+		</if>
+		<if test="vo.uid != null">
+			and uid = #{vo.uid,jdbcType=INTEGER}
+		</if>
+		<if test="vo.loginName != null">
+			and login_name = #{vo.loginName,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.password != null">
+			and password= #{vo.password,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.sellerPassword != null">
+			and seller_password= #{vo.sellerPassword,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.supplierPassword != null">
+			and supplier_password=
+			#{vo.supplierPassword,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.operatorPassword != null">
+			and operator_password=
+			#{vo.operatorPassword,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.accountType != null">
+			and account_type =#{vo.accountType,jdbcType=CHAR}
+		</if>
+		<if test="vo.lastLoginTime != null">
+			and last_login_time =
+			#{vo.lastLoginTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="vo.lastLoginIp != null">
+			and last_login_ip = #{vo.lastLoginIp,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.createTime != null">
+			and create_time=#{vo.createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="vo.createBy != null">
+			and create_by=#{vo.createBy,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.updateTime != null">
+			and update_time=#{vo.updateTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="vo.updateBy != null">
+			and update_by= #{vo.updateBy,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.isDeleted != null">
+			and is_deleted= #{vo.isDeleted,jdbcType=BIT}
+		</if>
+		<if test="vo.openId != null">
+			and open_id=#{vo.openId,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.thirdNickName != null">
+			and third_nick_name=#{vo.third_nick_name,jdbcType=VARCHAR}
+		</if>
+	</select>
+
+
+	<select id="findLastLogin" parameterType="Long" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user_account
+		where last_login_time is not null and uid=#{uid}
+		and is_deleted = 0
+		order by last_login_time desc
+		limit 0,1
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id,
+		uid,
+		login_name,
+		password,
+		seller_password,
+		supplier_password,
+		operator_password,
+		account_type,
+		last_login_time,
+		last_login_ip,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		appShareInfo,
+		open_id,
+		third_nick_name
+	</sql>
+
+	<select id="findUserAccountByUid" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from sys_user_account where uid=#{uid} and is_deleted = 0
+	</select>
+
+	<select id="selectByExampleBO" resultMap="BOResultMap"
+		parameterType="com.sinco.carnation.sys.model.UserAccountExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_user_account
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sys.model.UserAccountExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_user_account
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user_account
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="Long">
+		delete from
+		sys_user_account
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.UserAccountExample">
+		delete from sys_user_account
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.UserAccount"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_user_account (
+		id,
+		uid,
+		login_name,
+		password,
+		seller_password,
+		supplier_password,
+		operator_password,
+		account_type,
+		last_login_time,
+		last_login_ip,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		open_id,
+		third_nick_name
+		)
+		values
+		(
+		#{id,jdbcType=INTEGER},
+		#{uid,jdbcType=INTEGER},
+		#{loginName,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{sellerPassword,jdbcType=VARCHAR},
+		#{supplierPassword,jdbcType=VARCHAR},
+		#{operatorPassword,jdbcType=VARCHAR},
+		#{accountType,jdbcType=CHAR},
+		#{lastLoginTime,jdbcType=TIMESTAMP},
+		#{lastLoginIp,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{createBy,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{updateBy,jdbcType=VARCHAR},
+		#{isDeleted,jdbcType=BIT},
+		#{openId,jdbcType=VARCHAR},
+		#{thirdNickName,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.UserAccount">
+		insert into sys_user_account
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="loginName != null">
+				login_name,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="sellerPassword != null">
+				seller_password,
+			</if>
+			<if test="supplierPassword != null">
+				supplier_password,
+			</if>
+			<if test="operatorPassword != null">
+				operator_password,
+			</if>
+			<if test="accountType != null">
+				account_type,
+			</if>
+			<if test="lastLoginTime != null">
+				last_login_time,
+			</if>
+			<if test="lastLoginIp != null">
+				last_login_ip,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+			<if test="openId != null">
+				open_id,
+			</if>
+			<if test="thirdNickName != null">
+				third_nick_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=INTEGER},
+			</if>
+			<if test="loginName != null">
+				#{loginName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="sellerPassword != null">
+				#{sellerPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierPassword != null">
+				#{supplierPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorPassword != null">
+				#{operatorPassword,jdbcType=VARCHAR},
+			</if>
+			<if test="accountType != null">
+				#{accountType,jdbcType=CHAR},
+			</if>
+			<if test="lastLoginTime != null">
+				#{lastLoginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastLoginIp != null">
+				#{lastLoginIp,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+			<if test="openId != null">
+				#{openId,jdbcType=VARCHAR},
+			</if>
+			<if test="thirdNickName != null">
+				#{third_nick_name,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.UserAccountExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_user_account
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_user_account
+		<set>
+			update_time =now()
+			<if test="record.id != null">
+				,id = #{record.id,jdbcType=INTEGER}
+			</if>
+			<if test="record.uid != null">
+				,uid = #{record.uid,jdbcType=INTEGER}
+			</if>
+			<if test="record.loginName != null">
+				,login_name = #{record.loginName,jdbcType=VARCHAR}
+			</if>
+			<if test="record.password != null">
+				,password = #{record.password,jdbcType=VARCHAR}
+			</if>
+			<if test="record.sellerPassword != null">
+				,seller_password =
+				#{record.sellerPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="record.supplierPassword != null">
+				,supplier_password =
+				#{record.supplierPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="record.operatorPassword != null">
+				,operator_password =
+				#{record.operatorPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="record.accountType != null">
+				,account_type = #{record.accountType,jdbcType=CHAR}
+			</if>
+			<if test="record.lastLoginTime != null">
+				,last_login_time =
+				#{record.lastLoginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="record.lastLoginIp != null">
+				,last_login_ip = #{record.lastLoginIp,jdbcType=VARCHAR}
+			</if>
+			<if test="record.createTime != null">
+				,create_time = #{record.createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="record.createBy != null">
+				,create_by = #{record.createBy,jdbcType=VARCHAR}
+			</if>
+			<!-- <if test="record.updateTime != null" > ,update_time = #{record.updateTime,jdbcType=TIMESTAMP} 
+				</if> -->
+			<if test="record.updateBy != null">
+				,update_by = #{record.updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="record.isDeleted != null">
+				,is_deleted = #{record.isDeleted,jdbcType=BIT}
+			</if>
+			<if test="record.thirdNickName != null">
+				,third_nick_name =
+				#{record.thirdNickName,jdbcType=VARCHAR}
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+
+	<update id="updatePassWordByUID">
+		update sys_user_account
+		<set>
+			update_time =now()
+			<if test="record.password != null">
+				,password = #{record.password,jdbcType=VARCHAR}
+			</if>
+			<if test="record.sellerPassword != null">
+				,seller_password =
+				#{record.sellerPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="record.supplierPassword != null">
+				,supplier_password =
+				#{record.supplierPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="record.operatorPassword != null">
+				,operator_password =
+				#{record.operatorPassword,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where
+		uid= #{record.uid,jdbcType=INTEGER}
+		<if test="record.id!=null">
+			and
+			id = #{record.id,jdbcType=INTEGER}
+		</if>
+	</update>
+
+	<update id="updatePassWordByID">
+		update sys_user_account
+		<set>
+			update_time =now()
+			<if test="record.password != null">
+				,password = #{record.password,jdbcType=VARCHAR}
+			</if>
+			<if test="record.sellerPassword != null">
+				,seller_password =
+				#{record.sellerPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="record.supplierPassword != null">
+				,supplier_password =
+				#{record.supplierPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="record.operatorPassword != null">
+				,operator_password =
+				#{record.operatorPassword,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where
+		id = #{record.id,jdbcType=INTEGER}
+		and
+		1=1
+	</update>
+
+
+	<update id="updatePassWordAndUIDByOuid">
+		update sys_user_account
+		<set>
+			update_time =now()
+			<if test="record.password != null">
+				,password = #{record.password,jdbcType=VARCHAR}
+			</if>
+			<if test="record.sellerPassword != null">
+				,seller_password =
+				#{record.sellerPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="record.supplierPassword != null">
+				,supplier_password =
+				#{record.supplierPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="record.operatorPassword != null">
+				,operator_password =
+				#{record.operatorPassword,jdbcType=VARCHAR}
+			</if>
+			,uid = #{record.uid,jdbcType=INTEGER}
+		</set>
+		where
+		uid = #{ouid,jdbcType=INTEGER}
+	</update>
+
+	<update id="updatePassWordAndUIDByID">
+		update sys_user_account
+		<set>
+			update_time =now()
+			<if test="record.password != null">
+				,password = #{record.password,jdbcType=VARCHAR}
+			</if>
+			<if test="record.sellerPassword != null">
+				,seller_password =
+				#{record.sellerPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="record.supplierPassword != null">
+				,supplier_password =
+				#{record.supplierPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="record.operatorPassword != null">
+				,operator_password =
+				#{record.operatorPassword,jdbcType=VARCHAR}
+			</if>
+			,uid = #{record.uid,jdbcType=INTEGER}
+		</set>
+		where
+		id = #{record.id,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateByExample" parameterType="map">
+		update sys_user_account
+		set id = #{record.id,jdbcType=INTEGER},
+		uid =
+		#{record.uid,jdbcType=INTEGER},
+		login_name =
+		#{record.loginName,jdbcType=VARCHAR},
+		password =
+		#{record.password,jdbcType=VARCHAR},
+		seller_password =
+		#{record.sellerPassword,jdbcType=VARCHAR},
+		supplier_password =
+		#{record.supplierPassword,jdbcType=VARCHAR},
+		operator_password =
+		#{record.operatorPassword,jdbcType=VARCHAR},
+		account_type =
+		#{record.accountType,jdbcType=CHAR},
+		last_login_time =
+		#{record.lastLoginTime,jdbcType=TIMESTAMP},
+		last_login_ip =
+		#{record.lastLoginIp,jdbcType=VARCHAR},
+		create_time =
+		#{record.createTime,jdbcType=TIMESTAMP},
+		create_by =
+		#{record.createBy,jdbcType=VARCHAR},
+		update_time =
+		#{record.updateTime,jdbcType=TIMESTAMP},
+		update_by =
+		#{record.updateBy,jdbcType=VARCHAR},
+		third_nick_name =
+		#{record.thirdNickName,jdbcType=VARCHAR},
+		is_deleted =
+		#{record.isDeleted,jdbcType=BIT},
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.UserAccount">
+		update sys_user_account
+		<set>
+			update_time =now()
+			<if test="uid != null">
+				,uid = #{uid,jdbcType=INTEGER}
+			</if>
+			<if test="loginName != null">
+				,login_name = #{loginName,jdbcType=VARCHAR}
+			</if>
+			<if test="password != null">
+				,password = #{password,jdbcType=VARCHAR}
+			</if>
+			<if test="sellerPassword != null">
+				,seller_password =
+				#{sellerPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="supplierPassword != null">
+				,supplier_password =
+				#{supplierPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="operatorPassword != null">
+				,operator_password =
+				#{operatorPassword,jdbcType=VARCHAR}
+			</if>
+			<if test="accountType != null">
+				,account_type = #{accountType,jdbcType=CHAR}
+			</if>
+			<if test="lastLoginTime != null">
+				,last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="lastLoginIp != null">
+				,last_login_ip = #{lastLoginIp,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createBy != null">
+				,create_by = #{createBy,jdbcType=VARCHAR}
+			</if>
+			<if test="updateBy != null">
+				,update_by = #{updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="isDeleted != null">
+				,is_deleted = #{isDeleted,jdbcType=BIT}
+			</if>
+			<if test="openId != null">
+				,open_id = #{openId,jdbcType=VARCHAR}
+			</if>
+			<if test="appShareInfo != null">
+				,appShareInfo = #{appShareInfo,jdbcType=VARCHAR}
+			</if>
+			<if test="thirdNickName != null">
+				,third_nick_name = #{thirdNickName,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.UserAccount">
+		update
+		sys_user_account
+		set uid = #{uid,jdbcType=INTEGER},
+		login_name =
+		#{loginName,jdbcType=VARCHAR},
+		password = #{password,jdbcType=VARCHAR},
+		seller_password = #{sellerPassword,jdbcType=VARCHAR},
+		supplier_password = #{supplierPassword,jdbcType=VARCHAR},
+		operator_password = #{operatorPassword,jdbcType=VARCHAR},
+		account_type
+		= #{accountType,jdbcType=CHAR},
+		last_login_time =
+		#{lastLoginTime,jdbcType=TIMESTAMP},
+		last_login_ip =
+		#{lastLoginIp,jdbcType=VARCHAR},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		create_by =
+		#{createBy,jdbcType=VARCHAR},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		update_by =
+		#{updateBy,jdbcType=VARCHAR},
+		third_nick_name =
+		#{thirdNickName,jdbcType=VARCHAR},
+		is_deleted =
+		#{isDeleted,jdbcType=BIT}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="findAccountByVo" resultMap="BOResultMap">
+		SELECT * FROM sys_user_account WHERE 1=1
+		<if test="vo.uid != null">
+			AND uid = #{vo.uid}
+		</if>
+		<if test="vo.loginName != null">
+			AND login_name = #{vo.loginName}
+		</if>
+		<if test="vo.accountType != null">
+			and account_type = #{vo.accountType}
+		</if>
+		limit 1
+	</select>
+
+	<update id="updateWx" parameterType="com.sinco.carnation.user.vo.UpdateWxVO">
+		update sys_user_account
+		set
+		uid = #{accountup.newUid,jdbcType=INTEGER}
+		where uid =
+		#{accountup.oldUid,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateUserAccountForIsDeleted">
+		update sys_user_account
+		set
+		is_deleted =
+		#{isDeleted,jdbcType=BIT},
+		update_by = #{updateBy,jdbcType=VARCHAR},
+		update_time = now()
+		where
+		uid = #{uid,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deleteByUID" parameterType="Long">
+		delete
+		from
+		sys_user_account
+		where
+		uid = #{uid,jdbcType=INTEGER}
+	</delete>
+	<select id="selectAcocountByCnUserAlias" resultMap="BOResultMap">
+		SELECT
+		s.*,u.uid as userID from sys_user_account s LEFT JOIN user_customer u
+		on s.uid=u.uid where login_name = #{loginName,jdbcType=VARCHAR}
+	</select>
+	<select id="selectAcocountOperatorByCnUserAlias" resultMap="BOResultMap">
+		SELECT s.*,u.user_id as userID from sys_user_account s LEFT JOIN
+		user_operator u on s.uid=u.user_id where login_name =
+		#{loginName,jdbcType=VARCHAR}
+	</select>
+
+	<update id="updateRecordBalance">
+		UPDATE user_money a SET record_balance=(IFNULL
+		((SELECT SUM(rebate_amount)
+		FROM `user_rebate_record` WHERE
+		rebate_status = 0 AND user_id
+		=a.uid),0.00))
+	</update>
+	
+	<select id="listCNUser" resultMap="BOResultMap">
+		select uid from sys_user_account where account_type = 8 order by uid desc
+	</select>
+	
+</mapper>

@@ -1,0 +1,88 @@
+jdbc.type=mysql
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://192.168.1.44:3306/carnation?autoReconnect=true&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+jdbc.username=root
+jdbc.password=123456
+
+
+#pool settings
+jdbc.pool.minIdle=3
+jdbc.pool.maxActive=20
+
+
+#file server
+fs.server.ip=192.168.1.209
+fs.server.port=9333
+fs.filerserver.ip=ff1.jgclub.cn
+fs.filerserver.port=8888
+
+ ##########################################################
+ #
+ # properities for hibernate-redis
+ #
+ ##########################################################
+# http session redis
+session.redis.host=192.168.1.209
+session.redis.port=6379
+session.redis.database=3
+ # Redis Server for hibernate 2nd cache
+ redis.host=192.168.1.209
+ redis.port=6379
+ 
+
+#jpush use shizj 
+jpush.masterSecret_seller=cbe4448e2f632f3e9ca13aa6
+jpush.appKey_seller=a67042a49564cfa66d970145
+
+jpush.masterSecret=623dfb022864d08e30ebe372
+jpush.appKey=4f74f353ab356e7afb5c3f1e
+jpush.alias.flag=t_
+
+#sms
+sms.handler2.username=cf_ysysgo888
+sms.handler2.pwd=ysysgo0755
+
+#es
+es.host=192.168.1.209
+es.port=9300
+
+
+ # redis.timeout=2000
+ # redis.password=
+
+ # database for hibernate cache
+ # redis.database=0
+ redis.database=1
+
+ # hiberante 2nd cache default expiry (seconds)
+ redis.expiryInSeconds=120
+
+ # expiry of hibernate.common region (seconds) // hibernate is prefix, region name is common
+ redis.expiryInSeconds.hibernate.common=0
+
+ # expiry of hibernate.account region (seconds) // hibernate is prefix, region name is account
+ redis.expiryInSeconds.hibernate.account=1200
+ 
+ #order payofftime if goods receipt unit:day
+order.payofflog.daycount=7
+
+#The automatic evaluation content
+order.evaluate.content=\u597D\u8BC4 
+#Automatic high praise time
+order.auto.review.time = 7
+#Automatic receiving time
+order.auto.receiving.time = 10
+
+#porn
+porn.regionId=cn-hangzhou
+porn.accessKeyId=LTAIBrLB1TKXxIb2
+porn.secret=Ss8BuI2wseQ2m4utQTjbSzJvls3sh0
+porn.sms.mobile=15989324705
+porn.rate=50
+
+#orcl
+orcl.code=YUNSHANG
+orcl.key=123456
+orcl.url=http://222.122.195.61:8090/DataInterface.aspx
+
+carnation.isDebug=1

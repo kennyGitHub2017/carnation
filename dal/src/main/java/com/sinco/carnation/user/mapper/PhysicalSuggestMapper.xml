@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinco.carnation.user.mapper.PhysicalSuggestMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.user.model.PhysicalSuggest">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="physical_type_id" jdbcType="BIGINT" property="physicalTypeId" />
+		<result column="result_type" jdbcType="INTEGER" property="resultType" />
+		<result column="is_enabled" jdbcType="INTEGER" property="isEnabled" />
+		<result column="suggest_type" jdbcType="INTEGER" property="suggestType" />
+		<result column="priority" jdbcType="INTEGER" property="priority" />
+		<result column="delete_status" jdbcType="TINYINT" property="deleteStatus" />
+		<result column="create_by" jdbcType="BIGINT" property="createBy" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="modify_by" jdbcType="BIGINT" property="modifyBy" />
+		<result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+	</resultMap>
+	<resultMap extends="BaseResultMap" id="BOResultMap"
+		type="com.sinco.carnation.user.bo.PhysicalSuggestBO">
+		<result column="content" jdbcType="LONGVARCHAR" property="content" />
+	</resultMap>
+	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+		type="com.sinco.carnation.user.model.PhysicalSuggest">
+		<result column="content" jdbcType="LONGVARCHAR" property="content" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, physical_type_id, result_type, is_enabled, suggest_type, priority,
+		delete_status,
+		create_by, create_time, modify_by, modify_time
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByExampleWithBLOBs"
+		parameterType="com.sinco.carnation.user.model.PhysicalSuggestExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from check_physical_suggest
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalSuggestExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from check_physical_suggest
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from check_physical_suggest
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from check_physical_suggest
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalSuggestExample">
+		delete from check_physical_suggest
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insertSelective" keyProperty="id"
+		parameterType="com.sinco.carnation.user.model.PhysicalSuggest"
+		useGeneratedKeys="true">
+		insert into check_physical_suggest
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="physicalTypeId != null">
+				physical_type_id,
+			</if>
+			<if test="resultType != null">
+				result_type,
+			</if>
+			<if test="isEnabled != null">
+				is_enabled,
+			</if>
+			<if test="suggestType != null">
+				suggest_type,
+			</if>
+			<if test="priority != null">
+				priority,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="modifyBy != null">
+				modify_by,
+			</if>
+			<if test="modifyTime != null">
+				modify_time,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="physicalTypeId != null">
+				#{physicalTypeId,jdbcType=BIGINT},
+			</if>
+			<if test="resultType != null">
+				#{resultType,jdbcType=INTEGER},
+			</if>
+			<if test="isEnabled != null">
+				#{isEnabled,jdbcType=INTEGER},
+			</if>
+			<if test="suggestType != null">
+				#{suggestType,jdbcType=INTEGER},
+			</if>
+			<if test="priority != null">
+				#{priority,jdbcType=INTEGER},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				#{modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="modifyTime != null">
+				#{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalSuggestExample"
+		resultType="java.lang.Integer">
+		select count(*) from check_physical_suggest
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update check_physical_suggest
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.physicalTypeId != null">
+				physical_type_id = #{record.physicalTypeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.resultType != null">
+				result_type = #{record.resultType,jdbcType=INTEGER},
+			</if>
+			<if test="record.isEnabled != null">
+				is_enabled = #{record.isEnabled,jdbcType=INTEGER},
+			</if>
+			<if test="record.suggestType != null">
+				suggest_type = #{record.suggestType,jdbcType=INTEGER},
+			</if>
+			<if test="record.priority != null">
+				priority = #{record.priority,jdbcType=INTEGER},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.modifyBy != null">
+				modify_by = #{record.modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.modifyTime != null">
+				modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update check_physical_suggest
+		set id = #{record.id,jdbcType=BIGINT},
+		physical_type_id = #{record.physicalTypeId,jdbcType=BIGINT},
+		result_type = #{record.resultType,jdbcType=INTEGER},
+		is_enabled = #{record.isEnabled,jdbcType=INTEGER},
+		suggest_type = #{record.suggestType,jdbcType=INTEGER},
+		priority = #{record.priority,jdbcType=INTEGER},
+		delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		modify_by = #{record.modifyBy,jdbcType=BIGINT},
+		modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+		content = #{record.content,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update check_physical_suggest
+		set id = #{record.id,jdbcType=BIGINT},
+		physical_type_id = #{record.physicalTypeId,jdbcType=BIGINT},
+		result_type = #{record.resultType,jdbcType=INTEGER},
+		is_enabled = #{record.isEnabled,jdbcType=INTEGER},
+		suggest_type = #{record.suggestType,jdbcType=INTEGER},
+		priority = #{record.priority,jdbcType=INTEGER},
+		delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		modify_by = #{record.modifyBy,jdbcType=BIGINT},
+		modify_time = #{record.modifyTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.PhysicalSuggest">
+		update check_physical_suggest
+		<set>
+			<if test="physicalTypeId != null">
+				physical_type_id = #{physicalTypeId,jdbcType=BIGINT},
+			</if>
+			<if test="resultType != null">
+				result_type = #{resultType,jdbcType=INTEGER},
+			</if>
+			<if test="isEnabled != null">
+				is_enabled = #{isEnabled,jdbcType=INTEGER},
+			</if>
+			<if test="suggestType != null">
+				suggest_type = #{suggestType,jdbcType=INTEGER},
+			</if>
+			<if test="priority != null">
+				priority = #{priority,jdbcType=INTEGER},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.user.model.PhysicalSuggest">
+		update check_physical_suggest
+		set physical_type_id = #{physicalTypeId,jdbcType=BIGINT},
+		result_type = #{resultType,jdbcType=INTEGER},
+		is_enabled = #{isEnabled,jdbcType=INTEGER},
+		suggest_type = #{suggestType,jdbcType=INTEGER},
+		priority = #{priority,jdbcType=INTEGER},
+		delete_status = #{deleteStatus,jdbcType=TINYINT},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		modify_by = #{modifyBy,jdbcType=BIGINT},
+		modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+		content = #{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.PhysicalSuggest">
+		update check_physical_suggest
+		set physical_type_id = #{physicalTypeId,jdbcType=BIGINT},
+		result_type = #{resultType,jdbcType=INTEGER},
+		is_enabled = #{isEnabled,jdbcType=INTEGER},
+		suggest_type = #{suggestType,jdbcType=INTEGER},
+		priority = #{priority,jdbcType=INTEGER},
+		delete_status = #{deleteStatus,jdbcType=TINYINT},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		modify_by = #{modifyBy,jdbcType=BIGINT},
+		modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+
+	<!-- 体检建议管理条件查询 -->
+	<select id="selectListByVo" resultMap="BOResultMap">
+		SELECT ps.*, pt.type_name physicalTypeName FROM check_physical_suggest
+		ps
+		LEFT JOIN check_physical_type pt ON ps.physical_type_id = pt.id
+		<where>
+			<if test="vo.physicalTypeId != null ">
+				and ps.physical_type_id = #{vo.physicalTypeId}
+			</if>
+			<if test="vo.suggestType != null ">
+				and suggest_type = #{vo.suggestType}
+			</if>
+			<if test="vo.isEnabled != null ">
+				and is_enabled = #{vo.isEnabled}
+			</if>
+		</where>
+	</select>
+
+	<!--添加 -->
+	<insert id="insert" keyProperty="id" useGeneratedKeys="true"
+		parameterType="com.sinco.carnation.user.model.PhysicalSuggest">
+		insert into check_physical_suggest (physical_type_id, result_type,
+		is_enabled, suggest_type, priority,
+		delete_status, create_by, create_time,
+		modify_by, modify_time, content
+		)
+		values (#{physicalTypeId,jdbcType=BIGINT}, #{resultType,jdbcType=INTEGER},
+		#{isEnabled,jdbcType=INTEGER}, #{suggestType,jdbcType=INTEGER},
+		#{priority,jdbcType=INTEGER},
+		#{deleteStatus,jdbcType=TINYINT}, #{createBy,jdbcType=BIGINT}, now(),
+		#{modifyBy,jdbcType=BIGINT}, now(), #{content,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+
+	<select id="queryPhysicalSuggestByCond" resultMap="BOResultMap">
+		SELECT * FROM check_physical_suggest
+		<where>
+			1 =1
+			<if test="vo.id != null">
+				and id = #{vo.id,jdbcType=BIGINT}
+			</if>
+			<if test="vo.physicalTypeId != null">
+				and physical_type_id = #{vo.physicalTypeId,jdbcType=BIGINT}
+			</if>
+			<if test="vo.resultType != null">
+				and result_type = #{vo.resultType,jdbcType=INTEGER}
+			</if>
+			<if test="vo.suggestType != null">
+				and suggest_type = #{vo.suggestType,jdbcType=INTEGER}
+			</if>
+			<if test="vo.isEnabled != null">
+				and is_enabled = #{vo.isEnabled,jdbcType=INTEGER}
+			</if>
+			<if test="vo.deleteStatus != null">
+				and delete_status = #{vo.deleteStatus,jdbcType=TINYINT}
+			</if>
+			<if test="vo.createBy != null">
+				and create_by = #{vo.createBy,jdbcType=BIGINT}
+			</if>
+			<if test="vo.createTime != null">
+				and create_time = #{vo.createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="vo.modifyBy != null">
+				and modify_by = #{vo.modifyBy,jdbcType=BIGINT}
+			</if>
+			<if test="vo.modifyTime != null">
+				and modify_time = #{vo.modifyTime,jdbcType=TIMESTAMP}
+			</if>
+			order by suggest_type asc,priority asc
+		</where>
+	</select>
+
+
+
+
+</mapper>

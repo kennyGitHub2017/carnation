@@ -1,0 +1,704 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-发布新服务</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.metaGenerator}" />
+<meta name="author" content="$!{config.metaAuthor}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js"  charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script>
+//options为编辑配置属性pc
+var options1 = {
+        cssPath : '$!webPath/resources/editor/plugins/code/prettify.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '860px',
+		height:'400px',
+		resizeType : 1,
+		allowImageUpload : true,
+		allowFlashUpload : false,
+		allowMediaUpload : false,
+		allowFileManager : false,
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source', '|', 'fullscreen', 'undo', 'redo', 'cut', 'copy', 'paste',
+			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage', 
+			'flash', 'media', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+}; 
+//options为编辑配置属性app
+var options2 = {
+        cssPath : '$!webPath/resources/editor/plugins/code/prettify.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '360px',
+		height:'400px',
+		minWidth:'360px',
+		resizeType : 1,
+		allowImageUpload : true,
+		allowFlashUpload : false,
+		allowMediaUpload : false,
+		allowFileManager : false,
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source', '|', 'undo', 'redo', 'cut', 'copy', 'paste',
+			'|', 'justifyleft', 'justifycenter',  'insertorderedlist', 'insertunorderedlist', '|',
+			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|',  'image', 'multiimage', 'hr', '|', 'about']
+}; 
+//options为购买属性编辑配置属性
+var options3 = {
+        cssPath : '$!webPath/resources/editor/plugins/code/prettify.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '860px',
+		height:'400px',
+		resizeType : 1,
+		allowImageUpload : false,
+		allowFlashUpload : false,
+		allowMediaUpload : false,
+		allowFileManager : false,
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source', '|', 'fullscreen', 'undo', 'redo', 'cut', 'copy', 'paste',
+			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'about']
+}; 
+jQuery(document).ready(function() {
+	jQuery(".upload_pictures_bottom ul").sortable({stop: function(event,ui){},start:function(event,ui){},revert: true});
+	jQuery(".upload_pictures_bottom ul").bind('sortstop',
+		function(event, ui){
+			draw_goods_main_img();
+			jQuery(ui.item).css("cursor","auto");
+		});
+	jQuery(".upload_pictures_bottom ul").bind('sortstart',
+		function(event, ui){
+			jQuery(ui.item).css("cursor","move");
+		}); 	
+	jQuery(".upload_pictures_bottom ul" ).disableSelection();
+  //
+  //表单验证
+  jQuery("#theForm").validate({
+	ignore: "",						  
+     rules: {
+			ggName:{
+			     required:true,
+				 minlength:3,
+				 maxlength:50
+			    },
+			 goodsType:{
+				 required:true
+			 },
+			 endTimeStr:{
+				 required:true
+			 },
+			 costPrice:{
+			    required:true,
+				number:true,
+				range:[0.01,1000000] 
+			 },
+			 groupPrice:{
+			    required:true,
+				number:true,
+				range:[0.01,1000000] 
+			 },
+			 groupCount:{
+				required:true,
+			    number:true,
+				range:[1,1000000000] 
+			 }
+			},
+     messages: {
+			ggName:{
+			    required: "服务名不能为空",
+			    minlength:"服务名最少为3个字符",
+			    maxlength:"服务名最多为50个字符"			   
+			  },
+		    goodsType:{
+				required:"服务类型不能为空"
+			 },
+			 endTimeStr:{
+				required:"服务结束时间不能为空"
+			 },
+			 costPrice:{
+			    required:"服务原价不能为空",
+				number:"服务原价只能是数字格式",
+				range:"服务价格只能在0.01-1000000之间"
+			 },
+			 groupPrice:{
+			    required:"商户价格不能为空",
+				number:"商户价格只能是数字格式",
+				range:"商户价格只能在0.01-1000000之间"
+			 },
+			 groupCount:{
+				required:"商户库存不能为空",
+			    number:"商户库存只能为数字",
+				range:"商户库存数量只能在1-1000000000之间"
+			}
+		  }
+  }); 
+  //
+  editor = KindEditor.create('#goods_details_web',options3);
+  editor3 = KindEditor.create('#goods_details_web1',options1);
+  editor4 = KindEditor.create('#goods_details_app1',options2);
+  //
+  jQuery("select[id^=ugc_id_]").live("change",function(){
+     var the_ugc_id=jQuery(this).attr("id");
+	 var the_val=jQuery(this).val();
+	 if(the_val!=""){
+	 jQuery("select[id!="+the_ugc_id+"]").each(function(){
+	   if(jQuery(this).val()==the_val){
+	     showDialog("msg_info","","已经存在该分类！",2,"warning",3,'');
+		 jQuery("#"+the_ugc_id).val("");
+	   }	   
+	 });
+	 }
+  });
+  //
+    jQuery('#end_time').attr("readonly","readonly").datepicker({
+  	  dateFormat:"yy-mm-dd",
+  	  minDate:1,
+  	  changeMonth: true,
+  	  changeYear: true
+    });
+  //
+  	jQuery("#toTop").click(function(){
+       jQuery('body,html').animate({scrollTop:0},1000);
+       return false;
+    });
+	//
+  jQuery(".seller_right_nav_center a").click(function(){
+	var target_id = jQuery(this).attr("target_id");
+	if(target_id!=""){
+	   var top = jQuery("tr[id="+target_id+"]").offset().top-2;
+	   jQuery('body,html').animate({scrollTop:top},1000);
+	  }
+  });
+ //页面导航样式变化
+  var list=new Array();	
+  jQuery(".seller_right_nav_center a").each(function(){
+     var target_id=jQuery(this).attr("target_id");
+	 list.push(target_id);
+  });	
+
+});
+/*Ajax分页*/
+function ajaxPage(url,currentPage,obj){
+  var ajax_page=jQuery(obj).parent().attr("ajax_page");
+  if(ajax_page=="goods_transport"){
+     jQuery.post("$!webPath/seller/goods_transport.htm",{"currentPage":currentPage,"ajax":true},function(data){
+         jQuery("#ListForm").empty().html(data);
+      },"html");
+  }else if(ajax_page=="goods_img"){
+     var ajax_type=jQuery(obj).parent().attr("ajax_type");
+     var type=jQuery(obj).parent().attr("type");
+	 var album_id=jQuery(obj).parent().attr("album_id");
+     jQuery.post("$!webPath/seller/goods_img.htm",{"currentPage":currentPage,"type":type,"album_id":album_id},function(text){
+       jQuery(ajax_type).empty();
+	   jQuery(ajax_type).append(text);
+     },"text");
+
+  }else if(ajax_page=="goods_album"){
+	  var ajax_type=jQuery(obj).parent().attr("ajax_type");
+     jQuery.post("$!webPath/seller/goods_album.htm",{"currentPage":currentPage,"ajax_type":ajax_type},function(text){
+       jQuery(ajax_type).empty();
+	   jQuery(ajax_type).append(text);
+     },"text");
+  }
+}
+/*表单提交*/
+function saveForm(){
+  	editor.sync();//同步编辑器的数据到texterea
+  	editor3.sync();
+  	editor4.sync();
+  	
+  	if(jQuery(".upload_pictures_bottom_i img").size() < 1){
+ 	   showDialog("warning","","请至少上传一张服务图片！",2,"warning",3);
+ 	} else {  	
+	/*服务图片处理*/
+	var image_ids="";
+	var main_image_id="";
+	jQuery(".upload_pictures_bottom_i img").each(function(index, element) {
+		if(index==0){
+			main_image_id=jQuery(element).attr("src");
+		}else{
+			var image_id=jQuery(element).attr("src");
+			image_ids=image_ids+"|"+image_id;
+		}
+	});
+	jQuery("#image_ids").val(image_ids);
+	jQuery("#goods_main_img_id").val(main_image_id);
+	
+	
+// 	var user_class_ids="";
+// 	jQuery("select[id^=ugc_id_]").each(function(){
+// 	 if(jQuery(this).val()!=""){
+// 	   user_class_ids=jQuery(this).val()+","+user_class_ids;
+// 	 }
+// 	});
+// 	jQuery("#user_class_ids").val(user_class_ids);
+// 	var goods_spec_ids="";
+// 	jQuery(":checkbox[id^=spec_][checked='checked']").each(function(){
+// 	 goods_spec_ids=jQuery(this).val()+","+goods_spec_ids;
+// 	});
+// 	jQuery("#goods_spec_ids").val(goods_spec_ids);
+// 	var goods_properties="";
+// 	jQuery("select[id^=property_]").each(function(){
+// 	if(jQuery(this).val()!=""){
+// 	   goods_properties=jQuery(this).attr("id").substring(9)+","+jQuery(this).val()+";"+goods_properties;
+// 	}
+// 	});
+// 	jQuery("#goods_properties").val(goods_properties);
+// 	var intentory_details="";
+// 	jQuery("input[id^=inventory_details_count_]").each(function(){
+// 	 var id=jQuery(this).attr("name");
+// 	 var count=jQuery(this).val();
+// 	 var price=jQuery("#inventory_details_price_"+id).val();
+// 	 intentory_details=id+","+count+","+price+";"+intentory_details;
+// 	});
+// 	jQuery("#intentory_details").val(intentory_details);
+	jQuery("#theForm").submit();
+	}
+	
+}<!--end-->
+function switch_detail_editor(str){
+ 	jQuery("#detail_web").addClass("this");
+	
+	if(str=="app1" || str=="web1"){
+		jQuery("#goods_details_div_web1").hide();
+		jQuery("#goods_details_div_app1").hide();
+		if(str=="app1"){
+			jQuery("#detail_web1").removeClass("this");
+			jQuery("#detail_app1").addClass("this");
+		}else{
+			jQuery("#detail_app1").removeClass("this");
+			jQuery("#detail_web1").addClass("this");
+		}
+	}
+	
+	jQuery("#goods_details_div_"+str).show();	
+	if(str=="app"){
+		jQuery("#goods_details_div_app_content").show();
+	}else{
+		jQuery("#goods_details_div_app_content").hide();
+	}
+	if(str=="app1"){
+		jQuery("#goods_details_div_app_content1").show();
+	}else{
+		jQuery("#goods_details_div_app_content1").hide();
+	}
+}
+//服务图片删除
+function del_goods_image(img_id,obj){
+	if(img_id == "0")
+	  {
+		  if(confirm("删除后不可恢复，是否继续？")){
+			var img = $(obj).parent().prev().find("img");
+			img_id = $(img).attr("img_id");
+			var goods_id = $(img).attr("goods_id");
+			jQuery.post("$!webPath/seller/group_goods_image_del.htm",{"imageId":img_id, "groupGoodsId":goods_id},function(data){
+			    if(data.result==true){
+			    	draw_goods_main_img();
+					jQuery(".add_img").show();
+					jQuery(obj).parent().parent().remove();
+				}else showDialog("msg_info","","删除失败！",2,"warning",3,'');
+			},"json");
+		  }		
+	  }
+	  else
+	  {
+		  remove_goods_image(obj);
+	  }
+}
+function remove_goods_image(obj){
+	jQuery(obj).parent().parent().remove();
+	draw_goods_main_img();
+	jQuery(".add_img").show();
+}
+//根据传入新图片的URL，绘制下方小图。
+function  draw_goods_img(img_url,img_id){
+	if(jQuery("#show_img").children().size()==5) {alert("最多可选择5张服务图片"); return;}
+	jQuery("#show_img").append("<li><span class='upload_pictures_bottom_i'><img src='"+img_url+"' img_id='"+img_id+"' title='可拖动' /></span><span class='upload_pictures_bottom_del'><a href='javascript:void(0)' onclick='del_goods_image("+img_id+",this)'><img src='/resources/style/system/front/default/images/usercenter/del_right.png' title='删除图片'/></a></span></li>");
+	draw_goods_main_img();
+	if(jQuery("#show_img").children().size()>=5) jQuery(".add_img").hide();	
+}
+/*绘制服务主图*/
+function  draw_goods_main_img(){
+	if(jQuery("#show_img").children().size()==0){
+		jQuery(".upload_pictures_top_img img").attr("src",null);
+	}else if(jQuery("#show_img").children().size()>=1){
+		var img_url=jQuery(".upload_pictures_bottom_i img").attr("src");
+		jQuery(".upload_pictures_top_img img").attr("src",img_url);
+	}
+}
+//服务图片ajax上传
+function upload_goods_img(){
+	jQuery(".add_img").removeClass("add_img").addClass("add_loading");
+	jQuery.ajaxFileUpload({url:'$!webPath/upload.htm',
+		  dataType:'text',
+		  fileElementId:['imgFile'],
+		  fileFilter:"$!imageSuffix1",
+		  success:function(data){
+				var json = eval('(' + data + ')');
+				jQuery(".add_loading").removeClass("add_loading").addClass("add_img");
+				draw_goods_img(json.url, '-1');
+		  },
+	});
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/seller/top.htm")
+<div class="main">
+  <div class="seller_right_nav">
+    <div class="seller_right_nav_center">
+      <ul>
+        <li class="seller_right_nav_top">页面导航</li>
+        <li><a href="javascript:void(0);" target_id="goods_base">基本信息</a></li>
+        <li><a href="javascript:void(0);" target_id="goods_detail">详细描述</a></li>
+        <li class="seller_right_nav_backtop"><a href="javascript:void(0);" id="toTop" target_id="">返回顶部</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="seller_center">
+    <div><a href="$!webPath/seller/index.htm">商家中心</a>><span>服务管理</span>><span>添加新服务</span></div>
+    <div class="navdetail"> <span class="navadd1 addcolor">选择服务所在分类</span> <span class="navadd2 white">填写服务详细信息</span> <span class="navadd3 addcolor">服务发布成功</span> </div>
+    <div class="adddetail">
+      <form action="$!webPath/seller/add_group_goods_finish.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tabledetail" >
+          <tr id="goods_base">
+            <td colspan="2" class="tableh1">基本信息
+              <input name="id" type="hidden" id="id" value="$!obj.id" /></td>
+          </tr>
+          <tr>
+            <td width="18%" align="right"><strong class="redstr">*</strong>服务分类：</td>
+            <td><span>$!goods_class_info</span><span class="editbtn">
+              	#if($!edit)
+              		<input name="ggGcId" type="hidden" id="gg_gc_id" value="$!{obj.ggGcId}" />
+              	 	$!gcName 
+              	 #else
+              	 	<input name="ggGcId" type="hidden" id="gg_gc_id" value="$!{ggcId}" />
+              	 #end
+              <input type="hidden" name="isEdit" id="is_edit" value="$!edit"/>
+              <input name="edit_class" type="button" id="edit_class" value="编辑" style="cursor:pointer;" onclick="window.location.href='$!webPath/seller/add_group_goods_first.htm?id=$!{obj.id}'" />
+              </span></td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"><strong class="redstr">*</strong>服务名称：</td>
+            <td class="sptable"><span class="tabtxt1 size1">
+              <input name="ggName" type="text" id="goods_name" value="$!obj.ggName" />
+              </span><span class="hui2">服务标题名称长度至少3个字符，最长50个汉字</span></td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"><strong class="redstr">*</strong>服务类型：</td>
+            <td class="sptable"><span class="element_center">
+              <select name="goodsType" id="goods_type">
+                <option value="">请选择...</option>
+                <option value="1" #if($!obj.goodsType == 1) selected #end>套餐劵</option>
+                <option value="2" #if($!obj.goodsType == 2) selected #end>代金劵</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"><strong class="redstr">*</strong>有效期开始时间：</td>
+            <td class="sptable"><span class="tabtxt1 size2">
+	            #if($!edit)
+	              $!CommUtil.formatShortDate($!obj.beginTime)
+	              <input name="beginTimeStr" id="begin_time" type="hidden" value="$!CommUtil.formatShortDate($!obj.beginTime)" />
+	            #else
+	              $!beginTimeStr
+	              <input name="beginTimeStr" id="begin_time" type="hidden" value="$!beginTimeStr" />
+	            #end
+              </span></td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"><strong class="redstr">*</strong>有效期结束时间：</td>
+            <td class="sptable"><span class="tabtxt1 size2">
+              <input name="endTimeStr" id="end_time" type="text" value="$!CommUtil.formatShortDate($!obj.endTime)" style="width:200px;"/>
+              </span></td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"><strong class="redstr">*</strong>服务原价：</td>
+            <td class="sptable"><span class="element_center">
+              <input name="costPrice" type="text" id="cost_price" value="$!obj.costPrice" />
+              <i class="element">元</i> </span> <span class="hui2">
+              <ul class="tableli">
+                <li>服务票价必须是0.01~1000000之间的数字</li>
+              </ul>
+              </span></td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"><strong class="redstr">*</strong>商户价格：</td>
+            <td class="sptable"><span class="element_center">
+              <input name="groupPrice" type="text" id="group_price" value="$!obj.groupPrice" />
+              <i class="element">元</i> </span> <span class="hui2">
+              <ul class="tableli">
+                <li>服务票价必须是0.01~1000000之间的数字</li>
+              </ul>
+              </span></td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"><strong class="redstr">*</strong>商户库存：</td>
+            <td class="sptable"><span class="element_center">
+              <input name="groupCount" type="text" id="group_count" value="$!obj.groupCount" />
+              <i class="element">件</i> </span> <span class="hui2">
+              <ul class="tableli">
+                <li>商铺库存数量必须为1~1000000000之间的整数</li>
+              </ul>
+              </span></td>
+          </tr>
+          <tr>
+            <td align="right" valign="top">服务图片：</td>
+            <script>
+		    function photo_switch(clz,obj){	
+			 if(clz=="tab_body_b"){
+			 var album_id = jQuery(obj).attr("album_id");
+			 jQuery.post("$!webPath/seller/goods_img.htm",{"type":"goods_img_album","album_id":album_id},function(text){
+				jQuery(".tab_body_b").empty();
+				jQuery(".tab_body_b").append(text);
+			  },"text");
+			 }
+			 jQuery("."+clz).show();			  
+			}
+			function show_album(clz,obj){
+				 jQuery(".tabbody_ul li").removeClass("this");
+			 	 jQuery(obj).addClass("this");
+				 jQuery(".tab_body_b").empty();
+			 	 if(clz=="tab_body_b"){
+			 		 jQuery.post("$!webPath/seller/goods_album.htm",{"ajax_type":".tab_body_b"},function(text){
+				 	 jQuery(".tab_body_b").empty();
+				 	 jQuery(".tab_body_b").append(text);
+			       		 },"text");
+				}		
+			}	
+		  </script>
+            <td><!--服务图片上传 -->
+              
+              <div class="tab_body" style="width: 1040px;margin-left: 40px">
+              <ul class="tabbody_ul">
+                <li class="this" style="cursor:pointer;" onclick="show_album('tab_body_a',this)">上传图片</li>
+                <li style="cursor:pointer;" onclick="show_album('tab_body_b',this)">从用户相册选择</li>
+              </ul>
+              <div class="tabbodys" style="width: 1038px;">
+                <div class="tab_body_b" style="width: 1040px;"></div>
+                <div class="tab_body_a" style="width: 1040px;">
+                  <div class="upload_pictures">
+                    <div class="upload_pictures_top">
+                      <div class="upload_pictures_top_img"><img #if($!obj.groupAccPath)
+                    src="$!{obj.groupAccPath}"
+                    #end /></div>
+                    </div>
+                    <div class="upload_pictures_bottom">
+                      <ul id="show_img">
+                        #if($!{obj.groupAccPath})
+                        <li> <span class="upload_pictures_bottom_i"><img src="$!{obj.groupAccPath}" img_id="0" title="可拖动" /></span> <span class="upload_pictures_bottom_del"><a href="javascript:void(0)" onclick="del_goods_image(-1,this)"><img src="/resources/style/system/front/default/images/usercenter/del_right.png"  title="删除图片数据" /></a> </span> </li>
+                        #end
+                        #foreach($img in $goodsAccList)
+	                        #if($velocityCount==1)
+		                        #set($img2="$!{img.path}")
+		                        #set($img2_id="$!img.id")
+		                        <li><span class="upload_pictures_bottom_i"><img src="$!{img2}" img_id="$!{img2_id}" goods_id = "$!{img.groupGoodsId}" title="可拖动" /></span> <span class="upload_pictures_bottom_del"><a href="javascript:void(0)" onclick="del_goods_image('0',this)"><img src="/resources/style/system/front/default/images/usercenter/del_right.png"  title="删除图片数据" /></a> </span></li>
+	                        #end
+	                        #if($velocityCount==2)
+		                        #set($img3="$!{img.path}")
+		                        #set($img3_id="$!img.id")
+		                        <li><span class="upload_pictures_bottom_i"><img src="$!{img3}" img_id="$!{img3_id}" goods_id = "$!{img.groupGoodsId}" title="可拖动" /></span> <span class="upload_pictures_bottom_del"><a href="javascript:void(0)" onclick="del_goods_image('0',this)"><img src="/resources/style/system/front/default/images/usercenter/del_right.png"  title="删除图片数据" /></a> </span></li>
+	                        #end
+	                        #if($velocityCount==3)
+		                        #set($img4="$!{img.path}")
+		                        #set($img4_id="$!img.id")
+		                        <li><span class="upload_pictures_bottom_i"><img src="$!{img4}" img_id="$!{img4_id}" goods_id = "$!{img.groupGoodsId}" title="可拖动" /></span> <span class="upload_pictures_bottom_del"><a href="javascript:void(0)" onclick="del_goods_image('0',this)"><img src="/resources/style/system/front/default/images/usercenter/del_right.png" title="删除图片数据" /></a> </span></li>
+	                        #end
+	                        #if($velocityCount==4)
+		                        #set($img5="$!{img.path}")
+		                        #set($img5_id="$!img.id")
+		                        <li><span class="upload_pictures_bottom_i"><img src="$!{img5}" img_id="$!{img5_id}" goods_id = "$!{img.groupGoodsId}" title="可拖动" /></span> <span class="upload_pictures_bottom_del"><a href="javascript:void(0)" onclick="del_goods_image('0',this)"><img src="/resources/style/system/front/default/images/usercenter/del_right.png" title="删除图片数据" /></a> </span></li>
+	                        #end
+                        #end
+                      </ul>
+                      <ul>
+                        <li class="add_img" #if($!goodsAccList.size()>=4) style="display:none" #end > <span class="upload_pictures_bottom_w">
+                          <input name="imgFile" type="file" id="imgFile" onchange="upload_goods_img()"/>
+                          </span> </li>
+                      </ul>
+                      <input name="imagePaths" type="hidden" id="image_ids" />
+                      <input name="groupAccPath" type="hidden" id="goods_main_img_id" />
+                    </div>
+                  </div>
+                  <!--说明 -->
+                  <div class="upload_pictures_statement">
+                    <div class="upload_pictures_statement_c"> <img src="/resources/style/system/front/default/images/upload_right.png" /> <span>1、最多可发布 <b style="color:#F00">5</b> 张服务图片<br />
+                      2、服务主图下方小图可<b style="color:#F00">拖动</b>以便调整顺序<br />
+                      3、支持格式：$!{imageSuffix}<br />
+                      4、建议选择尺寸<b style="color:#F00">800x800</b>、大小1M内的图片<br />
+                      5、空间不限制大小<br />
+                      6、<img src="/resources/style/system/front/default/images/usercenter/del_right.png" /> 表示删除该服务的图片数据
+                      </span> </div>
+                  </div>
+                </div>
+              </div>
+            </div></td>
+          </tr>
+          <tr id="goods_detail">
+            <td colspan="2" class="tableh1">详细描述</td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"> 购买须知： </td>
+            <td><div style="width:862px;">
+                <div class="detail_td_web_nav" style="width:862px;">
+                  <div class="addphoto_c"><a id="detail_web" class="this" href="javascript:void(0);" onclick="switch_detail_editor('web');">电脑端</a></div>
+                </div>
+                <div id="goods_details_div_web" class="addphoto_c_textarea" style="float:left; margin-bottom:10px;">
+                  <textarea name="groupNotice"   #if($!store.grade.add_funciton) style="width:100%;height:500px;visibility:hidden;" #else cols="140" rows="25"  style="resize:none" #end id="goods_details_web">
+                  $!obj.groupNotice
+                  </textarea>
+                </div>
+              </div>
+           </td>
+          </tr>
+          <tr>
+            <td align="right" valign="top"> 服务描述： </td>
+            <td><div style="width:862px;">
+                <div class="detail_td_web_nav" style="width:862px;">
+                  <div class="addphoto_c"><a id="detail_web1" class="this" href="javascript:void(0);" onclick="switch_detail_editor('web1');">电脑端</a></div>
+                  <div class="addphoto_c"><a id="detail_app1" href="javascript:void(0);" onclick="switch_detail_editor('app1');">手机端</a></div>
+                </div>
+                <div id="goods_details_div_web1" class="addphoto_c_textarea" style="float:left; margin-bottom:10px;">
+                  <textarea name="groupDesc"   #if($!store.grade.add_funciton) style="width:100%;height:500px;visibility:hidden;" #else cols="140" rows="25"  style="resize:none" #end id="goods_details_web1">
+                  $!obj.groupDesc
+                  </textarea>
+                </div>
+                <div id="goods_details_div_app1" class="addphoto_c_textarea" style="float:left; margin-bottom:10px;display:none">
+                  <textarea name="groupMobileDesc"  #if($!store.grade.add_funciton) style="width:100%;height:500px;visibility:hidden;" #else cols="140" rows="25"  style="resize:none" #end id="goods_details_app1">
+                  $!obj.groupMobileDesc
+                  </textarea>
+                </div>
+                <div id="goods_details_div_app_content1" class="goods_details_div_app_right" style="display:none;">
+                  <li>手机端服务描述说明：</li>
+                  <li>1.手机端服务描述用于手机app，描述应该符合手机用户的使用场景。</li>
+                  <li>2.由于手机端的特殊性，建议只使用图片和文字来描述您的服务，并合理安排您的图片的数量和大小。</li>
+                </div>
+              </div>
+              <script>
+              function switch_editor_photo(obj){
+    			  var album_id = jQuery(obj).attr("album_id");
+    				jQuery.post("$!webPath/seller/goods_img.htm",{"type":"goods_detail_album","album_id":album_id},function(text){
+    				   jQuery(".editor_photo_detail").empty();
+    			  	   jQuery(".editor_photo_detail").append(text);
+    			    },"text");
+    				jQuery(".editor_photo_detail").show();
+    		   }
+              
+		   	  function switch_editor_album(mark){
+				 var dis=jQuery(".editor_photo_detail").css("display");
+				 if(dis=="none" || mark=="album_list"){
+					 jQuery.post("$!webPath/seller/goods_album.htm",{"type":"goods_detail_album","ajax_type":".editor_photo_detail"},function(text){
+						  jQuery(".editor_photo_detail").empty();																					  
+						  jQuery(".editor_photo_detail").append(text).show();
+						  jQuery("#album_switch").text("关闭相册图片");
+					 },"text"); 
+				  }else{
+					 jQuery(".editor_photo_detail").hide();
+					   jQuery("#album_switch").text("打开相册图片");
+				  }		
+			 }
+            </script>
+              <div class="photoimg">
+                <div class="addphoto"><a id="album_switch" href="javascript:void(0);" onclick="switch_editor_album('');">打开相册图片</a></div>
+                <div class="editor_photo_detail" style="display:none;"> </div>
+              </div>
+           </td>
+          </tr>
+          <tr>
+            <td align="right" valign="top">服务发布：</td>
+            <td class="prorelease"><span>
+              <label style="cursor:pointer">
+                <input name="publishGoodsStatus" id="publish_goods_status" type="radio" value="0" checked="checked" />
+                &nbsp;立即发布 </label>
+              </span> <span>
+              <label style="cursor:pointer">
+                <input name="publishGoodsStatus" id="publish_goods_status" type="radio" value="1" />
+                &nbsp;放入仓库 </label>
+              </span> <span>
+          <tr>
+            <td align="right" valign="top">SEO关键字：</td>
+            <td class="sptable"><span class="tabtxt1 size1">
+              <input name="seoKeywords" type="text" id="seo_keywords" value="$!obj.seoKeywords" />
+              </span><span class="hui2 noteswidth">SEO关键字 (keywords) 出现在服务详细页面头部的 Meta 标签中，
+              用于记录本页面服务的关键字，多个关键字间请用半角逗号 "," 隔开。</span></td>
+          </tr>
+          <tr>
+            <td align="right" valign="top">SEO描述：</td>
+            <td class="sptable"><span class="texttable">
+              <textarea name="seoDescription" cols="" rows="" id="seo_description">$!obj.seoDescription</textarea>
+              </span> <span class="hui2 noteswidth">SEO描述 (Description) 出现在服务详细页面头部的 Meta 标签中， 
+              用于记录本页面服务的的描述，建议80字左右，应该是该服务的最精确的简短的概述。</span></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td><span class="submittable">
+              <input name="" type="button" id="save" value="提交" onclick="saveForm();" style="cursor:pointer;"/>
+              </span>
+              <input name="goods_session" type="hidden" id="goods_session" value="$!goods_session" /></td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

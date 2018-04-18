@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.RebateRateMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.RebateRate">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="own_rate" property="ownRate" jdbcType="DECIMAL" />
+		<result column="reference_rate" property="referenceRate"
+			jdbcType="DECIMAL" />
+		<result column="own_seller_rate" property="ownSellerRate"
+			jdbcType="DECIMAL" />
+		<result column="own_seller_reference_rate" property="ownSellerReferenceRate"
+			jdbcType="DECIMAL" />
+		<result column="own_regional_rate" property="ownRegionalRate"
+			jdbcType="DECIMAL" />
+		<result column="own_regional_reference_rate" property="ownRegionalReferenceRate"
+			jdbcType="DECIMAL" />
+		<result column="own_district_rate" property="ownDistrictRate"
+			jdbcType="DECIMAL" />
+		<result column="own_city_rate" property="ownCityRate" jdbcType="DECIMAL" />
+		<result column="buy_seller_reference_rate" property="buySellerReferenceRate"
+			jdbcType="DECIMAL" />
+		<result column="buy_regional_rate" property="buyRegionalRate"
+			jdbcType="DECIMAL" />
+		<result column="buy_district_rate" property="buyDistrictRate"
+			jdbcType="DECIMAL" />
+		<result column="buy_city_rate" property="buyCityRate" jdbcType="DECIMAL" />
+		<result column="shop_rate" property="shopRate" jdbcType="DECIMAL" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.RebateRateBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, code, description, own_rate, reference_rate, own_seller_rate,
+		own_seller_reference_rate,
+		own_regional_rate, own_regional_reference_rate, own_district_rate, own_city_rate,
+		buy_seller_reference_rate, buy_regional_rate, buy_district_rate,
+		buy_city_rate, shop_rate,
+		update_time, create_time
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.user.model.RebateRateExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_rebate_rate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_rebate_rate
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_rebate_rate
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.RebateRateExample">
+		delete from user_rebate_rate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.RebateRate"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_rebate_rate (id, code, description,
+		own_rate, reference_rate, own_seller_rate,
+		own_seller_reference_rate, own_regional_rate,
+		own_regional_reference_rate, own_district_rate,
+		own_city_rate, buy_seller_reference_rate, buy_regional_rate,
+		buy_district_rate, buy_city_rate, shop_rate,
+		update_time, create_time)
+		values (#{id,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{ownRate,jdbcType=DECIMAL}, #{referenceRate,jdbcType=DECIMAL}, #{ownSellerRate,jdbcType=DECIMAL},
+		#{ownSellerReferenceRate,jdbcType=DECIMAL},
+		#{ownRegionalRate,jdbcType=DECIMAL},
+		#{ownRegionalReferenceRate,jdbcType=DECIMAL},
+		#{ownDistrictRate,jdbcType=DECIMAL},
+		#{ownCityRate,jdbcType=DECIMAL}, #{buySellerReferenceRate,jdbcType=DECIMAL},
+		#{buyRegionalRate,jdbcType=DECIMAL},
+		#{buyDistrictRate,jdbcType=DECIMAL}, #{buyCityRate,jdbcType=DECIMAL},
+		#{shopRate,jdbcType=DECIMAL},
+		#{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.RebateRate"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_rebate_rate
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="code != null">
+				code,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="ownRate != null">
+				own_rate,
+			</if>
+			<if test="referenceRate != null">
+				reference_rate,
+			</if>
+			<if test="ownSellerRate != null">
+				own_seller_rate,
+			</if>
+			<if test="ownSellerReferenceRate != null">
+				own_seller_reference_rate,
+			</if>
+			<if test="ownRegionalRate != null">
+				own_regional_rate,
+			</if>
+			<if test="ownRegionalReferenceRate != null">
+				own_regional_reference_rate,
+			</if>
+			<if test="ownDistrictRate != null">
+				own_district_rate,
+			</if>
+			<if test="ownCityRate != null">
+				own_city_rate,
+			</if>
+			<if test="buySellerReferenceRate != null">
+				buy_seller_reference_rate,
+			</if>
+			<if test="buyRegionalRate != null">
+				buy_regional_rate,
+			</if>
+			<if test="buyDistrictRate != null">
+				buy_district_rate,
+			</if>
+			<if test="buyCityRate != null">
+				buy_city_rate,
+			</if>
+			<if test="shopRate != null">
+				shop_rate,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="ownRate != null">
+				#{ownRate,jdbcType=DECIMAL},
+			</if>
+			<if test="referenceRate != null">
+				#{referenceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="ownSellerRate != null">
+				#{ownSellerRate,jdbcType=DECIMAL},
+			</if>
+			<if test="ownSellerReferenceRate != null">
+				#{ownSellerReferenceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="ownRegionalRate != null">
+				#{ownRegionalRate,jdbcType=DECIMAL},
+			</if>
+			<if test="ownRegionalReferenceRate != null">
+				#{ownRegionalReferenceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="ownDistrictRate != null">
+				#{ownDistrictRate,jdbcType=DECIMAL},
+			</if>
+			<if test="ownCityRate != null">
+				#{ownCityRate,jdbcType=DECIMAL},
+			</if>
+			<if test="buySellerReferenceRate != null">
+				#{buySellerReferenceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="buyRegionalRate != null">
+				#{buyRegionalRate,jdbcType=DECIMAL},
+			</if>
+			<if test="buyDistrictRate != null">
+				#{buyDistrictRate,jdbcType=DECIMAL},
+			</if>
+			<if test="buyCityRate != null">
+				#{buyCityRate,jdbcType=DECIMAL},
+			</if>
+			<if test="shopRate != null">
+				#{shopRate,jdbcType=DECIMAL},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.RebateRateExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_rebate_rate
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_rebate_rate
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.code != null">
+				code = #{record.code,jdbcType=VARCHAR},
+			</if>
+			<if test="record.description != null">
+				description = #{record.description,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ownRate != null">
+				own_rate = #{record.ownRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.referenceRate != null">
+				reference_rate = #{record.referenceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.ownSellerRate != null">
+				own_seller_rate = #{record.ownSellerRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.ownSellerReferenceRate != null">
+				own_seller_reference_rate =
+				#{record.ownSellerReferenceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.ownRegionalRate != null">
+				own_regional_rate = #{record.ownRegionalRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.ownRegionalReferenceRate != null">
+				own_regional_reference_rate =
+				#{record.ownRegionalReferenceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.ownDistrictRate != null">
+				own_district_rate = #{record.ownDistrictRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.ownCityRate != null">
+				own_city_rate = #{record.ownCityRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.buySellerReferenceRate != null">
+				buy_seller_reference_rate =
+				#{record.buySellerReferenceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.buyRegionalRate != null">
+				buy_regional_rate = #{record.buyRegionalRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.buyDistrictRate != null">
+				buy_district_rate = #{record.buyDistrictRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.buyCityRate != null">
+				buy_city_rate = #{record.buyCityRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.shopRate != null">
+				shop_rate = #{record.shopRate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_rebate_rate
+		set id = #{record.id,jdbcType=BIGINT},
+		code = #{record.code,jdbcType=VARCHAR},
+		description = #{record.description,jdbcType=VARCHAR},
+		own_rate = #{record.ownRate,jdbcType=DECIMAL},
+		reference_rate = #{record.referenceRate,jdbcType=DECIMAL},
+		own_seller_rate = #{record.ownSellerRate,jdbcType=DECIMAL},
+		own_seller_reference_rate = #{record.ownSellerReferenceRate,jdbcType=DECIMAL},
+		own_regional_rate = #{record.ownRegionalRate,jdbcType=DECIMAL},
+		own_regional_reference_rate =
+		#{record.ownRegionalReferenceRate,jdbcType=DECIMAL},
+		own_district_rate = #{record.ownDistrictRate,jdbcType=DECIMAL},
+		own_city_rate = #{record.ownCityRate,jdbcType=DECIMAL},
+		buy_seller_reference_rate = #{record.buySellerReferenceRate,jdbcType=DECIMAL},
+		buy_regional_rate = #{record.buyRegionalRate,jdbcType=DECIMAL},
+		buy_district_rate = #{record.buyDistrictRate,jdbcType=DECIMAL},
+		buy_city_rate = #{record.buyCityRate,jdbcType=DECIMAL},
+		shop_rate = #{record.shopRate,jdbcType=DECIMAL},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.RebateRate">
+		update user_rebate_rate
+		<set>
+			<if test="code != null">
+				code = #{code,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="ownRate != null">
+				own_rate = #{ownRate,jdbcType=DECIMAL},
+			</if>
+			<if test="referenceRate != null">
+				reference_rate = #{referenceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="ownSellerRate != null">
+				own_seller_rate = #{ownSellerRate,jdbcType=DECIMAL},
+			</if>
+			<if test="ownSellerReferenceRate != null">
+				own_seller_reference_rate =
+				#{ownSellerReferenceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="ownRegionalRate != null">
+				own_regional_rate = #{ownRegionalRate,jdbcType=DECIMAL},
+			</if>
+			<if test="ownRegionalReferenceRate != null">
+				own_regional_reference_rate =
+				#{ownRegionalReferenceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="ownDistrictRate != null">
+				own_district_rate = #{ownDistrictRate,jdbcType=DECIMAL},
+			</if>
+			<if test="ownCityRate != null">
+				own_city_rate = #{ownCityRate,jdbcType=DECIMAL},
+			</if>
+			<if test="buySellerReferenceRate != null">
+				buy_seller_reference_rate =
+				#{buySellerReferenceRate,jdbcType=DECIMAL},
+			</if>
+			<if test="buyRegionalRate != null">
+				buy_regional_rate = #{buyRegionalRate,jdbcType=DECIMAL},
+			</if>
+			<if test="buyDistrictRate != null">
+				buy_district_rate = #{buyDistrictRate,jdbcType=DECIMAL},
+			</if>
+			<if test="buyCityRate != null">
+				buy_city_rate = #{buyCityRate,jdbcType=DECIMAL},
+			</if>
+			<if test="shopRate != null">
+				shop_rate = #{shopRate,jdbcType=DECIMAL},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.RebateRate">
+		update user_rebate_rate
+		set code = #{code,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR},
+		own_rate = #{ownRate,jdbcType=DECIMAL},
+		reference_rate = #{referenceRate,jdbcType=DECIMAL},
+		own_seller_rate = #{ownSellerRate,jdbcType=DECIMAL},
+		own_seller_reference_rate = #{ownSellerReferenceRate,jdbcType=DECIMAL},
+		own_regional_rate = #{ownRegionalRate,jdbcType=DECIMAL},
+		own_regional_reference_rate = #{ownRegionalReferenceRate,jdbcType=DECIMAL},
+		own_district_rate = #{ownDistrictRate,jdbcType=DECIMAL},
+		own_city_rate = #{ownCityRate,jdbcType=DECIMAL},
+		buy_seller_reference_rate = #{buySellerReferenceRate,jdbcType=DECIMAL},
+		buy_regional_rate = #{buyRegionalRate,jdbcType=DECIMAL},
+		buy_district_rate = #{buyDistrictRate,jdbcType=DECIMAL},
+		buy_city_rate = #{buyCityRate,jdbcType=DECIMAL},
+		shop_rate = #{shopRate,jdbcType=DECIMAL},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_time = #{createTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

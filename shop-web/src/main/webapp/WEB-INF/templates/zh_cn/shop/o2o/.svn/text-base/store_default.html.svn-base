@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>$!{store.storeName},$!{store.gcName},云尚健康商城网</title>
+    <meta name="keywords" content="$!{store.storeName},$!{store.gcName}" />
+    <meta name="description" content="$!{store.storeInfo}" />
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet" />
+    <link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+    <link href="$!webPath/resources/wgt/lightbox/css/lightbox.css" type="text/css" rel="stylesheet" />
+    <link href="$!webPath/resources/style/service/public.css" type="text/css" rel="stylesheet" />
+
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+    <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+    <script src="$!webPath/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=700b132845ef5b0b135066dfa0222a37"></script>
+
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/group/head.htm")
+$!httpInclude.include("/group/nav.htm")
+
+<div class="main clearfix pt-20">
+	#if($!store.getStoreStatus()!=15)
+		提示：该商户已下架
+	#end
+    <div class="pd-address-box o-h">
+        <div class="pd-min-map-wrap">
+            <div id="pd-min-map"></div>
+            <div class="view-map">
+                <a href="javascript:void(0)"  dialog_uri="$!current_webPath/load_store_map.htm?storeId=$store.id" dialog_title="查看完整地图" dialog_width="640" dialog_height="400"><i class="icon-zoom icon"></i> 查看完整地图</a>
+            </div>
+        </div>
+        <div class="pd-address-text">
+        						#set($rate = $storeRate*100/5)
+            <h3>$!store.storeName</h3>
+            <div><div class="five_star"><b title="好评率：${rate}%" style="width:${rate}%;"></b></div></div>
+            <p>地址：$!store.areaInfo</p>
+            <p>电话：$!store.storeTelephone</p>
+            #if($store.groupDiscount)
+	            #set($storeGroupDiscount = $store.groupDiscount*100)
+	            #if($math.mod($storeGroupDiscount,10) == 0)
+	            	<p class="o-h c_gray"><span class="sale-ico">折</span>  到店享受 <span class="sale-lab-text"> $number.format("#0", $math.div($!storeGroupDiscount,10))折</span> 起</p>
+	            #else
+	            	<p class="o-h c_gray"><span class="sale-ico">折</span>  到店享受 <span class="sale-lab-text"> $number.format("#0.0", $math.div($!storeGroupDiscount,10))折</span> 起</p>
+	            #end
+            #end
+            <div class="sd-share-collect">
+                <div class="share-collect-box">
+                    <!-- JiaThis Button BEGIN -->
+                    <span class="fl pt-5"> 分享到：</span>
+                    <div class="jiathis_style_24x24">
+                        <a class="jiathis_button_weixin"></a>
+                        <a class="jiathis_button_qzone"></a>
+                        <a class="jiathis_button_tsina"></a>
+                    </div>
+                    <script type="text/javascript" >
+                    function addIntegral(evt) {
+                  	  jQuery.ajax({
+                  		  				type:'POST',
+                  		  				url:'$!webPath/buyer/share_addIntegral.htm'
+                  	});
+                  	}
+                        var jiathis_config={
+                            url: location.href,
+                            summary:"$!store.storeName",
+                            title:"$!store.storeName",
+                            pic:"$!store.storeLogoPath",
+                            shortUrl:false,
+                            hideMore:false,
+                            evt:{
+                                "share":"addIntegral"
+                            }
+                        }
+                    </script>
+                    <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+                    <!-- JiaThis Button END -->
+
+                    <div class="collect_product_wrap">
+                        <div class="collect_product  "><a href="javascript:void(0);" onclick="collect($store.id)" #if(!$isLogin) dialog_uri="$!webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" #end> <i class="collect-icon icon active"></i> 收藏(<span id="count">$!favoriteCount</span>)</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mod-pd-title pt-20 mb-0">
+        <span class="title">套餐券</span>
+    </div>
+    <div class="o-h">
+        <ul class="sd-pro-list">
+            #foreach($good in $groupGoods)
+            
+            
+            #if($!good.goodsType==1)
+            <li>
+                <a href="$!webPath/group/view_${good.id}.htm" class="title" title="$!good.ggName">
+                    <div class="pic"><img  src="${good.groupAccPath}" /></div>
+                    <div class="text">
+                        <div class="sp-title">$!good.ggName</div>
+                        <div class="c_gray">已售$!good.selledCount</div>
+                    </div>
+                </a>
+                <div class="time">
+                            	<div>开始时间：$!CommUtil.formatShortDate($!good.beginTime)</div>
+                	<div>结束时间：$!CommUtil.formatShortDate($!good.endTime)</div>
+                </div>
+                <div class="price">
+                    <strong>¥ $!good.groupPrice</strong>
+                    <span class="del gray">¥ $!good.costPrice</span>
+                </div>
+                <div class="actions">
+                 #if($!user)
+		         	<a href="${webPath}/life_order.htm?gid=$!{good.id}&number=1" class="btn btn-blue btn-mini">立即抢购</a>
+		         #else								
+					<a class="btn btn-blue btn-mini" href="javascript:void(0);" dialog_uri="$!current_webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login">立即抢购</a>
+		         #end 	
+                </div>
+            </li>
+            #end
+            #end
+        </ul>
+    </div>
+
+    <div class="mod-pd-title pt-20 mb-0">
+        <span class="title">现金券</span>
+    </div>
+    <div class="o-h">
+        <ul class="sd-pro-list">
+            #foreach($good in $groupGoods)
+             #if($!good.goodsType==2)
+            <li>
+                <a href="$!webPath/group/view_${good.id}.htm" class="title" title="$!good.ggName">
+                    <div class="pic"><img  src="${good.groupAccPath}" /></div>
+                    <div class="text">
+                        <div class="sp-title">$!good.ggName</div>
+                        <div class="c_gray">已售$!good.selledCount</div>
+                    </div>
+                </a>
+                <div class="time">
+                	<div>开始时间：$!CommUtil.formatShortDate($!good.beginTime)</div>
+                	<div>结束时间：$!CommUtil.formatShortDate($!good.endTime)</div>
+                </div>
+                <div class="price">
+                    <strong>¥ $!good.groupPrice</strong>
+                    <span class="del gray">¥ $!good.costPrice</span>
+                </div>
+                <div class="actions">
+                #if($!user)
+                <a href="${webPath}/life_order.htm?gid=$!{good.id}&number=1" class="btn btn-blue btn-mini">立即抢购</a>
+                #else
+                <a href="javascript:void(0);" dialog_uri="$!current_webPath/user_dialog_login.htm" dialog_title="会员登录" dialog_width="430" dialog_height="100" dialog_id="user_login" class="btn btn-blue btn-mini">立即抢购</a>
+                #end                    
+                </div>
+            </li>
+            #end
+            #end
+        </ul>
+    </div>
+
+    <div class="pt-20 o-h">
+        <div class="main-left">
+            <div class="mod-pd-title pt-20">
+                <span class="title">商户环境</span>
+            </div>
+            <div class="slideBox choose-list">
+                <a class="sPrev" href="javascript:void(0)"><i></i></a>
+                <ul>
+                	#foreach($accessory in $accessories)
+                    <li>
+                        <a href="${accessory.path}" data-lightbox="example_group">
+                            <div class="pic">
+                                <img src="${accessory.path}" />
+                            </div>
+                        </a>
+                    </li>
+                    #end
+                </ul>
+                <a class="sNext" href="javascript:void(0)"><i></i></a>
+            </div>
+            <div class="mod-pd-title pt-20">
+                <span class="title">商户简介</span>
+            </div>
+            <div class="editer-content">
+            $!store.storeInfo
+            </div>
+
+            <div class="mod-pd-title pt-20">
+                <span class="title">用户评价</span>
+            </div>
+            <div class="sd-evaluate o-h">
+                <div class="sd-evaluate-level">
+                    <p><strong>$!storeRate</strong></p>
+                    <div class="ptb-10"><div class="five_star"><b title="好评率：${rate}%" style="width:${rate}%;"></b></div></div>
+                    <div>共有<span class="c_orange">#if($!storeTotal.num)$!storeTotal.num #else 0 #end</span>人评价</div>
+                </div>
+                <div class="sd-evaluate-charts">
+                #set($num5 =0)
+                #set($num4 =0)
+                #set($num3 =0)
+                #set($num2 =0)
+                #set($num1 =0)
+                #set($rate5 =0)
+                #set($rate4 =0)
+                #set($rate3 =0)
+                #set($rate2 =0)
+                #set($rate1 =0)
+                
+                	#foreach($score in $scores)
+                		#if($score.score == 5)
+                			#set($rate5 = $score.score*100/$storeTotal.totalScore)
+                			#set($num5 = $score.num)
+                		#elseif($score.score == 4)
+                			#set($rate4 = $score.score*100/$storeTotal.totalScore)
+                			#set($num4 = $score.num)
+                		#elseif($score.score == 3)
+                			#set($rate3 = $score.score*100/$storeTotal.totalScore)
+                			#set($num3 = $score.num)
+                		#elseif($score.score == 2)
+                			#set($rate2 = $score.score*100/$storeTotal.totalScore)
+                			#set($num2 = $score.num)
+                		#elseif($score.score == 1)
+                			#set($rate1 = $score.score*100/$storeTotal.totalScore)
+                			#set($num1 = $score.num)
+                		#end
+                	#end
+                
+                    <p>5分 <span class="evaluate-plan"><i style="width: ${rate5}%"></i></span> ${num5}人</p>
+                    <p>4分 <span class="evaluate-plan"><i style="width: ${rate4}%"></i></span> ${num4} 人</p>
+                    <p>3分 <span class="evaluate-plan"><i style="width: ${rate3}%"></i></span> ${num3} 人</p>
+                    <p>2分 <span class="evaluate-plan"><i style="width: ${rate2}%"></i></span> ${num2} 人</p>
+                    <p>1分 <span class="evaluate-plan"><i style="width: ${rate1}%"></i></span> ${num1} 人</p>
+                </div>
+            </div>
+
+            <div class="mod-pd-title-sub mt-20">评价详情</div>
+
+            <ul class="sd-comment-list">
+            #foreach($obj in $objs)
+                <li>
+                    <div class="pic">
+                    									#if($obj.avatarUrl)
+                    <img src="${obj.avatarUrl}" />
+                    #else
+                       <img src="$!{config.memberIcon.path}">
+                                													
+                    #end
+                    </div>
+                    <div class="cont">
+                        <div class="o-h">
+                            <div class="fl">
+                            #set($rate = $obj.score*100/5.0)
+                                <div class="five_star"><b title="好评率：$obj.score" style="width:$rate%;"></b></div>  <span class="c_gray">$!obj.nickName</span>
+                            </div>
+                            <span class="fr c_gray">$!CommUtil.formatShortDate($!obj.evaluateTime)</span>
+                        </div>
+                        <div class="text">$!obj.content</div>
+                        									
+                        <div class="photos img_list_dl_img">
+                        #set($imgs = $imageTools.queryRemoteImgs2($obj.photoUrls))
+                        #foreach($img in $imgs)
+                            <div class="img_list_dl_img_one">
+                                <div class="img_list_dl_img_one_top">
+	                                <a href="javascript:void(0)" onclick="show_addbigimg(this,'$img.id')">
+	                                <img osrc="$img.path" src="${img.path}">
+	                                </a>
+                                
+                                </div>
+                                <b class="tm_photos_arrow" style="display: none;">
+                                <img src="$!webPath/resources/style/system/front/default/images/tm-photos-arrow.png">
+                                </b> 
+                                
+	                            <div class="img_list_dl_img_one_b" id="eva_add_bigimg_top_${img.id}" style="display: none;">
+	                                <div class="img_list_dl_img_one_b_top"> <a href="javascript:void(0)" class="img_list_dl_img_one_b_top_back" onclick="hide_addimg(${img.id})">收起</a> <a href="javascript:void(0)" class="img_list_dl_img_one_b_top_big" onclick="pro_addimg(${img.id})">原图</a> </div>
+	                                <div class="img_list_dl_img_one_b_img"> <img osrc="${img.path}" src="${img.path}" id="eva_add_bigimg_${img.id}"></div>
+	                            </div>
+                            </div>
+                         #end
+                        </div>
+                        #if($!obj.replyContent)
+                        <div class="details_reply" style="margin-left:0; margin-top:10px; color:#b28500">店主<i style="color:#a1a1a1; padding:0 8px">回复：</i>$!obj.replyContent</div>
+                        #end
+                    </div>
+                </li>
+            #end
+            </ul>
+            #if($objs)
+            <form action="$!webPath/group/store.htm?id=$store.id" method="post" id="ListForm">
+            <div class="fenye">
+              <span class="user_page_sp">
+                <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+                $!gotoPageFormHTML
+              </span>
+            </div>
+            </form>
+            #end
+        </div>
+
+        <div class="slide-bar-right slide-box mt-20">
+        <div class="slide-title">最近浏览</div>
+        <div class="slide-list">
+            <ul id="last_view">
+                
+            </ul>
+        </div>
+    </div>
+    </div>
+
+    <div class="mod-col-bor cl">
+        <div class="title">猜你喜欢</div>
+        <div class="s-pro-list pro-list-side">
+        $!httpInclude.include("/goodslike_list.htm")
+            
+        </div>
+    </div>
+
+</div>
+$!httpInclude.include("/footer.htm")
+
+
+<script src="$!webPath/resources/wgt/lightbox/js/lightbox.js"></script>
+<script>
+	function collect(storeId){
+		jQuery.post('/group/collectStore.htm?id='+storeId)
+		.success(function(resp){
+			resp= jQuery.parseJSON(resp)
+			if(resp.error!=undefined){
+				if(resp.error==1){
+					alert('店铺不存在')
+					return 
+				}else if(resp.error==2){
+					alert('还未登录')
+					return 
+				}
+			}
+			console.log(resp,resp.success)
+			if(resp.success==1){
+				console.log('..........')
+				showDialog("msg_info","","店铺已经收藏成功！",2,"warning",3,'');
+			}
+			else if(resp.success==0){
+				$('#count').html(1)
+				
+				showDialog("msg_info","","店铺收藏成功！",2,"warning",3,'');
+			}
+		})
+	}
+
+	
+
+    // 百度地图API功能
+    var map = new BMap.Map("pd-min-map");
+    var point = new BMap.Point(#if($!store.storeLon) $!store.storeLon #else 0 #end,#if($!store.storeLat) $!store.storeLat #else 0 #end);
+    map.centerAndZoom(point,14);
+
+    map.addOverlay(new BMap.Marker(point));
+
+
+    jQuery(".slideBox").slide({ mainCell:"ul",vis:4,prevCell:".sPrev",nextCell:".sNext",effect:"leftLoop"});
+
+
+
+    function show_bigimg(obj1,obj2){
+        jQuery(obj1).parent().parent().parent().find(".img_list_dl_img_one_top").removeClass("this");
+        jQuery(obj1).parent().parent().parent().find(".tm_photos_arrow").hide();
+        jQuery(obj1).parent().parent().find(".tm_photos_arrow").show();
+        jQuery(obj1).parent().addClass("this");
+        var src=jQuery(obj1).find("img").attr("osrc");
+        jQuery("#eva_bigimg_top_"+obj2).show();
+        jQuery("#eva_bigimg_"+obj2).attr("src",src+"").attr("osrc",src);
+    }
+    function show_addbigimg(obj1,obj2){
+        jQuery(obj1).parent().parent().parent().find(".img_list_dl_img_one_top").removeClass("this");
+        jQuery(obj1).parent().parent().parent().find(".tm_photos_arrow").hide();
+        jQuery(obj1).parent().parent().find(".tm_photos_arrow").show();
+        jQuery(obj1).parent().addClass("this");
+        var src=jQuery(obj1).find("img").attr("osrc");
+        jQuery("#eva_add_bigimg_top_"+obj2).show();
+        jQuery("#eva_add_bigimg_"+obj2).attr("src",src+"").attr("osrc",src);
+    }
+    function hideimg(obj){
+        jQuery("#eva_bigimg_top_"+obj).parent().find(".img_list_dl_img_one_top").removeClass("this");
+        jQuery("#eva_bigimg_top_"+obj).parent().find(".tm_photos_arrow").hide();
+        jQuery("#eva_bigimg_top_"+obj).hide();
+    }
+    function proimg(obj){
+        var src=jQuery("#eva_bigimg_"+obj).attr("osrc");
+        window.open(src);
+    }
+    function hide_addimg(obj){
+        jQuery("#eva_add_bigimg_top_"+obj).parent().find(".img_list_dl_img_one_top").removeClass("this");
+        jQuery("#eva_add_bigimg_top_"+obj).parent().find(".tm_photos_arrow").hide();
+        jQuery("#eva_add_bigimg_top_"+obj).hide();
+    }
+    function pro_addimg(obj){
+        var src=jQuery("#eva_add_bigimg_"+obj).attr("osrc");
+        window.open(src);
+    }
+    	
+</script>
+
+
+<script>
+//---------
+//最近浏览
+//---------
+
+var goodsStr = jQuery.cookie('goodsStr');
+//解析json字符串
+goods = jQuery.parseJSON(goodsStr);
+
+//write html
+var content = '';
+for(i in goods){
+	var good = goods[i];
+	var pic =good.pic==undefined?'':good.pic;
+	var name =good.name==undefined?'':good.name;
+	var storeName =good.storeName==undefined?'':good.storeName;
+	var groupPrice =good.groupPrice==undefined?'':good.groupPrice;
+	var selledCount =good.selledCount==undefined?'':good.selledCount;
+	//console.log(name,'---',pic, storeName,groupPrice,selledCount)
+	content += "<li><a href='$!webPath/group/view_"+good.id+".htm'><div class='pic'><img src='"+pic+"' /></div><div class='cont'><div class='name ell'>"+name+"</div><div class='name address'>"+storeName+"</div> <div class='fl price'>"+groupPrice+"</div> <div class='part text-right c_gray'> 已销售"+selledCount+" </div></div></a></li>"; 
+}
+jQuery('#last_view').html(content);
+</script>
+</body>
+</html>

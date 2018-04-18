@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-线下服务订单管理-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#localReturnStatus").val("$!vo.localReturnStatus");
+  jQuery('#beginTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+   jQuery(".gift_icon_c").mouseenter(function(){
+		jQuery(this).siblings("div").show();									
+											});
+  jQuery(".gift_icon_center").mouseleave(function(){
+		jQuery(this).children(".gift_icon_main").hide();									
+											});
+  
+});
+function export_excel(){
+	#if($!objs.size()>0)	
+		var order_id = jQuery("#order_id").val();
+		var buyer_userName = jQuery("#buyer_userName").val();
+		var beginTime = jQuery("#beginTime").val();
+		var endTime = jQuery("#endTime").val();
+		var localReturnStatus = jQuery("#localReturnStatus").val();
+		if(beginTime!=""&&endTime!=""){
+			window.location.href="$!webPath/seller/group_order_local_excel.htm?orderId="+order_id+"&buyerUserName="+buyer_userName+"&startDate="+beginTime+"&endDate="+endTime+"&localReturnStatus="+localReturnStatus;
+		}else{
+			showDialog("msg_info","","请选择开始时间与结束时间",0,"warning",3);
+			}		
+	#else
+		showDialog("msg_info","","当前没有可以导出的数据！",0,"warning",3);
+	#end		
+}
+</script>
+<style>
+.user_sp_right{padding-top:30px}
+.user_title_txt{height:30px;}
+.fl{float:left}
+.c4a{color:#4a4a4a;font-size:14px;line-height:30px}
+.user_sp_right .c4a{margin-right:8px}
+#order_id{width:200px}
+#beginTime,#endTime{width:120px}
+#line1{width: 9px;background-color: #666;height: 2px;margin-right: 5px;margin-top: 14px;}
+.ml21{margin-left:21px}
+	::-webkit-input-placeholder { /* WebKit browsers */
+		font-size:14px;
+		color:#9b9b9b;
+　　}
+　　:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		font-size:14px;
+		color:#9b9b9b;
+　　}
+　　::-moz-placeholder { /* Mozilla Firefox 19+ */
+		font-size:14px;
+		color:#9b9b9b;
+　　}
+　　:-ms-input-placeholder { /* Internet Explorer 10+ */
+		font-size:14px;
+		color:#9b9b9b;
+　　}
+.seller_sear_btn{
+background:#7dba55;
+border-radius:3px;
+width:56px;
+height:32px;
+font-size:14px;
+color:#ffffff;
+text-align:center;
+border:1px solid #7dba55;
+}
+.seller_sear_btn:hover{ background:#7dba55; color:#fff;border:1px solid #7dba55;}
+.seller_title_right{top:31px}
+.seller_title_right a{
+background:#7dba55;
+border-radius:3px;
+width:94px;
+height:32px;
+font-size:14px;
+color:#ffffff;
+text-align:center;
+border:1px solid #7dba55;
+line-height:34px
+}
+.table_lifeorder{border-collapse: collapse;border: 1px solid #E6E6E6;border-top: 0px;border-bottom: 0px;text-align:center;font-family: arial;margin-top:10px;float:left}			
+.table_lifeorder td,.table_lifeorder th{border:1px solid #e2e2e2;text-align:center}
+.table_lifeorder th{color: #666666;font-size: 14px;background: #F9F9F9;font-weight: normal;height: 40px;}
+.table_lifeorder td{color: #4A4A4A;font-size: 13px;height: 50px;}
+</style>
+</head>
+<body>
+$!httpInclude.include("/seller/top.htm")
+<div class="main">
+  <div class="seller_center"> $!httpInclude.include("/seller/nav.htm?op=group_order_local")
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/seller/index.htm">商家中心</a></b>><b>服务交易管理</b>><b>线上服务订单管理</b></span></div>
+      <div class="user_list">
+        <div class="seller_list_title">
+          <ul class="seller_title_ul">
+            <li #if($!vo.statusCode=='all' || !$!vo.statusCode)class="this" #end><a href="$!webPath/seller/group_order_local.htm">所有订单</a></li>
+          </ul>
+        </div>
+        <script>
+			#if($!vo.statusCode)
+			  jQuery(".orderul li").removeClass("this");
+		     jQuery(".orderul li a[href$=$!vo.statusCode]").parent().addClass("this");
+			#end
+		  </script>
+        <form action="$!webPath/seller/group_order_local.htm" method="post" id="ListForm">
+          <div class="user_sp_right"> <span style="margin-right: 4px;">
+          	<span class="fl c4a">订单编号</span>
+            <input name="orderId" type="text" class="user_title_txt" id="order_id" placeholder="订单编号" value="$!vo.orderId"/>
+            <span class="fl c4a ml21">支付时间</span>
+            <input name="startDate" type="text" class="user_title_txt" id="beginTime" placeholder="开始时间" value="$!vo.startDate" readonly="readonly"/>
+            <span class="fl" id="line1"></span>
+            <input name="endDate" type="text" class="user_title_txt" id="endTime" placeholder="结束时间" value="$!vo.endDate" readonly="readonly"/>
+            </span>
+            <input name="" type="submit" class="seller_sear_btn" value="查询"/>
+            <div class="seller_title_right"><a href="javascript:void(0);" onclick="export_excel();">导出excel</a></div>
+          </div>
+          #if($objs.size()>0) 
+          <table border="" cellspacing="" cellpadding="" class="table_lifeorder">
+			<tbody>
+				<tr>
+					<th width="208">订单编号</th>
+					<th width="150">手机号码</td>
+					<th width="150">支付类型</th>
+					<th width="150">消费金额</th>
+					<th width="176">支付时间</th>
+					<th width="163">支付方式</th>
+				</tr>
+          		#foreach($obj in $objs)
+				<tr>
+					<td>$!{obj.orderId}</td>
+					<td>$!{obj.mobile}</td>
+					<td>
+						#if($!obj.orderType==1)
+				        	线上订单
+				        #end
+				        #if($!obj.orderType==2)
+				        	扫码支付
+				        #end
+				        #if($!obj.orderType==3)
+				        	优惠买单
+				        #end
+				        #if($!obj.orderType==4)
+				        	套餐券    
+				        #end 
+				        #if($!obj.orderType==5)
+				        	代金券   
+				        #end 
+					</td>
+					<td>¥ $!{obj.totalPrice}</td>
+					<td>$!CommUtil.formatLongDate($!obj.payTime)</td>
+					<td>$PaymentConstants.getPaymentName($!obj.paymentMark)</td>
+				</tr>
+				#end 
+			</tbody>
+		</table>
+		<div class="userlist_allop">
+           <input name="currentPage" type="hidden" class="user_title_txt" id="currentPage"  value="$!currentPage"/>
+           <div class="seller_list_page"><span class="seller_page_sp">$!gotoPageFormHTML</span> </div>
+         </div>
+         #else
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" class="user_order_table">
+            <tr>
+              <td colspan="6" align="center"><div class="seller_center_nothing">
+                  <div class="seller_center_nothing_left"><img src="$!webPath/resources/style/system/front/default/images/seller_center_nothing.png" /></div>
+                  <div class="seller_center_nothing_right">暂时没有数据</div>
+                </div></td>
+            </tr>
+          </table>
+          #end
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

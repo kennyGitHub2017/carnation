@@ -1,0 +1,57 @@
+<script>
+jQuery(document).ready(function(){
+jQuery.validator.addMethod("verify",function(value,element){
+var re = /^[0-9a-zA-Z]*$/;
+        if(re.test(jQuery("#shipCode").val())){			
+			return true;
+		  } 
+		  else {
+		    return false;
+			  }
+});								
+  jQuery("#theForm").validate({
+	   rules:{
+		   name:{required:true},
+		   sequence:{required:true,digits:true},
+		   display:{required:true},
+		   },
+		   
+		   
+	   messages:{
+		   name:{required:"必填项"},
+		   sequence:{required:"必填项", digits:"必须输入整数"},
+		   display:{required:"必填项"},
+	   }
+	});
+}); 
+</script>
+
+
+
+<form action="$!webPath/admin/add_spec_save.htm" method="post" id="theForm">
+	<table style="float: left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="box_table">
+		<tr>
+			<td align="right" valign="top">规格名称</td>
+			<td align="left"><input name="name" type="text" id="" size="30" /></td>
+		</tr>
+		
+	 	<tr>
+			<td align="right" valign="top">排序</td>
+			<td align="left"><input name="sequence" type="text"
+				id="" size="30" /></td>
+		</tr>
+		
+		<tr>
+			<td align="right" valign="top">显示</td>
+			<td align="left">
+			显示<input name="display" type="radio" id="" size="30" value="0"/> 
+			不显示<input name="display" type="radio" id="" size="30" value="1" /></td>
+		</tr>
+		
+		<tr>
+			<td align=""><input name="" type="submit" id="" size="30" value="确定" /></td>
+			<td align=""><input name="" type="button" id="" size="30" value="取消" /></td>
+		</tr>
+		
+	</table>
+</form>

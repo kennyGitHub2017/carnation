@@ -1,0 +1,135 @@
+	<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+</head>
+<body>
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 商户入驻信息
+</div>
+
+<div class="main">
+	<ul class="m-menu">
+        <li><a href="/operator/operator_check_shop_list.htm">商户待审核列表</a> </li>
+        <li><a href="javascript:void(0);" class="active">商户入驻信息</a> </li>
+    </ul>
+    <div class="view-box">
+        <div class="view-title">运营商信息</div>
+        <div class="col-md-3">
+            姓名：$!store.storeName
+        </div>
+        <div class="col-md-3">
+            所属行业：$!applyInfo.industry
+        </div>
+        <div class="col-md-3">
+            经营范围：$!applyInfo.licenseBusinessScope
+        </div>
+        <div class="col-md-6">
+            公司简介：$!applyInfo.licenseCDesc
+        </div>
+        <div class="col-md-3">
+            主营类目：$!store.gcName
+        </div>
+        <div class="col-md-3">
+            商户所在地：$!store.areaName
+        </div>
+        <div class="col-md-3">
+            详细地址：$!store.areaName $!store.storeAddress
+        </div>
+        <div class="col-md-3">
+            固定电话：$!store.storeTelephone
+        </div>
+        <div class="col-md-3">
+            手机号码：$!store.loginName
+        </div>
+        <div class="col-md-3">
+            推荐人姓名：
+        </div>
+        <div class="col-md-3">
+        	#set($rate = $!store.commissionRebate * 100)
+            返佣比率：$!rate %	
+        </div>
+        <div class="col-md-3">
+            折扣：$!store.groupDiscount
+        </div>
+        <div class="col-md-3">
+            结算账户名：$!store.bankAccountName
+        </div>
+        <div class="col-md-3">
+            结算账号：$!store.bankCAccount
+        </div>
+        <div class="col-md-3">
+            账户开户行：$!store.bankAccountName
+        </div>
+        <div class="col-md-3">
+            是否安装POS机：#if($!store.isEepay) 安装 #else 无 #end
+        </div>
+         <div class="col-md-3">
+           审核原因说明：#if($!store.failReseaon) $!store.failReseaon #else 无 #end
+        </div>
+        <div class="col-md-3 cl">
+            法人身份证正面：
+            #if($!applyInfo.licenseLegalIdCardFrontPath)
+            	<a href="$!{applyInfo.licenseLegalIdCardFrontPath}" target="_blank" class="license-pic"> <img src="$!{applyInfo.licenseLegalIdCardFrontPath}"  height="204" width="204"/></a>
+            #end
+        </div>
+        <div class="col-md-3">
+            法人身份证反面：
+            #if($!applyInfo.licenseLegalIdCardBackPath)
+            	<a href="$!{applyInfo.licenseLegalIdCardBackPath}" target="_blank" class="license-pic"> <img src="$!{applyInfo.licenseLegalIdCardBackPath}"  height="204" width="204"/></a>
+            #end
+        </div>
+         #if($!store.isEepay == true)
+        <div class="col-md-3">
+            法人手持身份证照：
+            #if($!applyInfo.licenseLegalIdCardReachPath)
+            	<a href="$!{applyInfo.licenseLegalIdCardReachPath}" target="_blank" class="license-pic"> <img src="$!{applyInfo.licenseLegalIdCardReachPath}"  height="204" width="204"/></a>
+            #end
+        </div>
+        #end
+        <div class="col-md-3">
+            银行卡正面照：
+             #if($!applyInfo.bankCardFrontPath)
+            	<a href="$!{applyInfo.bankCardFrontPath}" target="_blank" class="license-pic"> <img src="$!{applyInfo.bankCardFrontPath}"  height="204" width="204"/></a>
+            #end
+        </div>
+        <div class="col-md-3">
+            银行卡反面照：
+             #if($!applyInfo.bankCardBackPath)
+            	<a href="$!{applyInfo.bankCardBackPath}" target="_blank" class="license-pic"> <img src="$!{applyInfo.bankCardBackPath}"  height="204" width="204"/></a>
+            #end
+        </div>
+        <div class="col-md-3">
+            #if($!store.isEepay)经营场所证明(租赁合同或营业执照)：#else经营场所证明(营业执照)： #end
+             #if($!applyInfo.licenseImagePath)
+            	<a href="$!{applyInfo.licenseImagePath}" target="_blank" class="license-pic"> <img src="$!{applyInfo.licenseImagePath}"  height="204" width="204"/></a>
+            #end
+        </div>
+        #if($!store.isEepay == true)
+        <div class="col-md-3">
+            申请人手持信用卡正面照:：
+             #if($!applyInfo.businessPlacePhotoPath)
+            	<a href="$!{applyInfo.businessPlacePhotoPath}" target="_blank" class="license-pic"> <img src="$!{applyInfo.businessPlacePhotoPath}"  height="204" width="204"/></a>
+            #end
+        </div>
+        #end
+        #if($!applyInfo.otherPhotoList && $!applyInfo.otherPhotoList.size() > 0)
+        #foreach($photo in $!applyInfo.otherPhotoList)
+        <div class="col-md-3">
+        #if($!store.isEepay == true)
+		#if($!velocityCount <= 1)其他(申请人信用卡正面等)：#else &nbsp;&nbsp;&nbsp;&nbsp; #end 
+		#else
+		#if($!velocityCount <= 1)其他(门店照片或实景图等)：#else &nbsp;&nbsp;&nbsp;&nbsp; #end 
+		#end       
+	            <a href="$!photo" target="_blank" class="license-pic"> <img src="$!photo"  height="204" width="204"/></a>
+        </div>
+        #end
+        #end
+        <div class="cl view-box-btns"> <a href="/operator/check_store_form.htm?storeId=$!store.id" class="btn btn-blue">审核</a> </div>
+    </div>
+
+</div>
+</body>
+</html>

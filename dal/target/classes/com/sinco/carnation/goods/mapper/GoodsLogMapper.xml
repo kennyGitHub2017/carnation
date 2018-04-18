@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.goods.mapper.GoodsLogMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.goods.model.GoodsLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="addTime" property="addtime" jdbcType="TIMESTAMP" />
+		<result column="deleteStatus" property="deletestatus" jdbcType="INTEGER" />
+		<result column="gc_id" property="gcId" jdbcType="BIGINT" />
+		<result column="goods_brand_id" property="goodsBrandId"
+			jdbcType="BIGINT" />
+		<result column="goods_click" property="goodsClick" jdbcType="INTEGER" />
+		<result column="goods_collect" property="goodsCollect"
+			jdbcType="INTEGER" />
+		<result column="goods_id" property="goodsId" jdbcType="BIGINT" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="goods_salenum" property="goodsSalenum"
+			jdbcType="INTEGER" />
+		<result column="img_id" property="imgId" jdbcType="VARCHAR" />
+		<result column="log_form" property="logForm" jdbcType="INTEGER" />
+		<result column="preferential" property="preferential" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DECIMAL" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.goods.model.GoodsLog"
+		extends="BaseResultMap">
+		<result column="goods_click_from" property="goodsClickFrom"
+			jdbcType="LONGVARCHAR" />
+		<result column="goods_order_type" property="goodsOrderType"
+			jdbcType="LONGVARCHAR" />
+		<result column="goods_sale_info" property="goodsSaleInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="preferential_info" property="preferentialInfo"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.goods.bo.GoodsLogBO">
+	</resultMap>
+	<select id="selectGoodsTop" resultMap="BOResultMap">
+		SELECT
+		goods_name goodsName,
+		sum(${columeName}) ${columeName}
+		FROM
+		shop_goods_log
+		WHERE
+		store_id = #{storeId}
+		<if test="startTime != null">
+			AND DATE_FORMAT(addTime,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{startTime},'%Y-%m-%d')
+		</if>
+		<if test="endTime != null">
+			AND DATE_FORMAT(addTime,'%Y-%m-%d') <![CDATA[ < ]]>
+			DATE_FORMAT(#{endTime},'%Y-%m-%d')
+		</if>
+
+		GROUP BY
+		goods_id
+		ORDER BY
+		sum(${columeName}) ${orderType}
+		limit ${start},
+		${offset}
+	</select>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, addTime, deleteStatus, gc_id, goods_brand_id,
+		goods_click,
+		goods_collect, goods_id,
+		goods_name, goods_salenum, img_id,
+		log_form, preferential, price, store_id,
+		store_name
+	</sql>
+	<sql id="Blob_Column_List">
+		goods_click_from, goods_order_type, goods_sale_info,
+		preferential_info
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.goods.model.GoodsLogExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.goods.model.GoodsLogExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_goods_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods_log
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		shop_goods_log
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.goods.model.GoodsLogExample">
+		delete from shop_goods_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.goods.model.GoodsLog">
+		insert into shop_goods_log
+		(id, addTime, deleteStatus,
+		gc_id, goods_brand_id, goods_click,
+		goods_collect, goods_id, goods_name,
+		goods_salenum, img_id, log_form,
+		preferential, price, store_id,
+		store_name, goods_click_from,
+		goods_order_type,
+		goods_sale_info, preferential_info
+		)
+		values
+		(#{id,jdbcType=BIGINT}, #{addtime,jdbcType=TIMESTAMP},
+		#{deletestatus,jdbcType=INTEGER},
+		#{gcId,jdbcType=BIGINT},
+		#{goodsBrandId,jdbcType=BIGINT}, #{goodsClick,jdbcType=INTEGER},
+		#{goodsCollect,jdbcType=INTEGER}, #{goodsId,jdbcType=BIGINT},
+		#{goodsName,jdbcType=VARCHAR},
+		#{goodsSalenum,jdbcType=INTEGER},
+		#{imgId,jdbcType=VARCHAR}, #{logForm,jdbcType=INTEGER},
+		#{preferential,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL},
+		#{storeId,jdbcType=BIGINT},
+		#{storeName,jdbcType=VARCHAR},
+		#{goodsClickFrom,jdbcType=LONGVARCHAR},
+		#{goodsOrderType,jdbcType=LONGVARCHAR},
+		#{goodsSaleInfo,jdbcType=LONGVARCHAR},
+		#{preferentialInfo,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.goods.model.GoodsLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_goods_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addtime != null">
+				addTime,
+			</if>
+			<if test="deletestatus != null">
+				deleteStatus,
+			</if>
+			<if test="gcId != null">
+				gc_id,
+			</if>
+			<if test="goodsBrandId != null">
+				goods_brand_id,
+			</if>
+			<if test="goodsClick != null">
+				goods_click,
+			</if>
+			<if test="goodsCollect != null">
+				goods_collect,
+			</if>
+			<if test="goodsId != null">
+				goods_id,
+			</if>
+			<if test="goodsName != null">
+				goods_name,
+			</if>
+			<if test="goodsSalenum != null">
+				goods_salenum,
+			</if>
+			<if test="imgId != null">
+				img_id,
+			</if>
+			<if test="logForm != null">
+				log_form,
+			</if>
+			<if test="preferential != null">
+				preferential,
+			</if>
+			<if test="price != null">
+				price,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="storeName != null">
+				store_name,
+			</if>
+			<if test="goodsClickFrom != null">
+				goods_click_from,
+			</if>
+			<if test="goodsOrderType != null">
+				goods_order_type,
+			</if>
+			<if test="goodsSaleInfo != null">
+				goods_sale_info,
+			</if>
+			<if test="preferentialInfo != null">
+				preferential_info,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addtime != null">
+				#{addtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deletestatus != null">
+				#{deletestatus,jdbcType=INTEGER},
+			</if>
+			<if test="gcId != null">
+				#{gcId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsBrandId != null">
+				#{goodsBrandId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsClick != null">
+				#{goodsClick,jdbcType=INTEGER},
+			</if>
+			<if test="goodsCollect != null">
+				#{goodsCollect,jdbcType=INTEGER},
+			</if>
+			<if test="goodsId != null">
+				#{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsName != null">
+				#{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsSalenum != null">
+				#{goodsSalenum,jdbcType=INTEGER},
+			</if>
+			<if test="imgId != null">
+				#{imgId,jdbcType=VARCHAR},
+			</if>
+			<if test="logForm != null">
+				#{logForm,jdbcType=INTEGER},
+			</if>
+			<if test="preferential != null">
+				#{preferential,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				#{price,jdbcType=DECIMAL},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="storeName != null">
+				#{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsClickFrom != null">
+				#{goodsClickFrom,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsOrderType != null">
+				#{goodsOrderType,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsSaleInfo != null">
+				#{goodsSaleInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="preferentialInfo != null">
+				#{preferentialInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.goods.model.GoodsLogExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_goods_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_goods_log
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addtime != null">
+				addTime = #{record.addtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deletestatus != null">
+				deleteStatus = #{record.deletestatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.gcId != null">
+				gc_id = #{record.gcId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goodsBrandId != null">
+				goods_brand_id = #{record.goodsBrandId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goodsClick != null">
+				goods_click = #{record.goodsClick,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsCollect != null">
+				goods_collect = #{record.goodsCollect,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsId != null">
+				goods_id = #{record.goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goodsName != null">
+				goods_name = #{record.goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsSalenum != null">
+				goods_salenum = #{record.goodsSalenum,jdbcType=INTEGER},
+			</if>
+			<if test="record.imgId != null">
+				img_id = #{record.imgId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.logForm != null">
+				log_form = #{record.logForm,jdbcType=INTEGER},
+			</if>
+			<if test="record.preferential != null">
+				preferential = #{record.preferential,jdbcType=VARCHAR},
+			</if>
+			<if test="record.price != null">
+				price = #{record.price,jdbcType=DECIMAL},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.storeName != null">
+				store_name = #{record.storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsClickFrom != null">
+				goods_click_from =
+				#{record.goodsClickFrom,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsOrderType != null">
+				goods_order_type =
+				#{record.goodsOrderType,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsSaleInfo != null">
+				goods_sale_info =
+				#{record.goodsSaleInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.preferentialInfo != null">
+				preferential_info =
+				#{record.preferentialInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_goods_log
+		set id = #{record.id,jdbcType=BIGINT},
+		addTime =
+		#{record.addtime,jdbcType=TIMESTAMP},
+		deleteStatus =
+		#{record.deletestatus,jdbcType=INTEGER},
+		gc_id =
+		#{record.gcId,jdbcType=BIGINT},
+		goods_brand_id =
+		#{record.goodsBrandId,jdbcType=BIGINT},
+		goods_click =
+		#{record.goodsClick,jdbcType=INTEGER},
+		goods_collect =
+		#{record.goodsCollect,jdbcType=INTEGER},
+		goods_id =
+		#{record.goodsId,jdbcType=BIGINT},
+		goods_name =
+		#{record.goodsName,jdbcType=VARCHAR},
+		goods_salenum =
+		#{record.goodsSalenum,jdbcType=INTEGER},
+		img_id =
+		#{record.imgId,jdbcType=VARCHAR},
+		log_form =
+		#{record.logForm,jdbcType=INTEGER},
+		preferential =
+		#{record.preferential,jdbcType=VARCHAR},
+		price =
+		#{record.price,jdbcType=DECIMAL},
+		store_id =
+		#{record.storeId,jdbcType=BIGINT},
+		store_name =
+		#{record.storeName,jdbcType=VARCHAR},
+		goods_click_from =
+		#{record.goodsClickFrom,jdbcType=LONGVARCHAR},
+		goods_order_type =
+		#{record.goodsOrderType,jdbcType=LONGVARCHAR},
+		goods_sale_info =
+		#{record.goodsSaleInfo,jdbcType=LONGVARCHAR},
+		preferential_info =
+		#{record.preferentialInfo,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_goods_log
+		set id = #{record.id,jdbcType=BIGINT},
+		addTime =
+		#{record.addtime,jdbcType=TIMESTAMP},
+		deleteStatus =
+		#{record.deletestatus,jdbcType=INTEGER},
+		gc_id =
+		#{record.gcId,jdbcType=BIGINT},
+		goods_brand_id =
+		#{record.goodsBrandId,jdbcType=BIGINT},
+		goods_click =
+		#{record.goodsClick,jdbcType=INTEGER},
+		goods_collect =
+		#{record.goodsCollect,jdbcType=INTEGER},
+		goods_id =
+		#{record.goodsId,jdbcType=BIGINT},
+		goods_name =
+		#{record.goodsName,jdbcType=VARCHAR},
+		goods_salenum =
+		#{record.goodsSalenum,jdbcType=INTEGER},
+		img_id =
+		#{record.imgId,jdbcType=VARCHAR},
+		log_form =
+		#{record.logForm,jdbcType=INTEGER},
+		preferential =
+		#{record.preferential,jdbcType=VARCHAR},
+		price =
+		#{record.price,jdbcType=DECIMAL},
+		store_id =
+		#{record.storeId,jdbcType=BIGINT},
+		store_name =
+		#{record.storeName,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.goods.model.GoodsLog">
+		update shop_goods_log
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addtime != null">
+				addTime = #{addtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deletestatus != null">
+				deleteStatus = #{deletestatus,jdbcType=INTEGER},
+			</if>
+			<if test="gcId != null">
+				gc_id = #{gcId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsBrandId != null">
+				goods_brand_id = #{goodsBrandId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsClick != null">
+				goods_click = #{goodsClick,jdbcType=INTEGER},
+			</if>
+			<if test="goodsCollect != null">
+				goods_collect = #{goodsCollect,jdbcType=INTEGER},
+			</if>
+			<if test="goodsId != null">
+				goods_id = #{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsName != null">
+				goods_name = #{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsSalenum != null">
+				goods_salenum = #{goodsSalenum,jdbcType=INTEGER},
+			</if>
+			<if test="imgId != null">
+				img_id = #{imgId,jdbcType=VARCHAR},
+			</if>
+			<if test="logForm != null">
+				log_form = #{logForm,jdbcType=INTEGER},
+			</if>
+			<if test="preferential != null">
+				preferential = #{preferential,jdbcType=VARCHAR},
+			</if>
+			<if test="price != null">
+				price = #{price,jdbcType=DECIMAL},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="storeName != null">
+				store_name = #{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsClickFrom != null">
+				goods_click_from =
+				#{goodsClickFrom,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsOrderType != null">
+				goods_order_type =
+				#{goodsOrderType,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsSaleInfo != null">
+				goods_sale_info = #{goodsSaleInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="preferentialInfo != null">
+				preferential_info =
+				#{preferentialInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.goods.model.GoodsLog">
+		update
+		shop_goods_log
+		set addTime = #{addtime,jdbcType=TIMESTAMP},
+		deleteStatus = #{deletestatus,jdbcType=INTEGER},
+		gc_id =
+		#{gcId,jdbcType=BIGINT},
+		goods_brand_id =
+		#{goodsBrandId,jdbcType=BIGINT},
+		goods_click =
+		#{goodsClick,jdbcType=INTEGER},
+		goods_collect =
+		#{goodsCollect,jdbcType=INTEGER},
+		goods_id =
+		#{goodsId,jdbcType=BIGINT},
+		goods_name = #{goodsName,jdbcType=VARCHAR},
+		goods_salenum = #{goodsSalenum,jdbcType=INTEGER},
+		img_id =
+		#{imgId,jdbcType=VARCHAR},
+		log_form = #{logForm,jdbcType=INTEGER},
+		preferential = #{preferential,jdbcType=VARCHAR},
+		price =
+		#{price,jdbcType=DECIMAL},
+		store_id = #{storeId,jdbcType=BIGINT},
+		store_name = #{storeName,jdbcType=VARCHAR},
+		goods_click_from =
+		#{goodsClickFrom,jdbcType=LONGVARCHAR},
+		goods_order_type =
+		#{goodsOrderType,jdbcType=LONGVARCHAR},
+		goods_sale_info =
+		#{goodsSaleInfo,jdbcType=LONGVARCHAR},
+		preferential_info =
+		#{preferentialInfo,jdbcType=LONGVARCHAR}
+		where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.goods.model.GoodsLog">
+		update
+		shop_goods_log
+		set addTime = #{addtime,jdbcType=TIMESTAMP},
+		deleteStatus = #{deletestatus,jdbcType=INTEGER},
+		gc_id =
+		#{gcId,jdbcType=BIGINT},
+		goods_brand_id =
+		#{goodsBrandId,jdbcType=BIGINT},
+		goods_click =
+		#{goodsClick,jdbcType=INTEGER},
+		goods_collect =
+		#{goodsCollect,jdbcType=INTEGER},
+		goods_id =
+		#{goodsId,jdbcType=BIGINT},
+		goods_name = #{goodsName,jdbcType=VARCHAR},
+		goods_salenum = #{goodsSalenum,jdbcType=INTEGER},
+		img_id =
+		#{imgId,jdbcType=VARCHAR},
+		log_form = #{logForm,jdbcType=INTEGER},
+		preferential = #{preferential,jdbcType=VARCHAR},
+		price =
+		#{price,jdbcType=DECIMAL},
+		store_id = #{storeId,jdbcType=BIGINT},
+		store_name = #{storeName,jdbcType=VARCHAR}
+		where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+</mapper>

@@ -1,0 +1,210 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css?v=5"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery('#beginTime').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+	  jQuery('#endTime').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+  jQuery("#condition").val("$!condition");	
+  jQuery(".memimg").mouseover(function(){
+     jQuery(this).css("cursor","pointer");
+	 jQuery(".mem_detail[id^=user_detail_]").hide();
+     var id=jQuery(this).attr("id");
+	 jQuery("#user_detail_"+id).show();
+  });
+  jQuery(".mem_detail[id^=user_detail_]").mouseleave(function(){
+    jQuery(this).hide();
+  });
+  jQuery("#isDeleted").val("$!vo.isDeleted");	
+});
+</script>
+<body>
+  <div class="cont">
+    <h1 class="seth">会员管理</h1>
+    <div class="nav_list">
+    <ul> 
+    <li><a href="$!webPath/admin/user_list.htm?freezed=false"  class="this"><b>管理</b></a> </li>
+    <li><a href="$!webPath/admin/user_add.htm" ><b>新增</b></a></li>
+     </ul> 
+     </div>
+		<FORM name="ListForm" id="ListForm"  action="$!webPath/admin/user_list.htm" method="post">
+    <div class="search">
+      <span>
+          <select name="condition" id="condition">
+            <option value="1">会员名</option>
+            <option value="2">注册邮箱</option>
+            <option value="3">真实姓名</option>
+            <option value="4">邀请码</option>
+          </select>
+          </span> <span class="size150">
+          <input name="value" type="text" id="value" value="$!value" />
+          </span>
+          	<!-- <span>
+          	状态：
+          	<select name="isDeleted" id="isDeleted">
+            <option value="false">正常</option>
+            <option value="true">已冻结</option>
+          </select>
+          	</span> -->
+          <span>
+          	推荐码：
+          	<span class="size150"><input name="invitationCode" type="text" id="invitationCode" value="$!vo.invitationCode" placeholder="推荐人的推荐码" /></span>
+          	</span>
+          	<span>注册时间</span> <span class="size100">
+      <input name="beginTime" type="text" id="beginTime" value="$!vo.beginTime" readonly="readonly" />
+      </span> <span class="size100">
+      <input name="endTime" type="text" id="endTime" value="$!vo.endTime" readonly="readonly" />
+      </span> 
+          <span>
+          <input name="" type="submit" value="搜索" style="cursor:pointer;" title="搜索会员"  class="search_btn"/>
+          </span>
+
+    </div>
+    <!-- <div class="operation">
+      <h3>友情提示</h3>
+      <ul>
+        <li>可用金额，买家会员可以用来支付订单、提现，商家可以用来支付商城收费服务</li>
+        <li>冻结金额，当会员进行提现操作后，提现金额变为冻结金额等待管理员审核操作。当会员使用云豆支付购买时，在订单支付后且未收货之前，
+          可用金额减少，支付的金额变为冻结金额，直到确认收货后，冻结金额减少，商家可用金额增加。冻结金额不能用来支付或提现</li>
+      </ul>
+    </div>-->
+
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="4%" align="left">&nbsp;</th>
+          <th width="13%" align="left"><span class="form_btna">会员名</span></th>
+            <th width="6%" align="center"><span class="form_btna">邀请码</span></th>
+		  <th width="6%" align="center"><span class="form_btna">昵称</span></th>
+		   <th width="6%" align="center"><span class="form_btna">真实名字</span></th>
+		  <th width="6%" align="center"><span class="form_btna">手机</span></th>
+          <th width="8%" align="center"><span class="form_btna">云豆</span></th>
+          <th width="6%" align="center"><span class="form_btna">会员积分</span></th>
+          <th width="6%" align="center"><span class="form_btna">推荐人</span></th>
+          <th width="6%" align="center"><span class="form_btna">注册时间</span></th>
+          <th width="6%" align="center"><span class="form_btna">登录时间</span></th>
+          <th width="6%" align="center"><span class="form_btna">状态</span></th>
+          <th  align="center" ><span class="form_btna">操作</span></th>
+        </tr>
+        #foreach($!obj in $pages)
+        <tr>
+          <td class="check_position"><input name="id" type="checkbox" id="id" style="width:16px; border:none;" value="$!obj.uid" /></td>
+          #set($user_img="$!webPath/resources/style/system/manage/blue/images/default_user_photo.gif")
+          #if($!obj.headImgPath)
+          #set($user_img=$!obj.headImgPath)
+          #end
+          <td  align="left"><span class="memimg"><img  src="$!{user_img}" width="45" height="49" /></span> <span class="mem_detail">
+            <ul>
+              <li class="mem_font">$!obj.loginName</li>
+            </ul>
+            </span></td>
+              <td class="lightred">$!obj.invitationCode</td>
+            <td class="lightred">$!obj.nickname</td>
+              <td class="lightred">$!obj.name</td>
+            <td class="lightred">$!obj.mobile</td>
+           <td class="lightred"><ul>
+              <li>可用：<strong>#if($!{obj.availableBalance})$!{obj.availableBalance}#else 0 #end元</strong></li>
+<!--               <li>冻结：<strong>#if($!{obj.freezeBlance})$!{obj.freezeBlance}#else 0 #end元</strong></li> -->
+            </ul></td>
+          <td align="center">$!obj.integral</td>
+          <td align="center">
+          #if($!obj.reUserName)
+          $!obj.reUserName
+          #else
+          $!obj.operatorName
+          #end
+          </td>
+          <td align="center">$!CommUtil.formatLongDate($!obj.createTime)</td>
+          <td align="center">$!CommUtil.formatLongDate($!obj.lastLoginTime)</td>
+          <td align="center">
+          #if($!obj.freezed == "1")
+          正常
+          #else
+          已冻结
+          #end
+         </td>
+          <td align="center" class="hui oprate_con" style="min-width:80px">
+            <a href="javascript:void(0);" class="blue" dialog_uri="$!webPath/admin/user_detail.htm?id=$!obj.uid" dialog_title="会员详情" dialog_width="800" dialog_id="user_detail">详情</a> | 
+            <a href="$!webPath/admin/user_edit.htm?id=$!obj.uid" class="blue" >编辑</a>
+            |
+            
+            <!-- <a href="javascript:void(0);" onclick="if(confirm('删除会员会同步删除删除该会员所有信息，且不可恢复，是否继续？'))window.location.href='$!webPath/admin/user_del.htm?mulitId=$!obj.uid&currentPage=$!currentPage'" class="blue" >删除</a>
+             -->
+            				#if($!obj.freezed=="1")
+            <a href="javascript:void(0);" onclick="if(confirm('冻结的会员将不可登录，是否继续？'))window.location.href='$!webPath/admin/user_freeze.htm?mulitId=$!obj.uid&currentPage=$!currentPage&freezed=true'" class="blue" >冻结</a>
+            					#else
+            					<a href="javascript:void(0);" onclick="if(confirm('解冻的会员将恢复登录，是否继续？'))window.location.href='$!webPath/admin/user_freeze.htm?mulitId=$!obj.uid&currentPage=$!currentPage&freezed=false'" class="blue" >解冻</a>
+            					#end
+            |
+            <a href="$!webPath/admin/predepositlog_list.htm?userId=$!obj.uid" class="blue" target="_blank">云豆明细</a>
+            <br />
+            <a href="$!webPath/admin/order_list.htm?userId=$!obj.uid" class="blue" target="_blank">商品订单</a>
+            |
+            <a href="$!webPath/admin/online_group_order_list.htm?orderType=1&userId=$!obj.uid" class="blue" target="_blank">线上服务</a>
+            |
+            <a href="$!webPath/admin/offline_group_order_list.htm?orderType=2&userId=$!obj.uid" class="blue" target="_blank">线下服务</a>
+            <br />
+            <a href="$!webPath/admin/userRebate.htm?userId=$!obj.uid" class="blue" target="_blank">返润明细</a>
+            |
+            <a href="$!webPath/admin/selfTest.htm?userId=$!obj.uid" class="blue" target="_blank">自测档案</a>
+            |
+            <a href="$!webPath/admin/user_list.htm?freezed=false&invitationCode=$!obj.invitationCode" class="blue">推荐的人</a>
+            |
+            <a href="$!webPath/admin/reportList.htm?userId=$!obj.uid" class="blue" target="_blank">体检档案</a>
+            <br/>
+            <a href="$!webPath/admin/user_evaluations_goods.htm?userId=$!obj.uid" class="blue" target="_blank">评论明细</a>
+            <a href="$!webPath/admin/user_collections_post.htm?userId=$!obj.uid" class="blue" target="_blank">收藏明细</a>
+            <a href="$!webPath/admin/user_consultings.htm?userId=$!obj.uid" class="blue" target="_blank">专家咨询明细</a>
+            <a href="$!webPath/admin/aio_data_list.htm?uid=$!obj.uid" class="blue" target="_blank">一体机体检明细</a>
+          </td>
+        </tr>
+        #end
+        <tr>
+        <td colspan="13" style="border-bottom:0px; padding:0px;">
+        <div class="operate_bar">
+    <div class="fenye"> <input name="userRole" type="hidden" id="userRole" value="BUYER" />
+      <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+      <input name="mulitId" type="hidden" id="mulitId" />
+      $!gotoPageFormHTML</div> 
+    
+    <div class="oper_sp"> <span class="oper_check"><label><input name="all" type="checkbox" id="all" onclick="selectAll(this)" value="" />全部</label></span>
+           <span class="oper_del">
+           					#if($!vo.isDeleted==false)
+           					<input type="hidden" name="freezed" value="true">
+           <input name="" type="button" value="冻结" style="cursor:pointer;" onclick="cmd('$!webPath/admin/user_freeze.htm')"/>
+           					#else
+           					<input type="hidden" name="freezed" value="false">
+           <input name="" type="button" value="解冻" style="cursor:pointer;" onclick="cmd('$!webPath/admin/user_freeze.htm')"/>
+           					#end
+           </span>
+           </div>      
+ </div>
+        </td>
+        </tr>
+      </table>
+    </div>
+	</FORM>
+  </div>
+</body>
+</html>

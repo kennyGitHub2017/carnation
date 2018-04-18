@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!{obj.title} - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/circle.css" rel="stylesheet" type="text/css" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script>
+//options为编辑配置属性
+var options = {
+        cssPath : '$!webPath/resources/editor/plugins/code/prettify.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '890px',
+		height:'216px',
+		resizeType : 1,
+		allowImageUpload : true,
+		allowFlashUpload : false,
+		allowMediaUpload : false,
+		allowFileManager : false,
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['media','image','flash','emoticons', 'about']
+}; 
+jQuery(document).ready(function(){
+	jQuery("#owner_id").val("");							
+	jQuery("#reply_content").html("");							
+	jQuery(window).scroll(function () {
+		if(jQuery(document).scrollTop() + jQuery(window).height()>=jQuery(document).height()){
+			jQuery(".circle_nav").hide();		     
+		}else{
+			jQuery(".circle_nav").show();		   
+		}
+	});
+	jQuery("#toBottom").click(function(){
+		var sTop = jQuery(document).height()
+       jQuery('body,html').animate({scrollTop:sTop},1000);
+       return false;
+    });
+	editor = KindEditor.create('#reply_content',options);
+	reply_load();
+ });////
+
+
+function praise(obj_id,obj){
+	jQuery.post("$!webPath/circle/invitation_parise.htm",{"id":obj_id},
+				function(data){
+				if(data.code==100){
+					jQuery(obj).parent().find("em").addClass("this").parent().find("i").html(data.count);
+					}																
+				},"json");
+	}
+#if($!code==100)
+function pay_attention(cid){
+	jQuery.post("$!webPath/circle/pay_attention.htm",
+				{"cid":cid},
+				function(data){
+					if(data=="100"){
+						 showDialog("msg_info","","圈子关注成功！",2,"succeed",2,function(){
+																				   location.reload();
+																				   });
+						}
+					if(data=="-100"){
+						 showDialog("msg_info","","您已经关注了该圈子！",2,"error",2);
+						}	
+				},"text");
+	}
+#end
+//回复帖子
+function reply_save(obj){
+	var status =jQuery(obj).attr("status");
+	if(status==""){
+		jQuery(obj).attr("status","sending");
+		var content = jQuery("#reply_content").val();
+		var id ="$!{obj.id}";
+		if(content==""){
+			 showDialog("msg_info","","请填写回复内容！",2,"error",2);
+		 }else{
+			 jQuery.post("$!webPath/circle/invitation_reply_save.htm",
+						{"id":id,"reply_content":content},
+						function(data){
+						if(data.code==100){
+							  jQuery(obj).attr("status","");
+							  jQuery("#reply_content").val("");
+							  editor.html("");
+							  showDialog("msg_info","","回复成功！",2,"succeed",2,function(){
+								reply_load();
+							  });
+							}
+						if(data.code==-100){
+							 jQuery(obj).attr("status","");
+							 showDialog("msg_info","","参数错误，请刷新页面后重试！",2,"succeed",2);
+							}	
+						},
+						"json");
+			
+			}
+		
+		}
+	}
+function reply_load(){
+		var id ="$!{obj.id}";
+		var owner_id = jQuery("#owner_id").val();
+		jQuery.post("$!webPath/circle/invitation_reply.htm?owner_id="+owner_id,
+			{"id":id},
+			function(data){
+				jQuery("#reply_list").html(data);
+				},
+				"text");
+	}
+	
+function ajaxPage(url,currentPage,obj){
+var mark =jQuery(obj).parent().attr("mark");
+if(mark=="reply_others"){
+	var pid =jQuery(obj).parent().attr("pid");
+	jQuery.ajax({type:'POST',url:url,data:{"currentPage":currentPage,"pid":pid},
+			  success:function(data){
+				jQuery("#reply_others_list_"+pid).html(data);																                
+			  }
+		})	
+}else{
+	var owner_id =	jQuery("#owner_id").val();
+	var id ="$!{obj.id}";
+	jQuery.ajax({type:'POST',url:url,data:{"currentPage":currentPage,"id":id,"owner_id":owner_id},
+		  success:function(data){
+			jQuery('body,html').animate({scrollTop:0},0);  
+			jQuery("#reply_list").html(data);																					                
+		  }
+	})		
+}
+  }	
+  
+ function only_owner(obj_id,obj){
+	 var owner_id =	jQuery("#owner_id").val();
+	 if(owner_id==""){
+		 jQuery("#owner_id").val(obj_id);
+		 jQuery(obj).html("查看全部");
+		 reply_load();
+		 }else{
+			 jQuery("#owner_id").val("");
+			 jQuery(obj).html("只看楼主");
+			  reply_load();
+			 }
+	 } 
+function invitation_del(id){
+   showDialog('invitation_remove','删除确认','确定删除该帖子？',1,'warning',3,function(){
+	  jQuery.post("$!webPath/circle/invitation_delete.htm",{"id":id},function(data){
+	     if(data=="true"){
+	       window.location.href='$!webPath/circle/detail_$!{obj.circle_id}.htm';
+		 }else{
+		   showDialog("msg_info","","删除失败，请尝试再次操作！",2,"succeed",2);
+		 }
+	  },"text");																	   
+   })
+}
+</script>
+</head>
+<body>
+<!--圈子申请 -->
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/circle/head.htm")
+<div class="circle_main"> $!httpInclude.include("/circle/nav.htm")
+  <div class="circle_main_center">
+    <div class="circle_list_x"> #set($img=$!circleViewTools.genercircleImage("$!{obj.circle_id}"))
+      <div class="circle_list_left_x"><img src="$!{obj.headPath}" /></div>
+      <div class="circle_list_center_x">
+        <ul>
+          <li class="name">
+            <h3>$!obj.title</h3>
+          </li>
+          <li class="host"><i>$!obj.content</i></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+  <div class="circle_main_center_m">
+    <div class="circle_main_left">
+     #foreach($!ob in $pages) 
+      <div class="circle_main_left_top">
+        <div class="circle_main_left_top_left"><a href="$!webPath/sns/other_sns_$!{obj.user_id}.htm" target="_blank"><img src="$!imageWebServer/$!{src}" /></a></div>
+        <div class="circle_main_left_top_center">
+          <h3>$!obj.title</h3>
+          <span>
+          #if($!ob.createBy == $!userid)
+          <strong>$!ob.expName 回复了 $!ob.userName</strong>
+          #else
+          <strong>$!ob.userName 回复了$!ob.expName </strong>
+          #end
+          <i>$!CommUtil.formatLongDate($!ob.createTime)</i></span>
+        </div>
+        <input id="owner_id" name="owner_id" type="hidden" value="">
+      </div>
+  #end
+      <div class="circle_main_left_reply_top">
+        <div class="circle_main_left_reply_top_r">
+          <div>
+            <textarea name="reply_content" id="reply_content" cols="" rows=""></textarea>
+          </div>
+          <span><a href="javascript:void(0);" status="" onclick="reply_save(this);" >回复</a></span> </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

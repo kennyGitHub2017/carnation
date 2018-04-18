@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.UserHealthtaskSignlogMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.sns.model.UserHealthtaskSignlog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="user_healthTask_id" property="userHealthtaskId"
+			jdbcType="BIGINT" />
+		<result column="sign_time" property="signTime" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIGINT" />
+		<result column="sign_week" property="signWeek" jdbcType="BIGINT" />
+		<result column="days" property="days" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.sns.bo.UserHealthtaskSignlogBO" extends="BaseResultMap" />
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+
+	<sql id="Base_Column_List">
+		id,
+		user_id,
+		user_healthTask_id,
+		sign_time,
+		is_deleted,
+		sign_week,
+		days
+	</sql>
+
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.sns.model.UserHealthtaskSignlogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_healthtask_signlog
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_healthtask_signlog
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_healthtask_signlog
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sns.model.UserHealthtaskSignlogExample">
+		delete from user_healthtask_signlog
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.UserHealthtaskSignlog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		user_healthtask_signlog (user_id, user_healthTask_id,sign_time, is_deleted)
+		values
+		(#{userId,jdbcType=BIGINT}, #{userHealthtaskId,jdbcType=BIGINT},now(),
+		#{isDeleted,jdbcType=BIGINT})
+	</insert>
+
+
+
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.UserHealthtaskSignlog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_healthtask_signlog
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			sign_time
+			<if test="id != null">
+				,id
+			</if>
+			<if test="userId != null">
+				,user_id
+			</if>
+			<if test="userHealthtaskId != null">
+				,user_healthTask_id
+			</if>
+			<if test="isDeleted != null">
+				,is_deleted
+			</if>
+			<if test="signWeek != null">
+				,sign_week
+			</if>
+			<if test="days != null">
+				,days
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			now()
+			<if test="id != null">
+				, #{id,jdbcType=BIGINT}
+			</if>
+			<if test="userId != null">
+				, #{userId,jdbcType=BIGINT}
+			</if>
+			<if test="userHealthtaskId != null">
+				,#{userHealthtaskId,jdbcType=BIGINT}
+			</if>
+			<if test="isDeleted != null">
+				, #{isDeleted,jdbcType=BIGINT}
+			</if>
+			<if test="signWeek != null">
+				,#{signWeek,jdbcType=BIGINT}
+			</if>
+			<if test="days != null">
+				,#{days,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sns.model.UserHealthtaskSignlogExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_healthtask_signlog
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_healthtask_signlog
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userHealthtaskId != null">
+				user_healthTask_id = #{record.userHealthtaskId,jdbcType=BIGINT},
+			</if>
+			<if test="record.signTime != null">
+				sign_time = #{record.signTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+
+	<update id="updateByExample" parameterType="map">
+		update user_healthtask_signlog
+		set id = #{record.id,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		user_healthTask_id = #{record.userHealthtaskId,jdbcType=BIGINT},
+		sign_time = #{record.signTime,jdbcType=TIMESTAMP},
+		is_deleted = #{record.isDeleted,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.UserHealthtaskSignlog">
+		update user_healthtask_signlog
+		<set>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="userHealthtaskId != null">
+				user_healthTask_id = #{userHealthtaskId,jdbcType=BIGINT},
+			</if>
+			<if test="signTime != null">
+				sign_time = #{signTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.UserHealthtaskSignlog">
+		update user_healthtask_signlog
+		set user_id = #{userId,jdbcType=BIGINT},
+		user_healthTask_id = #{userHealthtaskId,jdbcType=BIGINT},
+		sign_time = #{signTime,jdbcType=TIMESTAMP},
+		is_deleted = #{isDeleted,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectByCondition" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		user_healthtask_signlog
+		where
+		1=1
+		and
+		is_deleted = 0
+		<if test="obj.id!=null">
+			and
+			id = #{obj.id,jdbcType=BIGINT}
+		</if>
+		<if test="obj.userId!=null">
+			and
+			user_id = #{obj.userId,jdbcType=BIGINT}
+		</if>
+		<if test="obj.userHealthtaskId!=null">
+			and
+			user_healthTask_id = #{obj.userHealthtaskId,jdbcType=BIGINT}
+		</if>
+		<if test="obj.signTime!=null">
+			and
+			sign_time like CONCAT('%',#{obj.signTime},'%')
+		</if>
+		<if test="obj.signWeek!=null">
+			and
+			sign_week = #{obj.signWeek,jdbcType=BIGINT}
+		</if>
+		order by sign_time desc
+	</select>
+</mapper>

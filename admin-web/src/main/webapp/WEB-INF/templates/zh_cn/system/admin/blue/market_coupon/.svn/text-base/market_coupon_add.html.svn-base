@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	
+	<link rel="stylesheet" href="$!webPath/resources/editor/themes/default/default.css" />
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	
+	
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/plugins/jquery.validatebox.js"></script>
+	
+	<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+	
+</head>
+<body>
+		<div style="padding:10px 20px 20px 20px">
+	    <form id="theForm" name="theForm" method="post" enctype="multipart/form-data" action="$!webPath/admin/market_coupon_save.htm" 
+	     data-options="validate:true,">
+	    
+            <input name="id" id="id" type="hidden" value="$!CommUtil.null2Int($!obj.id)" />
+            <input name="couponId" id="couponId" type="hidden" value="$!obj.couponId" />
+	    	<table cellpadding="5">
+	    		<tr>
+	    			<td width=80><strong style="color:red;">*</strong>名称:</td>
+	    			<td width=360>
+	    			<input class="easyui-textbox" type="text" name="schemeName" data-options="required:true," value="$!obj.schemeName">
+	    			</input>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    		    <td><strong style="color:red;">*</strong>编码:</td>
+	    			<td>
+	    				<input class="easyui-textbox" type="text" name="vcode"  value="$!obj.vcode" data-options="required:true"></input>
+	    			</td>
+	    			<td>状态:</td>
+	    			<td>
+	    				<input name="isEnabled" type="checkbox" value = '1' #if($!obj.isEnabled==1) checked="true" #end>是否启用</input>
+	    			</td>
+	    			
+	    		</tr>
+	    		
+	    		<!-- 优惠券开抢时间 -->
+    			<tr>
+	    			<td><strong style="color:red;">*</strong>优惠券开抢时间:</td>
+	    			<td>
+					<input id ="startTimeStr" name="getStartStr" value="$!CommUtil.formatLongDate($!obj.getStart)" class="easyui-datetimebox"  missingMessage="日期必须填写" data-options="required:true"style="width:150px"/>
+					至
+					<input id ="endTimeStr" name="getEndStr" value="$!CommUtil.formatLongDate($!obj.getEnd)"  class="easyui-datetimebox"   missingMessage="日期必须填写" data-options="required:true" style="width:150px"/>
+					</td>
+					
+	    		</tr>
+	    		
+	    		<!-- 优惠券使用时间 -->
+    			<tr>
+	    			<td><strong style="color:red;">*</strong>优惠券使用时间:</td>
+	    			<td>
+					<input id ="startTimeStr" name="useStartStr" value="$!CommUtil.formatLongDate($!obj.useStart)" class="easyui-datetimebox"  missingMessage="日期必须填写" data-options="required:true"style="width:150px"/>
+					至
+					<input id ="endTimeStr" name="useEndStr" value="$!CommUtil.formatLongDate($!obj.useEnd)"  class="easyui-datetimebox"   missingMessage="日期必须填写" data-options="required:true" style="width:150px"/>
+					</td>
+					
+	    		</tr>
+	    		
+	    		
+    			<!-- 活动开始时间-->
+    			<tr>
+	    			<td><strong style="color:red;">*</strong>活动开始时间:</td>
+	    			<td>
+					<input id ="startTimeStr" name="startTimeStr" value="$!CommUtil.formatLongDate($!obj.startTime)" class="easyui-datetimebox"  missingMessage="日期必须填写" data-options="required:true"style="width:150px"/>
+					至
+					<input id ="endTimeStr" name="endTimeStr" value="$!CommUtil.formatLongDate($!obj.endTime)"  class="easyui-datetimebox"   missingMessage="日期必须填写" data-options="required:true" style="width:150px"/>
+					</td>
+					
+	    		</tr>
+	    		
+	    		<!--优惠券预热时间 -->
+    			<tr>
+	    			<td><strong style="color:red;">*</strong>优惠券预热时间:</td>
+	    			<td>
+					<input id ="startTimeStr" name="preStartStr" value="$!CommUtil.formatLongDate($!obj.preStart)" class="easyui-datetimebox"  missingMessage="日期必须填写" data-options="required:true"style="width:150px"/>
+					至
+					<input id ="endTimeStr" name="preEndStr" value="$!CommUtil.formatLongDate($!obj.preEnd)"  class="easyui-datetimebox"   missingMessage="日期必须填写" data-options="required:true" style="width:150px"/>
+					</td>
+					
+	    		</tr>
+	    		
+	    	<!-- 	<tr>
+	    			<td><strong style="color:red;">*</strong>生效时间:</td>
+	    			<td>
+					<input id ="startTimeStr" name="startTimeStr" value="$!CommUtil.formatLongDate($!obj.startTime)" class="easyui-datetimebox"  missingMessage="日期必须填写" data-options="required:true"style="width:150px"/>
+					至
+					<input id ="endTimeStr" name="endTimeStr" value="$!CommUtil.formatLongDate($!obj.endTime)"  class="easyui-datetimebox"   missingMessage="日期必须填写" data-options="required:true" style="width:150px"/>
+					</td>
+					<td>红包金额:</td>
+	    			<td>
+	    			<input class="easyui-numberbox" type="text" name="totalMoney" value="$!obj.totalMoney"  data-options="min:0,max:1000000000,precision:2,required:true"></input>
+	    			</td>
+	    			
+	    			
+	    		</tr> -->
+	    		<tr>
+	    			
+	    		    <td><strong style="color:red;">*</strong>优惠券金额:</td>
+	    			<td>
+	    			<input class="easyui-numberbox" type="text" name="couponNum"  value="$!obj.couponNum" data-options="min:0,max:1000000000,precision:2,required:true" style="width:50px"></input>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td><strong style="color:red;">*</strong>发行量:</td>
+	    			<td>
+	    				<input class="easyui-numberbox" type="text" name="totalCount" value="$!obj.totalCount"  data-options="min:0,max:1000000000,precision:0,required:true"></input>
+	    			</td>
+	    			
+	    			 <td><strong style="color:red;">*</strong>权重:</td>
+	    			<td>
+	    				<input class="easyui-numberbox" type="text" name="priority"  value="$!obj.priority" data-options="min:0,max:1000000000,precision:0,required:true"></input>
+	    			</td>
+	    		</tr>
+	    		
+	    		<tr>
+	    			<td><strong style="color:red;">*</strong>使用规则(最低购物消费金额):</td>
+	    			<td>
+	    				<input class="easyui-numberbox" type="text" name="minMoney" value="$!obj.minMoney"  data-options="min:0,max:1000000000,precision:0,required:true"></input>
+	    			</td>
+	    			
+	    		</tr>
+	    		<tr>
+	    			<td><strong style="color:red;">*</strong>中奖概率:</td>
+	    			<td colspan='2'>
+	    				<input class="easyui-numberbox" type="text" name="rate" value="$!obj.rate"  data-options="min:0,max:1000000000,precision:0,required:true"></input>
+	    				<span>中奖概率：如果是20那20人中有一个中奖,以此类推.</span>
+	    			</td>
+	    			
+	    		</tr>
+	    	 
+	    		
+	    		<tr>
+	    			<td >使用说明:</td>
+	    			<td colspan="3">
+	    			
+	    			<span class="webname">
+            		<textarea name="description" style="width:300px;height:400px;" id="description">$!obj.description</textarea>
+            		</span>
+            </td>
+	    			  
+	    		</tr>
+	    	</table>
+	    </form>
+	    </div >
+	    
+</body>
+</html>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.aio.mapper.AioBindingMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.aio.bo.AioBindingBO">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="uid" property="uid" jdbcType="BIGINT" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="update_num" property="updateNum" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="LONGVARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="last_update_user" property="lastUpdateUser"
+			jdbcType="VARCHAR" />
+		<result column="last_update_time" property="lastUpdateTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<select id="queryByUid" resultMap="BaseResultMap">
+		SELECT
+		id,uid,id_card,create_time,update_num,last_update_time
+		FROM sc_aio_binding
+		WHERE
+		delete_status =0 and uid = #{uid,jdbcType=BIGINT}
+	</select>
+
+	<insert id="insertSelective" parameterType="com.sinco.carnation.aio.model.AioBinding"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sc_aio_binding
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="idCard != null">
+				id_card,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="lastUpdateUser != null">
+				last_update_user,
+			</if>
+			<if test="lastUpdateTime != null">
+				last_update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="idCard != null">
+				#{idCard,jdbcType=VARCHAR},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastUpdateUser != null">
+				#{lastUpdateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateTime != null">
+				#{lastUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.aio.model.AioBinding">
+		update sc_aio_binding
+		<set>
+			<if test="idCard != null">
+				id_card = #{idCard,jdbcType=VARCHAR},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="updateNum != null">
+				update_num = #{updateNum,jdbcType=INTEGER},
+			</if>
+			<if test="createUser != null">
+				create_user = #{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastUpdateUser != null">
+				last_update_user = #{lastUpdateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateTime != null">
+				last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

@@ -1,0 +1,460 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("select[id^=area]").change(function(){
+		 jQuery("#operatorAreaIdLabel").remove();
+	     var level=jQuery(this).attr("level");
+		 var id=jQuery(this).val();
+		 jQuery("#operatorAreaId").val("");
+		 for(var i=4;i>level;i--){
+		  jQuery("#area"+i).empty();
+		  jQuery("#area"+i).append("<option value=''>请选择</option>");
+		 }
+		 if(id!=""){
+		  jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+		     jQuery("#area"+level).empty();
+			  jQuery("#area"+level).append("<option value=''>请选择</option>");
+		      jQuery.each(data, function(index,item){
+			    jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+			  });
+		  },"json");
+		 }else{
+		   for(var i=level;i<=4;i++){
+		    jQuery("#area"+i).empty();
+		   }
+		 }
+	 });
+	
+	jQuery("#area2").change(function(){
+		var id=jQuery("#level").val();
+ 		if(id == 1)
+ 		{
+ 			var areaId=jQuery("#area2").val();
+		 	jQuery("#operatorAreaId").val(areaId);
+			validateAreaOperator();
+ 		}
+ 	 });
+	
+	if(jQuery("#level").val() == 2 || jQuery("#level").val()==3)
+	{
+		jQuery("#area3").change(function(){
+	 	   var areaId=jQuery("#area3").val();
+	 	   jQuery("#operatorAreaId").val(areaId);
+	 	   if(jQuery("#level").val() == 2)
+	 	   {
+	 		  validateAreaOperator();		 		   
+	 	   }
+	 	});
+	}
+	
+	jQuery("#level").change(function(){
+	   var id=jQuery(this).val();
+	   jQuery("#operatorAreaIdLabel").remove();
+	   if(id != '')
+	   {
+		   jQuery("#operatorAreaId").val("");
+		   for(var i=4;i>1;i--){
+			  jQuery("#area"+i).empty();
+			  jQuery("#area"+i).append("<option value=''>请选择</option>");
+			}
+		   jQuery("#area1 option[value='']").attr("selected", "selected");
+		   jQuery("#operatorAreaIdUl").show();
+		   if(id == 1)
+		   {
+			 	jQuery("#area3").remove();
+		   }
+		   else if(id == 2 || id == 3)
+		   {
+			   if(jQuery("#area3").size() < 1)
+			   {
+				   jQuery("#operatorAreaIdUl li:last").find("span").append('<select name="area3" id="area3" level="4"><option value="">县/区</option></select>');
+			   }
+			   jQuery("#area3").change(function(){
+			 	   var areaId=jQuery("#area3").val();
+			 	   jQuery("#operatorAreaId").val(areaId);
+			 	   if(id == 2)
+			 	   {
+			 		  validateAreaOperator();			 		   
+			 	   }
+			 	});
+		   }
+		   if(id == 1 || id == 2)
+			   validateAreaOperator();
+	   }
+	   else
+	   {
+		   jQuery("#operatorAreaIdUl").hide();
+	   }
+	 });
+						
+  jQuery("#theForm").validate({
+    rules:{
+    	operatorName:{required :true },
+		userName:{required :true },
+		#if(!$!edit)
+		password:{required:true, minlength:6, maxlength:20 }, 
+		#end
+		idCard:{required :true, minlength:18, maxlength:20},
+		level:{required :true},
+		operatorAreaId:{required :true},
+		phone:{required :true },
+		address:{required :true },
+		nation:{required :true },
+		bankName:{required :true },
+		subBankName:{required :true },
+		bankNo:{required :true },
+		invitationCode:{
+		    remote:{
+			    url: "$!webPath/verify_operator_invitation_code.htm",     //后台处理程序
+	            type: "post",               //数据发送方式
+	            dataType: "json",           //接受数据格式   
+	            data: {                     //要传递的数据
+	                  	"invitationCode": function(){return jQuery("#invitationCode").val();}
+			     	  }
+				}	
+		}
+	},
+	messages:{
+	  	operatorName:{required:"运营商名称不能为空"},
+	  	userName:{required:"真实姓名不能为空"},
+	  	password:{required:"密码不能为空",minlength:"密码不能少于{0}位",maxlength:"密码不能大于{0}位"},
+	  	idCard:{required:"身份证不能为空",minlength:"身份证不能少于{0}位",maxlength:"身份证不能大于{0}位"},
+	  	level:{required:"请选择运营商级别"},
+	  	operatorAreaId:{required:"请选择运营地区"},
+	  	phone:{required:"联系电话不能为空"},
+	  	address:{required:"联系地址不能为空"},
+	  	nation:{required:"民族不能为空"},
+	  	bankName:{required:"开户行不能为空"},
+	  	subBankName:{required:"支行不能为空"},
+	  	bankNo:{required:"银行账号不能为空"},
+	  	invitationCode:{remote:"邀请码不存在"}
+	}
+  });	
+  jQuery(":radio[id=sex]").each(function(){
+    if(jQuery(this).val()=="$!obj.sex")jQuery(this).attr("checked",true);
+  });
+  
+  jQuery("input[type='file']").change(function(){
+		jQuery(this).parent().parent().find("input[type='text']").val(jQuery(this).val());
+   });
+  
+  	jQuery("#registrationFilePreview").mouseover(function(){								
+	    jQuery("#registrationFileImg").css('display','block');
+    }).mouseout(function(){
+		jQuery("#registrationFileImg").css('display','none');
+	});
+  	jQuery("#organizationFilePreview").mouseover(function(){								
+	    jQuery("#organizationFileImg").css('display','block');
+    }).mouseout(function(){
+		jQuery("#organizationFileImg").css('display','none');
+	});
+  	jQuery("#taxFilePreview").mouseover(function(){								
+	    jQuery("#taxFileImg").css('display','block');
+    }).mouseout(function(){
+		jQuery("#taxFileImg").css('display','none');
+	});
+});
+
+function saveForm(){
+	var id = jQuery("#id").val();
+	//说明不行
+	if(id == '' && !validateAreaOperator())
+	{
+		alert("该地区，该级别运营商已经存在了！");
+	}
+	else
+	{
+		jQuery("#theForm").submit();
+	}
+}
+
+function validateAreaOperator()
+{
+	var areaId = jQuery("#operatorAreaId").val();
+	var level = jQuery("#level").val();
+	var result = true;
+	if(areaId != '' && level != 3)
+	{
+		jQuery.ajax({
+		    url: "$!webPath/admin/verify_operator_area.htm",     //后台处理程序
+	        type: "post",               //数据发送方式
+	        async: false,
+	        dataType: "json",           //接受数据格式   
+	        data: {"operatorAreaId": areaId,"level":level},
+	        success:function(data){
+	        	result = data;
+	        	if(!data)
+	        	{
+	        		if(jQuery("#operatorAreaIdLabel").size() < 1)
+	        		{
+		        		jQuery("#operatorAreaId").parent().append('<label id="operatorAreaIdLabel" for="operatorAreaId" generated="true" class="error">该地区已经存在该级别运营商！</label>');
+	        		}
+	        		jQuery("#area1").focus();
+	        	}
+	        	else
+	        	{
+	        		jQuery("#operatorAreaIdLabel").remove();
+	        	}
+	        }
+		});
+	}
+	return result;
+}
+
+</script>
+<body>
+	<div class="cont">
+		<h1 class="seth">运营商管理</h1>
+		<div class="nav_list">
+			<ul>
+				<li><a href="$!webPath/admin/operator_list.htm"><b>管理</b></a></li>
+				<li><a href="$!webPath/admin/operator_add.htm" #if(!$!edit) class="this" #end><b>新增</b></a></li> 
+				#if($!edit)
+					<li><a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+				#end
+				<li><a href="$!webPath/admin/operator_assigned_list.htm"><b>商户分配</b></a> </li>
+			</ul>
+
+		</div>
+		<form name="theForm" id="theForm" action="$!webPath/admin/operator_save.htm" method="post" enctype="multipart/form-data">
+			<input name="id" type="hidden" id="id" value="$!obj.id" /> 
+			<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" /> 
+			<input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/operator_list.htm" /> 
+			<input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/operator_add.htm" />
+			<div class="edit">
+				<div class="editul setcont">
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>运营商名称</li>
+						<li><span class="webname"> <input name="operatorName" type="text" id="operatorName" value="$!obj.operatorName" size="40" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>真实姓名</li>
+						<li><span class="webname"> <input name="userName" type="text" id="userName" value="$!obj.userName" size="40" />
+						</span></li>
+					</ul>
+					#if($!edit)
+					<ul class="set1">
+						<li class="setcont_bg">密码
+						</li>
+						<li><span class="webname"> <input name="password" type="password" id="password" size="40" autocomplete="off" />
+						</span><span id="nothis"><strong class="q"></strong><strong class="w">密码留空表示不修改</strong><strong class="c"></strong></span></li>
+					</ul>
+					#end
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>性别</li>
+						<li><span class="use_code"> <label> 
+							<strong>
+							#if($!edit) 
+								<input style="border: none; height: 16px; width: 16px;" name="sex" id="sex" type="radio" value="1" #if($!obj.sex== 1) checked="checked" #end /> 
+							#else
+								<input style="border: none; height: 16px; width: 16px;" name="sex" id="sex" type="radio" value="1" checked="checked" /> 
+							#end
+							</strong>
+							<strong class="usecode"> 男</strong>
+							</label>
+						</span><span class="use_code"> 
+							<label> 
+								<strong>
+									<input style="border: none; height: 16px; width: 16px;" type="radio" id="sex" name="sex" value="2" #if($!obj.sex== 2) checked="checked" #end />
+								</strong>
+								<strong class="usecode">女</strong>
+							</label>
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>身份证号</li>
+						<li><span class="webname"> <input name="idCard" type="text" id="idCard" value="$!obj.idCard" /></span></li>
+					</ul>
+					<ul class="set1">
+			          <li  class="setcont_bg"><strong class="sred">*</strong>运营商级别</li>
+			          <li> 
+			          <span>
+			          	#if(!$!edit || $!obj.status != "1")
+			            <select name="level" id="level">
+			              <option value="">请选择级别...</option>
+			              <option #if($!obj.level == 1) selected="selected" #end value="1">市级运营商</option>
+			              <option #if($!obj.level == 2) selected="selected" #end value="2">区级运营商</option>
+			              <option #if($!obj.level == 3) selected="selected" #end value="3">区域级运营商</option>
+			            </select>
+			            #else
+			            	#if($!obj.level == 1)
+			            		市级运营商
+			            	#elseif($!obj.level == 2)
+			            		区级运营商
+			            	#elseif($!obj.level == 3)
+			            		区域级运营商
+			            	#end
+			            #end
+			          </span><strong></strong>
+			          </li>
+			        </ul>
+					<ul class="set1" id="operatorAreaIdUl" #if(!$!edit) style="display:none;" #end>
+			          <li  class="setcont_bg"><strong class="sred">*</strong>运营地</li>
+			          <li> 
+			          	<span>
+			          	  #if(!$!edit || $!obj.status != "1") 
+					          <select name="area1" id="area1" level="2">
+				                <option value="">省份/自治区</option>
+						          #foreach($area in $areas)            
+						                <option value="$!area.id" #if($!area.areaName==$!obj.areaSheng) selected="true" #end>$!area.areaName</option>
+						           #end          
+				              </select>
+				              <select name="area2" id="area2" level="3">
+				              	#if($!obj.areaShi)
+				              		<option>$!obj.areaShi</option>
+				              	#else
+				                	<option value="">市/区</option>
+				                #end
+				              </select>
+				              #if(!$!obj || $!obj.level != "1")
+					              <select name="area3" id="area3" level="4">
+					              	#if($!obj.areaXian)
+					              		<option>$!obj.areaXian</option>
+					              	#else
+					                	<option value="">县/区</option>
+					                #end
+					              </select>
+				              #end
+				              <input id="operatorAreaId" name="operatorAreaId" type="hidden" value="$!obj.operatorAreaId" /></td>
+			              #else
+			              	  $!obj.areaName
+			              #end
+			          </span><strong></strong>
+			          </li>
+			        </ul>
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>手机号码</li>
+						<li><span class="webname"> <input name="phone"
+								type="text" id="phone" value="$!obj.phone" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>联系地址</li>
+						<li><span class="webname"> <input name="address" type="text" id="address" value="$!obj.address" size="40" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>民族</li>
+						<li><span class="webname"> <input name="nation" type="text" id="nation" value="$!obj.nation" size="40" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>开户行</li>
+						<li><span class="webname"> <input name="bankName" type="text" id="bankName" value="$!obj.bankName" size="40" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>支行</li>
+						<li><span class="webname"> <input name="subBankName" type="text" id="subBankName" value="$!obj.subBankName" size="40" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>银行账号</li>
+						<li><span class="webname"> <input name="bankNo" type="text" id="bankNo" value="$!obj.bankNo" size="40" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">营业执照号</li>
+						<li><span class="webname"> <input name="registrationNo" type="text" id="registrationNo" value="$!obj.registrationNo" size="40" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+			          <li class="setcont_bg">营业执照图片</li>
+			          <li> 
+			          	<span class="size13"> <input name="textfieldRegistrationFile" type="text" id="textfieldRegistrationFile" /></span> 
+			          	<span class="filebtn"> <input name="buttonRegistrationFile" type="button" id="buttonRegistrationFile" value="" /></span> 
+						<span style="float: left;" class="file">
+							<input name="registrationFile" type="file" id="registrationFile" class="file-text" size="30" />
+						</span> 
+						<span class="preview"> 
+							<a #if($!obj.registrationPath) href="$!{obj.registrationPath}" target="_blank" #else href="javascript:void();" #end>
+			            		<img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="registrationFilePreview" style="cursor:help"/>
+			            	</a>
+						</span>
+			            #if(!$!obj.registrationPath)
+			            	<span id="nothis"><strong class="q"></strong><strong class="w">暂无图片</strong><strong class="c"></strong></span>
+			            #else
+			            	<div class="bigimgpre" id="registrationFileImg" style="display:none; left:380px;"><img src="$!{obj.registrationPath}" id="registrationFileShow"/> </div>
+			            #end 
+			            </li>
+			        </ul>
+					<ul class="set1">
+						<li class="setcont_bg">组织机构代码</li>
+						<li><span class="webname"> <input name="organizationNo" type="text" id="organizationNo" value="$!obj.organizationNo" size="40" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+			          <li class="setcont_bg">组织机构代码图片</li>
+			          <li> 
+			          	<span class="size13"> <input name="textfieldOrganizationFile" type="text" id="textfieldOrganizationFile" /></span> 
+			          	<span class="filebtn"> <input name="buttonOrganizationFile" type="button" id="buttonOrganizationFile" value="" /></span> 
+						<span style="float: left;" class="file">
+							<input name="organizationFile" type="file" id="organizationFile" class="file-text" size="30" />
+						</span> 
+						<span class="preview">
+							<a #if($!obj.organizationPath) href="$!{obj.organizationPath}" target="_blank" #else href="javascript:void();" #end>
+			            		<img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="organizationFilePreview" style="cursor:help"/>
+			            	</a>
+						</span>
+			            #if(!$!obj.organizationPath)
+			            	<span id="nothis"><strong class="q"></strong><strong class="w">暂无图片</strong><strong class="c"></strong></span>
+			            #else
+			            	<div class="bigimgpre" id="organizationFileImg" style="display:none; left:380px;"><img src="$!{obj.organizationPath}" id="organizationFileShow"/> </div>
+			            #end 
+			            </li>
+			        </ul>
+					<ul class="set1">
+						<li class="setcont_bg">税务登记证</li>
+						<li><span class="webname"> <input name="taxNo" type="text" id="taxNo" value="$!obj.taxNo" size="40" />
+						</span></li>
+					</ul>
+					<ul class="set1">
+			          <li class="setcont_bg">税务登记证图片</li>
+			          <li> 
+			          	<span class="size13"> <input name="textfieldTaxFile" type="text" id="textfieldTaxFile" /></span> 
+			          	<span class="filebtn"> <input name="buttonTaxFile" type="button" id="buttonTaxFile" value="" /></span> 
+						<span style="float: left;" class="file">
+							<input name="taxFile" type="file" id="taxFile" class="file-text" size="30" />
+						</span> 
+						<span class="preview"> 
+							<a #if($!obj.taxPath) href="$!{obj.taxPath}" target="_blank" #else href="javascript:void();" #end>
+				            	<img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="taxFilePreview" style="cursor:help"/>
+							</a>
+						</span>
+			            #if(!$!obj.taxPath)
+			            	<span id="nothis"><strong class="q"></strong><strong class="w">暂无图片</strong><strong class="c"></strong></span>
+			            #else
+			            	<div class="bigimgpre" id="taxFileImg" style="display:none; left:380px;"><img src="$!{obj.taxPath}" id="taxFileShow"/> </div>
+			            #end 
+			            </li>
+			        </ul>
+			        #if(!$!edit) 
+			        <ul class="set1">
+						<li class="setcont_bg">邀请码</li>
+						<li><span class="webname"> <input name="invitationCode" type="text" id="invitationCode" size="40" />
+						</span></li>
+					</ul>
+					#end
+				</div>
+			</div>
+		</form>
+		<div class="submit">
+			<span class="pad120"><input name="save" type="button"
+				value="提交" onclick="saveForm()" /></span>
+		</div>
+	</div>
+</body>
+</html>

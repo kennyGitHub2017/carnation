@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+</head>
+<body>
+<div class="cont">
+<h3 class="seth">线下刷卡服务订单</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/admin/offline_group_order_list.htm"><b>所有订单</b></a></li>
+        <li><a href="javascript:void(0);" class="this"><b>订单详情</b></a></li>
+    </ul>
+  </div>
+  <div class="orderdetail">
+    <div class="orderh">订单状态</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">订单号：</span><span>$!obj.orderId</span></li>
+        <li><span class="ordertitle"> 订单状态：</span><span>#if($!obj.localReturnStatus==2)已退款#else已消费#end</span></li>
+        <li><span class="ordertitle">订单总额：</span><span><strong class="orange" style="padding-right：10px;">¥$!{obj.totalPrice}</strong></span></li>
+      </ul>
+    </div>
+    <div class="orderh">订单详情</div>
+    <div class="orderhh">订单信息</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">买家名称：</span><span>#if($!obj.isSysUser)$!obj.userCustomer.nickname#else非会员#end</span></li>
+        #if($!store.storeName)
+        <li><span class="ordertitle"> 商家名称：</span><span>$!store.storeName</span></li>
+        #end
+        #set($payment=$PaymentConstants.getPaymentName($!obj.paymentMark))
+        <li><span class="ordertitle">支付方式：</span><span>$!payment</span></li>
+        <li><span class="ordertitle">下单时间：</span><span>$!CommUtil.formatLongDate($!obj.addTime)</span></li>
+      </ul>
+    </div>
+    <div class="orderhhh">服务信息</div>
+    <div class="ordetable">
+      <table width="90%" border="0" cellspacing="0" cellpadding="0" class="orde_table">
+        <tr style="border-bottom：1px dotted #CCEAF4">
+          <td width="70%"><strong>服务名称</strong></td>
+          <td width="30%"><strong>单价</strong></td>
+        </tr>
+        <script>
+			  function show_combin_goods(obj){
+				  var cz = jQuery(obj).parent().parent().find(".order_pay_tab_group_center");
+				  var display = jQuery(cz).css("display");
+					if(display=="none"){
+						jQuery(cz).show();
+					}else{
+						jQuery(cz).hide();	
+					}				
+			 }
+        </script> 
+        <tr style="border-bottom：1px dotted #CCEAF4">
+          <td>
+          	$!obj.localGroupName
+          </td>
+          <td>
+          	<strong class="orange">¥</strong>$!obj.totalPrice
+          </td>
+        </tr>
+      </table>
+    </div>
+<!--     <div class="orderhhh">操作历史</div> -->
+<!--     <div class="orderul_record"> -->
+<!--       <ul> -->
+<!--         #foreach($log in $!logs) -->
+<!--         <li><strong style="color：#F90">$!{log.userCustomer.nickname}</strong>于<strong><em>$!CommUtil.formatLongDate($!log.addTime)</em></strong>$!log.logInfo</li> -->
+<!--         #end -->
+<!--       </ul> -->
+<!--     </div> -->
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<!-- <script src="$!webPath/resources/js/echarts/esl.js"></script>-->
+<script src="$!webPath/resources/js/echarts/echarts-all.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">会员统计</h1>
+	
+<div id="main" style="height:400px; margin: 50px;"></div>
+
+     <script type="text/javascript">
+     	var unknown = $!map.unknown;
+     	var male = $!map.male;
+     	var female = $!map.female;
+     	var secret = $!map.secret;
+     	var total = unknown+male+female+secret;
+     	
+        // 路径配置
+         var myChart = echarts.init(document.getElementById('main')); 
+                
+                option = {
+                	    title: {
+                	        x: 'center',
+                	        text: '会员性别统计',
+                	        subtext: '会员总数： '+total
+                	    },
+                	    tooltip: {
+                	        trigger: 'item'
+                	    },
+                /* 	    toolbox: {
+                	        show: true,
+                	        feature: {
+                	            restore: {show: true},
+                	            saveAsImage: {show: true}
+                	        }
+                	    }, */
+                	    calculable: true,
+                	    xAxis: [
+                	        {
+                	            type: 'category',
+                	            show: true,
+                	            data: ['男', '女', '未知']
+                	        }
+                	    ],
+                	    yAxis: [
+                	        {
+                	            type: 'value',
+                	            show: true
+                	        }
+                	    ],
+                	    series: [
+                	        {
+                	            name: '会员统计',
+                	            type: 'bar',
+                	            itemStyle: {
+                	                normal: {
+                	                    color: function(params) {
+                	                        // build a color map as your need.
+                	                        var colorList = [
+                	                          '#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
+                	                           '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+                	                           '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+                	                        ];
+                	                        return colorList[params.dataIndex]
+                	                    },
+                	                    label: {
+                	                        show: true,
+                	                        position: 'top',
+                	                        formatter: '{b}\n{c}'
+                	                    }
+                	                }
+                	            },
+                	            data: [male,female,unknown+secret]
+                	        }
+                	    ]
+                	};
+        
+                // 为echarts对象加载数据 
+                myChart.setOption(option); 
+    </script>
+
+</div>
+
+</body>
+</html>

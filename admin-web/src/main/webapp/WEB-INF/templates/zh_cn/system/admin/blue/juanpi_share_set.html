@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>模板管理</title>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/style/system/manage/blue/act.css">
+	<link  href="$!webPath/resources/style/common/css/jquery.imageview.css" type="text/css" rel="stylesheet"/>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js" ></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+	
+	<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+	<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+	<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/overlay.css" type="text/css" rel="stylesheet" />
+	<script src="$!webPath/resources/js/jquery-1.8.2.js"></script>
+	<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+	<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+	<script src="$!webPath/resources/js/jquery.imgareaselect.js"></script>
+	<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+	<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+	<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+	<script src="$!webPath/resources/js/jquery.imageview.js"></script>
+	<script src="$!webPath/resources/js/smallalert.js"></script>
+	<style type="text/css">
+		body{font-family: "Microsoft Yahei", "Lucida Grande", Verdana, Lucida, Helvetica, Arial, 'Simsun', sans-serif;color: #333;}
+		select{padding:0;top:0}
+		.settings .content {width: auto;}
+		input.uploadPath {border-radius: 5px 0 0 5px;padding: 0 4px;border: 1px solid #d3d3d3;border-right:none}
+		input[type='text']{border: 1px solid #d3d3d3;padding: 2px 4px;}
+		.title_s{background:#f2f4f6;height:31px;margin-left: 19px;text-indent: 15px;line-height: 31px;color: #333;font-size: 14px;}
+		.settings {overflow: hidden;font-size: 14px;margin-top: 15px;-webkit-user-select: none;}
+		.settings .tit {width: 80px;text-align: right;float: left;line-height: 28px;margin-left: 19px;}
+		.settings .content{float: left;margin-left: 13px;}
+		.settings .content .line{overflow: hidden;}
+		.settings .content .mt{margin-top: 10px;}
+		.settings .content .line .item{float: left;margin-right: 38px;line-height: 28px;}
+		.settings .content input[type='radio']{display: none;}
+		.settings .content label{position: relative;padding-left: 23px;display: block;}
+		.settings .content label:before{content: '';position: absolute;left: 0;top: 50%;margin-top: -8px;width: 16px;height: 16px; background: url($!webPath/resources/image/radio_bg.png) no-repeat left top;}
+		.settings .content .radio:checked+label:before{background-position: left bottom;}
+		.settings .content .text{background:#ffffff;border:1px solid #d3d3d3;border-radius:5px;height:26px;}
+		.w370{width: 370px;}
+		.w313{width: 313px;}
+		.hide{display: none;}
+		.mt{margin-top:10px}
+		.textarea{border:1px solid #d3d3d3;border-radius:5px;width:362px;height:60px;padding: 8px;}
+		input.uploadPath {border-radius: 5px 0 0 5px;padding: 0 4px;border: 1px solid #d3d3d3;border-right: none;height: 26px;text-indent: 4px;float: left;width: 273px;}
+		.settings .content .selectImage {background: #f2f4f6;    border: 1px solid #d3d3d3;border-radius: 0px 5px 5px 0px;width: 100px;line-height: 26px;text-align: center;float: left;position: relative;cursor: pointer;}
+		.settings .content .selectImage input[type=file] {opacity: 0;filter: alpha(opacity=0);position: absolute;left: 0;top: 0;width: 100px;height: 26px;}
+		.fn-clear:after {visibility:hidden;display:block;font-size:0;content:" ";clear:both;height:0;}
+		.sharePicThumbnail{color: #3497ff;}
+		.sharePicThumbnail img{width: 80px;height: 80px;}
+		.sharePicThumbnail .zoomup{display: inline-block;margin-left: 8px;background: url($!webPath/resources/image/zoomup.png) no-repeat left center;padding-left: 18px;cursor: pointer;} 
+		.sharePicThumbnail .line-sepa{margin: 0 10px;}
+		.sharePicThumbnail .del{cursor: pointer;}
+		.uploading{width: 16px;height: 16px;margin: 6px 0 0 6px;display:none;float:left}
+		.cont{float:none}
+		.submitBtn{background-image:linear-gradient(-180deg, #47e4ff 0%, #13b9e6 100%);border:1px solid #30cafb;box-shadow:inset 0 2px 3px 0 rgba(240,240,240,0.78);border-radius:5px;width:116px;height:35px;display:block;line-height:35px;text-align:center;color:#fff;font-size:18px;margin:57px 0 0 105px}
+		.submitBtn:hover{color:#fff}
+		.tips{display: inline-block;line-height: 26px;color: red;margin-left: 5px;}
+	</style>
+</head>
+<body>
+	<div class="cont">
+		<h3 class="seth">分享管理</h3>
+		 <div class="nav_list">
+			 <ul>
+			  	<li><a href="JavaScript:;" class="this"><b>卷皮商品</b></a> </li>
+			  </ul>
+		  </div>
+	</div>
+	<div class="title_s">非团购商品</div>
+	<div class="settings">
+		<div class="tit">分享标题:</div>
+		<div class="content">
+			<div class="line" id="shareTitle1">
+				<div class="item">
+					<input type="radio" class="radio" name="titleClass" id="r1" value="1" #if($!ptBO.titleClass==1) checked="checked" #end/>
+					<label for="r1">调用商品标题</label>
+				</div>
+				<div class="item">
+					<input type="radio" class="radio" name="titleClass" id="r2" value="2" #if($!ptBO.titleClass==2) checked="checked" #end />
+					<label for="r2">自定义</label>
+				</div>
+				<div class="item">
+					<input type="radio" class="radio" name="titleClass" id="r3" value="3" #if($!ptBO.titleClass==3) checked="checked" #end />
+					<label for="r3">自定义+商品标题</label>
+				</div>
+			</div>
+			<div #if($!ptBO.titleClass==2) class="mt" #else class="hide mt" #end id="r2_div">
+				<input type="text" name="title" class="text w370"  value="$!ptBO.title"/>
+			</div>
+			<div #if($!ptBO.titleClass==3) class="mt" #else class="hide mt" #end id="r3_div">
+				<input type="text" name="title" class="text w313" value="$!ptBO.title"/>+商品标题
+			</div>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit">分享内容:</div>
+		<div class="content">
+			<textarea class="textarea" name="context" value="$!ptBO.context">$!ptBO.context</textarea>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit">分享图片:</div>
+		<div class="content">
+			<div class="line">
+				<div class="item">
+					<input type="radio" class="radio" name="imgClass" id="pic1" value="1" #if($!ptBO.imgClass==1) checked="checked" #end />
+					<label for="pic1">调用商品图片</label>
+				</div>
+				<div class="item">
+					<input type="radio" class="radio" name="imgClass" id="pic2" value="2" #if($!ptBO.imgClass==2) checked="checked" #end />
+					<label for="pic2">自定义</label>
+				</div>
+			</div>
+			<div #if($!ptBO.imgClass==2) class="mt fn-clear" #else class="hide mt fn-clear"  #end id="selectPic">
+				<input value="$!ptBO.imgUrl" class="input uploadPath" name="imgUrl" type="text" id="src_uploadSharePic" readonly="readonly">
+				<div class="selectImage"><input class="file" type="file" id="uploadSharePic" name="imgFile">添加分享图片</div><img id="uploading_uploadSharePic" src="$!webPath/resources/style/system/manage/blue/images/loading.gif" class="uploading"/>
+				<span class="tips">*注:图片比例为1:1</span>
+			</div>
+			<div #if($!ptBO.imgClass==2) class="mt sharePicThumbnail" #else class="hide mt sharePicThumbnail" #end  id="div_uploadSharePic">
+				<img src="$!ptBO.imgUrl" id="thumbnail_uploadSharePic"  /><span class="zoomup">查看大图</span><span class="line-sepa">|</span><span class="del">删除</span>
+			</div>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit">跳转链接:</div>
+		<div class="content">
+			<input type="text" class="text w370" name="url" value="$!ptBO.url" />
+		</div>
+	</div>
+<div class="title_s mt">团购商品</div>
+	<div class="settings">
+		<div class="tit">分享标题:</div>
+		<div class="content">
+			<div class="line" id="shareTitle2">
+				<div class="item">
+					<input type="radio" class="radio" name="grouptitleClass" id="r11" value="1" #if($!tgBO.titleClass==1) checked="checked" #end/>
+					<label for="r11">调用商品标题</label>
+				</div>
+				<div class="item">
+					<input type="radio" class="radio" name="grouptitleClass" id="r22" value="2" #if($!tgBO.titleClass==2) checked="checked" #end />
+					<label for="r22">自定义</label>
+				</div>
+				<div class="item">
+					<input type="radio" class="radio" name="grouptitleClass" id="r33" value="3" #if($!tgBO.titleClass==3) checked="checked" #end />
+					<label for="r33">自定义+商品标题</label>
+				</div>
+			</div>
+			<div #if($!tgBO.titleClass==2) class="mt" #else class="hide mt" #end  id="r22_div">
+				<input type="text" class="text w370" name="grouptitle" value="$!tgBO.title"/>
+			</div>
+			<div #if($!tgBO.titleClass==3) class="mt" #else class="hide mt" #end id="r33_div">
+				<input type="text" class="text w313" name="grouptitle" value="$!tgBO.title"/>+商品标题
+			</div>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit">分享内容:</div>
+		<div class="content">
+			<textarea class="textarea" name="groupcontext">$!tgBO.context</textarea>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit">分享图片:</div>
+		<div class="content">
+			<div class="line">
+				<div class="item">
+					<input type="radio" class="radio" name="groupimgClass" id="pic11" value="1"  #if($!tgBO.imgClass==1) checked="checked" #end/>
+					<label for="pic11">调用商品图片</label>
+				</div>
+				<div class="item">
+					<input type="radio" class="radio" name="groupimgClass" id="pic22" value="2"  #if($!tgBO.imgClass==2) checked="checked" #end />
+					<label for="pic22">自定义</label>
+				</div>
+			</div>
+			<div #if($!tgBO.imgClass==2) class="mt fn-clear" #else class="hide mt fn-clear" #end id="selectPic2">
+				<input value="$!tgBO.imgUrl" class="input uploadPath" name="groupimgUrl" type="text" id="src_uploadSharePic2" readonly="readonly">
+				<div class="selectImage"><input name="imgFile" class="file" type="file" id="uploadSharePic2">添加分享图片</div><img id="uploading_uploadSharePic2" src="$!webPath/resources/style/system/manage/blue/images/loading.gif" class="uploading"/>
+				<span class="tips">*注:图片比例为1:1</span>
+			</div>
+			<div #if($!tgBO.imgClass==2) class="mt sharePicThumbnail" #else class="hide mt sharePicThumbnail" #end id="div_uploadSharePic2">
+				<img src="$!tgBO.imgUrl" id="thumbnail_uploadSharePic2"  /><span class="zoomup">查看大图</span><span class="line-sepa">|</span><span class="del">删除</span>
+			</div>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit">跳转链接:</div>
+		<div class="content">
+			<input type="text" class="text w370" name="groupurl" value="$!tgBO.url"/>
+		</div>
+	</div>
+	<a href="javascript:;" class="submitBtn">确定</a>
+	<script>
+	$(function(){
+		$("#shareTitle1 .item label").click(function(){
+			var index=$("#shareTitle1 .item label").index(this);
+			switch(index){
+				case 0:
+					$("#r2_div,#r3_div").addClass("hide");
+					break;
+				case 1:
+					$("#r2_div").removeClass("hide").find("input").focus();
+					$("#r3_div").addClass("hide");
+					break;
+				case 2:
+					$("#r3_div").removeClass("hide").find("input").focus();
+					$("#r2_div").addClass("hide");
+					break;
+			}
+		});
+		
+		$("#shareTitle2 .item label").click(function(){
+			var index=$("#shareTitle2 .item label").index(this);
+			switch(index){
+				case 0:
+					$("#r22_div,#r33_div").addClass("hide");
+					break;
+				case 1:
+					$("#r22_div").removeClass("hide").find("input").focus();
+					$("#r33_div").addClass("hide");
+					break;
+				case 2:
+					$("#r33_div").removeClass("hide").find("input").focus();
+					$("#r22_div").addClass("hide");
+					break;
+			}
+		});
+		
+		var selectPic=$("#selectPic"),
+		    sharePicThumbnail=$("#div_uploadSharePic"),
+		    selectPic2=$("#selectPic2"),
+		    sharePicThumbnail2=$("#div_uploadSharePic2");
+		
+		$("input[name=imgClass]").change(function(){
+			if(1==$(this).val()){
+				selectPic.hide();
+				sharePicThumbnail.hide();
+			}else{
+				selectPic.show();
+			}
+		})
+		$("input[name=groupimgClass]").change(function(){
+			if(1==$(this).val()){
+				selectPic2.hide();
+				sharePicThumbnail2.hide();
+			}else{
+				selectPic2.show();
+			}
+		})
+		jQuery("img").imageview();
+		jQuery(".zoomup").click(function(){//查看大图
+			$(this).prev("img").trigger("dblclick");
+		});
+		jQuery(".del").click(function(){
+			jQuery(this).parent().hide();
+			jQuery(this).parent().prev().find("input").val("");
+		});
+		
+		//商品图片ajax上传
+		jQuery("input[type=file]").live('change',function(){
+			var that=this;
+			var id=this.id;
+			var uploading=$("#uploading_"+id);
+			uploading.show();
+			jQuery.ajaxFileUpload({
+				  url:'/upload.htm',
+				  dataType:'text',
+				  fileElementId:[that.id],
+				  secureuri: false, //一般设置为false
+				  success:function(data){						    
+					var json = eval('(' + data + ')');
+					jQuery("#src_"+id).val(json.url);
+					jQuery("#div_"+id).show();
+					jQuery("#thumbnail_"+id).attr("src",json.url);
+					uploading.hide();
+				  }
+			});
+		})
+		var flag=true;
+		jQuery(".submitBtn").click(function(){
+			var titleClass=$("input[name=titleClass]:checked").val();
+			var grouptitleClass=$("input[name=grouptitleClass]:checked").val();
+			var imgClass=$("input[name=imgClass]:checked").val();
+			var groupimgClass=$("input[name=groupimgClass]:checked").val();
+			var url=$("input[name=url]").val();
+			var groupurl=$("input[name=groupurl]").val();
+			var title="",grouptitle="",context=$("[name=context]").val(),groupcontext=$("[name=groupcontext]").val(),imgUrl="",groupimgUrl="";
+			#if($!ptBO.id)
+				var id=$!ptBO.id;
+			#else
+				var id="";
+			#end
+			#if($!ptBO.id)
+				var groupid=$!tgBO.id;
+			#else
+				var groupid="";
+			#end
+			var mark="juanpi_putong";
+			var groupmark="juanpi_tuangou";
+			if(titleClass===undefined||grouptitleClass===undefined){
+				smallalert('请选择分享标题');
+				return;
+			}else{
+				if(titleClass=="2"){
+					title=$("input[name=title]").eq(0).val();
+				}else if(titleClass=="3"){
+					title=$("input[name=title]").eq(1).val();
+				}
+				if(grouptitleClass=="2"){
+					grouptitle=$("input[name=grouptitle]").eq(0).val();
+				}else if(grouptitleClass=="3"){
+					grouptitle=$("input[name=grouptitle]").eq(1).val();
+				}
+				if((title==""&&titleClass!="1")||(grouptitle==""&&grouptitleClass!="1")){
+					smallalert('请填写分享标题');
+					return;
+				}				
+			}
+			if(context==""||groupcontext==""){
+				smallalert('请填写分享内容');
+				return;
+			}
+			if(imgClass===undefined||groupimgClass===undefined){
+				smallalert('请选择分享图片');
+				return;
+			}
+			if(imgClass=="2"){
+				imgUrl=$("input[name=imgUrl]").val();
+				if(imgUrl==""){
+					smallalert('请上传分享图片');
+					return;
+				}
+			}
+			if(groupimgClass=="2"){
+				groupimgUrl=$("input[name=groupimgUrl]").val();
+				if(groupimgUrl==""){
+					smallalert('请上传分享图片');
+					return;
+				}
+			}
+			if(url==""||groupurl==""){
+				smallalert('请填写分享链接');
+				return;
+			}
+			if(!flag){
+				return;
+			}
+			flag=false;
+			$.ajax({
+				url:'/admin/share_save.htm',
+				data:{id:id,mark:mark,titleClass:titleClass,title:title,context:context,imgClass:imgClass,imgUrl:imgUrl,url:url,groupid:groupid,groupmark:groupmark,grouptitleClass:grouptitleClass,grouptitle:grouptitle,groupcontext:groupcontext,groupimgClass:groupimgClass,groupimgUrl:groupimgUrl,groupurl:groupurl},
+				type:"POST",
+				dataType:"text",
+				success:function(data){
+					flag=true;
+					smallalert(data);
+				}
+			})
+			
+		});
+
+	});
+	</script>	
+</body>
+</html>

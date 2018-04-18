@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.RelationLogMapper" >
+  <resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.RelationLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="uid" property="uid" jdbcType="BIGINT" />
+    <result column="referee_uid" property="refereeUid" jdbcType="BIGINT" />
+    <result column="seller_uid" property="sellerUid" jdbcType="BIGINT" />
+    <result column="referee_uid_new" property="refereeUidNew" jdbcType="BIGINT" />
+    <result column="seller_uid_new" property="sellerUidNew" jdbcType="BIGINT" />
+    <result column="log_type" property="logType" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.RelationLogBO" extends="BaseResultMap" />
+  <resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.user.model.RelationLog" extends="BaseResultMap" >
+    <result column="log_info" property="logInfo" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, uid, referee_uid, seller_uid, referee_uid_new, seller_uid_new, log_type, create_time, 
+    create_by, modify_time, modify_by
+  </sql>
+  <sql id="Blob_Column_List" >
+    log_info
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.user.model.RelationLogExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from user_relation_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.sinco.carnation.user.model.RelationLogExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_relation_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      limit ${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from user_relation_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_relation_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.RelationLogExample" >
+    delete from user_relation_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinco.carnation.user.model.RelationLog" useGeneratedKeys="true" keyProperty="id" >
+    insert into user_relation_log (id, uid, referee_uid, 
+      seller_uid, referee_uid_new, seller_uid_new, 
+      log_type, create_time, create_by, 
+      modify_time, modify_by, log_info
+      )
+    values (#{id,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT}, #{refereeUid,jdbcType=BIGINT}, 
+      #{sellerUid,jdbcType=BIGINT}, #{refereeUidNew,jdbcType=BIGINT}, #{sellerUidNew,jdbcType=BIGINT}, 
+      #{logType,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=VARCHAR}, #{logInfo,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinco.carnation.user.model.RelationLog" useGeneratedKeys="true" keyProperty="id" >
+    insert into user_relation_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="refereeUid != null" >
+        referee_uid,
+      </if>
+      <if test="sellerUid != null" >
+        seller_uid,
+      </if>
+      <if test="refereeUidNew != null" >
+        referee_uid_new,
+      </if>
+      <if test="sellerUidNew != null" >
+        seller_uid_new,
+      </if>
+      <if test="logType != null" >
+        log_type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="logInfo != null" >
+        log_info,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="refereeUid != null" >
+        #{refereeUid,jdbcType=BIGINT},
+      </if>
+      <if test="sellerUid != null" >
+        #{sellerUid,jdbcType=BIGINT},
+      </if>
+      <if test="refereeUidNew != null" >
+        #{refereeUidNew,jdbcType=BIGINT},
+      </if>
+      <if test="sellerUidNew != null" >
+        #{sellerUidNew,jdbcType=BIGINT},
+      </if>
+      <if test="logType != null" >
+        #{logType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="logInfo != null" >
+        #{logInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinco.carnation.user.model.RelationLogExample" resultType="java.lang.Integer" >
+    select count(*) from user_relation_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update user_relation_log
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.uid != null" >
+        uid = #{record.uid,jdbcType=BIGINT},
+      </if>
+      <if test="record.refereeUid != null" >
+        referee_uid = #{record.refereeUid,jdbcType=BIGINT},
+      </if>
+      <if test="record.sellerUid != null" >
+        seller_uid = #{record.sellerUid,jdbcType=BIGINT},
+      </if>
+      <if test="record.refereeUidNew != null" >
+        referee_uid_new = #{record.refereeUidNew,jdbcType=BIGINT},
+      </if>
+      <if test="record.sellerUidNew != null" >
+        seller_uid_new = #{record.sellerUidNew,jdbcType=BIGINT},
+      </if>
+      <if test="record.logType != null" >
+        log_type = #{record.logType,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null" >
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifyTime != null" >
+        modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyBy != null" >
+        modify_by = #{record.modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logInfo != null" >
+        log_info = #{record.logInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update user_relation_log
+    set id = #{record.id,jdbcType=BIGINT},
+      uid = #{record.uid,jdbcType=BIGINT},
+      referee_uid = #{record.refereeUid,jdbcType=BIGINT},
+      seller_uid = #{record.sellerUid,jdbcType=BIGINT},
+      referee_uid_new = #{record.refereeUidNew,jdbcType=BIGINT},
+      seller_uid_new = #{record.sellerUidNew,jdbcType=BIGINT},
+      log_type = #{record.logType,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      modify_by = #{record.modifyBy,jdbcType=VARCHAR},
+      log_info = #{record.logInfo,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update user_relation_log
+    set id = #{record.id,jdbcType=BIGINT},
+      uid = #{record.uid,jdbcType=BIGINT},
+      referee_uid = #{record.refereeUid,jdbcType=BIGINT},
+      seller_uid = #{record.sellerUid,jdbcType=BIGINT},
+      referee_uid_new = #{record.refereeUidNew,jdbcType=BIGINT},
+      seller_uid_new = #{record.sellerUidNew,jdbcType=BIGINT},
+      log_type = #{record.logType,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      modify_by = #{record.modifyBy,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.RelationLog" >
+    update user_relation_log
+    <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="refereeUid != null" >
+        referee_uid = #{refereeUid,jdbcType=BIGINT},
+      </if>
+      <if test="sellerUid != null" >
+        seller_uid = #{sellerUid,jdbcType=BIGINT},
+      </if>
+      <if test="refereeUidNew != null" >
+        referee_uid_new = #{refereeUidNew,jdbcType=BIGINT},
+      </if>
+      <if test="sellerUidNew != null" >
+        seller_uid_new = #{sellerUidNew,jdbcType=BIGINT},
+      </if>
+      <if test="logType != null" >
+        log_type = #{logType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="logInfo != null" >
+        log_info = #{logInfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.user.model.RelationLog" >
+    update user_relation_log
+    set uid = #{uid,jdbcType=BIGINT},
+      referee_uid = #{refereeUid,jdbcType=BIGINT},
+      seller_uid = #{sellerUid,jdbcType=BIGINT},
+      referee_uid_new = #{refereeUidNew,jdbcType=BIGINT},
+      seller_uid_new = #{sellerUidNew,jdbcType=BIGINT},
+      log_type = #{logType,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR},
+      log_info = #{logInfo,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.RelationLog" >
+    update user_relation_log
+    set uid = #{uid,jdbcType=BIGINT},
+      referee_uid = #{refereeUid,jdbcType=BIGINT},
+      seller_uid = #{sellerUid,jdbcType=BIGINT},
+      referee_uid_new = #{refereeUidNew,jdbcType=BIGINT},
+      seller_uid_new = #{sellerUidNew,jdbcType=BIGINT},
+      log_type = #{logType,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.UserCustomerFavoritesMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.user.model.UserCustomerFavorites">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="uid" property="uid" jdbcType="BIGINT" />
+		<result column="fid" property="fid" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap type="com.sinco.carnation.user.bo.UserCustomerFavoritesBO"
+		id="UserCustomerFavoritesBO" extends="BaseResultMap" />
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, uid, fid, type, create_by, create_time
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.user.bo.UserCustomerFavoritesBO">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_customer_favorites
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="selectByUserForGoods" resultMap="UserCustomerFavoritesBO">
+		select * from
+		user_customer_favorites ucf
+		left join shop_goods sg on sg.id=ucf.fid
+		where ucf.uid=#{userId} and ucf.type=3 order by ucf.id desc
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="Long">
+		select
+		<include refid="Base_Column_List" />
+		from user_customer_favorites
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="Long">
+		delete from
+		user_customer_favorites
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.user.model.UserCustomerFavoritesExample">
+		delete from user_customer_favorites
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert"
+		parameterType="com.sinco.carnation.user.model.UserCustomerFavorites"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into user_customer_favorites
+		(id, uid, fid, type,
+		create_by, create_time)
+		values
+		(#{id,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT},
+		#{fid,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
+		#{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sinco.carnation.user.model.UserCustomerFavorites">
+		insert into user_customer_favorites
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="fid != null">
+				fid,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="fid != null">
+				#{fid,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.user.model.UserCustomerFavoritesExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_customer_favorites
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_customer_favorites
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.uid != null">
+				uid = #{record.uid,jdbcType=BIGINT},
+			</if>
+			<if test="record.fid != null">
+				fid = #{record.fid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_customer_favorites
+		set id = #{record.id,jdbcType=BIGINT},
+		uid = #{record.uid,jdbcType=BIGINT},
+		fid =
+		#{record.fid,jdbcType=VARCHAR},
+		type = #{record.type,jdbcType=VARCHAR},
+		create_by = #{record.createBy,jdbcType=VARCHAR},
+		create_time =
+		#{record.createTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sinco.carnation.user.model.UserCustomerFavorites">
+		update user_customer_favorites
+		<set>
+			<if test="uid != null">
+				uid = #{uid,jdbcType=BIGINT},
+			</if>
+			<if test="fid != null">
+				fid = #{fid,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sinco.carnation.user.model.UserCustomerFavorites">
+		update user_customer_favorites
+		set uid =
+		#{uid,jdbcType=BIGINT},
+		fid = #{fid,jdbcType=VARCHAR},
+		type =
+		#{type,jdbcType=VARCHAR},
+		create_by = #{createBy,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP}
+		where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+	<select id="queryFavorites" resultType="com.sinco.carnation.user.bo.UserCustomerFavoritesBO"
+		parameterType="com.sinco.carnation.user.bo.UserCustomerFavoritesBO">
+		SELECT
+		a.*, b.goods_current_price,
+		b.goods_type,
+		b.goods_main_photo_path,
+		b.goods_name,
+		c.store_name,
+		c.store_address,
+		c.store_logo_path,
+		c.favorite_count
+		FROM
+		`user_customer_favorites` a
+		LEFT
+		JOIN shop_goods b ON a.fid = b.id
+		LEFT JOIN shop_store c ON a.fid =
+		c.id
+		WHERE
+		uid = #{vo.uid,jdbcType=BIGINT}
+
+		<if test="vo.type != null and vo.type !=''">
+			AND type = #{vo.type,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.goodsType != null and vo.goodsType !=''">
+			AND goods_type = #{vo.goodsType,jdbcType=VARCHAR}
+		</if>
+		ORDER BY create_time DESC
+	</select>
+	<select id="queryGroupServiceFavorites" resultType="com.sinco.carnation.o2o.bo.GroupGoodsBO">
+		SELECT
+		a.id AS
+		fid,b.*
+		FROM
+		`user_customer_favorites` a
+		LEFT JOIN o2o_group_goods b ON
+		a.fid = b.id
+		LEFT JOIN shop_store c ON a.fid = c.id
+		WHERE
+		uid =
+		#{userId,jdbcType=BIGINT}
+
+		AND a.type = 5
+		ORDER BY create_time DESC
+	</select>
+	<select id="countStoreFavorite" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM
+		user_customer_favorites
+		WHERE fid=#{storeId,jdbcType=BIGINT} AND
+		`type`=#{type,jdbcType=BIGINT}
+	</select>
+
+	<select id="searchFavoriteExperts" resultType="com.sinco.carnation.user.bo.UserExpertsBO">
+		SELECT
+		a.create_time,
+		b.nickname,
+		c.*
+		FROM
+		user_customer_favorites a
+		LEFT JOIN user_customer b ON a.uid = b.uid
+		INNER JOIN user_experts c
+		ON a.fid=c.uid
+		WHERE a.uid= #{userId,jdbcType=BIGINT} AND a.type=2
+		<if test="nickName != null and nickName != ''">
+			AND b.nickname LIKE
+			CONCAT('%',#{nickName,jdbcType=VARCHAR},'%')
+		</if>
+	</select>
+	<select id="searchFavoriteStores" resultType="com.sinco.carnation.store.bo.StoreBO">
+		SELECT
+		a.create_time,
+		b.nickname,
+		c.*
+		FROM
+		user_customer_favorites a
+		LEFT JOIN user_customer b ON a.uid = b.uid
+		INNER JOIN shop_store c
+		ON a.fid=c.id
+		WHERE 1=1
+		<if test="userId != null and userId != ''">
+			AND a.uid =#{userId,jdbcType=BIGINT}
+		</if>
+		<if test="nickName != null and nickName != ''">
+			AND b.nickname LIKE
+			CONCAT('%',#{nickName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="type != null and type == 'shop'">
+			AND c.is_shop =1
+		</if>
+		<if test="type != null and type == 'o2o'">
+			AND c.is_o2o =1
+		</if>
+	</select>
+	<select id="searchFavoriteCircleInvitations" resultType="com.sinco.carnation.sns.bo.CircleInvitationBO">
+		SELECT
+		a.create_time,
+		b.nickname,
+		c.*
+		FROM
+		user_customer_favorites a
+		LEFT JOIN user_customer b ON a.uid = b.uid
+		INNER JOIN sns_invitation c
+		ON a.fid=c.id
+		WHERE 1=1
+		<if test="userId != null and userId != ''">
+			AND a.uid =#{userId,jdbcType=BIGINT}
+		</if>
+		<if test="nickName != null and nickName != ''">
+			AND b.nickname LIKE
+			CONCAT('%',#{nickName,jdbcType=VARCHAR},'%')
+		</if>
+	</select>
+	<select id="searchFavoriteGroupGoods" resultType="com.sinco.carnation.o2o.bo.GroupGoodsBO">
+		SELECT
+		a.create_time,
+		b.nickname,
+		c.*
+		FROM
+		user_customer_favorites a
+		LEFT JOIN user_customer b ON a.uid = b.uid
+		INNER JOIN o2o_group_goods c
+		ON a.fid=c.id
+		WHERE 1=1
+		<if test="userId != null and userId != ''">
+			AND a.uid =#{userId,jdbcType=BIGINT}
+		</if>
+		<if test="nickName != null and nickName != ''">
+			AND b.nickname LIKE
+			CONCAT('%',#{nickName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="type != null and type != ''">
+			AND c.goods_type =#{type,jdbcType=BIGINT}
+		</if>
+	</select>
+	<select id="searchFavoriteGoods" resultType="com.sinco.carnation.goods.bo.GoodsBO">
+		SELECT
+		a.create_time,
+		b.nickname,
+		c.*
+		FROM
+		user_customer_favorites a
+		LEFT JOIN user_customer b ON a.uid = b.uid
+		INNER JOIN shop_goods c
+		ON a.fid=c.id
+		WHERE 1=1
+		<if test="userId != null and userId != ''">
+			AND a.uid =#{userId,jdbcType=BIGINT}
+		</if>
+		<if test="nickName != null and nickName != ''">
+			AND b.nickname LIKE
+			CONCAT('%',#{nickName,jdbcType=VARCHAR},'%')
+		</if>
+	</select>
+</mapper>

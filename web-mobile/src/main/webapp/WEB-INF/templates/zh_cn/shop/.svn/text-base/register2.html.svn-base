@@ -1,0 +1,372 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户注册 -$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/login.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	
+ //
+ jQuery.validator.addMethod("verify",function(value,element){
+	    var re =  /^([0-9a-zA-Z]|[\u4E00-\u9FA5])+$/;
+        if(re.test(jQuery("#userName").val())){			
+			return true;
+		  } 
+		  else {
+		    return false;
+			  }		  
+});
+jQuery.validator.addMethod("isMobile", function(value, element) {
+var length = value.length;
+var mobile = /^((13[0-9])|(14[0-9])|(15([0-9]))|(17([0-9]))|(18[0-9]))\d{8}$/;
+return this.optional(element) || (length == 11 && mobile.test(value));
+}, "请正确填写您的手机号码");
+
+ var validateObj=jQuery("#theForm").validate({				 
+	errorPlacement:function(error, element) {
+       error.appendTo(element.parent().parent());  
+      },
+	  rules:{
+	    userName:{
+			  required:true,
+			  verify:true,
+	          remote:{
+				    url: "$!webPath/verify_username.htm",     //后台处理程序
+		            type: "post",               //数据发送方式
+		            dataType: "json",           //接受数据格式   
+		            data: {                     //要传递的数据
+		                  "userName": function(){return jQuery("#userName").val();
+		                  }
+			         }
+				}
+			
+		},
+		area1: {required: true},
+        area2: {required: true},
+        area3: {required: true},
+		invitationCode:{
+			  //required:true,
+			  verify:true,
+	          remote:{
+			    url: "$!webPath/verify_invitationCode.htm",     //后台处理程序
+	            type: "post",               //数据发送方式
+	            dataType: "json",           //接受数据格式   
+	            data: {                     //要传递的数据
+	                  "invitationCode": function(){return jQuery("#invitationCode").val();}
+			     }
+				}
+	},
+		mobileCode:{
+		  required:true
+		},
+        password:{
+		  required:true,
+		  minlength:6,
+		  maxlength:20  
+		},
+		mobile:{
+		  required:true,
+		  isMobile:true,
+		  remote:{
+		    url: "$!webPath/verify_mobile.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "mobile": function(){return jQuery("#mobile").val();}
+		     }
+		  }
+		},
+		agree:{
+		  required:true
+		}
+	  },
+	  messages:{
+	    userName:{
+		  required:"用户名不能为空",
+		  verify:"不可使用特殊字符",
+		  remote:"用户名已存在"
+		},
+		mobileCode:{
+		  required:"手机验证码不能为空"
+		},
+		invitationCode:{
+			remote:"邀请码不正确",
+			verify:"",
+			},
+		
+        password:{
+		  required:"密码不能为空",
+		  minlength:"密码不能小于{0}个字符",
+		  maxlength:"密码不能大于{0}个字符" 
+		},
+		mobile:{
+		  required:"手机号不能为空",
+		  isMobile:"请正确填写您的手机号码",
+		  remote:"该手机号已经存在"
+		},
+		agree:{
+		  required:"请接受用户协议"
+		},
+        area1: {required: ''},
+        area2: {required: ''},
+        area3: {required: ''}
+	  }
+	});
+	
+	var time;
+	function countDown(){
+		--time;
+		jQuery("#code_get_result").val(time+"秒后可重新获取");
+		if(time<=0){
+		   window.clearInterval(time_id);
+		   jQuery("#code_get_result").val("").hide();
+		   jQuery("#code_get").show();
+	     }
+	}
+	$("#code_get").click(function (){
+		   jQuery("#code_get").hide();	
+		   	var mobile=$("#mobile").val();
+           jQuery("#code_get_result").val("......").show();
+           jQuery("#code_get").hide();
+		   jQuery.ajax({type:'POST',url:'$!webPath/reg_code_get.htm',data:{"accept_type":"mobile"
+		   ,"mobile":mobile},success:function(ret){
+		     if(ret=="1"){
+			   time=120;
+			   time_id=setInterval(countDown,500);
+			 }else{
+			 	alert("系统繁忙，发送失败!");
+			   jQuery("#code_get_result").hide();
+			   jQuery("#code_get").show();
+			 }
+		   }});
+	});
+ 	jQuery("select").change(function(){
+	    var level=jQuery(this).attr("level");
+	  var id=jQuery(this).val();
+	  jQuery("#area_id").val("");
+	  for(var i=3;i>level;i--){
+	   jQuery("#area"+i).empty();
+	   jQuery("#area"+i).append("<option value=''>请选择</option>");
+	  }
+	  if(id!=""){
+	   jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	      jQuery("#area"+level).empty();
+	     jQuery("#area"+level).append("<option value=''>请选择</option>");
+	       jQuery.each(data, function(index,item){
+	       jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+	     });
+	   },"json");
+	  }else{
+	    for(var i=level;i<=4;i++){
+	     jQuery("#area"+i).empty();
+	    }
+	  }
+	 });
+	//
+	   #if($!address.id)
+	   jQuery("#area_id").val("$!address.areaId"); 
+	   jQuery("#area1").val("$!area.parent.parent.id")
+	   jQuery("#area2").html("<option>$!area.parent.areaName</option>");
+//	   jQuery("#area3").html("<option>$!area.areaName</option>");
+	   #end
+	   #if($!user.month_income)
+	     jQuery("#month_income").val("$!user.month_income"); 
+	   #end 
+ //
+});
+
+function saveForm(){
+   jQuery("#theForm").submit();
+}
+jQuery("#area1").val("$!pid");
+if($iscity==1){
+	function initArea2(){
+		   var level=2;
+			  var id=$pid;
+			  jQuery("#area_id").val("");
+			  for(var i=3;i>level;i--){
+			   jQuery("#area"+i).empty();
+			   jQuery("#area"+i).append("<option value=''>请选择</option>");
+			  }
+			  if(id!=""){
+			   jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+				      jQuery("#area"+level).empty();
+				      jQuery("#area"+level).append("<option value=''>请选择</option>");
+				      jQuery.each(data, function(index,item){
+				      if(item.id==$cid){
+				    	  jQuery("#area"+level).append("<option value='"+item.id+"' selected='selected'>"+item.areaName+"</option>");
+				    	  initArea3(item.id);
+				      }
+				      else{
+				    	  jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+				      }
+			     });
+			   },"json");
+			  }else{
+			    for(var i=level;i<=4;i++){
+			     jQuery("#area"+i).empty();
+			    }
+			  }
+	}
+	function initArea3(pid){
+		   var level=3;
+			  var id=pid;
+			  jQuery("#area_id").val("");
+			  
+			   jQuery("#area3").empty();
+			   jQuery("#area3").append("<option value=''>请选择</option>");
+			  
+			  if(id!=""){
+			   jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+				      jQuery("#area"+level).empty();
+				      jQuery("#area"+level).append("<option value=''>请选择</option>");
+				      jQuery.each(data, function(index,item){
+				      
+				    	  jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+				      
+			     		});
+				      jQuery("#area"+level+" option").eq(1).attr("selected","selected")
+			   },"json");
+			  }else{
+			    for(var i=level;i<=4;i++){
+			     jQuery("#area"+i).empty();
+			    }
+			  }
+	}
+
+	initArea2();
+	initArea3();
+}
+
+jQuery("#area2").val("$!cid");
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="login_head">
+  <div class="reg-head-right" style="float: right; padding-top: 44px;">已有帐号 <a href="$!webPath/user/login.htm" class="c_blue">立即登录</a></div>
+  <h1><span>#if($!config.websiteLogo) <a href="$!webPath/index.htm"> <img src="$!config.websiteLogo.path" border="0" /> </a> #else <a href="$!webPath/index.htm"><img src="$!webPath/resources/style/system/front/default/images/logo.jpg"  /> </a> #end</span> <strong>&nbsp; | &nbsp;注册</strong></h1>
+</div>
+<div class="login_box">
+    <div class="regist_common">
+        #if($message)
+        <h3>${message}</h3>
+        #end
+        <form action="$!webPath/register_finish.htm" method="post" name="theForm" id="theForm">
+            <table width="900" border="0" cellpadding="0" cellspacing="0" class="regist_common_table">
+            	<input type="hidden" name="code" value="$!{code}"/>
+                <tr>
+                    <td align="right">手机号：</td>
+                    <td><div class="regist_form_txt">
+                        <input name="mobile" type="hidden" id="mobile" value="$!{mobile}"/>$!{mobile}</div>
+                        </td>
+    </td>
+    </tr>
+    <tr>
+    <tr>
+        <td width="90" align="right">短信验证码：</td>
+        <td><div class="regist_form_txt"><input name="mobileCode" type="text" id="mobileCode" class="regist_txt m-code-text" />
+            <input id="code_get" class="btn btn-blue" type="button" value="发送短信验证码" />
+            <input id="code_get_result" class="btn btn-gray" type="button" style="display: none;" value="" />
+        </div></td>
+    </tr>
+    <tr>
+    </tr>
+    <tr>
+    <tr>
+      <tr>
+       <td width="90" align="right">用户名：</td>
+       <td>
+       	<div class="regist_form_txt">
+			<input name="userName" type="text" id="userName" class="regist_txt" />
+       	</div>
+       </td>
+ 	</tr>
+    
+    <tr>
+        <td  align="right">登录密码：</td>
+        <td><div class="regist_form_txt"><input  name="password" type="password" id="password" class="regist_txt"/></div></td>
+    </tr>
+ 
+   
+    </script>
+    
+      <input type="hidden" name="addressId" value="$!address.id" />
+                
+		        
+     <tr>
+        <td  align="right">你的注册人(邀请码)：</td>
+        <td><div class="regist_form_txt"><input name="invitationCode" type="text" id="invitationCode"  class="regist_txt" placeholder="请输入邀请码"/></div></td>
+    </tr>
+    <tr>
+        <td  align="right">所在区域:</td>
+        <td>
+        	<div class="regist_form_txt">
+        		<span class="base_select">
+                  <select id="area1" name="area1" level="2" class="base_select_check" >
+                    <option value="">请选择...</option>
+                    #foreach($area in $areas)
+                    	#if($area.id.equals($pid))
+                    <option value="$!area.id" selected="selected">$!area.areaName</option>
+                    	#else
+                    	 <option value="$!area.id">$!area.areaName</option>
+                    	#end
+                    #end
+                  </select>
+                  <select id="area2" name="area2" level="3" class="base_select_check">
+                    <option value="">请选择...</option>
+                  </select>
+              <select id="area3" name="area3" level="4" class="base_select_check">
+                    <option value="">请选择...</option>
+                  </select> 
+                  <input id="area_id" name="area_id" type="hidden" value="$!address.areaId"/>
+                </span> 
+        	</div>
+        	</td>
+    </tr>
+    <tr>
+    
+        <td>&nbsp;</td>
+        <td class="font12">
+            <div class="regist_form_txt">
+                <input name="agree" type="checkbox" class="regist_check" id="agree" value="true" checked="checked" />
+                <label for="agree">我已阅读并同意 </label>
+                <a href="javascript:void(0);" onclick="jQuery('#agree_article').show();"  class="blue2">《商城在线服务协议》</a></div>
+        </td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td><input name="" type="submit"  class="regist_btn btn btn-blue" value="立即注册"/></td>
+    </tr>
+    </table>
+    </form>
+</div>
+</div>
+<div style="display:none;" id="agree_article">
+  <div class="white_content" > </div>
+  <div class="white_content_box"> <a href="javascript:void(0);"  onclick="jQuery('#agree_article').hide();" class="white_close"><img src="$!webPath/resources/style/system/front/default/images/login/close.gif" width="16" height="16" /></a>
+    <div class="white_con">
+      <h3 class="white_title"><span>用户注册协议</span></h3>
+      <div class="white_box">
+        <div class="white_box_contant"> $!doc.content </div>
+      </div>
+      <div class="white_box_btn">
+        <input name="" type="button" value="同意并继续" onclick="jQuery('#agree_article').hide();" />
+      </div>
+    </div>
+  </div>
+  <div class="black_overlay"></div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</body>
+</html>

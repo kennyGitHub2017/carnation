@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head></head>
+#macro ( genericTree $somelist )
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs)
+#end
+#end
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" href="$!webPath/resources/editor/themes/default/default.css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+<script src="$!webPath/resources/js/jquery.imgareaselect.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.shop.base.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script src="$!webPath/resources/js/jquery.viewpic.js"></script>
+
+<script>
+jQuery(document).ready(function() {
+    jQuery("#logoShow").mouseover(function() {
+        jQuery("#logoImg").css('display', 'block');
+    }).mouseout(function() {
+        jQuery("#logoImg").css('display', 'none');
+    });
+    
+    
+    
+    jQuery("#logoShow2").mouseover(function() {
+        jQuery("#appDownloadPicPre").css('display', 'block');
+    }).mouseout(function() {
+        jQuery("#appDownloadPicPre").css('display', 'none');
+    });
+    
+	jQuery.validator.addMethod("cl",
+    function(value, element) {
+		var level=jQuery(" option:selected").attr("level");
+        if(level==1||level=="1"){
+			return false;
+		}else{
+			return true;
+		}
+	});
+    jQuery("#theForm").validate({
+        rules: {
+            title: {
+                required: true
+            },
+            circleId: {
+                required: true,
+				cl:true
+            },
+            content: {
+            	required: true
+            }
+        },
+        messages: {
+            title: {
+                required: "标题不能为空"	
+            },
+            circleId: {
+                required: "圈子不能为空",
+				cl:"请选择二级分类"
+            },
+            article:{
+			 	required: "资讯内容不得为空"
+			}
+        }
+    });
+    //改变系统提示的样式
+    jQuery("span .w").mousemove(function() {
+        var id = jQuery(this.parentNode).attr("id");
+        if (id = "nothis") {
+            jQuery(this.parentNode).attr("id", "this")
+        }
+    }).mouseout(function() {
+        var id = jQuery(this.parentNode).attr("id");
+        if (id = "this") {
+            jQuery(this.parentNode).attr("id", "nothis")
+        }
+    });
+    var options = {
+            cssPath : '$!webPath/resources/editor/themes/default/default.css',
+            filterMode : false,
+    		uploadJson:'$!webPath/upload.htm',
+    		width : '900px',
+    		height:'400px',
+    		resizeType: 1,
+    		syncType:"form",
+    		afterCreate : function() {
+    							var self = this;
+    							self.sync();
+    						},
+    		afterChange : function() {
+    							var self = this;
+    							self.sync();
+    						},
+    		afterBlur : function() {
+    							var self = this;
+    							self.sync();
+    						},
+    		items:['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+    			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+    			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+    			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+    			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+    			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+    };
+
+    editor = KindEditor.create('#content', options);
+});
+window.flag=0;
+function saveForm() {
+	var selectedCircleName = jQuery('#circleId option:selected').text();
+	jQuery('#circleName').val(selectedCircleName);
+   	if(jQuery("#title").val()==""){
+   		jQuery("#show1").show();
+   		return;
+   	}
+   	if(jQuery("#circleId").val()==""){
+   		jQuery("#show2").show();
+   		return;
+   	}
+   	if(jQuery("#content").val()==""){
+		jQuery("#show").show();
+		return;
+	}
+	editor.sync();
+	$("#theForm").attr("action","$!webPath/admin/circle_invitation_save.htm");
+	$("#theForm").attr("target","main_workspace");
+	if(window.flag == 0){
+        window.flag = 1;
+        jQuery("#theForm").submit();
+    }
+	
+}
+function yulan(){
+	if(jQuery("#content").val()==""){
+		jQuery("#show").show();
+		return;
+	}
+	editor.sync();
+	$("#theForm").attr("action","$!webPath/admin/circle_preview.htm");
+	$("#theForm").attr("target","_blank");
+	jQuery("#theForm").submit();
+}
+</script>
+</head><body>
+<form action="$!webPath/admin/circle_invitation_save.htm" method="post" enctype="multipart/form-data" name="theForm" id="theForm" target="main_workspace">
+  <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/circle_official_invitation.htm" />
+  <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/circle_invitation_add.htm" />
+  <div class="cont">
+    <h1 class="seth">帖子管理</h1>
+    <div class="nav_list">
+      <ul>
+        <li><a href="$!webPath/admin/circle_official_invitation.htm"><b>管理列表</b></a></li>
+        <li><a href="$!webPath/admin/circle_invitation_add.htm" #if(!$!edit) class="this" #end><b>新增帖子</b></a></li>
+        #if($!edit)
+        <li><a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+        #end
+      </ul>
+    </div>
+    <div class="edit">
+      <div class="editul setcont" >
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>资讯标题</li>
+          <li><span class="webname">
+            <input name="title" type="text" id="title" value="$!obj.title" />
+            </span></li>
+               <li style=" clear:both; margin-left:135px;">
+	          <label id="show1" class="error" generated="true" style="display:none">标题不能为空</label>
+	        </li>
+        </ul>
+<!--         <ul class="set1"> -->
+<!--           <li class="setcont_bg"><strong class="sred">*</strong>帖子类型</li> -->
+<!--           <li><span class="webname"> -->
+<!--             <select name="circleType" id="circleType" > -->
+<!--               <option value="0" #if($obj.circleType == 0)selected = "selected"#end>普通</option> -->
+<!--               <option value="1" #if($obj.circleType == 1)selected = "selected"#end>官方</option> -->
+<!--             </select> -->
+<!--             </span></li> -->
+<!--         </ul> -->
+		<input  type="hidden" value="2" name ="circleType"/>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>圈  子</li>
+          <li><span class="webname">
+            <select name="circleId" id="circleId" >
+              <option value="">请选择圈子</option>
+      		 #foreach($objc in $listCircle)
+      		 	<option value="$!{objc.id}" #if($obj.circleId == $objc.id)selected = "selected"#end>$!objc.title</option>
+	         #end
+            </select>
+            <input id="circleName" name="circleName" type="hidden" value=""/>
+            </span></li>
+            <li style=" clear:both; margin-left:135px;">
+	          <label id="show2" class="error" generated="true" style="display:none">圈子不能为空</label>
+	        </li>
+        </ul>
+        
+			<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>关键字</li>
+						<li><span class="webname"><input type="hidden" id="kid_typeid" name="keyWordIdStr" value="#foreach($skmResult in $skmResult) $!skmResult.kId,  #end">
+						</span>
+						
+						<span id="add" onclick="showKeywordsBox()">添加</span>
+						<span id="keywordslist">#foreach($skmResult in $skmResult) $!skmResult.kName  #end</span>
+						</li>
+			</ul>
+			
+        
+        <ul class="set1">
+          <li class="setcont_bg">资讯封面</li>
+          <li><span class="webname"> <span class="eidt_li_a" style="position:relative; width:50px; height:22px; line-height:22px;margin-top: 3px; color:#333; border:1px solid #ccc; padding:2px 5px; border-radius:3px;">选择图片
+            <input type="file" id="cover" onchange="changePic('cover','preview')" style="opacity: 0;top:0;left:1px;position:absolute; z-index:100;width:60px; " name="cover" />
+            </span> </span><span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/></span>
+            <span id="nothis"><strong class="q"></strong><strong class="w">封面用于和标题一起来展示资讯的核心内容（可选）</strong><strong class="c"></strong></span>
+            #if($!obj.thumbnail)
+            #set($img=$!imageTools.queryImg($!obj.thumbnail))
+            <div class="bigimgpre" id="logoImg" style="display:none; left:270px;"><img src="$!obj.thumbnail"  width="200" height="200" id="coverimg"/> </div>
+            #end
+            <div class="pic-view"><img id="preview" alt="" name="pic" /></div>
+            </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>资讯内容</li>
+          <li><span class="webname">
+            <textarea name="content" style="width:100%;height:400px;" id="content">$!obj.content</textarea>        </span></li>
+	        <li style=" clear:both; margin-left:135px;">
+	          <label id="show" class="error" generated="true" style="display:none">资讯内容不能为空</label>
+	        </li>
+<!--           <li style=" clear:both; margin-left:135px;"> -->
+<!--             <div id="info_goods" class="editor_photo_detail" style="display:none;"> </div> -->
+<!--             <div id="info_goods_imgs" class="editor_photo_detail" style="display:none;"> </div> -->
+<!--           </li> -->
+        </ul>
+        
+         <ul class="set1">
+          <li class="setcont_bg">帖子app推广图片</li>
+          <li><span class="webname"> <span class="eidt_li_a" style="position:relative; width:50px; height:22px; line-height:22px;margin-top: 3px; color:#333; border:1px solid #ccc; padding:2px 5px; border-radius:3px;">选择图片
+            <input type="file" id="filePic" onchange="changePic('filePic','previewPic')" style="opacity: 0;top:0;left:1px;position:absolute; z-index:100;width:60px; " name="filePic" />
+            </span> </span><span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow2" style="cursor:help"/></span>
+            <span id="nothis"><strong class="q"></strong><strong class="w">用于帖子分享时显示app推广下载图片（可选）</strong><strong class="c"></strong></span>
+            #if($!obj.appDownloadPic)
+            #set($img=$!imageTools.queryImg($!obj.appDownloadPic))
+            <div class="bigimgpre" id="appDownloadPicPre" style="display:none; left:270px;"><img src="$!obj.appDownloadPic"  width="200" height="200" id="coverimgPre"/> </div>
+            #end
+            <div class="pic-view"><img id="previewPic" alt="" name="appDownloadPic" /></div>
+            </li>
+        </ul>
+      </div>
+    </div>
+    <div class="submit"> <span class="pad120">
+      <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/>
+      <input name="" type="button" value="预览" style="cursor:pointer;" onclick="yulan();"/>
+      </span> </div>
+  </div>
+</form>
+	#parse("/result/key_word_utils.html")
+</body>
+</html>

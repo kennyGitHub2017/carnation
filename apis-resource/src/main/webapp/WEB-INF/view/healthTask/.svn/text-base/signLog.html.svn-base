@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>完成结果</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="format-detection" content="telephone=no">
+    	<meta name="format-detection" content="email=no">
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/common.css"/>
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/task.css" />
+    	<script type="text/javascript">
+			var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+			document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+    	</script>
+	</head>
+	<body>
+		<div class="appbar fn-clear">
+			<a href="javascript:;" class="return"></a>
+			<span class="centerTitle">$!obj.taskName</span>
+			#if($!jumpType=='task-index')
+			<a href="javascript:;" class="submit">设置</a>
+			#end
+			<input type="hidden" id="id" value="$!obj.id"/>
+			<input type="hidden" id="taskID" value="$!obj.userHealthtaskId"/>
+			<input type="hidden" id="uid" value="$!uid"/>
+		</div>	
+		<div class="taskHolder">
+			<div class="dotask">
+				<div class="timenow">$!currDate</div>
+				<div class="undone done"></div>
+				<div class="tips">已完成任务</div>
+			</div>
+			<div class="tongji">
+				<a href="javascript:;">已坚持<span id="countDay">$!obj.days</span>天</a>
+				成长统计
+			</div>
+			<div class="weekly">
+				<div class="week">
+		            <ul>
+		                <li #if($!obj.signWeek==1) class="curr" #end>周一</li>
+		                <li #if($!obj.signWeek==2) class="curr" #end>周二</li>
+		                <li #if($!obj.signWeek==3) class="curr" #end>周三</li>
+		                <li #if($!obj.signWeek==4) class="curr" #end>周四</li>
+		                <li #if($!obj.signWeek==5) class="curr" #end>周五</li>
+		                <li #if($!obj.signWeek==6) class="curr" #end>周六</li>
+		                <li #if($!obj.signWeek==7) class="curr" #end>周日</li>
+		            </ul>
+		       </div>
+			</div>
+		</div>
+		<script src="${apiPath}/resources/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/jQuery.fn/tap.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function(){
+				if(fn.getQueryPar("taskDone")=="taskDone"){
+					setTimeout(function(){
+						jQuery(".undone").trigger("touchstart");
+					},500);					
+				}
+			});	
+			var undoneflag=false;
+			jQuery(".undone").on('touchstart',function(){
+			});
+			//返回按钮
+			jQuery(".return").on("touchstart",function(){
+				if(history.length==1){
+					fn.requestBack();
+				}
+				else{
+					window.location.href="${apiPath}/v1/ht/index?userID="+jQuery("#uid").val();
+				}
+			});
+			//设置按钮
+			jQuery(".submit").on("touchstart",function(){
+				window.location.href="${apiPath}/v1/ht/taskSet?id="+jQuery("#taskID").val()+"&userID="+jQuery("#uid").val()+"&jumpType=$!jumpType";
+			});
+		</script>
+	</body>
+</html>

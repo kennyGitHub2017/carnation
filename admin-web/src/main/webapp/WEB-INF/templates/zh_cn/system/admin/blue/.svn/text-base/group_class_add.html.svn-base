@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericGroupClassTree $somelist) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">
+<!-- #if($!some.gcLevel>0) -->
+<!-- #foreach($count in [0..$!some.gcLevel])&nbsp;&nbsp;#end #end  -->
+$!some.gcName
+</option>
+<!-- #genericGroupClassTree($!some.childs)  -->
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	//设置默认状态以及判断初始显示状态
+	var state = jQuery("#display").val();
+	if(state==""){
+		jQuery("#display").val("true");
+		jQuery("#displayOff").hide();
+	}else{
+		 if(state=="true"){
+			jQuery("#displayOff").hide();
+		}else{
+			jQuery("#displayOn").hide();
+		}
+	}
+ 	//改变系统提示的样式
+	#if($!obj)
+	jQuery("#gc_type").val($!obj.gc_type);
+	#end
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  gcName:{
+	    required :true,
+	    maxlength:8, 
+	    remote:{
+		    url: "$!webPath/admin/group_class_verify.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "gcName": function(){return jQuery("#gcName").val();},
+				  "id":function(){return jQuery("#id").val()},
+				  "pid":function(){return jQuery("#pid").val()}
+		     }
+			}
+	   },
+	   gcSequence:{
+		   required :true,
+		   digits:true,
+		   min:0,
+		   max:9999
+	   }
+	 },
+	messages:{
+		gcName:{required:"分类名称不能为空",maxlength:"最多输入8个字符",remote:"该分类已经存在"},
+		gcSequence:{required:"排序不能为空",digits:"必须为数字",min:"最小0",max:"最大9999"}
+	}
+  });	
+  #if($!edit)
+	  jQuery("#textfield1").rules("remove", "required"); 	
+  	  jQuery("#textfield2").rules("remove", "required"); 	
+  #end
+  //
+  jQuery("#pid").val($!obj.parentId);
+  jQuery("input[type='file']").change(function(){
+	 jQuery(this).parent().parent().find("input[type='text']").val(jQuery(this).val());
+  })
+  jQuery("#logoShow").mouseover(function(){								
+	    jQuery("#logoImg").css('display','block');
+   }).mouseout(function(){
+		jQuery("#logoImg").css('display','none');
+   });
+  jQuery("#mobileLogoShow").mouseover(function(){								
+	    jQuery("#mobileLogoImg").css('display','block');
+  }).mouseout(function(){
+		jQuery("#mobileLogoImg").css('display','none');
+  });
+  /**#if($!obj.parentId)
+	  jQuery("#icon_acc_ul").hide();
+	  jQuery("#mobile_icon_acc_ul").hide();
+  #end
+  //图标
+  jQuery("#pid").change(function(){
+	 var val = jQuery(this).val();
+	  if(val==""){
+			 jQuery("#icon_acc_ul").show(); 
+			 jQuery("#mobile_icon_acc_ul").show(); 
+	  }else{ 
+		 jQuery("#icon_acc_ul").hide(); 
+		 jQuery("#mobile_icon_acc_ul").hide(); 
+	  }
+   });*/
+   
+  jQuery("#gc_type").change(function(){
+		 var val = jQuery(this).val();
+			  if(val=="10"){
+				  jQuery("#type_selected").show();
+			  }else{
+				  jQuery("#type_selected").hide();
+			  }
+		  });
+   
+});
+
+//设置显示开关
+function displayState(){
+	var state = jQuery("#display").val();
+	if(state=="true"){
+		jQuery("#display").val("false");
+		jQuery("#displayOff").show();
+		jQuery("#displayOn").hide();
+	}else{
+		jQuery("#display").val("true");
+		jQuery("#displayOff").hide();
+		jQuery("#displayOn").show();
+	}
+}
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">服务分类</h1>
+  <div class="nav_list">
+  <ul>
+<!--    <li><a href="$!webPath/admin/group_list.htm"><b>团购列表</b></a> </li> -->
+<!--    <li><a href="$!webPath/admin/group_add.htm"><b>新增团购</b></a></li> -->
+<!--    <li><a href="$!webPath/admin/group_class_list.htm?type=goods" ><b>商品团购分类</b></a> </li> -->
+   <li><a href="$!webPath/admin/group_class_list.htm?type=life" ><b>管理</b></a> </li>
+<!--    <li><a href="$!webPath/admin/group_class_add.htm?type=goods" #if($!type=="goods"&&!$!edit) class="this" #end ><b>新增商品类分类</b></a></li> -->
+   <li><a href="$!webPath/admin/group_class_add.htm?type=life" #if($!type=="life"&&!$!edit) class="this" #end><b>新增</b></a></li>
+<!--    <li><a href="$!webPath/admin/group_area_list.htm" ><b>团购区域</b></a></li> -->
+<!--    <li><a href="$!webPath/admin/group_area_add.htm"><b>新增区域</b></a></li> -->
+<!--    <li><a href="$!webPath/admin/group_price_list.htm" ><b>价格区间</b></a></li> -->
+<!--    <li><a href="$!webPath/admin/group_price_add.htm"><b>添加区间</b></a> </li> -->
+    #if($!edit)
+     <li><a href="javascript:void(0);" class="this"><b>编辑</b></a> </li>
+     #end
+  </ul>
+    </div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/group_class_save.htm" method=post enctype="multipart/form-data">
+ <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+  <div class="edit">
+  <div class="editul setcont">
+    <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>分类名称</li>
+      <li><span class="webname">
+        <input name="gcName" type="text" id="gcName" value="$!obj.gcName" size="40" />
+      </span></li>
+    </ul>
+    <!--<ul class="set1">
+        <li  class="setcont_bg"><strong class="sred">*</strong>分类类型</li>
+        <li> <span class="webnamesec sizese">
+          <select name="gc_type" id="gc_type">
+            <option value="0" selected="selected">商品类团购</option>
+            <option value="1">生活类团购</option>
+          </select>
+         </span><span id="nothis"><strong class="q"></strong><strong class="w">商品类团购为实物商品、生活类为虚拟商品 如：电影票团购</strong><strong class="c"></strong></span></li>
+      </ul>-->
+    <!--鼠标未经过样式-->
+    <ul class="set1">
+      <li class="setcont_bg">上级分类</li>
+      <li><span class="webnamesec sizese">
+        <select name="pid" id="pid">
+              <option value="">请选择...</option>
+			  #genericGroupClassTree($!gcs)
+         </select>
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">如果选择上级分类，那么新增的分类则为被选择上级分类的子分类</strong><strong class="c"></strong></span></li>
+    </ul>
+    <ul class="set1">
+       <li class="setcont_bg">显示</li>
+       <li class="webSwitch">
+         <input name="display" id="display" type="hidden" value="$!obj.display" />
+         <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="displayOn" onclick="displayState();" style="cursor:pointer"/> <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="displayOff" onclick="displayState();" style="cursor:pointer"/></li>
+    </ul>
+    <ul class="set1" id="icon_acc_ul"  >
+      <li class="setcont_bg">web端图标上传</li>
+      <li> <span class="size13" >
+        <input name="textfield1" type="text" id="textfield1" />
+        </span> <span class="filebtn">
+        <input name="button" type="button" id="button1" value=""/>
+        </span> <span style="float:left;" class="file">
+        <input name="webIcon" type="file" id="webIcon" class="file-text" size="30"/>
+        </span> <span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> </span>#if(!$!obj.webIcon)<span id="nothis"><strong class="q"></strong><strong class="w">暂无图标</strong><strong class="c"></strong></span>#end
+        #if($!obj.webIcon)
+        <div class="bigimgpre" id="logoImg" style="display:none; left:380px;"><img src="$!obj.webIcon"  width="50" height="50" id="logoShow2"/> </div>
+        #end 
+      </li>
+    </ul>
+    <ul class="set1" id="mobile_icon_acc_ul" >
+      <li class="setcont_bg">移动端图标上传</li>
+      <li> <span class="size13" >
+        <input name="textfield2" type="text" id="textfield2" />
+        </span> <span class="filebtn">
+        <input name="button" type="button" id="button1" value=""/>
+        </span> <span style="float:left;" class="file">
+        <input name="mobileIcon" type="file" id="mobileIcon" class="file-text" size="30"/>
+        </span> <span class="preview"> <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="mobileLogoShow" style="cursor:help"/> </span>#if(!$!obj.mobileIcon)<span id="nothis"><strong class="q"></strong><strong class="w">暂无图标</strong><strong class="c"></strong></span>#end
+        #if($!obj.mobileIcon)
+        <div class="bigimgpre" id="mobileLogoImg" style="display:none; left:380px;"><img src="$!obj.mobileIcon"  width="50" height="50" /> </div>
+        #end </li>
+    </ul>
+    <ul class="set1">
+      <li class="setcont_bg">排序</li>
+      <li><span class="size100">
+        <input name="gcSequence" type="text" id="gcSequence" value="$!obj.gcSequence" />
+      </span><span id="nothis"><strong class="q"></strong><strong class="w">序号越小，分类显示越靠前</strong><strong class="c"></strong></span></li>
+    </ul>    
+    <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>类型</li>
+      <li>
+      	<span class="webnamesec sizese">
+	        <select name="gc_type" id="gc_type">
+	              <option value="0" #if($!obj.gcType=='0') selected="selected" #end>原生</option>
+	              <option value="10"  #if($!obj.gcType=='10') selected="selected" #end>H5</option>
+	         </select>
+      	</span>
+      </li>
+      
+    </ul>    
+    
+   	<span id="type_selected" #if($!obj.gcType!='10') style="display:none" #end>
+    <ul class="set1">
+      <li class="setcont_bg"><strong class="sred"></strong>链接</li>
+      <li>
+		<span class="webname"><input name="url" type="text" id="url" value="$!obj.url" size="40" /></span>
+	    <span id="nothis"><strong class="q"></strong><strong class="w">类型为10时 使用该链接调H5</strong><strong class="c"></strong></span>
+      </li>
+    </ul>
+    </span>
+    
+  </div>
+  </div>
+  </form>
+  <div class="submit">
+   <span class="pad120"> <input name="save" type="button" value="提交" onclick="saveForm()" /></span>
+  </div>
+</div>
+</body>
+</html>

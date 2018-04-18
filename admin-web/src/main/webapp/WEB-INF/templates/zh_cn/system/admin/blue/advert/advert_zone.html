@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+/* 
+系统通用方法，根据参数来决定处理的url和参数
+*/
+function cmd22(){
+	var ids=$.trim(arguments[0]);
+	if(ids == ""){
+		jQuery("#ListForm").find(":checkbox:checked").each(function(){
+		  if(jQuery(this).val()!=""){	  
+			  ids+=jQuery(this).val()+",";
+		  }
+		});
+	}
+	if(ids!=""){
+	 	if(confirm("确定要执行该操作？")){
+		  jQuery.ajax({
+			  	async: false,
+				type:'POST',
+			    url:'$!webPath/admin/areaAd/delete.htm',
+				data:{"mulitId":ids},
+				dataType: "json",
+				beforeSend:function(){
+					
+				},
+			   	success:function(datas){
+			   		var msg = "";
+		       		if(datas.length > 0){
+		       			//提示
+		       			var table = jQuery(".fshop_table");
+		       			for(var i = 0; i < datas.length; i++){
+		       				var data = datas[i];
+		       				if(!data.state){
+		       					table.find("input[type='checkbox']").each(function(){
+		       						if(this.value == data.id){
+		       							msg += "专区【" + $(this).closest("td").next().html() + "】存在子区域，删除失败。\r\n";
+		       						}
+		       					});
+		       				}
+		       			}
+				 	} 
+		       		if(msg){
+	       				alert(msg);
+	       			}
+		       		jQuery("#ListForm").submit();
+		    	}
+			});
+	 	}
+	}else{
+       alert("至少选择一条数据记录");
+	}
+}
+function changeStatus(id, ele){
+	/* var url = '$!webPath/admin/areaAd/enabled.htm';
+	jQuery("#ListForm #mulitId").val(id);
+	jQuery("#ListForm").attr("action",url);
+    jQuery("#ListForm").submit(); */
+    jQuery.ajax({
+		type:'POST',
+	    url:'$!webPath/admin/areaAd/enabled.htm',
+		data:{"mulitId":id},
+		dataType: "text",
+		beforeSend:function(){
+			
+		},
+	   	success:function(res){
+	   		var datas = eval("("+ res +")");
+	   		for(var key in datas){
+	   			if(datas[key] == 1){
+	   				$("#tr_" + key).find("img").attr("src", "$!webPath/resources/style/system/manage/blue/images/false.png");
+	   			}else{
+	   				$("#tr_" + key).find("img").attr("src", "$!webPath/resources/style/system/manage/blue/images/true.png");
+	   			}
+	   		}
+    	}
+	});
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">专区管理</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/admin/areaAd/list.htm"  class="this"><b>管理</b></a></li>
+        <li><a href="$!webPath/admin/areaAd/toEdit.htm" ><b>新增</b></a></li>
+    </ul>
+  </div>
+<!--   <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li>添加标识可通过article_标识.htm进行站内引用，标识不可重复</li>
+    </ul>
+  </div> -->
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/admin/areaAd/list.htm" method="post">
+  
+      <div class="search">
+			<span>标签名称</span> <span class="size250"> 
+			<input type="text" value="$!areaAd.name" name="name">
+			</span> 
+			<span class="btn_search"> <input type="submit" class="search_btn" style="cursor: pointer;" value="搜索" name="">
+			</span>
+	</div>
+  
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="10%">&nbsp;排序</th>
+        <th width="10%"><span class="form_btna">名称</span></th>
+        <th width="15%"><span class="form_btna">专区代码</span></th>
+        <th width="10%"><span class="form_btna">类型</span></th>
+        <th width="15%"><span class="form_btna">位置</span></th>
+        <th width="15%"><span class="form_btna">状态</span></th>
+        <th ><b class="form_btnb">操作</b></th>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr id="tr_$!obj.id">
+        <td class="check_position" align="center"><input style="float:left" name="checkbox" type="checkbox" value="$!obj.id" /><span style="margin-left:-16px">${obj.orders}</span></td>
+       <td class="z_name" align="center">${obj.name}</td>
+       <td class="z_code" align="center">${obj.code}</td>
+       <td class="z_type" align="center">样式${obj.style}</td>
+       <td class="z_position" align="center">#if(${obj.pos}==0) PC #else APP #end</td>
+       <td class="z_status" align="center">#if(${obj.disabled}==0) 
+       <img onclick="changeStatus(${obj.id}, this)"src="$!webPath/resources/style/system/manage/blue/images/true.png" width="25" height="21" border="0" style="cursor:pointer;" title="可编辑" val="true">
+        #else<img onclick="changeStatus(${obj.id}, this)" src="$!webPath/resources/style/system/manage/blue/images/false.png" width="25" height="21" border="0" style="cursor:pointer;" title="可编辑" val="false"> #end</td>
+        <td class="hui oprate_con" align="center">
+        #if(${obj.disabled}==0)
+        <a href="$!webPath/admin/areaAd/addAdContent.htm?id=$!obj.id" class="blue">添加区域</a> 
+        	|<a href="$!webPath/admin/areaAd/toEdit.htm?id=$!obj.id" class="blue">编辑</a> 
+            |<a href="javascript:;" onclick="cmd22(${obj.id})" class="blue">删除</a>
+        #else
+        <a href="javascript:alert('当前专区为隐藏状态，不允许添加区域')" class="blue">添加区域</a> 
+        	|<a href="$!webPath/admin/areaAd/toEdit.htm?id=$!obj.id" class="blue">编辑</a> 
+            |<a href="javascript:;" onclick="cmd22(${obj.id})" class="blue">删除</a>
+        #end
+        </td>
+      </tr>
+      #end
+    </table>
+ </div>
+ <div class="operate_bar">
+ 	<div class="oper_sp"> 
+    	<span class="oper_check"><label><input type="checkbox" name="all" id="all" onclick="selectAll(this)" value="" />全部</label></span>
+    	<span class="oper_del"><input name="" type="button" value="删除" style="cursor:pointer;" onclick="cmd22()"/></span>
+    </div>
+    <div class="fenye">
+    	<input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	  	<input name="mulitId" type="hidden" id="mulitId" />
+	  	$!gotoPageFormHTML
+    </div>       
+ </div>
+ </FORM>
+</div>
+</body>
+</html>

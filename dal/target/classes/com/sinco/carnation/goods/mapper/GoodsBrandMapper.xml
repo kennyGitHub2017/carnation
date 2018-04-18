@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.goods.mapper.GoodsBrandMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.goods.model.GoodsBrand">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus" />
+		<result column="audit" property="audit" jdbcType="INTEGER" />
+		<result column="first_word" property="firstWord" jdbcType="VARCHAR" />
+		<result column="mobile_recommend" property="mobileRecommend"
+			jdbcType="INTEGER" />
+		<result column="mobile_recommend_time" property="mobileRecommendTime"
+			jdbcType="DATE" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="recommend" property="recommend" jdbcType="BIT" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="show_index" property="showIndex" jdbcType="BIT" />
+		<result column="user_status" property="userStatus" jdbcType="INTEGER" />
+		<result column="brand_logo_id" property="brandLogoId" />
+		<result column="category_id" property="categoryId" jdbcType="BIGINT" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="gc_id" property="gcId" jdbcType="BIGINT" />
+		<result column="weixin_recommend" property="weixinRecommend"
+			jdbcType="INTEGER" />
+		<result column="weixin_recommend_time" property="weixinRecommendTime"
+			jdbcType="DATE" />
+	</resultMap>
+
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.goods.model.GoodsBrand"
+		extends="BaseResultMap">
+		<result column="remark" property="remark" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<resultMap id="BOResultMap" type="com.sinco.carnation.goods.bo.GoodsBrandBO"
+		extends="ResultMapWithBLOBs">
+		<result column="category_name" property="categoryName" />
+		<result column="class_name" property="className" />
+		<result column="store_name" property="storeName" />
+	</resultMap>
+
+	<select id="findBOById" parameterType="long" resultMap="BOResultMap">
+		select gb.*,gbc.name as category_name
+		from shop_goods_brand gb
+		left join shop_goods_brand_category gbc on gbc.id=gb.category_id
+		where gb.id=#{id}
+	</select>
+
+	<select id="findByShowIndex" resultMap="BOResultMap">
+		select gb.*,gbc.name as category_name
+		from shop_goods_brand gb
+		left join shop_goods_brand_category gbc on gbc.id=gb.category_id
+		where gb.delete_status=0
+		and gb.show_index=#{showIndex}
+		and gb.audit=#{audit}
+		<if test="count != null">
+			limit 0,#{count}
+		</if>
+	</select>
+
+	<select id="findByPage" parameterType="map" resultMap="BOResultMap">
+		select gb.*,gbc.name as category_name,gc.class_name as
+		class_name,store.store_name
+		from shop_goods_brand gb
+		left join shop_goods_brand_category gbc on gbc.id=gb.category_id
+		left join shop_goods_class gc on gb.gc_id=gc.id
+		left join shop_store store on store.id=gb.store_id
+		where gb.delete_status = 0
+		<if test="vo.audit != null">
+			and gb.audit =#{vo.audit}
+		</if>
+		<if test="vo.userStatus != null">
+			and gb.user_status =#{vo.userStatus}
+		</if>
+		<if test="vo.categoryName != null and vo.categoryName != ''">
+			and gbc.name like CONCAT('%',#{vo.categoryName},'%')
+		</if>
+		<if test="vo.brandName != null and vo.brandName != ''">
+			and gb.name like CONCAT('%',#{vo.brandName},'%')
+		</if>
+		order by gb.sequence asc
+	</select>
+
+
+	<select id="findByGoodsClass" parameterType="Long" resultMap="BOResultMap">
+		select gb.* from shop_goods_brand gb
+		INNER join shop_goods_type_brand gtb on gb.id=gtb.brand_id
+		INNER join shop_goods_type gt on gt.id=gtb.type_id
+		INNER join shop_goods_class gc on gt.id=gc.goods_type_id
+		where gb.delete_status =0 and gc.id=#{gcId}
+	</select>
+
+	<select id="findByGoodsType" parameterType="Long" resultMap="BOResultMap">
+		select gb.* from shop_goods_brand gb
+		INNER join shop_goods_type_brand gtb on gb.id=gtb.brand_id
+		INNER join shop_goods_type gt on gt.id=gtb.type_id
+		where gb.delete_status=0 and gt.id=#{gtId}
+	</select>
+
+	<select id="selectBOByExample" resultMap="BOResultMap"
+		parameterType="com.sinco.carnation.goods.model.GoodsBrandExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_goods_brand
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, audit, first_word, mobile_recommend,
+		mobile_recommend_time,
+		name, recommend, sequence, show_index, user_status, brand_logo_id,
+		category_id, store_id,
+		gc_id, weixin_recommend, weixin_recommend_time
+	</sql>
+	<sql id="Blob_Column_List">
+		remark
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.goods.model.GoodsBrandExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods_brand
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.goods.model.GoodsBrandExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_goods_brand
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods_brand
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_goods_brand
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.goods.model.GoodsBrandExample">
+		delete from shop_goods_brand
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.goods.model.GoodsBrand">
+		insert into shop_goods_brand (id, add_time, delete_status,
+		audit, first_word, mobile_recommend,
+		mobile_recommend_time, name, recommend,
+		sequence, show_index, user_status,
+		brand_logo_id, category_id, store_id,
+		gc_id, weixin_recommend, weixin_recommend_time,
+		remark)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{audit,jdbcType=INTEGER}, #{firstWord,jdbcType=VARCHAR}, #{mobileRecommend,jdbcType=INTEGER},
+		#{mobileRecommendTime,jdbcType=DATE}, #{name,jdbcType=VARCHAR},
+		#{recommend,jdbcType=BIT},
+		#{sequence,jdbcType=INTEGER}, #{showIndex,jdbcType=BIT}, #{userStatus,jdbcType=INTEGER},
+		#{brandLogoId,jdbcType=VARCHAR}, #{categoryId,jdbcType=BIGINT},
+		#{storeId,jdbcType=BIGINT},
+		#{gcId,jdbcType=BIGINT}, #{weixinRecommend,jdbcType=INTEGER},
+		#{weixinRecommendTime,jdbcType=DATE},
+		#{remark,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.goods.model.GoodsBrand">
+		insert into shop_goods_brand
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="audit != null">
+				audit,
+			</if>
+			<if test="firstWord != null">
+				first_word,
+			</if>
+			<if test="mobileRecommend != null">
+				mobile_recommend,
+			</if>
+			<if test="mobileRecommendTime != null">
+				mobile_recommend_time,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="recommend != null">
+				recommend,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="showIndex != null">
+				show_index,
+			</if>
+			<if test="userStatus != null">
+				user_status,
+			</if>
+			<if test="brandLogoId != null">
+				brand_logo_id,
+			</if>
+			<if test="categoryId != null">
+				category_id,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="gcId != null">
+				gc_id,
+			</if>
+			<if test="weixinRecommend != null">
+				weixin_recommend,
+			</if>
+			<if test="weixinRecommendTime != null">
+				weixin_recommend_time,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="audit != null">
+				#{audit,jdbcType=INTEGER},
+			</if>
+			<if test="firstWord != null">
+				#{firstWord,jdbcType=VARCHAR},
+			</if>
+			<if test="mobileRecommend != null">
+				#{mobileRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="mobileRecommendTime != null">
+				#{mobileRecommendTime,jdbcType=DATE},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="recommend != null">
+				#{recommend,jdbcType=BIT},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="showIndex != null">
+				#{showIndex,jdbcType=BIT},
+			</if>
+			<if test="userStatus != null">
+				#{userStatus,jdbcType=INTEGER},
+			</if>
+			<if test="brandLogoId != null">
+				#{brandLogoId,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryId != null">
+				#{categoryId,jdbcType=BIGINT},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="gcId != null">
+				#{gcId,jdbcType=BIGINT},
+			</if>
+			<if test="weixinRecommend != null">
+				#{weixinRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="weixinRecommendTime != null">
+				#{weixinRecommendTime,jdbcType=DATE},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.goods.model.GoodsBrandExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_goods_brand
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_goods_brand
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.audit != null">
+				audit = #{record.audit,jdbcType=INTEGER},
+			</if>
+			<if test="record.firstWord != null">
+				first_word = #{record.firstWord,jdbcType=VARCHAR},
+			</if>
+			<if test="record.mobileRecommend != null">
+				mobile_recommend = #{record.mobileRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="record.mobileRecommendTime != null">
+				mobile_recommend_time = #{record.mobileRecommendTime,jdbcType=DATE},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.recommend != null">
+				recommend = #{record.recommend,jdbcType=BIT},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.showIndex != null">
+				show_index = #{record.showIndex,jdbcType=BIT},
+			</if>
+			<if test="record.userStatus != null">
+				user_status = #{record.userStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.brandLogoId != null">
+				brand_logo_id = #{record.brandLogoId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.categoryId != null">
+				category_id = #{record.categoryId,jdbcType=BIGINT},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.gcId != null">
+				gc_id = #{record.gcId,jdbcType=BIGINT},
+			</if>
+			<if test="record.weixinRecommend != null">
+				weixin_recommend = #{record.weixinRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="record.weixinRecommendTime != null">
+				weixin_recommend_time = #{record.weixinRecommendTime,jdbcType=DATE},
+			</if>
+			<if test="record.remark != null">
+				remark = #{record.remark,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_goods_brand
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		audit = #{record.audit,jdbcType=INTEGER},
+		first_word = #{record.firstWord,jdbcType=VARCHAR},
+		mobile_recommend = #{record.mobileRecommend,jdbcType=INTEGER},
+		mobile_recommend_time = #{record.mobileRecommendTime,jdbcType=DATE},
+		name = #{record.name,jdbcType=VARCHAR},
+		recommend = #{record.recommend,jdbcType=BIT},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		show_index = #{record.showIndex,jdbcType=BIT},
+		user_status = #{record.userStatus,jdbcType=INTEGER},
+		brand_logo_id = #{record.brandLogoId,jdbcType=VARCHAR},
+		category_id = #{record.categoryId,jdbcType=BIGINT},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		gc_id = #{record.gcId,jdbcType=BIGINT},
+		weixin_recommend = #{record.weixinRecommend,jdbcType=INTEGER},
+		weixin_recommend_time = #{record.weixinRecommendTime,jdbcType=DATE},
+		remark = #{record.remark,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_goods_brand
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		audit = #{record.audit,jdbcType=INTEGER},
+		first_word = #{record.firstWord,jdbcType=VARCHAR},
+		mobile_recommend = #{record.mobileRecommend,jdbcType=INTEGER},
+		mobile_recommend_time = #{record.mobileRecommendTime,jdbcType=DATE},
+		name = #{record.name,jdbcType=VARCHAR},
+		recommend = #{record.recommend,jdbcType=BIT},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		show_index = #{record.showIndex,jdbcType=BIT},
+		user_status = #{record.userStatus,jdbcType=INTEGER},
+		brand_logo_id = #{record.brandLogoId,jdbcType=VARCHAR},
+		category_id = #{record.categoryId,jdbcType=BIGINT},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		gc_id = #{record.gcId,jdbcType=BIGINT},
+		weixin_recommend = #{record.weixinRecommend,jdbcType=INTEGER},
+		weixin_recommend_time = #{record.weixinRecommendTime,jdbcType=DATE}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.goods.model.GoodsBrand">
+		update shop_goods_brand
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="audit != null">
+				audit = #{audit,jdbcType=INTEGER},
+			</if>
+			<if test="firstWord != null">
+				first_word = #{firstWord,jdbcType=VARCHAR},
+			</if>
+			<if test="mobileRecommend != null">
+				mobile_recommend = #{mobileRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="mobileRecommendTime != null">
+				mobile_recommend_time = #{mobileRecommendTime,jdbcType=DATE},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="recommend != null">
+				recommend = #{recommend,jdbcType=BIT},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="showIndex != null">
+				show_index = #{showIndex,jdbcType=BIT},
+			</if>
+			<if test="userStatus != null">
+				user_status = #{userStatus,jdbcType=INTEGER},
+			</if>
+			<if test="brandLogoId != null">
+				brand_logo_id = #{brandLogoId,jdbcType=VARCHAR},
+			</if>
+			<if test="categoryId != null">
+				category_id = #{categoryId,jdbcType=BIGINT},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="gcId != null">
+				gc_id = #{gcId,jdbcType=BIGINT},
+			</if>
+			<if test="weixinRecommend != null">
+				weixin_recommend = #{weixinRecommend,jdbcType=INTEGER},
+			</if>
+			<if test="weixinRecommendTime != null">
+				weixin_recommend_time = #{weixinRecommendTime,jdbcType=DATE},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.goods.model.GoodsBrand">
+		update shop_goods_brand
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		audit = #{audit,jdbcType=INTEGER},
+		first_word = #{firstWord,jdbcType=VARCHAR},
+		mobile_recommend = #{mobileRecommend,jdbcType=INTEGER},
+		mobile_recommend_time = #{mobileRecommendTime,jdbcType=DATE},
+		name = #{name,jdbcType=VARCHAR},
+		recommend = #{recommend,jdbcType=BIT},
+		sequence = #{sequence,jdbcType=INTEGER},
+		show_index = #{showIndex,jdbcType=BIT},
+		user_status = #{userStatus,jdbcType=INTEGER},
+		brand_logo_id = #{brandLogoId,jdbcType=VARCHAR},
+		category_id = #{categoryId,jdbcType=BIGINT},
+		store_id = #{storeId,jdbcType=BIGINT},
+		gc_id = #{gcId,jdbcType=BIGINT},
+		weixin_recommend = #{weixinRecommend,jdbcType=INTEGER},
+		weixin_recommend_time = #{weixinRecommendTime,jdbcType=DATE},
+		remark = #{remark,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.goods.model.GoodsBrand">
+		update shop_goods_brand
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		audit = #{audit,jdbcType=INTEGER},
+		first_word = #{firstWord,jdbcType=VARCHAR},
+		mobile_recommend = #{mobileRecommend,jdbcType=INTEGER},
+		mobile_recommend_time = #{mobileRecommendTime,jdbcType=DATE},
+		name = #{name,jdbcType=VARCHAR},
+		recommend = #{recommend,jdbcType=BIT},
+		sequence = #{sequence,jdbcType=INTEGER},
+		show_index = #{showIndex,jdbcType=BIT},
+		user_status = #{userStatus,jdbcType=INTEGER},
+		brand_logo_id = #{brandLogoId,jdbcType=VARCHAR},
+		category_id = #{categoryId,jdbcType=BIGINT},
+		store_id = #{storeId,jdbcType=BIGINT},
+		gc_id = #{gcId,jdbcType=BIGINT},
+		weixin_recommend = #{weixinRecommend,jdbcType=INTEGER},
+		weixin_recommend_time = #{weixinRecommendTime,jdbcType=DATE}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="findByVo" resultMap="BOResultMap">
+		SELECT bc.name categoryName, gb.* FROM shop_goods_brand AS gb
+		LEFT JOIN shop_goods_brand_category AS bc
+		ON gb.category_id = bc.id
+		<if test="record.deleteStatus != null">
+			where gb.delete_status = #{record.deleteStatus}
+		</if>
+	</select>
+	<select id="selectByAll" resultMap="BOResultMap">
+		SELECT * from shop_goods_brand;
+	</select>
+</mapper>

@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+});
+</script>
+</head>
+<body>
+
+<div class="cont">
+  <h3 class="seth">线下刷卡服务退款管理</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="javascript:void(0);" class="this"><b>线下刷卡服务退款</b></a></li>
+    </ul>
+  </div>
+  <form action="$!webPath/admin/offline_group_order_refund_list.htm?orderType=2&localReturnStatus=2" method="post" id="queryForm">
+  <div class="search">
+    <ul>
+      <li> 
+	      <span>商家名称</span>
+	      <span class="size100">
+	      	<input name="storeName" type="text" value="$!vo.storeName" id="storeName" />
+	      </span> 
+	      <span>申请者</span>
+	      <span class="size100">
+	      	<input name="userNickname" type="text" value="$!vo.userNickname" id="userNickname" />
+	      </span>
+	      <span >
+	      	<input name="" type="submit" value="搜索" style="cursor:pointer;" class="search_btn"/>
+	      </span> 
+      </li>
+    </ul>
+  </div>
+  </form>
+  <form action="$!webPath/admin/offline_group_order_refund_list.htm?orderType=2&localReturnStatus=2" method="post" id="ListForm" >
+    <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="15%"><span class="form_btna">订单号</span></th>
+      	<th width="15%"><span class="form_btna">服务名称</span></th>
+        <th width="15%"><span class="form_btna">商户名称</span></th>
+        <th width="10%"><span class="form_btna">是否会员</span></th>
+        <th width="8%"><span class="form_btna">申请者</span></th>
+        <th width="8%"><span class="form_btna">服务价格</span></th>
+        <th width="8%"><span class="form_btna">退款状态</span></th>
+      </tr>
+      #foreach($obj in $objs)
+      <tr>
+        <td align="center">$!obj.orderId</td>
+        <td align="center">$!obj.localGroupName</td>
+        <td align="center">$!obj.storeName</td>
+        <td align="center">#if($!obj.isSysUser)是#else否#end</td>
+        <td align="center">#if($!obj.isSysUser)$!obj.userNickname#else非会员#end</td>
+        <td align="center">$!obj.totalPrice</td>
+        <td align="center">退款完成</td>
+      </tr>
+     #end
+    </table>
+  </div>
+  <div class="operate_bar">
+    <div class="fenye">
+    	<input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	 	<input name="mulitId" type="hidden" id="mulitId" />
+	 	<input name="storeName" type="hidden" value="$!vo.storeName" />
+	 	<input name="userNickName" type="hidden" value="$!vo.userNickName" />
+      	$!gotoPageFormHTML
+    </div>  
+   </div>
+  </form>
+</div>
+</body>
+</html>

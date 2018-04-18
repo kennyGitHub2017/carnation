@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.BalanceExceptionOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.BalanceExceptionOrder" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="delete_status" property="deleteStatus" jdbcType="BIT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="seller_id" property="sellerId" jdbcType="BIGINT" />
+    <result column="store_id" property="storeId" jdbcType="BIGINT" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="server_name" property="serverName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.BalanceExceptionOrderBO" extends="BaseResultMap" />
+  <resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.BalanceExceptionOrder" extends="BaseResultMap" >
+    <result column="exception_msg" property="exceptionMsg" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, add_time, delete_status, order_id, seller_id, store_id, amount, server_name, 
+    update_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    exception_msg
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.shop.model.BalanceExceptionOrderExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from balance_exception_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.sinco.carnation.shop.model.BalanceExceptionOrderExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from balance_exception_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      limit ${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from balance_exception_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from balance_exception_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.BalanceExceptionOrderExample" >
+    delete from balance_exception_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinco.carnation.shop.model.BalanceExceptionOrder" useGeneratedKeys="true" keyProperty="id" >
+    insert into balance_exception_order (id, add_time, delete_status, 
+      order_id, seller_id, store_id, 
+      amount, server_name, update_time, 
+      exception_msg)
+    values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP}, #{deleteStatus,jdbcType=BIT}, 
+      #{orderId,jdbcType=BIGINT}, #{sellerId,jdbcType=BIGINT}, #{storeId,jdbcType=BIGINT}, 
+      #{amount,jdbcType=DECIMAL}, #{serverName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{exceptionMsg,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.BalanceExceptionOrder" useGeneratedKeys="true" keyProperty="id" >
+    insert into balance_exception_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="sellerId != null" >
+        seller_id,
+      </if>
+      <if test="storeId != null" >
+        store_id,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="serverName != null" >
+        server_name,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="exceptionMsg != null" >
+        exception_msg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        #{deleteStatus,jdbcType=BIT},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="sellerId != null" >
+        #{sellerId,jdbcType=BIGINT},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="serverName != null" >
+        #{serverName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exceptionMsg != null" >
+        #{exceptionMsg,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinco.carnation.shop.model.BalanceExceptionOrderExample" resultType="java.lang.Integer" >
+    select count(*) from balance_exception_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update balance_exception_order
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteStatus != null" >
+        delete_status = #{record.deleteStatus,jdbcType=BIT},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sellerId != null" >
+        seller_id = #{record.sellerId,jdbcType=BIGINT},
+      </if>
+      <if test="record.storeId != null" >
+        store_id = #{record.storeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.serverName != null" >
+        server_name = #{record.serverName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.exceptionMsg != null" >
+        exception_msg = #{record.exceptionMsg,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update balance_exception_order
+    set id = #{record.id,jdbcType=BIGINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=BIT},
+      order_id = #{record.orderId,jdbcType=BIGINT},
+      seller_id = #{record.sellerId,jdbcType=BIGINT},
+      store_id = #{record.storeId,jdbcType=BIGINT},
+      amount = #{record.amount,jdbcType=DECIMAL},
+      server_name = #{record.serverName,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      exception_msg = #{record.exceptionMsg,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update balance_exception_order
+    set id = #{record.id,jdbcType=BIGINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=BIT},
+      order_id = #{record.orderId,jdbcType=BIGINT},
+      seller_id = #{record.sellerId,jdbcType=BIGINT},
+      store_id = #{record.storeId,jdbcType=BIGINT},
+      amount = #{record.amount,jdbcType=DECIMAL},
+      server_name = #{record.serverName,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.BalanceExceptionOrder" >
+    update balance_exception_order
+    <set >
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status = #{deleteStatus,jdbcType=BIT},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="sellerId != null" >
+        seller_id = #{sellerId,jdbcType=BIGINT},
+      </if>
+      <if test="storeId != null" >
+        store_id = #{storeId,jdbcType=BIGINT},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="serverName != null" >
+        server_name = #{serverName,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="exceptionMsg != null" >
+        exception_msg = #{exceptionMsg,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.BalanceExceptionOrder" >
+    update balance_exception_order
+    set add_time = #{addTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=BIT},
+      order_id = #{orderId,jdbcType=BIGINT},
+      seller_id = #{sellerId,jdbcType=BIGINT},
+      store_id = #{storeId,jdbcType=BIGINT},
+      amount = #{amount,jdbcType=DECIMAL},
+      server_name = #{serverName,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      exception_msg = #{exceptionMsg,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.BalanceExceptionOrder" >
+    update balance_exception_order
+    set add_time = #{addTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=BIT},
+      order_id = #{orderId,jdbcType=BIGINT},
+      seller_id = #{sellerId,jdbcType=BIGINT},
+      store_id = #{storeId,jdbcType=BIGINT},
+      amount = #{amount,jdbcType=DECIMAL},
+      server_name = #{serverName,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.BuygiftMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.Buygift">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+		<result column="condition_amount" property="conditionAmount"
+			jdbcType="DECIMAL" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="gift_status" property="giftStatus" jdbcType="INTEGER" />
+		<result column="gift_type" property="giftType" jdbcType="INTEGER" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.BuygiftBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.Buygift"
+		extends="BaseResultMap">
+		<result column="failed_reason" property="failedReason"
+			jdbcType="LONGVARCHAR" />
+		<result column="gift_info" property="giftInfo" jdbcType="LONGVARCHAR" />
+		<result column="goods_info" property="goodsInfo" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, begin_time, condition_amount, end_time,
+		gift_status,
+		gift_type, store_id, store_name
+	</sql>
+	<sql id="Blob_Column_List">
+		failed_reason, gift_info, goods_info
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.shop.model.BuygiftExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_buygift
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.shop.model.BuygiftExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_buygift
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_buygift
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_buygift
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.BuygiftExample">
+		delete from shop_buygift
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.Buygift"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_buygift (id, add_time, delete_status,
+		begin_time, condition_amount, end_time,
+		gift_status, gift_type, store_id,
+		store_name, failed_reason, gift_info,
+		goods_info)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{beginTime,jdbcType=TIMESTAMP}, #{conditionAmount,jdbcType=DECIMAL}, #{endTime,jdbcType=TIMESTAMP},
+		#{giftStatus,jdbcType=INTEGER}, #{giftType,jdbcType=INTEGER},
+		#{storeId,jdbcType=BIGINT},
+		#{storeName,jdbcType=VARCHAR}, #{failedReason,jdbcType=LONGVARCHAR},
+		#{giftInfo,jdbcType=LONGVARCHAR},
+		#{goodsInfo,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.Buygift"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_buygift
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="beginTime != null">
+				begin_time,
+			</if>
+			<if test="conditionAmount != null">
+				condition_amount,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+			<if test="giftStatus != null">
+				gift_status,
+			</if>
+			<if test="giftType != null">
+				gift_type,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="storeName != null">
+				store_name,
+			</if>
+			<if test="failedReason != null">
+				failed_reason,
+			</if>
+			<if test="giftInfo != null">
+				gift_info,
+			</if>
+			<if test="goodsInfo != null">
+				goods_info,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="beginTime != null">
+				#{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="conditionAmount != null">
+				#{conditionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="giftStatus != null">
+				#{giftStatus,jdbcType=INTEGER},
+			</if>
+			<if test="giftType != null">
+				#{giftType,jdbcType=INTEGER},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="storeName != null">
+				#{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="failedReason != null">
+				#{failedReason,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="giftInfo != null">
+				#{giftInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsInfo != null">
+				#{goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.BuygiftExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_buygift
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_buygift
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.beginTime != null">
+				begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.conditionAmount != null">
+				condition_amount = #{record.conditionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.endTime != null">
+				end_time = #{record.endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.giftStatus != null">
+				gift_status = #{record.giftStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.giftType != null">
+				gift_type = #{record.giftType,jdbcType=INTEGER},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.storeName != null">
+				store_name = #{record.storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.failedReason != null">
+				failed_reason = #{record.failedReason,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.giftInfo != null">
+				gift_info = #{record.giftInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsInfo != null">
+				goods_info = #{record.goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_buygift
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+		condition_amount = #{record.conditionAmount,jdbcType=DECIMAL},
+		end_time = #{record.endTime,jdbcType=TIMESTAMP},
+		gift_status = #{record.giftStatus,jdbcType=INTEGER},
+		gift_type = #{record.giftType,jdbcType=INTEGER},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		store_name = #{record.storeName,jdbcType=VARCHAR},
+		failed_reason = #{record.failedReason,jdbcType=LONGVARCHAR},
+		gift_info = #{record.giftInfo,jdbcType=LONGVARCHAR},
+		goods_info = #{record.goodsInfo,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_buygift
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+		condition_amount = #{record.conditionAmount,jdbcType=DECIMAL},
+		end_time = #{record.endTime,jdbcType=TIMESTAMP},
+		gift_status = #{record.giftStatus,jdbcType=INTEGER},
+		gift_type = #{record.giftType,jdbcType=INTEGER},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		store_name = #{record.storeName,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.Buygift">
+		update shop_buygift
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="beginTime != null">
+				begin_time = #{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="conditionAmount != null">
+				condition_amount = #{conditionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="giftStatus != null">
+				gift_status = #{giftStatus,jdbcType=INTEGER},
+			</if>
+			<if test="giftType != null">
+				gift_type = #{giftType,jdbcType=INTEGER},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="storeName != null">
+				store_name = #{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="failedReason != null">
+				failed_reason = #{failedReason,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="giftInfo != null">
+				gift_info = #{giftInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsInfo != null">
+				goods_info = #{goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.Buygift">
+		update shop_buygift
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		begin_time = #{beginTime,jdbcType=TIMESTAMP},
+		condition_amount = #{conditionAmount,jdbcType=DECIMAL},
+		end_time = #{endTime,jdbcType=TIMESTAMP},
+		gift_status = #{giftStatus,jdbcType=INTEGER},
+		gift_type = #{giftType,jdbcType=INTEGER},
+		store_id = #{storeId,jdbcType=BIGINT},
+		store_name = #{storeName,jdbcType=VARCHAR},
+		failed_reason = #{failedReason,jdbcType=LONGVARCHAR},
+		gift_info = #{giftInfo,jdbcType=LONGVARCHAR},
+		goods_info = #{goodsInfo,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.Buygift">
+		update shop_buygift
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		begin_time = #{beginTime,jdbcType=TIMESTAMP},
+		condition_amount = #{conditionAmount,jdbcType=DECIMAL},
+		end_time = #{endTime,jdbcType=TIMESTAMP},
+		gift_status = #{giftStatus,jdbcType=INTEGER},
+		gift_type = #{giftType,jdbcType=INTEGER},
+		store_id = #{storeId,jdbcType=BIGINT},
+		store_name = #{storeName,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

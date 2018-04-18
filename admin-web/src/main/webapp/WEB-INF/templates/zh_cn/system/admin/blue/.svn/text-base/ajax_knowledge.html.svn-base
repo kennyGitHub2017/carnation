@@ -1,0 +1,22 @@
+<table style="width:100%;border:1px solid  #ccc;">
+  <thead>
+  	<tr bgcolor="#bfbfbf">
+  	  <th width="200px">名称</th>
+  	  <th width="200px">创建人</th>
+  	  <th>时间</th>
+  	</tr>
+  </thead>
+  <tbody>
+  #foreach($knowledge in $!list)
+  #if($velocityCount%2 == 0)
+  <tr align="center"  onclick="knowledgeByClassId('$!knowledge.context')" bgcolor="#f2f2f2">
+  #else
+  <tr align="center"  onclick="knowledgeByClassId('$!knowledge.context')" bgcolor="#ffffff">
+  #end 
+  <td>$!knowledge.title</td>
+  <td>$!knowledge.name</td>
+  <td>$!CommUtil.formatLongDate($!knowledge.createTime)</td>
+  </tr>
+  #end
+  </tbody>
+</table>

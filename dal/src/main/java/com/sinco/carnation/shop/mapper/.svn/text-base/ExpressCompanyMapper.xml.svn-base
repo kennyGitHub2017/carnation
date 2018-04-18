@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.ExpressCompanyMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.ExpressCompany">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="company_mark" property="companyMark" jdbcType="VARCHAR" />
+		<result column="company_name" property="companyName" jdbcType="VARCHAR" />
+		<result column="company_sequence" property="companySequence"
+			jdbcType="INTEGER" />
+		<result column="company_status" property="companyStatus"
+			jdbcType="INTEGER" />
+		<result column="company_template_heigh" property="companyTemplateHeigh"
+			jdbcType="INTEGER" />
+		<result column="company_template_width" property="companyTemplateWidth"
+			jdbcType="INTEGER" />
+		<result column="company_type" property="companyType" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.ExpressCompany"
+		extends="BaseResultMap">
+		<result column="company_template" property="companyTemplate"
+			jdbcType="LONGVARCHAR" />
+		<result column="company_template_offset" property="companyTemplateOffset"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.ExpressCompanyBO"
+		extends="ResultMapWithBLOBs">
+		<result column="ecc_ec_id" property="eccEcId" jdbcType="BIGINT" />
+		<result column="ecc_type" property="eccType" jdbcType="INTEGER" />
+		<result column="ecc_store_id" property="eccStoreId" jdbcType="BIGINT" />
+		<result column="ecc_name" property="eccName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, company_mark, company_name,
+		company_sequence, company_status,
+		company_template_heigh, company_template_width, company_type
+	</sql>
+	<sql id="Blob_Column_List">
+		company_template, company_template_offset
+	</sql>
+	<sql id="BO_Column_List">
+		sec.id, sec.add_time, sec.delete_status, sec.company_mark, sec.company_name,
+		sec.company_sequence, sec.company_status,
+		sec.company_template_heigh, sec.company_template_width, sec.company_type, sec.company_template,
+		sec.company_template_offset,
+		ecc.ecc_ec_id, ecc.ecc_type, ecc.ecc_name, ecc.ecc_store_id
+	</sql>
+	<delete id="deleteExpressCompanyById">
+		delete from shop_express_company where id in
+		<foreach collection="ids" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<select id="queryExpressCompanyPage" resultMap="ResultMapWithBLOBs">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_express_company ORDER BY company_sequence desc
+	</select>
+
+	<select id="selectByExampleWithBLOBs"
+		parameterType="com.sinco.carnation.shop.model.ExpressCompanyExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_express_company
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.shop.model.ExpressCompanyExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_express_company
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_express_company
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_express_company
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.shop.model.ExpressCompanyExample">
+		delete from shop_express_company
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.ExpressCompany"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_express_company (id, add_time, delete_status,
+		company_mark, company_name, company_sequence,
+		company_status, company_template_heigh, company_template_width,
+		company_type, company_template, company_template_offset
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{companyMark,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{companySequence,jdbcType=INTEGER},
+		#{companyStatus,jdbcType=INTEGER},
+		#{companyTemplateHeigh,jdbcType=INTEGER},
+		#{companyTemplateWidth,jdbcType=INTEGER},
+		#{companyType,jdbcType=VARCHAR},
+		#{companyTemplate,jdbcType=LONGVARCHAR},
+		#{companyTemplateOffset,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.ExpressCompany"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_express_company
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="companyMark != null">
+				company_mark,
+			</if>
+			<if test="companyName != null">
+				company_name,
+			</if>
+			<if test="companySequence != null">
+				company_sequence,
+			</if>
+			<if test="companyStatus != null">
+				company_status,
+			</if>
+			<if test="companyTemplateHeigh != null">
+				company_template_heigh,
+			</if>
+			<if test="companyTemplateWidth != null">
+				company_template_width,
+			</if>
+			<if test="companyType != null">
+				company_type,
+			</if>
+			<if test="companyTemplate != null">
+				company_template,
+			</if>
+			<if test="companyTemplateOffset != null">
+				company_template_offset,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="companyMark != null">
+				#{companyMark,jdbcType=VARCHAR},
+			</if>
+			<if test="companyName != null">
+				#{companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="companySequence != null">
+				#{companySequence,jdbcType=INTEGER},
+			</if>
+			<if test="companyStatus != null">
+				#{companyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="companyTemplateHeigh != null">
+				#{companyTemplateHeigh,jdbcType=INTEGER},
+			</if>
+			<if test="companyTemplateWidth != null">
+				#{companyTemplateWidth,jdbcType=INTEGER},
+			</if>
+			<if test="companyType != null">
+				#{companyType,jdbcType=VARCHAR},
+			</if>
+			<if test="companyTemplate != null">
+				#{companyTemplate,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="companyTemplateOffset != null">
+				#{companyTemplateOffset,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.shop.model.ExpressCompanyExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_express_company
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_express_company
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.companyMark != null">
+				company_mark = #{record.companyMark,jdbcType=VARCHAR},
+			</if>
+			<if test="record.companyName != null">
+				company_name = #{record.companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.companySequence != null">
+				company_sequence = #{record.companySequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.companyStatus != null">
+				company_status = #{record.companyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.companyTemplateHeigh != null">
+				company_template_heigh =
+				#{record.companyTemplateHeigh,jdbcType=INTEGER},
+			</if>
+			<if test="record.companyTemplateWidth != null">
+				company_template_width =
+				#{record.companyTemplateWidth,jdbcType=INTEGER},
+			</if>
+			<if test="record.companyType != null">
+				company_type = #{record.companyType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.companyTemplate != null">
+				company_template = #{record.companyTemplate,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.companyTemplateOffset != null">
+				company_template_offset =
+				#{record.companyTemplateOffset,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_express_company
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		company_mark = #{record.companyMark,jdbcType=VARCHAR},
+		company_name = #{record.companyName,jdbcType=VARCHAR},
+		company_sequence = #{record.companySequence,jdbcType=INTEGER},
+		company_status = #{record.companyStatus,jdbcType=INTEGER},
+		company_template_heigh = #{record.companyTemplateHeigh,jdbcType=INTEGER},
+		company_template_width =
+		#{record.companyTemplateWidth,jdbcType=INTEGER},
+		company_type = #{record.companyType,jdbcType=VARCHAR},
+		company_template = #{record.companyTemplate,jdbcType=LONGVARCHAR},
+		company_template_offset =
+		#{record.companyTemplateOffset,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_express_company
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		company_mark = #{record.companyMark,jdbcType=VARCHAR},
+		company_name = #{record.companyName,jdbcType=VARCHAR},
+		company_sequence = #{record.companySequence,jdbcType=INTEGER},
+		company_status = #{record.companyStatus,jdbcType=INTEGER},
+		company_template_heigh = #{record.companyTemplateHeigh,jdbcType=INTEGER},
+		company_template_width =
+		#{record.companyTemplateWidth,jdbcType=INTEGER},
+		company_type = #{record.companyType,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.ExpressCompany">
+		update shop_express_company
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="companyMark != null">
+				company_mark = #{companyMark,jdbcType=VARCHAR},
+			</if>
+			<if test="companyName != null">
+				company_name = #{companyName,jdbcType=VARCHAR},
+			</if>
+			<if test="companySequence != null">
+				company_sequence = #{companySequence,jdbcType=INTEGER},
+			</if>
+			<if test="companyStatus != null">
+				company_status = #{companyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="companyTemplateHeigh != null">
+				company_template_heigh = #{companyTemplateHeigh,jdbcType=INTEGER},
+			</if>
+			<if test="companyTemplateWidth != null">
+				company_template_width = #{companyTemplateWidth,jdbcType=INTEGER},
+			</if>
+			<if test="companyType != null">
+				company_type = #{companyType,jdbcType=VARCHAR},
+			</if>
+			<if test="companyTemplate != null">
+				company_template = #{companyTemplate,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="companyTemplateOffset != null">
+				company_template_offset = #{companyTemplateOffset,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.ExpressCompany">
+		update shop_express_company
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		company_mark = #{companyMark,jdbcType=VARCHAR},
+		company_name = #{companyName,jdbcType=VARCHAR},
+		company_sequence = #{companySequence,jdbcType=INTEGER},
+		company_status = #{companyStatus,jdbcType=INTEGER},
+		company_template_heigh = #{companyTemplateHeigh,jdbcType=INTEGER},
+		company_template_width = #{companyTemplateWidth,jdbcType=INTEGER},
+		company_type = #{companyType,jdbcType=VARCHAR},
+		company_template = #{companyTemplate,jdbcType=LONGVARCHAR},
+		company_template_offset = #{companyTemplateOffset,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.ExpressCompany">
+		update shop_express_company
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		company_mark = #{companyMark,jdbcType=VARCHAR},
+		company_name = #{companyName,jdbcType=VARCHAR},
+		company_sequence = #{companySequence,jdbcType=INTEGER},
+		company_status = #{companyStatus,jdbcType=INTEGER},
+		company_template_heigh = #{companyTemplateHeigh,jdbcType=INTEGER},
+		company_template_width = #{companyTemplateWidth,jdbcType=INTEGER},
+		company_type = #{companyType,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="findListByStatus" resultMap="BOResultMap"
+		parameterType="java.lang.Integer">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM shop_express_company sec
+		<where>
+			<if test="companyStatus!=null and companyStatus>=0">
+				sec.company_status = #{companyStatus}
+			</if>
+		</where>
+	</select>
+</mapper>

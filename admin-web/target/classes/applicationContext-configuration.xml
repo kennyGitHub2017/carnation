@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+	<context:annotation-config />
+
+	<task:annotation-driven />
+
+	<!-- 把标记了@Controller等注解的类转换为bean -->
+	<context:component-scan base-package="com.sinco.carnation" />
+
+	<context:component-scan base-package="vc.thinker.b2b2c" />
+
+	<!--拦截器 -->
+	<!-- <mvc:interceptors> -->
+	<!-- 微信端自动进入登陆状态拦截器 -->
+	<!-- <mvc:interceptor> -->
+	<!-- <mvc:mapping path="/wap/*.htm" /> -->
+	<!-- <bean class="vc.thinker.b2b2c.module.weixin.interceptor.LoginInterceptor"></bean> -->
+	<!-- </mvc:interceptor> -->
+	<!-- 拦截非法请求向微信接口发送消息 -->
+	<!-- <mvc:interceptor> -->
+	<!-- <mvc:mapping path="/weixin_develop_action.htm" /> -->
+	<!-- <bean class="vc.thinker.b2b2c.module.weixin.interceptor.WeixinInterceptor"></bean> -->
+	<!-- </mvc:interceptor> -->
+	<!-- app买家拦截器 -->
+	<!-- <mvc:interceptor> -->
+	<!-- <mvc:mapping path="/app/buyer/*.htm" /> -->
+	<!-- <bean class="vc.thinker.b2b2c.module.app.view.tools.AppInterceptor"></bean> -->
+	<!-- </mvc:interceptor> -->
+	<!-- </mvc:interceptors> -->
+
+	<!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/> -->
+
+	<!--文件上传设置 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>10485760</value><!-- 文件上传最大为10M -->
+		</property>
+		<property name="maxInMemorySize" value="4096" />
+	</bean>
+
+	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+	<bean id="velocityCongfig"
+		class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath">
+			<value>/</value>
+		</property>
+		<property name="velocityProperties">
+			<props>
+				<prop key="input.encoding">UTF-8</prop>
+				<prop key="output.encoding ">UTF-8</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="velocitySecurityUtil" class="vc.thinker.web.velocity.VelocitySecurityUtil" />
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml" />
+		<property name="viewClass" value="vc.thinker.web.velocity.VelocityToolbox2View" />
+		<property name="contentType">
+			<value>text/html;charset=UTF-8</value>
+		</property>
+		<property name="attributesMap">
+			<map>
+				<entry key="sec">
+					<ref bean="velocitySecurityUtil" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- property-placeholder是一个属性遍历器，定位一个属性文件，属性文件存放的是jdbc一些连接数据 -->
+	<context:property-placeholder
+		location="classpath:application.properties,classpath:service.properties" />
+
+<bean
+		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:application.properties</value>
+			</list>
+		</property>
+		<property name="nullValue" value="" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!--配置velocity engine默认路径 -->
+	<bean id="velocityEngine"
+		class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<property name="resourceLoaderPath" value="/velocity/"></property>
+	</bean>
+
+	<mvc:resources location="/resources/" mapping="/resources/**" />
+
+	<mvc:view-controller path="/"
+		view-name="redirect:/admin/index.htm" />
+
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+			<!-- 将Jackson2HttpMessageConverter的默认格式化输出为true -->
+			<bean
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="prettyPrint" value="true" />
+			</bean>
+			<!-- 使用XML格式输出数据 -->
+			<bean
+				class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+				<property name="supportedMediaTypes" value="application/xml" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<import resource="classpath:/dal-basic.xml" />
+	<import resource="classpath:/dal.xml" />
+	<import resource="classpath:/biz-basic.xml" />
+	<import resource="classpath:/biz-sys.xml" />
+	<import resource="classpath:/biz-user.xml" />
+	<import resource="classpath:/biz-check.xml" />
+	<import resource="classpath:/biz-shop.xml" />
+
+
+</beans>

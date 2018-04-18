@@ -1,0 +1,233 @@
+<script>
+jQuery(document).ready(function(){
+	var cityid="4524157";
+	var provinceid="4524130";
+   jQuery("#floor_goods_info").sortable({containment:"#floor_goods_info",opacity:0.9,cursor:"crosshair"});
+   jQuery("#floor_goods_info").disableSelection();   
+   jQuery("#group_floor_area1").change(function(){
+	    var store_ids="";
+	    if(cityid!=""){		   
+		   jQuery(".floor_box_pls ul").each(function(){
+			   store_ids=store_ids+","+jQuery(this).attr("goods_id"); 
+			 });	  
+		   selected_stroe[cityid]=store_ids;	
+	    }
+        var level=jQuery(this).attr("level");
+   	 	var id=jQuery(this).val();
+	   	  jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	   	    jQuery("#group_floor_area"+level).empty();
+	   	    //var index0=4524157;
+	   	    jQuery.each(data, function(index,item){
+	   	       if(index==0){
+	   	    	//index0=item.id;
+	   	    	cityid=item.id;
+	   	       }
+	   		  jQuery("#group_floor_area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+	   		  jQuery("#group_floor_area"+level).show();			  
+	   		});
+	   	      
+			  var new_store_ids=selected_stroe[cityid];
+			  //alert(new_store_ids);
+			  if(typeof(new_store_ids) == "undefined"){
+				 var id=jQuery("#id").val();
+				 //alert("1111");
+				 jQuery("#floor_goods_info").load("$!webPath/admin/group_floor_selected_store.html?id="+id+"&cityid="+cityid);  			  
+			  }else{
+				 //alert("2222");
+				 jQuery("#floor_goods_info").load("$!webPath/admin/group_floor_selected_store.html?group_ids="+new_store_ids);
+			  }	   	    
+	   	     		
+	   	  },"json");
+	   	 //alert(cityid);
+	   	jQuery("#group_floor_store_list").empty();
+   		 		  
+     });  
+   
+   jQuery("#group_floor_area2").change(function(){
+	   var store_ids="";
+	   jQuery(".floor_box_pls ul").each(function(){
+		   store_ids=store_ids+","+jQuery(this).attr("goods_id"); 
+		 });
+	   //alert(cityid);
+	   selected_stroe[cityid]=store_ids;
+	   
+	   cityid=jQuery(this).val();
+	   //alert(cityid);
+	   new_store_ids=selected_stroe[cityid];
+	   //alert("store_ids:"+store_ids);
+	   //alert("new_store_ids:"+new_store_ids);	   
+		if(typeof(new_store_ids) == "undefined"){
+			//alert("11111");
+			var id=jQuery("#id").val();
+			jQuery("#floor_goods_info").load("$!webPath/admin/group_floor_selected_store.html?id="+id+"&cityid="+cityid);  			  
+		}else{
+			//alert("22222");
+			jQuery("#floor_goods_info").load("$!webPath/admin/group_floor_selected_store.html?group_ids="+new_store_ids);
+		}	
+		jQuery("#group_floor_store_list").empty();
+   })
+
+	var id=jQuery("#id").val();
+   	var new_store_ids=selected_stroe[cityid];
+	if(typeof(new_store_ids) != "undefined"){
+		jQuery("#floor_goods_info").load("$!webPath/admin/group_floor_selected_store.html?group_ids="+new_store_ids);
+	}else{
+		//alert("22222");
+		jQuery("#floor_goods_info").load("$!webPath/admin/group_floor_selected_store.html?id="+id+"&cityid="+cityid);  	
+	}   	
+	init_select_city_panel();
+});
+
+function init_select_city_panel(){ 	  
+   	  jQuery.post("$!webPath/load_area.htm",{"pid":'4524130'},function(data){
+	   	    jQuery("#group_floor_area2").empty();
+	   	    //var index0=4524157;
+	   	    jQuery.each(data, function(index,item){
+	   	       if(index==0){
+	   	    	cityid=item.id;
+	   	       }
+		   	    if(item.id=='4524157')  
+			   		  jQuery("#group_floor_area2").append("<option value='"+item.id+"' selected>"+item.areaName+"</option>");
+			   	else
+			   	      jQuery("#group_floor_area2").append("<option value='"+item.id+"'>"+item.areaName+"</option>");		
+	   		  jQuery("#group_floor_area2").show();			  
+	   		});	   	     		
+	   	  },"json");
+}
+
+function ajaxPage(url,page,obj){
+ //alert(url);
+ jQuery.ajax({type:'POST',url:url,data:{"currentPage":page},
+			  success:function(data){
+				  	//alert(JSON.stringify(data));
+					jQuery("#group_floor_store_list").empty().append(data);
+				} 
+			});
+}
+
+function group_floor_store_load(){
+  var area2=jQuery("#group_floor_area2").val();
+  var gc_id=jQuery("#group_floor_categroy").val();
+  var goods_name=jQuery("#goods_name").val(); 
+  //alert("area2"+area2);
+  //alert("gc_id"+gc_id);
+  //alert("goods_name"+goods_name);
+  jQuery.ajax({type:'POST',url:'$!webPath/admin/group_floor_store_load.html',data:{"areaId":area2,"storeName":goods_name,"groupMainId":gc_id},
+			  success:function(data){
+					jQuery("#group_floor_store_list").empty().append(data);
+				} 
+			});
+}
+
+function goods_list_set(obj){
+  var img=jQuery(obj).attr("img_uri");
+  var goods_id=jQuery(obj).attr("goods_id"); 
+  var price=jQuery(obj).attr("price");
+  var goods_name=jQuery(obj).attr("goods_name");
+  var count=jQuery(".floor_box_pls ul").length;
+  var add=0;
+  jQuery(".floor_box_pls ul").each(function(){
+     if(jQuery(this).attr("goods_id")==goods_id){
+	   alert("已经存在该商品");
+	   add=2;
+	 }
+  });
+  if(add==0){
+  var s="<ul ondblclick='jQuery(this).remove();' class='floor_pro' style=' margin-left:23px;'  goods_id='"+goods_id+"'><li class='floor_pro_img'><img src='"+img+"' width='100' height='100' /></li><li class='floor_pro_name'>"+goods_name+"</li></ul>";
+  //alert(jQuery("#group_floor_area2").val());
+  jQuery(".floor_box_pls").append(s);
+  }
+}
+
+function save_form(){
+ 	var ids=""; 
+	//alert("area1:"+jQuery("#group_goods_area1").val());
+ 	 //alert("area2:"+jQuery("#group_floor_area2").val());
+ 	jQuery("#groupFloorStoreCityId").val(jQuery("#group_floor_area2").val()); 
+	 jQuery(".floor_box_pls ul").each(function(){
+	   ids=ids+","+jQuery(this).attr("goods_id"); 
+	 });
+	 
+	var store_ids="";
+	cityid=jQuery("#group_floor_area2").val();
+	//alert(cityid);
+	if(cityid!=""){		   
+		jQuery(".floor_box_pls ul").each(function(){
+			store_ids=store_ids+","+jQuery(this).attr("goods_id"); 
+		});
+		//alert(store_ids);
+		selected_stroe[cityid]=store_ids;	
+	 }	 
+
+	 var count=0;
+	 var space_count=0;
+	 for(var i in selected_stroe){
+	     count = count+selected_stroe[i].split(',').length;
+	     space_count++;
+	 }	
+	
+ if(count==0){
+	 alert("请选择商户！");
+	 }else{	 
+	 //alert(JSON.stringify(selected_stroe));
+	 jQuery("#add_group_floor_store").attr("dialog_uri","$!webPath/admin/group_floor_store_list.html?group_ids="+ids);
+	 jQuery("#goods_count").html("共"+(count-space_count)+"件商品");
+	 jQuery("#case_content").val(ids);
+	 jQuery("#group_floor_store").remove();	
+	 
+	 //jQuery("#add_group_floor_store").click();
+	 
+	}
+}
+
+</script>
+<form action="$!webPath/admin/group_case_goods_save.htm" method="post" id="theForm">
+<div class="box_floor">
+  <div class="city-title" id="select_city">
+             按省份选择:
+            <select name="group_floor_area1" id="group_floor_area1" level="2" >
+ 				  #foreach($area in $areas)
+	 				  #if($!area.id=='4524130')
+	          			<option value="$!area.id" selected>$!area.areaName</option>
+	          		  #else
+	          		  	<option value="$!area.id">$!area.areaName</option>
+	          		  #end
+				  #end
+        	</select>
+	        <select name="group_floor_area2" id="group_floor_area2" >
+
+	        </select>   
+  </div>	
+  <div class="box_floor_six">
+    <div class="box_floor_class">
+      <input name="id" type="hidden" id="id" value="$!{obj.id}">
+      <input type="hidden" name="ids" id="ids">
+      <input type="hidden" name="old_ids" id="old_ids" value="$!{obj.goodsIds}">
+    </div>    
+    <span class="floor_choose">已选商户：</span>
+    <div class="box_floor_prodel" style="width:95%" id="group_floor_selected_store"> 
+      <em class="floor_warning">注释：显示时按照添加顺序显示。双击删除已选商户信息，按下鼠标拖动商户次序</em>
+      <div class="floor_box_pls" id="floor_goods_info" style="height:162px; width:100%; overflow-x:auto;">
+      
+       </div>
+    </div>
+    <span class="floor_choose">选择要展示的商户：</span>
+    <div class="floor_choose_box"> <span class="floor_search_sp"><b>选择分类：</b>
+        <select name="group_floor_categroy" id="group_floor_categroy">
+              <option value="">请选择...</option>
+			  #genericGroupClassTree($!gcs $!obj.parentId)
+         </select>  
+      </span> <span class="floor_search_sp" style="margin-left:5px;"><b>商户名称：</b>
+      <input name="goodsName" type="text" id="goods_name" class="gf_goods_name"/>
+      <input type="button"  class="floor_sear_btn" value="搜索" onclick="group_floor_store_load();" style="cursor:pointer; margin-top:2px;" />
+      </span> <em class="floor_warning">注释：点击商户加入楼层</em>
+     <div id="group_floor_store_list">
+     </div>
+    </div>
+  </div>
+  <!--图片开始-->
+  <div class="submit">
+    <input type="button" value="保存" onclick="save_form();" />
+  </div>
+</div>
+</form>

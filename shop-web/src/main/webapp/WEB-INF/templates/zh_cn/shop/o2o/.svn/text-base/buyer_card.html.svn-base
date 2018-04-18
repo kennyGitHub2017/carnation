@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>我的在线服务订单</title>
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet"/>
+    <link href="http://localhost:8080/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+    <link href="http://localhost:8080/resources/style/system/front/default/css/user.css" type="text/css"
+          rel="stylesheet"/>
+    <link href="$!webPath/resources/style/service/public.css?v=5" type="text/css" rel="stylesheet"/>
+
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/static/include?name=head.html")
+$!httpInclude.include("/static/include?name=nav.html")
+
+<div class="main clearfix">
+    <div class="usercenter"> $!httpInclude.include("/buyer/nav.htm?op=address")
+        <div class="usercenter_right">
+            <div class="myorder">
+                <h4><span class="myorder_fright"></span><strong>我的线下服务订单</strong></h4>
+            </div>
+            <form id="ListForm" method="post" action="http://localhost:8080/buyer/order.htm">
+                <div class="user_list">
+                    <div class="user_list_title">
+              <span class="user_title_sp">
+                <span style="float:left; line-height:24px;">订单编号：</span>
+                <input type="text" placeholder="订单编号" value="" class="user_title_txt" id="order_id" name="order_id">
+                <span style="float:left; line-height:24px;">下单时间：</span>
+                <input type="text" placeholder="开始时间" style="width:70px" class="user_title_txt hasDatepicker"
+                       readonly="readonly" value="" id="beginTime" name="beginTime">
+                <span style="float:left; line-height:24px; padding-right:5px;">&mdash;</span>
+                <input type="text" placeholder="结束时间" style="width:70px" class="user_title_txt hasDatepicker"
+                       readonly="readonly" value="" id="endTime" name="endTime">
+                <input type="submit" value="查询" class="user_sear_btn" name="">
+              </span>
+                        <ul class="user_title_ul">
+                            <li class="this"><i></i>
+                                <a href="http://localhost:8080/buyer/order.htm">全部订单</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="user_list_box">
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                               class="user_order_table user_table_title">
+                            <tbody>
+                            <tr>
+                                <th width="42%">购买信息</th>
+                                <th width="28%">总价</th>
+                                <th width="20%">订单状态</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <div class="orderlist_one">
+                        <h4 class="orderlist_one_h4">
+                            <span>
+                                订单号： <a target="_blank" href="http://localhost:8080/buyer/order_view.htm?id=735">236201508271807581</a>
+                            </span>
+                        </h4>
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" class="user_order_table">
+                            <tbody>
+                                <tr>
+                                    <td width="42%">
+                                        <div class="order_card_data">
+                                            <a href="#" class="title ell"> 龙泉脉道养生馆</a>
+                                            <a href="#" class="c_blue"> 商家信息</a>
+                                        </div>
+                                    </td>
+                                    <td width="28%" align="center">
+                                        ￥59.90
+                                    </td>
+                                    <td width="20%" align="center">
+                                        <p class="lh-25">已消费</p>
+                                        <a href="#" class="c_blue"> 订单详情 </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="orderlist_one">
+                        <h4 class="orderlist_one_h4">
+                            <span>
+                                订单号： <a target="_blank" href="http://localhost:8080/buyer/order_view.htm?id=735">236201508271807581</a>
+                            </span>
+                        </h4>
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" class="user_order_table">
+                            <tbody>
+                            <tr>
+                                <td width="42%">
+                                    <div class="order_card_data">
+                                        <a href="#" class="title ell"> 龙泉脉道养生馆</a>
+                                        <a href="#" class="c_blue"> 商家信息</a>
+                                    </div>
+                                </td>
+                                <td width="28%" align="center">
+                                    ￥59.90
+                                </td>
+                                <td width="20%" align="center">
+                                    <p class="lh-25">已消费</p>
+                                    <a href="#" class="c_blue"> 订单详情 </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="orderlist_one">
+                        <h4 class="orderlist_one_h4">
+                            <span>
+                                订单号： <a target="_blank" href="http://localhost:8080/buyer/order_view.htm?id=735">236201508271807581</a>
+                            </span>
+                        </h4>
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" class="user_order_table">
+                            <tbody>
+                            <tr>
+                                <td width="42%">
+                                    <div class="order_card_data">
+                                        <a href="#" class="title ell"> 龙泉脉道养生馆</a>
+                                        <a href="#" class="c_blue"> 商家信息</a>
+                                    </div>
+                                </td>
+                                <td width="28%" align="center">
+                                    ￥59.90
+                                </td>
+                                <td width="20%" align="center">
+                                    <p class="lh-25">已消费</p>
+                                    <a href="#" class="c_blue"> 订单详情 </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="orderlist_one">
+                        <h4 class="orderlist_one_h4">
+                            <span>
+                                订单号： <a target="_blank" href="http://localhost:8080/buyer/order_view.htm?id=735">236201508271807581</a>
+                            </span>
+                        </h4>
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" class="user_order_table">
+                            <tbody>
+                            <tr>
+                                <td width="42%">
+                                    <div class="order_card_data">
+                                        <a href="#" class="title ell"> 龙泉脉道养生馆</a>
+                                        <a href="#" class="c_blue"> 商家信息</a>
+                                    </div>
+                                </td>
+                                <td width="28%" align="center">
+                                    ￥59.90
+                                </td>
+                                <td width="20%" align="center">
+                                    <p class="lh-25">已消费</p>
+                                    <a href="#" class="c_blue"> 订单详情 </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="orderlist_one">
+                        <h4 class="orderlist_one_h4">
+                            <span>
+                                订单号： <a target="_blank" href="http://localhost:8080/buyer/order_view.htm?id=735">236201508271807581</a>
+                            </span>
+                        </h4>
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" class="user_order_table">
+                            <tbody>
+                            <tr>
+                                <td width="42%">
+                                    <div class="order_card_data">
+                                        <a href="#" class="title ell"> 龙泉脉道养生馆</a>
+                                        <a href="#" class="c_blue"> 商家信息</a>
+                                    </div>
+                                </td>
+                                <td width="28%" align="center">
+                                    ￥59.90
+                                </td>
+                                <td width="20%" align="center">
+                                    <p class="lh-25">已消费</p>
+                                    <a href="#" class="c_blue"> 订单详情 </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="orderlist_one">
+                        <h4 class="orderlist_one_h4">
+                            <span>
+                                订单号： <a target="_blank" href="http://localhost:8080/buyer/order_view.htm?id=735">236201508271807581</a>
+                            </span>
+                        </h4>
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" class="user_order_table">
+                            <tbody>
+                            <tr>
+                                <td width="42%">
+                                    <div class="order_card_data">
+                                        <a href="#" class="title ell"> 龙泉脉道养生馆</a>
+                                        <a href="#" class="c_blue"> 商家信息</a>
+                                    </div>
+                                </td>
+                                <td width="28%" align="center">
+                                    ￥59.90
+                                </td>
+                                <td width="20%" align="center">
+                                    <p class="lh-25">已消费</p>
+                                    <a href="#" class="c_blue"> 订单详情 </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="fenye">
+                      <span class="user_page_sp">
+                        <input type="hidden" value="1" id="currentPage" name="currentPage">
+                        <a onclick="return gotoPage(1)" href="javascript:void(0);">首页</a> 第&#12288;<a
+                              onclick="return gotoPage(1)" href="javascript:void(0);" class="this">1</a> 页&#12288;
+                      </span>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+$!httpInclude.include("/footer.htm")
+
+<script>
+
+
+</script>
+</body>
+</html>

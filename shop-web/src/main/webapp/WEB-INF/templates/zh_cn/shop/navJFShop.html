@@ -1,0 +1,137 @@
+<script>
+jQuery(document).ready(function(){
+    jQuery("#navul li a").each(function(i){
+        var original_url=jQuery(this).attr("href");
+        if("$!{op}"!=""){
+            if(original_url.indexOf("$!{op}")>=0){
+                jQuery(this).parent().addClass("this");
+            }
+        } else if (i == 0) {
+            jQuery(this).parent().addClass("this");
+        }
+    });
+});
+$(function(){
+	$(".left_menu dl a").hover(function() {
+		$(this).addClass('crr');
+		$(".left_menu dl a.crr img").attr("src","$!webPath/resources/style/system/front/default/images/jifen-fanweiyixuan.png");
+	}, function() {
+		$(this).removeClass('crr');
+		$(".left_menu dl a img").attr("src","$!webPath/resources/style/system/front/default/images/jifen-fanwei.png");
+	});
+}); 
+
+$(function(){
+	if(location.href.indexOf("brandStore")>-1){
+		$("#navul li").eq(1).addClass("this").siblings().removeClass("this");
+	}else if(location.href.indexOf("integral")>-1){
+		$("#navul li").eq(2).addClass("this").siblings().removeClass("this");
+
+	}else if(location.href.indexOf("group")>-1){
+		$("#navul li").eq(3).addClass("this").siblings().removeClass("this");
+
+	}else if(location.href.indexOf("yunGou")>-1){
+		$("#navul li").eq(4).addClass("this").siblings().removeClass("this");
+
+	}else if(location.href.indexOf("appDownLoad")>-1){
+		$("#navul li").eq(5).addClass("this").siblings().removeClass("this");
+
+	}
+	
+});
+</script>
+
+<style>
+.left_menu dl img{vertical-align: middle;margin: 0px 15px;margin-left: 50px;}
+.left_menu dl dt a,.left_menu dl dd a{
+	color: #fff;
+	font-size: 18px;
+	display: inline-block;
+	width: 100%;
+	height: 60px;line-height: 60px;
+	text-align: left;
+	
+}
+.left_menu dl dt a:hover{
+	background-color: #fff;
+	color: #19bf96;
+}
+.left_menu dl dd a:hover{
+	background-color: #fff;
+	color: #19bf96;
+}
+-->
+</style>
+<div class="nav">
+  <div class="nav_center">
+    <div class="nav_left">
+      <h2><a href="javascript:void(0)"><span>积分范围<em><img src="$!webPath/resources/style/system/front/default/images/nav_top.png" width="14" height="9" /></em></span></a> </h2>
+      <div class="index_topleft">
+        <div class="left_menu" id="left_menu"> 
+         	<dl>
+             	<dt><a href="$!webPath/integral/list.htm?begin=0&end=100&rang_begin=0&rang_end=100&rank=1"><img alt="" src="$!webPath/resources/style/system/front/default/images/jifen-fanwei.png">0-100</a></dt>
+                 <dd><a href="$!webPath/integral/list.htm?begin=101&end=1000&rang_begin=101&rang_end=1000&rank=2"><img alt="" src="$!webPath/resources/style/system/front/default/images/jifen-fanwei.png">101-1000</a></dd>
+                 <dt><a href="$!webPath/integral/list.htm?begin=1001&end=5000&rang_begin=1001&rang_end=5000&rank=3"><img alt="" src="$!webPath/resources/style/system/front/default/images/jifen-fanwei.png">1001-5000</a></dt>
+                 <dd><a href="$!webPath/integral/list.htm?begin=5001&end=12000&rang_begin=5001&rang_end=12000&rank=4"><img alt="" src="$!webPath/resources/style/system/front/default/images/jifen-fanwei.png">5001~12000</a></dd>
+                 <dt><a href="$!webPath/integral/list.htm?begin=12001&end=50000&rang_begin=12001&rang_end=50000&rank=5"><img alt="" src="$!webPath/resources/style/system/front/default/images/jifen-fanwei.png">12001~50000</a></dt>
+                 <dt><a href="$!webPath/integral/list.htm?begin=50000&end=0&rang_begin=50000&rang_end=0&rank=6"><img alt="" src="$!webPath/resources/style/system/front/default/images/jifen-fanwei.png">50000以上</a></dt>
+                 <dd><a href="$!webPath/integral/list.htm"><img alt="" src="$!webPath/resources/style/system/front/default/images/jifen-fanwei.png">全部</a></dd>
+             </dl>
+         </div>
+      </div>
+    </div>
+    
+    <ul id="navul">
+      #set($navs=$!navTools.queryNav(0,-1))
+      #foreach($nav in $navs)
+	      #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+	      	#set($url="$!nav.url")
+	      #else
+	      	#set($url="$!webPath/$!{nav.url}")
+	      #end
+
+	     <!-- 普通会员和CN会员都需要显示精品专区，登陆即可 -->
+	      #if(!$!isLogin)
+	      	
+	      	#if($!nav.title == '精选专区' )
+			
+			#elseif($!nav.title == 'APP下载')
+			<li id="appdownload_li"><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a>
+				<div class="download_dropdown">
+					<img src="$!webPath/resources/style/system/front/default/img/arraw_top.png" style="position:absolute;left:95px;top:-12px" />
+					<ul>
+						<li><a href="$!webPath/appDownLoad.htm">云尚App下载</a></li>
+						<li><a href="$!webPath/shdappDownLoad.htm">商户App下载</a></li>
+						<li><a href="$!webPath/yysappDownLoad.htm">运营商App下载</a></li>
+					</ul>
+				</div>
+			</li>
+			
+	      	#else
+	      	<li><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a></li>
+	      	#end
+	      	
+	      #else
+	      	      	
+	      	#if($!nav.title == 'APP下载')
+			<li id="appdownload_li"><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a>
+				<div class="download_dropdown">
+					<img src="$!webPath/resources/style/system/front/default/img/arraw_top.png" style="position:absolute;left:95px;top:-12px" />
+					<ul>
+						<li><a href="$!webPath/appDownLoad.htm">云尚App下载</a></li>
+						<li><a href="$!webPath/shdappDownLoad.htm">商户App下载</a></li>
+						<li><a href="$!webPath/yysappDownLoad.htm">运营商App下载</a></li>
+					</ul>
+				</div>
+			</li>
+			#else
+	      	
+	      	<li><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a></li>
+	      	#end
+	
+	      #end
+	      
+      #end
+    </ul>
+  </div>
+</div>

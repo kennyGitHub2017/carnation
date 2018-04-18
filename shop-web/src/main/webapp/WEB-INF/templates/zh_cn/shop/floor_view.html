@@ -1,0 +1,124 @@
+<!--蓝色-->
+<div class="storey $!{floor.gfCss}" id="floor_$!{floorCount}">
+  <div class="storey_left">
+    <h1><b>$!{floorCount}F</b><span>$!{floor.gfName}</span></h1>
+    <div class="storey_bd">
+      <div class="storey_ul">
+        <ul>
+          #foreach($gc in $gf_tools.generic_gf_gc("$!floor.gfGcList"))
+          #foreach($c_gc in $gc.childs)
+          <li><a href="store_goods_list_$!{c_gc.id}.htm" target="_blank">$!c_gc.className</a></li>
+          #end
+          #end
+        </ul>
+      </div>
+      <div class="advert">$!gf_tools.generic_adv("$!url","$!floor.gfLeftAdv")</div>
+    </div>
+  </div>
+  <div class="storey_right">
+    <div class="index_sale_tab">
+      <ul>
+        #foreach($info in $floor.childs)
+        <li #if($!{velocityCount}==1) class="this" #end style="cursor:pointer;" id="$!{info.id}" store_gc="$!floor.id"><a href="javascript:void(0);">$!{info.gfName}</a></li>
+        #end
+      </ul>
+    </div>
+    #foreach($info in $floor.childs)
+    #if($!info.gfStyle=="style1")
+    <div class="storey_list" #if($!{velocityCount}>1) style="display:none;" #end>
+      <ul>
+        #foreach($goods in $gf_tools.generic_goods("$!info.gfGcGoods"))
+        #if($!goods)
+
+ 		#if($!goods.goodsMainPhotoPath)
+         #set($img="$!{goods.goodsMainPhotoPath}")
+        #else
+         #set($img="$!{config.goodsImage.path}")
+        #end
+
+        #set($goods_url="goods_$!{goods.id}_floor.htm")
+        #if($!config.secondDomainOpen && $!goods.goodsType==1 && $!goods.storeSecondDomain!="")
+        #set($goods_url="http://$!{goods.storeSecondDomain}.$!{domainPath}/goods_$!{goods.id}_floor.htm")
+        #end
+        <li>
+          <div class="bd_right">
+            <div class="storey_ps">
+              <div class="storey_hover"> <span class="goods_name"><a href="$!goods_url" target="_blank">$!{goods.goodsName}</a></span> <span class="goods_price">¥<b>$!{goods.goodsShowPrice}</b><em>¥$!{goods.goodsPrice}</em></span> <span class="goods_pic"><a href="$!goods_url" target="_blank"><span class="img_cspan">
+                <p><img src="$!{img}"  onerror="this.src='$!{config.goodsImage.path}';" width="230" height="230"/></p>
+                </span></a></span> </div>
+            </div>
+          </div>
+        </li>
+        #end
+        #end
+      </ul>
+    </div>
+    #end
+    #if($!info.gfStyle=="style2")
+    <div class="storey_show_2"  #if($!{velocityCount}>1) style="display:none;" #end>
+        #set($map1=$!gf_tools.generic_style2_goods("$!info.gfStyle2Goods","1"))
+        <div class="storey_show_2_left">
+        #if($!map1.get("img_url")!="")
+        <a href='$!map1.get("href_url")' target="_blank"><img  id="style2_1" src="$!map1.get("img_url")"  onerror="this.src='$!{config.goodsImage.path}';"/></a>
+        #end
+        #if($!map1.get("goods_name")!=""&&$!map1.get("store_price")!="")
+        <div class="storey_show_on" style="display:none;">
+           <div class="storey_show_2_right_word"><a href='$!map1.get("href_url")' target="_blank">$!map1.get("goods_name")</a></div>
+           <div class="storey_show_2_right_price">¥$!map1.get("store_price")</div>
+        </div>
+        #end
+        </div>
+        <div class="storey_show_2_right">
+          <ul>
+          	#foreach( $foo in [2..9] )
+	          	<li>
+	             #set($map2=$!gf_tools.generic_style2_goods("$!info.gfStyle2Goods","$foo"))
+	              <div class="storey_show_2_right_img">
+	              #if($!map2.get("img_url"))
+	              <a href='$!map2.get("href_url")' target="_blank"> <img id="style2_2" src='$!{map2.get("img_url")}_137x137' height="137" width="137"/></a>
+	              #end
+	              </div>
+	              #if($!map2.get("goods_name")!=""&&$!map2.get("store_price")!="")
+	              <div class="storey_show_on" style="display:none;">
+	              <div class="storey_show_2_right_word"><a href='$!map2.get("href_url")' target="_blank">$!map2.get("goods_name")</a></div>
+	              <div class="storey_show_2_right_price">¥$!map2.get("store_price")</div>
+	              </div>
+	              #end
+	            </li>
+          	#end
+          </ul>
+        </div>
+      </div>
+      #end
+    #end
+    <div class="hot_sell">
+      <div class="hot_sell_br"> #set($map=$!gf_tools.generic_goods_list("$!floor.gfListGoods"))
+        <h2>$!map.get("list_title")</h2>
+        <ul class="hot_sell_ul">
+        #foreach($goods in $!map.get("goodsList"))
+	      #if($!goods.goodsMainPhotoPath)
+	         #set($img="$!{goods.goodsMainPhotoPath}")
+	      #else
+	         #set($img="$!{config.goodsImage.path}")
+	      #end
+        
+          #set($goods_url="/goods_$!{goods.id}.htm")
+
+          #if($!config.secondDomainOpen && $!goods.goodsType==1 && $!goods.storeSecondDomain!="")
+          #set($goods_url="http://$!{goods.storeSecondDomain}.$!{domainPath}/goods_$!{goods.id}.htm")
+          #end
+          <li> <em class="number_0${velocityCount}"></em> <span class="hot_goods_pic"><a href="$!goods_url" target="_blank"><span class="img_cspan">
+            <p><img src="$!{img}" width="80" height="80" /></p>
+            </span></a></span>
+            <div class="hot_describe">
+              <p class="hot_goods_promo">已售$!{goods.goodsSalenum}件</p>
+              <p class="hot_goods_name"><a href="$!goods_url" target="_blank">$!goods.goodsName</a></p>
+              <p class="hot_goods_price">¥<b>$!{goods.goodsShowPrice}</b></p>
+            </div>
+          </li>
+        #end
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

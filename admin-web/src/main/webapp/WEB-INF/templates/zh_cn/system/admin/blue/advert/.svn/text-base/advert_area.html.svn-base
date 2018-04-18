@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+/* 
+系统通用方法，根据参数来决定处理的url和参数
+*/
+function cmd22(){
+	var url=arguments[0];
+	var mulitId="";
+	jQuery("#ListForm").find(":checkbox:checked").each(function(){
+	  if(jQuery(this).val()!=""){	  
+	    mulitId+=jQuery(this).val()+",";
+	  }
+	});
+	if(mulitId!=""){
+	  jQuery("#ListForm #mulitId").val(mulitId);
+	  if(confirm("确定要执行该操作？")){
+	     jQuery("#ListForm").attr("action",url);
+	     jQuery("#ListForm").submit();
+	  }
+	}else{
+       alert("至少选择一条数据记录");
+	}
+}
+
+function changeStatus(id, ele,status){
+	$.ajax({
+		type:"post",
+		url:"$!webPath/admin/advert_area_changeShow.htm",
+		data:"disabled="+status+"&id="+id+"&type="+1,
+		dataType:"json",
+		success:function(data){
+			if(data.disabled==0){
+				$(ele).attr({"src":"$!webPath/resources/style/system/manage/blue/images/false.png","onclick":"changeStatus("+data.id+", this,0)","val":"true"});
+			}else{
+				$(ele).attr({"src":"$!webPath/resources/style/system/manage/blue/images/true.png","onclick":"changeStatus("+data.id+", this,1)","val":"true"});
+			}
+		}
+	});
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">区域管理</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/admin/advert_area_list.htm"  class="this"><b>管理</b></a></li>
+        <li><a href="$!webPath/admin/advert_area_edit.htm" ><b>新增</b></a></li>
+    </ul>
+  </div>
+<!--   <div class="operation">
+    <h3>友情提示</h3>
+    <ul>
+      <li>添加标识可通过article_标识.htm进行站内引用，标识不可重复</li>
+    </ul>
+  </div> -->
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/admin/advert_area_list.htm" method="post">
+	<div class="search">
+		<span>专区</span> <span class="size250"> 
+			<span class="size200">
+				<select name="areaAdId" id="areaAdId">
+	            	<option value="">所有专区</option>
+	            	#foreach($areaad in $areaads)
+						<option value="$areaad.id" #if($vo.areaAdId==$areaad.id) selected="selected" #end>$areaad.name</option>
+                    #end       
+	            </select>
+			</span>
+		</span> 
+		<span class="btn_search"> <input type="submit" class="search_btn" style="cursor: pointer;" value="搜索" name=""></span>
+	</div>
+	<div class="fshoptb">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+	      <tr>
+	        <th width="10%">&nbsp;序号</th>
+	        <th width="15%"><span class="form_btna">区域</span></th>
+	        <th width="15%"><span class="form_btna">所在专区</span></th>
+	        <th width="25%"><span class="form_btna">图片</span></th>
+	        <th width="10%"><span class="form_btna">状态</span></th>
+	        <th ><b class="form_btnb">操作</b></th>
+	      </tr>
+	      #set($num=$pageNumber*10)
+		  #foreach($obj in $objs)
+		  	#if($!obj.disabled==0)
+		  		#set($status="显示")
+		  	#else
+		  		#set($status="不显示")
+		  	#end
+	      	#set($num=$num+1)
+	      	
+		  	#set($adName="未选择专区")
+		  	#foreach($areaad in $areaads)
+		  		#if($areaad.id == $obj.areaAdId)
+		  			#set($adName=$areaad.name)
+		  		#end
+		  	#end
+	      <tr>
+	       <td class="check_position">
+				<span><input name="id" type="checkbox" id="checkbox" value="$!obj.id"/></span>
+				<span style="margin-left:56px">$num</span>
+	       </td>
+	       <td class="a_area" align="center">$!obj.name</td>
+	       <td class="a_zone" align="center">$adName</td>
+	       <td class="a_img" align="center">
+				<img src="$!obj.pic" width="100">
+	       </td>
+	   <!--     <td class="a_status" align="center">$status</td>   -->     
+	       <td class="z_status" align="center">
+		       #if(${obj.disabled}==0) 
+		      	<img onclick="changeStatus(${obj.id}, this,1)"src="$!webPath/resources/style/system/manage/blue/images/true.png" width="25" height="21" border="0" style="cursor:pointer;" title="可编辑" val="true">
+		       #else
+		       	<img onclick="changeStatus(${obj.id}, this,0)" src="$!webPath/resources/style/system/manage/blue/images/false.png" width="25" height="21" border="0" style="cursor:pointer;" title="可编辑" val="false"> 
+		       #end
+	       </td>
+	       <td class="hui oprate_con" align="center">
+	        <a href="$!webPath/admin/advert/advert_content_add.htm?parentId=$!obj.id&areaAdId=$!obj.areaAdId&amp;currentPage=$!currentPage" class="blue">添加城市</a> 
+	        	|<a href="$!webPath/admin/advert_area_edit.htm?id=$!obj.id&amp;currentPage=$!currentPage" class="blue">编辑</a> 
+	            |<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/admin/advert_area_delete.htm?mulitId=$!obj.id&amp;currentPage=$!currentPage'" class="blue">删除</a>
+	       </td>
+	      </tr>
+	      #end
+	    </table>
+ </div>
+ <div class="operate_bar">
+ 	<div class="oper_sp"> 
+    	<span class="oper_check"><label><input type="checkbox" name="all" id="all" onclick="selectAll(this)" value="" />全部</label></span>
+    	<span class="oper_del"><input name="" type="button" value="删除" style="cursor:pointer;" onclick="cmd22('$!webPath/admin/advert_area_delete.htm')"/></span>
+    </div>
+    <div class="fenye">
+    	<input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	  	<input name="mulitId" type="hidden" id="mulitId" />
+	  	$!gotoPageFormHTML
+    </div>       
+ </div>
+ </FORM>
+</div>
+</body>
+</html>

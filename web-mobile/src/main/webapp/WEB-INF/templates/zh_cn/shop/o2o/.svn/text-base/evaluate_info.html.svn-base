@@ -1,0 +1,29 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<div class="add_usercenter" style="text-align:left; margin-top:0px;  margin-right:8px; margin-left:8px; text-indent:10px;">
+#if($!ret==0)
+  参数错误
+#else
+  		$!evl.content
+		  #set($imgs=$!photos)
+     #if($imgs.size()>0) 
+     	<span class="pj_b_img"> 
+     		#foreach($!img in $imgs) 
+     			<a href="$!{img}" target="_blank"><img src="$!{img}_42*42" /></a> 
+     		#end 
+     	</span> 
+     #end
+
+		<div style="color:#ccc; text-align:left; margin-bottom:10px;" > 
+			[$!CommUtil.formatLongDate($!evl.evaluateTime)] 
+		</div>
+		#if($!evl.status==3)
+		<div style="padding:10px; float:left; clear:both; width:90%; background:#f6f6f6; color:#b28500"> 
+		  		[回复]$!evl.replyContent 
+				<div style="color:#9e9e9e;" > 
+					[$!CommUtil.formatLongDate($!evl.replyTime)]
+				</div>
+		</div>
+		#end 
+#end
+</div>

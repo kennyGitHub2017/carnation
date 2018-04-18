@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="cont">
+  <div class="orderdetail">
+    <div class="orderh">兑换信息</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">兑换单号:</span><span>$!obj.igoOrderSn</span></li>
+       #if($!obj.igoStatus==-1)
+                  #set($status="已取消")
+                #end
+                #if($!obj.igoStatus==0)
+                  #set($status="待付款")
+                #end
+                #if($!obj.igoStatus==20)
+                  #set($status="已付款，待发货")
+                #end
+                #if($!obj.igoStatus==30)
+                  #set($status="已发货")        
+                #end                
+                #if($!obj.igoStatus==40)
+                #set($status="已收货完成")
+                #end     
+        <li><span class="ordertitle"> 兑换状态:</span><span>$!status</span></li>
+        <li><span class="ordertitle"> 兑换积分:</span><span>$!{obj.igoTotalIntegral}</span></li>
+        <li><span class="ordertitle">运费金额:</span><span><strong class="orange" style="padding-right:10px;">¥$!{obj.igoTransFee}</strong></span></li>
+        <li><span class="ordertitle">下单时间:</span><span>$!CommUtil.formatLongDate($!obj.addTime)</span></li>
+        <li><span class="ordertitle">发货时间:</span><span>$!CommUtil.formatLongDate($!obj.igoShipTime)</span></li>
+        <li><span class="ordertitle">物流信息:</span><span>$!express_company_name     $!obj.igoShipCode</span></li>
+      </ul>
+    </div>
+    <div class="orderh">兑换详情</div>
+    <div class="orderhh">会员信息</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">会员名:</span><span>$!{obj.loginName}</span></li>
+        <li><span class="ordertitle">会员Email:</span><span>$!{obj.email}</span></li>
+        <li><span class="ordertitle">兑换留言:</span><span>#if($!{obj.igoMsg}!="")$!{obj.igoMsg}#else未填写#end</span></li>
+      </ul>
+    </div>
+   <div class="orderhh">支付信息</div>
+    <div class="orderul">
+      <ul>
+     			  #if($!obj.igoPayment=="alipay")
+                  #set($payment="支付宝")
+                  #end
+                  #if($!obj.igoPayment=="alipay_wap")
+                  #set($payment="支付宝网页支付")
+                  #end
+                  #if($!obj.igoPayment=="alipay_app")
+                  #set($payment="支付宝App支付")
+                  #end
+                  #if($!obj.igoPayment=="tenpay")
+                  #set($payment="财付通")
+                  #end
+                  #if($!obj.igoPayment=="bill")
+                  #set($payment="快钱")
+                  #end                 
+                  #if($!obj.igoPayment=="chinabank")
+                  #set($payment="网银在线")
+                  #end       
+                  #if($!obj.igoPayment=="balance")
+                  #set($payment="云豆支付")
+                  #end 
+                  #if($!obj.igoPayment=="no_fee")
+                  #set($payment="无运费订单")
+                  #end 
+                  #if(!$!obj.igoPayment)
+                  #set($payment="未支付")
+                  #end
+        <li><span class="ordertitle">支付方式:</span><span>$!payment</span></li>
+        <li><span class="ordertitle">支付时间:</span><span>$!CommUtil.formatLongDate($!obj.igoPayTime)</span></li>
+        <li><span class="ordertitle">支付留言:</span><span>#if($!{obj.igoPayMsg}!="")$!obj.igoPayMsg#else未填写#end</span></li>
+      </ul>
+    </div>
+    <div class="orderhhh">收货人信息</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">收货人姓名:</span><span>$!{obj.receiverName}</span></li>
+        <li><span class="ordertitle">所在地区:</span><span>$!{obj.receiverArea}</span></li>
+        <li><span class="ordertitle">邮政编码:</span><span>$!{obj.receiverZip}</span></li>
+        <li><span class="ordertitle">详细地址:</span><span>$!{obj.receiverAreaInfo}</span></li>
+        <li><span class="ordertitle">电话号码:</span><span>#if($!{obj.receiverTelephone}!="")$!{obj.receiverTelephone}#else无#end</span></li>
+        <li><span class="ordertitle">手机号码:</span><span>#if($!{obj.receiverMobile}!="")$!{obj.receiverMobile}#else无#end</span></li>
+      </ul>
+    </div>
+    #if($!obj.igo_ship_code)
+    <div class="orderhhh">发货信息</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">发货时间:</span><span>$!CommUtil.formatLongDate($!{obj.igoShipTime})</span></li>
+        <li><span class="ordertitle">物流单号:</span><span>$!{obj.igo_ship_code}</span></li>
+        <li><span class="ordertitle">发货说明:</span><span>#if($!{obj.igoShipContent}!="")$!{obj.igoShipContent}#else未填写#end</span></li>
+      </ul>
+    </div>
+    #end
+    <div class="orderhhh">礼品信息</div>
+    <div class="ordetable">
+      <table width="95%" border="0" cellspacing="0" cellpadding="0" class="orde_table">
+        <tr style="border-bottom:1px dotted #CCEAF4">
+          <td width="15%">&nbsp;</td>
+          <td width="40%"><strong>礼品信息</strong></td>
+          <td width="15%"><strong>兑换数量</strong></td>
+           <td width="15%"><strong>运费</strong></td>
+          <td><strong>兑换积分</strong></td>
+        </tr>
+         #set($igo_gcs=$!orderFormTools.query_integral_goodsinfo("$!obj.goodsInfo"))
+        #foreach($gc in $igo_gcs)
+        <tr style="border-bottom:1px dotted #CCEAF4"> 
+          <td><img src="$!gc.ig_goods_img" width="45" height="45" /></td>
+          <td><a href="$!{shopPath}/integral/view_$!{gc.id}.htm" target="_blank" class="blue2">$!gc.ig_goods_name</a></td>
+          <td>$!gc.ig_goods_count</td>
+               <td>$!gc.ig_goods_tran_fee 元</td>
+          <td>$!gc.ig_goods_integral</td>
+        </tr>
+        #end
+      </table>
+    </div>
+<div class="submit">
+    <input name="go" type="button" value="返回列表" onclick="javascript :history.back(-1);" />
+  </div>
+  </div>
+</div>
+</body>
+</html>

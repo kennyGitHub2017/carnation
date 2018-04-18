@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinco.carnation.sys.mapper.IncrementMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.Increment">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	</resultMap>
+	<insert id="insert" keyProperty="id"
+		parameterType="com.sinco.carnation.sys.model.Increment"
+		useGeneratedKeys="true">
+		insert into sys_increment (create_time) values (NOW())
+	</insert>
+</mapper>

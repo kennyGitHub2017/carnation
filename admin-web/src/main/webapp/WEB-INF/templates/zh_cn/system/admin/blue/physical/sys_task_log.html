@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户任务记录</title>
+
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type=text/css rel=stylesheet />
+
+<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css"/>
+<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css"/>
+<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="$!webPath/resources/js/easyui/plugins/jquery.validatebox.js"></script>
+
+</head>
+<body>
+	<div class="cont">
+		<h1 class="seth">用户任务记录</h1>
+		<div class="nav_list">
+			<ul>
+			</ul>
+		</div>
+		
+		 <form id="searchForm" action="$!webPath/admin/sys_task_log.htm" method="post">
+			<div class="search">
+				<ul>
+					<li>
+					<span>昵称</span>
+					<span>
+						<input id="nickname" name="nickname" value="$!vo.getNickname()"  type="text" style="width:100px;" data-options="prompt:'昵称'"/>
+					</span>
+					<input type="hidden" id="page" name="page" value="$!currentPage"></input>
+	    	<input type="hidden" id="size" name="size" value="$!pageSize"></input> 
+				<span> <input name="搜索" type="submit" value="搜索"
+							style="cursor: pointer;" class="search_btn" />
+					</span></li>
+				</ul>
+			</div>
+		</form>
+		
+			<div class="fshoptb">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					class="fshop_table">
+					<tr>
+						<th><span class="form_btna">昵称</span></th>
+						<th><span class="form_btna">任务名称</span></th>
+						<th><span class="form_btna">提醒时间</span></th>
+						<th><span class="form_btna">提醒周期</span></th>
+						<th><span class="form_btna">完成时间</span></th>
+						<th><span class="form_btna">操作</span></th>
+					</tr>
+					
+					#foreach($objs in $objs)
+					<tr>
+						<td align="center">$!objs.nickname</td>
+						<td align="center">$!objs.taskName</td>
+						<td align="center">$!CommUtil.formatShortDateCn($!objs.remindTime)</td>
+						<td align="center">$!weekTools.weekDay($!objs.remindDay)</td>
+						<td align="center">$!CommUtil.formatShortDateCn($!objs.completedTime)</td>
+						<td align="center">
+						 <a class="blue" href="javascript:;" 
+						 onclick="if(confirm('确认要删除吗？'))window.location.href='$!webPath/admin/sys_task_log_del.htm?id=$!objs.id'">删除</a>
+						</td>
+					</tr>
+					#end
+				</table>
+			</div>
+
+			<div class="operate_bar">
+   				<div id="listPager" class="easyui-pagination" data-options="total:$!rows,pageSize:$!pageSize,pageNumber:$!currentPage,pageList:[10,20,50,100]" style="background:#efefef;border:1px solid #ccc;"></div> 
+			</div>
+			
+		</FORM>
+	</div>
+	<script>
+jQuery('#listPager').pagination({
+	onSelectPage:function(pageNumber, pageSize){
+		jQuery(this).pagination('loading');
+		jQuery('#page').attr("value",pageNumber);
+		jQuery('#size').attr("value",pageSize);
+		jQuery(this).pagination('loaded');
+		formSubmit();
+	},
+}); 
+ 
+ function formSubmit(){
+ 	jQuery("#searchForm").submit();
+ }
+</script> 
+</body>
+</html>

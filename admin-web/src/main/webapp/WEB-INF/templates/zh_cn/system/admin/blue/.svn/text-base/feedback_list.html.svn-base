@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#nickName").val("$!vo.nickName");	
+  jQuery("#source").val("$!vo.source");	
+  jQuery("#status").val("$!vo.status");	
+});
+function dealConfirm(id, status) {
+	showDialog('msg_info', '', status == 1 ? '是否已经处理？' : '是否不予处理？', 1, 'question', 3, function() {
+		jQuery.post("$!webPath/admin/feedback_deal.htm",{"id":id,"status":status},function(data){
+			if(data!=''){
+				showDialog('msg_error',data);
+				return;
+			}
+			var source = jQuery("#source").val();
+			var status = jQuery("#status").val();
+			var currentPage = jQuery("#currentPage").val();
+			window.location.href = "$!webPath/admin/feedback_list.htm?source="+source+"&status="+status+"&currentPage="+currentPage;
+		   });
+	});
+	
+};
+</script>
+<body>
+  <div class="cont">
+    <h1 class="seth">反馈管理</h1>
+		<FORM name="ListForm" id="ListForm"  action="$!webPath/admin/feedback_list.htm" method="post">
+    <div class="search"> 
+			<span>反馈人昵称:
+      <input name="nickName" type="text" id="nickName"  value="$!vo.nickName" />
+      </span>
+      <span>手机号:
+      <input name="mobile" type="text" id="mobile"  value="$!vo.mobile" />
+      </span>
+      <span class="size150">
+          <select name="source" id="source">
+          <option value="">请选择客户端来源..</option>
+							<option value="1">IOS个人端APP </option>
+							<option value="2">IOS商户端APP </option>
+							<option value="3">IOS运营商APP</option>
+							<option value="4">安卓个人端APP</option>
+							<option value="5">安卓商户端APP</option>
+							<option value="6">安卓运营商APP</option>
+          </select>
+		</span>
+		<span class="size150">
+          <select name="status" id="status">
+          <option value="">请选择处理状态..</option>
+							<option value="1">已处理</option>
+							<option value="2">不处理</option>
+							<option value="0">未处理</option>
+          </select>
+		</span>
+	    <span class="btn_search">
+			<input name="" type="submit"  value="搜索" style="cursor:pointer;"  class="search_btn"/>
+	    </span> 
+	    <span> 
+		   	<a class="add_btn search_btn" style="display: inline-block;line-height: 26px;text-align: center;color: #fff;" onclick="export_excel()" href="javascript:void(0);"> 
+		   		<b class="add_btn_b">导出Excel</b>
+		   	</a>
+	    </span>
+    </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="30%" align="left"><span class="form_btna">反馈用户</span></th>
+		  <th width="15%" align="center"><span class="form_btna">反馈用户来源手机号</span></th>
+		  <th width="10%" align="center"><span class="form_btna">来源APP</span></th>
+          <th width="10%" align="center"><span class="form_btna">反馈时间</span></th>
+          <th width="10%" align="center"><span class="form_btna">状态</span></th>
+          <th  align="center" ><span class="form_btna">操作</span></th>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+  				<td>$!obj.nickName</td>
+  				<td>$!obj.mobile</td>
+  				<td  align="center">
+  					#if($!obj.source=='1')
+								IOS个人端APP 
+  					#elseif($!obj.source=='2')
+  								IOS商户端APP
+  					#elseif($!obj.source=='3')
+  								IOS运营商APP
+  					#elseif($!obj.source=='4')
+								安卓个人端APP
+  					#elseif($!obj.source=='5')
+								安卓商户端APP
+  					#elseif($!obj.source=='6')
+								安卓运营商APP
+  					#end
+  				</td>
+  				<td align="center">$!CommUtil.formatShortDate($!obj.createTime)</td>
+  				<td>
+  				#if($!obj.status=='0')
+  							未处理
+  				#elseif($!obj.status=='1')
+  							已处理
+  				#elseif($!obj.status=='2')
+  							不处理
+  				#end
+  				</td>
+  				<td align="center">
+  				#if($!obj.status=='0')
+  							<a class="blue" href="javascript:dealConfirm($!obj.id, 1)">已处理</a>
+  							<a class="blue" href="javascript:dealConfirm($!obj.id, 2);">不处理</a>
+  				#end
+  				<a href="javascript:void(0);" dialog_uri="$!webPath/admin/feedback_content.htm?id=$!obj.id" dialog_title="反馈详情" dialog_width="410" dialog_height="100" class="blue">查看</a>
+  				</td>
+        </tr>
+        #end
+      </table>
+    <div class="operate_bar">
+      <div class="fenye">
+        <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML 
+       </div>
+    </div>
+    </div>
+	</FORM>
+  </div>
+  
+	<script>
+		function export_excel(){
+			var source = jQuery("#source").val();
+			var status = jQuery("#status").val();
+			location.href="$!webPath/admin/feedback_list_excel.htm?source="+source+"&status="+status ;
+		}
+	</script>
+	
+</body>
+</html>

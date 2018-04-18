@@ -1,0 +1,907 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.market.mapper.ActRedPackageMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.market.model.ActRedPackage">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="vcode" property="vcode" jdbcType="VARCHAR" />
+		<result column="min_money" property="minMoney" jdbcType="DECIMAL" />
+		<result column="max_money" property="maxMoney" jdbcType="DECIMAL" />
+		<result column="fix_type" property="fixType" jdbcType="TINYINT" />
+		<result column="scheme_name" property="schemeName" jdbcType="VARCHAR" />
+		<result column="total_count" property="totalCount" jdbcType="BIGINT" />
+		<result column="total_money" property="totalMoney" jdbcType="DECIMAL" />
+		<result column="get_count" property="getCount" jdbcType="BIGINT" />
+		<result column="per_limit_count" property="perLimitCount"
+			jdbcType="BIGINT" />
+		<result column="priority" property="priority" jdbcType="INTEGER" />
+		<result column="shop_type" property="shopType" jdbcType="TINYINT" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="terminal_type" property="terminalType"
+			jdbcType="TINYINT" />
+		<result column="is_enabled" property="isEnabled" jdbcType="TINYINT" />
+		<result column="logo_path" property="logoPath" jdbcType="VARCHAR" />
+		<result column="user_type" property="userType" jdbcType="TINYINT" />
+		<result column="get_type" property="getType" jdbcType="TINYINT" />
+		<result column="act_position" property="actPosition" jdbcType="VARCHAR" />
+		<result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="TINYINT" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="BIGINT" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="current_open_count" property="currentOpenCount"
+			jdbcType="BIGINT" />
+		<result column="current_get_count" property="currentGetCount"
+			jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.market.bo.ActRedPackageBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.sinco.carnation.market.model.ActRedPackage" extends="BaseResultMap">
+		<result column="description" property="description" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, vcode, min_money, max_money, fix_type, scheme_name,
+		total_count,
+		total_money,
+		get_count, per_limit_count, priority,
+		shop_type, store_id, terminal_type,
+		is_enabled,
+		logo_path, user_type,
+		get_type, act_position, start_time, end_time,
+		delete_status,
+		create_by,
+		create_time, modify_by, modify_time, current_open_count,
+		current_get_count
+	</sql>
+	<sql id="Blob_Column_List">
+		description
+	</sql>
+	<select id="selectByExampleWithBLOBs"
+		parameterType="com.sinco.carnation.market.model.ActRedPackageExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from act_red_package
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.market.model.ActRedPackageExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from act_red_package
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from act_red_package
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		act_red_package
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.market.model.ActRedPackageExample">
+		delete from act_red_package
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.market.model.ActRedPackage"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into act_red_package (id,
+		vcode, min_money,
+		max_money, fix_type, scheme_name,
+		total_count,
+		total_money, get_count,
+		per_limit_count, priority, shop_type,
+		store_id,
+		terminal_type, is_enabled,
+		logo_path, user_type, get_type,
+		act_position, start_time, end_time,
+		delete_status, create_by,
+		create_time,
+		modify_by, modify_time, current_open_count,
+		current_get_count, description)
+		values (#{id,jdbcType=BIGINT},
+		#{vcode,jdbcType=VARCHAR},
+		#{minMoney,jdbcType=DECIMAL},
+		#{maxMoney,jdbcType=DECIMAL}, #{fixType,jdbcType=TINYINT},
+		#{schemeName,jdbcType=VARCHAR},
+		#{totalCount,jdbcType=BIGINT},
+		#{totalMoney,jdbcType=DECIMAL},
+		#{getCount,jdbcType=BIGINT},
+		#{perLimitCount,jdbcType=BIGINT}, #{priority,jdbcType=INTEGER},
+		#{shopType,jdbcType=TINYINT},
+		#{storeId,jdbcType=BIGINT},
+		#{terminalType,jdbcType=TINYINT},
+		#{isEnabled,jdbcType=TINYINT},
+		#{logoPath,jdbcType=VARCHAR}, #{userType,jdbcType=TINYINT},
+		#{getType,jdbcType=TINYINT},
+		#{actPosition,jdbcType=VARCHAR},
+		#{startTime,jdbcType=TIMESTAMP},
+		#{endTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=TINYINT}, #{createBy,jdbcType=BIGINT},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{modifyBy,jdbcType=BIGINT},
+		#{modifyTime,jdbcType=TIMESTAMP},
+		#{currentOpenCount,jdbcType=BIGINT},
+		#{currentGetCount,jdbcType=BIGINT},
+		#{description,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.market.model.ActRedPackage"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into act_red_package
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="vcode != null">
+				vcode,
+			</if>
+			<if test="minMoney != null">
+				min_money,
+			</if>
+			<if test="maxMoney != null">
+				max_money,
+			</if>
+			<if test="fixType != null">
+				fix_type,
+			</if>
+			<if test="schemeName != null">
+				scheme_name,
+			</if>
+			<if test="totalCount != null">
+				total_count,
+			</if>
+			<if test="totalMoney != null">
+				total_money,
+			</if>
+			<if test="getCount != null">
+				get_count,
+			</if>
+			<if test="perLimitCount != null">
+				per_limit_count,
+			</if>
+			<if test="priority != null">
+				priority,
+			</if>
+			<if test="shopType != null">
+				shop_type,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="terminalType != null">
+				terminal_type,
+			</if>
+			<if test="isEnabled != null">
+				is_enabled,
+			</if>
+			<if test="logoPath != null">
+				logo_path,
+			</if>
+			<if test="userType != null">
+				user_type,
+			</if>
+			<if test="getType != null">
+				get_type,
+			</if>
+			<if test="actPosition != null">
+				act_position,
+			</if>
+			<if test="startTime != null">
+				start_time,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="modifyBy != null">
+				modify_by,
+			</if>
+			<if test="modifyTime != null">
+				modify_time,
+			</if>
+			<if test="currentOpenCount != null">
+				current_open_count,
+			</if>
+			<if test="currentGetCount != null">
+				current_get_count,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="vcode != null">
+				#{vcode,jdbcType=VARCHAR},
+			</if>
+			<if test="minMoney != null">
+				#{minMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="maxMoney != null">
+				#{maxMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="fixType != null">
+				#{fixType,jdbcType=TINYINT},
+			</if>
+			<if test="schemeName != null">
+				#{schemeName,jdbcType=VARCHAR},
+			</if>
+			<if test="totalCount != null">
+				#{totalCount,jdbcType=BIGINT},
+			</if>
+			<if test="totalMoney != null">
+				#{totalMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="getCount != null">
+				#{getCount,jdbcType=BIGINT},
+			</if>
+			<if test="perLimitCount != null">
+				#{perLimitCount,jdbcType=BIGINT},
+			</if>
+			<if test="priority != null">
+				#{priority,jdbcType=INTEGER},
+			</if>
+			<if test="shopType != null">
+				#{shopType,jdbcType=TINYINT},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="terminalType != null">
+				#{terminalType,jdbcType=TINYINT},
+			</if>
+			<if test="isEnabled != null">
+				#{isEnabled,jdbcType=TINYINT},
+			</if>
+			<if test="logoPath != null">
+				#{logoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="userType != null">
+				#{userType,jdbcType=TINYINT},
+			</if>
+			<if test="getType != null">
+				#{getType,jdbcType=TINYINT},
+			</if>
+			<if test="actPosition != null">
+				#{actPosition,jdbcType=VARCHAR},
+			</if>
+			<if test="startTime != null">
+				#{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				#{modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="modifyTime != null">
+				#{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="currentOpenCount != null">
+				#{currentOpenCount,jdbcType=BIGINT},
+			</if>
+			<if test="currentGetCount != null">
+				#{currentGetCount,jdbcType=BIGINT},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.market.model.ActRedPackageExample"
+		resultType="java.lang.Integer">
+		select count(*) from act_red_package
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update act_red_package
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.vcode != null">
+				vcode = #{record.vcode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.minMoney != null">
+				min_money = #{record.minMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="record.maxMoney != null">
+				max_money = #{record.maxMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="record.fixType != null">
+				fix_type = #{record.fixType,jdbcType=TINYINT},
+			</if>
+			<if test="record.schemeName != null">
+				scheme_name = #{record.schemeName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.totalCount != null">
+				total_count = #{record.totalCount,jdbcType=BIGINT},
+			</if>
+			<if test="record.totalMoney != null">
+				total_money = #{record.totalMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="record.getCount != null">
+				get_count = #{record.getCount,jdbcType=BIGINT},
+			</if>
+			<if test="record.perLimitCount != null">
+				per_limit_count =
+				#{record.perLimitCount,jdbcType=BIGINT},
+			</if>
+			<if test="record.priority != null">
+				priority = #{record.priority,jdbcType=INTEGER},
+			</if>
+			<if test="record.shopType != null">
+				shop_type = #{record.shopType,jdbcType=TINYINT},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.terminalType != null">
+				terminal_type = #{record.terminalType,jdbcType=TINYINT},
+			</if>
+			<if test="record.isEnabled != null">
+				is_enabled = #{record.isEnabled,jdbcType=TINYINT},
+			</if>
+			<if test="record.logoPath != null">
+				logo_path = #{record.logoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userType != null">
+				user_type = #{record.userType,jdbcType=TINYINT},
+			</if>
+			<if test="record.getType != null">
+				get_type = #{record.getType,jdbcType=TINYINT},
+			</if>
+			<if test="record.actPosition != null">
+				act_position = #{record.actPosition,jdbcType=VARCHAR},
+			</if>
+			<if test="record.startTime != null">
+				start_time = #{record.startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.endTime != null">
+				end_time = #{record.endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.modifyBy != null">
+				modify_by = #{record.modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.modifyTime != null">
+				modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.currentOpenCount != null">
+				current_open_count =
+				#{record.currentOpenCount,jdbcType=BIGINT},
+			</if>
+			<if test="record.currentGetCount != null">
+				current_get_count =
+				#{record.currentGetCount,jdbcType=BIGINT},
+			</if>
+			<if test="record.description != null">
+				description = #{record.description,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update act_red_package
+		set id = #{record.id,jdbcType=BIGINT},
+		vcode =
+		#{record.vcode,jdbcType=VARCHAR},
+		min_money =
+		#{record.minMoney,jdbcType=DECIMAL},
+		max_money =
+		#{record.maxMoney,jdbcType=DECIMAL},
+		fix_type =
+		#{record.fixType,jdbcType=TINYINT},
+		scheme_name =
+		#{record.schemeName,jdbcType=VARCHAR},
+		total_count =
+		#{record.totalCount,jdbcType=BIGINT},
+		total_money =
+		#{record.totalMoney,jdbcType=DECIMAL},
+		get_count =
+		#{record.getCount,jdbcType=BIGINT},
+		per_limit_count =
+		#{record.perLimitCount,jdbcType=BIGINT},
+		priority =
+		#{record.priority,jdbcType=INTEGER},
+		shop_type =
+		#{record.shopType,jdbcType=TINYINT},
+		store_id =
+		#{record.storeId,jdbcType=BIGINT},
+		terminal_type =
+		#{record.terminalType,jdbcType=TINYINT},
+		is_enabled =
+		#{record.isEnabled,jdbcType=TINYINT},
+		logo_path =
+		#{record.logoPath,jdbcType=VARCHAR},
+		user_type =
+		#{record.userType,jdbcType=TINYINT},
+		get_type =
+		#{record.getType,jdbcType=TINYINT},
+		act_position =
+		#{record.actPosition,jdbcType=VARCHAR},
+		start_time =
+		#{record.startTime,jdbcType=TIMESTAMP},
+		end_time =
+		#{record.endTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=TINYINT},
+		create_by =
+		#{record.createBy,jdbcType=BIGINT},
+		create_time =
+		#{record.createTime,jdbcType=TIMESTAMP},
+		modify_by =
+		#{record.modifyBy,jdbcType=BIGINT},
+		modify_time =
+		#{record.modifyTime,jdbcType=TIMESTAMP},
+		current_open_count =
+		#{record.currentOpenCount,jdbcType=BIGINT},
+		current_get_count =
+		#{record.currentGetCount,jdbcType=BIGINT},
+		description =
+		#{record.description,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update act_red_package
+		set id = #{record.id,jdbcType=BIGINT},
+		vcode =
+		#{record.vcode,jdbcType=VARCHAR},
+		min_money =
+		#{record.minMoney,jdbcType=DECIMAL},
+		max_money =
+		#{record.maxMoney,jdbcType=DECIMAL},
+		fix_type =
+		#{record.fixType,jdbcType=TINYINT},
+		scheme_name =
+		#{record.schemeName,jdbcType=VARCHAR},
+		total_count =
+		#{record.totalCount,jdbcType=BIGINT},
+		total_money =
+		#{record.totalMoney,jdbcType=DECIMAL},
+		get_count =
+		#{record.getCount,jdbcType=BIGINT},
+		per_limit_count =
+		#{record.perLimitCount,jdbcType=BIGINT},
+		priority =
+		#{record.priority,jdbcType=INTEGER},
+		shop_type =
+		#{record.shopType,jdbcType=TINYINT},
+		store_id =
+		#{record.storeId,jdbcType=BIGINT},
+		terminal_type =
+		#{record.terminalType,jdbcType=TINYINT},
+		is_enabled =
+		#{record.isEnabled,jdbcType=TINYINT},
+		logo_path =
+		#{record.logoPath,jdbcType=VARCHAR},
+		user_type =
+		#{record.userType,jdbcType=TINYINT},
+		get_type =
+		#{record.getType,jdbcType=TINYINT},
+		act_position =
+		#{record.actPosition,jdbcType=VARCHAR},
+		start_time =
+		#{record.startTime,jdbcType=TIMESTAMP},
+		end_time =
+		#{record.endTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=TINYINT},
+		create_by =
+		#{record.createBy,jdbcType=BIGINT},
+		create_time =
+		#{record.createTime,jdbcType=TIMESTAMP},
+		modify_by =
+		#{record.modifyBy,jdbcType=BIGINT},
+		modify_time =
+		#{record.modifyTime,jdbcType=TIMESTAMP},
+		current_open_count =
+		#{record.currentOpenCount,jdbcType=BIGINT},
+		current_get_count =
+		#{record.currentGetCount,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.market.model.ActRedPackage">
+		update act_red_package
+		<trim prefix="set" suffixOverrides=",">
+			<if test="vcode != null">
+				vcode = #{vcode,jdbcType=VARCHAR},
+			</if>
+			<if test="minMoney != null">
+				min_money = #{minMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="maxMoney != null">
+				max_money = #{maxMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="fixType != null">
+				fix_type = #{fixType,jdbcType=TINYINT},
+			</if>
+			<if test="schemeName != null">
+				scheme_name = #{schemeName,jdbcType=VARCHAR},
+			</if>
+			<if test="totalCount != null">
+				total_count = #{totalCount,jdbcType=BIGINT},
+			</if>
+			<if test="totalMoney != null">
+				total_money = #{totalMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="getCount != null">
+				get_count = #{getCount,jdbcType=BIGINT},
+			</if>
+			<if test="perLimitCount != null">
+				per_limit_count = #{perLimitCount,jdbcType=BIGINT},
+			</if>
+			<if test="priority != null">
+				priority = #{priority,jdbcType=INTEGER},
+			</if>
+			<if test="shopType != null">
+				shop_type = #{shopType,jdbcType=TINYINT},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="terminalType != null">
+				terminal_type = #{terminalType,jdbcType=TINYINT},
+			</if>
+			<if test="isEnabled != null">
+				is_enabled = #{isEnabled,jdbcType=TINYINT},
+			</if>
+			<if test="logoPath != null">
+				logo_path = #{logoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="userType != null">
+				user_type = #{userType,jdbcType=TINYINT},
+			</if>
+			<if test="getType != null">
+				get_type = #{getType,jdbcType=TINYINT},
+			</if>
+			<if test="actPosition != null">
+				act_position = #{actPosition,jdbcType=VARCHAR},
+			</if>
+			<if test="startTime != null">
+				start_time = #{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="currentOpenCount != null">
+				current_open_count = #{currentOpenCount,jdbcType=BIGINT},
+			</if>
+			<if test="currentGetCount != null">
+				current_get_count = #{currentGetCount,jdbcType=BIGINT},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.market.model.ActRedPackage">
+		update
+		act_red_package
+		set vcode = #{vcode,jdbcType=VARCHAR},
+		min_money =
+		#{minMoney,jdbcType=DECIMAL},
+		max_money = #{maxMoney,jdbcType=DECIMAL},
+		fix_type = #{fixType,jdbcType=TINYINT},
+		scheme_name =
+		#{schemeName,jdbcType=VARCHAR},
+		total_count =
+		#{totalCount,jdbcType=BIGINT},
+		total_money =
+		#{totalMoney,jdbcType=DECIMAL},
+		get_count =
+		#{getCount,jdbcType=BIGINT},
+		per_limit_count =
+		#{perLimitCount,jdbcType=BIGINT},
+		priority =
+		#{priority,jdbcType=INTEGER},
+		shop_type = #{shopType,jdbcType=TINYINT},
+		store_id = #{storeId,jdbcType=BIGINT},
+		terminal_type =
+		#{terminalType,jdbcType=TINYINT},
+		is_enabled =
+		#{isEnabled,jdbcType=TINYINT},
+		logo_path =
+		#{logoPath,jdbcType=VARCHAR},
+		user_type = #{userType,jdbcType=TINYINT},
+		get_type = #{getType,jdbcType=TINYINT},
+		act_position =
+		#{actPosition,jdbcType=VARCHAR},
+		start_time =
+		#{startTime,jdbcType=TIMESTAMP},
+		end_time =
+		#{endTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{deleteStatus,jdbcType=TINYINT},
+		create_by =
+		#{createBy,jdbcType=BIGINT},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		modify_by =
+		#{modifyBy,jdbcType=BIGINT},
+		modify_time =
+		#{modifyTime,jdbcType=TIMESTAMP},
+		current_open_count =
+		#{currentOpenCount,jdbcType=BIGINT},
+		current_get_count =
+		#{currentGetCount,jdbcType=BIGINT},
+		description =
+		#{description,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.market.model.ActRedPackage">
+		update
+		act_red_package
+		set vcode = #{vcode,jdbcType=VARCHAR},
+		min_money =
+		#{minMoney,jdbcType=DECIMAL},
+		max_money = #{maxMoney,jdbcType=DECIMAL},
+		fix_type = #{fixType,jdbcType=TINYINT},
+		scheme_name =
+		#{schemeName,jdbcType=VARCHAR},
+		total_count =
+		#{totalCount,jdbcType=BIGINT},
+		total_money =
+		#{totalMoney,jdbcType=DECIMAL},
+		get_count =
+		#{getCount,jdbcType=BIGINT},
+		per_limit_count =
+		#{perLimitCount,jdbcType=BIGINT},
+		priority =
+		#{priority,jdbcType=INTEGER},
+		shop_type = #{shopType,jdbcType=TINYINT},
+		store_id = #{storeId,jdbcType=BIGINT},
+		terminal_type =
+		#{terminalType,jdbcType=TINYINT},
+		is_enabled =
+		#{isEnabled,jdbcType=TINYINT},
+		logo_path =
+		#{logoPath,jdbcType=VARCHAR},
+		user_type = #{userType,jdbcType=TINYINT},
+		get_type = #{getType,jdbcType=TINYINT},
+		act_position =
+		#{actPosition,jdbcType=VARCHAR},
+		start_time =
+		#{startTime,jdbcType=TIMESTAMP},
+		end_time =
+		#{endTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{deleteStatus,jdbcType=TINYINT},
+		create_by =
+		#{createBy,jdbcType=BIGINT},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		modify_by =
+		#{modifyBy,jdbcType=BIGINT},
+		modify_time =
+		#{modifyTime,jdbcType=TIMESTAMP},
+		current_open_count =
+		#{currentOpenCount,jdbcType=BIGINT},
+		current_get_count =
+		#{currentGetCount,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+
+	<select id="findAllByPage" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM act_red_package
+		WHERE delete_status = 0
+		<if test="vo.schemeName != null and vo.schemeName != '' ">
+			AND scheme_name = #{vo.schemeName}
+		</if>
+		<if test="vo.terminalType != null and vo.terminalType != -1">
+			AND terminal_type =#{vo.terminalType}
+		</if>
+		<if test="vo.actPosition != null  and vo.actPosition != -1">
+			AND act_position = #{vo.actPosition}
+		</if>
+		<if test="vo.startTimeStr != null  and vo.startTimeStr != '' ">
+			AND create_time <![CDATA[ >= ]]>
+			#{vo.startTime}
+		</if>
+		<if test="vo.endTimeStr != null  and vo.endTimeStr != '' ">
+			AND create_time <![CDATA[ <= ]]>
+			#{vo.endTime}
+		</if>
+		<choose>
+			<!-- 1-未开始,2-进行中 ,3-已结束 -->
+			<when test="vo.status == 1">
+				and start_time <![CDATA[ > ]]>
+				now()
+			</when>
+			<when test="vo.status == 2">
+				and start_time <![CDATA[ <= ]]>
+				now() and end_time <![CDATA[ >= ]]>
+				now()
+				and current_open_count <![CDATA[ < ]]>
+				total_count
+				and is_enabled = 1
+			</when>
+			<when test="vo.status == 3">
+				and (
+				end_time <![CDATA[ < ]]>
+				now()
+				or current_open_count <![CDATA[ >= ]]>
+				total_count
+				)
+			</when>
+			<when test="vo.status == 4">
+				and is_enabled = 0
+			</when>
+			<when test="vo.status == 5">
+				and is_enabled = 1
+			</when>
+		</choose>
+
+
+		ORDER BY priority DESC
+	</select>
+
+	<!-- <select id="getActRedPackageBO" resultMap="BOResultMap" > SELECT <include 
+		refid="Base_Column_List" /> FROM act_red_package WHERE delete_status = 0 
+		and is_enabled = 1 ORDER BY priority DESC LIMIT 1; </select> -->
+
+	<update id="updateActRedPackageRecordById" parameterType="java.lang.String">
+		update
+		act_red_package set
+		current_get_count = current_get_count + 1
+		where id =
+		#{id,jdbcType=BIGINT} and current_get_count &lt;
+		current_open_count
+	</update>
+
+
+
+
+</mapper>

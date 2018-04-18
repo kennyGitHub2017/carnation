@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.AlbumMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.Album">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="album_default" property="albumDefault"
+			jdbcType="BIT" />
+		<result column="store_info_default" property="storeInfoDefault"
+			jdbcType="BIT" />
+		<result column="album_name" property="albumName" jdbcType="VARCHAR" />
+		<result column="album_sequence" property="albumSequence"
+			jdbcType="INTEGER" />
+		<result column="album_cover_id" property="albumCoverId"
+			jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+	</resultMap>
+
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.AlbumBO"
+		extends="BaseResultMap" />
+
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.user.model.Album"
+		extends="BaseResultMap">
+		<result column="alblum_info" property="alblumInfo" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<resultMap id="ResultMapBO" type="com.sinco.carnation.user.bo.AlbumBO"
+		extends="ResultMapWithBLOBs">
+		<result column="acc_id" property="accId" jdbcType="BIGINT" />
+		<result column="path" property="path" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="ResultMapAlbumList" type="com.sinco.carnation.user.bo.AlbumBO"
+		extends="ResultMapWithBLOBs">
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="path" property="path" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, album_default, album_name, album_sequence,
+		album_cover_id,
+		user_id,store_info_default
+	</sql>
+	<sql id="Blob_Column_List">
+		alblum_info
+	</sql>
+
+	<select id="queryAlbumListByUid" resultMap="BOResultMap">
+		select id, add_time, delete_status,user_id from user_album where
+		user_id=#{userId}
+	</select>
+	<select id="fetchStoreInfoDefaultAlbum" resultMap="BOResultMap">
+		select id,album_cover_id from user_album where user_id=#{userId} and
+		store_info_default=1 ORDER BY add_time DESC LIMIT 1
+	</select>
+
+	<select id="albumUserList" resultMap="ResultMapAlbumList">
+		SELECT s.id acc_id,s.path,a.login_name,u.* FROM user_album u LEFT JOIN
+		sys_accessory s ON u.id=s.album_id and u.album_cover_id=s.id
+		LEFT JOIN sys_user_account a ON (u.user_id=a.uid and a.account_type = 2)
+		WHERE u.delete_status=0
+		<if test="albumName != null and albumName != ''">
+			and u.album_name like concat('%',#{albumName},'%')
+		</if>
+		order by album_sequence
+	</select>
+
+	<select id="queryAlbumByUserNameList" resultMap="ResultMapAlbumList">
+		SELECT a.*,u.login_name,c.path FROM user_album a LEFT JOIN
+		sys_user_account u ON (u.uid=a.user_id and u.account_type=2)
+		LEFT JOIN sys_accessory c ON c.id=a.album_cover_id
+		<if test="loginName != null and loginName != ''">
+			WHERE u.login_name LIKE CONCAT('%',#{loginName},'%')
+		</if>
+	</select>
+
+	<select id="queryAblumAccessory" resultMap="ResultMapBO">
+		SELECT s.* from user_album a LEFT JOIN sys_accessory s ON a.id=s.album_id
+		AND a.album_cover_id=s.id WHERE a.id=#{coverId,jdbcType=BIGINT} and
+		a.user_id=#{userId,jdbcType=BIGINT}
+	</select>
+
+	<delete id="ablumDelete">
+		delete from user_album
+		where id in
+		<foreach collection="ids" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<select id="queryAlbumList" resultMap="ResultMapBO">
+		SELECT s.id acc_id,s.path,u.* FROM user_album u LEFT JOIN sys_accessory s ON
+		u.id=s.album_id and u.album_cover_id=s.id
+		WHERE
+		u.store_info_default = 0 and
+		u.user_id=#{userId,jdbcType=BIGINT} order by album_sequence
+	</select>
+	<select id="queryStoreAlbumList" resultMap="ResultMapBO">
+		SELECT s.id acc_id,s.path,u.* FROM user_album u LEFT JOIN sys_accessory s ON
+		u.id=s.album_id and u.album_cover_id=s.id
+		WHERE
+		u.store_info_default = 1 and
+		u.user_id=#{userId,jdbcType=BIGINT} order by album_sequence
+	</select>
+
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.user.model.AlbumExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_album
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.user.model.AlbumExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_album
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_album
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_album
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.AlbumExample">
+		delete from user_album
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.Album"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_album (id, add_time, delete_status,
+		album_default, album_name, album_sequence,
+		album_cover_id, user_id, alblum_info,store_info_default
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{albumDefault,jdbcType=BIT}, #{albumName,jdbcType=VARCHAR}, #{albumSequence,jdbcType=INTEGER},
+		#{albumCoverId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+		#{alblumInfo,jdbcType=LONGVARCHAR},
+		#{storeInfoDefault}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.Album"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_album
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="albumDefault != null">
+				album_default,
+			</if>
+			<if test="albumName != null">
+				album_name,
+			</if>
+			<if test="albumSequence != null">
+				album_sequence,
+			</if>
+			<if test="albumCoverId != null">
+				album_cover_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="alblumInfo != null">
+				alblum_info,
+			</if>
+			<if test="storeInfoDefault != null">
+				store_info_default,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{id,jdbcType=BIGINT},
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="albumDefault != null">
+				#{albumDefault,jdbcType=BIT},
+			</if>
+			<if test="albumName != null">
+				#{albumName,jdbcType=VARCHAR},
+			</if>
+			<if test="albumSequence != null">
+				#{albumSequence,jdbcType=INTEGER},
+			</if>
+			<if test="albumCoverId != null">
+				#{albumCoverId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="alblumInfo != null">
+				#{alblumInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeInfoDefault != null">
+				#{storeInfoDefault},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.AlbumExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_album
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_album
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.albumDefault != null">
+				album_default = #{record.albumDefault,jdbcType=BIT},
+			</if>
+			<if test="record.albumName != null">
+				album_name = #{record.albumName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.albumSequence != null">
+				album_sequence = #{record.albumSequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.albumCoverId != null">
+				album_cover_id = #{record.albumCoverId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.alblumInfo != null">
+				alblum_info = #{record.alblumInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.storeInfoDefault != null">
+				store_info_default = #{record.storeInfoDefault},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update user_album
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		album_default = #{record.albumDefault,jdbcType=BIT},
+		album_name = #{record.albumName,jdbcType=VARCHAR},
+		album_sequence = #{record.albumSequence,jdbcType=INTEGER},
+		album_cover_id = #{record.albumCoverId,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		alblum_info = #{record.alblumInfo,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_album
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		album_default = #{record.albumDefault,jdbcType=BIT},
+		album_name = #{record.albumName,jdbcType=VARCHAR},
+		album_sequence = #{record.albumSequence,jdbcType=INTEGER},
+		album_cover_id = #{record.albumCoverId,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.Album">
+		update user_album
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="albumDefault != null">
+				album_default = #{albumDefault,jdbcType=BIT},
+			</if>
+			<if test="albumName != null">
+				album_name = #{albumName,jdbcType=VARCHAR},
+			</if>
+			<if test="albumSequence != null">
+				album_sequence = #{albumSequence,jdbcType=INTEGER},
+			</if>
+			<if test="albumCoverId != null">
+				album_cover_id = #{albumCoverId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="alblumInfo != null">
+				alblum_info = #{alblumInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeInfoDefault != null">
+				store_info_default = #{storeInfoDefault},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.user.model.Album">
+		update user_album
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		album_default = #{albumDefault,jdbcType=BIT},
+		album_name = #{albumName,jdbcType=VARCHAR},
+		album_sequence = #{albumSequence,jdbcType=INTEGER},
+		album_cover_id = #{albumCoverId,jdbcType=BIGINT},
+		user_id = #{userId,jdbcType=BIGINT},
+		alblum_info = #{alblumInfo,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.Album">
+		update user_album
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		album_default = #{albumDefault,jdbcType=BIT},
+		album_name = #{albumName,jdbcType=VARCHAR},
+		album_sequence = #{albumSequence,jdbcType=INTEGER},
+		album_cover_id = #{albumCoverId,jdbcType=BIGINT},
+		user_id = #{userId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

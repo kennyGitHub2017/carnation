@@ -1,0 +1,128 @@
+<script>
+jQuery(document).ready(function(){
+	jQuery("select[id^=areaDialog]").change(function(){
+	     var level=jQuery(this).attr("level");
+		 var id=jQuery(this).val();
+		 jQuery("#dialogOperatorAreaId").val("");
+		 for(var i=4;i>level;i--){
+		  jQuery("#areaDialog"+i).empty();
+		  jQuery("#areaDialog"+i).append("<option value=''>请选择</option>");
+		 }
+		 if(id!=""){
+		  jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+		     jQuery("#areaDialog"+level).empty();
+			  jQuery("#areaDialog"+level).append("<option value=''>请选择</option>");
+		      jQuery.each(data, function(index,item){
+			    jQuery("#areaDialog"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+			  });
+		  },"json");
+		 }else{
+		   for(var i=level;i<=4;i++){
+		    jQuery("#areaDialog"+i).empty();
+		   }
+		 }
+	 });
+	jQuery("#dialogLevel").change(function(){
+	   var id=jQuery(this).val();
+	   if(id != '')
+	   {
+		   jQuery("#dialogOperatorAreaId").val("");
+		   if(id == 1)
+		   {
+			 	jQuery("#areaDialog2").change(function(){
+			 	   var id=jQuery(this).val();
+			 	   jQuery("#dialogOperatorAreaId").val(id);
+			 	 });
+			 	jQuery("#areaDialog3").remove();
+			 	
+			 	for(var i=4;i>1;i--){
+				  jQuery("#areaDialog"+i).empty();
+				  jQuery("#areaDialog"+i).append("<option value=''>请选择</option>");
+				}
+			   	jQuery("#areaDialog1 option[value='']").attr("selected", "selected");
+		   }
+		   else if(id == 2 || id == 3)
+		   {
+			   if(jQuery("#areaDialog3").size() < 1)
+			   {
+				   	jQuery("#dialogAreaTd").append('<select name="areaDialog3" id="areaDialog3" level="4"><option value="">县/区</option></select>');
+				   	for(var i=4;i>1;i--){
+					  jQuery("#areaDialog"+i).empty();
+					  jQuery("#areaDialog"+i).append("<option value=''>请选择</option>");
+					}
+				   	jQuery("#areaDialog1 option[value='']").attr("selected", "selected");
+			   }
+			   jQuery("#areaDialog3").change(function(){
+			 	   var id=jQuery(this).val();
+			 	   jQuery("#dialogOperatorAreaId").val(id);
+			 	});
+		   }
+	   }
+	   jQuery("#dialogOperatorAreaId").val(id);
+	 });
+ });
+
+</script>
+
+<form action="operator_check.htm?id=$!{obj.id}" method="post" id="checkOrderForm">
+	<table>
+		<tr>
+			<td height="30" align="right" width="100">运营商级别：</td>
+			<td align="left">
+				<select name="level" id="dialogLevel">
+	             <option value="">请选择级别...</option>
+	             <option #if($!obj.level == 1) selected="selected" #end value="1">市级运营商</option>
+	             <option #if($!obj.level == 2) selected="selected" #end value="2">区级运营商</option>
+	             <option #if($!obj.level == 3) selected="selected" #end value="2">区域级运营商</option>
+	           </select>
+			</td>
+		</tr>
+		<tr>
+			<td height="30" align="right">运营地：</td>
+			<td id="dialogAreaTd"  align="left">
+				<select name="areaDialog1" id="areaDialog1" level="2">
+	               <option value="">省份/自治区</option>
+		          #foreach($area in $areas)            
+		                <option value="$!area.id" #if($!area.areaName==$!obj.areaSheng) selected="true" #end>$!area.areaName</option>
+		           #end          
+	             </select>
+	             <select name="areaDialog2" id="areaDialog2" level="3">
+	             	#if($!obj.areaShi)
+	             		<option>$!obj.areaShi</option>
+	             	#else
+	               	<option value="">市/区</option>
+	               #end
+	             </select>
+	             <select name="areaDialog3" id="areaDialog3" level="4">
+	             	#if($!obj.areaXian)
+	             		<option>$!obj.areaXian</option>
+	             	#else
+	               	<option value="">县/区</option>
+	               #end
+	             </select>
+	             <input id="dialogOperatorAreaId" name="operatorAreaId" type="hidden" value="$!obj.operatorAreaId" />
+			</td>
+		</tr>
+		<tr>
+			<td height="30" align="right" width="100">审核结果：</td>
+			<td align="left">
+				<select name="level" id="dialogLevel">
+	             <option value="">请选择审核结果</option>
+	             <option value="1">审核通过</option>
+	             <option value="-1">审核不通过</option>
+	           </select>
+			</td>
+		</tr>
+	</table>
+<input style="margin-top: 10px;" type="button" value="确定" style="cursor:pointer;" class="search_btn" onclick="submitForm();">   	
+<input name="intentoryDetails" id = "intentory_details" type="hidden"/>
+</form>
+<script>
+jQuery(document).ready(function(){
+	
+});////
+function submitForm()
+{
+	jQuery("#checkOrderForm").submit();
+}
+</script>

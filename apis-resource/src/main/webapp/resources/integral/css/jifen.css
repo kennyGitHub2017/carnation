@@ -1,0 +1,81 @@
+html{font-size: 50px;height: 100%;}
+body{height: 100%;position: relative;padding-top: 1rem;box-sizing: border-box;}
+.bg{background: #f64e3a;height: 100%;width: 100%;position: absolute;left: 0;top: 0;z-index: -4;}
+.topbg{background: url(../img/topbg@2x.png) no-repeat center top;background-size:cover;height: 6rem;width: 100%;position: absolute;left: 0;top: 0;z-index: -3;}
+.bottombg{background: url(../img/bottombg@2x.png) no-repeat center top;background-size: cover;height: 8.24rem;width: 100%;position: absolute;left: 0;top: 5.12rem;z-index: -2;}
+.return{background: url(../img/close.png) no-repeat center center;background-size: 0.56rem;width: 1.2rem;height: 1.2rem;position: absolute;left: 0;top: 0.2rem;text-indent: -9999px;z-index: 99999999;}
+.tit{background: url(../img/tit@2x.png) no-repeat left center;width: 5.16rem;height: 1.32rem;background-size: cover;margin: 0 auto;}
+.coin{background: url(../img/coin@2x.png) no-repeat left center;background-size: contain;width: 6.54rem;height: 2.42rem;position: absolute;top: 0.52rem;left:0.48rem;}
+.coins{background: url(../img/coins@2x.png) no-repeat left center;width: 2.16rem;height: 1.88rem;background-size: 2.16rem 1.88rem;position: absolute;right: 0;top: 3.9rem;}
+.flipperCon{width: 100%;height: 2.76rem;display:flex;display: -webkit-flex;flex-flow:row;justify-content: center;margin-top: 1.08rem;}
+.flipperCon>div{height: 2.76rem;width: 2.28rem;position: relative;}
+.flipperCon>div:first-child{left: -5px;}
+.flipperCon>div:last-child{left: 5px;}
+.flip-container {
+	perspective: 1000;
+	-webkit-perspective: 1000px; 
+	-moz-perspective: 1000px;
+	-ms-perspective: 1000px;
+	-o-perspective: 1000px;
+	perspective: 1000px;
+}
+.curr .back {transform: rotateY(0deg); -webkit-transform: rotateY(0deg);-moz-transform: rotateY(0deg);-ms-transform: rotateY(0deg);-o-transform: rotateY(0deg); z-index:2;}
+.curr .front { transform: rotateY(180deg);-webkit-transform: rotateY(180deg);-moz-transform: rotateY(180deg);-ms-transform: rotateY(180deg);-o-transform: rotateY(180deg); z-index:1}
+.flipper {
+	transition: transform .5s ease-in-out;
+	-webkit-transition: transform .5s ease-in-out;
+	-moz-transition: transform .5s ease-in-out;
+	-ms-transition: transform .5s ease-in-out;
+	-o-transition: transform .5s ease-in-out;
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	-ms-transform-style: preserve-3d;
+	-o-transform-style: preserve-3d;
+	 transform-style: preserve-3d;
+	 display:block;
+	 position: relative;
+ }
+.front, .back {height: 2.76rem;width: 2.28rem;backface-visibility: hidden;-webkit-backface-visibility: hidden;transition: 0.6s ease-in-out;-webkit-transition: .6s ease-in-out; -webkit-transform-style: preserve-3d; -moz-transform-style: preserve-3d; -ms-transform-style: preserve-3d;-o-transform-style: preserve-3d;transform-style: preserve-3d;position: absolute;top: 0;left: 0;}
+.front {z-index: 2;transform: rotateY(0deg);transform: rotateY(0deg); -webkit-transform: rotateY(0deg);-moz-transform: rotateY(0deg);-ms-transform: rotateY(0deg);-o-transform: rotateY(0deg);}
+.back { z-index:1;transform: rotateY(-180deg);transform: rotateY(-180deg);-webkit-transform: rotateY(-180deg);-moz-transform: rotateY(-180deg);-ms-transform: rotateY(-180deg);-o-transform: rotateY(-180deg);}
+.junior .front{background: url(../img/lfront@2x.png) no-repeat center top;background-size: 2.28rem 2.76rem;}
+.junior .back{background: url(../img/lback@2x.png) no-repeat center top;background-size: 2.28rem 2.76rem;}
+.senior .front{background: url(../img/hfront@2x.png) no-repeat center top;background-size: 2.28rem 2.76rem;}
+.senior .back{background: url(../img/hback@2x.png) no-repeat center top;background-size: 2.28rem 2.76rem;}
+.back{color: #f56b10;font-size: 28px;line-height: 2.4rem;text-align: center;text-indent: 0.25rem;}
+.back:before{
+	content: "+";
+	position: absolute;
+	font-size: 32px;
+	color: #F56B10;
+	left: 0.7rem;
+	top: 1rem;
+    font-family: Tahoma;
+    zoom: 0.7;
+    line-height: 1;
+    text-indent: 0;
+}
+.descript{color: #FFFFFF;width: 6rem;margin: 0 auto;text-align: center;line-height: 24px;font-size: 18px;margin-top: 0.28rem;letter-spacing: 1px;font-family: tahoma;}
+.rules{border:solid 1px #f77566;width: 6.6rem;height: 2.6rem;margin: 0 auto;position: relative;color: #fbd9d5;border-radius: 0.1rem;margin-top: 0.36rem;}
+.rules .gz{font-size: 14px;background: #f65f4e;position: absolute;left: 0.2rem;top: -0.14rem;padding:0 0.1rem;}
+.rules .rul{overflow: hidden;font-size: 12px;margin-top: 0.36rem;}
+.rules .rulmt{margin-top: 0.2rem;}
+.rules .rul .num{float: left;margin-left: 0.32rem;line-height: 18px;}
+.rules .rul .content{float: left;max-width: 5.9rem;margin-left: 0.1rem;line-height: 18px;}
+
+.btn{display: block;width: 6.6rem;height: 0.92rem;line-height: 0.92rem;margin: 0 auto;border-radius:2rem;font-size: 20px;text-align:center;color: #FFFFFF;}
+.makeScore{background-image:linear-gradient(-180deg, #ffe239 0%, #ffc51b 100%);margin-top: 0.4rem;}
+.exchange{background-image:linear-gradient(-180deg, #e74344 0%, #d63334 100%);margin-top: 0.24rem;margin-bottom: 0.4rem;}
+
+/*dpr为3的屏*/
+html[data-dpr='3'] .topbg{background: url(../img/topbg@3x.png) no-repeat center top;background-size:cover;}
+html[data-dpr='3'] .bottombg{background: url(../img/bottombg@3x.png) no-repeat center top;background-size: cover;}
+html[data-dpr='3'] .tit{background: url(../img/tit@3x.png) no-repeat left center;background-size: cover;}
+html[data-dpr='3'] .coin{background: url(../img/coin@3x.png) no-repeat left center;background-size: contain;}
+html[data-dpr='3'] .coins{background: url(../img/coins@3x.png) no-repeat left center;background-size: 2.16rem 1.88rem;}
+html[data-dpr='3'] .junior .front{background: url(../img/lfront@3x.png) no-repeat center top;background-size: 2.28rem 2.76rem;}
+html[data-dpr='3'] .junior .back{background: url(../img/lback@3x.png) no-repeat center top;background-size: 2.28rem 2.76rem;}
+html[data-dpr='3'] .senior .front{background: url(../img/hfront@3x.png) no-repeat center top;background-size: 2.28rem 2.76rem;}
+html[data-dpr='3'] .senior .back{background: url(../img/hback@3x.png) no-repeat center top;background-size: 2.28rem 2.76rem;}
+
+.hideload{position: absolute;left: -9999px;top: 0;}

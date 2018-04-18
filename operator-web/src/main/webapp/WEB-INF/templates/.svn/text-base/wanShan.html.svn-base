@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+		<meta http-equiv="description" content="This is my page">
+		<meta http-equiv="X-UA-Compatible"content="IE=10; IE=9; IE=8; IE=EDGE">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge8,chrome=1" >
+		<link rel="stylesheet" href="/resources/css/style.css" />
+		<link rel="stylesheet" href="/resources/css/city.css" />
+		<title>完善个人信息</title>
+		
+	</head>
+
+<body class="mes">
+	<div class="back-login">
+		<a href="$!url/operator_logout.htm">返回登录界面</a>
+	</div>
+	<form action="/operator/save_CN_Improve_Info.htm" method="post" id="theForm">
+		<div class="mes-add-bigdiv">
+			<div class="mes-add-div">
+				<div class="add-mes-tit">完善个人资料<span>（必填）</span></div>
+				<div class="tit-zhishi"><span>＊</span>请您认真填写以下个人信息，以便顺利通过审核</div>
+				<ul>
+					<li>
+						<label>姓名</label>
+						<input id="userName" class="txt" type="text" name="userName"/>
+					</li>
+					<li>
+						<label>性别</label>
+						<span class="danspan">
+							<input class="sex" type="radio" name="sex" value="1" />
+							男
+						</span>
+						<span class="danspan">
+							<input class="sex" type="radio" name="sex" value="2" />
+							女
+						</span>
+					</li>
+					<li>
+						<label>手机号</label>
+						<input id="mobilephone" class="txt" type="text" name="phone"/>
+					</li>
+					<li>
+						<label>身份证号</label>
+						<input id="idCard" class="txt" type="text" name="idCard"/>
+					</li>
+					<li>
+						<label>民族</label>
+						<input id="nation" class="txt" type="text" name="nation"/>
+					</li>
+					<li>
+						<label>开户行</label>
+						<input id="bankName" class="txt" type="text" name="bankName"/>
+					</li>
+					<li>
+						<label>开户支行</label>
+						<input id="subBankName" class="txt" type="text" name="subBankName"/>
+					</li>
+					<li>
+						<label>银行账号</label>
+						<input id="bankNo" class="txt" type="text" name="bankNo"/>
+					</li>
+					
+					<li style="height: auto">
+						<label>运营地</label>
+						<div class="infolist">
+								                            <div class="liststyle">
+								                               <div class="regist_form_txt">
+							        		<span class="base_select" style="border: none;">
+							                  <select id="area1" name="area1" level="2" class="base_select_check" >
+							                    <option value="">请选择...</option>
+							                      #foreach($area in $areas)
+								                    	#if($area.id.equals($pid))
+								                    <option value="$!area.id" selected="selected">$!area.areaName</option>
+								                    	#else
+								                    	 <option value="$!area.id">$!area.areaName</option>
+								                    	#end
+								                    #end
+							                  </select>
+							                  <select id="area2" name="area2" level="3" class="base_select_check">
+							                    <option value="">请选择...</option>
+							                  </select>
+							              <select id="area3" name="area3" level="4" class="base_select_check">
+							                    <option value="">请选择...</option>
+							                  </select> 
+							                  <input id="area_id" name="area_id" type="hidden" value="$!address.areaId"/>
+							                </span> 
+							        	</div>
+	                            </div>
+	                    </div>
+	
+				</li>
+				</ul>
+				<input id="test" name="test" style="width:0px" />
+				<input onclick="saveForm()" class="submit" type="submit" value="提交" />
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript" src="/resources/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/resources/js/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="/resources/js/city.min.js"></script>
+	<script type="text/javascript" src="/resources/js/tipsbox.js"></script>
+	<script>
+jQuery(document).ready(function(){
+
+
+ 	jQuery("select").change(function(){
+	    var level=jQuery(this).attr("level");
+	  var id=jQuery(this).val();
+	  jQuery("#area_id").val("");
+	  for(var i=3;i>level;i--){
+	   jQuery("#area"+i).empty();
+	   jQuery("#area"+i).append("<option value=''>请选择</option>");
+	  }
+	  if(id!=""){
+	   jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	      jQuery("#area"+level).empty();
+	     jQuery("#area"+level).append("<option value=''>请选择</option>");
+	       jQuery.each(data, function(index,item){
+	       jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+	     });
+	   },"json");
+	  }else{
+	    for(var i=level;i<=4;i++){
+	     jQuery("#area"+i).empty();
+	    }
+	  }
+	 });
+	//
+	   #if($!address.id)
+	   jQuery("#area_id").val("$!address.areaId"); 
+	   jQuery("#area1").val("$!area.parent.parent.id")
+	   jQuery("#area2").html("<option>$!area.parent.areaName</option>");
+//	   jQuery("#area3").html("<option>$!area.areaName</option>");
+	   #end
+	   #if($!user.month_income)
+	     jQuery("#month_income").val("$!user.month_income"); 
+	   #end 
+ //
+});
+
+jQuery("#area1").val("$!pid");
+ if(true){
+	function initArea2(){
+		   var level=2;
+			  var id=$pid;
+			  jQuery("#area_id").val("");
+			  for(var i=3;i>level;i--){
+			   jQuery("#area"+i).empty();
+			   jQuery("#area"+i).append("<option value=''>请选择</option>");
+			  }
+			  if(id!=""){
+			   jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+				      jQuery("#area"+level).empty();
+				      jQuery("#area"+level).append("<option value=''>请选择</option>");
+				      jQuery.each(data, function(index,item){
+				      if(item.id==$cid){
+				    	  jQuery("#area"+level).append("<option value='"+item.id+"' selected='selected'>"+item.areaName+"</option>");
+				    	  initArea3(item.id);
+				      }
+				      else{
+				    	  jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+				      }
+			     });
+			   },"json");
+			  }else{
+			    for(var i=level;i<=4;i++){
+			     jQuery("#area"+i).empty();
+			    }
+			  }
+	}
+	function initArea3(pid){
+		   var level=3;
+			  var id=pid;
+			  jQuery("#area_id").val("");
+			  
+			   jQuery("#area3").empty();
+			   jQuery("#area3").append("<option value=''>请选择</option>");
+			  
+			  if(id!=""){
+			   jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+				      jQuery("#area"+level).empty();
+				      jQuery("#area"+level).append("<option value=''>请选择</option>");
+				      jQuery.each(data, function(index,item){
+				      
+				    	  jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+				      
+			     		});
+				      jQuery("#area"+level+" option").eq(1).attr("selected","selected")
+			   },"json");
+			  }else{
+			    for(var i=level;i<=4;i++){
+			     jQuery("#area"+i).empty();
+			    }
+			  }
+	}
+
+	initArea2();
+	initArea3();
+} 
+
+jQuery("#area2").val("$!cid");
+</script>
+	
+	<script>
+	$(document).ready(function(){
+		 jQuery.validator.addMethod("area",function(value,element){
+			    var area =  $("#area3").val();
+		        if(area=="4524158"){
+		        	return false;
+		        }else{
+		        	return true;
+		        }	  
+		});
+		
+		$("#theForm").validate({
+	    	errorPlacement: function(error, element) {
+				
+			},
+			ignore: "",
+			rules : {
+				sex:{
+					required:true
+				},
+				phone:{
+					required:true
+				},
+				mobilephone:{
+					required:true
+				},
+				idCard:{
+					required:true
+				},
+				userName:{
+					required:true
+				},
+				nation:{
+					required:true
+				},
+				bankName:{
+					required:true
+				},
+				subBankName:{
+					required:true
+				},
+				bankNo:{
+					required:true
+				},
+				area1: {required: true},
+		        area2: {required: true},
+		        area3: {required: true,area:true}
+			},
+			messages : {
+				/* sex:{required :"性别不能为空"},
+				phone:{required :"性别不能为空"}, */
+			},
+			submitHandler: function(form) {		
+				form.submit();			
+	        }
+		});
+	});
+	
+	
+	function saveForm() {
+		var username = $("input[name='userName']").val();
+		var phone = $("input[name='phone']").val();
+		var idCard = $("input[name='idCard']").val();
+		var nation = $("input[name='nation']").val();
+		var bankName = $("input[name='bankName']").val();
+		var subBankName = $("input[name='subBankName']").val();
+		var bankNo = $("input[name='bankNo']").val();
+		var sex=$('input:radio[name="sex"]:checked').val();
+		var area1=$("#area1").val(); if(!area1){alert("请选择运营地的省!")}
+
+		var area2=$("#area2").val(); if(!area1){alert("请选择运营地的市!")}
+		var area3=$("#area3").val(); if(!area1){alert("请选择运营地的区!")}
+		
+        if(sex==null){
+            alert("请选择性别!");
+            return false;
+        }
+
+		
+		
+		if (!username) {
+			alert("姓名不能为空!");
+			return false;
+		}
+		if (!phone.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/)) {
+			alert("您输入的手机号格式有误!");
+		return false;
+		}
+		if (!idCard.match(/^[1-9]{1}[0-9]{14}$|^[1-9]{1}[0-9]{16}([0-9]|[xX])$/)) {
+			alert("您输入的身份证格式有误!");
+			return false;
+		}	
+		if (!nation) {
+			alert("名族不能为空!");
+			return false;
+		}
+		if (!bankName) {
+			alert("开户行不能为空!");
+			return false;
+		}
+		if (!subBankName) {
+			alert("开户支行不能为空!");
+			return false;
+		}
+		if (!bankNo) {
+			alert("银行账号不能为空!");
+			return false;
+		} 
+		
+
+	}
+	</script>
+</body>
+</html>

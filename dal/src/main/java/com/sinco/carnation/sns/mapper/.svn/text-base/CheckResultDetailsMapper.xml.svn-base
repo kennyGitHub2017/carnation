@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.CheckResultDetailsMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.sns.model.CheckResultDetails">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="physical_name" property="physicalName"
+			jdbcType="VARCHAR" />
+		<result column="min_vale" property="minVale" jdbcType="VARCHAR" />
+		<result column="max_value" property="maxValue" jdbcType="VARCHAR" />
+		<result column="reference_value" property="referenceValue"
+			jdbcType="VARCHAR" />
+		<result column="positive" property="positive" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="unit" property="unit" jdbcType="VARCHAR" />
+		<result column="reply_id" property="replyId" jdbcType="BIGINT" />
+		<result column="result" property="result" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.sns.bo.CheckResultDetailsBO" extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, physical_name, min_vale, max_value, reference_value, positive, type,
+		unit,
+		reply_id, result
+	</sql>
+
+	<select id="queryResultStatusCount" resultType="INTEGER">
+		SELECT COUNT(id) FROM check_result_details WHERE reply_id=#{id} AND
+		result=#{result}
+	</select>
+
+	<select id="queryResultDetailsList" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		from check_result_details where reply_id=#{replyId}
+	</select>
+
+	<select id="queryByReply" resultMap="BOResultMap">
+		select * from
+		check_result_details where reply_id=#{replyId}
+	</select>
+
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.sns.model.CheckResultDetailsExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from check_result_details
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from check_result_details
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from check_result_details
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sns.model.CheckResultDetailsExample">
+		delete from check_result_details
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.CheckResultDetails"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into check_result_details (id, physical_name, min_vale,
+		max_value, reference_value, positive,
+		type, unit, reply_id,
+		result)
+		values (#{id,jdbcType=BIGINT}, #{physicalName,jdbcType=VARCHAR},
+		#{minVale,jdbcType=VARCHAR},
+		#{maxValue,jdbcType=VARCHAR}, #{referenceValue,jdbcType=VARCHAR}, #{positive,jdbcType=VARCHAR},
+		#{type,jdbcType=INTEGER}, #{unit,jdbcType=VARCHAR},
+		#{replyId,jdbcType=BIGINT},
+		#{result,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.CheckResultDetails"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into check_result_details
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="physicalName != null">
+				physical_name,
+			</if>
+			<if test="minVale != null">
+				min_vale,
+			</if>
+			<if test="maxValue != null">
+				max_value,
+			</if>
+			<if test="referenceValue != null">
+				reference_value,
+			</if>
+			<if test="positive != null">
+				positive,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="unit != null">
+				unit,
+			</if>
+			<if test="replyId != null">
+				reply_id,
+			</if>
+			<if test="result != null">
+				result,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="physicalName != null">
+				#{physicalName,jdbcType=VARCHAR},
+			</if>
+			<if test="minVale != null">
+				#{minVale,jdbcType=VARCHAR},
+			</if>
+			<if test="maxValue != null">
+				#{maxValue,jdbcType=VARCHAR},
+			</if>
+			<if test="referenceValue != null">
+				#{referenceValue,jdbcType=VARCHAR},
+			</if>
+			<if test="positive != null">
+				#{positive,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="unit != null">
+				#{unit,jdbcType=VARCHAR},
+			</if>
+			<if test="replyId != null">
+				#{replyId,jdbcType=BIGINT},
+			</if>
+			<if test="result != null">
+				#{result,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sns.model.CheckResultDetailsExample"
+		resultType="java.lang.Integer">
+		select count(*) from check_result_details
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update check_result_details
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.physicalName != null">
+				physical_name = #{record.physicalName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.minVale != null">
+				min_vale = #{record.minVale,jdbcType=VARCHAR},
+			</if>
+			<if test="record.maxValue != null">
+				max_value = #{record.maxValue,jdbcType=VARCHAR},
+			</if>
+			<if test="record.referenceValue != null">
+				reference_value = #{record.referenceValue,jdbcType=VARCHAR},
+			</if>
+			<if test="record.positive != null">
+				positive = #{record.positive,jdbcType=VARCHAR},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=INTEGER},
+			</if>
+			<if test="record.unit != null">
+				unit = #{record.unit,jdbcType=VARCHAR},
+			</if>
+			<if test="record.replyId != null">
+				reply_id = #{record.replyId,jdbcType=BIGINT},
+			</if>
+			<if test="record.result != null">
+				result = #{record.result,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update check_result_details
+		set id = #{record.id,jdbcType=BIGINT},
+		physical_name = #{record.physicalName,jdbcType=VARCHAR},
+		min_vale = #{record.minVale,jdbcType=VARCHAR},
+		max_value = #{record.maxValue,jdbcType=VARCHAR},
+		reference_value = #{record.referenceValue,jdbcType=VARCHAR},
+		positive = #{record.positive,jdbcType=VARCHAR},
+		type = #{record.type,jdbcType=INTEGER},
+		unit = #{record.unit,jdbcType=VARCHAR},
+		reply_id = #{record.replyId,jdbcType=BIGINT},
+		result = #{record.result,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.CheckResultDetails">
+		update check_result_details
+		<set>
+			<if test="physicalName != null">
+				physical_name = #{physicalName,jdbcType=VARCHAR},
+			</if>
+			<if test="minVale != null">
+				min_vale = #{minVale,jdbcType=VARCHAR},
+			</if>
+			<if test="maxValue != null">
+				max_value = #{maxValue,jdbcType=VARCHAR},
+			</if>
+			<if test="referenceValue != null">
+				reference_value = #{referenceValue,jdbcType=VARCHAR},
+			</if>
+			<if test="positive != null">
+				positive = #{positive,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="unit != null">
+				unit = #{unit,jdbcType=VARCHAR},
+			</if>
+			<if test="replyId != null">
+				reply_id = #{replyId,jdbcType=BIGINT},
+			</if>
+			<if test="result != null">
+				result = #{result,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.CheckResultDetails">
+		update check_result_details
+		set physical_name = #{physicalName,jdbcType=VARCHAR},
+		min_vale = #{minVale,jdbcType=VARCHAR},
+		max_value = #{maxValue,jdbcType=VARCHAR},
+		reference_value = #{referenceValue,jdbcType=VARCHAR},
+		positive = #{positive,jdbcType=VARCHAR},
+		type = #{type,jdbcType=INTEGER},
+		unit = #{unit,jdbcType=VARCHAR},
+		reply_id = #{replyId,jdbcType=BIGINT},
+		result = #{result,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Expires" content="-1">           
+    <meta http-equiv="Cache-Control" content="no-cache">           
+    <meta http-equiv="Pragma" content="no-cache">         
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+
+    <title>鍣㈣�讹紒鎴戝凡杞绘澗鍔犲叆浜慹鐢燂紝涓旇幏鍙�20绉垎锛岀Н鍒嗗彲鍏戞崲鍟嗗搧锛侀�熺偣锛�</title>
+     <link href="$!webPath/resources/assets/css/normalize.css?v=1" rel="stylesheet" type="text/css">
+	<link href="$!webPath/resources/assets/css/font.css?v=2" rel="stylesheet" type="text/css">
+	<link href="$!webPath/resources/assets/css/style.css?v=3" rel="stylesheet" type="text/css">
+	<script>
+		    var isAndroid, isiOS;
+		    (function() {
+		        var u = navigator.userAgent, app = navigator.appVersion;
+		        isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android缁堢鎴栬�卽c娴忚鍣�
+		        isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios缁堢
+		    }());
+		        
+	</script>
+	 <script type="text/javascript">
+		var phoneWidth = parseInt(window.screen.width);
+		var phoneScale = phoneWidth/640;
+		var ua = navigator.userAgent;
+		if (/Android (\d+\.\d+)/.test(ua)){
+			var version = parseFloat(RegExp.$1);
+			// andriod 2.3
+			if(version>2.3){
+				document.write('<meta name="viewport" content="width=640, minimum-scale = '+phoneScale+', maximum-scale = '+phoneScale+', target-densitydpi=device-dpi">');
+			// andriod 2.3浠ヤ笂
+			}else{
+				document.write('<meta name="viewport" content="width=640, target-densitydpi=device-dpi">');
+			}
+			// 鍏朵粬绯荤粺
+		} else {
+			document.write('<meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">');
+		}
+	  
+</script> 
+
+<style type="text/css">
+.reg-wrap {
+     background-color: #FD253D;
+     color:#fff;
+     padding-top: 1px;
+}
+.reg-title{
+color:#fbd4bc;
+font-size:0.8em;
+}
+a, a:hover{
+color:#fff;
+}
+.reg-copyright{
+color:#fff;
+}
+input {
+color:black;
+}
+body{
+background: #0f0; 
+background-color: #FD253D;
+font-size:1.4em;
+overflow-x : hidden; 
+overflow-y : hidden; 
+}
+.btn-blue {
+    background-color: #FFECA0;
+    color: red;
+}
+
+label.error {
+color: #FFF900;
+}
+
+font {
+    color: #FFF900;
+    font-size: 0.8rem;
+}
+</style>
+</head>
+<body>
+    <div class="reg-wrap">
+    <div style><span onclick="window.parent.location.reload()" style="float:right; cursor:pointer"><img style="width:1.3em;height:1.3em" src="$!webPath/resources/style/app/images/close.png"/></span><span style="float:left;">鎵嬫満娉ㄥ唽</span></div>
+    <div class="reg-div-hr">
+    <br>
+    	<hr style="color:white;width: 20em;border-top: 1px;">
+    </div>
+    <!--     <h1 class="text-center"><img src="$!webPath/resources/assets/images/logo1.png?v=1"  width="0px" height="0px" style="width:0px;height:0px;"><br/><img src="$!webPath/resources/assets/images/logo.png?v=1" style="max-width: 55%;"></h1> -->
+        <div class="reg-title"> 鎮ㄨ繕涓嶆槸浜� e 鐢熶細鍛橈紝娉ㄥ唽鍚庡嵆鍙皢绾㈠寘瀛樺埌鎮ㄧ殑閽卞寘锛�</div>
+        <font color="red">$!{request.getParameter("message")}</font>
+        <form id="regForm" method="post" action="$!webPath/redpackage_register_finish.htm">
+            <ul class="list reg-form">
+                <li class="item item-ico">
+                    <i class="icon-phone2"></i><input type="text" class="text" name="mobile"  id="mobile" placeholder="璇疯緭鍏ユ墜鏈哄彿"   value="#if($!phone)$!phone#else$!{request.getParameter('phone')}#end"/>
+                </li>
+                <li class="item item-ico">
+                    <i class="icon-lock"></i><input type="password" class="text" name="password" placeholder="6-14浣嶏紝寤鸿鏁板瓧銆佸瓧姣嶃�佺鍙风粍鍚�" />
+                </li>
+                <li class="item">
+                    <div class="fr">
+                        <input type="button" value="鍙戦�侀獙璇佺爜" class="btn btn-blue" id="mobile_verify_code_generic" onclick="generic_mobile_verify_code()" />
+                        <span id="time_out_generic"></span>
+                    </div>
+                    <div class="v-code">
+                        <input type="text" placeholder="璇疯緭鍏ユ墜鏈洪獙璇佺爜" class="text" name="mobileCode"  style="width:80%"/>
+                    </div>
+                </li>
+                <li class="item">
+                    <input id="submitBtn" type="submit" value="绔嬪嵆娉ㄥ唽" class="btn btn-blue btn-block" />
+                    <input type="hidden" placeholder="" class="text" name="id"  value="#if($!id)$!id#else$!{request.getParameter('id')}#end"/>
+                    <input type="hidden" placeholder="" class="text" name="invitationCode"  value="#if($!invitationCode)$!invitationCode #else $!{request.getParameter('invitationCode')}#end"/>
+                    
+                </li>
+            </ul>
+        </form>
+    </div>
+
+
+	<div id="v-code-box" style="display: none;">
+		<div style="position: fixed; top: 50%; width: 80%; margin: -50px 10% 0; border: 4px #FF8F00 solid; background-color: #FF152F; padding: 20px; z-index: 1; box-sizing: border-box; border-radius: 25px;">
+			<div class="item">
+	              <div class="text-center">
+	                <script>
+				        function refreshCode(){
+				            jQuery("#code_img").attr("src","$!webPath/verify.htm?d"+new Date().getTime());
+				        }
+				     </script>
+	                  <input type="text" placeholder="璇疯緭鍏ラ獙璇佺爜" style="width: 108px; vertical-align: top;height: 25px;" class="text" name="code"  id="code"/>
+	                  <a href="javascript:void(0);" onclick="refreshCode();" class="code_refresh"><img id="code_img" src="$!webPath/verify.htm" width="62" height="30" /></a>
+	              </div>
+	          </div>
+	          <div class="text-center pt-10">
+	          	<input type="button" value="鍙戦��" class="btn btn-blue"  id="sendCodeBtn"/>
+	          	<input type="button" value="鍙栨秷" class="btn" id="quxiaoBtn"/>
+	          </div>
+		</div>
+		<div class="mask"></div>
+	</div>
+
+
+    <!--<div class="fixed-bottom-bar double-btn-bar pt-10">-->
+        <!--<button class="btn btn-blue">闄勮繎鍖婚櫌</button>-->
+        <!--<button class="btn btn-blue">鍜ㄨ涓撳</button>-->
+    <!--</div>-->
+
+    <script src="$!webPath/resources/assets/js/jquery-2.1.4.min.js"></script>
+    <script src="$!webPath/resources/assets/js/jquery-validate.min.js"></script>
+
+    <script src="$!webPath/resources/js/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+
+    <!-- 寮瑰嚭妗嗙壒鏁� -->
+    <script src="$!webPath/resources/js/jAlert/jAlert-v3.js"></script>
+    <script src="$!webPath/resources/js/jAlert/jAlert-functions.js"></script>
+    <link href="$!webPath/resources/js/jAlert/jAlert-v3.css" rel="stylesheet">
+
+    <script>
+    var api = frameElement.api, W = api.opener;	
+	var message="$!{request.getParameter("message")}";
+	if(message!=""){
+		if(message=="0"){
+			showMessage_getredpackage("绾㈠寘宸茬粡鍏呭�煎埌鎮ㄥ笎鍙�",true);
+			setTimeout(function(){
+				window.frameElement.api.close();
+			},5000); // 寤惰繜鍏抽棴,IE涓嬫姤娌℃湁鏉冮檺閿欒
+		}else{
+			 // W.$.dialog.alert(message);	
+		}
+	}
+    
+    
+    
+    jQuery(document).ready(function(){
+
+    	jQuery.validator.addMethod("isMobile", function(value, element) {
+    		var length = value.length;
+    		var mobile = /^((13[0-9])|(14[0-9])|(15([0-9]))|(17([0-9]))|(18[0-9]))\d{8}$/;
+    		return this.optional(element) || (length == 11 && mobile.test(value));
+    		}, "璇锋纭～鍐欐偍鐨勬墜鏈哄彿鐮�");
+        $("#regForm").validate({
+            rules: {
+                mobile:{
+          		  required:true,
+        		  isMobile:true,
+        		  remote:{
+        		    url: "$!webPath/verify_mobile.htm",     //鍚庡彴澶勭悊绋嬪簭
+                    type: "post",               //鏁版嵁鍙戦�佹柟寮�
+                    dataType: "json",           //鎺ュ彈鏁版嵁鏍煎紡   
+                    data: {                     //瑕佷紶閫掔殑鏁版嵁
+                          "mobile": function(){return jQuery("#mobile").val();}
+        		     }
+        		  }
+        		},
+                password:{
+                	  required:true,
+                	  minlength:6,
+            		  maxlength:14
+                },
+                mobileCode:{
+                	  required:true
+                }
+            },
+            messages: {
+            	mobile:{
+          		  required:"鎵嬫満鍙蜂笉鑳戒负绌�",
+          		  isMobile:"璇锋纭～鍐欐偍鐨勬墜鏈哄彿鐮�",
+          		  remote:"璇ユ墜鏈哄彿宸茬粡瀛樺湪"
+          		},
+                password: {
+                	required:"璇疯緭鍏ユ偍鐨勫瘑鐮�",
+              		minlength:"瀵嗙爜涓嶈兘灏忎簬{0}涓瓧绗�",
+              		maxlength:"瀵嗙爜涓嶈兘澶т簬{0}涓瓧绗�" 
+                },
+                mobileCode:{
+                	required:"璇疯緭鍏ユ偍鐨勯獙璇佺爜"
+                }
+            }, submitHandler : function(form) {
+            	   form.submit();
+			       $("#submitBtn").attr({"disabled":"disabled"}); //闃叉閲嶅鎻愪氦
+               }
+        });
+    	 
+    });
+      
+        function generic_mobile_verify_code(){
+        	var mobile = jQuery("#mobile").val();
+        	if(mobile==''){
+        		return;
+        	}
+    		var mobilerule = /^((13[0-9])|(14[0-9])|(15([0-9]))|(17([0-9]))|(18[0-9]))\d{8}$/;
+    		if(mobilerule.test(mobile)==false){
+    			return;
+    		}
+        	 jQuery.ajax({
+        		 type:'POST',
+        		 url:'$!webPath/verify_mobile.htm',
+        		 data:{"mobile": function(){return jQuery("#mobile").val();}},
+        		 success:function(ret){
+        			if(ret=='true'){
+        				 jQuery("#code_img").attr("src","$!webPath/verify.htm?d"+new Date().getTime());
+        				 $("#v-code-box").show();
+        			}
+ 		   		}
+        	});
+        	
+        		
+        }
+        var time=60;
+        var time_id="";
+        function countDown(){
+            --time;
+            jQuery("#time_out_generic").html(time+"绉掑悗鍙噸璇�");
+            if(time<=0){
+                clearInterval(time_id);
+                time=60;
+                jQuery("#time_out_generic").html("");
+                jQuery("#mobile_verify_code_generic").show();
+            }
+        }
+        $("#sendCodeBtn").click(function() {
+		        jQuery("#mobile_verify_code_generic").hide();
+		        countDown();
+		        time_id=setInterval(countDown,1000);
+		    	var mobile=$("#mobile").val();
+		    	var code=$("#code").val();
+		        //jQuery.post("xxx",{"type":"password_vetify_code"},function(data){
+		       // },"text");
+		        jQuery.ajax({type:'POST',url:'$!webPath/moblie_reg_code_get.htm',data:{"mobile":mobile,"code":code},success:function(ret){
+		 		     if(ret=="1"){
+		 		    	$("#v-code-box").hide();
+		 			 }else{
+		 				showMessage("璇疯緭鍏ユ纭殑楠岃瘉鐮�!",false);
+		 			 	 clearInterval(time_id);
+		 			 	 time=60;
+		     			  jQuery("#time_out_generic").html("");
+		                  jQuery("#mobile_verify_code_generic").show();
+		 			 }
+	 		   }});
+        });
+        $("#quxiaoBtn").click(function() {
+        	$("#v-code-box").hide();
+        });
+        
+        function showMessage_getredpackage(message){ //message 寮瑰嚭鏂囨湰 鍘绘帀鍏抽棴鎸夐挳璁╃敤鎴峰彧鑳界偣鍑讳笅杞�
+        	var theme ='red';//鏍峰紡
+        	var title='浜慹鐢�';
+        	var buttonOne='涓嬭浇浜� e 鐢� APP';
+        	var buttonTwo='纭畾';
+        	var buttonTheme='red';//鎸夐挳鏍峰紡
+           	$.jAlert({
+                   'title':title, 
+                   'closeBtn': false,
+                   'content':"<span style='font-size:20px;color:#ffffff'>"+message+"</span><div><br/><hr style='border-top:0.1px solid #FDC9CE;'></div>", 
+        	        'btns': [
+        		        		{'text':buttonOne, 'theme':buttonTheme ,'onClick': function(e, btn){
+        					           e.preventDefault();
+        					          window.location.href="http://static.ysysgo.com/static/platform/appDownload.jsp";
+        					       /*     alert('寮�濮嬩笅杞�.....'); */
+        					           return false;
+        				           }}
+        			        ],'theme': theme
+          		});	
+        }
+        
+        function showMessage(message,status){ //message 寮瑰嚭鏂囨湰 ,status true 涓嬭浇 false 鏃犱笅杞�
+        	var theme ='red';//鏍峰紡
+        	var title='浜慹鐢�';
+        	var buttonOne='涓嬭浇浜� e 鐢� APP';
+        	var buttonTwo='纭畾';
+        	var buttonTheme='red';//鎸夐挳鏍峰紡
+            if(status==true){
+            	
+            	 $.jAlert({
+                     'title':title, 
+                     'content':"<span style='font-size:1.6em;color:#ffffff'>"+message+"</span><div><br/><hr style='border-top:0.1px solid #FDC9CE;'></div>", 
+         	        'btns': [
+         		        		{'text':buttonOne, 'theme':buttonTheme ,'onClick': function(e, btn){
+         					           e.preventDefault();
+         					          window.location.href="http://static.ysysgo.com/static/platform/appDownload.jsp";
+         					       /*     alert('寮�濮嬩笅杞�.....'); */
+         					           return false;
+         				           }}
+         			        ],'theme': theme
+           		});	
+            	 
+            }else{
+            	
+            	$.jAlert({
+                    'title':title, 
+                    'content':"<span style='font-size:2em;color:#ffffff'>"+message+"</span><div><br/><hr style='border-top:0.1px solid #FE6F7F;'></div>",
+        	        'btns': [
+        		        		{'text':buttonTwo, 'theme':buttonTheme}
+        			        ],'theme': theme
+          		});	
+            }
+        }    
+    </script>
+<!-- 绔欓暱缁熻 -->
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='display: none;' id='cnzz_stat_icon_1255206113'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1255206113' type='text/javascript'%3E%3C/script%3E"));</script>
+<!-- 鐧惧害缁熻 -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8b2f2c6656ec077454798a10e8660852";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

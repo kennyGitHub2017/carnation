@@ -1,0 +1,457 @@
+<style>
+	.addPrice{border-collapse: collapse;width:900px;font-family: sans-serif;font-size: 12px;color: #333;table-layout: fixed;margin:0 auto;margin-bottom:10px}
+	.addPrice .tit{background: #F5F5F5;}
+	.addPrice td{border: solid 1px #d2d2d2;text-align: center;padding: 0 4px;position: relative;height:30px}
+	.addPrice .addPrice_input{height: 25px;border: solid 1px #d2d2d2;width: 100%;margin: 0 auto;text-indent: 5px;}
+	.white_content .addPrice .addPrice_input{padding:0}
+	.all_pt{display: inline-block;width: 40px;height: 20px;vertical-align: middle;background: url($!webPath/resources/style/system/front/default/images/edit_all.png);float: right;margin-top: 5px;cursor: pointer;}
+	.addPrice td.ali_left{text-align: left;line-height: 30px;}
+	.editAllBox{width: 94%;border: solid 1px #c6c6c6;position: absolute;left: 3%;top: 30px;z-index: 9;background: #FFFFFF;box-shadow: 0px 0px 6px #868686;display: none;}
+	.editAllBox .title{line-height: 30px;text-align: center;}
+	.addPrice .editAllBox input{width: 90%;display: block;text-indent: 5px;}
+	.btn_sure{display: block;width: 66px;height: 26px;background: url($!webPath/resources/style/system/front/default/images/btn_sure.png);margin: 8px auto;}
+	
+	.common_add_price{font-size: 14px;text-align:left}
+	.common_add_price .current{line-height: 30px;}
+	.common_add_price .ptjj{line-height: 30px;}
+	.common_add_price .cnjj{line-height: 30px;}
+	.common_add_price .cnjj_content{line-height: 30px;}
+	.common_add_price .tit{display: inline-block;width: 115px;text-align: right;}
+	.common_add_price .current .curr_retail{margin-left: 250px;}
+	.common_add_price .jj_input{height: 25px;border: solid 1px #d2d2d2;width: 85px;text-indent: 5px;margin-left: 5px;}
+	.common_add_price .title{margin-left: 35px;}
+	.ml5{margin-left: 5px;}
+</style>
+<script type="text/javascript">
+function valChange(val){
+	  var tempval=val.replace(/[^0-9.]/g,'').replace(/^\./g,"");
+	  var tempArr=tempval.split('.');
+	  if(tempArr.length>1){
+		  tempval=tempArr[0]+"."+tempArr[1];
+	  }else{
+		  tempval=tempArr[0];
+	  }
+	  if(tempArr.length>1&&tempArr[1].length>2){
+		  tempval=Number(val).toFixed(2);
+	  }
+	  return tempval;
+} 
+function priceChange(obj,e){
+	  if(e){
+		  var e=e||window.event;
+	      if(e.keyCode>=37&&e.keyCode<=40) return;  
+	  }
+	  var val=valChange(obj.val());
+	  obj.val(val);
+	  var gname=obj.attr("mark");
+	  jQuery(":input[id=inventory_details_ygb_"+gname+"]").val("");
+	  jQuery(":input[id=inventory_details_cash_"+gname+"]").val("0.00");
+	  jQuery(":input[id=inventory_details_bv_"+gname+"]").val("0.00").attr("readonly","readonly");
+}
+function commonMemberAdd(obj,e){
+	if(e){
+		  var e=e||window.event;
+	      if(e.keyCode>=37&&e.keyCode<=40) return;  
+  	}
+	var val=valChange(obj.val());
+	if(val==""){
+		val="0.00";
+	}
+	var gname=obj.attr("mark");
+	obj.val(val);    
+  jQuery(":input[id=addPrice_ygb_"+gname+"]").val("");
+  jQuery(":input[id=addPrice_cash_"+gname+"]").val("0.00");
+  jQuery(":input[id=addPrice_bv_"+gname+"]").val("0.00").attr("readonly","readonly");
+  
+}
+function ygbChange(obj,e){
+	  if(e){
+		  var e=e||window.event;
+	      if(e.keyCode>=37&&e.keyCode<=40) return;  
+	  }	  
+	  var val=valChange(obj.val());
+	  var gname=obj.attr("mark");
+	  var providePrice=jQuery("[id=addPrice_provide_"+gname+"]").html();//供货价
+	  var commonMemberPrice=jQuery(":input[id=addPrice_pt_"+gname+"]").val();//普通会员加价
+	  var goodsPrice=jQuery("[id=addPrice_goodsPrice_"+gname+"]").html();//店铺价
+	  var cash=(Number(providePrice)+Number(commonMemberPrice)-Number(val)).toFixed(2);
+	  if(val==""||(Number(val)>(Number(providePrice)+Number(commonMemberPrice)))){//云购币不能大于店铺价//云购币不能大于供货价与普通会员加价之和
+		  	 val="";
+			 cash="0.00";
+			 jQuery(":input[id=addPrice_bv_"+gname+"]").val("0.00").attr("readonly","readonly");
+	  }else{
+		  jQuery(":input[id=addPrice_bv_"+gname+"]").removeAttr("readonly");
+	  }
+	  if(Number(val)==(Number(providePrice)+Number(commonMemberPrice))){
+		  cash="0.00";
+		  jQuery(":input[id=addPrice_bv_"+gname+"]").val("0.00").attr("readonly","readonly");
+	  }
+	  obj.val(val);
+	  jQuery(":input[id=addPrice_cash_"+gname+"]").val(cash);	 
+}
+function cashChange(obj,e){
+	  if(e){
+		  var e=e||window.event;
+	      if(e.keyCode>=37&&e.keyCode<=40) return;  
+	  }
+	  var val=valChange(obj.val());
+	  var gname=obj.attr("mark");
+	  
+	  var providePrice=jQuery("[id=addPrice_provide_"+gname+"]").html()||0;//供货价
+	  var commonMemberPrice=jQuery(":input[id=addPrice_ygb_"+gname+"]").val()||0;//云购币
+	  var commonMemberPrice=jQuery(":input[id=addPrice_pt_"+gname+"]").val()||0;//普通会员加价
+	  var goodsPrice=jQuery("[id=addPrice_goodsPrice_"+gname+"]").html()||0;//店铺价
+	  
+	  var ygb=(Number(providePrice)+Number(commonMemberPrice)-Number(val)).toFixed(2);	
+	  if(Number(val)==0){
+		  jQuery(":input[id=addPrice_bv_"+gname+"]").val("0.00").attr("readonly","readonly");
+	  }else if(Number(val)>(Number(providePrice)+Number(commonMemberPrice))){
+		  ygb="";
+		  val="0.00";
+		  jQuery(":input[id=addPrice_bv_"+gname+"]").val("0.00").attr("readonly","readonly");
+	  }else{
+		  jQuery(":input[id=addPrice_bv_"+gname+"]").removeAttr("readonly");
+	  }
+	  obj.val(val);
+	  jQuery(":input[id=addPrice_ygb_"+gname+"]").val(ygb);
+}
+function bvChange(obj,e){
+	if(e){
+		  var e=e||window.event;
+	      if(e.keyCode>=37&&e.keyCode<=40) return;  
+	}
+	var val=valChange(obj.val());
+	if(val==""){
+		val="0.00";
+	}
+	obj.val(val);
+}
+jQuery(document).ready(function(){
+	jQuery(":input").each(function(){
+		jQuery(this).attr("autocomplete","off");
+	});
+	jQuery(":input[id^=addPrice_ygb_]").each(function(){
+		if(jQuery(this).val()==""){
+			var mark=jQuery(this).attr("name");
+			jQuery(":input[id^=addPrice_bv_"+mark+"]").attr("readonly","readonly");
+		}
+	});
+	jQuery(":input[id^=addPrice_pt_]").live("keyup",function(e){
+		commonMemberAdd(jQuery(this),e);
+	});
+		
+	jQuery(":input[id^=addPrice_ygb_]").live("keyup",function(e){
+	    ygbChange(jQuery(this),e);
+	});
+	
+	jQuery(":input[id^=addPrice_ygb_]").live("blur",function(e){
+		if(Number(jQuery(this).val())==0){
+			jQuery(this).val("");
+		}
+	    ygbChange(jQuery(this),e);
+	});
+	
+		jQuery(":input[id^=addPrice_cash_]").live("keyup",function(e){
+			 cashChange(jQuery(this),e);
+	});
+		jQuery(":input[id^=addPrice_bv_]").live("keyup",function(e){
+			 bvChange(jQuery(this),e);
+	});
+});
+
+</script>
+<form action="goods_audit.htm?mulitId=$!{id}&status=$!{status}" method="post" id="goodsCheckOrderForm">
+
+  #if(!$!{checkSpecFlag})
+
+	 
+	<div class="common_add_price">
+		<div class="current">
+			#set($balance=$!{goods.goodsShowPrice}-$!{goods.selfAddPrice}) 
+			#set($goodsPrice=$!{goods.goodsPrice}-$!{goods.selfAddPrice}) 
+			<span class="tit">当前供货价:</span><span class="ml5" id="addPrice_provide_spec">$balance</span>
+			<span class="curr_retail">当前零售价:</span><span class="ml5" id="addPrice_goodsPrice_spec">${goodsPrice}</span>
+		</div>
+		<div class="ptjj">
+			<span class="tit">普通会员加价:</span><input mark="spec" type="text" name="selfAddPrice" id="addPrice_pt_spec" class="jj_input" value="$!{goods.selfAddPriceLog}" />
+		</div>
+		<!-- <div class="cnjj">
+			<span class="tit">CN会员加价:</span>
+		</div> -->
+<!-- 		<div class="cnjj_content">
+			<span class="tit">云购币</span><input mark="spec" type="text" id="addPrice_ygb_spec" class="jj_input" name="cnNeedYgb" value="$!{goods.needYgb}" /><span class="title">现金</span><input mark="spec" id="addPrice_cash_spec" type="text" class="jj_input" name="cnNeedMoney" value="$!{goods.needMoney}" /><span class="title">BV值</span><input mark="spec" id="addPrice_bv_spec" type="text" class="jj_input" name="cnSelfAddPrice" value="$!{goods.cnSelfAddPrice}" />
+		</div> -->
+	</div>
+  #else
+	
+		<table border="0" cellspacing="" cellpadding="" class="addPrice">
+			<tbody>				
+				<tr class="tit">
+					#foreach($spec in $specs)
+				    <td rowspan="1" width="">$!spec.name</td>
+				    #end
+					<td rowspan="1" align="center">供货价</td>
+					<td rowspan="1" align="center">零售价</td>
+					<td rowspan="1" colspan="1" style="line-height: 40px;">
+						普通会员加价<span class="all_pt" style="margin-top: 10px;"></span>
+						<div class="editAllBox" style="top: 60px;" mark="pt">
+							<div class="title">批量加价</div>
+							<input mark="all_pt" type="text" mark="pt" class="addPrice_input"  />
+							<a href="javascript:;" class="btn_sure" mark="pt"></a>
+						</div>
+					</td>
+					<!-- <td colspan="3" style="height: 30px;">CN会员加价</td> -->
+				</tr>
+				<!-- <tr class="tit">
+					<td class="ali_left" style="height: 30px;" align="left">
+						云购币<span class="all_pt"></span>
+						<div class="editAllBox" mark="ygb">
+							<div class="title">批量加价</div>
+							<input mark="all_ygb" type="text" class="addPrice_input"  />
+							<a href="javascript:;" class="btn_sure" mark="ygb"></a>
+						</div>
+					</td>
+					<td class="ali_left">
+						现金<span class="all_pt"></span>
+						<div class="editAllBox" mark="cash">
+							<div class="title">批量加价</div>
+							<input mark="all_cash" type="text" class="addPrice_input"  />
+							<a href="javascript:;" class="btn_sure" mark="cash"></a>
+						</div>
+					</td>
+					<td class="ali_left">
+						BV<span class="all_pt"></span>
+						<div class="editAllBox" mark="bv">
+							<div class="title">批量加价</div>
+							<input mark="all_bv" type="text" class="addPrice_input"  />
+							<a href="javascript:;" class="btn_sure" mark="bv"></a>
+						</div>
+					</td>
+				</tr> -->
+				#foreach($gsp in $gsps)
+				<tr class="price_setting_trs">
+				  #set($id="")
+				  #foreach($c_gsp in $gsp)
+				    	#set($id=$!{c_gsp.id}+"_"+$id)
+				    	<td>$!c_gsp.value</td>
+				  #end
+					<td id="addPrice_provide_$!id">$!map.get($!{id}).opt('storePrice') || $!map.get($!{id}).opt('price') </td>
+					<td id="addPrice_goodsPrice_$!id">${goods.goodsPrice}</td>
+					#if($!map)
+					<td colspan="1"><input mark="$!{id}" name="$!{id}" id="addPrice_pt_$!id" type="text" class="addPrice_input" value="$!map.get($!{id}).opt('selfAddPrice')" /></td>
+					<!-- <td><input mark="$!{id}" name="$!{id}" type="text" id="addPrice_ygb_$!id" class="addPrice_input" value="$!map.get($!{id}).opt('needYgb')" /></td>
+					<td><input mark="$!{id}" name="$!{id}" type="text" id="addPrice_cash_$!id" class="addPrice_input" value="$!map.get($!{id}).opt('needMoney')" /></td>
+					<td><input mark="$!{id}" name="$!{id}" type="text" id="addPrice_bv_$!id" class="addPrice_input" value="$!map.get($!{id}).opt('cnSelfAddPrice')" /></td> -->
+					#else
+					<td colspan="1"><input mark="$!{id}" name="$!{id}" id="addPrice_pt_$!id" type="text" class="addPrice_input" value="0" /></td>
+					<!-- <td><input mark="$!{id}" name="$!{id}" type="text" id="addPrice_ygb_$!id" class="addPrice_input" value="0" /></td>
+					<td><input mark="$!{id}" name="$!{id}" type="text" id="addPrice_cash_$!id" class="addPrice_input" value="0" /></td>
+					<td><input mark="$!{id}" name="$!{id}" type="text" id="addPrice_bv_$!id" class="addPrice_input" value="0" /></td> -->
+					#end
+				</tr>
+				#end
+			</tbody>
+		</table>
+		
+  #end
+<input type="button" value="确定" style="cursor:pointer;" class="search_btn" onclick="submitForm();">   	
+<input name="intentoryDetails" id = "intentory_details" type="hidden"/>
+</form>
+
+ #if("$!{goods.inventoryType}" == 'spec') 
+<script>
+
+
+jQuery(document).ready(function(){
+	var inventory_detail='$!goods.goodsInventoryDetail';
+	var goods_inventory_detail=eval("("+inventory_detail+")");
+	console.log(">>>>>>>> data"+goods_inventory_detail);
+	jQuery.each(goods_inventory_detail, function(index,item){
+		jQuery("#inventory_details_count_"+item.id).text(item.count);
+		var currentPrice = parseFloat(item.price);
+		var newPrice = currentPrice;
+		var selfAddPriceHistory = 0;
+		var selfAddPrice = 0;
+		if(item.selfAddPrice > 0)
+		{
+			selfAddPrice = parseFloat(item.selfAddPrice);
+			newPrice = currentPrice - selfAddPrice;
+			selfAddPriceHistory = parseFloat(item.selfAddPriceHistory||"0");	
+		}
+		else if(item.selfAddPriceHistory)
+		{
+			selfAddPriceHistory = parseFloat(item.selfAddPriceHistory||"0");			
+		}
+		console.log(">>>>>>>>>>>> selfAddPrice="+selfAddPrice+" selfAddPriceHistory="+selfAddPriceHistory);
+		jQuery("#inventory_details_price_"+item.id).text(newPrice);
+		jQuery("#inventory_details_price_"+item.id).attr("price", newPrice);
+		jQuery("#inventory_details_self_add_price_"+item.id).val(selfAddPriceHistory);
+		
+		var needYgb = parseFloat(item.needYgb||"0");
+		var needMoney = parseFloat(item.needMoney||"0");
+		var cnSelfAddPrice = parseFloat(item.cnSelfAddPrice||"0");
+		jQuery("#addPrice_pt_"+item.id).val(selfAddPrice);
+		jQuery("#addPrice_ygb_"+item.id).val(needYgb);
+		jQuery("#addPrice_cash_"+item.id).val(needMoney);
+		jQuery("#addPrice_bv_"+item.id).val(cnSelfAddPrice);
+	 });
+	
+  	
+	
+	jQuery("span[id^=select_all_]").click(function(){
+		var mark =	jQuery(this).attr("mark");
+		jQuery("span.select_all_input[mark='"+mark+"']").show();
+		jQuery(this).hide();
+	});	
+	/* jQuery("a[id^=sure_]").click(function(){
+		var mark =jQuery(this).attr("mark");
+		var val = jQuery("input[mark=all_"+mark+"]").val();
+		jQuery("#select_all_"+mark).show();
+		jQuery("span.select_all_input[mark='"+mark+"']").hide();
+		var addPrice = 0;
+		if(/[0-9]*\.[0-9]*$/.test(val))
+		{
+			alert("请输入正整数！");
+			jQuery("input[id^=inventory_details_"+mark+"_]").each(function(){
+					jQuery(this).val(0);
+			 });
+		}
+		else
+		{
+			jQuery("input[id^=inventory_details_"+mark+"_]").each(function(){
+				if(val!=""){
+					jQuery(this).val(val);
+					addPrice = val;
+				}												   							   
+			 });
+		}
+		if(addPrice >= 0)
+		{
+			jQuery("td[id^=inventory_details_price_]").each(function(index,item){
+				var currentPrice = parseFloat(jQuery(item).attr("price"));
+				var price = parseFloat(addPrice)+currentPrice;
+				jQuery(item).html(price);
+			});
+		}
+	});		 */
+	
+	jQuery("input[id^=inventory_details_self_add_price_]").blur(function(){
+		var val = jQuery(this).val();
+		if(val == "")
+		{
+			jQuery(this).val(0);
+		}
+		var id = jQuery(this).attr("name");
+		var currentPrice = parseFloat(jQuery("#inventory_details_price_"+id).attr("price"));
+		if(!/^[0-9]*$/.test(val))
+		{
+			alert("请输入正整数！");
+			jQuery(this).val(0);
+			jQuery("#inventory_details_price_"+id).html(currentPrice);
+			return false;
+		}
+		var price = parseFloat(val)+currentPrice;
+		jQuery("#inventory_details_price_"+id).html(price);
+	});
+});////
+</script>
+#end
+<script>
+jQuery(".all_pt").click(function(){
+	var editAllBox=jQuery(this).next();
+	editAllBox.css("display")=="none"?editAllBox.show():editAllBox.hide();				
+});
+
+jQuery("a.btn_sure").click(function(){
+	var mark =jQuery(this).attr("mark");
+	var val = jQuery("input[mark=all_"+mark+"]").val();
+	jQuery("input[id^=addPrice_"+mark+"_]").each(function(){
+		if(mark=="bv"&&jQuery(this).attr("readonly")=="readonly") return;
+		if(val!=""){
+			var reg = new RegExp("^[0-9]+([\.]?[0-9]+)?$");							
+			var reg2 = new RegExp("^[\+]{1}[0-9]+([\.]?[0-9]+)?$");
+			var reg3 = new RegExp("^[\-]{1}[0-9]+([\.]?[0-9]+)?$");
+			if(mark.indexOf("count") > 0)
+			{
+				reg = new RegExp("^[0-9]*$");
+				reg2 = new RegExp("^[\+]{1}[0-9]*$");
+				reg3 = new RegExp("^[\-]{1}[0-9]*$");
+			}
+			if(!reg.test(val)){
+				if(reg2.test(val)){
+					var num=parseFloat(jQuery(this).val())+parseFloat(val.replace("+",""));
+					if(num>=0)
+					jQuery(this).val(num);	
+				}else if(reg3.test(val)){
+					var num=parseFloat(jQuery(this).val())-parseFloat(val.replace("-",""));
+					if(num>=0)
+					jQuery(this).val(num);	
+				}
+			}else{
+				jQuery(this).val(val);	
+			}
+			jQuery(".editAllBox[mark='"+mark+"']").hide();
+			if(mark=="pt"){
+				commonMemberAdd(jQuery(this));
+			}else if(mark=="ygb"){
+				ygbChange(jQuery(this));
+			}else if(mark=="cash"){
+				cashChange(jQuery(this));
+			}else if(mark=="bv"){
+				bvChange(jQuery(this));
+			}else{
+				
+			}
+		}
+	
+		})
+})
+
+function submitForm()
+{
+	
+		var intentory_details = "";
+		
+		//要么全部输了云购币，要么全部空着
+		var obj=jQuery("input[id^=addPrice_ygb_]");
+		for(var i=0,len=obj.length;i<(len-1);i++){
+			var val1=obj.eq(i).val();
+			var val2=obj.eq(i+1).val();
+			if((val1==""&&val2!="")||(val1!=""&&val2=="")){
+				alert("云购币输入有误！");
+				return false;
+			}
+		}
+		var priceChangeFlag=false;
+		jQuery(":input[id^=addPrice_ygb_]").each(function(){
+			var gname=jQuery(this).attr("mark");
+			var provide=Number(jQuery("[id=addPrice_provide_"+gname+"]").html())||0;
+			var ygb=Number(jQuery(this).val())||0;
+			var cash=Number(jQuery("[id=addPrice_cash_"+gname+"]").val())||0;
+			var pt=Number(jQuery("[id=addPrice_pt_"+gname+"]").val())||0;			
+			if(provide+pt!=ygb+cash&&ygb!=0){
+				priceChangeFlag=true;
+			}
+		})
+		if(priceChangeFlag){
+			alert('供货价发生变化，请重新填写加价');
+			return false;
+		}
+		
+		
+		
+		jQuery(".price_setting_trs").each(function(){
+			var inputs = jQuery(this).find(".addPrice_input");
+			var id = inputs.eq(0).attr("name");
+			var addPrice = inputs.eq(0).val()||0;
+			var needYgb = inputs.eq(1).val()||0;
+			var needMoney = inputs.eq(2).val()||0;
+			var cnSelfAddPrice = inputs.eq(3).val()||0;
+			intentory_details=id+","+addPrice+","+needYgb+","+needMoney+","+cnSelfAddPrice+";"+intentory_details;
+		});
+		jQuery("#intentory_details").val(intentory_details);
+
+	
+	jQuery("#goodsCheckOrderForm").submit();
+}
+</script>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" style="font-size:50px">
+<head>
+    <title>我的推荐码</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script type="text/javascript">
+        var jgGlobal={
+            screenWidth:window.innerWidth||document.documentElement.clientWidth,
+            screenHeight:window.innerHeight||document.documentElement.clientHeight,
+            isALlowTouchMove:true,
+            setFontSize:function(){
+                var sw=window.innerWidth||document.documentElement.clientWidth;
+                if (sw < 640) {
+                    document.documentElement.style.fontSize = parseInt(sw / 640 * 100) + "px";
+                }else{
+                    document.documentElement.style.fontSize="100px";
+                }
+            },
+            setTranslate:function(node, positionY,containCss, useAnimate) {
+                var cssText = [
+                    containCss,
+                    'display: block',
+                    'transform: translate3d(0, ' + positionY + 'px, 0)',
+                    '-webkit-transform: translate3d(0, ' + positionY + 'px, 0)',
+                ].join(';');
+                if (useAnimate) {
+                    cssText = [
+                        cssText,
+                        'transition: .5s transform ease',
+                        '-webkit-transition: .5s -webkit-transform ease'
+                    ].join(';');
+                }
+                node.style.cssText = cssText;
+            },
+            isTouchMove:function(){
+                var _this=this;
+                document.addEventListener("touchmove",function(e){
+                    if(!_this.isALlowTouchMove){
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                },false);
+                if (navigator.userAgent.toLowerCase().indexOf('firefox')>=0)
+                {
+
+                    addEventListener('DOMMouseScroll',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }else{
+                    addEventListener('mousewheel',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }
+            },
+            init:function(){
+                this.isTouchMove();
+                this.setFontSize();
+            }
+        }
+        jgGlobal.init();
+        
+        jQuery(document).ready(function(){
+        	jgGlobal.setFontSize();
+        });
+        
+    </script>
+    <style>
+    	html,body{width:100%;height:100%;overflow:hidden;font-family: arial}
+    	.headImgUrl{display:block;width:2rem;height:2rem;border-radius:50%;margin:0 auto;margin-top:0.2rem}
+    	.wxNickName{width:100%;text-align:center;font-size:18px;font-weight:bold;height:30px;line-height:30px;margin-top:10px}
+    	.words{text-align:center;font-size:14px;color:#646363;height:25px;line-height:25px}
+    	.qr_code{display:block;width:4.5rem;margin:0 auto;margin-top:20px}
+    	.errMsg{font-size:14px;color:#646363;text-align:center}
+    </style>
+</head>
+<body>
+<!-- 错误提示 -->
+#if($errMsg)
+   <p class="errMsg"> $!{errMsg}</p>
+#else
+    <!-- 头像 -->
+        <img src="$!headImgUrl" class="headImgUrl" />
+    	<p class="wxNickName">我是：$!{wxNickName}</p>
+        <p class="words">邀您来云尚</p>
+    #if($url)
+        <img class="qr_code" src="$!webPath/qr_code.htm?qrUrl=$!{qrUrl}" />
+    #end
+
+      <script src="$!webPath/resources/assets/js/jquery-2.1.4.min.js"></script>
+      <script type="text/javascript" src="$!webPath/resources/wx_red_package/images/jweixin-1.0.0.js"></script>    
+      <script type="text/javascript" src="$!webPath/resources/wx_red_package/images/wx_share.js?v=222"></script> 
+         <!-- 微信分享 -->    
+        <script>
+        jQuery(document).ready(function(){ 
+            wxConfig('${appId}',${timestamp},'${nonceStr}','${signature}');
+            
+            var title='我是$!{wxNickName},向您推荐云尚云尚！';
+            var desc='加入云尚，立马赠送20积分，积分可兑换商品！速点！';
+            var link='$!webPath/wxmp/qr_invitation_share.htm?qrUrl=$!{qrUrl}&n=$!{wxNickName}&h=$!headImgUrl';
+            var imgUrl='$!headImgUrl';
+            wxReady(title,desc,link,imgUrl);
+        });
+        </script>
+
+#end
+
+</body>
+</html>

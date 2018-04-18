@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>健康任务添加</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	    <meta name="format-detection" content="telephone=no">
+    	<meta name="format-detection" content="email=no">
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/common.css"/>
+    	<link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/task.css" />
+    	<script type="text/javascript">
+	    	var screenWidth=window.innerWidth||document.documentElement.clientWidth;	
+	    	var fontSize=parseInt(screenWidth /7.5 )
+	    	var fontEl = document.createElement('style');
+	    	document.documentElement.firstElementChild.appendChild(fontEl);
+	    	fontEl.innerHTML = 'html{font-size:' + fontSize + 'px!important;}';
+    	</script>
+	</head>
+	<body>
+		<div class="appbar fn-clear">
+			<a href="javascript:;" class="return" ></a>
+			<span class="search">
+				<input type="text" placeholder="" id="search" class="" />
+				<input type="hidden" id="uid" value="$!uid"/>
+				<span class="clear"></span>
+			</span>
+			<a href="javascript:;" class="cancle">取消</a>
+		</div>	
+		<div class="taskHolder">
+			<div class="searchCon">
+				<div class="taskList">
+					<ul>
+						#foreach($!obj in $!list)
+							<li>
+								<span class="imgHolder">
+									<img src="$!obj.iconURL" />
+								</span>
+								<span class="taskCon">
+									<span class="title">$!obj.taskName</span>
+									<span class="total">已有$!obj.joinNum位参与者</span>
+								</span>
+								<a href="javascript:;" class="join" onclick="joinHealthTask($!obj.id)">加入</a>
+							</li>
+						#end
+					</ul>
+				</div>
+				<div class="taskList suggestion">
+					<ul id="suggestion">
+						<!-- <li><span>0人在坚持</span>每天喝8杯水</li> -->
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		
+		<script src="${apiPath}/resources/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/jQuery.fn/tap.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function(){
+				var returnLeft=jQuery(".return").width();
+				
+				jQuery("#search").on("focus",function(){
+					jQuery(".return").css("margin-left","-0.7rem");						
+					fn.setTransition(jQuery(".return")[0],0.2);
+					jQuery(".cancle").show();
+				});
+				jQuery("#search").on("blur",function(){
+					jQuery(".return").css("margin-left","0px");
+					jQuery(".cancle").hide();
+				});
+				
+				
+				
+				var timeoutId=null;
+				
+				jQuery("#search").on("input",function(){
+					var search = jQuery(this).val();
+					console.log(search);
+					if(jQuery(this).val()==""){
+						jQuery(this).removeClass("bg_none");
+						jQuery(".search .clear").hide();
+					}else{
+						clearTimeout(timeoutId);
+						var that=this;
+						search = encodeURI(search);
+						timeoutId=setTimeout(function(){
+							jQuery(".search .clear").show();
+							jQuery(".cancle").show();
+							jQuery(that).addClass("bg_none");						
+							//ajax请求
+							jQuery(".suggestion").show();
+							jQuery("#suggestion").html("<li style=\'text-align:center\'>加载中...</li>");
+							jQuery.ajax({
+					             type: "GET",
+					             url: "${apiPath}/v1/ht/search",
+					             data: {taskName:search},
+					             dataType: "json",
+					             success: function(data){
+				                    var result = data.healthTaskBOList;
+				                    var isBoo = (result=="");
+			                      	if(isBoo){
+			                      		jQuery("#suggestion").html("<li style=\'text-align:center\'>暂无数据...</li>");
+			                      	}else{
+			                      		/* var html=""; */
+			                      		var len = result.length;
+			                      		/* for(var i=0;i<len;i++){
+			                      			var obj = result[i];
+			                      			alert(obj.taskName);
+			                      		} */
+			                      		var html="";
+			                      		for(var i=0;i<len;i++){
+			                      			var obj = result[i];
+			                      			html+="<li onclick=\"joinHealthTask("+obj.id+")\"><span>"+obj.joinNum+"人在坚持</span>"+obj.taskName+"</li>"
+			                      		}
+			                      		console.log("...."+html);
+			                      		jQuery("#suggestion").html(html);
+			                      	}
+									
+			                    }
+					        });
+						},200)
+						
+					}
+				});
+				
+				jQuery(".search .clear").on("touchstart",function(){
+					jQuery("#search").val("");					
+					jQuery(this).hide();
+					jQuery("#search").removeClass("bg_none");
+				});
+				jQuery(".cancle").on("click",function(){
+					jQuery("#search").val("");
+					jQuery(".search .clear").hide();
+					jQuery("#search").removeClass("bg_none");
+					jQuery(".suggestion").hide();
+					jQuery(this).hide();
+					document.getElementById("search").blur();
+				});	
+			});
+			
+			function joinHealthTask(id){
+				var uid = jQuery("#uid").val();
+				var reqURL = "${apiPath}/v1/ht/taskSet?id="+id+"&userID="+uid+"&jumpType=$jumpType";
+				window.location.href = reqURL;
+			}
+			//返回键事件
+			var refer=document.referrer;
+			jQuery(".return").on("touchstart",function(){
+			    var uid = jQuery("#uid").val();
+			    var type = "${jumpType}";
+			    if(type.indexOf("task-index")>-1){
+			    	window.location.href = "${apiPath}/v1/ht/index?userID="+uid;
+			    	return;
+			    }
+				if(history.length==1 ||(refer.indexOf("taskSet")>-1)){
+					fn.requestBack();
+				}else{
+					location.href=refer;					
+					/* window.location.href = "${apiPath}/v1/ht/sysTaskList?userID="+uid */
+				}	
+			});
+		</script>
+	</body>
+</html>

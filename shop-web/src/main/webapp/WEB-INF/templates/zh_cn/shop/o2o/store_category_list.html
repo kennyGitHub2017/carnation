@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>#if($!selectGc) $!selectGc.gcName - #end #if($!area) $!area.areaName - #end 云尚健康商城网</title>
+    <meta name="keywords" content="#if($!selectGc) $!selectGc.gcName #end #if($!area) $!area.areaName #end,云尚周边服务,云尚健康调理中心,云尚健康生活圈,O2O健康生活圈,云尚商圈,保健服务商圈,到店体验,健康生活圈APP下载,云尚健康生活圈" />
+	<meta name="description" content="本地生活服务精全面覆盖，享受到店优惠，便捷支付等功能。精准推送商家位置，一键导航轻松便捷，为用户查找周边吃喝玩乐一站式服务。云尚服务热线：400-888-2933 。云尚服务热线：400-888-2933 。" />
+    
+    <link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+    <link href="$!webPath/resources/style/service/public2.css" type="text/css" rel="stylesheet" />
+
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+     <script src="$!webPath/resources/js/jquery.cookie.js"></script>
+	<script type="text/javascript">
+		function toSearch(classId,area,orderBy,order,currentPage){
+			if(!classId){
+				#if($!classId)
+					classId="$!classId";
+				#end
+			}
+			if(!area && area!=""){
+				#if($!areaId)
+					area="$!areaId";
+				#end
+			}
+			if(!orderBy){
+				#if($!orderBy)
+					orderBy="$!orderBy";
+				#end
+			}
+			if(!order){
+				#if($!order)
+					order="$!order";
+				#end
+			}
+			if(!currentPage){
+				#if($!page)
+					currentPage="$!page.currentPage";
+				#end
+			}
+			var url="$webPath/group/category/search.htm";
+			var param="";
+			if(classId && classId!=""){
+				param=param+"&classId="+classId;
+			}
+			if(area && area!=""){
+				param=param+"&areaId="+area;
+			}
+			if(orderBy && orderBy!=""){
+				param=param+"&orderBy="+orderBy;
+			}
+			if(order && order!=""){
+				param=param+"&order="+order;
+			}
+			if(currentPage && currentPage!=""){
+				param=param+"&currentPage="+currentPage;
+			}
+			if(param != ""){
+				param=param.substring(1);
+			}
+			url=url+"?"+param;
+			location.href=url;
+		}
+		
+		function gotoPage(n){
+			toSearch(null,null,null,null,n);
+		}
+	</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/group/head.htm?classId=$!classId")
+$!httpInclude.include("/group/nav.htm")
+
+<div class="main clearfix pt-20">
+    <div class="slide-bar slide-box">
+        <div class="slide-title">最近浏览</div>
+        <div class="slide-list">
+            <ul id="last_view">
+            </ul>
+        </div>
+    </div>
+    
+    <div class="main-content clearfix">
+        <div class="main-header">
+            <div class="nav-store">
+                <a href="$webPath/group/category/search.htm">全部</a>
+                #if($!selectGc)
+                	#if($!selectGc.parent)
+                	 &gt; <a href="$webPath/group/category/search.htm?classId=$!{selectGc.parent.id}">$!selectGc.parent.gcName</a>
+                	#end
+                	&gt; <a href="$webPath/group/category/search.htm?classId=$!{selectGc.id}">$!selectGc.gcName</a>
+                #end
+            </div>
+            <div class="filter-rows">
+                <span class="title">分类</span>
+                <ul id="ul_category">
+	                #if($!selectGc)
+		                #if($!selectGc.parent)
+	                    	<li><a href="javascript:void(0)" onclick="toSearch('$!selectGc.parent.id')">不限</a></li>
+	                    #else
+	                    	<li><a href="javascript:void(0)" onclick="toSearch('$!selectGc.id')">不限</a></li>
+	                    #end
+	                #else
+                    	<li><a href="$webPath/group/category/search.htm">不限</a></li>
+	                #end
+                	#foreach($gc in $!gcList)
+	                    <li >
+	                    	<a href="javascript:void(0)" #if($!selectGc.id == $!gc.id) class="active" #end onclick="toSearch('$!gc.id')">$!gc.gcName</a>
+	                    </li>
+                    #end
+                </ul>
+            </div>
+            <div class="filter-rows">
+                <span class="title">区域</span>
+                <ul id="ul_area">
+	                <li><a href="javascript:void(0)" onclick="toSearch(null,'')">不限</a></li>
+                	#foreach($area in $!subAreaList)
+	                    <li>
+	                    	<a href="javascript:void(0)" #if($!area.id == $!areaId) class="active" #end onclick="toSearch(null,'$area.id')">$area.areaName</a>
+	                    </li>
+                    #end
+                </ul>
+            </div>
+        </div>
+
+        <div class="sort-bar">
+        	#set($order="asc")
+        	#if(!$!page.order || $!page.order == "asc")
+        		#set($order="desc")
+        	#else
+        		#set($order="asc")
+        	#end
+	        <a href="javascript:void(0)" onclick="toSearch(null,null,'DEFAULT')" 
+	        #if(!$!page.orderBy || $!page.orderBy=="DEFAULT") class="active" #end >
+	        	默认 
+	        </a>
+            #if($!page.orderBy=="SALES")
+	            <a href="javascript:void(0)" onclick="toSearch(null,null,'SALES','$order')" #if($!page.orderBy=="SALES") class="active" #end>
+	            	销量<i class="icon arrow #if($!page.order=="asc") arrow-up #end"></i>
+	            </a>
+            #else
+            	<a href="javascript:void(0)" onclick="toSearch(null,null,'SALES','desc')">销量<i class="icon arrow"></i></a>
+            #end
+            #if($!page.orderBy=="CREDIT")
+	            <a href="javascript:void(0)" onclick="toSearch(null,null,'CREDIT','$order')" #if($!page.orderBy=="CREDIT") class="active" #end>
+	            	好评<i class="icon arrow #if($!page.order=="asc") arrow-up #end"></i>
+	            </a>
+            #else
+	            <a href="javascript:void(0)" onclick="toSearch(null,null,'CREDIT','desc')">
+	            	好评<i class="icon arrow"></i>
+	            </a>
+           #end
+        </div>
+		#if($!page.result && $!page.result.size() > 0)
+        <div class="s-pro-list pro-list-side">
+            <ul>
+            	#foreach($store in $!page.result)
+            		#if($!store.storeInfoPath)
+						#set($img=$store.storeInfoPath)
+					#else
+						#set($img=$config.storeImage.path)
+					#end
+                <li>
+                    <a href="$!webPath/group/store.htm?id=$!{store.id}" target="_blank">
+                        <div class="pic"><img src="${img}" width="209" height="144"/></div>
+                        <div class="cont">
+                            <div class="name ell">$store.storeName</div>
+                            <div class="address ell">地址：$!store.storeAddress</div>
+                            <div class="part text-right c_gray">
+                                <div class="five_star">
+									#set($storeEvaluationAverage = $!store.storeEvaluationAverage * 20)
+									<b style="width: ${storeEvaluationAverage}%;" title="好评率：%"></b>
+								</div>
+								$!{store.storeEvaluationCount} 人评价
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                #end
+            </ul>
+            
+        </div>
+        
+        <div class="fenye"><span> $!gotoPageFormHTML</span></div>
+        #else
+        <div class="main_list_box">
+          <div class="main_list_none"> <span class="main_none_box"> <i></i>
+            <p><br> 抱歉，没有找到符合条件的商家！</p>
+            </span></div>
+        </div>
+        #end
+    </div>
+
+    <div class="mod-col-bor">
+        <div class="title">猜你喜欢</div>
+        <div class="s-pro-list pro-list-side">
+           $!httpInclude.include("/goodslike_list.htm")
+        </div>
+    </div>
+
+</div>
+
+$!httpInclude.include("/footer.htm")
+
+<script>
+
+$(function (){
+	var ul_category= $("#ul_category a.active");
+	if(ul_category.length == 0){
+		$("#ul_category a").eq(0).addClass("active");
+	}
+	if($("#ul_area a.active").length == 0){
+		$("#ul_area a").eq(0).addClass("active");
+	}
+})
+
+//---------
+//最近浏览
+//---------
+
+var goodsStr = jQuery.cookie('goodsStr');
+//解析json字符串
+goods = jQuery.parseJSON(goodsStr);
+
+//write html
+var content = '';
+for(i in goods){
+	var good = goods[i];
+	var pic =good.pic==undefined?'':good.pic;
+	var name =good.name==undefined?'':good.name;
+	var storeName =good.storeName==undefined?'':good.storeName;
+	var groupPrice =good.groupPrice==undefined?'':good.groupPrice;
+	var selledCount =good.selledCount==undefined?'':good.selledCount;
+	//console.log(name,'---',pic, storeName,groupPrice,selledCount)
+	content += "<li><a href='$!webPath/group/view_"+good.id+".htm'><div class='pic'><img src='"+pic+"' /></div><div class='cont'><div class='name ell'>"+name+"</div><div class='name address'>"+storeName+"</div> <div class='fl price'>"+groupPrice+"</div> <div class='part text-right c_gray'> 已销售"+selledCount+" </div></div></a></li>"; 
+}
+jQuery('#last_view').html(content);
+
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.market.mapper.RedPackageGetRecordMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.market.model.RedPackageGetRecord">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="package_id" property="packageId" jdbcType="BIGINT" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="money" property="money" jdbcType="DECIMAL" />
+		<result column="cook_id" property="cookId" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+		<result column="open_time" property="openTime" jdbcType="TIMESTAMP" />
+		<result column="get_time" property="getTime" jdbcType="TIMESTAMP" />
+		<result column="off_time" property="offTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="TINYINT" />
+	</resultMap>
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.market.bo.RedPackageGetRecordBO" extends="BaseResultMap">
+		<result column="head_img_path" property="headImgPath" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, package_id, phone, money, cook_id, user_id, ip, status,
+		created_time,
+		open_time,
+		get_time, off_time, delete_status
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.market.model.RedPackageGetRecordExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from red_package_get_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from red_package_get_record
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		red_package_get_record
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.market.model.RedPackageGetRecordExample">
+		delete from red_package_get_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert"
+		parameterType="com.sinco.carnation.market.model.RedPackageGetRecord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into red_package_get_record
+		(id, package_id, phone,
+		money, cook_id, user_id,
+		ip, status,
+		created_time,
+		open_time, get_time, off_time,
+		delete_status)
+		values
+		(#{id,jdbcType=BIGINT}, #{packageId,jdbcType=BIGINT},
+		#{phone,jdbcType=VARCHAR},
+		#{money,jdbcType=DECIMAL},
+		#{cookId,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT},
+		#{ip,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT},
+		#{createdTime,jdbcType=TIMESTAMP},
+		#{openTime,jdbcType=TIMESTAMP},
+		#{getTime,jdbcType=TIMESTAMP}, #{offTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=TINYINT})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sinco.carnation.market.model.RedPackageGetRecord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into red_package_get_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="packageId != null">
+				package_id,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="money != null">
+				money,
+			</if>
+			<if test="cookId != null">
+				cook_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="ip != null">
+				ip,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="createdTime != null">
+				created_time,
+			</if>
+			<if test="openTime != null">
+				open_time,
+			</if>
+			<if test="getTime != null">
+				get_time,
+			</if>
+			<if test="offTime != null">
+				off_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="packageId != null">
+				#{packageId,jdbcType=BIGINT},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="money != null">
+				#{money,jdbcType=DECIMAL},
+			</if>
+			<if test="cookId != null">
+				#{cookId,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="ip != null">
+				#{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=TINYINT},
+			</if>
+			<if test="createdTime != null">
+				#{createdTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="openTime != null">
+				#{openTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="getTime != null">
+				#{getTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="offTime != null">
+				#{offTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.market.model.RedPackageGetRecordExample"
+		resultType="java.lang.Integer">
+		select count(*) from red_package_get_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update red_package_get_record
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.packageId != null">
+				package_id = #{record.packageId,jdbcType=BIGINT},
+			</if>
+			<if test="record.phone != null">
+				phone = #{record.phone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.money != null">
+				money = #{record.money,jdbcType=DECIMAL},
+			</if>
+			<if test="record.cookId != null">
+				cook_id = #{record.cookId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.ip != null">
+				ip = #{record.ip,jdbcType=VARCHAR},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=TINYINT},
+			</if>
+			<if test="record.createdTime != null">
+				created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.openTime != null">
+				open_time = #{record.openTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.getTime != null">
+				get_time = #{record.getTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.offTime != null">
+				off_time = #{record.offTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update red_package_get_record
+		set id = #{record.id,jdbcType=BIGINT},
+		package_id = #{record.packageId,jdbcType=BIGINT},
+		phone =
+		#{record.phone,jdbcType=VARCHAR},
+		money =
+		#{record.money,jdbcType=DECIMAL},
+		cook_id =
+		#{record.cookId,jdbcType=VARCHAR},
+		user_id =
+		#{record.userId,jdbcType=BIGINT},
+		ip = #{record.ip,jdbcType=VARCHAR},
+		status = #{record.status,jdbcType=TINYINT},
+		created_time =
+		#{record.createdTime,jdbcType=TIMESTAMP},
+		open_time =
+		#{record.openTime,jdbcType=TIMESTAMP},
+		get_time =
+		#{record.getTime,jdbcType=TIMESTAMP},
+		off_time =
+		#{record.offTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=TINYINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sinco.carnation.market.model.RedPackageGetRecord">
+		update red_package_get_record
+		<trim prefix="set" suffixOverrides=",">
+			<if test="packageId != null">
+				package_id = #{packageId,jdbcType=BIGINT},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="money != null">
+				money = #{money,jdbcType=DECIMAL},
+			</if>
+			<if test="cookId != null">
+				cook_id = #{cookId,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="createdTime != null">
+				created_time = #{createdTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="openTime != null">
+				open_time = #{openTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="getTime != null">
+				get_time = #{getTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="offTime != null">
+				off_time = #{offTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=TINYINT},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sinco.carnation.market.model.RedPackageGetRecord">
+		update red_package_get_record
+		set package_id =
+		#{packageId,jdbcType=BIGINT},
+		phone = #{phone,jdbcType=VARCHAR},
+		money =
+		#{money,jdbcType=DECIMAL},
+		cook_id = #{cookId,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=BIGINT},
+		ip = #{ip,jdbcType=VARCHAR},
+		status = #{status,jdbcType=TINYINT},
+		created_time =
+		#{createdTime,jdbcType=TIMESTAMP},
+		open_time =
+		#{openTime,jdbcType=TIMESTAMP},
+		get_time =
+		#{getTime,jdbcType=TIMESTAMP},
+		off_time =
+		#{offTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{deleteStatus,jdbcType=TINYINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- 查询sql语句 -->
+	<select id="findAllByPage" resultMap="BOResultMap">
+		SELECT red.package_id, red.phone,
+		sys_user.invitation_code,
+		user_customer.nickname,
+		red.get_time,red.money,
+		red.STATUS,
+		red.ip
+		FROM
+		red_package_get_record AS red LEFT JOIN user_customer AS
+		user_customer
+		ON red.phone = user_customer.mobile LEFT JOIN sys_user
+		ON
+		user_customer.uid = sys_user.id LEFT JOIN act_red_package
+		ON
+		red.package_id = act_red_package.id
+		WHERE red.delete_status = 0
+		<if test="vo.packageId != null and vo.packageId !=0  ">
+			and red.package_id = #{vo.packageId}
+		</if>
+		<if test="vo.status == 0 ">
+			and red.status = #{vo.status}
+		</if>
+		<if test="vo.status != null and vo.status != '' and vo.status != -1 ">
+			and red.status = #{vo.status}
+		</if>
+		<if test="vo.createdTimeStr != null and vo.createdTimeStr != '' ">
+			and red.created_time <![CDATA[ >= ]]>
+			#{vo.createdTimeStr}
+		</if>
+		<if test="vo.offTimeStr != null and vo.offTimeStr != '' ">
+			and red.off_time <![CDATA[ <= ]]>
+			#{vo.offTimeStr}
+		</if>
+		<if
+			test="vo.choose != null and vo.choose != '' and vo.mation != null and vo.mation != '' ">
+			<if test="vo.choose == 3">
+				and user_customer.nickname = #{vo.mation}
+			</if>
+			<if test="vo.choose == 1">
+				and red.phone= #{vo.mation}
+			</if>
+			<if test="vo.choose == 2">
+				and sys_user.invitation_code= #{vo.mation}
+			</if>
+		</if>
+		ORDER BY red.package_id,red.phone,red.get_time DESC
+	</select>
+
+	<update id="updateActRedPacketRecord" parameterType="com.sinco.carnation.market.vo.ActRedPackageVO">
+		update red_package_get_record
+		<trim prefix="set" suffixOverrides=",">
+
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="money != null">
+				money = #{money,jdbcType=DECIMAL},
+			</if>
+			<if test="cookId != null">
+				cook_id = #{cookId,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="createdTime != null">
+				created_time = #{createdTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="openTime != null">
+				open_time = #{openTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="getTime != null">
+				get_time = #{getTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="offTime != null">
+				off_time = #{offTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=TINYINT},
+			</if>
+		</trim>
+		where package_id = #{packageId,jdbcType=BIGINT}
+	</update>
+
+
+
+
+
+
+	<update id="updateByCookieIdandPacketId" parameterType="com.sinco.carnation.market.vo.RedPackageGetRecordVO">
+		update red_package_get_record
+		<set>
+
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="money != null">
+				money = #{money,jdbcType=DECIMAL},
+			</if>
+
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="ip != null">
+				ip = #{ip,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=TINYINT},
+			</if>
+			<if test="createdTime != null">
+				created_time = #{createdTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="openTime != null">
+				open_time = #{openTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="getTime != null">
+				get_time = #{getTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="offTime != null">
+				off_time = #{offTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=TINYINT},
+			</if>
+		</set>
+		where package_id = #{packageId,jdbcType=BIGINT} and cook_id =
+		#{cookId,jdbcType=VARCHAR}
+	</update>
+
+
+	<select id="findRedPackageByPhone" parameterType="java.lang.String"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from red_package_get_record
+		where phone = #{phone,jdbcType=VARCHAR} and
+		package_id =
+		#{packageId,jdbcType=BIGINT}
+	</select>
+
+
+
+	<select id="getActRedPacketRecordUserList" parameterType="com.sinco.carnation.market.vo.RedPackageGetRecordVO"
+		resultMap="BOResultMap">
+		SELECT a.money,uc.head_img_path
+		FROM red_package_get_record AS a
+		LEFT
+		JOIN `act_red_package` arp ON a.`package_id`= arp.`id`
+		LEFT JOIN
+		user_customer uc ON a.user_id = uc.uid
+		WHERE 1=1
+		<if test="status != null">
+			AND a.STATUS = #{status,jdbcType=TINYINT}
+		</if>
+		<if test="vcode != null">
+			AND arp.vcode = #{vcode,jdbcType=VARCHAR}
+		</if>
+		ORDER BY get_time DESC LIMIT 12
+	</select>
+
+	<select id="getSumMoney" parameterType="java.lang.Long"
+		resultType="Float">
+		SELECT sum(money) AS sumMoney
+		FROM red_package_get_record
+		WHERE package_id = #{id,jdbcType=BIGINT} and cook_id is not null and
+		ip is
+		not null
+	</select>
+
+</mapper>

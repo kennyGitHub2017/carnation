@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=1.0">
+	<meta name="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="format-detection" content="email=no">
+	<link href="$!{webPath}/resources/css/base.min.css" rel="stylesheet" type="text/css">
+	<link href="$!{webPath}/resources/css/css.css" rel="stylesheet" type="text/css">
+	<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+	</head>
+    <title>云尚抗衰老中心</title>
+    <style>
+        html,body{height: 100%}
+    </style>
+    <script type="text/javascript">
+        var jgGlobal={
+            screenWidth:window.innerWidth||document.documentElement.clientWidth,
+            screenHeight:window.innerHeight||document.documentElement.clientHeight,
+            setFontSize:function(){
+                if (this.screenWidth < 640) {
+                    document.documentElement.style.fontSize = parseInt(this.screenWidth / 640 * 100) + "px";
+                }else{
+                    document.documentElement.style.fontSize="100px";
+                }
+            },
+            setTranslate:function(node, positionY,containCss, useAnimate) {
+                var cssText = [
+                    containCss,
+                    'display: block',
+                    'transform: translate3d(0, ' + positionY + 'px, 0)',
+                    '-webkit-transform: translate3d(0, ' + positionY + 'px, 0)',
+                ].join(';');
+                if (useAnimate) {
+                    cssText = [
+                        cssText,
+                        'transition: .5s transform ease',
+                        '-webkit-transition: .5s -webkit-transform ease'
+                    ].join(';');
+                }
+                node.style.cssText = cssText;
+            }
+        }
+        jgGlobal.setFontSize();
+        window.onresize = function () {
+            jgGlobal.setFontSize();
+        }
+		window.onload=function(){
+			jgGlobal.setFontSize();
+		}
+		
+    </script>
+</head>
+<body>
+    <div class="merchantHomeContainer">
+        <div class="title">
+            <img src="$!{webPath}/resources/mch_wx_qr_pay/business_ico.png">
+            <span>云尚抗衰老中心</span>
+        </div>
+        <div class="link_icon">
+            <ul class="fn-clear">
+                <li>
+                    <a href="$!{webPath}/mobile_register.htm?invitationCode=$!{invitationCode}">
+                        <img src="$!{webPath}/resources/mch_wx_qr_pay/register_icon.png">
+                        <div>会员注册</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" onclick="window.location.href=decodeURIComponent('$!{jgQrPath}')">
+                        <img src="$!{webPath}/resources/mch_wx_qr_pay/pay_yes_icon.png">
+                        <div>会员支付</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="$!{wxQrPath}">
+                        <img src="$!{webPath}/resources/mch_wx_qr_pay/pay_wx_icon.png">
+                        <div>微信支付</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="$!{aliQrPath}">
+                        <img src="$!{webPath}/resources/mch_wx_qr_pay/pay_ali_icon.png">
+                        <div>支付宝支付</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="provid">由<span class="t1">云尚</span><span class="t2">TM</span>提供商户服务</div>
+    </div>
+
+</body>
+</html>

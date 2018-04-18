@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.goldEgg.mapper.GlodEggRecordMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.goldEgg.model.GlodEggRecord">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="uid" property="uid" jdbcType="BIGINT" />
+		<result column="money" property="money" jdbcType="DECIMAL" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="cn_account" property="cnAccount" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+		<result column="app_name" property="appName" jdbcType="VARCHAR" />
+		<result column="egg_index" property="eggIndex" jdbcType="TINYINT" />
+		<result column="glod_egg_id" property="glodEggId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.goldEgg.bo.GlodEggRecordBO" extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, uid, money, create_time, cn_account, mobile, nick_name, app_name,
+		egg_index,
+		glod_egg_id
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.goldEgg.model.GlodEggRecordExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from glod_egg_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from glod_egg_record
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from glod_egg_record
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.goldEgg.model.GlodEggRecordExample">
+		delete from glod_egg_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.goldEgg.model.GlodEggRecord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into glod_egg_record (id, uid, money,
+		create_time, cn_account, mobile,
+		nick_name, app_name, egg_index,
+		glod_egg_id)
+		values (#{id,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT},
+		#{money,jdbcType=DECIMAL},
+		#{createTime,jdbcType=TIMESTAMP}, #{cnAccount,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+		#{nickName,jdbcType=VARCHAR}, #{appName,jdbcType=VARCHAR},
+		#{eggIndex,jdbcType=TINYINT},
+		#{glodEggId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.goldEgg.model.GlodEggRecord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into glod_egg_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="money != null">
+				money,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="cnAccount != null">
+				cn_account,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="nickName != null">
+				nick_name,
+			</if>
+			<if test="appName != null">
+				app_name,
+			</if>
+			<if test="eggIndex != null">
+				egg_index,
+			</if>
+			<if test="glodEggId != null">
+				glod_egg_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="money != null">
+				#{money,jdbcType=DECIMAL},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="cnAccount != null">
+				#{cnAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="nickName != null">
+				#{nickName,jdbcType=VARCHAR},
+			</if>
+			<if test="appName != null">
+				#{appName,jdbcType=VARCHAR},
+			</if>
+			<if test="eggIndex != null">
+				#{eggIndex,jdbcType=TINYINT},
+			</if>
+			<if test="glodEggId != null">
+				#{glodEggId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.goldEgg.model.GlodEggRecordExample"
+		resultType="java.lang.Integer">
+		select count(*) from glod_egg_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update glod_egg_record
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.uid != null">
+				uid = #{record.uid,jdbcType=BIGINT},
+			</if>
+			<if test="record.money != null">
+				money = #{record.money,jdbcType=DECIMAL},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.cnAccount != null">
+				cn_account = #{record.cnAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="record.mobile != null">
+				mobile = #{record.mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.nickName != null">
+				nick_name = #{record.nickName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.appName != null">
+				app_name = #{record.appName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.eggIndex != null">
+				egg_index = #{record.eggIndex,jdbcType=TINYINT},
+			</if>
+			<if test="record.glodEggId != null">
+				glod_egg_id = #{record.glodEggId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update glod_egg_record
+		set id = #{record.id,jdbcType=BIGINT},
+		uid = #{record.uid,jdbcType=BIGINT},
+		money = #{record.money,jdbcType=DECIMAL},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		cn_account = #{record.cnAccount,jdbcType=VARCHAR},
+		mobile = #{record.mobile,jdbcType=VARCHAR},
+		nick_name = #{record.nickName,jdbcType=VARCHAR},
+		app_name = #{record.appName,jdbcType=VARCHAR},
+		egg_index = #{record.eggIndex,jdbcType=TINYINT},
+		glod_egg_id = #{record.glodEggId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.goldEgg.model.GlodEggRecord">
+		update glod_egg_record
+		<trim prefix="set" suffixOverrides=",">
+			<if test="uid != null">
+				uid = #{uid,jdbcType=BIGINT},
+			</if>
+			<if test="money != null">
+				money = #{money,jdbcType=DECIMAL},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="cnAccount != null">
+				cn_account = #{cnAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="nickName != null">
+				nick_name = #{nickName,jdbcType=VARCHAR},
+			</if>
+			<if test="appName != null">
+				app_name = #{appName,jdbcType=VARCHAR},
+			</if>
+			<if test="eggIndex != null">
+				egg_index = #{eggIndex,jdbcType=TINYINT},
+			</if>
+			<if test="glodEggId != null">
+				glod_egg_id = #{glodEggId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.goldEgg.model.GlodEggRecord">
+		update glod_egg_record
+		set uid = #{uid,jdbcType=BIGINT},
+		money = #{money,jdbcType=DECIMAL},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		cn_account = #{cnAccount,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		nick_name = #{nickName,jdbcType=VARCHAR},
+		app_name = #{appName,jdbcType=VARCHAR},
+		egg_index = #{eggIndex,jdbcType=TINYINT},
+		glod_egg_id = #{glodEggId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="staticsCurrentGrantMoney" resultType="java.math.BigDecimal">
+		SELECT SUM(money) FROM glod_egg_record WHERE create_time &gt; #{startDate}
+		AND create_time &lt; #{endDate}
+	</select>
+	<select id="findPageByVO" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		glod_egg_record
+		where
+		1=1
+		<if test="vo.uid != null">
+			and uid = #{vo.uid,jdbcType=BIGINT}
+		</if>
+		<if test="vo.money != null">
+			and money = #{vo.money,jdbcType=DECIMAL}
+		</if>
+		<if test="vo.createTime != null">
+			and create_time = #{vo.createTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="vo.cnAccount != null">
+			and cn_account = #{vo.cnAccount,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.mobile != null">
+			and mobile = #{vo.mobile,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.nickName != null">
+			and nick_name = #{vo.nickName,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.appName != null">
+			and app_name = #{vo.appName,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.eggIndex != null">
+			and egg_index = #{vo.eggIndex,jdbcType=TINYINT}
+		</if>
+		<if test="vo.glodEggId != null">
+			and glod_egg_id = #{vo.glodEggId,jdbcType=BIGINT}
+		</if>
+		<if test="vo.beginTime != null and vo.beginTime != ''">
+		<![CDATA[AND date(create_time) >=#{vo.beginTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+		<![CDATA[AND date(create_time) <= #{vo.endTime,jdbcType=TIMESTAMP}]]>
+		</if>
+	</select>
+</mapper>

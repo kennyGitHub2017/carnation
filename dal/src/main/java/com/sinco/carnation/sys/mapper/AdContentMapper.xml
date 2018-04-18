@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.AdContentMapper" >
+  <resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.AdContent" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="area_ad_id" property="areaAdId" jdbcType="BIGINT" />
+    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
+    <result column="area_id" property="areaId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="link" property="link" jdbcType="VARCHAR" />
+    <result column="orders" property="orders" jdbcType="INTEGER" />
+    <result column="disabled" property="disabled" jdbcType="INTEGER" />
+    <result column="need_login" property="needLogin" jdbcType="BIT" />
+    <result column="create_by" property="createBy" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_by" property="modifyBy" jdbcType="BIGINT" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="BOResultMap" type="com.sinco.carnation.sys.bo.AdContentBO" extends="BaseResultMap" />
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, area_ad_id, parent_id, area_id, name, pic, type, link, orders, disabled, need_login, 
+    create_by, create_time, modify_by, modify_time
+  </sql>
+
+	<sql id="query_area_ad">
+		c.id, c.area_ad_id, c.parent_id, c.area_id, c.name, c.pic, c.type, c.link,
+		c.orders,c.need_login,
+		c.disabled, c.create_by,
+		c.create_time, c.modify_by, c.modify_time,a.style
+	</sql>
+	
+	
+	<select id="listByVOPage" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_ad_content where 1=1
+		<if test="vo.id != null">
+			and id = #{vo.id}
+		</if>
+		<if test="vo.areaAdId != null">
+			and area_ad_id = #{vo.areaAdId}
+		</if>
+		<if test="vo.parentId != null">
+			and parent_id = #{vo.parentId}
+		</if>
+		<if test="vo.areaId != null">
+			and area_id = #{vo.areaId}
+		</if>
+		<if test="vo.name != null">
+			and name = #{vo.name}
+		</if>
+		<if test="vo.type != null">
+			and type = #{vo.type}
+		</if>
+		<if test="vo.disabled != null">
+			and disabled = #{vo.disabled}
+		</if>
+		<if test="vo.createBy != null">
+			and create_by = #{vo.createBy}
+		</if>
+		<if test="queryType == 'parent'">
+			and parent_id is null
+		</if>
+		order by orders asc
+	</select>
+	
+	<update id="updateAllOrdersById" parameterType="com.sinco.carnation.sys.model.AdContent" >
+			UPDATE `sys_ad_content` SET orders =#{orders}
+			WHERE parent_id IN (#{id})
+	</update>
+  
+  <select id="findAll" parameterType="com.sinco.carnation.sys.model.AdContentExample" resultMap="BOResultMap" >
+  			select * from sys_ad_content
+  </select>
+  
+  <select id="findAllName" resultMap="BOResultMap">
+  		select <include refid="Base_Column_List" /> from sys_ad_content where  parent_id IS NULL and  area_ad_id = #{vo.areaAdId}
+  </select>
+  	
+	<select id="queryContentsList" parameterType="map" resultMap="BOResultMap">
+		select 
+		<include refid="Base_Column_List" />,style
+		from (
+		select <include refid="query_area_ad" />
+		from
+		sys_area_ad a left join sys_ad_content c on a.id =c.area_ad_id
+		where c.disabled = 0 and a.disabled = 0 and a.code = #{code}
+		<choose>
+        <when test="areaId != null">
+           and c.area_id = #{areaId}
+        </when>
+        <otherwise>
+           and c.area_id is null
+        </otherwise>
+    </choose>
+		group by c.parent_id
+		union
+		select <include refid="query_area_ad" /> 
+	    from sys_area_ad a left join
+		sys_ad_content c on a.id =
+		c.area_ad_id where a.code = #{code}
+		and c.area_id is null and c.disabled = 0 and a.disabled = 0
+		and c.id not in (select c.parent_id from sys_area_ad a left join
+		sys_ad_content c on a.id = c.area_ad_id where c.disabled = 0 and
+		a.disabled = 0 and a.code = #{code}
+				<choose>
+        <when test="areaId != null">
+           and c.area_id = #{areaId}
+        </when>
+        <otherwise>
+           and c.area_id is null
+        </otherwise>
+    </choose>
+		)) ad order by orders
+	</select>
+  
+
+	<select id="findContentsByPage" parameterType="com.sinco.carnation.sys.model.AdContentExample"
+		resultMap="BOResultMap">
+		SELECT sac1.id,sac1.area_ad_id,sac2.name as dname,sac1.id as
+		did,da.area_Name,sac1.pic,saa.name,sac1.disabled FROM `sys_ad_content`
+		sac1
+		LEFT JOIN `sys_ad_content` sac2
+		ON sac1.parent_id=sac2.id
+		LEFT JOIN dic_area da
+		ON da.id = sac1.area_id
+		LEFT JOIN sys_area_ad saa
+		ON saa.id = sac1.area_ad_id
+		where sac1.parent_id IS NOT NULL
+		<if test="vo.id != null and vo.id != ''">
+			AND sac2.id= #{vo.id}
+		</if>
+		<if test="vo.areaAdId != null and vo.areaAdId != ''">
+			AND sac1.area_ad_id = #{vo.areaAdId}
+		</if>
+		order by sac1.orders asc
+
+	</select>
+
+	<select id="findQuYunById" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_ad_content where parent_id IS NULL and area_ad_id = #{did}
+	</select>
+	
+  <select id="selectByExample" parameterType="com.sinco.carnation.sys.model.AdContentExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_ad_content
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      limit ${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_ad_content
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_ad_content
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.AdContentExample" >
+    delete from sys_ad_content
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinco.carnation.sys.model.AdContent" useGeneratedKeys="true" keyProperty="id" >
+    insert into sys_ad_content (id, area_ad_id, parent_id, 
+      area_id, name, pic, type, 
+      link, orders, disabled, 
+      need_login, create_by, create_time, 
+      modify_by, modify_time)
+    values (#{id,jdbcType=BIGINT}, #{areaAdId,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, 
+      #{areaId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{link,jdbcType=VARCHAR}, #{orders,jdbcType=INTEGER}, #{disabled,jdbcType=INTEGER}, 
+      #{needLogin,jdbcType=BIT}, #{createBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifyBy,jdbcType=BIGINT}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.AdContent" useGeneratedKeys="true" keyProperty="id" >
+    insert into sys_ad_content
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="areaAdId != null" >
+        area_ad_id,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="pic != null" >
+        pic,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="link != null" >
+        link,
+      </if>
+      <if test="orders != null" >
+        orders,
+      </if>
+      <if test="disabled != null" >
+        disabled,
+      </if>
+      <if test="needLogin != null" >
+        need_login,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyBy != null" >
+        modify_by,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="areaAdId != null" >
+        #{areaAdId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="areaId != null" >
+        #{areaId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null" >
+        #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null" >
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="orders != null" >
+        #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="disabled != null" >
+        #{disabled,jdbcType=INTEGER},
+      </if>
+      <if test="needLogin != null" >
+        #{needLogin,jdbcType=BIT},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        #{modifyBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinco.carnation.sys.model.AdContentExample" resultType="java.lang.Integer" >
+    select count(*) from sys_ad_content
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update sys_ad_content
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.areaAdId != null" >
+        area_ad_id = #{record.areaAdId,jdbcType=BIGINT},
+      </if>
+      <if test="record.parentId != null" >
+        parent_id = #{record.parentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.areaId != null" >
+        area_id = #{record.areaId,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pic != null" >
+        pic = #{record.pic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.link != null" >
+        link = #{record.link,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orders != null" >
+        orders = #{record.orders,jdbcType=INTEGER},
+      </if>
+      <if test="record.disabled != null" >
+        disabled = #{record.disabled,jdbcType=INTEGER},
+      </if>
+      <if test="record.needLogin != null" >
+        need_login = #{record.needLogin,jdbcType=BIT},
+      </if>
+      <if test="record.createBy != null" >
+        create_by = #{record.createBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifyBy != null" >
+        modify_by = #{record.modifyBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifyTime != null" >
+        modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update sys_ad_content
+    set id = #{record.id,jdbcType=BIGINT},
+      area_ad_id = #{record.areaAdId,jdbcType=BIGINT},
+      parent_id = #{record.parentId,jdbcType=BIGINT},
+      area_id = #{record.areaId,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      pic = #{record.pic,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      link = #{record.link,jdbcType=VARCHAR},
+      orders = #{record.orders,jdbcType=INTEGER},
+      disabled = #{record.disabled,jdbcType=INTEGER},
+      need_login = #{record.needLogin,jdbcType=BIT},
+      create_by = #{record.createBy,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      modify_by = #{record.modifyBy,jdbcType=BIGINT},
+      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.AdContent" >
+    update sys_ad_content
+    <set >
+      <if test="areaAdId != null" >
+        area_ad_id = #{areaAdId,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="areaId != null" >
+        area_id = #{areaId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null" >
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null" >
+        link = #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="orders != null" >
+        orders = #{orders,jdbcType=INTEGER},
+      </if>
+      <if test="disabled != null" >
+        disabled = #{disabled,jdbcType=INTEGER},
+      </if>
+      <if test="needLogin != null" >
+        need_login = #{needLogin,jdbcType=BIT},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyBy != null" >
+        modify_by = #{modifyBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.AdContent" >
+    update sys_ad_content
+    set area_ad_id = #{areaAdId,jdbcType=BIGINT},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      area_id = #{areaId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      pic = #{pic,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR},
+      orders = #{orders,jdbcType=INTEGER},
+      disabled = #{disabled,jdbcType=INTEGER},
+      need_login = #{needLogin,jdbcType=BIT},
+      create_by = #{createBy,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_by = #{modifyBy,jdbcType=BIGINT},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

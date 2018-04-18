@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet"/>
+<link  href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+</script>
+</head>
+<body>
+<div class="cont">
+  <form action="$!webPath/$!sumbmitUrl" method="post" name="ListForm" id="ListForm">
+  <input type="hidden" id="id" name="id" value="$!id" />
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <td align="center" width="50%">
+        	<input type="radio" name="status" value="1" checked="checked"/>审核通过
+        </td>
+        <td align="center" width="50%">
+        	<input type="radio" name="status" value="-1"/>审核不通过
+        </td>
+      </tr>
+      <tr>
+        <td align="center">
+	        <span>
+	        	<input class="enter" name="" type="submit" value="确定" style="cursor:pointer;"/>
+	        </span>
+        </td>
+        <td align="center">
+        	<span>
+	        	<input class="cancel" name="" type="button" value="取消" style="cursor:pointer;" onclick="javascript:jQuery('#$!dialogId').remove();" />
+	        </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+  </form>
+</div>
+</body>
+</html>

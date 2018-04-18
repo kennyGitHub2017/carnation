@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+#macro ( genericGroupClassTree $somelist $id) 
+#foreach ( $some in $somelist )
+#if($!some.id == $!id)
+<option value="$!some.id" selected="selected">
+#else
+<option value="$!some.id">
+#end
+#if($!some.gcLevel>0)
+#foreach($count in [0..$!some.gcLevel])&nbsp;&nbsp;#end #end $!some.gcName
+</option>
+#genericGroupClassTree($!some.childs $id) 
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+<script src="$!webPath/resources/js/jquery.imgareaselect.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+var caseContentStr;
+var selected_stroe={};
+
+jQuery(document).ready(function(){
+	jQuery("#theForm").validate({
+	    rules:{
+		  caseName:{
+		    required :true
+		  },
+		  caseId:{
+		    required :true
+		  },
+		  sequence:{
+			number:true
+		  }
+		 },
+		messages:{
+		  caseName:{required:"标题不能为空"},
+		  caseId:{required:"标识不能为空"},
+		  sequence:{number:"排序编号只能是数字格式",}
+		}
+	  });
+	//结束
+		jQuery("#status_img").click(function(){
+	     var display=jQuery("#display").val();
+	     //alert(display);
+		 if(display=="false"||display=="0"||display==""){
+		    jQuery("#status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+			jQuery("#display").val("1");
+		 }
+		 if(display=="true"||display=="1"){
+		    jQuery("#status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+			jQuery("#display").val("0");
+		 }	 	 
+	  });
+	  //
+	  //alert($!obj.display);
+	  #if($!obj.display=="true")
+	    jQuery("#status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg");
+	  #end
+	  #if($!obj.display=="false")
+	    jQuery("#status_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg");
+	  #end
+	});
+ 
+ function saveForm(){
+		var id=jQuery("#id").val();
+		var str=jQuery("#case_content").val();
+		var cityId=jQuery("#groupFloorStoreCityId").val();
+		
+		//var cityId=jQuery("#groupCaseGoodsCityId").val();
+		//alert("cityId:"+cityId);
+		if(jQuery('#display').val()=="true"){
+			jQuery("#display").val("1");
+		}else if(jQuery('#display').val()=="false"||jQuery('#display').val()==''){
+			jQuery("#display").val("0");
+		}		
+		if(id==""&&str==""){
+			alert("请选择商户");
+		}else{
+			jQuery("#groupFloorStores").val(JSON.stringify(selected_stroe));
+			jQuery("#theForm").attr("action","$!webPath/admin/group_floor_save.html?r="+Math.random());
+			jQuery("#theForm").submit();
+		}	 
+ }
+ 
+ function showdialoguri(){
+	 jQuery("#add_group_goods").attr("dialog_uri").val();
+ }
+ 
+</script>
+<body>
+<form action="$!webPath/admin/group_floor_save2.html" method="post" enctype="multipart/form-data" name="theForm" id="theForm">
+  <input name="id" type="hidden" id="id" value="$!obj.id"/>
+  <input name="groupFloorStores" type="hidden" id="groupFloorStores" value=""/>
+  <input name="groupFloorStoreCity" type="hidden" id="groupFloorStoreCityId" value="$!obj.cityId"/>
+  <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/group_floor_add.html" />
+  <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/group_floor_list.html" />
+  <div class="cont">
+    <h1 class="seth">服务楼层管理</h1>
+    <div class="nav_list">
+      <ul>
+        <li><a href="$!webPath/admin/group_floor_list.html"><b>管理</b></a></li>
+        <li><a href="$!webPath/admin/group_floor_add.html" #if(!$!edit) class="this" #end><b>新增</b></a></li>
+        #if($!edit)
+        <li><a href="javascript:void(0);"  class="this" ><b>编辑</b></a></li>
+        #end
+      </ul>
+    </div>
+
+   <div class="edit">
+      <div class="editul setcont" id="base">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>标题</li>
+          <li><span class="webname">
+            <input name="gfName" type="text" id="gfName" value="$!obj.gfName"  />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">排序</li>
+          <li><span class="webname">
+            <input name="gfSequence" type="text" id="gfSequence" value="$!obj.gfSequence" reg="^-?\d+$" tip="只能为整数"/>
+            </span> <span id="nothis"><strong class="q"></strong><strong class="w">楼层序号，序号越小显示越靠前</strong><strong class="c"></strong></span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">服务分类</li>
+          <li><span class="webname">
+             <select name="classId" id="classId">
+ 				  #foreach($serviceClass in $gcs)
+ 				  	#if($!serviceClass.id==$!obj.classId)
+          				<option value="$!serviceClass.id" selected>$!serviceClass.name</option>
+          			#else
+          				<option value="$!serviceClass.id">$!serviceClass.name</option>
+          			#end
+				  #end
+        	</select>
+           </span></li>
+        </ul>        
+        <ul class="set1">
+          <li class="setcont_bg">显示</li>
+          <li> <span class="webSwitch">
+            <input name="display" id="display" type="hidden" value="$!obj.display" />
+            <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="status_img" style="cursor:pointer;" /> </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>楼层内容</li>
+          <li>
+          	<span class="webname">
+            	<input type="hidden" id="case_content" name="caseContent" value="$!obj.caseContent"/>
+            	<!--a class="eidt_li_a" href="javascript:void(0);" id="add_goods" dialog_uri="$!webPath/admin/goods_case_goods.html?id=$!obj.id" dialog_title="橱窗商品" dialog_width="750" dialog_top="150" dialog_height="200" dialog_id="case_goods">添加展示商品</a--> 
+            	<a class="eidt_li_a" href="javascript:showdialoguri();" id="add_group_floor_store" dialog_uri="$!webPath/admin/group_floor_store_list.html?id=$!obj.id" dialog_title="服务首页楼层" dialog_width="750" dialog_top="150" dialog_height="200" dialog_id="group_floor_store">添加展示商户</a>
+            </span>
+            <span id="nothis"><strong class="q"></strong>
+            	<strong class="w" id="goods_count">#if($!count)共$!count件商品#else您还未添加商户#end</strong><strong class="c"></strong>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>    
+    
+  <div class="submit"> <span class="pad120">
+    <input name="" type="button" value="提交" onclick="saveForm()"/>
+    </span> </div>
+</form>
+</body>
+</html>

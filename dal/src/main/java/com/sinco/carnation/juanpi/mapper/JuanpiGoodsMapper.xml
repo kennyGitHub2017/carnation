@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.juanpi.mapper.JuanpiGoodsMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.juanpi.model.JuanpiGoods">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="goods_title" property="goodsTitle" jdbcType="VARCHAR" />
+		<result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+		<result column="goods_cprice" property="goodsCprice" jdbcType="DECIMAL" />
+		<result column="tuan_cprice" property="tuanCprice" jdbcType="DECIMAL" />
+		<result column="goods_price" property="goodsPrice" jdbcType="DECIMAL" />
+		<result column="target_url_pc" property="targetUrlPc" jdbcType="VARCHAR" />
+		<result column="target_url_m" property="targetUrlM" jdbcType="VARCHAR" />
+		<result column="goods_on_shelf" property="goodsOnShelf"
+			jdbcType="TIMESTAMP" />
+		<result column="goods_off_shelf" property="goodsOffShelf"
+			jdbcType="TIMESTAMP" />
+		<result column="free_delivery" property="freeDelivery"
+			jdbcType="INTEGER" />
+		<result column="cate_name" property="cateName" jdbcType="VARCHAR" />
+		<result column="cate_id" property="cateId" jdbcType="BIGINT" />
+		<result column="cate2_name" property="cate2Name" jdbcType="VARCHAR" />
+		<result column="cate2_id" property="cate2Id" jdbcType="BIGINT" />
+		<result column="cate3_name" property="cate3Name" jdbcType="VARCHAR" />
+		<result column="cate3_id" property="cate3Id" jdbcType="BIGINT" />
+		<result column="is_tuangou" property="isTuangou" jdbcType="INTEGER" />
+		<result column="is_show" property="isShow" jdbcType="INTEGER" />
+		<result column="sales" property="sales" jdbcType="BIGINT" />
+		<result column="class_id" property="classId" jdbcType="BIGINT" />
+		<result column="className" property="className" jdbcType="VARCHAR" />
+		<result column="class2Name" property="class2Name" jdbcType="VARCHAR" />
+		<result column="class3Name" property="class3Name" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.juanpi.bo.JuanpiGoodsBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, update_time, delete_status, goods_title, image_url,
+		goods_cprice,
+		tuan_cprice, goods_price, target_url_pc, target_url_m, goods_on_shelf,
+		goods_off_shelf,
+		free_delivery, cate_name, cate_id, cate2_name, cate2_id, cate3_name, cate3_id,
+		is_tuangou,
+		is_show, sales, class_id
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoodsExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from juanpi_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from juanpi_goods
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from juanpi_goods
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteUnsynJuanpiGoods">
+		update juanpi_goods set delete_status=1
+		where update_time &lt; #{lastUpdateTime}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoodsExample">
+		delete from juanpi_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoods"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into juanpi_goods (id, add_time, update_time,
+		delete_status, goods_title,
+		image_url, goods_cprice, tuan_cprice,
+		goods_price, target_url_pc, target_url_m,
+		goods_on_shelf, goods_off_shelf, free_delivery,
+		cate_name, cate_id, cate2_name,
+		cate2_id, cate3_name, cate3_id,
+		is_tuangou, is_show, sales,
+		class_id)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER}, #{goodsTitle,jdbcType=VARCHAR},
+		#{imageUrl,jdbcType=VARCHAR}, #{goodsCprice,jdbcType=DECIMAL}, #{tuanCprice,jdbcType=DECIMAL},
+		#{goodsPrice,jdbcType=DECIMAL}, #{targetUrlPc,jdbcType=VARCHAR},
+		#{targetUrlM,jdbcType=VARCHAR},
+		#{goodsOnShelf,jdbcType=TIMESTAMP}, #{goodsOffShelf,jdbcType=TIMESTAMP},
+		#{freeDelivery,jdbcType=INTEGER},
+		#{cateName,jdbcType=VARCHAR}, #{cateId,jdbcType=BIGINT}, #{cate2Name,jdbcType=VARCHAR},
+		#{cate2Id,jdbcType=BIGINT}, #{cate3Name,jdbcType=VARCHAR},
+		#{cate3Id,jdbcType=BIGINT},
+		#{isTuangou,jdbcType=INTEGER}, #{isShow,jdbcType=INTEGER}, #{sales,jdbcType=BIGINT},
+		#{classId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoods"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into juanpi_goods
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="goodsTitle != null">
+				goods_title,
+			</if>
+			<if test="imageUrl != null">
+				image_url,
+			</if>
+			<if test="goodsCprice != null">
+				goods_cprice,
+			</if>
+			<if test="tuanCprice != null">
+				tuan_cprice,
+			</if>
+			<if test="goodsPrice != null">
+				goods_price,
+			</if>
+			<if test="targetUrlPc != null">
+				target_url_pc,
+			</if>
+			<if test="targetUrlM != null">
+				target_url_m,
+			</if>
+			<if test="goodsOnShelf != null">
+				goods_on_shelf,
+			</if>
+			<if test="goodsOffShelf != null">
+				goods_off_shelf,
+			</if>
+			<if test="freeDelivery != null">
+				free_delivery,
+			</if>
+			<if test="cateName != null">
+				cate_name,
+			</if>
+			<if test="cateId != null">
+				cate_id,
+			</if>
+			<if test="cate2Name != null">
+				cate2_name,
+			</if>
+			<if test="cate2Id != null">
+				cate2_id,
+			</if>
+			<if test="cate3Name != null">
+				cate3_name,
+			</if>
+			<if test="cate3Id != null">
+				cate3_id,
+			</if>
+			<if test="isTuangou != null">
+				is_tuangou,
+			</if>
+			<if test="isShow != null">
+				is_show,
+			</if>
+			<if test="sales != null">
+				sales,
+			</if>
+			<if test="classId != null">
+				class_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="goodsTitle != null">
+				#{goodsTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="imageUrl != null">
+				#{imageUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsCprice != null">
+				#{goodsCprice,jdbcType=DECIMAL},
+			</if>
+			<if test="tuanCprice != null">
+				#{tuanCprice,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsPrice != null">
+				#{goodsPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="targetUrlPc != null">
+				#{targetUrlPc,jdbcType=VARCHAR},
+			</if>
+			<if test="targetUrlM != null">
+				#{targetUrlM,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsOnShelf != null">
+				#{goodsOnShelf,jdbcType=TIMESTAMP},
+			</if>
+			<if test="goodsOffShelf != null">
+				#{goodsOffShelf,jdbcType=TIMESTAMP},
+			</if>
+			<if test="freeDelivery != null">
+				#{freeDelivery,jdbcType=INTEGER},
+			</if>
+			<if test="cateName != null">
+				#{cateName,jdbcType=VARCHAR},
+			</if>
+			<if test="cateId != null">
+				#{cateId,jdbcType=BIGINT},
+			</if>
+			<if test="cate2Name != null">
+				#{cate2Name,jdbcType=VARCHAR},
+			</if>
+			<if test="cate2Id != null">
+				#{cate2Id,jdbcType=BIGINT},
+			</if>
+			<if test="cate3Name != null">
+				#{cate3Name,jdbcType=VARCHAR},
+			</if>
+			<if test="cate3Id != null">
+				#{cate3Id,jdbcType=BIGINT},
+			</if>
+			<if test="isTuangou != null">
+				#{isTuangou,jdbcType=INTEGER},
+			</if>
+			<if test="isShow != null">
+				#{isShow,jdbcType=INTEGER},
+			</if>
+			<if test="sales != null">
+				#{sales,jdbcType=BIGINT},
+			</if>
+			<if test="classId != null">
+				#{classId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoodsExample"
+		resultType="java.lang.Integer">
+		select count(*) from juanpi_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update juanpi_goods
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsTitle != null">
+				goods_title = #{record.goodsTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="record.imageUrl != null">
+				image_url = #{record.imageUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsCprice != null">
+				goods_cprice = #{record.goodsCprice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.tuanCprice != null">
+				tuan_cprice = #{record.tuanCprice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.goodsPrice != null">
+				goods_price = #{record.goodsPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.targetUrlPc != null">
+				target_url_pc = #{record.targetUrlPc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.targetUrlM != null">
+				target_url_m = #{record.targetUrlM,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsOnShelf != null">
+				goods_on_shelf = #{record.goodsOnShelf,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.goodsOffShelf != null">
+				goods_off_shelf = #{record.goodsOffShelf,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.freeDelivery != null">
+				free_delivery = #{record.freeDelivery,jdbcType=INTEGER},
+			</if>
+			<if test="record.cateName != null">
+				cate_name = #{record.cateName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.cateId != null">
+				cate_id = #{record.cateId,jdbcType=BIGINT},
+			</if>
+			<if test="record.cate2Name != null">
+				cate2_name = #{record.cate2Name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.cate2Id != null">
+				cate2_id = #{record.cate2Id,jdbcType=BIGINT},
+			</if>
+			<if test="record.cate3Name != null">
+				cate3_name = #{record.cate3Name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.cate3Id != null">
+				cate3_id = #{record.cate3Id,jdbcType=BIGINT},
+			</if>
+			<if test="record.isTuangou != null">
+				is_tuangou = #{record.isTuangou,jdbcType=INTEGER},
+			</if>
+			<if test="record.isShow != null">
+				is_show = #{record.isShow,jdbcType=INTEGER},
+			</if>
+			<if test="record.sales != null">
+				sales = #{record.sales,jdbcType=BIGINT},
+			</if>
+			<if test="record.classId != null">
+				class_id = #{record.classId,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update juanpi_goods
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		goods_title = #{record.goodsTitle,jdbcType=VARCHAR},
+		image_url = #{record.imageUrl,jdbcType=VARCHAR},
+		goods_cprice = #{record.goodsCprice,jdbcType=DECIMAL},
+		tuan_cprice = #{record.tuanCprice,jdbcType=DECIMAL},
+		goods_price = #{record.goodsPrice,jdbcType=DECIMAL},
+		target_url_pc = #{record.targetUrlPc,jdbcType=VARCHAR},
+		target_url_m = #{record.targetUrlM,jdbcType=VARCHAR},
+		goods_on_shelf = #{record.goodsOnShelf,jdbcType=TIMESTAMP},
+		goods_off_shelf = #{record.goodsOffShelf,jdbcType=TIMESTAMP},
+		free_delivery = #{record.freeDelivery,jdbcType=INTEGER},
+		cate_name = #{record.cateName,jdbcType=VARCHAR},
+		cate_id = #{record.cateId,jdbcType=BIGINT},
+		cate2_name = #{record.cate2Name,jdbcType=VARCHAR},
+		cate2_id = #{record.cate2Id,jdbcType=BIGINT},
+		cate3_name = #{record.cate3Name,jdbcType=VARCHAR},
+		cate3_id = #{record.cate3Id,jdbcType=BIGINT},
+		is_tuangou = #{record.isTuangou,jdbcType=INTEGER},
+		is_show = #{record.isShow,jdbcType=INTEGER},
+		sales = #{record.sales,jdbcType=BIGINT},
+		class_id = #{record.classId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoods">
+		update juanpi_goods
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="goodsTitle != null">
+				goods_title = #{goodsTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="imageUrl != null">
+				image_url = #{imageUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsCprice != null">
+				goods_cprice = #{goodsCprice,jdbcType=DECIMAL},
+			</if>
+			<if test="tuanCprice != null">
+				tuan_cprice = #{tuanCprice,jdbcType=DECIMAL},
+			</if>
+			<if test="goodsPrice != null">
+				goods_price = #{goodsPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="targetUrlPc != null">
+				target_url_pc = #{targetUrlPc,jdbcType=VARCHAR},
+			</if>
+			<if test="targetUrlM != null">
+				target_url_m = #{targetUrlM,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsOnShelf != null">
+				goods_on_shelf = #{goodsOnShelf,jdbcType=TIMESTAMP},
+			</if>
+			<if test="goodsOffShelf != null">
+				goods_off_shelf = #{goodsOffShelf,jdbcType=TIMESTAMP},
+			</if>
+			<if test="freeDelivery != null">
+				free_delivery = #{freeDelivery,jdbcType=INTEGER},
+			</if>
+			<if test="cateName != null">
+				cate_name = #{cateName,jdbcType=VARCHAR},
+			</if>
+			<if test="cateId != null">
+				cate_id = #{cateId,jdbcType=BIGINT},
+			</if>
+			<if test="cate2Name != null">
+				cate2_name = #{cate2Name,jdbcType=VARCHAR},
+			</if>
+			<if test="cate2Id != null">
+				cate2_id = #{cate2Id,jdbcType=BIGINT},
+			</if>
+			<if test="cate3Name != null">
+				cate3_name = #{cate3Name,jdbcType=VARCHAR},
+			</if>
+			<if test="cate3Id != null">
+				cate3_id = #{cate3Id,jdbcType=BIGINT},
+			</if>
+			<if test="isTuangou != null">
+				is_tuangou = #{isTuangou,jdbcType=INTEGER},
+			</if>
+			<if test="isShow != null">
+				is_show = #{isShow,jdbcType=INTEGER},
+			</if>
+			<if test="sales != null">
+				sales = #{sales,jdbcType=BIGINT},
+			</if>
+			<if test="classId != null">
+				class_id = #{classId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.juanpi.model.JuanpiGoods">
+		update juanpi_goods
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		goods_title = #{goodsTitle,jdbcType=VARCHAR},
+		image_url = #{imageUrl,jdbcType=VARCHAR},
+		goods_cprice = #{goodsCprice,jdbcType=DECIMAL},
+		tuan_cprice = #{tuanCprice,jdbcType=DECIMAL},
+		goods_price = #{goodsPrice,jdbcType=DECIMAL},
+		target_url_pc = #{targetUrlPc,jdbcType=VARCHAR},
+		target_url_m = #{targetUrlM,jdbcType=VARCHAR},
+		goods_on_shelf = #{goodsOnShelf,jdbcType=TIMESTAMP},
+		goods_off_shelf = #{goodsOffShelf,jdbcType=TIMESTAMP},
+		free_delivery = #{freeDelivery,jdbcType=INTEGER},
+		cate_name = #{cateName,jdbcType=VARCHAR},
+		cate_id = #{cateId,jdbcType=BIGINT},
+		cate2_name = #{cate2Name,jdbcType=VARCHAR},
+		cate2_id = #{cate2Id,jdbcType=BIGINT},
+		cate3_name = #{cate3Name,jdbcType=VARCHAR},
+		cate3_id = #{cate3Id,jdbcType=BIGINT},
+		is_tuangou = #{isTuangou,jdbcType=INTEGER},
+		is_show = #{isShow,jdbcType=INTEGER},
+		sales = #{sales,jdbcType=BIGINT},
+		class_id = #{classId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="findAllSellingGoods" resultType="Long">
+		SELECT id FROM juanpi_goods WHERE delete_status = 0 AND is_show = 1
+	</select>
+	<update id="upateGoodsSales">
+		update juanpi_goods set sales = sales+#{goodsnumber} where id=#{id}
+	</update>
+
+
+	<select id="findGoodsByVO" parameterType="com.sinco.carnation.juanpi.vo.JuanpiGoodsVO"  resultMap="BOResultMap">
+		SELECT
+		g.*,c.`class_name` AS className,c.`class2_name` AS class2Name,c.`class3_name` AS
+		class3Name,
+		c.class_id,c.class2_id,c.class3_id
+		FROM `juanpi_goods` g,`juanpi_goods_class` c
+		WHERE
+				c.`cate_id` = g.`cate_id`
+		  AND    c.`cate2_id` = g.`cate2_id`
+		  AND   c.`cate3_id` = g.`cate3_id`
+	    	AND c.class_id IS NOT NULL
+	    	AND c.class2_id IS NOT NULL
+	    	AND c.class3_id IS NOT NULL
+		<if test="vo.isTuangou != null ">
+			AND g.is_tuangou = #{vo.isTuangou}
+		</if>
+		<if test="vo.goodsTitle !=null and vo.goodsTitle !=''">
+			AND g.goods_title LIKE CONCAT("%", #{vo.goodsTitle},"%")
+		</if>
+		<if test="vo.isShow != null ">
+			AND g.is_show = #{vo.isShow}
+		</if>
+		<if test="vo.deleteStatus != null">
+			AND
+			<if test="vo.deleteStatus == 1">
+				(g.delete_status = #{vo.deleteStatus}
+
+				OR g.goods_off_shelf <![CDATA[ <= ]]>
+				(SELECT NOW()))
+			</if>
+			<if test="vo.deleteStatus != 1">
+				g.delete_status = #{vo.deleteStatus}
+			</if>
+		</if>
+		<if test="vo.deleteStatus == 0">
+			AND g.goods_off_shelf <![CDATA[ > ]]>
+			(SELECT NOW())
+		</if>
+		<if test="vo.beginTime != '' and vo.beginTime != null">
+			AND g.goods_on_shelf <![CDATA[ >= ]]>
+			#{vo.beginTime}
+		</if>
+		<if test="vo.endTime != '' and vo.endTime != null">
+			AND g.goods_on_shelf <![CDATA[ <= ]]>
+			#{vo.endTime}
+		</if>
+		<!-- <if test="vo.fgcId != null and vo.fgcId != ''"> -->
+		<!-- AND c.class_id = #{vo.fgcId} -->
+		<!-- </if> -->
+		<!-- <if test="vo.sgcId != null and vo.sgcId != ''"> -->
+		<!-- AND c.class2_id = #{vo.sgcId} -->
+		<!-- </if> -->
+		<!-- <if test="vo.tgcId != null and vo.tgcId != ''"> -->
+		<!-- AND c.class3_id = #{vo.tgcId} -->
+		<!-- </if> -->
+		<choose>
+			<when test="vo.tgcId != null and vo.tgcId != ''">
+				AND ((g.cate3_id IN (SELECT cate3_id FROM `juanpi_goods_class` c WHERE
+				c.class3_id = #{vo.tgcId}) AND g.class_Id IS NULL) OR (g.class_id =
+				#{vo.tgcId}))
+			</when>
+			<when test="vo.sgcId != null and vo.sgcId != ''">
+				AND ((g.cate2_id IN (SELECT cate2_id FROM `juanpi_goods_class` c WHERE
+				c.class2_id = #{vo.sgcId}) AND g.class_Id IS NULL)
+				OR g.class_id IN (SELECT id FROM `shop_goods_class` WHERE parent_id =
+				#{vo.sgcId}))
+			</when>
+			<when test="vo.fgcId != null and vo.fgcId != ''">
+				AND ((g.cate_id IN (SELECT cate_id FROM `juanpi_goods_class` c WHERE
+				c.class_id = #{vo.fgcId}) AND g.class_Id IS NULL)
+				OR g.class_id IN (SELECT id FROM shop_goods_class WHERE parent_id IN
+				(SELECT id FROM `shop_goods_class`
+				WHERE parent_id = #{vo.fgcId})))
+			</when>
+			<otherwise></otherwise>
+		</choose>
+		<if test="vo.timeType == 'on' and vo.sortBy =='asc' ">
+			ORDER BY g.goods_on_shelf DESC
+		</if>
+		<if test="vo.timeType == 'on' and vo.sortBy =='desc' ">
+			ORDER BY g.goods_on_shelf ASC
+		</if>
+		<if test="vo.timeType == 'off' and vo.sortBy =='asc' ">
+			ORDER BY g.goods_off_shelf DESC
+		</if>
+		<if test="vo.timeType == 'off' and vo.sortBy =='desc' ">
+			ORDER BY g.goods_off_shelf ASC
+		</if>
+		<if test="vo.timeType == null and vo.sortBy ==null ">
+			ORDER BY g.goods_on_shelf DESC
+		</if>
+	</select>
+
+	<update id="updateIsShow" parameterType="com.sinco.carnation.juanpi.vo.JuanpiGoodsVO">
+		UPDATE `juanpi_goods` SET `is_show` = #{vo.isShow} WHERE id = #{vo.id}
+	</update>
+
+	<update id="updateClass" parameterType="com.sinco.carnation.juanpi.vo.JuanpiGoodsVO">
+		UPDATE `juanpi_goods` SET `class_id` = #{vo.classId} WHERE id =
+		#{vo.id}
+	</update>
+
+	<select id="findClassNameById" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		SELECT cl1.class_name AS className,cl2.class_name AS
+		class2Name,cl3.class_name AS class3Name FROM `juanpi_goods` jg
+		LEFT JOIN `shop_goods_class` cl3 ON cl3.id = jg.`class_id`
+		LEFT JOIN `shop_goods_class` cl2 ON cl2.id = cl3.`parent_id`
+		LEFT JOIN `shop_goods_class` cl1 ON cl1.id = cl2.`parent_id`
+		WHERE jg.cate3_id IN (SELECT cate3_id FROM `juanpi_goods_class` jgc WHERE
+		class3_id = #{cId}) OR class_id = #{cId}
+	</select>
+
+	<select id="selectByRand" resultMap="BOResultMap">
+		SELECT * FROM `juanpi_goods` WHERE is_tuangou = 0 ORDER BY RAND()
+		<if test="limitStart != null">
+			limit #{limitStart}, #{limitEnd}
+		</if>
+	</select>
+	
+	<select id="findAllIds" resultType="java.lang.Long">
+		SELECT id FROM `juanpi_goods` limit #{pageNo},#{pageSize}
+	</select>
+</mapper>

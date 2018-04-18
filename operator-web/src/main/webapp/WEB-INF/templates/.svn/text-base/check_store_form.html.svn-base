@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+</head>
+<body>
+
+<div class="main">
+    <ul class="m-menu">
+        <li><a href="/operator/operator_check_shop_list.htm">商户待审核列表</a> </li>
+        <li><a href="javascript:void(0);" class="active">审核商户</a> </li>
+    </ul>
+
+    <form class="form-control" id="checkForm" action="/operator/check_store_save.htm">
+		<input type="hidden" name="storeId" value="$!{storeId}"/>
+        <ul>
+            <li>
+                <span class="txt-label">审核结果：</span>
+                <input type="radio" name="checkResult" class="J-result" value="1"/><label>审核通过</label>&nbsp; &nbsp; &nbsp; &nbsp; 
+                <input type="radio" name="checkResult" class="J-result" value="0" checked="checked"/><label>审核不通过</label>
+            </li>
+            <li id="resultDesc">
+                <span class="txt-label">审核结果描述：</span>
+                <textarea cols="60" rows="5" name="checkDescribe"></textarea>
+            </li>
+            #if($!store.isEepay)
+            <li class="posCode" style="display:none;">
+                <span class="txt-label">商户店名：</span>${store.storeName}
+            </li>
+            <li class="posCode" style="display:none;">
+                <span class="txt-label">机具编码：</span>
+                <input name="implementNumber" id="implementNumber" maxlength="100"/>
+            </li>
+            <li class="posCode" style="display:none;">
+                <span class="txt-label">机具类型：</span>
+                <select name="posType">
+                	<option value="4">移联商通</option>
+                	<option value="5">超级刷</option>
+                </select>
+            </li>
+            <li class="posCode" style="display:none;">
+                <span class="txt-label">联行行号：</span>
+                <input name="lineNumber" maxlength="100"/>
+            </li>
+            <li class="posCode" style="display:none;">
+                <span class="txt-label">开户行名称：</span>${store.bankName}
+            </li>
+            #end
+            <li class="btns">
+                <input type="submit" value="确定" class="btn btn-blue" />
+            </li>
+        </ul>
+
+    </form>
+</div>
+
+<script src="/resources/js/jquery-1.8.2.js"></script>
+<script src="/resources/js/jquery.validate.min.js"></script>
+<script src="/resources/js/jquery.blockUI.dialog.js"></script>
+<script src="/resources/js/common.js"></script>
+<script>
+    jQuery("#checkForm").validate({
+        rules:{
+        	implementNumber:{required :true},
+        	posType:{required :true},
+        	lineNumber:{required :true},
+            checkDescribe:{required :true}
+        },
+        messages:{
+        	implementNumber:{required:"机具编码不能为空！"},
+        	posType:{required:"请选择机具类型！"},
+        	lineNumber:{required:"请填写联行行号！"},
+            checkDescribe:{required:"审核不通过必须填写原因！"}
+        }
+    });
+    
+    jQuery(".J-result").click(function(){
+    	var result = jQuery(this).val();
+    	if(result == 1)
+    	{
+    		jQuery("#resultDesc").hide();
+    		#if($!store.isEepay)
+    			jQuery(".posCode").show();	
+    		#end
+    	}
+    	else
+    	{
+    		jQuery("#resultDesc").show();
+    		#if($!store.isEepay)
+    			jQuery(".posCode").hide();	
+    		#end
+    	}
+    });
+
+</script>
+</body>
+</html>

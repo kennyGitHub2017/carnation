@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.ConsultMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.Consult">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="consult_email" property="consultEmail"
+			jdbcType="VARCHAR" />
+		<result column="consult_type" property="consultType" jdbcType="VARCHAR" />
+		<result column="consult_user_id" property="consultUserId"
+			jdbcType="BIGINT" />
+		<result column="consult_user_name" property="consultUserName"
+			jdbcType="VARCHAR" />
+		<result column="goods_id" property="goodsId" jdbcType="BIGINT" />
+		<result column="reply" property="reply" jdbcType="BIT" />
+		<result column="reply_time" property="replyTime" jdbcType="TIMESTAMP" />
+		<result column="reply_user_id" property="replyUserId" jdbcType="BIGINT" />
+		<result column="reply_user_name" property="replyUserName"
+			jdbcType="VARCHAR" />
+		<result column="satisfy" property="satisfy" jdbcType="INTEGER" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="unsatisfy" property="unsatisfy" jdbcType="INTEGER" />
+		<result column="whether_self" property="whetherSelf" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.ConsultBO"
+		extends="ResultMapWithBLOBs" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.Consult"
+		extends="BaseResultMap">
+		<result column="consult_content" property="consultContent"
+			jdbcType="LONGVARCHAR" />
+		<result column="consult_reply" property="consultReply"
+			jdbcType="LONGVARCHAR" />
+		<result column="goods_info" property="goodsInfo" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<resultMap id="BOResultList" type="com.sinco.carnation.shop.bo.ConsultBO"
+		extends="ResultMapWithBLOBs">
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, consult_email, consult_type,
+		consult_user_id, consult_user_name,
+		goods_id, reply, reply_time, reply_user_id, reply_user_name, satisfy, store_id,
+		store_name,
+		unsatisfy, whether_self
+	</sql>
+	<sql id="Blob_Column_List">
+		consult_content, consult_reply, goods_info
+	</sql>
+
+	<select id="queryConsultById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,consult_content, consult_reply, goods_info
+		from shop_consult where id=#{id}
+	</select>
+
+	<delete id="deleteConsultById">
+		delete from shop_consult where id in
+		<foreach collection="ids" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<select id="queryConsultList" resultMap="BOResultList">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM shop_consult where delete_Status=0
+		<if test="consultUserName != null and consultUserName != ''">
+			and consult_user_name like
+			CONCAT("%",#{consultUserName,jdbcType=VARCHAR},"%")
+		</if>
+		order by reply_time desc
+	</select>
+
+	<select id="queryConsultSelfList" resultMap="BOResultList">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM shop_consult where delete_Status=0 and whether_self=1
+		<if test="consultUserName != null and consultUserName != ''">
+			and consult_user_name like
+			CONCAT("%",#{consultUserName,jdbcType=VARCHAR},"%")
+		</if>
+		<if test="reply == false or reply == true">
+			and reply=#{reply,jdbcType=BIT}
+		</if>
+		order by id desc
+	</select>
+	<select id="selectConsultListByVO" resultMap="BOResultList">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM shop_consult where delete_Status=0
+		<if test="vo.goodsId != null">
+			and goods_id = #{vo.goodsId}
+		</if>
+		<if test="vo.consultType != null and vo.consultType != ''">
+			and consult_type = #{vo.consultType}
+		</if>
+		<if test="vo.consultUserId != null">
+			and consult_user_id = #{vo.consultUserId}
+		</if>
+		<if test="vo.reply != null">
+			and reply = #{vo.reply}
+		</if>
+		order by add_time desc
+	</select>
+	<select id="findListByVO" resultMap="BOResultList">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM shop_consult where 1=1
+		<if test="vo.storeId != null and vo.storeId != ''">
+			and store_id = #{vo.storeId,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.reply == false or vo.reply == true">
+			and reply= #{vo.reply,jdbcType=BIT}
+		</if>
+		<if test="vo.consultType !=null and vo.consultType!=''">
+			and consult_type= #{vo.consultType,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.consultUserName!=null and vo.consultUserName!=''">
+			and consult_user_name= #{vo.consultUserName,jdbcType=VARCHAR}
+		</if>
+		order by add_time desc
+	</select>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.shop.model.ConsultExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_consult
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.shop.model.ConsultExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_consult
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_consult
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_consult
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.ConsultExample">
+		delete from shop_consult
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.Consult"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_consult (id, add_Time, delete_Status,
+		consult_email, consult_type, consult_user_id,
+		consult_user_name, goods_id, reply,
+		reply_time, reply_user_id, reply_user_name,
+		satisfy, store_id, store_name,
+		unsatisfy, whether_self, consult_content,
+		consult_reply, goods_info)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{consultEmail,jdbcType=VARCHAR}, #{consultType,jdbcType=VARCHAR}, #{consultUserId,jdbcType=BIGINT},
+		#{consultUserName,jdbcType=VARCHAR}, #{goodsId,jdbcType=BIGINT},
+		#{reply,jdbcType=BIT},
+		#{replyTime,jdbcType=TIMESTAMP}, #{replyUserId,jdbcType=BIGINT}, #{replyUserName,jdbcType=VARCHAR},
+		#{satisfy,jdbcType=INTEGER}, #{storeId,jdbcType=BIGINT},
+		#{storeName,jdbcType=VARCHAR},
+		#{unsatisfy,jdbcType=INTEGER}, #{whetherSelf,jdbcType=INTEGER},
+		#{consultContent,jdbcType=LONGVARCHAR},
+		#{consultReply,jdbcType=LONGVARCHAR},
+		#{goodsInfo,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.Consult"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_consult
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="consultEmail != null">
+				consult_email,
+			</if>
+			<if test="consultType != null">
+				consult_type,
+			</if>
+			<if test="consultUserId != null">
+				consult_user_id,
+			</if>
+			<if test="consultUserName != null">
+				consult_user_name,
+			</if>
+			<if test="goodsId != null">
+				goods_id,
+			</if>
+			<if test="reply != null">
+				reply,
+			</if>
+			<if test="replyTime != null">
+				reply_time,
+			</if>
+			<if test="replyUserId != null">
+				reply_user_id,
+			</if>
+			<if test="replyUserName != null">
+				reply_user_name,
+			</if>
+			<if test="satisfy != null">
+				satisfy,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="storeName != null">
+				store_name,
+			</if>
+			<if test="unsatisfy != null">
+				unsatisfy,
+			</if>
+			<if test="whetherSelf != null">
+				whether_self,
+			</if>
+			<if test="consultContent != null">
+				consult_content,
+			</if>
+			<if test="consultReply != null">
+				consult_reply,
+			</if>
+			<if test="goodsInfo != null">
+				goods_info,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="consultEmail != null">
+				#{consultEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="consultType != null">
+				#{consultType,jdbcType=VARCHAR},
+			</if>
+			<if test="consultUserId != null">
+				#{consultUserId,jdbcType=BIGINT},
+			</if>
+			<if test="consultUserName != null">
+				#{consultUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsId != null">
+				#{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="reply != null">
+				#{reply,jdbcType=BIT},
+			</if>
+			<if test="replyTime != null">
+				#{replyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="replyUserId != null">
+				#{replyUserId,jdbcType=BIGINT},
+			</if>
+			<if test="replyUserName != null">
+				#{replyUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="satisfy != null">
+				#{satisfy,jdbcType=INTEGER},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="storeName != null">
+				#{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="unsatisfy != null">
+				#{unsatisfy,jdbcType=INTEGER},
+			</if>
+			<if test="whetherSelf != null">
+				#{whetherSelf,jdbcType=INTEGER},
+			</if>
+			<if test="consultContent != null">
+				#{consultContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="consultReply != null">
+				#{consultReply,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsInfo != null">
+				#{goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.ConsultExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_consult
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_consult
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.consultEmail != null">
+				consult_email = #{record.consultEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="record.consultType != null">
+				consult_type = #{record.consultType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.consultUserId != null">
+				consult_user_id = #{record.consultUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.consultUserName != null">
+				consult_user_name = #{record.consultUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsId != null">
+				goods_id = #{record.goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="record.reply != null">
+				reply = #{record.reply,jdbcType=BIT},
+			</if>
+			<if test="record.replyTime != null">
+				reply_time = #{record.replyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.replyUserId != null">
+				reply_user_id = #{record.replyUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.replyUserName != null">
+				reply_user_name = #{record.replyUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.satisfy != null">
+				satisfy = #{record.satisfy,jdbcType=INTEGER},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.storeName != null">
+				store_name = #{record.storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.unsatisfy != null">
+				unsatisfy = #{record.unsatisfy,jdbcType=INTEGER},
+			</if>
+			<if test="record.whetherSelf != null">
+				whether_self = #{record.whetherSelf,jdbcType=INTEGER},
+			</if>
+			<if test="record.consultContent != null">
+				consult_content = #{record.consultContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.consultReply != null">
+				consult_reply = #{record.consultReply,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsInfo != null">
+				goods_info = #{record.goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_consult
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=BIT},
+		consult_email = #{record.consultEmail,jdbcType=VARCHAR},
+		consult_type = #{record.consultType,jdbcType=VARCHAR},
+		consult_user_id = #{record.consultUserId,jdbcType=BIGINT},
+		consult_user_name = #{record.consultUserName,jdbcType=VARCHAR},
+		goods_id = #{record.goodsId,jdbcType=BIGINT},
+		reply = #{record.reply,jdbcType=BIT},
+		reply_time = #{record.replyTime,jdbcType=TIMESTAMP},
+		reply_user_id = #{record.replyUserId,jdbcType=BIGINT},
+		reply_user_name = #{record.replyUserName,jdbcType=VARCHAR},
+		satisfy = #{record.satisfy,jdbcType=INTEGER},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		store_name = #{record.storeName,jdbcType=VARCHAR},
+		unsatisfy = #{record.unsatisfy,jdbcType=INTEGER},
+		whether_self = #{record.whetherSelf,jdbcType=INTEGER},
+		consult_content = #{record.consultContent,jdbcType=LONGVARCHAR},
+		consult_reply = #{record.consultReply,jdbcType=LONGVARCHAR},
+		goods_info = #{record.goodsInfo,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_consult
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=BIT},
+		consult_email = #{record.consultEmail,jdbcType=VARCHAR},
+		consult_type = #{record.consultType,jdbcType=VARCHAR},
+		consult_user_id = #{record.consultUserId,jdbcType=BIGINT},
+		consult_user_name = #{record.consultUserName,jdbcType=VARCHAR},
+		goods_id = #{record.goodsId,jdbcType=BIGINT},
+		reply = #{record.reply,jdbcType=BIT},
+		reply_time = #{record.replyTime,jdbcType=TIMESTAMP},
+		reply_user_id = #{record.replyUserId,jdbcType=BIGINT},
+		reply_user_name = #{record.replyUserName,jdbcType=VARCHAR},
+		satisfy = #{record.satisfy,jdbcType=INTEGER},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		store_name = #{record.storeName,jdbcType=VARCHAR},
+		unsatisfy = #{record.unsatisfy,jdbcType=INTEGER},
+		whether_self = #{record.whetherSelf,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.Consult">
+		update shop_consult
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="consultEmail != null">
+				consult_email = #{consultEmail,jdbcType=VARCHAR},
+			</if>
+			<if test="consultType != null">
+				consult_type = #{consultType,jdbcType=VARCHAR},
+			</if>
+			<if test="consultUserId != null">
+				consult_user_id = #{consultUserId,jdbcType=BIGINT},
+			</if>
+			<if test="consultUserName != null">
+				consult_user_name = #{consultUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsId != null">
+				goods_id = #{goodsId,jdbcType=BIGINT},
+			</if>
+			<if test="reply != null">
+				reply = #{reply,jdbcType=BIT},
+			</if>
+			<if test="replyTime != null">
+				reply_time = #{replyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="replyUserId != null">
+				reply_user_id = #{replyUserId,jdbcType=BIGINT},
+			</if>
+			<if test="replyUserName != null">
+				reply_user_name = #{replyUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="satisfy != null">
+				satisfy = #{satisfy,jdbcType=INTEGER},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="storeName != null">
+				store_name = #{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="unsatisfy != null">
+				unsatisfy = #{unsatisfy,jdbcType=INTEGER},
+			</if>
+			<if test="whetherSelf != null">
+				whether_self = #{whetherSelf,jdbcType=INTEGER},
+			</if>
+			<if test="consultContent != null">
+				consult_content = #{consultContent,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="consultReply != null">
+				consult_reply = #{consultReply,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsInfo != null">
+				goods_info = #{goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.Consult">
+		update shop_consult
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=BIT},
+		consult_email = #{consultEmail,jdbcType=VARCHAR},
+		consult_type = #{consultType,jdbcType=VARCHAR},
+		consult_user_id = #{consultUserId,jdbcType=BIGINT},
+		consult_user_name = #{consultUserName,jdbcType=VARCHAR},
+		goods_id = #{goodsId,jdbcType=BIGINT},
+		reply = #{reply,jdbcType=BIT},
+		reply_time = #{replyTime,jdbcType=TIMESTAMP},
+		reply_user_id = #{replyUserId,jdbcType=BIGINT},
+		reply_user_name = #{replyUserName,jdbcType=VARCHAR},
+		satisfy = #{satisfy,jdbcType=INTEGER},
+		store_id = #{storeId,jdbcType=BIGINT},
+		store_name = #{storeName,jdbcType=VARCHAR},
+		unsatisfy = #{unsatisfy,jdbcType=INTEGER},
+		whether_self = #{whetherSelf,jdbcType=INTEGER},
+		consult_content = #{consultContent,jdbcType=LONGVARCHAR},
+		consult_reply = #{consultReply,jdbcType=LONGVARCHAR},
+		goods_info = #{goodsInfo,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.Consult">
+		update shop_consult
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=BIT},
+		consult_email = #{consultEmail,jdbcType=VARCHAR},
+		consult_type = #{consultType,jdbcType=VARCHAR},
+		consult_user_id = #{consultUserId,jdbcType=BIGINT},
+		consult_user_name = #{consultUserName,jdbcType=VARCHAR},
+		goods_id = #{goodsId,jdbcType=BIGINT},
+		reply = #{reply,jdbcType=BIT},
+		reply_time = #{replyTime,jdbcType=TIMESTAMP},
+		reply_user_id = #{replyUserId,jdbcType=BIGINT},
+		reply_user_name = #{replyUserName,jdbcType=VARCHAR},
+		satisfy = #{satisfy,jdbcType=INTEGER},
+		store_id = #{storeId,jdbcType=BIGINT},
+		store_name = #{storeName,jdbcType=VARCHAR},
+		unsatisfy = #{unsatisfy,jdbcType=INTEGER},
+		whether_self = #{whetherSelf,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

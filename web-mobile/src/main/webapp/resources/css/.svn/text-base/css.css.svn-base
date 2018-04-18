@@ -1,0 +1,302 @@
+﻿html,body{overflow: hidden;height:100%;position:relative}
+
+
+.QrcodePayContainer{width: 100%;max-width: 640px;margin: 0 auto;background: #f5f5f5;color: #333}
+.QrcodePayContainer .Qrcode{display: table;width: 100%;text-align: center;position: relative}
+.QrcodePayContainer .Qrcode:after{content: "支付方式";font-size: 14px;color: #ccc;position: absolute;left: 10px;bottom: 5px}
+.QrcodePayContainer .Qrcode .content{display: table-cell;vertical-align: middle}
+.QrcodePayContainer .Qrcode .content .title{font-size: 0.32rem}
+.QrcodePayContainer .Qrcode .content .money{font-size: 0.5rem;font-weight: bold}
+.QrcodePayContainer .Qrcode .content .QrcodeTab div{display: none}
+.QrcodePayContainer .Qrcode .content .QrcodeTab div:first-child{display: block}
+.QrcodeTab div{width: 70%;margin: 0 auto;position:relative}
+.QrcodeTab div img{width: 100%}
+.QrcodeTab .qrcode_icon{position: absolute;width: 1rem;top: 50%;left: 50%;margin: -0.5rem 0 0 -0.5rem;}
+
+.payType .payIcon{width: 100%;background:#fff;padding: 0.2rem 0;}
+.payType .payIcon ul{width: 70%;margin: 0 auto;overflow: hidden}
+.payType .payIcon ul li{float: left;width: 22%;margin-left: 17%}
+.payType .payIcon ul li:first-child{margin-left: 0}
+.payType .payIcon ul li a{display: block;opacity: 0.1}
+.payType .payIcon ul li a.curr{opacity: 1}
+.payType .payIcon ul li a img{width: 100%}
+
+.payType .setMoney{display: table;width: 100%}
+.payType .setMoney span{display: table-cell;vertical-align: middle}
+.payType .setMoney .btn_setMoney{display: block;height: 40px;width: 96%;margin: 0 auto;border-radius: 2px;background: #00A249;font-size: 16px;color: #fff;line-height: 40px;text-align: center}
+
+.setMoneyContainer{position: absolute;left: 0;top: 0;width: 100%;max-width: 640px;background: #f5f5f5}
+
+input, textarea {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+
+input, textarea, select {
+    font-size: 1em;
+    display: inline-block;
+    padding: 4px;
+    color: #555555;
+    vertical-align: middle;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    margin: 3px 0;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input:focus,
+textarea:focus {
+    border-color: rgba(82, 168, 236, 0.8);
+    outline: 0;
+    outline: thin dotted \9;    /* IE6-9 */
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+}
+
+
+input[type="file"]:focus,
+input[type="radio"]:focus,
+input[type="checkbox"]:focus,
+select:focus {
+    outline: thin dotted #333;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+    box-shadow: none;
+}
+a:hover {
+    text-decoration: none;
+}
+input[type="image"],
+input[type="checkbox"],
+input[type="radio"] {
+    padding: 0;
+    margin: 3px 0;
+    *margin-top: 0;   /* IE7 */
+    line-height: normal;
+    cursor: pointer;
+    background-color: transparent;
+    border: 0 \9;     /* IE9- */
+    border-radius: 0;
+}
+
+
+input[type="button"],
+input[type="submit"],
+.btn {
+    display: inline-block;
+    *display: inline;
+    padding: 4px 10px;
+    font-size: 1em;
+    color: #333333;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    cursor: pointer;
+    background-color: #f5f5f5;
+    *background-color: #e6e6e6;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+    background-image: linear-gradient(top, #ffffff, #e6e6e6);
+    background-repeat: repeat-x;
+    border: 1px solid #cccccc;
+    *border: 0;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+    border-bottom-color: #b3b3b3;
+    border-radius: 4px;
+    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+    filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+    *zoom: 1;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.setMoneyContainer div{height:1.2rem;margin-top: 5px}
+.setMoneyContainer div:first-child{margin-top:45px }
+.setMoney_input{display: block;width: 90%;margin: 0 auto;height: 0.8rem;line-height: 0.8rem;color: #696969;font-size: 16px}
+.setMoneyContainer .error{color: red;font-size: 12px;font-style: oblique;margin-left: 5%;display: none}
+.setMoneyContainer .btn_setMoney_ok{display: block;height: 40px;width: 90%;margin: 0 auto;margin-top: 25px;border-radius: 2px;background: #00A249;font-size: 16px;color: #fff;line-height: 40px;text-align: center}
+
+.container{width: 100%;height:100%;max-width: 640px;margin: 0 auto;background: #f7f7f7}
+.merchantHomeContainer{width: 100%;height:100%;max-width: 640px;margin: 0 auto;background: #f5f5f5;overflow: hidden}
+.shanghuName{width:100%;font-size: 0.4rem;font-weight: bold;height: 1.2rem;overflow: hidden}
+.shanghuName div{height: 0.5rem;line-height: 0.5rem;margin-top: 10px;text-align: center}
+.shanghuName div img{width: 0.5rem;height: 0.5rem;display: inline-block;vertical-align: top}
+.showMoneyValue{height: 1.2rem;line-height: 1.2rem;text-align: center;background: #fff}
+.showMoneyValue .title{font-size: 0.35rem;line-height: 0.4rem;float: left;color: #dacfcc;margin-top: 0.2rem;padding-left: 0.25rem;text-align: left}
+.showMoneyValue .value{font-size: 0.5rem;font-weight: bold;color: #000}
+.showMoneyValue .icon{width: 0.6rem;height: 0.6rem;float: right;margin-top:0.3rem;margin-right: 0.25rem }
+.showMoneyValue .icon img{width: 100%;height: 100%;vertical-align: top}
+.rmb{color: #333;font-weight: bold}
+
+.provid{text-align: center;color:#bbb;height: 0.5rem;line-height: 0.5rem;font-size: 12px}
+.provid .t1{margin-left: 2px;}
+.provid .t2{font-size: 10px;position: relative;top: -0.2em;margin-right: 2px}
+
+.container .confirmPay{display: block;height: 40px;width: 95%;margin: 0 auto;margin-top: 25px;border-radius: 2px;background: #00A249;font-size: 16px;color: #fff;line-height: 40px;text-align: center}
+
+.vip_login_container{position: absolute;left: 0;top: 0;width: 100%;max-width: 640px;z-index: 9999999;}
+.model{width: 100%; height: 100%; background-color: #000; opacity: 0.6; filter: alpha(opacity=60);display: none;z-index: 999999;position: absolute;left: 0;top: 0;}
+
+.vip_login_container .loginBox{position: absolute;width: 5.4rem;height: 4.2rem;left: 0.5rem;top: 1rem;background: #fff;border-radius: 5px;display: none}
+.vip_login_container .loginBox .title{font-size: 0.35rem;text-align: center;height: 0.8rem;line-height: 0.9rem;color: #000;border-bottom: solid 1px #ccc;font-weight: bold;position: relative}
+.vip_login_container .loginBox .title .close{position: absolute;left: 0.2rem;top: 0;color: #848484;font-size: 24px;height: 0.8rem;line-height: 0.8rem;width:0.8rem}
+.vip_login_container .loginBox div.input_holder{height: 1rem}
+.vip_login_container .loginBox div:nth-child(2){margin-top: 0.3rem}
+.vip_login_container .loginBox .input_holder input{width: 90%;display: block;margin: 0 auto;height:0.7rem;font-size:16px}
+.vip_login_container .loginBox .input_holder .tips{color: red;font-size: 12px;font-style: oblique;margin-left: 5%;display: none}
+.vip_login_container .loginBox .btn_login{display: block;height: 40px;width: 95%;margin: 0 auto;margin-top: 5px;border-radius: 2px;background: #00A249;font-size: 16px;color: #fff;line-height: 40px;text-align: center}
+
+
+.vip_login_container .pswBox{position: absolute;width: 5.4rem;height: 3.2rem;left: 0.5rem;top: 1rem;background: #fff;border-radius: 5px;display: none}
+.vip_login_container .pswBox .title{font-size: 0.35rem;text-align: center;height: 0.8rem;line-height: 0.9rem;color: #000;border-bottom: solid 1px #ccc;font-weight: bold;position: relative}
+.vip_login_container .pswBox .title .close{position: absolute;left: 0.2rem;top: 0.2rem;color: #d0d0d0;font-size: 0.3rem;height: 0.3rem;line-height: 0.3rem}
+.pswBox .psw-rmb{text-align: center;color: #333;font-weight: bold;font-size: 0.5rem;display: block;margin-top: 0.3rem}
+.pswBox .pswPoint{float:left;margin: 0.3rem auto 0 0.3rem;border: solid 1px #d0d0d0}
+.pswBox .pswPoint ul li{float: left;width:0.8rem;height: 0.6rem;line-height: 0.6rem;text-align: center;font-weight: bold;font-size: 0.6rem;border-right:solid 1px #E0E0E0}
+.pswBox .pswPoint ul li:nth-child(6){border-right: none}
+
+.vip_login_container .pswErrorBox{position: absolute;width: 5.4rem;height: 2rem;left: 0.5rem;top: 1.5rem;background: #fff;border-radius: 5px;display: none}
+.vip_login_container .pswErrorBox .title{font-size: 0.35rem;text-align: center;height: 1.2rem;line-height: 1.4rem;color: #000;border-bottom: solid 1px #ccc;font-weight: bold}
+.vip_login_container .pswErrorBox .aContainer{width: 50%;display: inline-block;text-align: center;float: left;margin-top: 0.2rem}
+.vip_login_container .pswErrorBox .aContainer a{font-size: 0.3rem}
+
+
+.merchantHomeContainer .title{height: 0.5rem;line-height: 0.5rem;margin-top:0.5rem;text-align: center;width:100%;font-size: 0.5rem;font-weight: bold;height: 1.2rem}
+.merchantHomeContainer .title img{width: 0.5rem;height: 0.5rem;display: inline-block;vertical-align: top}
+.merchantHomeContainer .link_icon{width: 5rem;margin: 0 auto;}
+.merchantHomeContainer .link_icon ul li{width: 1.45rem;float: left;background: #fff;margin-top: 10px;padding: 0.4rem 0.5rem 0.2rem 0.5rem;border-radius: 8px;text-align: center}
+.merchantHomeContainer .link_icon ul li:nth-child(2n){margin-left: 0.1rem;float: right}
+.merchantHomeContainer .link_icon ul li a div{color: #000;font-size: 0.28rem}
+
+.merchantHomeContainer .provid{margin-top: 0.25rem}
+
+.smalltips {
+            background-color: #4f4e4b;
+            opacity: 0;
+            filter: alpha(opacity=00);
+            position:fixed;
+            left:50%;
+            bottom:0px;
+            color:#fff;
+            padding:10px 20px;
+            border-radius:4px;
+            font-size:14px;
+            
+        }
+       .smalltips .content{display:inline-block;margin:0 auto}
+       
+.paying{position: fixed;color: #fff;width: 3rem;top:1rem;left:1.7rem;;display:none;z-index:999999999999999}
+        .paying .bg{width: 3rem;height: 3rem;border-radius: 10%;background: #000;opacity: 0.5;
+            filter: alpha(opacity=50)}
+        .paying .des{position: absolute;width: 3rem;height: 3rem;line-height: 3rem;text-align: center;left: 0;top: 0;font-size: 0.4rem}
+        .paying .cirContainer{position: absolute;bottom: 0.7rem;overflow: hidden;z-index: 2;width: 100%;text-align: center}
+        .paying .cirContainer .cir{display: inline-block;width: 0.2rem;height: 0.2rem;border-radius: 50%;background: #fff;opacity: 0.5;margin-left: 8px;transform-style: preserve-3d;-webkit-transform-style: preserve-3d;}
+        .paying .cirContainer .fir{margin-left: 0}
+        .paying .cirContainer .cir:nth-child(0) {
+            -webkit-animation: scale 0.75s 0s infinite cubic-bezier(.2, .68, .18, 1.08);
+            animation: scale 0.75s 0s infinite cubic-bezier(.2, .68, .18, 1.08); }
+        .paying .cirContainer .cir:nth-child(1) {
+            -webkit-animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08);
+            animation: scale 0.75s 0.12s infinite cubic-bezier(.2, .68, .18, 1.08); }
+        .paying .cirContainer .cir:nth-child(2) {
+            -webkit-animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08);
+            animation: scale 0.75s 0.24s infinite cubic-bezier(.2, .68, .18, 1.08); }
+        .paying .cirContainer .cir:nth-child(3) {
+            -webkit-animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
+            animation: scale 0.75s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08); }
+        @-webkit-keyframes scale {
+            0% {
+                -webkit-transform: scale(1) translateZ(0);
+                transform: scale(1) translateZ(0);
+                opacity: 1; }
+
+            45% {
+                -webkit-transform: scale(0.1) translateZ(0);
+                transform: scale(0.1);
+                opacity: 0.5; }
+
+            80% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                opacity: 1; } }
+        @keyframes scale {
+            0% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                opacity: 1; }
+
+            45% {
+                -webkit-transform: scale(0.1);
+                transform: scale(0.1);
+                opacity: 0.5; }
+
+            80% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+                opacity: 1; } } 
+
+
+/*向商家付款*/
+.merchant_name{background-color:#f7f7f7;width:100%;height:1.28rem;line-height: 1.28rem;color: #565656;text-indent: 1.1rem;font-size: 16px;background-image:url(../img/shop_icon@2x.png);
+background-repeat: no-repeat;background-size: 0.4rem 0.38rem;background-position: 0.42rem center;    }
+.amountMoney{width: 100%;height: 1.12rem;line-height: 1.12rem;font-size: 16px;color: #3e3e3e;background: #FFFFFF;overflow: hidden;}
+.amountMoney .words{margin-left: 0.42rem;float: left;height: 1.12rem;line-height: 1.12rem;width: 1.1rem;}
+.amountMoney .fn-rmb{color: #9c9c9c;float: left;height: 1.12rem;line-height: 1.12rem;}
+.amountMoney #addmount{color: #3E3E3E;font-size: 28px;font-weight: bold;}
+.empty{background:#f7f7f7;width:100%;height:10px;}
+.provideText{padding-top: 0.32rem;font-size:12px;color:#cccccc;letter-spacing:0px;text-align:center;background: #f7f7f7;}
+.pagecontainer{background: #ffffff;height: 100%;}
+.amountDiv{overflow: hidden;
+		    width: 4rem;
+		    float: left;
+		    text-align: center;
+		    font-size: 0;
+		    position:relative;
+}
+.pointer{color: gray;font-size: 28px;position: relative;top: -2px;
+	-webkit-animation: twinkling 1s steps(1,start) infinite;
+	animation: twinkling 1s steps(1,start) infinite; 
+}
+@-webkit-keyframes twinkling{
+	0%{opacity: 0}
+	50%{opacity: 0}
+	100%{opacity: 1}
+}
+@keyframes twinkling{
+	0%{opacity: 0}
+	50%{opacity: 0}
+	100%{opacity: 1}
+}
+
+
+.qrcode{width: 43%;display: block;margin: 0 auto;margin-top: 30px;}
+.qrtext{text-align: center;font-size: 14px;color: #DBDBDB;margin-top: 10px;margin-bottom: 9px;}
+.qrtext img{width: 14px;height: 14px;vertical-align: middle;margin-right: 5px;}
+.download_app_text{font-size:14px;color:#959494;letter-spacing:0px;line-height:19px;text-align:center;}
+
+
+.c_wx{background: #18c317;}
+.c_alipay{background: #01a3e4;}
+
+.amountDiv label{position: absolute;left: 0;top: 0;font-size: 14px;color: #C9C9C9;width: 100%;text-align: center;}	
+.discount{font-size:14px;color:#3e3e3e;background: #FFFFFF;}
+.discount>div{height: 50px;line-height: 50px;padding: 0 20px;overflow: hidden;}
+.fl{float: left;}
+.tr{text-align: right;display: block;}
+.discount>div:first-child{border-bottom: solid 1px #F7F7F7;}		   
+.color_green{color: #ff5c44;font-size: 18px;}
+.mright5{margin-right: 5px;}
+
+
+/*dpr为3的屏*/
+html[data-dpr='3'] .merchant_name{background-image:url(../img/merchant_icon@3x.png)}
+
+
+
+
+
+
+
+

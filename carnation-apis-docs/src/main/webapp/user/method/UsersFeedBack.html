@@ -1,0 +1,739 @@
+
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>API详情</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<link rel="stylesheet" href="/static/css/method/base-min.css" />
+<link rel="stylesheet" href="/static/css/method/common.css" />
+<link rel="stylesheet" href="/static/css/method/error.css" />
+
+<script type="text/javascript" src = "/static/js/method/kissy.js"></script>
+<script type="text/javascript" src = "/static/js/method/judge.js"> </script>
+<script type="text/javascript" src="/static/js/method/grade.js"></script>
+
+<link rel="stylesheet" href="/static/css/method/open-base.css" />
+
+<script type="text/javascript" src="/static/js/method/yahoo-dom-event.js"></script>	
+<script type="text/javascript" src="/static/js/method/doc.js"></script>
+<script type="text/javascript" src="/static/js/method/searchsuggest.js"></script>
+
+
+<script type="text/javascript" src="/static/js/method/sh.js"></script>
+<link rel="stylesheet" href="/static/css/method/sh.css"/>
+
+<link href="/static/css/method/editor-pkg-min-datauri.css" rel="stylesheet" />
+<link rel="stylesheet" href="/static/css/method/right-tools.css" />
+
+
+<script src="/static/js/method/a.js" type="text/javascript"></script>
+<script type="text/javascript" src="/static/js/method/editor-plugin-pkg-min.js"></script>
+
+</head>
+<body>
+	<!--header end-->	
+		<!--面包屑 begin-->	
+	<div class="crumbs">
+		<a href="/index.html">API文档</a>
+		<a href="/user/index.html">用户API</a>
+		<a class="last" href="#">/users/feed/back</a>	 <!--class with "last"-->		
+	</div>
+	<!--面包屑 end-->
+	
+	<div class = 'container grid-s165m0 layout'>
+		<!--正文区 begin-->
+		<div class = "col-main bg_line">
+			<div class = "main-wrap">
+				<div class = "title-wrap">
+					<h1 class = "open-bg title">/users/feed/back 问题反馈
+					</h1>  
+					
+					<ul class= "api-sub-title layout clearfix">
+						<li class = "sub-title"><a class = "link" href = "#authorize">API用户授权类型</a></li>
+						<li class = "sub-title"><a class = "link" href = "#sys-param">系统级输入参数</a></li>
+						<li class = "sub-title"><a class = "link" href = "#api-param">应用级输入参数</a></li>
+						<li class = "sub-title"><a class = "link" href = "#result">返回结果</a></li>
+						<li class = "sub-title"><a class = "link" href = "#error-code">错误码</a></li>
+					</ul>
+				</div>
+
+				<div class="api-detail-bd" id="bd">
+					<!-- ued div start 不知何用-->
+					<div>						
+						
+						<p class = "title-intro">
+						问题反馈
+						</p>
+						<div class="content-first">
+							<h2 class = "head-title" id="authorize">
+								<img src="/static/css/method/img/tri_down.png" style="cursor:pointer;margin-right:5px;" onclick="changeHide(this,'content-authorize')">
+								API用户授权类型
+							</h2>
+							<div id="content-authorize">
+								<p class = "introduction">
+																	需要
+																</p>
+							</div>
+							
+						</div>
+						<div>
+							<h2 class = "head-title" id="sys-param">
+								<img src="/static/css/method/img/tri_right.png" style="cursor:pointer;margin-right:5px;" onclick="changeHide(this,'content-sys-param')">
+								系统级别输入参数
+							</h2>
+							<div id="content-sys-param" style="display:none">
+								<div class="sub-column-title1"><a href="#">HTTP签名调用模式:</a></div>
+								<table class = "api-table" cellspacing = '0'>
+									<thead>
+										<tr>	
+											<th class = "middle" width="15%">名称</th>	
+											<th class = "middle" width="15%">类型</th>	
+											<th class = "middle" width="15%">是否必须</th>	
+											<th class = "left" width="55%">描述</th>	
+										</tr>
+									</thead>
+									<tbody>
+										<tr class="even">
+											<td class = "middle">Authorization</td>
+											<td class = "middle">Http header</td>
+											<td class = "middle">是</td>
+											<td class = "left">传方式为 "bearer {access_token}"（注意bearer后需带空格）</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div>
+							<h2 class = "head-title" id="api-param">
+								<img src="/static/css/method/img/tri_down.png" style="cursor:pointer;margin-right:5px;" onclick="changeHide(this,'content-api-param')">
+								应用级输入参数
+							</h2>
+							<div id="content-api-param">
+								<table class = "api-table" cellspacing = '0'>
+									<thead>
+										<tr>	
+											<th width="15%" class = "middle">名称</th>
+											<th width="10%" class = "middle">类型</th>
+											<th width="10%" class = "middle">url 参数</th>
+											<th width="10%" class = "middle">是否必须</th>
+											<th width="30%" class = "left">描述</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr  class="odd" >
+												<td class = "middle">source</td>
+												<td class = "middle">Integer</td>
+												<td class = "middle">否</td>
+												<td class = "middle">是</td>
+												<td class = "left">来源n1：IOS个人端APP 2：IOS商户端APP 3：IOS运营商APP 4：安卓个人端APP 5：安卓商户端APP 6：安卓运营商APP</td>
+										</tr>
+										<tr  class="even" >
+												<td class = "middle">content</td>
+												<td class = "middle">String</td>
+												<td class = "middle">否</td>
+												<td class = "middle">是</td>
+												<td class = "left">反馈内容</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div>
+							<h2 class = "head-title" id="result">
+								<img src="/static/css/method/img/tri_down.png" style="cursor:pointer;margin-right:5px;" onclick="changeHide(this,'content-result')">
+								返回结果							
+							</h2>
+							<div id="content-result">
+								<table class = "api-table" cellspacing = '0'>
+									<thead>
+										<tr>	
+											<th width="25%"  class = "left">名称</th>
+											<th width="25%" class = "left">类型</th>
+											<th width="50%" class = "left">描述</th>
+										</tr>
+									</thead>
+									<tbody>
+											<tr  class="odd" >
+												<td class = "left">customer</td>
+												<td class = "left">
+													<a href="../domain/UserCustomer.html">
+														UserCustomer
+													</a>
+												</td>
+												<td class = "left">用户信息 </td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">integral</td>
+												<td class = "left">
+													<a href="../domain/UserIntegral.html">
+														UserIntegral
+													</a>
+												</td>
+												<td class = "left">用户积分信息</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">availableBalance</td>
+												<td class = "left">
+													<a href="#">
+														Double
+													</a>
+												</td>
+												<td class = "left">用户云币</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">balance</td>
+												<td class = "left">
+													<a href="#">
+														BigDecimal
+													</a>
+												</td>
+												<td class = "left">用户财富</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">storeBankInfo</td>
+												<td class = "left">
+													<a href="../domain/StoreBank.html">
+														StoreBank
+													</a>
+												</td>
+												<td class = "left">商户银行信息</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">operatorBankInfo</td>
+												<td class = "left">
+													<a href="../domain/OperatorBank.html">
+														OperatorBank
+													</a>
+												</td>
+												<td class = "left">商营运商银行信息</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">userSign</td>
+												<td class = "left">
+													<a href="../domain/UserSign.html">
+														UserSign
+													</a>
+												</td>
+												<td class = "left">用户签到对象</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">bindingMobile</td>
+												<td class = "left">
+													<a href="#">
+														String
+													</a>
+												</td>
+												<td class = "left">第三方平台是否绑定平台帐号</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">isBinding</td>
+												<td class = "left">
+													<a href="#">
+														Boolean
+													</a>
+												</td>
+												<td class = "left">第三方平台是否绑定标志</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">bindingOpenId</td>
+												<td class = "left">
+													<a href="#">
+														String
+													</a>
+												</td>
+												<td class = "left">第三方平台是否绑定平台id</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">documet</td>
+												<td class = "left">
+													<a href="../domain/UserDocument.html">
+														UserDocument
+													</a>
+												</td>
+												<td class = "left">系统帮助</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">articleList</td>
+												<td class = "left">
+													<a href="../domain/ArticleBO.html">
+														ArticleBO[]
+													</a>
+												</td>
+												<td class = "left">平台发给商户公告</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">opNoticesBOs</td>
+												<td class = "left">
+													<a href="../domain/OpNotices.html">
+														OpNotices[]
+													</a>
+												</td>
+												<td class = "left">营运发给商户公告</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">articleBO</td>
+												<td class = "left">
+													<a href="../domain/ArticleBO.html">
+														ArticleBO
+													</a>
+												</td>
+												<td class = "left">营运商公告和商户平台公告明细</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">noticesBO</td>
+												<td class = "left">
+													<a href="../domain/OpNotices.html">
+														OpNotices
+													</a>
+												</td>
+												<td class = "left">营运商发给商户的公告明细</td>
+											</tr>
+																					<tr  class="even" >
+												<td class = "left">articMarkleList</td>
+												<td class = "left">
+													<a href="../domain/ArticleBO.html">
+														ArticleBO[]
+													</a>
+												</td>
+												<td class = "left">文章列表</td>
+											</tr>
+																					<tr  class="odd" >
+												<td class = "left">articMarkleDetails</td>
+												<td class = "left">
+													<a href="../domain/ArticleBO.html">
+														ArticleBO
+													</a>
+												</td>
+												<td class = "left">公告详情</td>
+											</tr>
+																														</tbody>
+								</table>
+							</div>
+						</div>
+						<div>
+							<h2 class = "head-title" id="error-code">
+								<img src="/static/css/method/img/tri_down.png" style="cursor:pointer;margin-right:5px;" onclick="changeHide(this,'content-error-code')">
+								方法错误码
+							</h2>
+							<div id="content-error-code">
+								<table class = "api-table" cellspacing = '0'>
+									<thead>
+										<tr>	
+											<th class = "left" width="30%">错误码</th>	
+											<th class = "left" width="30%">错误描述</th>
+											<th class = "left" width="40%">根错误</th>	
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div>
+							<h2 class = "head-title" id="error-code">
+								<img src="/static/css/method/img/tri_right.png" style="cursor:pointer;margin-right:5px;" onclick="changeHide(this,'common-error-code')">
+								公共错误码
+							</h2>
+							<div id="common-error-code" style="display:none">
+								<table class = "api-table" cellspacing = '0'>
+									<thead>
+										<tr>	
+											<th class = "left" width="30%">错误码</th>	
+											<th class = "left" width="30%">错误描述</th>
+											<th class = "left" width="40%">根错误</th>	
+										</tr>
+									</thead>
+									<tbody>
+											<tr class="odd">
+				                                  <td class="left">410</td>
+				                                  <td class="left">Token expired</td>
+												  <td class="left">2:Error authorize</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">invalid_arguments</td>
+				                                  <td class="left">Invalid Arguments</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">missing_required_arguments</td>
+				                                  <td class="left">Missing Required Arguments</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">page_size_null</td>
+				                                  <td class="left">page size is null</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">404</td>
+				                                  <td class="left">Invalid access token</td>
+												  <td class="left">2:Error authorize</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">401</td>
+				                                  <td class="left">Unauthorized</td>
+												  <td class="left">2:Error authorize</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">error_date_format</td>
+				                                  <td class="left">{param} 日期格式错误</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">error_param</td>
+				                                  <td class="left">{param} 为空，或者格式错误</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">query_time_null</td>
+				                                  <td class="left">query time is null</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">no_data</td>
+				                                  <td class="left">没有找到对应的数据</td>
+												  <td class="left">4:Error data</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">page_number_null</td>
+				                                  <td class="left">page number is null</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">rid_not_find</td>
+				                                  <td class="left">用户下未找到该角色</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">not_effective_fields</td>
+				                                  <td class="left">not effective fields</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">use_role_null</td>
+				                                  <td class="left">没有设置当前使用的角色，请调用设置当前使用角色API</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+											<tr class="odd">
+				                                  <td class="left">operation_failed</td>
+				                                  <td class="left">系统错误，操作失败</td>
+												  <td class="left">1:Internal system error</td>
+				                            </tr>
+											<tr class="even">
+				                                  <td class="left">query_number_null</td>
+				                                  <td class="left">query number is null</td>
+												  <td class="left">3:Error arguments</td>
+				                            </tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- ued div end-->
+				</div>
+			</div>
+		</div>
+		<!--正文区 end-->
+		<!--左侧导航栏 begin-->
+		<div class = "col-sub">
+			<div class="APIgory">
+				<ul>
+					<li>
+						<div class= "APIgory-title" >
+							<a href="/user/index.html">返回&nbsp;<span class="APIgory-sub-title"> 用户API</span></a>
+						</div>
+					</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersExpertsCancle.html"
+									 title="/users/experts/cancle">/users/experts/cancle</a>
+									<p class = "APIgory-intro info-overflow">取消收藏专家</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersExpertsQuery.html"
+									 title="/users/experts/query">/users/experts/query</a>
+									<p class = "APIgory-intro info-overflow">收藏的专家列表</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersFavorites.html"
+									 title="/users/favorites">/users/favorites</a>
+									<p class = "APIgory-intro info-overflow">用户收藏</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersFavoritesCancle.html"
+									 title="/users/favorites/cancle">/users/favorites/cancle</a>
+									<p class = "APIgory-intro info-overflow">取消收藏帖子</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersInvitationQuery.html"
+									 title="/users/invitation/query">/users/invitation/query</a>
+									<p class = "APIgory-intro info-overflow">用户查询收藏帖子列表</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/BindingMobile.html"
+									 title="/binding/mobile">/binding/mobile</a>
+									<p class = "APIgory-intro info-overflow">第三方平台绑定手机</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/BindingRegister.html"
+									 title="/binding/register">/binding/register</a>
+									<p class = "APIgory-intro info-overflow">补全资料注册</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/GroupAvailableBalanceGet.html"
+									 title="/group/availableBalance/get">/group/availableBalance/get</a>
+									<p class = "APIgory-intro info-overflow">用户财富</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/OpenIdBindingCheck.html"
+									 title="/openId_binding/check">/openId_binding/check</a>
+									<p class = "APIgory-intro info-overflow">检查用户是否绑定第三方平台</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersArticleMarkDetails.html"
+									 title="/users/article_mark/details">/users/article_mark/details</a>
+									<p class = "APIgory-intro info-overflow">公告详情</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersArticMarkList.html"
+									 title="/users/artic_mark/list">/users/artic_mark/list</a>
+									<p class = "APIgory-intro info-overflow">公告文章列表</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersBankInfoGet.html"
+									 title="/users/bank_info/get">/users/bank_info/get</a>
+									<p class = "APIgory-intro info-overflow">获取商户或营运商银行信息</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersCustomerSearch.html"
+									 title="/users/customer/search">/users/customer/search</a>
+									<p class = "APIgory-intro info-overflow">查找用户信息</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersCustomerUpdate.html"
+									 title="/users/customer/update">/users/customer/update</a>
+									<p class = "APIgory-intro info-overflow">修改用户信息</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersCustomerUpdateImg.html"
+									 title="/users/customer/updateImg">/users/customer/updateImg</a>
+									<p class = "APIgory-intro info-overflow">修改用户头像</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list focus">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersFeedBack.html"
+									 title="/users/feed/back">/users/feed/back</a>
+									<p class = "APIgory-intro info-overflow">问题反馈</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersIntegral.html"
+									 title="/users/integral">/users/integral</a>
+									<p class = "APIgory-intro info-overflow">用户云币</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersIntegralGet.html"
+									 title="/users/integral/get">/users/integral/get</a>
+									<p class = "APIgory-intro info-overflow">用户获取积分</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersNotice.html"
+									 title="/users/notice">/users/notice</a>
+									<p class = "APIgory-intro info-overflow">商户公告</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersNoticesDetails.html"
+									 title="/users/notices/details">/users/notices/details</a>
+									<p class = "APIgory-intro info-overflow">营运商发给商户公告详情</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersOperaterMoneypassUpdate.html"
+									 title="/users/operater_moneypass/update">/users/operater_moneypass/update</a>
+									<p class = "APIgory-intro info-overflow">营运商修改云币密码</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersOperatorNotices.html"
+									 title="/users/operator/notices">/users/operator/notices</a>
+									<p class = "APIgory-intro info-overflow">营运商公告</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersPasswordUpdate.html"
+									 title="/users/password/update">/users/password/update</a>
+									<p class = "APIgory-intro info-overflow">修改密码</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersPayPasswordUpdate.html"
+									 title="/users/pay_password/update">/users/pay_password/update</a>
+									<p class = "APIgory-intro info-overflow">修改云币密码</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersSignLogin.html"
+									 title="/users/sign/login">/users/sign/login</a>
+									<p class = "APIgory-intro info-overflow">用户签到</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersSysHelp.html"
+									 title="/users/sys/help">/users/sys/help</a>
+									<p class = "APIgory-intro info-overflow">系统帮助</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+						<li>
+							<div class= "APIgory-list ">
+								<div class= "APIgory-content">
+									<a class= "link APIgoryItem title-overflow" href = "../method/UsersSysNoticesDetails.html"
+									 title="/users/sys_notices/details">/users/sys_notices/details</a>
+									<p class = "APIgory-intro info-overflow">营运商公告和商户平台公告详情</p>
+								</div>
+								<s></s>
+							</div>
+						</li>
+					</ul>
+				<div class="quick-api">
+					<a href="/index.html">API文档</a>
+				</div>
+			</div>
+		</div>
+		<!--左侧导航栏 end-->
+	</div>
+	<script type="text/javascript">
+		function changeHide(imgDom,contentDivId){
+			var contentDiv=document.getElementById(contentDivId);
+			if(contentDiv.style.display=="none"){
+				contentDiv.style.display="";
+				imgDom.src="/static/css/method/img/tri_down.png";
+			}else{
+				contentDiv.style.display="none";
+				imgDom.src="/static/css/method/img/tri_right.png";
+			}
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/nav.css">
+    <script src="/resources/js/jquery-1.8.2.js"></script>
+</head>
+<body>
+
+    <ul class="menu" id="menu">
+        <li>
+            <a href="/operator/main.htm" target="mainFrame" class="active"><i class="icon icon-info" style="background: url(/resources/images/ionc3.png) no-repeat center center;"></i> 基本信息</a>
+        </li>
+        <li>
+            <a href="#"><i class="icon icon-operator" style="background: url(/resources/images/ionc4.png) no-repeat center center;"></i> 运营商管理 <span class="icon icon-arrow" style="background: url(/resources/images/yys-jt.png) no-repeat center center;"></span></a>
+            <ul>
+                <li><a href="/operator/register_operator_list.htm" target="mainFrame">运营商</a> </li>
+                <li><a href="/operator/register_shop_list.htm" target="mainFrame">商户</a> </li>
+                <li><a href="/operator/register_user_list.htm" target="mainFrame">会员</a> </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#"><i class="icon icon-cash" style="background: url(/resources/images/ionc5.png) no-repeat center center;"></i> 收益管理 <span class="icon icon-arrow" style="background: url(/resources/images/yys-jt.png) no-repeat center center;"></span></a>
+            <ul>
+            	<li><a href="/operator/operator_income_list.htm" target="mainFrame">收益记录</a> </li>
+            	<li><a href="/operator/operator_expect_income_list.htm" target="mainFrame">预期收益</a> </li>
+                <li><a href="/operator/operator_cash_list.htm" target="mainFrame">提现记录</a> </li>
+                <li><a href="/operator/operator_cash.htm" target="mainFrame">我要提现</a> </li>
+            </ul>
+        </li>
+        <li>
+            <a href="/operator/operator_check_shop_list.htm" target="mainFrame"><i class="icon icon-audit" style="background: url(/resources/images/ionc6.png) no-repeat center center;"></i> 商户审核</a>
+        </li>
+        #if($!op.level == 1)
+        <li>
+            <a href="/operator/operator_ad_list.html" target="mainFrame"><i class="icon icon-ad" style="background: url(/resources/images/ionc7.png) no-repeat center center;"></i> 广告管理</a>
+        </li>
+         <li>
+            <a href="/operator/operator_notice_list.htm" target="mainFrame"><i class="icon icon-notice" style="background: url(/resources/images/ionc8.png) no-repeat center center;"></i> 公告管理</a>
+        </li>
+        #end
+         <li>
+            <a href="/operator/complaint_new_list.htm" target="mainFrame"><i class="icon icon-notice" style="background: url(/resources/images/ionc9.png) no-repeat center center;"></i> 投诉管理</a>
+        </li>
+
+    </ul>
+    <div class="copyright">
+        吉林云尚保健食品有限公司 <br />
+       Copyright 2016 ysysgo.com
+    </div>
+
+    <script>
+
+        $("#menu a").click(function() {
+            var $ul = $(this).siblings("ul");
+            if ($ul.length > 0) {
+                if ($ul.is(':hidden')) {
+                    $ul.slideDown();
+                } else {
+                    $ul.slideUp();
+                }
+            } else {
+                $("#menu .active").removeClass("active");
+                $(this).addClass("active");
+            }
+        });
+
+    </script>
+
+</body>
+</html>

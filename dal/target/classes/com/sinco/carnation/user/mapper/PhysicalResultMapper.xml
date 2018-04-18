@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.PhysicalResultMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.PhysicalResult">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+		<result column="range_min" property="rangeMin" jdbcType="REAL" />
+		<result column="range_max" property="rangeMax" jdbcType="REAL" />
+		<result column="check_result" property="checkResult" jdbcType="VARCHAR" />
+		<result column="desc" property="desc" jdbcType="VARCHAR" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+		<result column="range_middle" property="rangeMiddle" jdbcType="REAL" />
+		<result column="terminal_type" property="terminalType"
+			jdbcType="TINYINT" />
+		<result column="valuation_id" property="valuationId" jdbcType="BIGINT" />
+		<result column="is_add_integral" property="isAddIntegral" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.PhysicalResultBO"
+		extends="BaseResultMap">
+		<result column="nickname" jdbcType="VARCHAR" property="nickname" />
+		<result column="sex" jdbcType="INTEGER" property="sex" />
+		<result column="age" jdbcType="INTEGER" property="age" />
+		<result column="type_name" jdbcType="VARCHAR" property="typeName" />
+		<result column="result_type" jdbcType="VARCHAR" property="resultType" />
+		<result column="memo" jdbcType="VARCHAR" property="memo" />
+		<result column="unit" jdbcType="VARCHAR" property="unit" />
+		<result column="range_min" property="rangeMin1" jdbcType="REAL" />
+		<result column="range_max" property="rangeMax1" jdbcType="REAL" />
+		<result column="range_min2" property="rangeMin2" jdbcType="REAL" />
+		<result column="range_max2" property="rangeMax2" jdbcType="REAL" />
+		<result column="range_min3" property="rangeMin3" jdbcType="REAL" />
+		<result column="range_max3" property="rangeMax3" jdbcType="REAL" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, item_code, range_min, range_max, check_result, create_by,
+		create_time,
+		is_deleted, range_middle, terminal_type, valuation_id,is_add_integral
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalResultExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from check_physical_result
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from check_physical_result
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from check_physical_result
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalResultExample">
+		delete from check_physical_result
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.PhysicalResult"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into check_physical_result (id, item_code, range_min,
+		range_max, check_result, desc,
+		create_by, create_time, is_deleted,
+		range_middle, terminal_type, valuation_id
+		)
+		values (#{id,jdbcType=BIGINT}, #{itemCode,jdbcType=VARCHAR},
+		#{rangeMin,jdbcType=REAL},
+		#{rangeMax,jdbcType=REAL}, #{checkResult,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR},
+		#{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{isDeleted,jdbcType=BIT},
+		#{rangeMiddle,jdbcType=REAL}, #{terminalType,jdbcType=TINYINT}, #{valuationId,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.PhysicalResult"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into check_physical_result
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="itemCode != null">
+				item_code,
+			</if>
+			<if test="rangeMin != null">
+				range_min,
+			</if>
+			<if test="rangeMax != null">
+				range_max,
+			</if>
+			<if test="checkResult != null">
+				check_result,
+			</if>
+			<if test="desc != null">
+				desc,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+			<if test="rangeMiddle != null">
+				range_middle,
+			</if>
+			<if test="terminalType != null">
+				terminal_type,
+			</if>
+			<if test="valuationId != null">
+				valuation_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="itemCode != null">
+				#{itemCode,jdbcType=VARCHAR},
+			</if>
+			<if test="rangeMin != null">
+				#{rangeMin,jdbcType=REAL},
+			</if>
+			<if test="rangeMax != null">
+				#{rangeMax,jdbcType=REAL},
+			</if>
+			<if test="checkResult != null">
+				#{checkResult,jdbcType=VARCHAR},
+			</if>
+			<if test="desc != null">
+				#{desc,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+			<if test="rangeMiddle != null">
+				#{rangeMiddle,jdbcType=REAL},
+			</if>
+			<if test="terminalType != null">
+				#{terminalType,jdbcType=TINYINT},
+			</if>
+			<if test="valuationId != null">
+				#{valuationId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalResultExample"
+		resultType="java.lang.Integer">
+		select count(*) from check_physical_result
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update check_physical_result
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.itemCode != null">
+				item_code = #{record.itemCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.rangeMin != null">
+				range_min = #{record.rangeMin,jdbcType=REAL},
+			</if>
+			<if test="record.rangeMax != null">
+				range_max = #{record.rangeMax,jdbcType=REAL},
+			</if>
+			<if test="record.checkResult != null">
+				check_result = #{record.checkResult,jdbcType=VARCHAR},
+			</if>
+			<if test="record.desc != null">
+				desc = #{record.desc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+			<if test="record.rangeMiddle != null">
+				range_middle = #{record.rangeMiddle,jdbcType=REAL},
+			</if>
+			<if test="record.terminalType != null">
+				terminal_type = #{record.terminalType,jdbcType=TINYINT},
+			</if>
+			<if test="record.valuationId != null">
+				valuation_id = #{record.valuationId,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update check_physical_result
+		set id = #{record.id,jdbcType=BIGINT},
+		item_code = #{record.itemCode,jdbcType=VARCHAR},
+		range_min = #{record.rangeMin,jdbcType=REAL},
+		range_max = #{record.rangeMax,jdbcType=REAL},
+		check_result = #{record.checkResult,jdbcType=VARCHAR},
+		desc = #{record.desc,jdbcType=VARCHAR},
+		create_by = #{record.createBy,jdbcType=VARCHAR},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{record.isDeleted,jdbcType=BIT},
+		range_middle = #{record.rangeMiddle,jdbcType=REAL},
+		terminal_type = #{record.terminalType,jdbcType=TINYINT},
+		valuation_id = #{record.valuationId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective">
+		update check_physical_result
+		<set>
+			<if test="record.itemCode != null">
+				item_code = #{record.itemCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.rangeMin != null">
+				range_min = #{record.rangeMin,jdbcType=REAL},
+			</if>
+			<if test="record.rangeMax != null">
+				range_max = #{record.rangeMax,jdbcType=REAL},
+			</if>
+			<if test="record.checkResult != null">
+				check_result = #{record.checkResult,jdbcType=VARCHAR},
+			</if>
+			<if test="record.desc != null">
+				desc = #{record.desc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+			<if test="record.rangeMiddle != null">
+				range_middle = #{record.rangeMiddle,jdbcType=REAL},
+			</if>
+			<if test="record.terminalType != null">
+				terminal_type = #{record.terminalType,jdbcType=TINYINT},
+			</if>
+			<if test="record.valuationId != null">
+				valuation_id = #{record.valuationId,jdbcType=BIGINT},
+			</if>
+			is_add_integral = 0
+		</set>
+		where id = #{record.id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.PhysicalResult">
+		update check_physical_result
+		set item_code = #{itemCode,jdbcType=VARCHAR},
+		range_min = #{rangeMin,jdbcType=REAL},
+		range_max = #{rangeMax,jdbcType=REAL},
+		check_result = #{checkResult,jdbcType=VARCHAR},
+		desc = #{desc,jdbcType=VARCHAR},
+		create_by = #{createBy,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{isDeleted,jdbcType=BIT},
+		range_middle = #{rangeMiddle,jdbcType=REAL},
+		terminal_type = #{terminalType,jdbcType=TINYINT},
+		valuation_id = #{valuationId,jdbcType=BIGINT},
+		is_add_integral = 0
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="queryPhysicalResult" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from check_physical_result where create_by=#{userId,jdbcType=VARCHAR}
+		and item_code=#{code,jdbcType=VARCHAR} and create_time=#{time}
+	</select>
+
+	<select id="queryPhysicalResultByCond" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from check_physical_result where create_by=#{userId,jdbcType=VARCHAR}
+		and create_time=#{time}
+	</select>
+
+
+
+	<select id="selectPhysicalResultList" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		FROM check_physical_result
+		WHERE is_deleted = 0
+		AND create_by =
+		#{userId}
+		AND item_code = #{itemCode}
+		ORDER BY create_time DESC
+		<if test=" lmt != null ">
+			LIMIT 0,#{lmt}
+		</if>
+	</select>
+
+	<sql id="selectPhysicalResultByVOsql">
+		<if test="vo.nickname != null and vo.nickname != ''">
+			and uc.nickname like CONCAT(CONCAT('%', #{vo.nickname}), '%')
+		</if>
+		<if test="vo.sex != null and vo.sex != 0">
+			and uc.sex = #{vo.sex}
+		</if>
+		<if test="vo.itemCode != null and vo.itemCode != ''">
+			and cpr.item_code = #{vo.itemCode}
+		</if>
+		<if test="vo.terminalType != null">
+			and cpr.terminal_type = #{vo.terminalType}
+		</if>
+	</sql>
+	<select id="selectPhysicalResultByVO" parameterType="map"
+		resultMap="BOResultMap">
+		SELECT uc.nickname,uc.sex,
+		(DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW()) -
+		TO_DAYS(uc.birthdate)),'%Y') + 0) AS age,
+		cpt.type_name,cpt.unit,cpr.range_min,cpr.range_max,cpr.create_time,cpr.terminal_type,
+		cpv.result_type,cpv.memo,cpr.item_code,cpr.id,
+		cpv.range_max,cpv.range_min,cpv.range_max2,cpv.range_min2,cpv.range_max3,cpv.range_min3
+		FROM check_physical_result cpr
+		LEFT JOIN check_physical_valuation cpv
+		ON cpr.valuation_id = cpv.id
+		LEFT JOIN check_physical_type cpt
+		ON
+		cpt.id=cpr.item_code
+		LEFT JOIN user_customer uc
+		ON uc.uid=cpr.create_by
+		WHERE cpr.is_deleted = 0 AND uc.is_deleted = 0<!-- 
+			AND cpv.delete_status = 0 -->
+		<include refid="selectPhysicalResultByVOsql" />
+	</select>
+
+	<update id="updateByIdForIsDel" parameterType="map">
+		UPDATE check_physical_result SET is_deleted = #{isdel} WHERE id = #{id}
+	</update>
+
+	<select id="selectPhysicalResultByUserIdSix" parameterType="map"
+		resultMap="BOResultMap">
+		(SELECT * FROM check_physical_result AS cpr WHERE cpr.is_deleted = 0 AND
+		cpr.create_by = #{userId} AND cpr.`item_code` = 2 ORDER BY
+		cpr.create_time DESC,cpr.id ASC LIMIT 7)
+		UNION ALL
+		(SELECT * FROM check_physical_result AS cpr WHERE cpr.is_deleted = 0 AND
+		cpr.create_by = #{userId} AND cpr.`item_code` = 5 ORDER BY
+		cpr.create_time DESC,cpr.id ASC LIMIT 7)
+		UNION ALL
+		(SELECT * FROM check_physical_result AS cpr WHERE cpr.is_deleted = 0 AND
+		cpr.create_by = #{userId} AND cpr.`item_code` = 6 ORDER BY
+		cpr.create_time DESC,cpr.id ASC LIMIT 7)
+		UNION ALL
+		(SELECT * FROM check_physical_result AS cpr WHERE cpr.is_deleted = 0 AND
+		cpr.create_by = #{userId} AND cpr.`item_code` = 7 ORDER BY
+		cpr.create_time DESC,cpr.id ASC LIMIT 7)
+		UNION ALL
+		(SELECT * FROM check_physical_result AS cpr WHERE cpr.is_deleted = 0 AND
+		cpr.create_by = #{userId} AND cpr.`item_code` = 8 ORDER BY
+		cpr.create_time DESC,cpr.id ASC LIMIT 7)
+		UNION ALL
+		(SELECT * FROM check_physical_result AS cpr WHERE cpr.is_deleted = 0 AND
+		cpr.create_by = #{userId} AND cpr.`item_code` = 9 ORDER BY
+		cpr.create_time DESC,cpr.id ASC LIMIT 7)
+
+	</select>
+	
+	<select id="listByisAddIntegral" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from check_physical_result
+		where is_add_integral = 0;
+	</select>
+	<update id="updateIsAddIntegralByid" parameterType="java.lang.Long">
+		update check_physical_result set is_add_integral = 1
+		where id = #{id};
+	</update>
+	
+
+</mapper>

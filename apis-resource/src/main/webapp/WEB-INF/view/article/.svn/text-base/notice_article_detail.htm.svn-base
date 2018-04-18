@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+
+    <title>公告详情</title>
+	<link href="${staticPath}/static/app/assets/widget/iCheck/blue.css" rel="stylesheet" type="text/css">
+    #parse("/include/common.htm")
+
+</head>
+<body class="gray-dark-bg">
+    <div class="wrapper">
+        <div class="notice">
+            <div class="title">$!article.title</div>
+            <div class="cont">
+            	$!article.content
+            </div>
+            <div class="date">
+                <span class="fr">$date.format($article.addTime)</span>
+                来自<a href="#" class="c-blue">系统</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="assets/js/jquery-2.1.4.min.js"></script>
+    <script src="assets/widget/iCheck/icheck.min.js"></script>
+    <script>
+        $('input').iCheck({
+            uncheck: true,
+            radioClass: 'iradio_square-blue'
+        }).iCheck("uncheck");
+    </script>
+</body>
+</html>

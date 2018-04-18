@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-线下刷卡订单管理-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+	jQuery("#localReturnStatus").val("$!vo.localReturnStatus");
+  jQuery('#beginTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+   jQuery(".gift_icon_c").mouseenter(function(){
+		jQuery(this).siblings("div").show();									
+											});
+  jQuery(".gift_icon_center").mouseleave(function(){
+		jQuery(this).children(".gift_icon_main").hide();									
+											});
+  
+});
+function export_excel(){
+	#if($!objs.size()>0)	
+		var order_id = jQuery("#order_id").val();
+		var buyer_userName = jQuery("#buyer_userName").val();
+		var beginTime = jQuery("#beginTime").val();
+		var endTime = jQuery("#endTime").val();
+		var localReturnStatus = jQuery("#localReturnStatus").val();
+		if(beginTime!=""&&endTime!=""){
+			window.location.href="$!webPath/seller/group_order_local_excel.htm?orderId="+order_id+"&buyerUserName="+buyer_userName+"&startDate="+beginTime+"&endDate="+endTime+"&localReturnStatus="+localReturnStatus;
+		}else{
+			showDialog("msg_info","","请选择开始时间与结束时间",0,"warning",3);
+			}		
+	#else
+		showDialog("msg_info","","当前没有可以导出的数据！",0,"warning",3);
+	#end		
+}
+</script>
+</head>
+<body>
+$!httpInclude.include("/seller/top.htm")
+<div class="main">
+  <div class="seller_center"> $!httpInclude.include("/seller/nav.htm?op=group_order_local")
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/seller/index.htm">商家中心</a></b>><b>服务交易管理</b>><b>线上服务订单管理</b></span></div>
+      <div class="user_list">
+        <div class="seller_list_title">
+          <ul class="seller_title_ul">
+            <li #if($!vo.statusCode=='all' || !$!vo.statusCode)class="this" #end><i></i><a href="$!webPath/seller/group_order_local.htm">所有订单</a></li>
+          </ul>
+        </div>
+        <script>
+			#if($!vo.statusCode)
+			  jQuery(".orderul li").removeClass("this");
+		     jQuery(".orderul li a[href$=$!vo.statusCode]").parent().addClass("this");
+			#end
+		  </script>
+        <form action="$!webPath/seller/group_order_local.htm" method="post" id="ListForm">
+          <div class="user_sp_right"> <span style="margin-right: 80px;">
+            <input name="orderId" type="text" class="user_title_txt" id="order_id" placeholder="订单编号" value="$!vo.orderId"/>
+            <input name="buyerUsername" type="text" class="user_title_txt" id="buyer_userName" placeholder="买家" value="$!vo.buyerUsername"  />
+            <input name="startDate" type="text" class="user_title_txt" id="beginTime" placeholder="下单时间(起始)" value="$!vo.startDate" readonly="readonly"/>
+            <input name="endDate" type="text" class="user_title_txt" id="endTime" placeholder="下单时间(结束)" value="$!vo.endDate" readonly="readonly"/>
+              <select name="localReturnStatus"  id="localReturnStatus" >
+                <option value="">请选择退款状态</option>
+                <option value="1">未退款</option>
+                <option value="2">已退款</option>
+              </select>
+            </span>
+            <input name="" type="submit" class="seller_sear_btn" value="查询"/>
+            <div class="seller_title_right"><a href="javascript:void(0);" onclick="export_excel();">导出excel</a></div>
+          </div>
+          #if($objs.size()>0) 
+          #foreach($obj in $objs)
+          #if($!obj.orderStatus==0)
+          #set($status="已取消")
+          #end
+          #if($!obj.orderStatus==10)
+          #set($status="未付款")
+          #end
+          #if($!obj.orderStatus==20)
+          #set($status="未消费")
+          #end
+          #if($!obj.orderStatus==30)
+          #set($status="已消费")        
+          #end 
+           #set($payment=$PaymentConstants.getPaymentName($!obj.paymentMark))
+         
+          <div class="orderlist_one">
+            <h4 class="orderlist_one_h4"><span>订单号：$!{obj.orderId}</span><span>下单时间：$!CommUtil.formatLongDate($!obj.addTime)</span><span>订单状态：<strong style="color:#F00">	
+               			#if($!obj.localReturnStatus==2)
+               			已退款
+               			#else
+               			已消费
+               			#end</strong></span> #if($!payment)<span class="blue">支付方式：线下刷卡</span>#end 
+			</h4>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="user_order_table">
+              <tr>
+                <td width="36%" height="60px;"  align="center"> 
+                   <strong>$!{obj.localGroupName}</strong>
+                  </dl>
+               </td>
+                <td width="20%" align="center"><span class="blue2 order_xx"><b mark="name_$!{obj.id}" obj_id="$!obj.id">$!obj.userNickname</b>
+                  </span></td>
+                <td width="12%" align="center"><span class="order_sp">¥$!{obj.totalPrice}</span></td>
+                <td width="11%" align="center">
+               			#if($!obj.isSysUser==true)
+               			会员用户
+               			#else
+               			非会员用户
+               			#end
+                </td>
+                <td align="center">
+                		#if($!obj.localReturnStatus==1)
+                		<a href="javascript:void();" onclick="showDialog('msg_info','','确认该服务是否已退款?',1,'question',3,function(){window.location.href='$!webPath/seller/local_order_return.htm?id=$!obj.id&currentPage=$!currentPage'});"  class="del_a">退款</a>
+               			#end
+               			#if($!obj.localReturnStatus==2)
+               			已退款
+               			#end
+                </td>
+              </tr>
+            </table>
+            <div class="seller_orderlist_bottom"></div>
+          </div>
+          #end
+          <div class="userlist_allop">
+            <input name="currentPage" type="hidden" class="user_title_txt" id="currentPage"  value="$!currentPage"/>
+            <div class="seller_list_page"><span class="seller_page_sp">$!gotoPageFormHTML</span> </div>
+          </div>
+          #else
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" class="user_order_table">
+            <tr>
+              <td colspan="6" align="center"><div class="seller_center_nothing">
+                  <div class="seller_center_nothing_left"><img src="$!webPath/resources/style/system/front/default/images/seller_center_nothing.png" /></div>
+                  <div class="seller_center_nothing_right">暂时没有数据</div>
+                </div></td>
+            </tr>
+          </table>
+          #end
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">
+#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	$('input[name="type"]').change(function() {
+		$('#numberType').toggle();
+		$('#selectType').toggle();
+	});
+ jQuery.validator.addMethod("verify",function(value,element){
+	  var re = /^[0-9a-zA-Z]*$/;
+        if(re.test(jQuery("#userName").val())){			
+			return true;
+		  } 
+		  else {
+		    return false;
+			  }	  
+});								
+  jQuery("#theForm").validate({
+    rules:{
+    	itemName:{required :true},
+    	unit:{required :false}
+	 },
+	messages:{
+		itemName:{required:"体检项名称不能为空"},
+		unit:{required:"单位不能为空"}
+	}
+  });	
+});
+
+function saveForm(){
+   jQuery("#theForm").submit();
+}
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth">会员管理</h1>
+  <div class="nav_list">
+      <ul>
+	      <li><a href="$!webPath/admin/checkResultItemList.htm"><b>管理</b></a></li>
+	      <li><a href="$!webPath/admin/reportGroupItemAddView.htm" class="this"><b>#if($!obj) 编辑 #else 新增 #end</b></a></li>
+      </ul>
+     
+     </div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/saveReportItem.htm" method="post">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <div class="edit">
+      <div class="editul setcont">
+    <!--鼠标经过样式-->
+    <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>体检项名称</li>
+      <li><span class="webname">
+        <input name="itemName" type="text" id="itemName" value="$!obj.itemName" size="40" />
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>分类</li>
+      <li><span class="webname">
+        <select name="groupId" id="groupId">
+            #foreach($obj in $groupList)
+              <option value="$!obj.id">$!obj.groupName</option>
+            #end
+        </select>
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>类型</li>
+      <li>
+        <input name="type" type="radio" value="0" checked="checked">数值型&emsp;
+        <input name="type" type="radio" value="1">选项型
+      </li>
+    </ul>
+    <ul class="set1">
+      <li class="setcont_bg">单位</li>
+      <li><span class="webname">
+        <input name="unit" type="text" id="unit" value="$!obj.unit" size="40" />
+      </span></li>
+    </ul>
+    <ul class="set1" id="numberType">
+      <li class="setcont_bg"><strong class="sred">*</strong>参考值</li>
+      <li>
+        <input name="minValue" type="text" id="minValue" value="$!obj.minValue" size="18" />~
+        <input name="maxValue" type="text" id="maxValue" value="$!obj.maxValue" size="18" />
+      </li>
+    </ul>
+    <ul class="set1" id="selectType" style="display: none;">
+      <li class="setcont_bg"><strong class="sred">*</strong>参考值</li>
+      <li>
+        <input name="referenceValue" type="radio" value="0" checked="checked">阴&emsp;
+        <input name="referenceValue" type="radio" value="1">阳
+      </li>
+    </ul>
+    <ul class="set1">
+      <li class="setcont_bg">排序</li>
+      <li><span class="webname">
+        #if($!obj.seqenc)
+          #set($seqenc = "$!obj.seqenc")
+        #else
+          #set($seqenc = "0")
+        #end
+        <input name="seqenc" type="text" id="seqenc" value="$!seqenc" size="40" maxlength="3" />
+      </span></li>
+    </ul>
+    
+    </div>
+    </div>
+  </form>
+  <div class="submit">
+   <span class="pad120"><input name="save" type="button" value="提交" onclick="saveForm()" /></span>
+  </div>
+</div>
+</body>
+</html>

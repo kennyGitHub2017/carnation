@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css?v=5"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type=text/css rel=stylesheet>
+	<link href="$!webPath/resources/style/common/css/overlay.css"
+		type="text/css" rel="stylesheet" />
+
+	<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+	<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+	<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+	<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+	<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+	<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+	<script>
+jQuery(document).ready(function(){
+	jQuery('#beginTime').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+	  jQuery('#endTime').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+  jQuery("#condition").val("$!condition");	
+  jQuery(".memimg").mouseover(function(){
+     jQuery(this).css("cursor","pointer");
+	 jQuery(".mem_detail[id^=user_detail_]").hide();
+     var id=jQuery(this).attr("id");
+	 jQuery("#user_detail_"+id).show();
+  });
+  jQuery(".mem_detail[id^=user_detail_]").mouseleave(function(){
+    jQuery(this).hide();
+  });
+  jQuery("#isDeleted").val("$!vo.isDeleted");	
+});
+</script>
+	<body>
+		<div class="cont">
+			<h1 class="seth">帐号清除</h1>
+			<FORM name="ListForm" id="ListForm"
+				action="$!webPath/admin/user_ClearAccount_Page.htm" method="post">
+				<div class="search">
+					<span>
+						<select name="condition" id="condition">
+							<option value="1">会员名</option>
+							<option value="2">注册邮箱</option>
+							<option value="3">真实姓名</option>
+							<option value="4">邀请码</option>
+						</select>
+					</span> 
+						<span class="size150"> <input name="value" type="text"
+							id="value" value="$!value" />
+						</span> 
+						<span> 状态： 
+							<select name="isDeleted" id="isDeleted">
+								<option value="false">正常</option>
+								<option value="true">已冻结</option>
+							</select>
+						</span> 
+						<span> 推荐码： <span class="size150"><input
+							name="invitationCode" type="text" id="invitationCode"
+							value="$!vo.invitationCode" placeholder="推荐人的推荐码" /></span>
+						</span> 
+						<span>注册时间</span> 
+						<span class="size100"> 
+							<input name="beginTime" type="text" id="beginTime" value="$!vo.beginTime"
+									readonly="readonly" />
+						</span> 
+						<span class="size100"> <input name="endTime" type="text"
+							id="endTime" value="$!vo.endTime" readonly="readonly" />
+						</span> <span> <input name="" type="submit" value="搜索"
+							style="cursor: pointer;" title="搜索会员" class="search_btn" />
+						</span>
+
+				</div>
+
+				<div class="fshoptb">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0"
+						class="fshop_table">
+						<tr>
+							<th width="4%" align="left">&nbsp;</th>
+							<th width="13%" align="center"><span class="form_btna">会员名</span></th>
+							<th width="6%" align="center"><span class="form_btna">邀请码</span></th>
+							<th width="6%" align="center"><span class="form_btna">昵称</span></th>
+							<th width="6%" align="center"><span class="form_btna">真实名字</span></th>
+							<th width="6%" align="center"><span class="form_btna">手机</span></th>
+							<th width="8%" align="center"><span class="form_btna">云豆</span></th>
+							<th width="6%" align="center"><span class="form_btna">会员积分</span></th>
+							<th width="6%" align="center"><span class="form_btna">推荐人</span></th>
+							<th width="6%" align="center"><span class="form_btna">注册时间</span></th>
+							<th width="6%" align="center"><span class="form_btna">登录时间</span></th>
+							<th width="6%" align="center"><span class="form_btna">状态</span></th>
+							<th align="center"><span class="form_btna">操作</span></th>
+						</tr>
+						#foreach($!obj in $pages)
+						<tr>
+							<td class="check_position">
+								<input name="id" type="checkbox" id="id" style="width: 16px; border: none;" value="$!obj.uid" />
+							</td>
+							<td align="left">
+								<span class="mem_detail">
+									<ul>
+										<li class="mem_font">$!obj.loginName</li>
+									</ul>
+							    </span>
+							</td>
+							<td class="lightred">
+								$!obj.invitationCode
+							</td>
+							<td class="lightred">
+								$!obj.nickname
+							</td>
+							<td class="lightred">
+								#if($!obj.name)
+									$!obj.name
+								#else
+									无
+								#end
+							</td>
+							<td class="lightred">
+								$!obj.mobile
+							</td>
+							<td class="lightred">
+								<ul>
+									<li>
+										可用：
+										<strong>
+											#if($!{obj.availableBalance})
+												$!{obj.availableBalance}
+											#else 
+											0 
+											#end
+											元
+										</strong>
+									</li>
+								</ul>
+							</td>
+							<td align="center">$!obj.integral</td>
+							<td align="center">
+								#if($!obj.reUserName) 
+									$!obj.reUserName
+								#else 
+									$!obj.operatorName 
+								#end
+							</td>
+							<td align="center">$!CommUtil.formatLongDate($!obj.createTime)</td>
+							<td align="center">$!CommUtil.formatLongDate($!obj.lastLoginTime)</td>
+							<td align="center">#if($!obj.freezed == "1") 正常 #else 已冻结
+								#end</td>
+							<td align="center" class="hui oprate_con" style="min-width: 80px">
+								
+								#if($!obj.isDeleted)
+									<a href="javascript:void(0);"
+										onclick="if(confirm('账号恢复，是否继续？'))window.location.href='$!webPath/admin/user_ClearAccount.htm?uid=$!obj.uid&types=2'"
+									class="blue">
+										账号恢复
+									</a>
+								#else
+									<a href="javascript:void(0);"
+										onclick="if(confirm('账号清除，是否继续？'))window.location.href='$!webPath/admin/user_ClearAccount.htm?uid=$!obj.uid&types=0'"
+									class="blue">
+									清除
+									</a>
+									|
+									<a href="javascript:void(0);"
+										onclick="if(confirm('账号彻底清除，是否继续？'))window.location.href='$!webPath/admin/user_ClearAccount.htm?uid=$!obj.uid&types=1'"
+									class="blue">
+									彻底清除
+									</a>
+								#end
+							</td>
+						</tr>
+						#end
+						<tr>
+							<td colspan="13" style="border-bottom: 0px; padding: 0px;">
+								<div class="operate_bar">
+									<div class="fenye">
+										<input name="userRole" type="hidden" id="userRole"
+											value="BUYER" /> <input type="hidden" name="currentPage"
+											id="currentPage" value="$!currentPage" /> <input
+											name="mulitId" type="hidden" id="mulitId" />
+										$!gotoPageFormHTML
+									</div>
+
+									<div class="oper_sp">
+										<span class="oper_check"><label><input
+												name="all" type="checkbox" id="all"
+												onclick="selectAll(this)" value="" />全部</label></span> <span
+											class="oper_del"> #if($!vo.isDeleted==false) <input
+											type="hidden" name="freezed" value="true"> <input
+												name="" type="button" value="冻结" style="cursor: pointer;"
+												onclick="cmd('$!webPath/admin/user_freeze.htm')" /> #else <input
+												type="hidden" name="freezed" value="false"> <input
+													name="" type="button" value="解冻" style="cursor: pointer;"
+													onclick="cmd('$!webPath/admin/user_freeze.htm')" /> #end </span>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</FORM>
+		</div>
+	</body>
+</html>

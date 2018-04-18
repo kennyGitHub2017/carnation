@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!{obj.title} - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/circle.css" rel="stylesheet" type="text/css" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script>
+//options为编辑配置属性
+var options = {
+        cssPath : '$!webPath/resources/editor/plugins/code/prettify.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '890px',
+		height:'216px',
+		resizeType : 1,
+		allowImageUpload : true,
+		allowFlashUpload : false,
+		allowMediaUpload : false,
+		allowFileManager : false,
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['media','image','flash','emoticons', 'about']
+}; 
+jQuery(document).ready(function(){
+	jQuery("#owner_id").val("");							
+	jQuery("#reply_content").html("");							
+	jQuery(window).scroll(function () {
+		if(jQuery(document).scrollTop() + jQuery(window).height()>=jQuery(document).height()){
+			jQuery(".circle_nav").hide();		     
+		}else{
+			jQuery(".circle_nav").show();		   
+		}
+	});
+	jQuery("#toBottom").click(function(){
+		var sTop = jQuery(document).height()
+       jQuery('body,html').animate({scrollTop:sTop},1000);
+       return false;
+    });
+	editor = KindEditor.create('#reply_content',options);
+	//reply_load();
+ });////
+
+//回复帖子
+function reply_save(obj){
+		var content = jQuery("#content").val();
+		jQuery("#content").val("");
+		var id =jQuery("#id").val();
+		if(content==""){
+			 showDialog("msg_info","","请填写回复内容！",2,"error",2);
+		 }else{			 
+			 jQuery.post("$!webPath/admin/consulting_reply.htm",
+						{"id":id,"content":content},function(data){
+			                 if(data){
+			                	jQuery("#replylist").html(data);
+			                	obj.attr("disable",false);
+			                 }
+						});
+			
+			}
+	}
+
+	
+</script>
+</head>
+<body>
+<!--圈子申请 -->
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/circle/head.htm")
+<div class="circle_main"> $!httpInclude.include("/circle/nav.htm")
+  <div class="circle_main_center">
+    <div class="circle_list_x autoHeight-list ke-clearfix"> 
+      <div class="circle_list_left_x"><img src="$!{obj.headPath}" /></div>
+      <div class="circle_list_center_x">
+        <ul>
+          <li class="name">
+            <h3>$!obj.title</h3>
+          </li>
+          <li class="host"><i>$!obj.content</i></li>
+          <li class="host">
+          #foreach($!imgs in $imageList) 
+          <img src="$!imgs">
+          #end
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="circle_main_center_m">
+    <div class="circle_main_left">
+    <div id="replylist">
+     #foreach($!ob in $pages) 
+      <div class="circle_main_left_top">
+        <div class="circle_main_left_top_left">#if($!ob.createBy == $!userid)<img src="$!ob.expHeadPath" />#else<img src="$!ob.userHeadPath" />#end</div>
+            <div class="circle_main_left_top_center">
+          <h3>$!ob.content</h3>
+          <span>
+          #if($!ob.createBy == $!userid)
+          <strong>$!ob.expName 回复了 $!ob.userName</strong>
+          #else
+          <strong>$!ob.userName 回复了$!ob.expName </strong>
+          #end
+          <i>$!CommUtil.formatLongDate($!ob.createTime)</i></span> </div>
+        <input id="owner_id" name="owner_id" type="hidden" value="">
+      </div>
+      #end
+      </div>
+      <div class="circle_main_left_center">
+      <div class="circle_main_left_reply">
+        <!--楼层开始-->
+        <div id="reply_list"> </div>
+        <!--楼层结束-->
+        <div class="circle_nav" style="display:none">
+          <div class="circle_nav_center">
+            <div class="circle_nav_center_m">
+              <h3>$!obj.title</h3>
+              <div class="circle_main_left_top_right" style=" margin-top:12px;"><a class="r" href="javascript:void(0);" id="toBottom"></a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="circle_main_left_reply_top">
+        <div class="circle_main_left_reply_top_r">
+          <div>
+          <input type="hidden" name="id" id="id" value="$!obj.id" />
+            <textarea name="content" id="content" cols="" rows=""></textarea>
+          </div>
+          <span><a  onclick="reply_save(this);"  style="cursor: pointer;" id="huifu">回复</a></span> </div>
+      </div> -->
+    </div>
+  </div>
+
+</div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

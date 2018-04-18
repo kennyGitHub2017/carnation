@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!obj.ig_goods_name - 积分商城 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!obj.ig_seo_keywords" />
+<meta name="description" content="$!obj.ig_seo_description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}" />
+<meta name="copyright" content="$!{config.copyRight}" />
+<link
+	href="$!webPath/resources/style/system/front/default/css/public2.css"
+	type="text/css" rel="stylesheet" />
+<link
+	href="$!webPath/resources/style/system/front/default/css/public_auto.css"
+	type="text/css" rel="stylesheet" />
+<link
+	href="$!webPath/resources/style/system/front/default/css/integral.css"
+	rel="stylesheet" type="text/css" />
+<link href="$!webPath/resources/style/common/css/overlay.css"
+	type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.lazyload.js"></script>
+<script>
+jQuery(document).ready(function(){
+  #if($!obj.ig_limit_type==true)
+    #set($max=$!{obj.ig_limit_count})
+  #else
+    #set($max=$!{obj.ig_goods_count})
+  #end
+  jQuery("#theForm").validate({
+      rules:{
+		   exchange_count:{required:true,digits:true,max:$!{max},min:1}
+		  },
+	  messages:{
+		    exchange_count:{required:"兑换数量不能为空",digits:"只能为整数",max:"最多兑换{0}",min:"最少兑换1件"}
+		  }
+   });
+  
+  jQuery(".cut_num").click(function(){
+	  var count=jQuery("#exchange_count").val();
+	  if(count>1){
+	    count=parseInt(count)-1;
+		jQuery("#exchange_count").val(count);
+		changeButton(count);
+	  }
+ });
+ //
+ jQuery(".add_num").click(function(){
+	 var count=jQuery("#exchange_count").val();
+	  count=parseInt(count)+1;
+	  jQuery("#exchange_count").val(count);
+	  changeButton(count);
+ });
+ 
+ $('#exchange_count').change(function(){
+	var count = $('#exchange_count').val();
+	if(!isNaN(count)){
+		changeButton(count);
+	}
+ });
+ 
+ changeButton(1);
+});
+
+function compamerIntegral(count){
+	var userIntegral = 0;
+	var goodsIntegeral = 0;
+	#if($!user)
+		userIntegral = $!{user.integral};
+		goodsIntegeral = $!{obj.ig_goods_integral};
+	#else
+		return true;
+	#end
+	
+	if(userIntegral>0 && goodsIntegeral>0 && (count && count>0)) {
+		if(goodsIntegeral * count > userIntegral){
+			return false;
+		} else {
+			return true;
+		}
+	}
+}
+
+function changeButton(count){
+	if(count){
+		var status = compamerIntegral(count);
+		if(status){
+			$('#exchangeBtn').attr('class','detspan');
+			$('#exchangeButton').val('我要兑换');
+			$("#exchangeButton").attr("disabled", false);
+		}else{
+			$('#exchangeBtn').attr('class','notdetspan');
+			$('#exchangeButton').val('积分不足');
+			$("#exchangeButton").attr("disabled", true);
+		}
+	}
+}
+</script>
+</head>
+<body>
+	$!httpInclude.include("/top.htm") $!httpInclude.include("/head.htm")
+	$!httpInclude.include("/nav1.htm")
+	<div class="main">
+		<div class="index">
+			<div class="integ_details">
+				<form action="$!webPath/integral/exchange1.htm" method="post"
+					id="theForm">
+					<div class="details_in">
+						<h1>$!obj.ig_goods_name</h1>
+						<div class="integ_img">
+							<img src="$!{obj.ig_goods_img}" width="384" height="384" />
+						</div>
+						<ul class="detailsul">
+							<li><span class="detulsp">商品编号:</span><span>$!{obj.ig_goods_sn}</span></li>
+							<li><span class="detulsp">上架时间:</span><span>$!CommUtil.formatShortDate($!obj.add_time)</span></li>
+							<li><span class="detulsp">兑换时间:</span>#if($!{obj.ig_time_type})<span>$!CommUtil.formatShortDate($!obj.ig_begin_time)至$!CommUtil.formatShortDate($!obj.ig_end_time)</span>#else<span>无限制</span>#end</li>
+							<!-- <li><span class="detulsp">兑换限制:</span>#if($!{obj.ig_limit_type})<span>每名会员最多兑换$!obj.ig_limit_count件</span>#else<span>无限制</span>#end</li> -->
+							<li><span class="detulsp">市场价格:</span><span>¥$!{obj.ig_goods_price}</span></li>
+							<li><span class="detulsp">我的积分:</span><span><b>#if($!user)$!{user.integral}分#else
+										尚未登录 #end</b></span></li>
+							<li><span class="detulsp">消耗积分:</span><span><strong
+									class="font_size" style="color: #59c4f0;">$!{obj.ig_goods_integral}</strong><a
+									href="$!webPath/article_freeintegral.htm" target="_blank"
+									class="detula">如何免费获取积分?</a></span></li>
+							<li><span class="detulsp">邮费:</span><span>#if($!obj.ig_transfee_type=="1")¥<strong>$!{obj.ig_transfee}</strong>#else商家承担#end
+							</span></li> #if($!obj.ig_user_Level==0) #set($obj_level_name="铜牌及以上会员") #end
+							#if($!obj.ig_user_Level==1) #set($obj_level_name="银牌及以上会员") #end
+							#if($!obj.ig_user_Level==2) #set($obj_level_name="金牌及以上会员") #end
+							#if($!obj.ig_user_Level==3) #set($obj_level_name="超级会员专享") #end
+							<li><span class="detulsp">要求等级:</span><span>$!obj_level_name</span></li>
+							<li>
+								<span class="detulsp" style="line-height:30px;">兑换数量:</span>
+								<span class="intg_addnum"  style="margin-left: 0px;">
+									<a href="javascript:void(0);" class="cut_num"></a>
+									<input name="exchange_count" type="text" id="exchange_count" value="1" class="countertxt" />
+            						<a href="javascript:void(0);" class="add_num" ></a>
+            					</span>
+            					<span style="padding-top: 6px; width: 299px;">
+            					<label for="exchange_count"  class="error" style=" display: none">请输入正确的数量</label>&nbsp;
+            					剩余<em>$!{obj.ig_goods_count}</em>件
+            					</span>
+								<!--  
+								<span>
+									<i class="txt_detul"> 
+										<a href="javascript:void(0);" class="cut_num1"></a>
+										<input name="exchange_count" type="text" id="exchange_count" value="1" />
+										<a href="javascript:void(0);" class="add_num1"></a>
+									</i>剩余
+									<em>$!{obj.ig_goods_count}</em>件
+								</span>-->
+							</li>
+							<li><i class="detspan" id="exchangeBtn"> 
+								<input name="" type="submit" id="exchangeButton" value="我要兑换" style="cursor: pointer;" />
+							</i> <input name="id" type="hidden" id="id" value="$!obj.id" />
+                                <!-- JiaThis Button BEGIN -->
+                             <div class="share-box">
+                                <span class="choose_left"> 分享到：</span>
+                                <div class="jiathis_style_24x24">
+                                    <a class="jiathis_button_weixin"></a>
+                                    <a class="jiathis_button_qzone"></a>
+                                    <a class="jiathis_button_tsina"></a>
+                                </div>
+                                <script type="text/javascript" >
+                                    var jiathis_config={
+                                        url:"网址网址",
+                                        summary:"摘要摘要摘要摘要",
+                                        title:"标题标题标题 \#\#",
+                                        pic:"图片图片url",
+                                        shortUrl:false,
+                                        hideMore:false
+                                    }
+                                </script>
+                                <script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js" charset="utf-8"></script>
+                             </div>
+                                <!-- JiaThis Button END -->
+                            </li>
+							#if($!{config.share_code}&&$!{config.share_code}!="")
+							<li><i class="collection">分享该礼品到：</i>$!config.share_code</li>
+							#end
+
+						</ul>
+					</div>
+				</form>
+				<div class="gift_explain">
+					<h1>
+						<span>礼品介绍</span>
+					</h1>
+					<div class="explain_det">$!{obj.ig_content}</div>
+				</div>
+			</div>
+			<!-- <div class="gift_recode">
+				<h1>礼品兑换记录</h1>
+				<ul>
+					#foreach($gc in $gcs)
+					<li><span><a
+							href="$!webPath/integral/view_$!{gc.goods.id}.htm"
+							target="_blank">$!{gc.order.igo_user.userName}兑换：$!CommUtil.substring("$!{gc.goods.ig_goods_name}",12)</a></span>
+						<span><b>使用积分：<strong> $!{gc.integral}分</strong></b> <i>$!CommUtil.formatLongDate($!gc.addTime)</i></span>
+					</li> #end
+				</ul>
+			</div> -->
+		</div>
+
+	</div>
+    $!httpInclude.include("/footer.htm")
+</body>
+</html>

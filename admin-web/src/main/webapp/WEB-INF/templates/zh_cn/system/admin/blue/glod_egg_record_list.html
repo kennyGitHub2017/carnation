@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+	jQuery(document).ready(function(){
+		jQuery('#beginTime').datepicker({
+			  dateFormat:"yy-mm-dd",
+			  changeMonth: true,
+			  changeYear: true
+		});
+		jQuery('#endTime').datepicker({
+			  dateFormat:"yy-mm-dd",
+			  changeMonth: true,
+			  changeYear: true
+		});
+	});
+	
+	function query_form(){
+		jQuery("#queryForm").submit();
+	};
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">详情</h3>
+  <div class="nav_list">
+  	<!-- <ul>
+    	<li><a href="$!webPath/admin/food_calories_list.htm" class="this"><b>食物列表</b></a></li>
+  		<li><a href="$!webPath/admin/food_calories_add.htm"><b>新增食物</b></a></li>
+ 		<li><a href="$!webPath/admin/food_class_list.htm"><b>食物分类列表</b></a></li>
+  		<li><a href="$!webPath/admin/food_class_add.htm"><b>新增食物分类</b></a></li>
+    </ul> -->
+  </div>
+  <form method="post" id="queryForm" name="ListForm" action="$!webPath/admin/glod_egg_record_list.htm">
+  <div class="search">
+    <ul>
+      <li>
+        <span>领取时间</span> 
+        <span class="size100">
+	       <input name="beginTime" type="text" id="beginTime"  readonly="readonly" />
+	    </span> 
+	    <span class="size100">
+	       <input name="endTime" type="text" id="endTime"  readonly="readonly" />
+      	</span> 
+      	&nbsp;&nbsp;
+      	<input name="" type="button"  value="搜索" style="cursor:pointer;" onclick="query_form()" class="search_btn"/>
+      </li>
+    </ul>
+  </div>
+  </form>
+  <form method="post" id="ListForm" action="$!webPath/admin/glod_egg_record_list.htm">
+	  <div class="fshoptb">
+		    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+			      <tr>
+						<th align="center">
+							<span class="form_btna">CN账号</span>
+						</th>
+						<th align="center">
+							<span class="form_btna">手机号</span>
+						</th>
+						<th align="center">
+							<span class="form_btna">微信昵称</span>
+						</th>
+						<th align="center">
+							<span class="form_btna">APP昵称</span>
+						</th>
+						<th align="center">
+							<span class="form_btna">领取金额</span>
+						</th>
+						<th align="center">
+							<span class="form_btna">领取时间</span>
+						</th>
+				 </tr>
+				 #foreach($!obj in $!objs)
+				 <tr>
+					 <td align="center">$!obj.cnAccount</td>
+					 <td align="center">$!obj.mobile</td>
+					 <td align="center">$!obj.nickName</td>
+					 <td align="center">$!obj.appName</td>
+					 <td align="center">$!obj.money</td>
+					 <td align="center">$!obj.addTime</td>
+				 </tr>
+				 #end
+		    </table>
+	  </div>
+  <div class="operate_bar">
+    <div class="fenye">
+        <input type="hidden" name="mulitId" id="mulitId" />
+		<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML
+    </div> 
+  </div>
+  </form>
+</div>
+</body>
+</html>

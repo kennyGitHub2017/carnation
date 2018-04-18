@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta name="format-detection" content="telephone=no">
+        <meta name="format-detection" content="email=no">
+        <title>疾病自测</title>
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/common.css"/>        
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/mui.min.css" />
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/mui.picker.min.css" />
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/tijian.css" />
+        <style type="text/css">
+        	body{
+        		line-height: 12px;
+        	}
+        </style>
+	    <script>
+    		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+			document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+	    </script>
+	</head>
+	<body>
+		<div class="progressBar">
+			<span class="bar"></span>
+		</div>
+		<div class="tjHolder bgWhite">
+			<div class="questionContent" id="questionContent">
+				<div class="quesTypeArea">
+					<span class="typeTit">疾病风险自测</span>
+					<input type="hidden" id="userID" value="$!uid"/>
+				</div>
+				<div class="questionList">
+					#foreach($!obj in $!list)
+						#if($!obj.questionIndex==1)
+								<div class="timu curr">
+									<div class="subject">
+										<p>
+											$obj.questionIndex&nbsp;$obj.questionTitle
+										</p>
+									</div>
+									<div class="option" data-type="$!obj.wjGroupId">
+									#foreach($!option in $!obj.question_option_List)
+										<a href="javascript:;" data-score="$!option.score">
+											<span class="circle"></span>
+											$!option.optionDesc
+										</a>
+									#end
+									</div>
+								</div>
+							#else
+								<div class="timu">
+									<div class="subject"><p>$obj.questionIndex&nbsp;$obj.questionTitle</p></div>
+									<div class="option fn-hide" data-type="$!obj.wjGroupId">
+										#foreach($!option in $!obj.question_option_List)
+										<a href="javascript:;" data-score="$!option.score">
+											<span class="circle"></span>
+											$!option.optionDesc
+										</a>
+										#end
+									</div>
+								</div>
+							#end
+					#end
+					<div class="fn-hide">
+						<a href="javascript:;" class="submitBtn" id="submitBtn">提&nbsp;&nbsp;交</a>
+					</div>
+					<form action="$!apiPath/v1/jibing/result" method="post" id="form">
+						<input type="hidden" name="userID" value="$!uid"/>
+						<input type="hidden" name="jsonStr"/>
+						<input type="hidden" name="groupID" value="$!groupID"/>
+					</form>
+				</div>
+			</div>
+			
+		</div>
+		<script src="${apiPath}/resources/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/mui.picker.min.js"></script>
+		<script src="${apiPath}/resources/js/jiankangpinggu/jiBing.js"></script>
+	</body>
+</html>

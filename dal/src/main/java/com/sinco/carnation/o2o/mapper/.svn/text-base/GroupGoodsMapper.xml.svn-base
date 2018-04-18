@@ -1,0 +1,1349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.o2o.mapper.GroupGoodsMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.o2o.model.GroupGoods">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+		<result column="cost_price" property="costPrice" jdbcType="DECIMAL" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="gg_name" property="ggName" jdbcType="VARCHAR" />
+		<result column="gg_rebate" property="ggRebate" jdbcType="DECIMAL" />
+		<result column="gg_click" property="ggClick" jdbcType="INTEGER" />
+		<result column="goods_type" property="goodsType" jdbcType="INTEGER" />
+		<result column="group_count" property="groupCount" jdbcType="INTEGER" />
+		<result column="group_price" property="groupPrice" jdbcType="DECIMAL" />
+		<result column="gg_status" property="ggStatus" jdbcType="INTEGER" />
+		<result column="group_status" property="groupStatus" jdbcType="INTEGER" />
+		<result column="gg_recommend" property="ggRecommend" jdbcType="BIT" />
+		<result column="gg_recommend_time" property="ggRecommendTime"
+			jdbcType="TIMESTAMP" />
+		<result column="selled_count" property="selledCount" jdbcType="INTEGER" />
+		<result column="gg_ga_id" property="ggGaId" jdbcType="BIGINT" />
+		<result column="gg_gc_id" property="ggGcId" jdbcType="BIGINT" />
+		<result column="group_acc_path" property="groupAccPath"
+			jdbcType="VARCHAR" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="seo_keywords" property="seoKeywords" jdbcType="VARCHAR" />
+		<result column="seo_description" property="seoDescription"
+			jdbcType="VARCHAR" />
+		<result column="goods_collect" property="goodsCollect"
+			jdbcType="INTEGER" />
+		<result column="offCause" property="offCause" jdbcType="VARCHAR" />
+		<result column="refusedReasonDesc" property="refusedReasonDesc"
+			jdbcType="VARCHAR" />
+		<result column="group_count_warn" property="groupCountWarn"
+			jdbcType="INTEGER" />
+		<result column="group_rebate_amount" property="groupRebateAmount"
+			jdbcType="DECIMAL" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.o2o.model.GroupGoods"
+		extends="BaseResultMap">
+		<result column="group_notice" property="groupNotice" jdbcType="LONGVARCHAR" />
+		<result column="group_mobile_desc" property="groupMobileDesc"
+			jdbcType="LONGVARCHAR" />
+		<result column="group_desc" property="groupDesc" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.o2o.bo.GroupGoodsBO"
+		extends="ResultMapWithBLOBs">
+		<result column="gc_name" property="gcName" jdbcType="VARCHAR" />
+		<result column="grade_id" property="gradeId" jdbcType="INTEGER" />
+		<result column="operator_name" property="operatorName"
+			jdbcType="VARCHAR" />
+		<result column="operator_code" property="operatorCode"
+			jdbcType="VARCHAR" />
+		<association property="store"
+			javaType="com.sinco.carnation.store.model.Store" columnPrefix="store_"
+			resultMap="com.sinco.carnation.store.mapper.StoreMapper.BaseResultMap" />
+	</resultMap>
+	<resultMap id="CountResultMap" type="java.util.Map">
+		<result column="count" property="count" jdbcType="INTEGER" />
+		<result column="ggStatus" property="ggStatus" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap type="com.sinco.carnation.o2o.bo.GroupGoodsBO" id="QueryGroupGoodsMap"
+		extends="ResultMapWithBLOBs">
+		<result column="nickname" property="nickName" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="order_id" property="orderId" jdbcType="BIGINT" />
+		<result column="group_sn" property="groupSn" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+		<result column="store_address" property="storeAddress"
+			jdbcType="VARCHAR" />
+		<result column="store_lat" property="storeLat" jdbcType="DECIMAL" />
+		<result column="store_lon" property="storeLon" jdbcType="DECIMAL" />
+		<result column="license_c_telephone" property="licenseCTelephone"
+			jdbcType="VARCHAR" />
+		<result column="store_telephone" property="storeTelephone"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap type="com.sinco.carnation.o2o.bo.GroupGoodsBO" id="QueryPGroupGoodsMap"
+		extends="ResultMapWithBLOBs">
+		<result column="nickname" property="nickName" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="order_id" property="orderId" jdbcType="BIGINT" />
+		<result column="group_sn" property="groupSn" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+		<result column="store_address" property="storeAddress"
+			jdbcType="VARCHAR" />
+		<result column="store_lat" property="storeLat" jdbcType="DECIMAL" />
+		<result column="store_lon" property="storeLon" jdbcType="DECIMAL" />
+		<result column="license_c_telephone" property="licenseCTelephone"
+			jdbcType="VARCHAR" />
+		<association property="evaluationStoreTotal" columnPrefix="est_"
+			javaType="com.sinco.carnation.o2o.model.GroupEvaluationStoreTotal"
+			resultMap="com.sinco.carnation.o2o.mapper.GroupEvaluationStoreTotalMapper.BaseResultMap"></association>
+	</resultMap>
+
+	<select id="queryGroupGoodsFavaList" resultMap="QueryGroupGoodsMap">
+		SELECT
+		s.store_name,g.id,g.gg_name,g.group_price,g.group_acc_path FROM
+		user_customer_favorites u
+		INNER JOIN o2o_group_goods g ON u.fid=g.id
+		INNER JOIN shop_store s ON s.id=g.store_id
+		WHERE u.uid=#{uid} AND
+		u.type=5
+		ORDER BY u.create_time DESC
+	</select>
+
+	<select id="queryAwayStoreInfo" resultMap="QueryGroupGoodsMap">
+		SELECT
+		g.*
+		FROM
+		o2o_group_goods g WHERE g.store_id=#{storeId} and g.gg_status=0 ORDER
+		BY g.selled_count DESC LIMIT 0,1
+	</select>
+
+	<select id="queryRefundgoodsPageList" resultMap="QueryGroupGoodsMap">
+		SELECT
+		c.nickname,c.mobile,i.group_sn,i.`status`,o.add_time order_time,g.*
+		FROM o2o_group_goods g LEFT JOIN o2o_group_info i ON i.goods_id=g.id
+		LEFT JOIN o2o_group_order o ON o.id=i.order_id
+		LEFT JOIN user_customer
+		c ON c.uid=o.user_id
+		WHERE o.store_id=#{storeId} AND i.`status`
+		IN(3,5,6,7)
+		ORDER BY o.add_time DESC
+	</select>
+
+	<select id="queryGroupGoodsList" resultMap="QueryGroupGoodsMap">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		,
+		<include refid="Blob_Column_List"></include>
+		FROM o2o_group_goods WHERE goods_type=#{goodType} AND
+		gg_status=#{status} AND store_id=#{storeId}
+	</select>
+
+	<select id="sumSelledCountByStore" parameterType="Long"
+		resultType="Long">
+		select sum(gg.selled_count) from o2o_group_goods gg where
+		gg.store_id=#{storeId}
+	</select>
+
+	<select id="queryGroupDetails" resultMap="QueryGroupGoodsMap">
+
+		SELECT
+		c.nickname,c.mobile,i.status,i.order_id,i.group_sn,g.* FROM
+		o2o_group_info i
+		LEFT JOIN o2o_group_goods g ON i.goods_id=g.id
+		LEFT
+		JOIN user_customer c ON i.user_id=c.uid
+		LEFT JOIN shop_store s ON
+		s.id=g.store_id
+		WHERE i.group_sn=#{groupSn,jdbcType=VARCHAR} AND
+		s.create_user_id=#{sellerUid}
+	</select>
+	<select id="selectGoodsYourLike" resultMap="QueryGroupGoodsMap">
+		SELECT
+		obj.*,ss.store_lat,ss.store_lon,ss.store_name
+		FROM
+		o2o_group_goods obj inner join shop_store ss on obj.store_id=ss.id
+		WHERE
+		obj.gg_status = 0
+		AND obj.delete_status = 0
+		<if test="areaId != null and areaId != ''">
+			AND obj.gg_ga_id=#{areaId}
+		</if>
+		<if test="goodsId != null and goodsId != ''">
+			AND obj.id != #{goodsId}
+		</if>
+		<if test="goodsIds != null and goodsIds.size() > 0">
+			AND obj.id not in
+			<foreach collection="goodsIds" item="goodsId" open="(" close=")"
+				separator=",">
+				#{goodsId}
+			</foreach>
+		</if>
+		ORDER BY
+		obj.selled_count DESC
+		<if test="offset != null and offset != -1">
+			limit #{start}, #{offset}
+		</if>
+	</select>
+	<select id="queryGroupGoodsById" resultMap="QueryGroupGoodsMap">
+		SELECT
+		g.*,s.store_name,s.store_address,s.store_lat,s.store_lon,s.store_telephone,i.license_c_telephone
+		FROM o2o_group_goods g
+		LEFT JOIN shop_store s ON s.id=g.store_id
+		LEFT
+		JOIN shop_store_apply_info i ON s.id=i.store_id
+		WHERE
+		g.id=#{goodsId,jdbcType=BIGINT}
+	</select>
+	<select id="queryByIds" resultMap="QueryPGroupGoodsMap">
+		SELECT g.*,s.store_name,s.store_address,s.store_lat,s.store_lon,
+		est.one AS est_one,
+		est.two AS est_two,
+		est.three AS est_three,
+		est.five
+		AS est_five,
+		est.four AS est_four
+		FROM o2o_group_goods g
+		LEFT JOIN
+		o2o_group_evaluation_store_total est ON g.store_id =
+		est.store_id
+		LEFT
+		JOIN shop_store s ON s.id = g.store_id
+		WHERE g.id in
+		<foreach collection="ids" index="index" item="id" open="("
+			separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+	<select id="queryGroupGoodsPageList" resultMap="QueryGroupGoodsMap">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		,
+		<include refid="Blob_Column_List"></include>
+		FROM o2o_group_goods where delete_status=0
+		<if test="storeId != null">
+			and store_id=#{storeId,jdbcType=BIGINT}
+		</if>
+		<if test="goodsType != null">
+			and goods_type=#{goodsType,jdbcType=INTEGER}
+		</if>
+		<choose>
+			<when test="ggStatus != null and ggStatus == 1">
+				and gg_status=1 and -5
+			</when>
+			<otherwise>
+				and gg_status=#{ggStatus,jdbcType=INTEGER}
+			</otherwise>
+		</choose>
+
+		<!-- <if test="ggStatus != null"> and gg_status=#{ggStatus,jdbcType=INTEGER} 
+			</if> -->
+		order by add_time desc
+	</select>
+
+	<select id="findListShow" parameterType="com.sinco.carnation.o2o.vo.GroupGoodsListShowVO"
+		resultMap="BOResultMap">
+		SELECT
+		gg.id,
+		gg.gg_name,
+		gg.cost_price,
+		gg.group_price,
+		gg.selled_count,
+		gg.group_count,
+		gg.group_count_warn,
+		gg.group_acc_path,
+		gg.store_id,
+		ss.store_address as store_store_address,
+		ss.store_name as
+		store_store_name,
+		ss.grade_id
+		FROM
+		o2o_group_goods gg
+		INNER JOIN
+		shop_store ss on gg.store_id=ss.id
+		<if test="caseId != null ">
+			INNER JOIN o2o_group_case_content gcc on
+			gg.id=gcc.goods_id
+		</if>
+		where gg.delete_status=0
+		<if test="ids != null and ids.size() > 0">
+			and g.id in
+			<foreach collection="ids" item="listItem" open="(" close=")"
+				separator=",">
+				#{listItem}
+			</foreach>
+		</if>
+		<if test="caseId != null ">
+			and gcc.case_id=#{caseId}
+		</if>
+		<if test="cityId != null ">
+			and gg.gg_ga_id=#{cityId}
+		</if>
+	</select>
+
+	<select id="findListPageShow" parameterType="com.sinco.carnation.o2o.vo.GroupGoodsListShowVO"
+		resultMap="BOResultMap">
+		SELECT
+		gg.id,
+		gg.gg_name,
+		gg.cost_price,
+		gg.group_price,
+		gg.selled_count,
+		gg.group_count,
+		gg.group_count_warn,
+		gg.group_acc_path,
+		gg.store_id,
+		gg.add_time,
+		ss.store_address as store_store_address,
+		ss.store_name as
+		store_store_name,
+		ss.grade_id
+		FROM
+		o2o_group_goods gg
+		INNER JOIN
+		shop_store ss on gg.store_id=ss.id
+		<if test="vo.caseId != null ">
+			INNER JOIN o2o_group_case_content gcc on
+			gg.id=gcc.goods_id
+		</if>
+		where gg.delete_status=0
+		<if test="vo.ids != null and vo.ids.size() > 0">
+			and g.id in
+			<foreach collection="vo.ids" item="listItem" open="(" close=")"
+				separator=",">
+				#{listItem}
+			</foreach>
+		</if>
+		<if test="vo.caseId != null ">
+			and gcc.case_id=#{vo.caseId}
+		</if>
+		<if test="vo.cityId != null ">
+			and gg.gg_ga_id=#{vo.cityId}
+		</if>
+		order by gg.add_time desc
+	</select>
+
+	<update id="increaseGoodsCollect">
+		update o2o_group_goods set
+		goods_collect=goods_collect+1 where id=#{id}
+	</update>
+
+	<update id="subductionGoodsCollect">
+		update o2o_group_goods set
+		goods_collect=goods_collect-1 where id=#{id}
+	</update>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, begin_time, cost_price,
+		end_time, gg_name,
+		gg_rebate,
+		gg_click, goods_type, group_count,
+		group_price, gg_status, group_status,
+		gg_recommend,
+		gg_recommend_time,
+		selled_count, gg_ga_id, gg_gc_id, group_acc_path, store_id, user_id,
+		seo_keywords, seo_description, goods_collect, offCause,
+		refusedReasonDesc, group_count_warn,
+		group_rebate_amount
+	</sql>
+	<sql id="Blob_Column_List">
+		group_notice, group_mobile_desc, group_desc
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.o2o.model.GroupGoodsExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from o2o_group_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.o2o.model.GroupGoodsExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from o2o_group_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from o2o_group_goods
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		o2o_group_goods
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.o2o.model.GroupGoodsExample">
+		delete from o2o_group_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.o2o.model.GroupGoods"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into o2o_group_goods (id,
+		add_time, delete_status,
+		begin_time, cost_price, end_time,
+		gg_name,
+		gg_rebate, gg_click,
+		goods_type, group_count, group_price,
+		gg_status,
+		group_status, gg_recommend,
+		gg_recommend_time, selled_count, gg_ga_id,
+		gg_gc_id, group_acc_path, store_id,
+		user_id, seo_keywords,
+		seo_description,
+		goods_collect, offCause, refusedReasonDesc,
+		group_count_warn, group_rebate_amount, group_notice,
+		group_mobile_desc, group_desc)
+		values (#{id,jdbcType=BIGINT},
+		#{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{beginTime,jdbcType=TIMESTAMP}, #{costPrice,jdbcType=DECIMAL},
+		#{endTime,jdbcType=TIMESTAMP},
+		#{ggName,jdbcType=VARCHAR},
+		#{ggRebate,jdbcType=DECIMAL},
+		#{ggClick,jdbcType=INTEGER},
+		#{goodsType,jdbcType=INTEGER}, #{groupCount,jdbcType=INTEGER},
+		#{groupPrice,jdbcType=DECIMAL},
+		#{ggStatus,jdbcType=INTEGER},
+		#{groupStatus,jdbcType=INTEGER},
+		#{ggRecommend,jdbcType=BIT},
+		#{ggRecommendTime,jdbcType=TIMESTAMP},
+		#{selledCount,jdbcType=INTEGER}, #{ggGaId,jdbcType=BIGINT},
+		#{ggGcId,jdbcType=BIGINT}, #{groupAccPath,jdbcType=VARCHAR},
+		#{storeId,jdbcType=BIGINT},
+		#{userId,jdbcType=BIGINT},
+		#{seoKeywords,jdbcType=VARCHAR}, #{seoDescription,jdbcType=VARCHAR},
+		#{goodsCollect,jdbcType=INTEGER}, #{offcause,jdbcType=VARCHAR},
+		#{refusedReasonDesc,jdbcType=VARCHAR},
+		#{groupCountWarn,jdbcType=INTEGER},
+		#{groupRebateAmount,jdbcType=DECIMAL},
+		#{groupNotice,jdbcType=LONGVARCHAR},
+		#{groupMobileDesc,jdbcType=LONGVARCHAR},
+		#{groupDesc,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.o2o.model.GroupGoods"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into o2o_group_goods
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="beginTime != null">
+				begin_time,
+			</if>
+			<if test="costPrice != null">
+				cost_price,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+			<if test="ggName != null">
+				gg_name,
+			</if>
+			<if test="ggRebate != null">
+				gg_rebate,
+			</if>
+			<if test="ggClick != null">
+				gg_click,
+			</if>
+			<if test="goodsType != null">
+				goods_type,
+			</if>
+			<if test="groupCount != null">
+				group_count,
+			</if>
+			<if test="groupPrice != null">
+				group_price,
+			</if>
+			<if test="ggStatus != null">
+				gg_status,
+			</if>
+			<if test="groupStatus != null">
+				group_status,
+			</if>
+			<if test="ggRecommend != null">
+				gg_recommend,
+			</if>
+			<if test="ggRecommendTime != null">
+				gg_recommend_time,
+			</if>
+			<if test="selledCount != null">
+				selled_count,
+			</if>
+			<if test="ggGaId != null">
+				gg_ga_id,
+			</if>
+			<if test="ggGcId != null">
+				gg_gc_id,
+			</if>
+			<if test="groupAccPath != null">
+				group_acc_path,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="seoKeywords != null">
+				seo_keywords,
+			</if>
+			<if test="seoDescription != null">
+				seo_description,
+			</if>
+			<if test="goodsCollect != null">
+				goods_collect,
+			</if>
+			<if test="offCause != null">
+				offCause,
+			</if>
+			<if test="refusedReasonDesc != null">
+				refusedReasonDesc,
+			</if>
+			<if test="groupCountWarn != null">
+				group_count_warn,
+			</if>
+			<if test="groupRebateAmount != null">
+				group_rebate_amount,
+			</if>
+			<if test="groupNotice != null">
+				group_notice,
+			</if>
+			<if test="groupMobileDesc != null">
+				group_mobile_desc,
+			</if>
+			<if test="groupDesc != null">
+				group_desc,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="beginTime != null">
+				#{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="costPrice != null">
+				#{costPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ggName != null">
+				#{ggName,jdbcType=VARCHAR},
+			</if>
+			<if test="ggRebate != null">
+				#{ggRebate,jdbcType=DECIMAL},
+			</if>
+			<if test="ggClick != null">
+				#{ggClick,jdbcType=INTEGER},
+			</if>
+			<if test="goodsType != null">
+				#{goodsType,jdbcType=INTEGER},
+			</if>
+			<if test="groupCount != null">
+				#{groupCount,jdbcType=INTEGER},
+			</if>
+			<if test="groupPrice != null">
+				#{groupPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="ggStatus != null">
+				#{ggStatus,jdbcType=INTEGER},
+			</if>
+			<if test="groupStatus != null">
+				#{groupStatus,jdbcType=INTEGER},
+			</if>
+			<if test="ggRecommend != null">
+				#{ggRecommend,jdbcType=BIT},
+			</if>
+			<if test="ggRecommendTime != null">
+				#{ggRecommendTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="selledCount != null">
+				#{selledCount,jdbcType=INTEGER},
+			</if>
+			<if test="ggGaId != null">
+				#{ggGaId,jdbcType=BIGINT},
+			</if>
+			<if test="ggGcId != null">
+				#{ggGcId,jdbcType=BIGINT},
+			</if>
+			<if test="groupAccPath != null">
+				#{groupAccPath,jdbcType=VARCHAR},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="seoKeywords != null">
+				#{seoKeywords,jdbcType=VARCHAR},
+			</if>
+			<if test="seoDescription != null">
+				#{seoDescription,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsCollect != null">
+				#{goodsCollect,jdbcType=INTEGER},
+			</if>
+			<if test="offCause != null">
+				#{offCause,jdbcType=VARCHAR},
+			</if>
+			<if test="refusedReasonDesc != null">
+				#{refusedReasonDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="groupCountWarn != null">
+				#{groupCountWarn,jdbcType=INTEGER},
+			</if>
+			<if test="groupRebateAmount != null">
+				#{groupRebateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="groupNotice != null">
+				#{groupNotice,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="groupMobileDesc != null">
+				#{groupMobileDesc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="groupDesc != null">
+				#{groupDesc,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.o2o.model.GroupGoodsExample"
+		resultType="java.lang.Integer">
+		select count(*) from o2o_group_goods
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update o2o_group_goods
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.beginTime != null">
+				begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.costPrice != null">
+				cost_price = #{record.costPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.endTime != null">
+				end_time = #{record.endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.ggName != null">
+				gg_name = #{record.ggName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ggRebate != null">
+				gg_rebate = #{record.ggRebate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.ggClick != null">
+				gg_click = #{record.ggClick,jdbcType=INTEGER},
+			</if>
+			<if test="record.goodsType != null">
+				goods_type = #{record.goodsType,jdbcType=INTEGER},
+			</if>
+			<if test="record.groupCount != null">
+				group_count = #{record.groupCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.groupPrice != null">
+				group_price = #{record.groupPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.ggStatus != null">
+				gg_status = #{record.ggStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.groupStatus != null">
+				group_status = #{record.groupStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.ggRecommend != null">
+				gg_recommend = #{record.ggRecommend,jdbcType=BIT},
+			</if>
+			<if test="record.ggRecommendTime != null">
+				gg_recommend_time =
+				#{record.ggRecommendTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.selledCount != null">
+				selled_count = #{record.selledCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.ggGaId != null">
+				gg_ga_id = #{record.ggGaId,jdbcType=BIGINT},
+			</if>
+			<if test="record.ggGcId != null">
+				gg_gc_id = #{record.ggGcId,jdbcType=BIGINT},
+			</if>
+			<if test="record.groupAccPath != null">
+				group_acc_path = #{record.groupAccPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.seoKeywords != null">
+				seo_keywords = #{record.seoKeywords,jdbcType=VARCHAR},
+			</if>
+			<if test="record.seoDescription != null">
+				seo_description =
+				#{record.seoDescription,jdbcType=VARCHAR},
+			</if>
+			<if test="record.goodsCollect != null">
+				goods_collect = #{record.goodsCollect,jdbcType=INTEGER},
+			</if>
+			<if test="record.offCause != null">
+				offCause = #{record.offCause,jdbcType=VARCHAR},
+			</if>
+			<if test="record.refusedReasonDesc != null">
+				refusedReasonDesc =
+				#{record.refusedReasonDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.groupCountWarn != null">
+				group_count_warn =
+				#{record.groupCountWarn,jdbcType=INTEGER},
+			</if>
+			<if test="record.groupRebateAmount != null">
+				group_rebate_amount =
+				#{record.groupRebateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.groupNotice != null">
+				group_notice =
+				#{record.groupNotice,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.groupMobileDesc != null">
+				group_mobile_desc =
+				#{record.groupMobileDesc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.groupDesc != null">
+				group_desc = #{record.groupDesc,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update o2o_group_goods
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=BIT},
+		begin_time =
+		#{record.beginTime,jdbcType=TIMESTAMP},
+		cost_price =
+		#{record.costPrice,jdbcType=DECIMAL},
+		end_time =
+		#{record.endTime,jdbcType=TIMESTAMP},
+		gg_name =
+		#{record.ggName,jdbcType=VARCHAR},
+		gg_rebate =
+		#{record.ggRebate,jdbcType=DECIMAL},
+		gg_click =
+		#{record.ggClick,jdbcType=INTEGER},
+		goods_type =
+		#{record.goodsType,jdbcType=INTEGER},
+		group_count =
+		#{record.groupCount,jdbcType=INTEGER},
+		group_price =
+		#{record.groupPrice,jdbcType=DECIMAL},
+		gg_status =
+		#{record.ggStatus,jdbcType=INTEGER},
+		group_status =
+		#{record.groupStatus,jdbcType=INTEGER},
+		gg_recommend =
+		#{record.ggRecommend,jdbcType=BIT},
+		gg_recommend_time =
+		#{record.ggRecommendTime,jdbcType=TIMESTAMP},
+		selled_count =
+		#{record.selledCount,jdbcType=INTEGER},
+		gg_ga_id =
+		#{record.ggGaId,jdbcType=BIGINT},
+		gg_gc_id =
+		#{record.ggGcId,jdbcType=BIGINT},
+		group_acc_path =
+		#{record.groupAccPath,jdbcType=VARCHAR},
+		store_id =
+		#{record.storeId,jdbcType=BIGINT},
+		user_id =
+		#{record.userId,jdbcType=BIGINT},
+		seo_keywords =
+		#{record.seoKeywords,jdbcType=VARCHAR},
+		seo_description =
+		#{record.seoDescription,jdbcType=VARCHAR},
+		goods_collect =
+		#{record.goodsCollect,jdbcType=INTEGER},
+		offCause =
+		#{record.offCause,jdbcType=VARCHAR},
+		refusedReasonDesc =
+		#{record.refusedReasonDesc,jdbcType=VARCHAR},
+		group_count_warn =
+		#{record.groupCountWarn,jdbcType=INTEGER},
+		group_rebate_amount =
+		#{record.groupRebateAmount,jdbcType=DECIMAL},
+		group_notice =
+		#{record.groupNotice,jdbcType=LONGVARCHAR},
+		group_mobile_desc =
+		#{record.groupMobileDesc,jdbcType=LONGVARCHAR},
+		group_desc =
+		#{record.groupDesc,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update o2o_group_goods
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=BIT},
+		begin_time =
+		#{record.beginTime,jdbcType=TIMESTAMP},
+		cost_price =
+		#{record.costPrice,jdbcType=DECIMAL},
+		end_time =
+		#{record.endTime,jdbcType=TIMESTAMP},
+		gg_name =
+		#{record.ggName,jdbcType=VARCHAR},
+		gg_rebate =
+		#{record.ggRebate,jdbcType=DECIMAL},
+		gg_click =
+		#{record.ggClick,jdbcType=INTEGER},
+		goods_type =
+		#{record.goodsType,jdbcType=INTEGER},
+		group_count =
+		#{record.groupCount,jdbcType=INTEGER},
+		group_price =
+		#{record.groupPrice,jdbcType=DECIMAL},
+		gg_status =
+		#{record.ggStatus,jdbcType=INTEGER},
+		group_status =
+		#{record.groupStatus,jdbcType=INTEGER},
+		gg_recommend =
+		#{record.ggRecommend,jdbcType=BIT},
+		gg_recommend_time =
+		#{record.ggRecommendTime,jdbcType=TIMESTAMP},
+		selled_count =
+		#{record.selledCount,jdbcType=INTEGER},
+		gg_ga_id =
+		#{record.ggGaId,jdbcType=BIGINT},
+		gg_gc_id =
+		#{record.ggGcId,jdbcType=BIGINT},
+		group_acc_path =
+		#{record.groupAccPath,jdbcType=VARCHAR},
+		store_id =
+		#{record.storeId,jdbcType=BIGINT},
+		user_id =
+		#{record.userId,jdbcType=BIGINT},
+		seo_keywords =
+		#{record.seoKeywords,jdbcType=VARCHAR},
+		seo_description =
+		#{record.seoDescription,jdbcType=VARCHAR},
+		goods_collect =
+		#{record.goodsCollect,jdbcType=INTEGER},
+		offCause =
+		#{record.offCause,jdbcType=VARCHAR},
+		refusedReasonDesc =
+		#{record.refusedReasonDesc,jdbcType=VARCHAR},
+		group_count_warn =
+		#{record.groupCountWarn,jdbcType=INTEGER},
+		group_rebate_amount =
+		#{record.groupRebateAmount,jdbcType=DECIMAL}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.o2o.model.GroupGoods">
+		update o2o_group_goods
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="beginTime != null">
+				begin_time = #{beginTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="costPrice != null">
+				cost_price = #{costPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ggName != null">
+				gg_name = #{ggName,jdbcType=VARCHAR},
+			</if>
+			<if test="ggRebate != null">
+				gg_rebate = #{ggRebate,jdbcType=DECIMAL},
+			</if>
+			<if test="ggClick != null">
+				gg_click = #{ggClick,jdbcType=INTEGER},
+			</if>
+			<if test="goodsType != null">
+				goods_type = #{goodsType,jdbcType=INTEGER},
+			</if>
+			<if test="groupCount != null">
+				group_count = #{groupCount,jdbcType=INTEGER},
+			</if>
+			<if test="groupPrice != null">
+				group_price = #{groupPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="ggStatus != null">
+				gg_status = #{ggStatus,jdbcType=INTEGER},
+			</if>
+			<if test="groupStatus != null">
+				group_status = #{groupStatus,jdbcType=INTEGER},
+			</if>
+			<if test="ggRecommend != null">
+				gg_recommend = #{ggRecommend,jdbcType=BIT},
+			</if>
+			<if test="ggRecommendTime != null">
+				gg_recommend_time =
+				#{ggRecommendTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="selledCount != null">
+				selled_count = #{selledCount,jdbcType=INTEGER},
+			</if>
+			<if test="ggGaId != null">
+				gg_ga_id = #{ggGaId,jdbcType=BIGINT},
+			</if>
+			<if test="ggGcId != null">
+				gg_gc_id = #{ggGcId,jdbcType=BIGINT},
+			</if>
+			<if test="groupAccPath != null">
+				group_acc_path = #{groupAccPath,jdbcType=VARCHAR},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="seoKeywords != null">
+				seo_keywords = #{seoKeywords,jdbcType=VARCHAR},
+			</if>
+			<if test="seoDescription != null">
+				seo_description = #{seoDescription,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsCollect != null">
+				goods_collect = #{goodsCollect,jdbcType=INTEGER},
+			</if>
+			<if test="offCause != null">
+				offCause = #{offCause,jdbcType=VARCHAR},
+			</if>
+			<if test="refusedReasonDesc != null">
+				refusedReasonDesc =
+				#{refusedReasonDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="groupCountWarn != null">
+				group_count_warn = #{groupCountWarn,jdbcType=INTEGER},
+			</if>
+			<if test="groupRebateAmount != null">
+				group_rebate_amount =
+				#{groupRebateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="groupNotice != null">
+				group_notice = #{groupNotice,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="groupMobileDesc != null">
+				group_mobile_desc =
+				#{groupMobileDesc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="groupDesc != null">
+				group_desc = #{groupDesc,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.o2o.model.GroupGoods">
+		update
+		o2o_group_goods
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		begin_time =
+		#{beginTime,jdbcType=TIMESTAMP},
+		cost_price =
+		#{costPrice,jdbcType=DECIMAL},
+		end_time =
+		#{endTime,jdbcType=TIMESTAMP},
+		gg_name = #{ggName,jdbcType=VARCHAR},
+		gg_rebate = #{ggRebate,jdbcType=DECIMAL},
+		gg_click =
+		#{ggClick,jdbcType=INTEGER},
+		goods_type =
+		#{goodsType,jdbcType=INTEGER},
+		group_count =
+		#{groupCount,jdbcType=INTEGER},
+		group_price =
+		#{groupPrice,jdbcType=DECIMAL},
+		gg_status =
+		#{ggStatus,jdbcType=INTEGER},
+		group_status =
+		#{groupStatus,jdbcType=INTEGER},
+		gg_recommend =
+		#{ggRecommend,jdbcType=BIT},
+		gg_recommend_time =
+		#{ggRecommendTime,jdbcType=TIMESTAMP},
+		selled_count =
+		#{selledCount,jdbcType=INTEGER},
+		gg_ga_id = #{ggGaId,jdbcType=BIGINT},
+		gg_gc_id = #{ggGcId,jdbcType=BIGINT},
+		group_acc_path =
+		#{groupAccPath,jdbcType=VARCHAR},
+		store_id =
+		#{storeId,jdbcType=BIGINT},
+		user_id = #{userId,jdbcType=BIGINT},
+		seo_keywords = #{seoKeywords,jdbcType=VARCHAR},
+		seo_description =
+		#{seoDescription,jdbcType=VARCHAR},
+		goods_collect =
+		#{goodsCollect,jdbcType=INTEGER},
+		offCause =
+		#{offCause,jdbcType=VARCHAR},
+		refusedReasonDesc =
+		#{refusedReasonDesc,jdbcType=VARCHAR},
+		group_count_warn =
+		#{groupCountWarn,jdbcType=INTEGER},
+		group_rebate_amount =
+		#{groupRebateAmount,jdbcType=DECIMAL},
+		group_notice =
+		#{groupNotice,jdbcType=LONGVARCHAR},
+		group_mobile_desc =
+		#{groupMobileDesc,jdbcType=LONGVARCHAR},
+		group_desc =
+		#{groupDesc,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.o2o.model.GroupGoods">
+		update
+		o2o_group_goods
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		begin_time =
+		#{beginTime,jdbcType=TIMESTAMP},
+		cost_price =
+		#{costPrice,jdbcType=DECIMAL},
+		end_time =
+		#{endTime,jdbcType=TIMESTAMP},
+		gg_name = #{ggName,jdbcType=VARCHAR},
+		gg_rebate = #{ggRebate,jdbcType=DECIMAL},
+		gg_click =
+		#{ggClick,jdbcType=INTEGER},
+		goods_type =
+		#{goodsType,jdbcType=INTEGER},
+		group_count =
+		#{groupCount,jdbcType=INTEGER},
+		group_price =
+		#{groupPrice,jdbcType=DECIMAL},
+		gg_status =
+		#{ggStatus,jdbcType=INTEGER},
+		group_status =
+		#{groupStatus,jdbcType=INTEGER},
+		gg_recommend =
+		#{ggRecommend,jdbcType=BIT},
+		gg_recommend_time =
+		#{ggRecommendTime,jdbcType=TIMESTAMP},
+		selled_count =
+		#{selledCount,jdbcType=INTEGER},
+		gg_ga_id = #{ggGaId,jdbcType=BIGINT},
+		gg_gc_id = #{ggGcId,jdbcType=BIGINT},
+		group_acc_path =
+		#{groupAccPath,jdbcType=VARCHAR},
+		store_id =
+		#{storeId,jdbcType=BIGINT},
+		user_id = #{userId,jdbcType=BIGINT},
+		seo_keywords = #{seoKeywords,jdbcType=VARCHAR},
+		seo_description =
+		#{seoDescription,jdbcType=VARCHAR},
+		goods_collect =
+		#{goodsCollect,jdbcType=INTEGER},
+		offCause =
+		#{offCause,jdbcType=VARCHAR},
+		refusedReasonDesc =
+		#{refusedReasonDesc,jdbcType=VARCHAR},
+		group_count_warn =
+		#{groupCountWarn,jdbcType=INTEGER},
+		group_rebate_amount =
+		#{groupRebateAmount,jdbcType=DECIMAL}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="findTopByStoreId" resultMap="BOResultMap">
+		select
+		g.id,g.gg_name,g.selled_count,g.group_acc_path,store.store_second_domain
+		from o2o_group_goods g
+		left join shop_store store ON
+		store.id=g.store_id
+		where g.delete_status = 0 and g.gg_status=0
+		<if test="storeId != null">
+			and g.store_id = #{storeId}
+		</if>
+		order by g.selled_count desc
+		limit 0,10
+	</select>
+
+	<select id="findExpiredGroupGoods" resultMap="QueryGroupGoodsMap">
+		SELECT g.*
+		FROM o2o_group_goods g
+		WHERE 1=1
+		and (gg_status=0 or
+		gg_status=2)
+	    <![CDATA[AND DATE_FORMAT(g.end_time,'%Y-%m-%d') < DATE_FORMAT(now(),'%Y-%m-%d')]]>
+		<!-- <![CDATA[AND DATE_FORMAT(g.end_time,'%Y-%m-%d') > #{startTime,jdbcType=VARCHAR}]]> -->
+		<!-- <![CDATA[AND DATE_FORMAT(g.end_time,'%Y-%m-%d') < #{endTime,jdbcType=VARCHAR}]]> -->
+	</select>
+	<select id="findCountWarnGoods" resultType="java.lang.Integer">
+		select count(*) from
+		o2o_group_goods s where s.delete_status=0 and s.store_id = #{storeId}
+		and gg_status = 0 and s.group_count &lt; s.group_count_warn;
+	</select>
+
+	<select id="findCountByStoreId" resultMap="CountResultMap">
+		SELECT COUNT(0) count,
+		gg_status ggStatus FROM o2o_group_goods WHERE
+		store_id = #{storeId} and
+		delete_status = 0 GROUP BY
+		gg_status
+	</select>
+	<select id="findOperatorGoodsListByVO" parameterType="com.sinco.carnation.o2o.vo.GroupGoodsVO"
+		resultMap="BOResultMap">
+		SELECT
+		gg.*, s.store_name as store_store_name
+		FROM
+		o2o_group_goods gg
+		INNER JOIN shop_store s ON gg.store_id = s.id
+		INNER JOIN user_owns o ON
+		s.create_user_id = o.seller_user_id
+		<if test="vo.ggGcId != null and vo.ggGcId != '' ">
+			INNER JOIN o2o_group_class gc ON gc.id = gg.gg_gc_id AND
+			gc.parent_id =
+			#{vo.ggGcId}
+		</if>
+		AND gg.gg_status = 0
+		AND gg.delete_status = 0
+		AND s.store_status = 15
+		AND s.delete_status = 0
+		AND o.own_operator_id = #{vo.operatorId}
+		<if test="vo.ggName != null and vo.ggName != ''">
+			AND gg.gg_name like CONCAT('%',#{vo.ggName},'%')
+		</if>
+		<if test="vo.storeName != null and vo.storeName != ''">
+			AND s.store_name like CONCAT('%',#{vo.storeName},'%')
+		</if>
+		<if test="vo.goodsType != null and vo.goodsType > 0">
+			AND gg.goods_type = #{vo.goodsType}
+		</if>
+		order by gg.add_time desc
+	</select>
+	<select id="findOperatorGoodsById" resultMap="BOResultMap">
+		SELECT
+		gg.*,
+		s.store_name as store_store_name
+		FROM
+		o2o_group_goods gg
+		INNER JOIN
+		shop_store s ON gg.store_id = s.id
+		INNER JOIN user_owns o ON
+		s.create_user_id = o.seller_user_id
+		AND gg.gg_status = 0
+		AND
+		gg.delete_status = 0
+		AND s.store_status = 15
+		AND s.delete_status = 0
+		AND
+		o.own_operator_id = #{operatorId}
+		AND gg.id=#{ggId}
+	</select>
+	<select id="findListByVO" parameterType="com.sinco.carnation.o2o.vo.GroupGoodsVO"
+		resultMap="BOResultMap">
+		SELECT
+		gg.id, gg.add_time, gg.delete_status, gg.begin_time,
+		gg.cost_price,
+		gg.end_time, gg.gg_name, gg.gg_rebate,
+		gg.goods_type,
+		gg.group_count, group_count_warn,gg.group_price, gg.gg_status,
+		gg.group_status, gg.selled_count, gg.gg_ga_id,
+		gg.gg_gc_id,
+		gg.group_acc_path, gg.store_id, gg.user_id, gg.seo_keywords,
+		gg.seo_description, gg.goods_collect,
+		gg.group_notice,
+		gg.group_mobile_desc, gg.group_desc, gg.gg_click,
+		gg.refusedReasonDesc, ss.store_name as store_store_name, t.gc_name,
+		gg.offCause, uo.operator_name, uo.operator_code
+		FROM o2o_group_goods gg
+		LEFT JOIN shop_store ss on gg.store_id=ss.id
+		LEFT JOIN o2o_group_class
+		t on t.id=gg.gg_gc_id
+		LEFT JOIN dic_area a on gg.gg_ga_id=a.id
+		LEFT JOIN
+		user_owns owns ON ss.create_user_id = owns.seller_user_id
+		LEFT JOIN
+		user_operator uo ON owns.own_operator_id = uo.id
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="vo.ggName != null and vo.ggName != ''">
+				and gg.gg_name like concat('%',#{vo.ggName},'%')
+			</if>
+			<if test="vo.groupStatus != null">
+				and gg.group_status = #{vo.groupStatus}
+			</if>
+			<if test="vo.target != null">
+				and gg.gg_status != 0
+			</if>
+			<if test="vo.ggStatus != null">
+				and gg.gg_status = #{vo.ggStatus}
+			</if>
+			<if test="vo.storeName != null and vo.storeName != ''">
+				and ss.store_name like concat('%',#{vo.storeName},'%')
+			</if>
+			<if test="vo.goodsType != null and vo.goodsType > 0">
+				and gg.goods_type = #{vo.goodsType}
+			</if>
+			<if test="vo.ggGaId != null and vo.ggGaId != '' ">
+				and (gg.gg_ga_id = #{vo.ggGaId}
+				or a.parent_id =
+				#{vo.ggGaId})
+			</if>
+			<if test="vo.groupClassIds != null and vo.groupClassIds.size() > 0">
+				AND gg.gg_gc_id in
+				<foreach collection="vo.groupClassIds" item="gcId" open="("
+					close=")" separator=",">
+					#{gcId}
+				</foreach>
+			</if>
+			<if test="vo.ggStatusList != null and vo.ggStatusList.size() > 0">
+				AND gg.gg_status in
+				<foreach collection="vo.ggStatusList" item="status" open="("
+					close=")" separator=",">
+					#{status}
+				</foreach>
+			</if>
+			<if test="vo.storeId != null and vo.storeId > 0">
+				and gg.store_id = #{vo.storeId}
+			</if>
+			<if test="vo.yysFlag != null and vo.yysFlag != ''">
+				and gg.group_status is not null
+			</if>
+			
+			<if test="vo.ownType != null">
+				and owns.own_type = #{vo.ownType}
+			</if>
+			
+		</trim>
+		order by gg.add_time desc
+	</select>
+</mapper>

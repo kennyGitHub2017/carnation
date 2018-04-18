@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>我的在线服务订单</title>
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/service/public.css" type="text/css" rel="stylesheet"/>
+    
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+		<style>
+			.lifeOrderInfo{width:1192px;margin:0 auto;background: #FFFFFF;float:left}
+			.lifeOrderInfo .orderInfo{border:1px solid #e8e8e8;width:1114px;height:171px;margin: 0 auto;margin-top: 27px;}
+			.lifeOrderInfo .orderInfo .tit{background:#fafafa;width:1114px;height:42px;line-height: 42px;text-indent: 24px;color: #4A4A4A;}
+			.lifeOrderInfo .orderInfo .orderInfoMain{margin: 21px 0 0 31px;}
+			.lifeOrderInfo .orderInfo .orderInfoMain>div div{float:left;width: 385px;height: 30px;line-height: 30px;color: #5c5c5c;}
+			.lifeOrderInfo .orderInfo .orderInfoMain>div div>span{margin-left: 5px;}
+			.lifeOrderInfo .buyInfo{border:1px solid #e8e8e8;width:1114px;height:171px;margin: 0 auto;margin-top: 21px;margin-bottom:20px}
+			.lifeOrderInfo .buyInfo .tit{background:#fafafa;width:1114px;height:42px;line-height: 42px;text-indent: 24px;color: #4A4A4A;}
+			.buy_table{border-collapse: collapse;border: none;margin: 12px 0 0 17px;}
+			.buy_table th{background:#f5f5f5;height:30px;font-size:12px;color:#4a4a4a;text-align:center;font-weight: normal;}
+			.buy_table td{border:none;height: 80px;text-align: center;}
+			.buy_table td.color{color: #4A4A4A;}
+			.marchant_pic{background:#d8d8d8;width:98px;height:60px;float:left;margin-left:15px}
+			.marchant_pic img{width:100%;height:100%}
+			.marchant_name{float:left;margin-left:14px;font-size:14px;width:126px;height:60px;text-align:left;display:table;color: #4A4A4A;text-decoration: none;}
+			.marchant_name span{display:table-cell;vertical-align:middle}
+			.fn-rmb{font-family:arial;color:#f6582a}
+		</style>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/group/head.htm")
+$!httpInclude.include("/group/nav.htm")
+
+#set($map = $!orderFormTools.queryGroupInfo("$!order.groupInfo"))
+#set($goods_id = "$!{map.get('goods_id')}")	
+#set($goods_name = "$!{map.get('goods_name')}")	
+#set($goods_begin_time = "$!{map.get('goods_begin_time')}")
+#set($goods_end_time = "$!{map.get('goods_end_time')}")
+#set($goods_total_price = "$!{map.get('goods_total_price')}")
+#set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+#set($goods_price = "$!{map.get('goods_price')}")
+
+<div class="main clearfix">
+    <div class="position" style="margin-left:10px"><a href="$!webPath/index.htm"><b>首页</b></a><i>&gt;</i>
+    <a href="$!webPath/buyer/group.htm?orderType=2">我的订单</a><i>&gt;</i>$!order.orderId</div>
+    
+    <div class="lifeOrderInfo">
+			<div class="orderInfo">
+				<div class="tit">订单信息</div>
+				<div class="orderInfoMain">
+					<div>
+						<div class="no">订单编号:<span>${order.orderId}</span></div>
+						<div class="time">支付时间:<span>$!CommUtil.formatLongDate($!order.payTime)</span></div>
+					</div>
+					<div>
+						<div class="payType">支付类型:<span>$!{order.localGroupName}</span></div>
+						<div class="payWay">支付方式:<span>$PaymentConstants.getPaymentName($!order.paymentMark)</span></div>
+					</div>
+					<div>
+						<div class="phone">手机号码:<span>${order.userCustomer.mobile}</span></div>
+					</div>
+				</div>
+			</div>
+			<div class="buyInfo">
+				<div class="tit">购买信息</div>
+				<div class="buyInfoMain">
+					<table border="" cellspacing="" cellpadding="" class="buy_table">
+						<tr>
+							<th width="430">商家信息</th>
+							<th width="230">消费金额</th>
+							<th width="170">实付金额</th>
+							<th width="240"></th>
+						</tr>
+						<tr>
+							<td>
+								<a href="$!webPath/group/store.htm?id=$!store.id" target="_blank" class="marchant_pic"><img src="$!{order.groupAccPath}" /></a>
+                            	<a href="$!webPath/group/store.htm?id=$!store.id" target="_blank" class="marchant_name"><span>$!{store.storeName}</span></a>
+							</td>
+							<td class="fn-rmb color">
+								¥ $!{order.originalPrice}
+							</td>
+							<td class="fn-rmb">
+								¥ $!{order.totalPrice}
+							</td>
+							<td></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+</div>
+
+$!httpInclude.include("/footer.htm")
+
+</body>
+</html>

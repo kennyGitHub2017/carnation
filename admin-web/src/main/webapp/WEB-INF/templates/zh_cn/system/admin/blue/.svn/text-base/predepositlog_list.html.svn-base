@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function() {
+	jQuery("#pd_payment").val("$!pd_payment");
+	jQuery("#pd_pay_status").val("$!pd_pay_status");
+	jQuery("#pd_status").val("$!pd_status");
+	jQuery("#pd_remittance_bank").val("$!pd_remittance_bank");
+	jQuery("#pd_remittance_user").val("$!pd_remittance_user");
+	jQuery("#pd_userName").val("$!nickName");
+	jQuery("#pdSn").val("$!pdSn");
+	jQuery('#beginTime').datepicker({
+		dateFormat : "yy-mm-dd",
+		changeMonth : true,
+		changeYear : true
+	});
+	jQuery('#endTime').datepicker({
+		dateFormat : "yy-mm-dd",
+		changeMonth : true,
+		changeYear : true
+	});
+	//
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth"><b>云豆明细</b></h3>
+  <form action="$!webPath/admin/predepositlog_list.htm" method="post">
+    <input name="userId" type="hidden" id="userId" value="$!vo.userId" />
+  <div class="search">
+    <ul>
+      <li> 
+      	<span>会员名</span> <span class="size250">
+        <input name="nickname" type="text" id="nickname" value="$!vo.nickname" />
+        </span>
+      	<span>运营商名</span> <span class="size250">
+        <input name="operaName" type="text" id="operaName" value="$!vo.operaName" />
+        </span>
+        <span> 
+        	<select name="userCode">
+				<option value="">所有类型</option>
+				<option value="0" #if($!vo.userCode==0) selected="selected" #end >个人</option>
+				<option value="1" #if($!vo.userCode==1) selected="selected" #end>供应商</option>
+				<option value="2" #if($!vo.userCode==2) selected="selected" #end>商户</option>
+				<option value="3" #if($!vo.userCode==3) selected="selected" #end>CN运营商</option>
+				<option value="4" #if($!vo.userCode==4) selected="selected" #end>YY运营商</option> 		
+			</select>
+		</span>	
+		<span>时间</span>
+	      <span class="size100">
+	        <input name="beginTime" value="$!vo.beginTime" type="text" id="beginTime"  readonly="readonly"/>
+	      </span>
+	      <span>—</span>
+	      <span class="size100">
+	        <input name="endTime" value="$!vo.endTime" type="text" id="endTime" readonly="readonly" />
+	      </span> 
+        <span>
+        <input name="" type="submit"  value="搜索" style="cursor:pointer;"  class="search_btn" />
+        <input name="" type="buttom"  value="导出Excel" style="cursor:pointer;"  class="search_btn" onclick="export_excel()" href="javascript:void(0);"/>
+        </span> </li>
+    </ul>
+  </div>
+  </form>
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/admin/predepositlog_list.htm" method="post">
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="15%"><span class="form_btna">会员名称</span></th>
+        <th width="12%" ><span class="form_btna">提交时间</span></th>
+        <th width="5%" ><span class="form_btna">金额</span></th>
+        <th width="5%" ><span class="form_btna">云豆余额</span></th>
+        <th width="10%"><span class="form_btna">云豆类型</span></th>
+        <th width="5%"><span class="form_btna">会员角色</span></th>
+        <th width="10%"><span class="form_btna">操作类型</span></th>
+        <th width="10%"><span class="form_btna">操作管理员</span></th>
+        <th align="center"><b class="form_btnb">描述</b></th>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+        <td align="center">$!obj.nickName</td>
+        <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+        <td align="center">$!obj.pdLogAmount</td>
+        <td align="center">$!obj.balance</td>
+        <td align="center">$!obj.pdType</td>
+        <td align="center">
+	        #if($!obj.userCode==1)
+	        	供应商
+	        #elseif($!obj.userCode==2)
+	        	商户
+	        #elseif($!obj.userCode==3)
+	        	运营商
+	        #elseif($!obj.userCode==4)
+	        	运营商
+	        #else
+	        	个人
+	        #end
+        </td>
+        #if($!obj.type=="system")
+		  #set($type="系统积分管理")
+		#end
+		#if($!obj.type=="reg")
+		  #set($type="用户注册")
+		#end
+		<td align="center">$!obj.pdOpType</td>
+		<td align="center">$!obj.adminName</td>
+        <td align="center">$!obj.pdLogInfo</td>
+      </tr>
+      #end
+    </table>
+  </div>
+  <div class="operate_bar">
+    <div class="fenye">
+    	<input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+        <input name="operaName" type="hidden" id="operaName" value="$!vo.operaName" />
+    	<input name="nickname" type="hidden" id="nickname" value="$!vo.nickname" />
+    	<input name="userCode" type="hidden" id="userCode" value="$!vo.userCode" />
+    	<input name="userId" type="hidden" id="userId" value="$!vo.userId" />
+	  	$!gotoPageFormHTML
+    </div>             
+ </div>
+ </FORM>
+</div>
+<script>
+
+function export_excel(){
+	#if($!objs.size() >0 )
+		var nickname = jQuery("#nickname").val();
+		var userCode = jQuery("#userCode").val();
+		var currentPage = jQuery("#currentPage").val();
+		var beginTime = jQuery("#beginTime").val();
+		var endTime = jQuery("#endTime").val();
+		window.location.href = "$!webPath/admin/predepositlog_list_excel.htm?currentPage="+currentPage+"&nickname="+nickname+"&userCode="+userCode+"&beginTime="+beginTime+"&endTime="+endTime;
+	#else
+		alert("当前没有可以导出的数据！");
+	#end
+}
+</script>
+</body>
+</html>

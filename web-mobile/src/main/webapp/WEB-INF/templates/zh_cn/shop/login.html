@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户登录 - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/login.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+//新建cookie。
+//hours为空字符串时,cookie的生存期至浏览器会话结束。hours为数字0时,建立的是一个失效的cookie,这个cookie会覆盖已经建立过的同名、同path的cookie（如果这个cookie存在）。
+function setCookie(name,value,hours,path){
+  var name = escape(name);
+  var value = escape(value);
+  var expires = new Date();
+  expires.setTime(expires.getTime() + hours*3600000);
+  path = path == "" ? "" : ";path=" + path;
+  _expires = (typeof hours) == "string" ? "" : ";expires=" + expires.toUTCString();
+  document.cookie = name + "=" + value + _expires + path;
+}
+//获取cookie值
+function getCookieValue(name){
+  var name = escape(name);
+  //读cookie属性，这将返回文档的所有cookie
+  var allcookies = document.cookie;       
+  //查找名为name的cookie的开始位置
+  name += "=";
+  var pos = allcookies.indexOf(name);    
+  //如果找到了具有该名字的cookie，那么提取并使用它的值
+  if (pos != -1){                                             //如果pos值为-1则说明搜索"version="失败
+      var start = pos + name.length;                  //cookie值开始的位置
+      var end = allcookies.indexOf(";",start);        //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
+      if (end == -1) end = allcookies.length;        //如果end值为-1说明cookie列表里只有一个cookie
+      var value = allcookies.substring(start,end);  //提取cookie的值
+      return unescape(value);                           //对它解码      
+      }   
+  else return "";                                             //搜索失败，返回空字符串
+}
+//删除cookie
+function deleteCookie(name,path){
+  var name = escape(name);
+  var expires = new Date(0);
+  path = path == "" ? "" : ";path=" + path;
+  document.cookie = name + "="+ ";expires=" + expires.toUTCString() + path;
+}
+
+
+jQuery(document).ready(function(){
+	//加载用户名和密码
+	 var userNameValue = getCookieValue("userName"); 
+	 jQuery("#username").val(userNameValue); 
+	 var passwordValue = getCookieValue("password");  
+	 jQuery("#password").val(passwordValue); 
+	 
+  jQuery("#theForm").validate({
+    errorPlacement: function(error, element){
+            var error_li = element.parent('li');
+            error_li.append(error);
+        },
+	rules: {
+			username: "required",
+			password: "required"#if($!config.securityCodeLogin),
+			code:"required"#end},
+		messages: {
+			username: "用户名不能为空",
+			password: "密码不能为空"#if($!config.securityCodeLogin),
+			code:"验证码不能为空"#end
+			},
+			 success: function() {
+				  	if( jQuery("#saveCookie").attr("checked")){    
+				         setCookie("userName",jQuery("#username").val(),24,"/");  
+				        // setCookie("password",jQuery("#password").val(),24,"/");  
+				     } else{
+				    	 deleteCookie("userName","/");
+				    	// deleteCookie("password","/");
+				     }  
+			 }
+		
+  });
+  //
+  jQuery(".login_box_nav a").click(function(){
+	 jQuery("#qr_login_img").hide();										
+	 jQuery("#waiting_img").show();										
+	 var target_id=jQuery(this).attr("target_id");
+	 jQuery("#normal_login").hide();
+	 jQuery("#qr_login").hide();
+	 jQuery("#"+target_id).show();
+	 jQuery(".login_box_nav>span").removeClass("this");
+	 jQuery(this).parent().addClass("this");		
+	 if(target_id=="qr_login"){
+	   jQuery.ajax({type:'POST',url:'$!webPath/qr_login_img.htm',data:'',dataType:'json',
+				  success:function(data){
+					  jQuery("#qr_login_img").attr("src",data.qr_img_url);
+					  jQuery("#qr_login_img").show();
+					  jQuery("#waiting_img").hide();
+					  setInterval("qr_login('"+data.qr_session_id+"')", 5000);  
+				  }
+	   });						
+	 } 
+  });
+  //
+    
+});//end
+function qr_login(qr_session_id){
+		jQuery.ajax({type:'POST',url:'$!webPath/qr_login.htm',data:{"qr_session_id":qr_session_id},dataType:'json',
+				  success:function(data){
+					  if(data.ret=="true"){
+						  clearInterval();
+						   window.location.href="$!webPath/qr_login_confirm.htm?user_id="+data.user_id+"&qr_log_mark="+data.qr_log_mark;						   
+					  }
+				  }
+		});
+	}
+
+</script>
+</head>
+<body>
+<!--手机客户端弹出 -->
+<!--<div class="login_box_show_bg" style="display:none;"></div>-->
+<!--<div class="login_box_show" style="display:none;"> <i><a href="javascript:void(0);" onclick="jQuery('div[class^=login_box_show]').hide();">x</a></i>-->
+  <!--<dl>-->
+    <!--<span><img src="$!imageWebServer/$!{config.uploadFilePath}/app/app_dowload.png" /></span>-->
+    <!--<dd><a href="$!config.ios_download" target="_blank"><img src="$!webPath/resources/style/system/front/default/images/login/for_iphone.png" /></a></dd>-->
+    <!--<dd><a href="$!config.android_download" target="_blank"><img src="$!webPath/resources/style/system/front/default/images/login/for_andriod.png" /></a></dd>-->
+  <!--</dl>-->
+<!--</div>-->
+
+
+
+
+          <div class="login_box_left"> #if($!config.qr_login==1)
+            <!--有二维码登录-->
+            <div class="login_box_nav" style="display:;"> <span class="this"><a href="javascript:void(0);" target_id="normal_login">普通登录</a></span> <span style="border-right:none;"><a href="javascript:void(0);" target_id="qr_login">二维码登录</a></span> </div>
+            #else
+            <!--没有二维码登录-->
+            <h3 class="login_box_h3" style="display:">用户登录</h3>
+            #end
+
+            <form action="$!webPath/b2b2c_login.htm" method="post" name="theForm" id="theForm">
+            <input name="ajax_login" type="hidden" id="ajax_login" class="ajax_login" placeholder="ajax_login" value="true" />
+              <div  id="normal_login">
+                <div class="login_box_login" style="display:;">
+                  <ul class="login_ul">
+                    <li class="login_ul_li">
+                      <input name="username" type="text" id="username" class="login_input_name" placeholder="手机号码" spellcheck="false" tabindex="1" />
+                    </li>
+                    <li class="login_ul_li">
+                      <input  name="password" type="password" id="password"  autocomplete="off" class="login_input_pwd" placeholder="登录密码" tabindex="2" />
+                    </li>
+                    #if($!config.securityCodeLogin)
+                    <script>
+                     function refreshCode(){
+                         jQuery("#code_img").attr("src","$!webPath/verify.htm?d"+new Date().getTime());
+                     }
+                 </script>
+                    <li class="login_auto">
+	                      <input   name="code" type="text" id="code"  autocomplete="off"  class="login_code" placeholder="验证码" tabindex="3"/>
+	                      #if($!config.securityCodeType=='voice')
+		                      <script>
+		                       function readCode(id){
+		                             var  s = "<embed id='sound_play' name='sound_play' src='$!webPath/resources/flash/soundPlayer.swf?" + (new Date().getTime()) + "' FlashVars='url=$!webPath"+ "' width='0'   height='0' allowScriptAccess='always' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></embed>";
+		                        jQuery("#"+id).html(s);
+		                        }
+		                 	</script>
+		                      <img id="code_img" src="$!webPath/verify.htm" width="59" height="27" style="display:none;" /> <a href="javascript:void(0);" onclick="readCode('player')" title="朗读验证码" class="code_speech"></a><a href="javascript:void(0);" onclick="refreshCode();" class="code_refresh"></a> <span id="player"></span> 
+		                      #else <b> <img id="code_img" src="$!webPath/verify.htm" width="59" height="27" /> </b>  <a href="javascript:void(0);" onclick="refreshCode();" class="code_refresh"></a>
+	                      #end 
+                      </li>
+                    #end
+                     <li style="line-height: 40px;">
+                     <input id="saveCookie" type="checkbox" value="" style="vertical-align: middle;"/><label for="saveCookie" style="font-size: 12px;color: #999;margin-left: 5px;vertical-align: middle;">记住用户名</label>  
+                    </li>
+                  </ul>
+                </div>
+                  #if($message)
+                  <p class="red ptb-10">${message}</p>
+                  #end
+                <div class="login_btn">
+                  <input name="" type="submit" class="btn btn-blue"  value="立即登录" />
+                  <input name="login_role" type="hidden" id="login_role" value="user" />
+                </div>
+
+                <div class="login_box_bottom">
+                    <a  href="$!webPath/forget1.htm" class="forget_psd">忘记密码？</a>
+                    <a href="$!webPath/register.htm">免费注册</a>
+                </div>
+              </div>
+            </form>
+           </div>
+</body>
+</html>

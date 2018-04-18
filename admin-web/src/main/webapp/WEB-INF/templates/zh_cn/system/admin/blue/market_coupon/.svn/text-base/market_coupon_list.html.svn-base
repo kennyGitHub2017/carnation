@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js" ></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/plugins/jquery.validatebox.js"></script>
+	
+	
+	<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+	<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+	 
+</head>
+<body>
+	 <div id='opButtonsList' style="padding:5px 5px;">
+	 <form id="searchForm" method="post" action="$!webPath/admin/market_coupon_setList.htm" >
+	    	<div style="padding:5px 5px;" >
+					<strong>查询：活动日期</strong>
+	    			
+	    			<!-- <select id="status" name="status" class="easyui-combobox" name="state" style="width:100px;">
+	    			#foreach($sKey in ${statusMap.keySet()})
+						<option value="$!sKey" #if($!sKey==$!vo.status) selected="true" #end >${statusMap.get($sKey)}</option>
+					#end
+					</select>
+					&nbsp;&nbsp;
+					<select id="terminalType" name="terminalType" class="easyui-combobox" name="terminalType" style="width:100px;">
+					#foreach($sKey in ${terminalTypeMap.keySet()})
+						<option value="$!sKey" #if($!sKey==$!vo.terminalType) selected="true" #end >${terminalTypeMap.get($sKey)}</option>
+					#end
+					</select>
+					&nbsp;&nbsp;
+					<select id="actPosition" name="actPosition" class="easyui-combobox" style="width:100px;">
+					#foreach($sKey in ${actPositionMap.keySet()})
+						<option value="$!sKey" #if($!sKey==$!vo.actPosition) selected="true" #end>${actPositionMap.get($sKey)}</option>
+					#end
+					</select> -->
+					&nbsp;&nbsp;
+					<input id="startTimeStr" name="startTimeStr" value="$!vo.startTimeStr" class="easyui-datetimebox" data-options="prompt:'开始时间'" style="width:150px"/>
+					<strong>至</strong>
+					<input id="endTimeStr" name="endTimeStr" value="$!vo.endTimeStr" class="easyui-datetimebox" data-options="prompt:'结束时间'" style="width:150px"/>
+					&nbsp;&nbsp;					
+					<input id="schemeName" name="schemeName" value="$!vo.schemeName" class="easyui-textbox" type="text" style="width:100px;" data-options="prompt:'名称'"/>
+					&nbsp;&nbsp;
+	    			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="formSubmit()">查询</a>
+	    			
+	    	</div>
+	    	<input type="hidden" id="page" name="page" value="$!currentPage"></input>
+	    	<input type="hidden" id="size" name="size" value="$!pageSize"></input>
+	</form>
+	    
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="edit(0)">添加</a>
+		<!-- <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="batchDel()">删除</a> -->
+	</div>
+	<table id="listData" class="easyui-datagrid" 	
+			data-options="collapsible:true,rownumbers:true,remoteSort:false" toolbar="#opButtonsList">
+		<thead>
+			<tr>
+				<th data-options="halign:'center',field:'id',align:'left'" checkbox="true">选择</th>
+				<th data-options="halign:'center',field:'schemeName',width:120,align:'left'">名称</th>
+				<th data-options="halign:'center',field:'vcode',width:120,align:'left'">编码</th>
+				
+				
+				<th data-options="halign:'center',field:'getStart',width:125,align:'center'">优惠券开抢开始时间</th>
+				<th data-options="halign:'center',field:'getEnd',width:125,align:'center'">优惠券开抢结束时间</th>
+				
+				<th data-options="halign:'center',field:'useStart',width:125,align:'center'">优惠券使用开始时间</th>
+				<th data-options="halign:'center',field:'useEnd',width:125,align:'center'">优惠券使用结束时间</th>
+				
+				<th data-options="halign:'center',field:'startTime',width:125,align:'center'">活动开始时间</th>
+				<th data-options="halign:'center',field:'endTime',width:125,align:'center'">活动结束时间</th>
+				
+				<th data-options="halign:'center',field:'preStart',width:125,align:'center'">优惠券预热开始时间</th>
+				<th data-options="halign:'center',field:'preEnd',width:125,align:'center'">优惠券预热结束时间</th>
+				
+				<th data-options="halign:'center',field:'totalMoney',width:80,align:'center'">发行总金额</th>
+				<th data-options="halign:'center',field:'minMoney',width:80,align:'left'">面额</th>
+				<th data-options="halign:'center',field:'totalCount',width:70,align:'right',sortable:true">发行量</th>
+				<th data-options="halign:'center',field:'currentGetCount',width:80,align:'right',sortable:true">领取量</th>
+				<th data-options="halign:'center',field:'currentOpenCount',width:80,align:'right',sortable:true">拆包量</th>
+				<th data-options="halign:'center',field:'priority',width:50,align:'right',sortable:true">权重</th>
+				<!-- <th data-options="halign:'center',field:'totalMoney',width:80,align:'center'">优惠券金额</th> -->
+				<!-- <th data-options="halign:'center',field:'sumMoney',width:80,align:'center'">领取金额</th> -->
+				<th data-options="halign:'center',field:'rate',width:80,align:'center'">抢卷概率</th>
+				<th data-options="halign:'center',field:'createTime',width:125,align:'center'">创建时间</th>
+				
+				<th data-options="halign:'center',field:'status',width:50,align:'center'">状态</th>
+				<th data-options="halign:'center',field:'operate',width:230,align:'center'">操作</th>
+			</tr>
+		</thead>
+	    <tbody>  
+	      #foreach($obj in $objs)
+	        <tr>    
+	        	<td>$!obj.id</td>
+	            <td>$!obj.schemeName</td>
+	             <td>$!{obj.vcode}</td>
+	         
+	            <td>$!CommUtil.formatLongDate($!obj.getStart)</td>	
+	            <td>$!CommUtil.formatLongDate($!obj.getEnd)</td>
+	            
+	            <td>$!CommUtil.formatLongDate($!obj.useStart)</td>
+	            <td>$!CommUtil.formatLongDate($!obj.useEnd)</td>
+	            
+	            <td>$!CommUtil.formatLongDate($!obj.startTime)</td>
+	            <td>$!CommUtil.formatLongDate($!obj.endTime)</td>
+	            
+	            <td>$!CommUtil.formatLongDate($!obj.preStart)</td>
+	           	<td>$!CommUtil.formatLongDate($!obj.preEnd)</td>
+	           	
+	             <!-- 总发行量 -->
+	            <td> $!obj.totalMoney</td>
+	            
+	            <!-- 面额 -->
+	             <td>$!obj.couponNum</td>
+	             
+	            <!--发行量 -->
+	            <td>$!obj.totalCount</td>	
+	            
+	            <!--  <td>
+		         $!actRedPackageTools.getSumMoney($!obj.id)
+		        </td>	      -->       
+		        
+	        	<!-- 领取量 -->
+		      	<td>$!obj.getCount</td> <!--  -->
+		      	<!-- 拆包量 -->
+		      	<td>$!actMarketCouponGetTools.countGetCouponNum($!obj.id)</td>
+		      	<!-- 权重 -->
+		     	<td>$!obj.priority</td>
+		     	
+		     	
+		     	<td>1/$!obj.rate</td>
+		        
+		         <!--创建时间 -->
+	            <td>$!CommUtil.formatLongDate($!obj.createTime)</td>
+	           
+	             
+		         #if($!obj.isEnabled==1)
+		            #set($status="<span style='color:green'>启用</span>") 
+		         #end
+		         #if($!obj.isEnabled==0)
+		            #set($status="<span style='color:red'>停用</span>")
+		         #end
+	        <td align="center">$!status</td>
+	        <td>
+	        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit'" onclick="edit($!obj.id)">修改</a>
+	        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="del($!obj.id)">删除</a>
+	         #if($!obj.isEnabled==1)
+	         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-no'" onclick="handleEnabled($!obj.id,0)">停用</a>
+	          #else
+		      <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="handleEnabled($!obj.id,1)">启用</a>
+		       #end
+		     <a href="$!webPath/admin/coupon_get_list.htm?actCouponId=$!obj.id" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" >详情</a> 
+		 </td>
+	        </tr>
+	      #end
+	      </tbody>
+	</table>
+
+	<div id="listPager" class="easyui-pagination" data-options="total:$!rows,pageSize:$!pageSize,pageNumber:$!currentPage,pageList:[10,20,50,100]" style="background:#efefef;border:1px solid #ccc;"></div> 
+
+</body>
+
+<!-- 弹出层页面 -->
+	<div id="dlg" class="easyui-dialog" data-options="closed:true">
+	</div>
+	
+ 	<script type="text/javascript">	
+ 	 //错误提示框
+ 	 var message='$!{request.getParameter("message")}';
+ 	 if(message!=""){
+ 		jQuery.messager.alert("提示框",message);
+ 	 }
+ 	
+	    jQuery('#listPager').pagination({
+	    	onSelectPage:function(pageNumber, pageSize){
+	    		jQuery(this).pagination('loading');
+	    		jQuery('#page').attr("value",pageNumber);
+	    		jQuery('#size').attr("value",pageSize);
+	    		jQuery(this).pagination('loaded');
+				formSubmit();
+	    	},
+	    });
+        function edit(id) {
+        	//	alert(id);
+        	var op = 'add';
+        	if(id > 0){
+        		op = 'modify';
+        	}
+        	
+        	jQuery("#dlg").dialog({
+                title: op=='add'?'添加优惠券':'编辑优惠券',
+                href:  op=='add'?'market_coupon_add.htm':'market_coupon_edit.htm?id=' + id,
+                width:'860',
+     	    	height:'600',
+                top:(jQuery(window).height() - 600) * 0.5,   
+                left:(jQuery(window).width() - 860) * 0.5,
+                iconCls: 'icon-edit',
+                modal: true,
+                closed: false,
+             	onLoad:function(){
+                	loadEditor();
+                }, 
+                buttons: [{
+					text:'保存',
+					iconCls:'icon-save',
+					handler:function(){
+						var flag =  jQuery('#theForm').form('validate');
+					    var b=false;
+					    var vcode=jQuery("input[name='vcode']").val();
+					    var couponNum=parseInt(jQuery("input[name='couponNum']").val());//优惠券金额
+					    var minMoney=parseInt(jQuery("input[name='minMoney']").val());//使用规则(最低购物消费金额)
+						/* if(op=="add"){
+							
+							$.ajax({
+					              type: "post",
+					              url: "$!webPath/admin/red_package_only.htm",
+					              data:"vcode="+vcode,
+					              dataType: "json",
+					              async:false,//使用同步的Ajax请求
+					              success: function (result) {
+					                if(result==true){
+					                	b=true;
+					                }				           	   
+					              },error: function (XMLHttpRequest, textStatus, errorThrown) { 
+					           	      showMessage(errorThrown,false); 
+					              }
+					          });
+							
+						    if(!b){
+						    	//jQuery("input[name='vcode']").select();
+						    	//jQuery("input[name='vcode']").focus();
+						        jQuery.messager.alert("提示框","编码不能重复,请重新命名！");
+						      return;
+						    }	
+						}  */
+						
+						if(minMoney==0 || minMoney<=couponNum){
+							 jQuery.messager.alert("提示框","最低购物消费金额必须大于优惠券金额！");
+						      return;
+						}
+						
+						
+						if (flag){
+						    //alert('验证通过！');
+      						editor.sync();
+      	
+							jQuery("#theForm").submit();
+							jQuery("#dlg").dialog('close');
+							
+						}
+					}
+				},{
+					text:'关闭',
+					iconCls:'icon-cancel',
+					handler:function(){
+						jQuery("#dlg").dialog('close');
+					}
+				}],                
+            });
+        }
+
+        function formSubmit(){
+        	jQuery("#searchForm").submit();
+        }
+        
+        function del(id){
+        	
+				jQuery.messager.confirm('确认', '删除后不可恢复，是否继续？', function (r) {
+				    if (r) {
+				    	window.location.href='$!webPath/admin/market_coupon_delete.htm?id='+ id +'&currentPage=$!currentPage';  
+				    }
+			  });
+ 		}
+        
+        function handleEnabled(id,isEnabled){
+        	
+        		jQuery.messager.confirm('确认', (isEnabled==0?'停用优惠券':'启用优惠券')+'，是否继续？', function (r) {
+				    if (r) {
+				     window.location.href='$!webPath/admin/market_coupon_enable.htm?id='+ id +"&isEnabled="+isEnabled+'&currentPage=$!currentPage';
+				    }
+  			    });
+        }
+        
+        function batchDel(){
+        	var row = jQuery('#listData').datagrid('getSelections');  
+            var i = 0;  
+            var strId = "";  
+            for(i;i<row.length;i++){  
+            	strId += row[i].id;  
+                if(i < row.length-1){  
+                	strId += ',';  
+                }else{  
+                    break;  
+                }  
+            }
+            if(strId != ''){
+            	del(strId);
+            }
+        }
+        
+        
+        function showConfirm(msg) {
+			jQuery.messager.confirm('确认', msg, function (r) {
+			    if (r) {
+			        return true;
+			    }
+			});
+			return false;
+		}
+        
+	 function loadEditor() {
+		
+	    var options = {
+	            cssPath : '$!webPath/resources/editor/themes/default/default.css',
+	            filterMode : true,
+	    		uploadJson:'$!webPath/upload.htm',
+	    		width : '300px',
+	    		height:'400px',
+	    		resizeType: 1,
+	    		syncType:"form",
+	    		afterCreate : function() {
+	    							var self = this;
+	    							self.sync();
+	    						},
+	    		afterChange : function() {
+	    							var self = this;
+	    							self.sync();
+	    						},
+	    		afterBlur:function() {
+	    							var self = this;
+	    							self.sync();
+	    						},
+	    		items:['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+	    			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+	    			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+	    			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+	    			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+	    			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+	    };
+
+	    editor = KindEditor.create('#description', options);
+	}	
+	
+</script>
+  
+</html>

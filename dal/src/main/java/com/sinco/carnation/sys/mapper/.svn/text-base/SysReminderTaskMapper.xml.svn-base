@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.SysReminderTaskMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.SysReminderTask">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="task_name" property="taskName" jdbcType="VARCHAR" />
+		<result column="task_type" property="taskType" jdbcType="INTEGER" />
+		<result column="is_top" property="isTop" jdbcType="INTEGER" />
+		<result column="is_enabled" property="isEnabled" jdbcType="INTEGER" />
+		<result column="default_day" property="defaultDay" jdbcType="VARCHAR" />
+		<result column="default_time" property="defaultTime" jdbcType="TIMESTAMP" />
+		<result column="priority" property="priority" jdbcType="INTEGER" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="TINYINT" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="BIGINT" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sys.bo.SysReminderTaskBO"
+		extends="ResultMapWithBLOBs">
+		<result column="userCount" property="userCount" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.sys.model.SysReminderTask"
+		extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, task_name, task_type, is_top, is_enabled, default_day, default_time,
+		priority,
+		delete_status, create_by, create_time, modify_by, modify_time
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByExampleWithBLOBs"
+		parameterType="com.sinco.carnation.sys.model.SysReminderTaskExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sys_reminder_task
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.sys.model.SysReminderTaskExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_reminder_task
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sys_reminder_task
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sys_reminder_task
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sys.model.SysReminderTaskExample">
+		delete from sys_reminder_task
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.SysReminderTask"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_reminder_task (id, task_name, task_type,
+		is_top, is_enabled, default_day,
+		default_time, priority, delete_status,
+		create_by, create_time, modify_by,
+		modify_time, content)
+		values (#{id,jdbcType=BIGINT}, #{taskName,jdbcType=VARCHAR},
+		#{taskType,jdbcType=INTEGER},
+		#{isTop,jdbcType=INTEGER}, #{isEnabled,jdbcType=INTEGER}, #{defaultDay,jdbcType=VARCHAR},
+		#{defaultTime,jdbcType=TIMESTAMP}, #{priority,jdbcType=INTEGER},
+		#{deleteStatus,jdbcType=TINYINT},
+		#{createBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifyBy,jdbcType=BIGINT},
+		#{modifyTime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.SysReminderTask"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_reminder_task
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="taskName != null">
+				task_name,
+			</if>
+			<if test="taskType != null">
+				task_type,
+			</if>
+			<if test="isTop != null">
+				is_top,
+			</if>
+			<if test="isEnabled != null">
+				is_enabled,
+			</if>
+			<if test="defaultDay != null">
+				default_day,
+			</if>
+			<if test="defaultTime != null">
+				default_time,
+			</if>
+			<if test="priority != null">
+				priority,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="modifyBy != null">
+				modify_by,
+			</if>
+			<if test="modifyTime != null">
+				modify_time,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="taskName != null">
+				#{taskName,jdbcType=VARCHAR},
+			</if>
+			<if test="taskType != null">
+				#{taskType,jdbcType=INTEGER},
+			</if>
+			<if test="isTop != null">
+				#{isTop,jdbcType=INTEGER},
+			</if>
+			<if test="isEnabled != null">
+				#{isEnabled,jdbcType=INTEGER},
+			</if>
+			<if test="defaultDay != null">
+				#{defaultDay,jdbcType=VARCHAR},
+			</if>
+			<if test="defaultTime != null">
+				#{defaultTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="priority != null">
+				#{priority,jdbcType=INTEGER},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				#{modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="modifyTime != null">
+				#{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sys.model.SysReminderTaskExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_reminder_task
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_reminder_task
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.taskName != null">
+				task_name = #{record.taskName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.taskType != null">
+				task_type = #{record.taskType,jdbcType=INTEGER},
+			</if>
+			<if test="record.isTop != null">
+				is_top = #{record.isTop,jdbcType=INTEGER},
+			</if>
+			<if test="record.isEnabled != null">
+				is_enabled = #{record.isEnabled,jdbcType=INTEGER},
+			</if>
+			<if test="record.defaultDay != null">
+				default_day = #{record.defaultDay,jdbcType=VARCHAR},
+			</if>
+			<if test="record.defaultTime != null">
+				default_time = #{record.defaultTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.priority != null">
+				priority = #{record.priority,jdbcType=INTEGER},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.modifyBy != null">
+				modify_by = #{record.modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.modifyTime != null">
+				modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update sys_reminder_task
+		set id = #{record.id,jdbcType=BIGINT},
+		task_name = #{record.taskName,jdbcType=VARCHAR},
+		task_type = #{record.taskType,jdbcType=INTEGER},
+		is_top = #{record.isTop,jdbcType=INTEGER},
+		is_enabled = #{record.isEnabled,jdbcType=INTEGER},
+		default_day = #{record.defaultDay,jdbcType=VARCHAR},
+		default_time = #{record.defaultTime,jdbcType=TIMESTAMP},
+		priority = #{record.priority,jdbcType=INTEGER},
+		delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		modify_by = #{record.modifyBy,jdbcType=BIGINT},
+		modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+		content = #{record.content,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sys_reminder_task
+		set id = #{record.id,jdbcType=BIGINT},
+		task_name = #{record.taskName,jdbcType=VARCHAR},
+		task_type = #{record.taskType,jdbcType=INTEGER},
+		is_top = #{record.isTop,jdbcType=INTEGER},
+		is_enabled = #{record.isEnabled,jdbcType=INTEGER},
+		default_day = #{record.defaultDay,jdbcType=VARCHAR},
+		default_time = #{record.defaultTime,jdbcType=TIMESTAMP},
+		priority = #{record.priority,jdbcType=INTEGER},
+		delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		modify_by = #{record.modifyBy,jdbcType=BIGINT},
+		modify_time = #{record.modifyTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.SysReminderTask">
+		update sys_reminder_task
+		<set>
+			<if test="taskName != null">
+				task_name = #{taskName,jdbcType=VARCHAR},
+			</if>
+			<if test="taskType != null">
+				task_type = #{taskType,jdbcType=INTEGER},
+			</if>
+			<if test="isTop != null">
+				is_top = #{isTop,jdbcType=INTEGER},
+			</if>
+			<if test="isEnabled != null">
+				is_enabled = #{isEnabled,jdbcType=INTEGER},
+			</if>
+			<if test="defaultDay != null">
+				default_day = #{defaultDay,jdbcType=VARCHAR},
+			</if>
+			<if test="defaultTime != null">
+				default_time = #{defaultTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="priority != null">
+				priority = #{priority,jdbcType=INTEGER},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.sys.model.SysReminderTask">
+		update sys_reminder_task
+		set task_name = #{taskName,jdbcType=VARCHAR},
+		task_type = #{taskType,jdbcType=INTEGER},
+		is_top = #{isTop,jdbcType=INTEGER},
+		is_enabled = #{isEnabled,jdbcType=INTEGER},
+		default_day = #{defaultDay,jdbcType=VARCHAR},
+		default_time = #{defaultTime,jdbcType=TIMESTAMP},
+		priority = #{priority,jdbcType=INTEGER},
+		delete_status = #{deleteStatus,jdbcType=TINYINT},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		modify_by = #{modifyBy,jdbcType=BIGINT},
+		modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+		content = #{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.SysReminderTask">
+		update sys_reminder_task
+		set task_name = #{taskName,jdbcType=VARCHAR},
+		task_type = #{taskType,jdbcType=INTEGER},
+		is_top = #{isTop,jdbcType=INTEGER},
+		is_enabled = #{isEnabled,jdbcType=INTEGER},
+		default_day = #{defaultDay,jdbcType=VARCHAR},
+		default_time = #{defaultTime,jdbcType=TIMESTAMP},
+		priority = #{priority,jdbcType=INTEGER},
+		delete_status = #{deleteStatus,jdbcType=TINYINT},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		modify_by = #{modifyBy,jdbcType=BIGINT},
+		modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="findPageByVo" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		,
+		(SELECT COUNT(*) FROM sys_task_log AS b WHERE b.task_id = a.id ) AS userCount
+		from sys_reminder_task AS a
+		where delete_status = 0
+		<if test="vo.taskName != null and vo.taskName != ''">
+			and task_name like concat('%', #{vo.taskName}, '%')
+		</if>
+		<if test="vo.content != null and vo.content != ''">
+			and content like concat('%', #{vo.content}, '%')
+		</if>
+		<if test="vo.isTop != null">
+			and is_top = #{vo.isTop}
+		</if>
+		<if test="vo.isEnabled != null">
+			and is_enabled = #{vo.isEnabled}
+		</if>
+		order by create_Time desc
+	</select>
+</mapper>

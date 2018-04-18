@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title> #macro ( genericTree $somelist ) #foreach ( $some in
+$somelist )
+<option value="$!some.id">#if($!some.level>0) #foreach($count
+	in [0..$!some.level])&nbsp;&nbsp;&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) #end #end
+</head>
+
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link  href="$!webPath/resources/style/chosen/muitiple-select.css" type=text/css rel=stylesheet />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+	jQuery(document).ready(function() {
+	 jQuery("#theForm").validate({
+		 rules : {
+				physicalTypeId : {
+		 		required : true
+		 		},
+		 		resultType:{
+		 			required : true
+		 		},
+		 		isEnabled:{
+		 			required : true
+		 		}
+		 		
+	 },
+	 messages : {
+		 physicalTypeId : {
+			required : "体检项需要选择"
+		},
+		resultType:{
+ 			required : "体检结果需要填写"
+ 		},
+ 		isEnabled:{
+ 			required : "是否开启需要填写"
+ 		}
+	
+	 }
+	 });
+
+	 });
+
+	function saveForm() {
+		var url = '$!webPath/admin/checkSuggest/editSuggest.htm';
+		$("#theForm").attr("action",url);
+		jQuery("#theForm").submit();
+	}
+	function updateForm(){
+		var url = '$!webPath/admin/checkSuggest/updateSuggest.htm';
+		$("#theForm").attr("action",url);
+		jQuery("#theForm").submit();
+	}
+</script>
+
+<body>
+	<div class="cont">
+		<h1 class="seth">体检建议编辑</h1>
+		<div class="nav_list">
+			<ul>
+				<li><a href="$!webPath/admin/checkSuggest/pageList.htm"><b>管理</b></a></li>
+				<li><a href="$!webPath/admin/checkSuggest/addPage.htm"
+					class="this"><b>#if($!obj) 编辑 #else 新增 #end</b></a></li>
+			</ul>
+
+		</div>
+
+
+		<form name="theForm" id="theForm"
+			action="" method="post">
+		<input type="hidden" name="id" value="$!suggestBo.id"/>
+			<div class="edit">
+				<div class="editul setcont">
+
+					<!--鼠标经过样式-->
+
+
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>体检项名称</li>
+						<li><span class="webname"> <select
+								name="physicalTypeId" id="physicalTypeId">
+									<option value="">--请选择--</option> #foreach($typeList in
+									$typeList)
+									<option value="$!typeList.id" #if($suggestBo.physicalTypeId== $!typeList.id) selected="selected" #end >$!typeList.typeName</option> #end
+							</select>
+
+						</span></li>
+						
+						<li class="setcont_bg"><strong class="sred">*</strong>结果说明</li>
+						<li><span class="webname"> 
+						<select name="resultType" id="resultType">
+						<option value="">--请选择--</option>
+								 	#foreach($sKey in ${physicalResult.keySet()})
+									<option value="$!sKey" #if($suggestBo.resultType== $!sKey) selected="selected" #end>${physicalResult.get($sKey)}</option>
+									#end
+							</select>
+						</span></li>
+					</ul>
+					
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>关键字</li>
+						<li><span class="webname"><input type="hidden" id="kid_typeid" name="keyWordIdStr" value="#foreach($skmResult in $skmResult) $!skmResult.kId,  #end">
+						</span>
+						
+						<span id="add" onclick="showKeywordsBox()">添加</span>
+						<span id="keywordslist">#foreach($skmResult in $skmResult) $!skmResult.kName  #end</span>
+						</li>
+
+					</ul>
+
+					 <ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>建议分类</li>
+						<li><span class="webname"> <select name="suggestType"
+								id="groupId">
+									<option value="1" #if($suggestBo.suggestType== 1) selected="selected" #end>饮食</option>
+									<option value="2" #if($suggestBo.suggestType== 2) selected="selected" #end>运动</option>
+									<option value="3" #if($suggestBo.suggestType== 3) selected="selected" #end>生活</option>
+									<option value="4" #if($suggestBo.suggestType== 4) selected="selected" #end>医疗</option>
+									<option value="5" #if($suggestBo.suggestType== 5) selected="selected" #end>其他</option>
+							</select>
+						</span></li>
+
+					</ul>
+
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>是否开启</li>
+						<li>
+						<input id="radio1"  type="radio" name="isEnabled"  value="1" #if($suggestBo.isEnabled== 1) checked="checked" #end/>是 &nbsp;&nbsp; 
+						<input id="radio2" type="radio" name="isEnabled" value="0" #if($suggestBo.isEnabled== 0) checked="checked" #end/>否
+						</li>
+					</ul>
+						
+					<ul class="set1">
+						<li class="setcont_bg"><strong class="sred">*</strong>权重</li>
+						<li><span class="webname"> <input name="priority"
+								type="text" id="itemName" value="$!suggestBo.priority" style="width: 30px" />
+						</span></li>
+					</ul>
+
+					<ul class="set1">
+						<li class="setcont_bg">描述</li>
+						<li><span class="webname"> <textarea rows="6"
+									cols="80" name="content" >$!suggestBo.content </textarea>
+						</span></li>
+					</ul>
+
+				</div>
+			</div>
+
+
+		</form>
+
+		<div class="submit">
+		#if($!flag != 1)
+			<span class="pad120"><input name="save" type="button"
+				value="提交" onclick="saveForm()" /></span> #end
+				#if($!flag == 1)
+				<span class="pad120"><input name="update" type="button"
+				value="修改" onclick="updateForm()" />#end
+		</div>
+		
+
+	</div>
+	
+    <script>
+    $(".right .list").delegate("ul li","click",function(){
+        if($(this).hasClass("curr")){
+            $(this).removeClass("curr");
+            var temp=$("#selected").html(),
+                    keyword=$(this).html(),
+                    kid=$(this).attr("kid");
+            $("#selected").html(temp.replace("<span kid="+"\""+kid+"\""+">"+keyword+"</span>",""));
+        }else{
+            $(this).addClass("curr");
+            var temp=$("#selected").html(),
+                    keyword=$(this).html(),
+                    kid=$(this).attr("kid");
+            $("#selected").html(temp+"<span kid="+kid+">"+keyword+"</span>");
+        }
+    });
+    
+    $("#keywordsCancel").click(function(){
+        $(".model").hide();
+        $(".keywordsBox").hide();
+    });
+
+    $("#keywordsComfirm").click(function(){
+        $(".model").hide();
+        $(".keywordsBox").hide();
+        var re=/<span kid="([^<]+)">([^<]+)<\/span>/g;
+        var keywordsStr=$("#selected").html();
+        var kidArr=[];
+        while(re.exec(keywordsStr)!=null)
+        {
+        	kidArr.push(RegExp.$1);
+        }
+        $("#kid_typeid").val(kidArr.join(","));
+        $("#keywordslist").html(keywordsStr);
+    });
+    
+    function showKeywordsBox(){
+    	$(".model").show();
+        $(".keywordsBox").show();
+    }
+    
+    $(".left .list ul li").click(function(){
+        $(this).addClass("curr").siblings("li").removeClass("curr");
+        var index=$(".left .list ul li").index(this);
+        $(".right .list").eq(index).show().siblings(".list").hide();
+        var that=this;
+        var id=$(this).attr("value");
+        
+        if($(this).attr("load")=="loaded"){
+            return;
+        }else{
+        	$.ajax({
+                type: 'POST',
+                url: '$!webPath/admin/physicalKeyWord/getKeyWordByType.htm',
+                async: false,
+                data: {type:id},
+                dataType: 'json',
+                success: function (data) {
+					data = data.data;
+                    var strHtml=""
+                   	for(var i=0;i<data.length;i++){
+                   		strHtml+="<li kid='"+data[i].id+"'>"+data[i].name+"</li>";                       	
+                       }
+                    $(".right .list").eq(index).html("<ul>"+strHtml+"</ul>");
+                    $(that).attr("load","loaded");
+                },
+                error: function () {
+                    
+                }
+            });   
+        }
+    });
+
+    
+    </script>
+
+	#parse("/result/key_word_utils.html")
+</body>
+</html>

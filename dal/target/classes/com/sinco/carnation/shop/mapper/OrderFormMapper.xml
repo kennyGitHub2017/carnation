@@ -1,0 +1,2168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.OrderFormMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.OrderForm">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="auto_confirm_email" property="autoConfirmEmail"
+			jdbcType="BIT" />
+		<result column="auto_confirm_sms" property="autoConfirmSms"
+			jdbcType="BIT" />
+		<result column="commission_amount" property="commissionAmount"
+			jdbcType="DECIMAL" />
+		<result column="confirm_time" property="confirmTime" jdbcType="TIMESTAMP" />
+		<result column="delivery_address_id" property="deliveryAddressId"
+			jdbcType="BIGINT" />
+		<result column="delivery_time" property="deliveryTime"
+			jdbcType="VARCHAR" />
+		<result column="delivery_type" property="deliveryType"
+			jdbcType="INTEGER" />
+		<result column="enough_reduce_amount" property="enoughReduceAmount"
+			jdbcType="DECIMAL" />
+		<result column="eva_user_id" property="evaUserId" jdbcType="BIGINT" />
+		<result column="finish_time" property="finishTime" jdbcType="TIMESTAMP" />
+		<result column="goods_amount" property="goodsAmount" jdbcType="DECIMAL" />
+		<result column="invoice" property="invoice" jdbcType="VARCHAR" />
+		<result column="invoice_type" property="invoiceType" jdbcType="INTEGER" />
+		<result column="operation_price_count" property="operationPriceCount"
+			jdbcType="INTEGER" />
+		<result column="order_cat" property="orderCat" jdbcType="INTEGER" />
+		<result column="order_confirm_delay" property="orderConfirmDelay"
+			jdbcType="INTEGER" />
+		<result column="order_form" property="orderForm" jdbcType="INTEGER" />
+		<result column="order_id" property="orderId" jdbcType="VARCHAR" />
+		<result column="order_main" property="orderMain" jdbcType="INTEGER" />
+		<result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+		<result column="order_type" property="orderType" jdbcType="VARCHAR" />
+		<result column="out_order_id" property="outOrderId" jdbcType="VARCHAR" />
+		<result column="out_price" property="outPrice" jdbcType="DECIMAL" />
+		<result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+		<result column="pay_type" property="payType" jdbcType="VARCHAR" />
+		<result column="rc_amount" property="rcAmount" jdbcType="INTEGER" />
+		<result column="rc_mobile" property="rcMobile" jdbcType="VARCHAR" />
+		<result column="rc_price" property="rcPrice" jdbcType="DECIMAL" />
+		<result column="rc_type" property="rcType" jdbcType="VARCHAR" />
+		<result column="receiver_name" property="receiverName"
+			jdbcType="VARCHAR" />
+		<result column="receiver_area" property="receiverArea"
+			jdbcType="VARCHAR" />
+		<result column="receiver_area_info" property="receiverAreaInfo"
+			jdbcType="VARCHAR" />
+		<result column="receiver_mobile" property="receiverMobile"
+			jdbcType="VARCHAR" />
+		<result column="receiver_telephone" property="receiverTelephone"
+			jdbcType="VARCHAR" />
+		<result column="receiver_zip" property="receiverZip" jdbcType="VARCHAR" />
+		<result column="return_ship_time" property="returnShipTime"
+			jdbcType="TIMESTAMP" />
+		<result column="ship_code" property="shipCode" jdbcType="VARCHAR" />
+		<result column="ship_time" property="shipTime" jdbcType="TIMESTAMP" />
+		<result column="ship_addr_id" property="shipAddrId" jdbcType="BIGINT" />
+		<result column="ship_price" property="shipPrice" jdbcType="DECIMAL" />
+		<result column="store_id" property="storeId" jdbcType="VARCHAR" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+		<result column="trade_no" property="tradeNo" jdbcType="VARCHAR" />
+		<result column="transport" property="transport" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="whether_gift" property="whetherGift" jdbcType="INTEGER" />
+		<result column="payment_id" property="paymentId" jdbcType="BIGINT" />
+		<result column="self_add_price" property="selfAddPrice"
+			jdbcType="DECIMAL" />
+		<result column="is_mobile" property="isMobile" />
+		<result column="allygPrice" property="allygPrice" jdbcType="DECIMAL" />
+		<result column="allCashPrice" property="allCashPrice" jdbcType="DECIMAL" />
+		<result column="isygOrder" property="isygOrder" jdbcType="BIT" />
+		<result column="actualygPrice" property="actualygPrice"
+			jdbcType="DECIMAL" />
+		<result column="actualPrice" property="actualPrice" jdbcType="DECIMAL" />
+		<result column="cn_useralias" property="cnUseralias" jdbcType="VARCHAR" />
+		<result column="actual_integral" property="actualIntegral" jdbcType="DECIMAL"/>
+		<result column="pay_type_flag" property="payTypeFlag" jdbcType="INTEGER"/>
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.OrderForm"
+		extends="BaseResultMap">
+		<result column="child_order_detail" property="childOrderDetail"
+			jdbcType="LONGVARCHAR" />
+		<result column="coupon_info" property="couponInfo" jdbcType="LONGVARCHAR" />
+		<result column="delivery_info" property="deliveryInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="enough_reduce_info" property="enoughReduceInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="express_info" property="expressInfo" jdbcType="LONGVARCHAR" />
+		<result column="gift_infos" property="giftInfos" jdbcType="LONGVARCHAR" />
+		<result column="goods_info" property="goodsInfo" jdbcType="LONGVARCHAR" />
+		<result column="group_info" property="groupInfo" jdbcType="LONGVARCHAR" />
+		<result column="msg" property="msg" jdbcType="LONGVARCHAR" />
+		<result column="order_seller_intro" property="orderSellerIntro"
+			jdbcType="LONGVARCHAR" />
+		<result column="pay_msg" property="payMsg" jdbcType="LONGVARCHAR" />
+		<result column="return_goods_info" property="returnGoodsInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="ship_addr" property="shipAddr" jdbcType="LONGVARCHAR" />
+		<result column="pay_type_flag" property="payTypeFlag" jdbcType="INTEGER"/>
+	</resultMap>
+	<resultMap type="com.sinco.carnation.shop.bo.OrderFormBO" id="BOResultMapWithBLOBs"
+		extends="ResultMapWithBLOBs">
+		<result column="mark" property="mark" jdbcType="VARCHAR" />
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="seller_user_id" property="sellerUserId"
+			jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="pay_type_flag" property="payTypeFlag" jdbcType="INTEGER"/>
+	</resultMap>
+
+	<select id="selectSumPriceByStoreId" resultMap="ResultMapWithBLOBs">
+		SELECT
+		user_id,
+		sum(total_price) allOfPrice
+		FROM
+		shop_order_form
+		WHERE
+		order_status <![CDATA[ >= ]]>
+		#{orderStatus}
+		AND store_id = #{storeId}
+		GROUP BY
+		user_id
+	</select>
+	<select id="sumOrderPrice" resultType="double">
+		SELECT
+		sum(of.total_price)
+		FROM
+		shop_order_form of
+		WHERE
+		of.id in
+		<foreach collection="ids" item="listItem" open="(" close=")"
+			separator=",">
+			#{listItem}
+		</foreach>
+	</select>
+
+	<select id="sumOrderCashPrice" resultType="double">
+		SELECT
+		sum(of.allCashPrice)
+		FROM
+		shop_order_form of
+		WHERE
+		of.id in
+		<foreach collection="ids" item="listItem" open="(" close=")"
+			separator=",">
+			#{listItem}
+		</foreach>
+	</select>
+	
+	<select id="sumOrderIntegral" resultType="double">
+		SELECT
+		sum(of.all_integral)
+		FROM
+		shop_order_form of
+		WHERE
+		of.id in
+		<foreach collection="ids" item="listItem" open="(" close=")"
+			separator=",">
+			#{listItem}
+		</foreach>
+	</select>	
+	<select id="sumOrderShip" resultType="double">
+		SELECT
+		sum(of.ship_price)
+		FROM
+		shop_order_form of
+		WHERE
+		of.id in
+		<foreach collection="ids" item="listItem" open="(" close=")"
+			separator=",">
+			#{listItem}
+		</foreach>
+	</select>
+	
+	<select id="statusCount" resultMap="BOResultMapWithBLOBs">
+		select order_status, count(*)
+		statusCount from shop_order_form where user_id=#{userId}
+		and
+		order_cat!=2 and order_main=1 group by order_status
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, auto_confirm_email, auto_confirm_sms,
+		commission_amount,
+		confirm_time, delivery_address_id, delivery_time, delivery_type,
+		enough_reduce_amount,
+		eva_user_id, finish_time, goods_amount, invoice, invoice_type,
+		operation_price_count,
+		order_cat, order_confirm_delay, order_form, order_id, order_main, order_status,
+		order_type,
+		out_order_id, out_price, pay_time, pay_type, rc_amount, rc_mobile, rc_price,
+		rc_type,
+		receiver_name, receiver_area, receiver_area_info, receiver_mobile,
+		receiver_telephone,
+		receiver_zip, return_ship_time, ship_code, ship_time, ship_addr_id, ship_price,
+		store_id,
+		store_name, total_price, trade_no, transport, user_id, user_name, whether_gift,
+		payment_id,
+		self_add_price,is_mobile,isygOrder,allCashPrice,allygPrice,order_type_flag,cn_useralias,
+		all_integral,actual_integral,pay_type_flag
+	</sql>
+	<sql id="Blob_Column_List">
+		child_order_detail, coupon_info, delivery_info, enough_reduce_info, express_info,
+		gift_infos, goods_info, group_info, msg, order_seller_intro, pay_msg,
+		return_goods_info,actualygPrice,actualPrice,
+		ship_addr
+	</sql>
+	<sql id="BO_Column_List">
+		so.id, so.add_time, so.delete_status, so.auto_confirm_email,
+		so.auto_confirm_sms, so.commission_amount,
+		so.confirm_time, so.delivery_address_id, so.delivery_time, so.delivery_type,
+		so.enough_reduce_amount,
+		so.eva_user_id, so.finish_time, so.goods_amount, so.invoice, so.invoice_type,
+		so.operation_price_count,
+		so.order_cat, so.order_confirm_delay, so.order_form, so.order_id, so.order_main,
+		so.order_status, so.order_type,
+		so.out_order_id, so.out_price, so.pay_time, so.pay_type, so.rc_amount, so.rc_mobile,
+		so.rc_price, so.rc_type,
+		so.receiver_name, so.receiver_area, so.receiver_area_info, so.receiver_mobile,
+		so.receiver_telephone,
+		so.receiver_zip, so.return_ship_time, so.ship_code, so.ship_time, so.ship_addr_id,
+		so.ship_price, so.store_id,so.actual_integral,so.actualPrice,
+		so.store_name, so.total_price, so.trade_no, so.transport, so.user_id, so.user_name,
+		so.whether_gift, so.payment_id,
+		so.self_add_price, so.child_order_detail, so.coupon_info, so.delivery_info,
+		so.enough_reduce_info, so.express_info,
+		so.gift_infos, so.goods_info, so.group_info, so.msg, so.order_seller_intro,
+		so.pay_msg, so.return_goods_info,so.pay_type_flag,
+		so.ship_addr,sp.mark,so.is_mobile,sp.name
+	</sql>
+
+	<select id="selectListById" resultMap="BOResultMapWithBLOBs">
+		SELECT
+		so.*
+		,user.login_name
+		FROM shop_order_form so
+		LEFT JOIN shop_payment sp ON sp.id = so.payment_id
+		LEFT JOIN sys_user_account user ON (user.uid = so.user_id and
+		user.account_type=2)
+		WHERE so.id=#{id}
+	</select>
+
+	<select id="selectSumTotlePriceByStatus" resultType="java.math.BigDecimal">
+		select
+		sum(total_price) from shop_order_form
+		where delete_status = 0 and order_status = #{orderStatus}
+	</select>
+
+	<select id="selectSumTotlePriceByVO" resultType="java.math.BigDecimal">
+		SELECT
+		sum(total_price)
+		FROM
+		shop_order_form
+		WHERE
+		order_form = #{vo.orderForm }
+		AND store_id = #{vo.storeId }
+		AND order_status <![CDATA[ >= ]]>
+		#{vo.orderStatus}
+		AND DATE_FORMAT(finish_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+		DATE_FORMAT(#{vo.beginTime},'%Y-%m-%d')
+		AND DATE_FORMAT(finish_time,'%Y-%m-%d') <![CDATA[ < ]]>
+		DATE_FORMAT(#{vo.endTime},'%Y-%m-%d')
+	</select>
+	<select id="selectCountByVO" resultType="int">
+		SELECT
+		count(*)
+		FROM
+		shop_order_form
+		WHERE
+		order_form = #{vo.orderForm }
+		AND store_id = #{vo.storeId }
+		AND DATE_FORMAT(add_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+		DATE_FORMAT(#{vo.beginTime},'%Y-%m-%d')
+		AND DATE_FORMAT(add_time,'%Y-%m-%d') <![CDATA[ < ]]>
+		DATE_FORMAT(#{vo.endTime},'%Y-%m-%d');
+	</select>
+
+	<select id="selectByExampleWithBLOBs" resultMap="BOResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.shop.model.OrderFormExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_order_form
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="search" resultMap="BOResultMapWithBLOBs">
+		select * from shop_order_form where order_main=1 and order_cat!=2
+		<![CDATA[and order_status>=40 and return_ship_time>=now()]]>
+		and user_id=#{userId} and date(date_add(confirm_time, interval #{day}
+		day))<![CDATA[>=]]>date(now())
+		<if test="orderId != null and orderId != ''">
+			and order_id like concat('%',#{orderId},'%')
+		</if>
+		order by id desc
+	</select>
+
+
+	<select id="selectOrderCanPreRebateArray" resultMap="BOResultMapWithBLOBs">
+		SELECT o.id AS id,IFNULL(s.`uid`,0) AS seller_user_id,o.order_form
+		FROM shop_order_form AS o
+		LEFT JOIN `user_seller` AS s ON s.`store_id` = o.`store_id`
+		WHERE
+		o.`order_id` not in (select `rebate_code` from user_rebate_record
+		where 1=1
+		and rebate_type in
+		('303','304','305','306','307','308','309','310','311','312','313','314','315','316','317','318','319','320','321','322','323','324','325','326','327','328','329','330','331'))
+		and o.`id` not in (select `return_order_id` from shop_return_goods_log
+		where refund_status=0)
+		and o.goods_amount <![CDATA[<>]]>
+		0
+		and (o.isygOrder<![CDATA[<>]]>1
+		or o.isygOrder is null)
+		and o.order_status>=20
+		order by o.id asc
+	</select>
+
+	<select id="selectYunGouCNOrderArray" resultMap="BOResultMapWithBLOBs">
+		SELECT o.id AS id,IFNULL(s.`uid`,0) AS seller_user_id,o.order_form
+		FROM shop_order_form AS o
+		LEFT JOIN `user_seller` AS s ON s.`store_id`
+		= o.`store_id`
+		WHERE
+		o.`order_id` not in (select `rebate_code` from user_rebate_record
+		where 1=1
+		and rebate_status=1
+		and rebate_type in
+		('303','304','305','306','307','308','309','310','311','312','313','314','315','316','317','318','319','320','321','322','323','324','325','326','327','328','329','330','331'))
+		and o.`id` not in (select `return_order_id` from shop_return_goods_log
+		where refund_status=0)
+		and o.order_status>=40
+		and o.isygOrder=1
+		and o.order_type_flag=3
+		and o.pay_type_flag in (1,2)
+		and date(date_add(o.confirm_time, interval 7 day)) <![CDATA[<=]]>
+		date(now())
+		order by o.id asc
+	</select>
+	
+	<select id="selectYunGouYSOrderArray" resultMap="BOResultMapWithBLOBs">
+		SELECT o.id AS id,IFNULL(s.`uid`,0) AS seller_user_id,o.order_form
+		FROM shop_order_form AS o
+		LEFT JOIN `user_seller` AS s ON s.`store_id`
+		= o.`store_id`
+		WHERE
+		o.`order_id` not in (select `rebate_code` from user_rebate_record
+		where 1=1
+		and rebate_status=1
+		and rebate_type in
+		('303','304','305','306','307','308','309','310','311','312','313','314','315','316','317','318','319','320','321','322','323','324','325','326','327','328','329','330','331'))
+		and o.`id` not in (select `return_order_id` from shop_return_goods_log
+		where refund_status=0)
+		and o.order_status>=40
+		and o.isygOrder=1
+		and o.order_type_flag=3
+		and o.pay_type_flag=3
+		and date(date_add(o.confirm_time, interval 7 day)) <![CDATA[<=]]>
+		date(now())
+		order by o.id asc
+	</select>
+	
+	
+	
+	
+
+	<select id="findOrderCanPayOffV2" resultMap="BOResultMapWithBLOBs">
+		SELECT o.id AS id,IFNULL(s.`uid`,0) AS seller_user_id,o.order_form
+		FROM shop_order_form AS o
+		LEFT JOIN `user_seller` AS s ON s.`store_id`
+		= o.`store_id`
+		WHERE
+		o.`order_id` not in (select `rebate_code` from user_rebate_record
+		where 1=1
+		and rebate_status=1
+		and rebate_type in
+		('303','304','305','306','307','308','309','310','311','312','313','314','315','316','317','318','319','320','321','322','323','324','325','326','327','328','329','330','331'))
+		and o.`id` not in (select `return_order_id` from shop_return_goods_log
+		where refund_status=0)
+		and o.order_status>=40
+		and o.goods_amount <![CDATA[<>]]>
+		0
+		and (o.isygOrder<![CDATA[<>]]>1
+		or o.isygOrder is null)
+		and date(date_add(o.confirm_time, interval 7 day)) <![CDATA[<=]]>
+		date(now())
+		order by o.id asc
+	</select>
+
+
+	<select id="findOrderCanPayOff" resultMap="BOResultMapWithBLOBs">
+		SELECT o.id AS id,IFNULL(s.`uid`,0) AS seller_user_id
+		FROM shop_order_form AS o
+		LEFT JOIN `user_seller` AS s ON s.`store_id` = o.`store_id`
+		LEFT JOIN `shop_return_goods_log` rg ON rg.`return_order_id` = o.`id` AND
+		rg.refund_status = 0
+		AND rg.goods_return_status in(1, 5, 6, 7, 10)
+
+		LEFT JOIN `user_rebate_record` rr ON rr.`order_id` = o.`id` AND
+		rr.rebate_type = '301'
+		WHERE
+		ISNULL(rg.`id`) AND ISNULL(rr.`id`) AND
+		<![CDATA[o.order_status>=40 and o.return_ship_time < now()]]>
+		and date(date_add(o.confirm_time, interval #{day} day))<![CDATA[<]]>date(now())
+		order by o.id asc
+	</select>
+
+	<select id="complain" resultMap="BOResultMapWithBLOBs">
+		select * from shop_order_form where order_main=1 <![CDATA[and order_status>=20]]>
+		and user_id=#{userId}
+		<if test="orderId != null and orderId != ''">
+			and order_id like concat('%',#{orderId},'%')
+		</if>
+		order by id desc
+	</select>
+
+	<select id="selectByExample" resultMap="BOResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.shop.model.OrderFormExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_order_form
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_order_form
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="fetch" resultMap="BOResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		SELECT
+		a.*,
+		b.mark,
+		b.name
+		FROM
+		shop_order_form a
+		LEFT JOIN shop_payment b ON a.payment_id = b.id
+		WHERE
+		a.id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_order_form
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.OrderFormExample">
+		delete from shop_order_form
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.OrderForm">
+		insert into shop_order_form (id, add_time, delete_status,
+		auto_confirm_email, auto_confirm_sms, commission_amount,
+		confirm_time, delivery_address_id, delivery_time,
+		delivery_type, enough_reduce_amount, eva_user_id,
+		finish_time, goods_amount, invoice,
+		invoice_type, operation_price_count, order_cat,
+		order_confirm_delay, order_form, order_id,
+		order_main, order_status, order_type,
+		out_order_id, out_price, pay_time,
+		pay_type, rc_amount, rc_mobile,
+		rc_price, rc_type, receiver_name,
+		receiver_area, receiver_area_info, receiver_mobile,
+		receiver_telephone, receiver_zip, return_ship_time,
+		ship_code, ship_time, ship_addr_id,
+		ship_price, store_id, store_name,
+		total_price, trade_no, transport,
+		user_id, user_name, whether_gift,
+		payment_id, child_order_detail, coupon_info,
+		delivery_info, enough_reduce_info,
+		express_info, gift_infos, goods_info,
+		group_info, msg, order_seller_intro,
+		pay_msg, return_goods_info, ship_addr,self_add_price,is_mobile
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{autoConfirmEmail,jdbcType=BIT}, #{autoConfirmSms,jdbcType=BIT}, #{commissionAmount,jdbcType=DECIMAL},
+		#{confirmTime,jdbcType=TIMESTAMP},
+		#{deliveryAddressId,jdbcType=BIGINT},
+		#{deliveryTime,jdbcType=VARCHAR},
+		#{deliveryType,jdbcType=INTEGER}, #{enoughReduceAmount,jdbcType=DECIMAL}, #{evaUserId,jdbcType=BIGINT},
+		#{finishTime,jdbcType=TIMESTAMP}, #{goodsAmount,jdbcType=DECIMAL},
+		#{invoice,jdbcType=VARCHAR},
+		#{invoiceType,jdbcType=INTEGER}, #{operationPriceCount,jdbcType=INTEGER},
+		#{orderCat,jdbcType=INTEGER},
+		#{orderConfirmDelay,jdbcType=INTEGER}, #{orderForm,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR},
+		#{orderMain,jdbcType=INTEGER}, #{orderStatus,jdbcType=INTEGER},
+		#{orderType,jdbcType=VARCHAR},
+		#{outOrderId,jdbcType=VARCHAR}, #{outPrice,jdbcType=DECIMAL}, #{payTime,jdbcType=TIMESTAMP},
+		#{payType,jdbcType=VARCHAR}, #{rcAmount,jdbcType=INTEGER},
+		#{rcMobile,jdbcType=VARCHAR},
+		#{rcPrice,jdbcType=DECIMAL}, #{rcType,jdbcType=VARCHAR}, #{receiverName,jdbcType=VARCHAR},
+		#{receiverArea,jdbcType=VARCHAR},
+		#{receiverAreaInfo,jdbcType=VARCHAR},
+		#{receiverMobile,jdbcType=VARCHAR},
+		#{receiverTelephone,jdbcType=VARCHAR},
+		#{receiverZip,jdbcType=VARCHAR}, #{returnShipTime,jdbcType=TIMESTAMP},
+		#{shipCode,jdbcType=VARCHAR}, #{shipTime,jdbcType=TIMESTAMP},
+		#{shipAddrId,jdbcType=BIGINT},
+		#{shipPrice,jdbcType=DECIMAL}, #{storeId,jdbcType=VARCHAR}, #{storeName,jdbcType=VARCHAR},
+		#{totalPrice,jdbcType=DECIMAL}, #{tradeNo,jdbcType=VARCHAR},
+		#{transport,jdbcType=VARCHAR},
+		#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{whetherGift,jdbcType=INTEGER},
+		#{paymentId,jdbcType=BIGINT},
+		#{childOrderDetail,jdbcType=LONGVARCHAR},
+		#{couponInfo,jdbcType=LONGVARCHAR},
+		#{deliveryInfo,jdbcType=LONGVARCHAR},
+		#{enoughReduceInfo,jdbcType=LONGVARCHAR},
+		#{expressInfo,jdbcType=LONGVARCHAR},
+		#{giftInfos,jdbcType=LONGVARCHAR}, #{goodsInfo,jdbcType=LONGVARCHAR},
+		#{groupInfo,jdbcType=LONGVARCHAR}, #{msg,jdbcType=LONGVARCHAR},
+		#{orderSellerIntro,jdbcType=LONGVARCHAR},
+		#{payMsg,jdbcType=LONGVARCHAR},
+		#{returnGoodsInfo,jdbcType=LONGVARCHAR},
+		#{shipAddr,jdbcType=LONGVARCHAR},
+		#{selfAddPrice},#{isMobile}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.OrderForm"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_order_form
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="autoConfirmEmail != null">
+				auto_confirm_email,
+			</if>
+			<if test="autoConfirmSms != null">
+				auto_confirm_sms,
+			</if>
+			<if test="commissionAmount != null">
+				commission_amount,
+			</if>
+			<if test="confirmTime != null">
+				confirm_time,
+			</if>
+			<if test="deliveryAddressId != null">
+				delivery_address_id,
+			</if>
+			<if test="deliveryTime != null">
+				delivery_time,
+			</if>
+			<if test="deliveryType != null">
+				delivery_type,
+			</if>
+			<if test="enoughReduceAmount != null">
+				enough_reduce_amount,
+			</if>
+			<if test="evaUserId != null">
+				eva_user_id,
+			</if>
+			<if test="finishTime != null">
+				finish_time,
+			</if>
+			<if test="goodsAmount != null">
+				goods_amount,
+			</if>
+			<if test="invoice != null">
+				invoice,
+			</if>
+			<if test="invoiceType != null">
+				invoice_type,
+			</if>
+			<if test="operationPriceCount != null">
+				operation_price_count,
+			</if>
+			<if test="orderCat != null">
+				order_cat,
+			</if>
+			<if test="orderConfirmDelay != null">
+				order_confirm_delay,
+			</if>
+			<if test="orderForm != null">
+				order_form,
+			</if>
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="orderMain != null">
+				order_main,
+			</if>
+			<if test="orderStatus != null">
+				order_status,
+			</if>
+			<if test="orderType != null">
+				order_type,
+			</if>
+			<if test="outOrderId != null">
+				out_order_id,
+			</if>
+			<if test="outPrice != null">
+				out_price,
+			</if>
+			<if test="payTime != null">
+				pay_time,
+			</if>
+			<if test="payType != null">
+				pay_type,
+			</if>
+			<if test="rcAmount != null">
+				rc_amount,
+			</if>
+			<if test="rcMobile != null">
+				rc_mobile,
+			</if>
+			<if test="rcPrice != null">
+				rc_price,
+			</if>
+			<if test="rcType != null">
+				rc_type,
+			</if>
+			<if test="receiverName != null">
+				receiver_name,
+			</if>
+			<if test="receiverArea != null">
+				receiver_area,
+			</if>
+			<if test="receiverAreaInfo != null">
+				receiver_area_info,
+			</if>
+			<if test="receiverMobile != null">
+				receiver_mobile,
+			</if>
+			<if test="receiverTelephone != null">
+				receiver_telephone,
+			</if>
+			<if test="receiverZip != null">
+				receiver_zip,
+			</if>
+			<if test="returnShipTime != null">
+				return_ship_time,
+			</if>
+			<if test="shipCode != null">
+				ship_code,
+			</if>
+			<if test="shipTime != null">
+				ship_time,
+			</if>
+			<if test="shipAddrId != null">
+				ship_addr_id,
+			</if>
+			<if test="shipPrice != null">
+				ship_price,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="storeName != null">
+				store_name,
+			</if>
+			<if test="totalPrice != null">
+				total_price,
+			</if>
+			<if test="tradeNo != null">
+				trade_no,
+			</if>
+			<if test="transport != null">
+				transport,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="whetherGift != null">
+				whether_gift,
+			</if>
+			<if test="paymentId != null">
+				payment_id,
+			</if>
+			<if test="childOrderDetail != null">
+				child_order_detail,
+			</if>
+			<if test="couponInfo != null">
+				coupon_info,
+			</if>
+			<if test="deliveryInfo != null">
+				delivery_info,
+			</if>
+			<if test="enoughReduceInfo != null">
+				enough_reduce_info,
+			</if>
+			<if test="expressInfo != null">
+				express_info,
+			</if>
+			<if test="giftInfos != null">
+				gift_infos,
+			</if>
+			<if test="goodsInfo != null">
+				goods_info,
+			</if>
+			<if test="groupInfo != null">
+				group_info,
+			</if>
+			<if test="msg != null">
+				msg,
+			</if>
+			<if test="orderSellerIntro != null">
+				order_seller_intro,
+			</if>
+			<if test="payMsg != null">
+				pay_msg,
+			</if>
+			<if test="returnGoodsInfo != null">
+				return_goods_info,
+			</if>
+			<if test="shipAddr != null">
+				ship_addr,
+			</if>
+			<if test="selfAddPrice != null">
+				self_add_price,
+			</if>
+			<if test="isMobile != null">
+				is_mobile,
+			</if>
+			<if test="allygPrice != null ">
+				allygPrice,
+			</if>
+			<if test="isygOrder != null ">
+				isygOrder,
+			</if>
+			<if test="allCashPrice != null ">
+				allCashPrice,
+			</if>
+			<if test="cnUseralias != null ">
+				cn_useralias,
+			</if>
+			<if test="orderTypeFlag != null ">
+				order_type_flag,
+			</if>
+			<if test="allIntegral != null ">
+				all_integral,
+			</if>
+			<if test="payTypeFlag != null ">
+				pay_type_flag
+			</if>
+
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="autoConfirmEmail != null">
+				#{autoConfirmEmail,jdbcType=BIT},
+			</if>
+			<if test="autoConfirmSms != null">
+				#{autoConfirmSms,jdbcType=BIT},
+			</if>
+			<if test="commissionAmount != null">
+				#{commissionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="confirmTime != null">
+				#{confirmTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deliveryAddressId != null">
+				#{deliveryAddressId,jdbcType=BIGINT},
+			</if>
+			<if test="deliveryTime != null">
+				#{deliveryTime,jdbcType=VARCHAR},
+			</if>
+			<if test="deliveryType != null">
+				#{deliveryType,jdbcType=INTEGER},
+			</if>
+			<if test="enoughReduceAmount != null">
+				#{enoughReduceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="evaUserId != null">
+				#{evaUserId,jdbcType=BIGINT},
+			</if>
+			<if test="finishTime != null">
+				#{finishTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="goodsAmount != null">
+				#{goodsAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="invoice != null">
+				#{invoice,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceType != null">
+				#{invoiceType,jdbcType=INTEGER},
+			</if>
+			<if test="operationPriceCount != null">
+				#{operationPriceCount,jdbcType=INTEGER},
+			</if>
+			<if test="orderCat != null">
+				#{orderCat,jdbcType=INTEGER},
+			</if>
+			<if test="orderConfirmDelay != null">
+				#{orderConfirmDelay,jdbcType=INTEGER},
+			</if>
+			<if test="orderForm != null">
+				#{orderForm,jdbcType=INTEGER},
+			</if>
+			<if test="orderId != null">
+				#{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderMain != null">
+				#{orderMain,jdbcType=INTEGER},
+			</if>
+			<if test="orderStatus != null">
+				#{orderStatus,jdbcType=INTEGER},
+			</if>
+			<if test="orderType != null">
+				#{orderType,jdbcType=VARCHAR},
+			</if>
+			<if test="outOrderId != null">
+				#{outOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="outPrice != null">
+				#{outPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="payTime != null">
+				#{payTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="payType != null">
+				#{payType,jdbcType=VARCHAR},
+			</if>
+			<if test="rcAmount != null">
+				#{rcAmount,jdbcType=INTEGER},
+			</if>
+			<if test="rcMobile != null">
+				#{rcMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="rcPrice != null">
+				#{rcPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="rcType != null">
+				#{rcType,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverName != null">
+				#{receiverName,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverArea != null">
+				#{receiverArea,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverAreaInfo != null">
+				#{receiverAreaInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverMobile != null">
+				#{receiverMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverTelephone != null">
+				#{receiverTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverZip != null">
+				#{receiverZip,jdbcType=VARCHAR},
+			</if>
+			<if test="returnShipTime != null">
+				#{returnShipTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="shipCode != null">
+				#{shipCode,jdbcType=VARCHAR},
+			</if>
+			<if test="shipTime != null">
+				#{shipTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="shipAddrId != null">
+				#{shipAddrId,jdbcType=BIGINT},
+			</if>
+			<if test="shipPrice != null">
+				#{shipPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=VARCHAR},
+			</if>
+			<if test="storeName != null">
+				#{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="totalPrice != null">
+				#{totalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="tradeNo != null">
+				#{tradeNo,jdbcType=VARCHAR},
+			</if>
+			<if test="transport != null">
+				#{transport,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="whetherGift != null">
+				#{whetherGift,jdbcType=INTEGER},
+			</if>
+			<if test="paymentId != null">
+				#{paymentId,jdbcType=BIGINT},
+			</if>
+			<if test="childOrderDetail != null">
+				#{childOrderDetail,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="couponInfo != null">
+				#{couponInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="deliveryInfo != null">
+				#{deliveryInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="enoughReduceInfo != null">
+				#{enoughReduceInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="expressInfo != null">
+				#{expressInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="giftInfos != null">
+				#{giftInfos,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsInfo != null">
+				#{goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="groupInfo != null">
+				#{groupInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="msg != null">
+				#{msg,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="orderSellerIntro != null">
+				#{orderSellerIntro,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="payMsg != null">
+				#{payMsg,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="returnGoodsInfo != null">
+				#{returnGoodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="shipAddr != null">
+				#{shipAddr,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="selfAddPrice != null">
+				#{selfAddPrice},
+			</if>
+			<if test="isMobile != null">
+				#{isMobile},
+			</if>
+			<if test="allygPrice != null ">
+				#{allygPrice},
+			</if>
+			<if test="isygOrder != null ">
+				#{isygOrder},
+			</if>
+			<if test="allCashPrice != null ">
+				#{allCashPrice},
+			</if>
+			<if test="cnUseralias != null ">
+				#{cnUseralias},
+			</if>
+			<if test="orderTypeFlag != null ">
+				#{orderTypeFlag},
+			</if>
+			<if test="allIntegral != null ">
+				#{allIntegral},
+			</if>
+			<if test="payTypeFlag != null ">
+				#{payTypeFlag},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.OrderFormExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_order_form
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_order_form
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.autoConfirmEmail != null">
+				auto_confirm_email = #{record.autoConfirmEmail,jdbcType=BIT},
+			</if>
+			<if test="record.autoConfirmSms != null">
+				auto_confirm_sms = #{record.autoConfirmSms,jdbcType=BIT},
+			</if>
+			<if test="record.commissionAmount != null">
+				commission_amount = #{record.commissionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.confirmTime != null">
+				confirm_time = #{record.confirmTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deliveryAddressId != null">
+				delivery_address_id = #{record.deliveryAddressId,jdbcType=BIGINT},
+			</if>
+			<if test="record.deliveryTime != null">
+				delivery_time = #{record.deliveryTime,jdbcType=VARCHAR},
+			</if>
+			<if test="record.deliveryType != null">
+				delivery_type = #{record.deliveryType,jdbcType=INTEGER},
+			</if>
+			<if test="record.enoughReduceAmount != null">
+				enough_reduce_amount = #{record.enoughReduceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.evaUserId != null">
+				eva_user_id = #{record.evaUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.finishTime != null">
+				finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.goodsAmount != null">
+				goods_amount = #{record.goodsAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.invoice != null">
+				invoice = #{record.invoice,jdbcType=VARCHAR},
+			</if>
+			<if test="record.invoiceType != null">
+				invoice_type = #{record.invoiceType,jdbcType=INTEGER},
+			</if>
+			<if test="record.operationPriceCount != null">
+				operation_price_count =
+				#{record.operationPriceCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.orderCat != null">
+				order_cat = #{record.orderCat,jdbcType=INTEGER},
+			</if>
+			<if test="record.orderConfirmDelay != null">
+				order_confirm_delay = #{record.orderConfirmDelay,jdbcType=INTEGER},
+			</if>
+			<if test="record.orderForm != null">
+				order_form = #{record.orderForm,jdbcType=INTEGER},
+			</if>
+			<if test="record.orderId != null">
+				order_id = #{record.orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.orderMain != null">
+				order_main = #{record.orderMain,jdbcType=INTEGER},
+			</if>
+			<if test="record.orderStatus != null">
+				order_status = #{record.orderStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.orderType != null">
+				order_type = #{record.orderType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.outOrderId != null">
+				out_order_id = #{record.outOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.outPrice != null">
+				out_price = #{record.outPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.payTime != null">
+				pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.payType != null">
+				pay_type = #{record.payType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.rcAmount != null">
+				rc_amount = #{record.rcAmount,jdbcType=INTEGER},
+			</if>
+			<if test="record.rcMobile != null">
+				rc_mobile = #{record.rcMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.rcPrice != null">
+				rc_price = #{record.rcPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rcType != null">
+				rc_type = #{record.rcType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverName != null">
+				receiver_name = #{record.receiverName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverArea != null">
+				receiver_area = #{record.receiverArea,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverAreaInfo != null">
+				receiver_area_info = #{record.receiverAreaInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverMobile != null">
+				receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverTelephone != null">
+				receiver_telephone = #{record.receiverTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverZip != null">
+				receiver_zip = #{record.receiverZip,jdbcType=VARCHAR},
+			</if>
+			<if test="record.returnShipTime != null">
+				return_ship_time = #{record.returnShipTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.shipCode != null">
+				ship_code = #{record.shipCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.shipTime != null">
+				ship_time = #{record.shipTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.shipAddrId != null">
+				ship_addr_id = #{record.shipAddrId,jdbcType=BIGINT},
+			</if>
+			<if test="record.shipPrice != null">
+				ship_price = #{record.shipPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeName != null">
+				store_name = #{record.storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.totalPrice != null">
+				total_price = #{record.totalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.tradeNo != null">
+				trade_no = #{record.tradeNo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.transport != null">
+				transport = #{record.transport,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userName != null">
+				user_name = #{record.userName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.whetherGift != null">
+				whether_gift = #{record.whetherGift,jdbcType=INTEGER},
+			</if>
+			<if test="record.paymentId != null">
+				payment_id = #{record.paymentId,jdbcType=BIGINT},
+			</if>
+			<if test="record.childOrderDetail != null">
+				child_order_detail = #{record.childOrderDetail,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.couponInfo != null">
+				coupon_info = #{record.couponInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.deliveryInfo != null">
+				delivery_info = #{record.deliveryInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.enoughReduceInfo != null">
+				enough_reduce_info = #{record.enoughReduceInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.expressInfo != null">
+				express_info = #{record.expressInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.giftInfos != null">
+				gift_infos = #{record.giftInfos,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.goodsInfo != null">
+				goods_info = #{record.goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.groupInfo != null">
+				group_info = #{record.groupInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.msg != null">
+				msg = #{record.msg,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.orderSellerIntro != null">
+				order_seller_intro = #{record.orderSellerIntro,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.payMsg != null">
+				pay_msg = #{record.payMsg,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.returnGoodsInfo != null">
+				return_goods_info = #{record.returnGoodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.shipAddr != null">
+				ship_addr = #{record.shipAddr,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.selfAddPrice != null">
+				self_add_price = #{record.selfAddPrice},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_order_form
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		auto_confirm_email = #{record.autoConfirmEmail,jdbcType=BIT},
+		auto_confirm_sms = #{record.autoConfirmSms,jdbcType=BIT},
+		commission_amount = #{record.commissionAmount,jdbcType=DECIMAL},
+		confirm_time = #{record.confirmTime,jdbcType=TIMESTAMP},
+		delivery_address_id = #{record.deliveryAddressId,jdbcType=BIGINT},
+		delivery_time = #{record.deliveryTime,jdbcType=VARCHAR},
+		delivery_type = #{record.deliveryType,jdbcType=INTEGER},
+		enough_reduce_amount = #{record.enoughReduceAmount,jdbcType=DECIMAL},
+		eva_user_id = #{record.evaUserId,jdbcType=BIGINT},
+		finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
+		goods_amount = #{record.goodsAmount,jdbcType=DECIMAL},
+		invoice = #{record.invoice,jdbcType=VARCHAR},
+		invoice_type = #{record.invoiceType,jdbcType=INTEGER},
+		operation_price_count = #{record.operationPriceCount,jdbcType=INTEGER},
+		order_cat = #{record.orderCat,jdbcType=INTEGER},
+		order_confirm_delay = #{record.orderConfirmDelay,jdbcType=INTEGER},
+		order_form = #{record.orderForm,jdbcType=INTEGER},
+		order_id = #{record.orderId,jdbcType=VARCHAR},
+		order_main = #{record.orderMain,jdbcType=INTEGER},
+		order_status = #{record.orderStatus,jdbcType=INTEGER},
+		order_type = #{record.orderType,jdbcType=VARCHAR},
+		out_order_id = #{record.outOrderId,jdbcType=VARCHAR},
+		out_price = #{record.outPrice,jdbcType=DECIMAL},
+		pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+		pay_type = #{record.payType,jdbcType=VARCHAR},
+		rc_amount = #{record.rcAmount,jdbcType=INTEGER},
+		rc_mobile = #{record.rcMobile,jdbcType=VARCHAR},
+		rc_price = #{record.rcPrice,jdbcType=DECIMAL},
+		rc_type = #{record.rcType,jdbcType=VARCHAR},
+		receiver_name = #{record.receiverName,jdbcType=VARCHAR},
+		receiver_area = #{record.receiverArea,jdbcType=VARCHAR},
+		receiver_area_info = #{record.receiverAreaInfo,jdbcType=VARCHAR},
+		receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
+		receiver_telephone = #{record.receiverTelephone,jdbcType=VARCHAR},
+		receiver_zip = #{record.receiverZip,jdbcType=VARCHAR},
+		return_ship_time = #{record.returnShipTime,jdbcType=TIMESTAMP},
+		ship_code = #{record.shipCode,jdbcType=VARCHAR},
+		ship_time = #{record.shipTime,jdbcType=TIMESTAMP},
+		ship_addr_id = #{record.shipAddrId,jdbcType=BIGINT},
+		ship_price = #{record.shipPrice,jdbcType=DECIMAL},
+		store_id = #{record.storeId,jdbcType=VARCHAR},
+		store_name = #{record.storeName,jdbcType=VARCHAR},
+		total_price = #{record.totalPrice,jdbcType=DECIMAL},
+		trade_no = #{record.tradeNo,jdbcType=VARCHAR},
+		transport = #{record.transport,jdbcType=VARCHAR},
+		user_id = #{record.userId,jdbcType=VARCHAR},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		whether_gift = #{record.whetherGift,jdbcType=INTEGER},
+		payment_id = #{record.paymentId,jdbcType=BIGINT},
+		child_order_detail = #{record.childOrderDetail,jdbcType=LONGVARCHAR},
+		coupon_info = #{record.couponInfo,jdbcType=LONGVARCHAR},
+		delivery_info = #{record.deliveryInfo,jdbcType=LONGVARCHAR},
+		enough_reduce_info = #{record.enoughReduceInfo,jdbcType=LONGVARCHAR},
+		express_info = #{record.expressInfo,jdbcType=LONGVARCHAR},
+		gift_infos = #{record.giftInfos,jdbcType=LONGVARCHAR},
+		goods_info = #{record.goodsInfo,jdbcType=LONGVARCHAR},
+		group_info = #{record.groupInfo,jdbcType=LONGVARCHAR},
+		msg = #{record.msg,jdbcType=LONGVARCHAR},
+		order_seller_intro = #{record.orderSellerIntro,jdbcType=LONGVARCHAR},
+		pay_msg = #{record.payMsg,jdbcType=LONGVARCHAR},
+		return_goods_info = #{record.returnGoodsInfo,jdbcType=LONGVARCHAR},
+		ship_addr = #{record.shipAddr,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_order_form
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		auto_confirm_email = #{record.autoConfirmEmail,jdbcType=BIT},
+		auto_confirm_sms = #{record.autoConfirmSms,jdbcType=BIT},
+		commission_amount = #{record.commissionAmount,jdbcType=DECIMAL},
+		confirm_time = #{record.confirmTime,jdbcType=TIMESTAMP},
+		delivery_address_id = #{record.deliveryAddressId,jdbcType=BIGINT},
+		delivery_time = #{record.deliveryTime,jdbcType=VARCHAR},
+		delivery_type = #{record.deliveryType,jdbcType=INTEGER},
+		enough_reduce_amount = #{record.enoughReduceAmount,jdbcType=DECIMAL},
+		eva_user_id = #{record.evaUserId,jdbcType=BIGINT},
+		finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
+		goods_amount = #{record.goodsAmount,jdbcType=DECIMAL},
+		invoice = #{record.invoice,jdbcType=VARCHAR},
+		invoice_type = #{record.invoiceType,jdbcType=INTEGER},
+		operation_price_count = #{record.operationPriceCount,jdbcType=INTEGER},
+		order_cat = #{record.orderCat,jdbcType=INTEGER},
+		order_confirm_delay = #{record.orderConfirmDelay,jdbcType=INTEGER},
+		order_form = #{record.orderForm,jdbcType=INTEGER},
+		order_id = #{record.orderId,jdbcType=VARCHAR},
+		order_main = #{record.orderMain,jdbcType=INTEGER},
+		order_status = #{record.orderStatus,jdbcType=INTEGER},
+		order_type = #{record.orderType,jdbcType=VARCHAR},
+		out_order_id = #{record.outOrderId,jdbcType=VARCHAR},
+		out_price = #{record.outPrice,jdbcType=DECIMAL},
+		pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+		pay_type = #{record.payType,jdbcType=VARCHAR},
+		rc_amount = #{record.rcAmount,jdbcType=INTEGER},
+		rc_mobile = #{record.rcMobile,jdbcType=VARCHAR},
+		rc_price = #{record.rcPrice,jdbcType=DECIMAL},
+		rc_type = #{record.rcType,jdbcType=VARCHAR},
+		receiver_name = #{record.receiverName,jdbcType=VARCHAR},
+		receiver_area = #{record.receiverArea,jdbcType=VARCHAR},
+		receiver_area_info = #{record.receiverAreaInfo,jdbcType=VARCHAR},
+		receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
+		receiver_telephone = #{record.receiverTelephone,jdbcType=VARCHAR},
+		receiver_zip = #{record.receiverZip,jdbcType=VARCHAR},
+		return_ship_time = #{record.returnShipTime,jdbcType=TIMESTAMP},
+		ship_code = #{record.shipCode,jdbcType=VARCHAR},
+		ship_time = #{record.shipTime,jdbcType=TIMESTAMP},
+		ship_addr_id = #{record.shipAddrId,jdbcType=BIGINT},
+		ship_price = #{record.shipPrice,jdbcType=DECIMAL},
+		store_id = #{record.storeId,jdbcType=VARCHAR},
+		store_name = #{record.storeName,jdbcType=VARCHAR},
+		total_price = #{record.totalPrice,jdbcType=DECIMAL},
+		trade_no = #{record.tradeNo,jdbcType=VARCHAR},
+		transport = #{record.transport,jdbcType=VARCHAR},
+		user_id = #{record.userId,jdbcType=VARCHAR},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		whether_gift = #{record.whetherGift,jdbcType=INTEGER},
+		payment_id = #{record.paymentId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.OrderForm">
+		update shop_order_form
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="autoConfirmEmail != null">
+				auto_confirm_email = #{autoConfirmEmail,jdbcType=BIT},
+			</if>
+			<if test="autoConfirmSms != null">
+				auto_confirm_sms = #{autoConfirmSms,jdbcType=BIT},
+			</if>
+			<if test="commissionAmount != null">
+				commission_amount = #{commissionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="confirmTime != null">
+				confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deliveryAddressId != null">
+				delivery_address_id = #{deliveryAddressId,jdbcType=BIGINT},
+			</if>
+			<if test="deliveryTime != null">
+				delivery_time = #{deliveryTime,jdbcType=VARCHAR},
+			</if>
+			<if test="deliveryType != null">
+				delivery_type = #{deliveryType,jdbcType=INTEGER},
+			</if>
+			<if test="enoughReduceAmount != null">
+				enough_reduce_amount = #{enoughReduceAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="evaUserId != null">
+				eva_user_id = #{evaUserId,jdbcType=BIGINT},
+			</if>
+			<if test="finishTime != null">
+				finish_time = #{finishTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="goodsAmount != null">
+				goods_amount = #{goodsAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="invoice != null">
+				invoice = #{invoice,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceType != null">
+				invoice_type = #{invoiceType,jdbcType=INTEGER},
+			</if>
+			<if test="operationPriceCount != null">
+				operation_price_count = #{operationPriceCount,jdbcType=INTEGER},
+			</if>
+			<if test="orderCat != null">
+				order_cat = #{orderCat,jdbcType=INTEGER},
+			</if>
+			<if test="orderConfirmDelay != null">
+				order_confirm_delay = #{orderConfirmDelay,jdbcType=INTEGER},
+			</if>
+			<if test="orderForm != null">
+				order_form = #{orderForm,jdbcType=INTEGER},
+			</if>
+			<if test="orderId != null">
+				order_id = #{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderMain != null">
+				order_main = #{orderMain,jdbcType=INTEGER},
+			</if>
+			<if test="orderStatus != null">
+				order_status = #{orderStatus,jdbcType=INTEGER},
+			</if>
+			<if test="orderType != null">
+				order_type = #{orderType,jdbcType=VARCHAR},
+			</if>
+			<if test="outOrderId != null">
+				out_order_id = #{outOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="outPrice != null">
+				out_price = #{outPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="payTime != null">
+				pay_time = #{payTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="payType != null">
+				pay_type = #{payType,jdbcType=VARCHAR},
+			</if>
+			<if test="rcAmount != null">
+				rc_amount = #{rcAmount,jdbcType=INTEGER},
+			</if>
+			<if test="rcMobile != null">
+				rc_mobile = #{rcMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="rcPrice != null">
+				rc_price = #{rcPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="rcType != null">
+				rc_type = #{rcType,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverName != null">
+				receiver_name = #{receiverName,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverArea != null">
+				receiver_area = #{receiverArea,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverAreaInfo != null">
+				receiver_area_info = #{receiverAreaInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverMobile != null">
+				receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverTelephone != null">
+				receiver_telephone = #{receiverTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverZip != null">
+				receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+			</if>
+			<if test="returnShipTime != null">
+				return_ship_time = #{returnShipTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="shipCode != null">
+				ship_code = #{shipCode,jdbcType=VARCHAR},
+			</if>
+			<if test="shipTime != null">
+				ship_time = #{shipTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="shipAddrId != null">
+				ship_addr_id = #{shipAddrId,jdbcType=BIGINT},
+			</if>
+			<if test="shipPrice != null">
+				ship_price = #{shipPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=VARCHAR},
+			</if>
+			<if test="storeName != null">
+				store_name = #{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="totalPrice != null">
+				total_price = #{totalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="tradeNo != null">
+				trade_no = #{tradeNo,jdbcType=VARCHAR},
+			</if>
+			<if test="transport != null">
+				transport = #{transport,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="whetherGift != null">
+				whether_gift = #{whetherGift,jdbcType=INTEGER},
+			</if>
+			<if test="paymentId != null">
+				payment_id = #{paymentId,jdbcType=BIGINT},
+			</if>
+			<if test="childOrderDetail != null">
+				child_order_detail = #{childOrderDetail,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="couponInfo != null">
+				coupon_info = #{couponInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="deliveryInfo != null">
+				delivery_info = #{deliveryInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="enoughReduceInfo != null">
+				enough_reduce_info = #{enoughReduceInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="expressInfo != null">
+				express_info = #{expressInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="giftInfos != null">
+				gift_infos = #{giftInfos,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="goodsInfo != null">
+				goods_info = #{goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="groupInfo != null">
+				group_info = #{groupInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="msg != null">
+				msg = #{msg,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="orderSellerIntro != null">
+				order_seller_intro = #{orderSellerIntro,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="payMsg != null">
+				pay_msg = #{payMsg,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="returnGoodsInfo != null">
+				return_goods_info = #{returnGoodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="shipAddr != null">
+				ship_addr = #{shipAddr,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="selfAddPrice != null">
+				self_add_price = #{selfAddPrice},
+			</if>
+			<if test="actualygPrice != null">
+				actualygPrice = #{actualygPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="actualPrice != null">
+				actualPrice = #{actualPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="actualIntegral != null ">
+				actual_integral = #{actualIntegral,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.OrderForm">
+		update shop_order_form
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		auto_confirm_email = #{autoConfirmEmail,jdbcType=BIT},
+		auto_confirm_sms = #{autoConfirmSms,jdbcType=BIT},
+		commission_amount = #{commissionAmount,jdbcType=DECIMAL},
+		confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
+		delivery_address_id = #{deliveryAddressId,jdbcType=BIGINT},
+		delivery_time = #{deliveryTime,jdbcType=VARCHAR},
+		delivery_type = #{deliveryType,jdbcType=INTEGER},
+		enough_reduce_amount = #{enoughReduceAmount,jdbcType=DECIMAL},
+		eva_user_id = #{evaUserId,jdbcType=BIGINT},
+		finish_time = #{finishTime,jdbcType=TIMESTAMP},
+		goods_amount = #{goodsAmount,jdbcType=DECIMAL},
+		invoice = #{invoice,jdbcType=VARCHAR},
+		invoice_type = #{invoiceType,jdbcType=INTEGER},
+		operation_price_count = #{operationPriceCount,jdbcType=INTEGER},
+		order_cat = #{orderCat,jdbcType=INTEGER},
+		order_confirm_delay = #{orderConfirmDelay,jdbcType=INTEGER},
+		order_form = #{orderForm,jdbcType=INTEGER},
+		order_id = #{orderId,jdbcType=VARCHAR},
+		order_main = #{orderMain,jdbcType=INTEGER},
+		order_status = #{orderStatus,jdbcType=INTEGER},
+		order_type = #{orderType,jdbcType=VARCHAR},
+		out_order_id = #{outOrderId,jdbcType=VARCHAR},
+		out_price = #{outPrice,jdbcType=DECIMAL},
+		pay_time = #{payTime,jdbcType=TIMESTAMP},
+		pay_type = #{payType,jdbcType=VARCHAR},
+		rc_amount = #{rcAmount,jdbcType=INTEGER},
+		rc_mobile = #{rcMobile,jdbcType=VARCHAR},
+		rc_price = #{rcPrice,jdbcType=DECIMAL},
+		rc_type = #{rcType,jdbcType=VARCHAR},
+		receiver_name = #{receiverName,jdbcType=VARCHAR},
+		receiver_area = #{receiverArea,jdbcType=VARCHAR},
+		receiver_area_info = #{receiverAreaInfo,jdbcType=VARCHAR},
+		receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
+		receiver_telephone = #{receiverTelephone,jdbcType=VARCHAR},
+		receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+		return_ship_time = #{returnShipTime,jdbcType=TIMESTAMP},
+		ship_code = #{shipCode,jdbcType=VARCHAR},
+		ship_time = #{shipTime,jdbcType=TIMESTAMP},
+		ship_addr_id = #{shipAddrId,jdbcType=BIGINT},
+		ship_price = #{shipPrice,jdbcType=DECIMAL},
+		store_id = #{storeId,jdbcType=VARCHAR},
+		store_name = #{storeName,jdbcType=VARCHAR},
+		total_price = #{totalPrice,jdbcType=DECIMAL},
+		trade_no = #{tradeNo,jdbcType=VARCHAR},
+		transport = #{transport,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=VARCHAR},
+		user_name = #{userName,jdbcType=VARCHAR},
+		whether_gift = #{whetherGift,jdbcType=INTEGER},
+		payment_id = #{paymentId,jdbcType=BIGINT},
+		child_order_detail = #{childOrderDetail,jdbcType=LONGVARCHAR},
+		coupon_info = #{couponInfo,jdbcType=LONGVARCHAR},
+		delivery_info = #{deliveryInfo,jdbcType=LONGVARCHAR},
+		enough_reduce_info = #{enoughReduceInfo,jdbcType=LONGVARCHAR},
+		express_info = #{expressInfo,jdbcType=LONGVARCHAR},
+		gift_infos = #{giftInfos,jdbcType=LONGVARCHAR},
+		goods_info = #{goodsInfo,jdbcType=LONGVARCHAR},
+		group_info = #{groupInfo,jdbcType=LONGVARCHAR},
+		msg = #{msg,jdbcType=LONGVARCHAR},
+		order_seller_intro = #{orderSellerIntro,jdbcType=LONGVARCHAR},
+		pay_msg = #{payMsg,jdbcType=LONGVARCHAR},
+		return_goods_info = #{returnGoodsInfo,jdbcType=LONGVARCHAR},
+		ship_addr = #{shipAddr,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.OrderForm">
+		update shop_order_form
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		auto_confirm_email = #{autoConfirmEmail,jdbcType=BIT},
+		auto_confirm_sms = #{autoConfirmSms,jdbcType=BIT},
+		commission_amount = #{commissionAmount,jdbcType=DECIMAL},
+		confirm_time = #{confirmTime,jdbcType=TIMESTAMP},
+		delivery_address_id = #{deliveryAddressId,jdbcType=BIGINT},
+		delivery_time = #{deliveryTime,jdbcType=VARCHAR},
+		delivery_type = #{deliveryType,jdbcType=INTEGER},
+		enough_reduce_amount = #{enoughReduceAmount,jdbcType=DECIMAL},
+		eva_user_id = #{evaUserId,jdbcType=BIGINT},
+		finish_time = #{finishTime,jdbcType=TIMESTAMP},
+		goods_amount = #{goodsAmount,jdbcType=DECIMAL},
+		invoice = #{invoice,jdbcType=VARCHAR},
+		invoice_type = #{invoiceType,jdbcType=INTEGER},
+		operation_price_count = #{operationPriceCount,jdbcType=INTEGER},
+		order_cat = #{orderCat,jdbcType=INTEGER},
+		order_confirm_delay = #{orderConfirmDelay,jdbcType=INTEGER},
+		order_form = #{orderForm,jdbcType=INTEGER},
+		order_id = #{orderId,jdbcType=VARCHAR},
+		order_main = #{orderMain,jdbcType=INTEGER},
+		order_status = #{orderStatus,jdbcType=INTEGER},
+		order_type = #{orderType,jdbcType=VARCHAR},
+		out_order_id = #{outOrderId,jdbcType=VARCHAR},
+		out_price = #{outPrice,jdbcType=DECIMAL},
+		pay_time = #{payTime,jdbcType=TIMESTAMP},
+		pay_type = #{payType,jdbcType=VARCHAR},
+		rc_amount = #{rcAmount,jdbcType=INTEGER},
+		rc_mobile = #{rcMobile,jdbcType=VARCHAR},
+		rc_price = #{rcPrice,jdbcType=DECIMAL},
+		rc_type = #{rcType,jdbcType=VARCHAR},
+		receiver_name = #{receiverName,jdbcType=VARCHAR},
+		receiver_area = #{receiverArea,jdbcType=VARCHAR},
+		receiver_area_info = #{receiverAreaInfo,jdbcType=VARCHAR},
+		receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
+		receiver_telephone = #{receiverTelephone,jdbcType=VARCHAR},
+		receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+		return_ship_time = #{returnShipTime,jdbcType=TIMESTAMP},
+		ship_code = #{shipCode,jdbcType=VARCHAR},
+		ship_time = #{shipTime,jdbcType=TIMESTAMP},
+		ship_addr_id = #{shipAddrId,jdbcType=BIGINT},
+		ship_price = #{shipPrice,jdbcType=DECIMAL},
+		store_id = #{storeId,jdbcType=VARCHAR},
+		store_name = #{storeName,jdbcType=VARCHAR},
+		total_price = #{totalPrice,jdbcType=DECIMAL},
+		trade_no = #{tradeNo,jdbcType=VARCHAR},
+		transport = #{transport,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=VARCHAR},
+		user_name = #{userName,jdbcType=VARCHAR},
+		whether_gift = #{whetherGift,jdbcType=INTEGER},
+		payment_id = #{paymentId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="queryListByVo" resultMap="BOResultMapWithBLOBs">
+		SELECT
+		so.*
+		,b.mark
+
+		FROM shop_order_form so
+
+		LEFT JOIN shop_payment b
+		ON so.payment_id = b.id
+		where so.delete_status=0 AND so.user_id =#{vo.userId} and so.order_cat!=2
+
+		<if test="vo.orderMain != null and vo.orderMain != ''">
+			AND so.order_main=1
+		</if>
+		<if test="vo.orderStatus != null and vo.orderStatus != ''">
+
+			<if test='vo.orderStatus == "1"'>
+				AND so.order_status>=40 and so.order_status!=47 and so.order_status!=50
+				and so.order_status != 60 and so.order_status !=65
+			</if>
+			<if test='vo.orderStatus != "1" and vo.orderStatus != "100" and vo.orderStatus != "10"'>
+				AND so.order_status = #{vo.orderStatus,jdbcType=INTEGER}
+			</if>
+			<if test='vo.orderStatus == "10" '><!-- 未支付的包括专区18状态的 -->
+				AND (so.order_status = 10 OR so.order_status = 18)
+			</if>
+			<if test='vo.orderStatus == "100" '>
+				AND so.order_status > 0
+			</if>
+
+		</if>
+
+		<if test="vo.orderStatus == null or vo.orderStatus == '' ">
+			AND so.order_status > 0
+		</if>
+
+		<if test="vo.orderId != null and vo.orderId !=''">
+			AND so.order_id like concat('%',#{vo.orderId},'%')
+		</if>
+
+		<if test="vo.beginTime != null and vo.beginTime != ''">
+		<![CDATA[AND so.add_time >= #{vo.beginTime}]]>
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+		<![CDATA[AND so.add_time <= #{vo.endTime}]]>
+		</if>
+		<if test="vo.isygOrder != null ">
+			AND so.isygOrder = #{vo.isygOrder}
+		</if>
+		<if test="vo.orderTypeFlag != null">
+			AND so.order_type_flag = #{vo.orderTypeFlag}
+		</if>
+		ORDER BY so.add_time DESC
+	</select>
+
+	<select id="selectListByVo" resultMap="BOResultMapWithBLOBs">
+		SELECT
+		<include refid="BO_Column_List" />
+		,user.login_name
+		FROM shop_order_form so
+		LEFT JOIN shop_payment sp ON sp.id = so.payment_id
+		LEFT JOIN sys_user_account user ON (user.uid = so.user_id and
+		user.account_type=2)
+		WHERE so.order_cat !=2
+		<if test="vo.orderForm != null and vo.orderForm>=0">
+			AND so.order_form=#{vo.orderForm}
+		</if>
+		<if test="vo.tradeNo != null and vo.tradeNo != ''">
+			and so.trade_no like concat('%',#{vo.tradeNo},'%')
+		</if>
+		<if test="vo.userId != null and vo.userId!=0">
+			AND so.user_id=#{vo.userId}
+		</if>
+		<if test="vo.storeId != null and vo.storeId != ''">
+			AND so.store_id=#{vo.storeId}
+		</if>
+		<if test="vo.receiverMobile != null and vo.receiverMobile != ''">
+			AND so.receiver_mobile=#{vo.receiverMobile}
+		</if>
+		<if test="vo.orderStatusNum != null and vo.orderStatusNum != 0">
+			and so.order_status = #{vo.orderStatusNum}
+		</if>
+		<if test="vo.orderStatus != null and vo.orderStatus != ''">
+			<!-- warning 订单状态现在不确定 -->
+			<if test="vo.orderStatus == 'order_submit'">
+			<![CDATA[AND (so.order_status = 10 OR so.order_status = 16 OR so.order_status = 18) ]]>
+			</if>
+			<if test="vo.orderStatus == 'order_pay'">
+			<![CDATA[AND (so.order_status >= 19 AND so.order_status <= 20) ]]>
+			</if>
+			<if test="vo.orderStatus == 'order_shipping'">
+			<![CDATA[AND so.order_status = 30 ]]>
+			</if>
+			<if test="vo.orderStatus == 'no_take_delivery'">
+			<![CDATA[AND (so.order_status = 30 OR so.order_status = 35) ]]>
+			</if>
+			<if test="vo.orderStatus == 'order_evaluate'">
+			<![CDATA[AND so.order_status = 40 ]]>
+			</if>
+			<if test="vo.orderStatus == 'order_finish'">
+			<![CDATA[AND so.order_status = 50 ]]>
+			</if>
+			<if test="vo.orderStatus == 'order_cancel'">
+			<![CDATA[AND so.order_status = 0 ]]>
+			</if>
+		</if>
+		<if test="vo.orderId != null and vo.orderId !=''">
+			AND so.order_id like concat('%',#{vo.orderId},'%')
+		</if>
+		<if test="vo.buyerUsername != null and vo.buyerUsername !=''">
+			AND so.receiver_name like concat('%',#{vo.buyerUsername},'%')
+		</if>
+		<if test="vo.receiverMobile != null and vo.receiverMobile !=''">
+			AND so.receiver_mobile = #{vo.receiverMobile,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.beginTime != null and vo.beginTime != ''">
+		<![CDATA[AND date(so.add_time) >=#{vo.beginTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+		<![CDATA[AND date(so.add_time) <= #{vo.endTime,jdbcType=TIMESTAMP}]]>
+		</if>
+
+		<if test="vo.orderTypeFlag != null">
+			AND so.order_type_flag = #{vo.orderTypeFlag}
+		</if>
+
+		<choose>
+			<when test="vo.orderStatus == 'order_pay'">
+				ORDER BY so.pay_time DESC
+			</when>
+			<when test="vo.orderByClause != null and vo.orderByClause!=''">
+				ORDER BY so.${vo.orderByClause}
+			</when>
+			<otherwise>
+				ORDER BY so.add_time DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="selectAllListByVo" resultMap="BOResultMapWithBLOBs">
+		SELECT
+		so.*,b.mark,b.name
+		FROM shop_order_form so
+		LEFT JOIN shop_payment b
+		ON so.payment_id = b.id
+		WHERE 1=1 and so.order_cat =0 and so.order_form=0
+		<if test="vo.userId != null and vo.userId != 0">
+			AND so.user_id = #{vo.userId}
+		</if>
+		<if test="vo.orderStatus != null and vo.orderStatus != ''">
+			AND so.order_status = #{vo.orderStatus,jdbcType=INTEGER}
+		</if>
+		<if test="vo.storeName != null and vo.storeName !=''">
+			AND so.store_name = #{vo.storeName,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.buyerUsername != null and vo.buyerUsername !=''">
+			AND so.user_name = #{vo.buyerUsername,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.orderId != null and vo.orderId !=''">
+			AND so.order_id = #{vo.orderId,jdbcType=VARCHAR}
+		</if>
+		<if test="vo.payment != null and vo.payment !=''">
+			AND b.mark = #{vo.payment}
+		</if>
+		<if test="vo.beginTime != null and vo.beginTime != ''">
+		<![CDATA[AND date(so.add_time) >=#{vo.beginTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+		<![CDATA[AND date(so.add_time) <= #{vo.endTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="vo.beginPrice != null and vo.beginPrice != ''">
+		<![CDATA[AND so.total_price>= #{vo.beginPrice,jdbcType=DECIMAL}]]>
+		</if>
+		<if test="vo.endPrice != null and vo.endPrice != ''">
+		<![CDATA[AND so.total_price <= #{vo.endPrice,jdbcType=DECIMAL}]]>
+		</if>
+		<if test="vo.receiverMobile != null and vo.receiverMobile != ''">
+		<![CDATA[AND so.receiver_mobile = #{vo.receiverMobile,jdbcType=DECIMAL}]]>
+		</if>
+		<if test="vo.tradeNo != null and vo.tradeNo != ''">
+			and so.trade_no like concat('%',#{vo.tradeNo},'%')
+		</if>
+
+		ORDER BY so.add_time DESC
+	</select>
+	<update id="updateStatus" parameterType="com.sinco.carnation.shop.model.OrderForm">
+		update shop_order_form
+		<set>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="orderStatus != null">
+				order_status = #{orderStatus,jdbcType=INTEGER},
+			</if>
+			<if test="outOrderId != null">
+				out_order_id = #{outOrderId,jdbcType=VARCHAR},
+			</if>
+			<if test="payTime != null">
+				pay_time = #{payTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="payType != null">
+				pay_type = #{payType,jdbcType=VARCHAR},
+			</if>
+			<if test="actualygPrice != null">
+				actualygPrice = #{actualygPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="actualPrice != null">
+				actualPrice = #{actualPrice,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="selectPayFailureOrder" resultMap="BaseResultMap">
+		SELECT
+		o.id,o.order_status,o.actualygPrice,o.user_id,o.order_id,o.cn_useralias
+		from shop_order_form o where o.order_status=18 and o.actualygPrice>0
+		and o.isygOrder=1 and TIMESTAMPDIFF(SECOND,o.add_time,now())>=259200
+		order by o.add_time DESC;
+	</select>
+
+	<select id="findCancelZeroActOrder" resultMap="BOResultMapWithBLOBs">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM shop_order_form
+		WHERE delete_status = false
+		<if test="status != null">
+			AND order_status = #{status}
+		</if>
+		<if test="flag != null">
+			AND order_type_flag = #{flag}
+		</if>
+		<if test="time != null">
+	    <![CDATA[AND add_time <= #{time}]]>
+		</if>
+	</select>
+
+	<select id="selectFailedYgOrder" resultMap="BaseResultMap">
+		SELECT
+		o.id,
+		o.order_status,
+		o.actualygPrice,
+		o.user_id,
+		o.order_id,
+		o.cn_useralias
+		FROM
+		shop_order_form o
+		WHERE o.order_status = 10
+		AND o.order_type_flag = 2
+		AND TIMESTAMPDIFF(SECOND, o.add_time, NOW()) >= 259200
+		ORDER BY o.add_time DESC
+	</select>
+
+	<select id="getOrderByDaysAgo" resultMap="BOResultMapWithBLOBs">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM
+		shop_order_form
+		<where>
+			delete_status = false
+			<if test="status != null">
+				AND order_status = #{status}
+			</if>
+			<if test="time != null">
+	    <![CDATA[AND add_time <= #{time}]]>
+			</if>
+		</where>
+	</select>
+
+	<select id="getOrdersByAutoReview" resultMap="BOResultMapWithBLOBs">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM
+		shop_order_form
+		<where>
+			delete_status = false
+			<if test="status != null">
+				AND order_status = #{status}
+			</if>
+			<if test="time != null">
+	   			 <![CDATA[AND confirm_time <= #{time}]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectFailedOrderFormByTime" resultMap="BaseResultMap">
+		SELECT 
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM
+			shop_order_form
+		WHERE 
+		<!-- 非云购币订单 非云购币专区订单 下单时间 -->
+			TIMESTAMPDIFF(SECOND,add_time, NOW()) >= #{second}
+			AND (isygOrder = 0 or isygOrder = 1)
+			AND (order_type_flag = 0 or order_type_flag = 3)
+			AND order_status = 10
+			
+		ORDER BY add_time DESC
+	</select>
+	
+	<select id="selectFailedIntegralOrder" resultMap="BaseResultMap">
+	SELECT 
+	  o.id,
+	  o.order_status,
+	  o.all_integral,
+	  o.actual_integral,
+	  o.user_id,
+	  o.order_id,
+	  o.cn_useralias,
+	  o.pay_type_flag
+	FROM
+	  shop_order_form o 
+	WHERE o.order_status = 18 
+	  AND o.order_type_flag = 3
+	  AND o.actual_integral
+	 AND TIMESTAMPDIFF(SECOND, o.add_time, NOW()) >= 259200
+	ORDER BY o.add_time DESC 
+	</select>
+	<select id="listOtherOrder"  resultMap="BOResultMapWithBLOBs">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		<![CDATA[
+			FROM `shop_order_form` WHERE order_status>=40 AND id NOT IN (SELECT of_id FROM `shop_order_log` WHERE log_info = '确认收货')
+			AND order_id NOT IN (SELECT order_id FROM shop_payoff_log) AND order_form = 0
+		]]>
+	</select>
+	
+	<!--注意: 此sql 用来查询卷皮订单和 本地订单的结合,增加字段注意顺序 -->
+	<!--注意: 此sql 用来查询卷皮订单和 本地订单的结合,增加字段注意顺序 -->
+<select id="queryAllOrderListByVo" resultMap="BOResultMapWithBLOBs">
+SELECT * FROM(SELECT id,orderno AS order_id,ordertime AS add_time,subchannel,goodsnumber,goodsmoney AS total_price,user_id,1 AS juanpiOrder,delete_status,
+NULL AS auto_confirm_email,NULL AS auto_confirm_sms,NULL AS commission_amount,NULL AS confirm_time,NULL AS delivery_address_id,NULL AS delivery_time,NULL AS delivery_type,
+NULL AS enough_reduce_amount,NULL AS eva_user_id,NULL AS finish_time,NULL AS goods_amount,NULL AS invoice,NULL AS invoice_type,NULL AS operation_price_count,0 AS order_cat,
+NULL AS order_confirm_delay,NULL AS order_form,NULL AS order_main,0 AS order_status,NULL AS order_type,NULL AS out_order_id,NULL AS out_price,NULL AS pay_time,NULL AS pay_type,
+NULL AS rc_amount,NULL AS rc_mobile,NULL AS rc_price,NULL AS rc_type,NULL AS receiver_name,NULL AS receiver_area,NULL AS receiver_area_info,NULL AS receiver_mobile,
+NULL AS receiver_telephone,NULL AS receiver_zip,NULL AS return_ship_time,NULL AS ship_code,NULL AS ship_time,NULL AS ship_addr_id,0 AS ship_price,NULL AS store_id,
+NULL AS store_name,NULL AS trade_no,NULL AS transport,NULL AS user_name,NULL AS whether_gift,NULL AS payment_id,NULL AS self_add_price,
+NULL AS is_mobile,0 AS isygOrder,0 AS allCashPrice,0 AS allygPrice,0 AS order_type_flag,NULL AS cn_useralias,0 AS all_integral,0 AS actual_integral,0 AS pay_type_flag,
+NULL AS mark,goodslist AS goods_info,NULL AS express_info
+FROM juanpi_order WHERE delete_status = 0  AND user_id = #{vo.userId}
+UNION ALL 
+SELECT so1.id,so1.order_id,so1.add_time,NULL AS subchannel,NULL AS goodsnumber,so1.total_price,so1.user_id,0 AS juanpiOrder,so1.delete_status,so1.auto_confirm_email,
+so1.auto_confirm_sms,so1.commission_amount,so1.confirm_time,so1.delivery_address_id,so1.delivery_time,so1.delivery_type,so1.enough_reduce_amount,so1.eva_user_id,so1.finish_time,
+so1.goods_amount,so1.invoice,so1.invoice_type,so1.operation_price_count,so1.order_cat,so1.order_confirm_delay,so1.order_form,so1.order_main,so1.order_status,so1.order_type,
+so1.out_order_id,so1.out_price,so1.pay_time,so1.pay_type,so1.rc_amount,so1.rc_mobile,so1.rc_price,so1.rc_type,so1.receiver_name,so1.receiver_area,so1.receiver_area_info,
+so1.receiver_mobile,so1.receiver_telephone,so1.receiver_zip,so1.return_ship_time,so1.ship_code,so1.ship_time,so1.ship_addr_id,so1.ship_price,so1.store_id,so1.store_name,
+so1.trade_no,so1.transport,so1.user_name,so1.whether_gift,so1.payment_id,so1.self_add_price,so1.is_mobile,so1.isygOrder,so1.allCashPrice,so1.allygPrice,so1.order_type_flag,
+so1.cn_useralias,so1.all_integral,so1.actual_integral,so1.pay_type_flag,b.mark,so1.goods_info,so1.express_info
+ FROM shop_order_form so1 LEFT JOIN shop_payment b ON so1.payment_id = b.id 
+ 
+ WHERE so1.order_cat != 2 AND so1.delete_status = 0 AND user_id = #{vo.userId}<if test="vo.orderStatus != null and vo.orderStatus != ''">
+ 				<if test='vo.orderStatus == "1"'>
+						AND so1.order_status>=40 and so1.order_status!=47 and so1.order_status!=50
+						and so1.order_status != 60 and so1.order_status !=65
+					</if>
+					<if test='vo.orderStatus != "1" and vo.orderStatus != "100" and vo.orderStatus != "10"'>
+						AND so1.order_status = #{vo.orderStatus,jdbcType=INTEGER}</if>
+					<if test='vo.orderStatus == "10" '>
+						AND (so1.order_status = 10 OR so1.order_status = 18)
+					</if>
+					<if test='vo.orderStatus == "100" '>
+						AND so1.order_status > 0
+					</if>
+					
+  					<if test="vo.orderMain != null and vo.orderMain != ''">
+					AND so1.order_main=1
+					</if>
+ </if>
+UNION ALL 	
+SELECT  order_id AS id,order_no AS order_id,jiuye_order.add_time,NULL AS subchannel,NULL AS goodsnumber,pay_money AS total_price,user_id,0 AS juanpiOrder,0 delete_status,
+NULL AS auto_confirm_email,NULL AS auto_confirm_sms,NULL AS commission_amount,NULL AS confirm_time,NULL AS delivery_address_id,NULL AS delivery_time,NULL AS delivery_type,
+NULL AS enough_reduce_amount,NULL AS eva_user_id,NULL AS finish_time,NULL AS goods_amount,NULL AS invoice,NULL AS invoice_type,NULL AS operation_price_count,0 AS order_cat,
+NULL AS order_confirm_delay,NULL AS order_form,NULL AS order_main,show_status AS order_status,NULL AS order_type,NULL AS out_order_id,NULL AS out_price,NULL AS pay_time,
+NULL AS pay_type,NULL AS rc_amount,NULL AS rc_mobile,NULL AS rc_price,NULL AS rc_type,receiver AS receiver_name,NULL AS receiver_area,NULL AS receiver_area_info,NULL AS receiver_mobile,
+NULL AS receiver_telephone,NULL AS receiver_zip,NULL AS return_ship_time,NULL AS ship_code,NULL AS ship_time,NULL AS ship_addr_id,0 AS ship_price,NULL AS store_id,NULL AS store_name,
+NULL AS trade_no,NULL AS transport,NULL AS user_name,NULL AS whether_gift,NULL AS payment_id,NULL AS self_add_price,
+NULL AS is_mobile,0 AS isygOrder,0 AS allCashPrice,0 AS allygPrice,4 AS order_type_flag,NULL AS cn_useralias,0 AS all_integral,
+0 AS actual_integral,0 AS pay_type_flag,shop_payment.mark AS mark,order_detail_dto AS goods_info,NULL AS express_info 
+FROM
+  jiuye_order left join shop_payment on 
+  jiuye_order.payment_id = shop_payment.id  WHERE user_id = #{vo.userId} AND jiuye_order.show_status !=10
+  <if test="vo.orderStatus != null and vo.orderStatus != ''">
+  						<if test="vo.orderStatus == '10'"> 
+							AND jiuye_order.show_status =1
+						</if>
+						<if test="vo.orderStatus == '20'">
+							AND jiuye_order.show_status =2
+						</if>
+						<if test="vo.orderStatus == '30'">
+							AND jiuye_order.show_status =3
+						</if>
+							<if test="vo.orderStatus == '40'">
+							AND jiuye_order.show_status =4
+						</if>
+							<if test="vo.orderStatus == '50'">
+							AND jiuye_order.show_status =4
+						</if>
+						<if test="vo.orderStatus == '0'">
+							AND jiuye_order.show_status =6
+						</if>
+			</if>
+			 
+ ) so WHERE 1=1 
+			 <if test="vo.orderId != null and vo.orderId !=''">
+				AND so.order_id like concat('%',#{vo.orderId},'%')
+			</if>
+			<if test="vo.beginTime != null and vo.beginTime != ''">
+			<![CDATA[AND so.add_time >= #{vo.beginTime}]]>
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+			<![CDATA[AND so.add_time <= #{vo.endTime}]]>
+			</if>
+			<if test="vo.isygOrder != null ">
+				AND so.isygOrder = #{vo.isygOrder}</if>
+			<if test="vo.orderTypeFlag != null">
+				AND so.order_type_flag = #{vo.orderTypeFlag}</if>
+			ORDER BY so.add_time DESC
+ </select>
+	
+	
+</mapper>

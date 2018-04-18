@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>我的线下刷卡订单</title>
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/service/public.css?v=5" type="text/css" rel="stylesheet"/>
+	<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+    <script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+    <script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+$(function() {
+	jQuery('#beginTime, #endTime').datepicker({
+	    dateFormat:"yy-mm-dd",
+	    changeMonth: true,
+	    changeYear: true
+	  });
+});
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm")
+$!httpInclude.include("/nav1.htm")
+
+<div class="main clearfix">
+    <div class="usercenter"> $!httpInclude.include("/buyer/nav.htm?op=type2")
+        <div class="usercenter_right">
+            <div class="myorder">
+                <h4><span class="myorder_fright"></span><strong>我的线下刷卡订单</strong></h4>
+            </div>
+            <form id="ListForm" method="post" action="$!webPath/buyer/group.htm?orderType=2">
+                <div class="user_list">
+                    <div class="user_list_title">
+              <span class="user_title_sp">
+                <span style="float:left; line-height:24px;">订单编号：</span>
+                <input type="text" placeholder="订单编号" value="$!vo.orderId" class="user_title_txt" id="order_id" name="orderId">
+                <span style="float:left; line-height:24px;">下单时间：</span>
+                <input type="text" placeholder="开始时间" style="width:70px" class="user_title_txt"
+                       readonly="readonly" value="$!vo.startDate" id="beginTime" name="startDate">
+                <span style="float:left; line-height:24px; padding-right:5px;">&mdash;</span>
+                <input type="text" placeholder="结束时间" style="width:70px" class="user_title_txt"
+                       readonly="readonly" value="$!vo.endDate" id="endTime" name="endDate">
+                <input type="submit" value="查询" class="user_sear_btn" name="">
+              </span>
+                        <ul class="user_title_ul">
+                            <li class="this"><i></i>
+                                <a href="$!webPath/buyer/group.htm?orderType=2">全部订单</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="user_list_box">
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                               class="user_order_table user_table_title">
+                            <tbody>
+                            <tr>
+                                <th width="42%">购买信息</th>
+                                <th width="28%">总价</th>
+                                <th width="20%">订单状态</th>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    #foreach($obj in $objs)
+                      #set($map = $!orderFormTools.queryGroupInfo("$!obj.groupInfo"))
+		              #set($goods_id = "$!{map.get('goods_id')}")	
+		              #set($goods_name = "$!{map.get('goods_name')}")	
+		              #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+		              #set($img = "$!{goods_mainphoto_path}")
+		              #set($goods_count = "$!{map.get('goods_count')}")
+		              #set($goods_price = "$!{map.get('goods_price')}")
+		              #set($goods_begin_time = "$!{map.get('goods_begin_time')}")
+		              #set($goods_end_time = "$!{map.get('goods_end_time')}")
+		              #set($goods_total_price = "$!{map.get('goods_total_price')}")
+                    <div class="orderlist_one">
+                        <h4 class="orderlist_one_h4">
+                            <span>
+                                订单号： <a>$!obj.orderId</a>
+                            </span>
+                        </h4>
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" class="user_order_table">
+                            <tbody>
+                                <tr>
+                                    <td width="42%">
+                                        <div class="order_card_data">
+                                            <a target="_blank" href="$!webPath/group/view_$!{goods_id}.htm" class="title ell">$!{obj.localGroupName}</a>
+                                            <a href="$!webPath/group/store.htm?id=$!obj.storeId" class="c_blue" target="_blank"> 商家信息</a>
+                                        </div>
+                                    </td>
+                                    <td width="28%" align="center">￥$!{obj.totalPrice}</td>
+                                #if($!obj.orderStatus==10)
+				                  #set($status="未支付")
+				                #end
+				                #if($!obj.orderStatus==0)
+				                  #set($status="已取消")
+				                #end
+				                #if($!obj.orderStatus==20)
+				                  #set($status="已支付")
+				                #end
+				                #if($!obj.orderStatus==30)
+				                  #set($status="已使用")
+				                #end
+				                #if($!obj.orderStatus>=50)
+				                  #set($status="已完成")
+				                #end
+                                    <td width="20%" align="center">
+                                        <p class="lh-25">$!status</p>
+                                        <a target="_blank" href="$!webPath/buyer/lifeorder_view.htm?id=$!obj.id&type=down" class="c_blue"> 订单详情 </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    #end
+                    <div class="fenye">
+			            <span class="user_page_sp">
+			              <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+			                  $!gotoPageFormHTML
+			            </span>
+			          </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+$!httpInclude.include("/footer.htm")
+
+<script>
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet"/>
+<link  href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+	var isEepay=jQuery("#isEepay").val();
+	jQuery(":radio").click(function(){
+		var val=jQuery(this).val();
+   		if(val=='6'){//审核不通过
+   			jQuery("#trReason").show();
+   			jQuery("#trImpNum").hide();
+   			jQuery("#trPosType").hide();
+   			jQuery("#trLineNum").hide();
+   			jQuery("#trBankName").hide();
+   		}else{//审核通过
+   			if(isEepay=='true'){//安装POS机
+   	   			jQuery("#trImpNum").show();
+   	   			jQuery("#trPosType").show();
+   	   			jQuery("#trLineNum").show();
+   	   			jQuery("#trBankName").show();
+   			}
+   			jQuery("#trReason").hide();
+   		}
+    });
+	jQuery("#ListForm").validate({
+	    rules:{
+	        failReseaon:{
+		    required :true,
+		    maxlength:200
+		   },
+		   implementNumber:{
+			   maxlength:100
+		   },
+		   posType:{
+			    required :true
+		   },
+		   lineNumber:{
+			    required :true
+		   }
+		 },
+		messages:{
+			failReseaon:{required:"原因不能为空",maxlength:"最多输入200个字符"},
+			implementNumber:{maxlength:"最多输入100个字符"},
+			posType:{maxlength:"必选项"},
+			lineNumber:{maxlength:"必填项"}
+		}
+	 });	
+	if(isEepay=='true'){//安装POS机
+			jQuery("#trReason").hide();
+			jQuery("#trImpNum").show();
+			jQuery("#trPosType").show();
+			jQuery("#trLineNum").show();
+			jQuery("#trBankName").show();
+	}
+})
+
+function onCancel(){
+	window.location.href="$!webPath/admin/merchant_list.htm?currentPage=$!currentPage";
+}
+
+function onView(id){
+	window.location.href="$!webPath/admin/merchant_audit_view.htm?currentPage=$!currentPage&audit_view=1&id="+id;
+}
+
+function posTypeChange(obj){
+	var posType=jQuery(obj).val();
+	if(posType=='4'){
+		jQuery("#addType").val('6');
+	}else{
+		jQuery("#addType").val('24');
+	}
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">商户管理</h3>
+  <div class="nav_list">
+  	<ul>
+    	<li><a href="$!webPath/admin/merchant_list.htm?currentPage=$!currentPage"><b>管理</b></a></li>
+        #if($!audit)
+        <li><a href="javascript:void(0)" class="this"><b>审核</b></a></li>
+        #end
+    </ul>
+  </div>
+  <form action="$!webPath/admin/merchant_audit_save.htm" method="post" name="ListForm" id="ListForm">
+  <input type="hidden" id="currentPage" name="currentPage" value="$!currentPage" />
+  <input type="hidden" id="id" name="id" value="$!vo.id" />
+  <input type="hidden" id="isEepay" name="isEepay" value="$!vo.isEepay" />
+  <input type="hidden" name="addType" id="addType" value="$!store.addType" />
+  <div class="fshoptb">
+    <table width="50%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <td align="right" width="20%">
+        	<input type="radio" name="storeStatus" value="5" checked="checked"/>审核通过
+        </td>
+        <td align="left" width="50%">
+        	<input type="radio" name="storeStatus" value="6"/>审核不通过
+        </td>
+      </tr>
+      <tr id="trReason" style="display:none">
+      	<td align="right" >
+        	<strong class="sred">*</strong>原因：
+        </td>
+        <td align="left">
+        	<label>
+	              <textarea name="failReseaon" id="failReseaon" cols="40" rows="3"></textarea>
+	        </label>
+        </td>
+      </tr>
+      <tr id="trImpNum" style="display:none">
+        <td align="right" >
+        	<strong class="sred">*</strong>输入机具编码：
+        </td>
+        <td align="left">
+        	<span class="size250">
+        		<input name="implementNumber" type="text" id="implementNumber" value="$!store.implementNumber" />
+        	</span>
+        </td>
+      </tr>
+      <tr id="trPosType" style="display:none">
+        <td align="right" >
+        	<strong class="sred">*</strong>机具类型：
+        </td>
+        <td align="left">
+        	<span class="webnamesec sizese">
+        		<select name="posType" id="posType" onchange="posTypeChange(this)">
+		              <option value="4" #if($!store.posType == 4) selected="selected"#end>移联商通</option>
+		              <option value="5" #if($!store.posType == 5) selected="selected"#end>超级刷</option>
+		        </select>
+        	</span>
+        </td>
+      </tr>
+      <tr id="trLineNum" style="display:none">
+        <td align="right" >
+        	<strong class="sred">*</strong>联行行号：
+        </td>
+        <td align="left">
+        	<span class="size250">
+        		<input name="lineNumber" type="text" id="lineNumber" value="$!store.lineNumber" />
+        	</span>
+        </td>
+      </tr>
+      <tr id="trBankName" style="display:none">
+        <td align="right" >
+        	开户行名称：
+        </td>
+        <td align="left">
+        	$!store.bankName
+        </td>
+      </tr>
+      <tr>
+        <td align="right">
+	        <span>
+	        	<input class="enter" name="" type="submit" value="确定" style="cursor:pointer;"/>
+	        </span>
+        </td>
+        <td align="left">
+        	<span>
+	        	<input class="cancel" name="" type="button" value="取消" style="cursor:pointer;" onclick='onCancel();'/>
+	        </span>
+	        <span>
+	        	<input class="enter" name="" type="button" value="查看" style="cursor:pointer;" onclick='onView($!vo.id);'/>
+	        </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>酒店列表</title>
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="$!webPath/resources/elong/css/main.css?v=sd" />
+<style>
+.page-list .page-list-con {
+    padding-bottom: 36px;
+}
+.nomore{display:none}
+</style>
+</head>
+<body>
+	<div class="pages">
+		<div class="page page-on-center" data-blend="layer"
+			data-blend-id="h5_list" data-url="/hotelfx/0101/nlist/" id="uniq22"
+			data-title="【北京酒店】北京酒店宾馆预订_旅店住宿价格查询_艺龙网移动版" data-title-id="h5_list">
+			<header class="bar bar-nav hotel-list-header">
+				<!-- <a class="icon pull-left icon-back tjclick" data-rel="back"	data-href="//m.elong.com/hotelfx/"
+					data-tj="{&quot;cspot&quot;:&quot;back&quot;}"></a>  -->
+					
+				<h1 class="title">
+					<span class="city-area"> <span class="city" name="cityId">${cityName}</span> <span class="num" style="display: none;"></span> <i
+						class="icon-bottom"></i>
+					</span>
+				</h1>
+			</header>
+			<div class="search-field showout">
+				<div class="header-search">
+					<div class="sea-date tjclick"
+						data-tj="{&quot;cspot&quot;:&quot;listcheckdate&quot;}">
+						<p>
+							入<span>店</span>：<b class="indate" name="arrivalDate"
+								data-value=""></b>
+						</p>
+						<p>
+							离<span>店</span>：<b class="outdate" name="departureDate"
+								data-value=""></b>
+						</p>
+						<span class="total">1晚<i></i></span>
+					</div>
+					<div class="sea-box tjclick"
+						data-tj="{&quot;cspot&quot;:&quot;searchbar&quot;}">
+						<label class="sea-mask"></label> <i></i> <input type="input"
+							value="" class="nameoraddress" name="queryText"
+							placeholder="酒店名称/位置不限" readonly="readonly"> <span
+							class="clear-btn icon-clear" style="display: none;"></span>
+					</div>
+				</div>				
+			</div>
+
+			<div id="scrollContent" class="page-content page-list page_lst_mvt16819 "
+				style="padding-top: 100px !important;">
+				<section class="page-list-con">
+
+					<div class="list-main">
+
+						<ul class="hotels-list" id="hotels-list">
+							#if($!hotelList.size()>0) #foreach($hotel in $hotelList)
+							<li class="hotel-item bdt "
+								data-url="$!webPath/v1/elong_hotel_detail.htm?hotelId=$!hotel.hotelId&cityId=$!cityId">
+								<div class="pic">
+									<img src="$!hotel.thumbnailUrl">
+								</div>
+								<div class="info">
+									<p class="name">
+										<em>$!hotel.hotelName</em> <i class="grade grade1"></i>
+									</p>
+									<p class="comt">
+										<span class="comt_no"><b>$!hotel.grade</b>分</span> <span
+											class="comt_nmb">$!hotel.reviewCount条点评</span>
+									</p>
+									<p class="fac">
+										#if($!hotel.category == 3) <span>舒适</span> #end
+										#if($!hotel.category == 4) <span>高档</span> #end
+										#if($!hotel.category == 5) <span>豪华</span> #end
+									</p>
+									<p class="district">
+										<span>$!hotel.businessZoneName | $!hotel.address </span>
+									</p>
+									<p class="reserve_time">
+										#if($!hotel.recentTimeInterval) <span>最新预订$!hotel.recentTimeInterval分钟前</span>
+										#end
+									</p>
+								</div>
+								<div class="right-wrap">
+									<div class="r-tab">
+										<p class="pri">
+											<b> </b> <span><i>$!hotel.currencyFlag</i>$!hotel.lowRate</span>
+										</p>
+										<p class="tags">
+											#if($!hotel.hotelFlags) <span
+												style="color: #4499ff; border: 1px solid #4499ff">门票套餐</span>
+											<span style="color: #4499ff; border: 1px solid #4499ff">促销</span>
+											<span style="color: #FF5555; border: 1px solid #FF5555">返</span>
+											#end
+										</p>
+									</div>
+								</div>
+							</li> #end #end
+						</ul>
+						<div class="nomore">							
+							<p><span><img style="width:16px;height:16px;vertical-align: middle;" src="$!webPath/resources/elong/img/loading.gif" /></span>正在加载更多酒店</p>
+						</div>
+						<div class="nomore">							
+							<p>没有更多酒店</p>
+						</div>
+						<!----------------------------------------搜索无结果start------------------------------------------>
+						#if($!hotelList.size()==0)
+						<div class="list-noresult">
+						#else
+						<div class="list-noresult" style="display: none;">
+						#end						
+							<i class="icon-noresult"></i>
+							<p>抱歉，未找到符合您条件的酒店</p>
+						</div>
+						
+						
+						<!----------------------------------------搜索无结果 end ------------------------------------------>
+
+					</div>
+					
+				</section>
+			</div>
+			<div class="list-sider bar">
+				<ul class="filter-list">
+					<li class="price-star-btn "
+						data-tj="{&quot;cspot&quot;:&quot;priceandstar&quot;}">
+						<p class="tit">
+							<i class="list-filter-i3"></i> <span class="title-pad">价格星级</span>
+							<span class="title-phone">价格星级</span>
+						</p>
+						<p class="opt">价格不限、星级不限</p>
+					</li>
+					<li class="default-btn tjclick"
+						data-tj="{&quot;cspot&quot;:&quot;sort&quot;}">
+						<p class="tit">
+							<i class="list-filter-i4"></i> <span class="title-pad">排序</span>
+							<span class="title-phone">排序</span>
+						</p>
+						<p class="opt">默认排序</p>
+					</li>
+				</ul>
+				<a href="" class="filter-reset">重置所有选项</a>
+			</div>
+			<div class="list-top" style="display: none;">
+				<div class="backtop">
+					<i class="icon-top"></i>
+				</div>
+			</div>
+			<div class="list-ctrlbtn">
+				<!--list-ctrlbtn-on选中list-ctrlbtn-active按下-->
+				<i class="icon-ctrlbtn"></i>
+				<div class="ctrl-txt">
+					<span><i class="icon-order"></i>订单</span><span><i
+						class="icon-collect"></i>收藏</span><span><i class="icon-history"></i>历史</span>
+				</div>
+			</div>
+			<div class="slide-selector plugin-inited">
+				<header class="bar-nav" style="display: none;">
+					<div class="radio-title">
+						<span class="title">排序</span><span class="cancel">取消</span>
+					</div>
+				</header>
+				<ul class="page-content" style="padding-top: 0px !important;">
+					<li class="radio-item selected" value="Default"><label
+						class="label-radio clearfix"><div class="radio-icon">
+								<span class="radio selected"></span>
+							</div>
+							<div class="radio-text">默认</div>
+							<div class="check"></div></label></li>
+					<li class="radio-item" value="StarRankDesc"><label
+						class="label-radio clearfix"><div class="radio-icon">
+								<span class="radio"></span>
+							</div>
+							<div class="radio-text">推荐星级 高-低</div>
+							<div class="check"></div></label></li>
+					<li class="radio-item" value="RateAsc"><label
+						class="label-radio clearfix"><div class="radio-icon">
+								<span class="radio"></span>
+							</div>
+							<div class="radio-text">价格 低-高</div>
+							<div class="check"></div></label></li>
+					<li class="radio-item" value="RateDesc"><label
+						class="label-radio clearfix"><div class="radio-icon">
+								<span class="radio"></span>
+							</div>
+							<div class="radio-text">价格 高-低</div>
+							<div class="check"></div></label></li>
+					<li class="radio-item" value="DistanceAsc"><label
+						class="label-radio clearfix"><div class="radio-icon">
+								<span class="radio"></span>
+							</div>
+							<div class="radio-text">距离 近-远</div>
+							<div class="check"></div></label></li>
+				</ul>
+				<div class="arrow up left"></div>
+				<div class="describe" style="display: none;">
+					<span></span>
+				</div>
+			</div>
+			<div id="filterPriceStar"
+				class="filter-sp filter-price-star plugin-inited" style="">
+				<span class="arrow"></span>
+				<div class="sp-content">
+					<div class="allhotel">
+						<p></p>
+					</div>
+					<div class="star">
+						<div class="sp-tit">星级（可多选）</div>
+						<ul class="star-list">
+							<li sn="-1" class="on"><span class="tptt">不限</span><span
+								class="moreh"></span></li>
+							<li sn="A" class=""><span class="tptt">公寓</span><span
+								class="moreh"></span></li>
+							<li sn="3" class=""><span class="tptt">三星/舒适</span><span
+								class="moreh"></span></li>
+							<li sn="4" class=""><span class="tptt">四星/高档</span><span
+								class="moreh"></span></li>
+							<li sn="5" class=""><span class="tptt">五星/豪华</span><span
+								class="moreh"></span></li>
+						</ul>
+					</div>
+					<div class="price">
+						<div class="sp-tit">价格</div>
+						<ul class="price-list">
+							<li class="on" price-value="0"><span class="tptt">不限</span></li>
+							<li price-value="0-150" class=""><span class="tptt">0-150</span><span
+								class="moreh"></span></li>
+							<li price-value="151-300" class=""><span class="tptt">151-300</span><span
+								class="moreh"></span></li>
+							<li price-value="301-450" class=""><span class="tptt">301-450</span><span
+								class="moreh"></span></li>
+							<li price-value="451-700" class=""><span class="tptt">451-700</span><span
+								class="moreh"></span></li>
+							<li price-value="701" class=""><span class="tptt">700以上</span><span
+								class="moreh"></span></li>
+						</ul>
+					</div>
+				</div>
+				<div class="sp-title">
+					<span class="left tjclick"
+						data-tj="{&quot;cspot&quot;:&quot;emptyPriceAndStar&quot;}">取消</span><span
+						class="right tjclick"
+						data-tj="{&quot;cspot&quot;:&quot;submitPriceAndStar&quot;}">确定</span>
+				</div>
+			</div>
+			<div class="cld page-plugin plugin-inited">
+				<header class="bar bar-nav">
+					<h1 class="title">选择日期</h1>
+					<a class="icon icon-back pull-left hide-cln"></a><a
+						class="cld-title-year pull-right icon"></a>
+				</header>
+				<div class="page-content">
+					
+				</div>
+				<ul class="cld-title bar">
+					<li>日</li>
+					<li>一</li>
+					<li>二</li>
+					<li>三</li>
+					<li>四</li>
+					<li>五</li>
+					<li>六</li>
+				</ul>
+			</div>
+			<div class="advance-city plugin-inited page-plugin">
+				<header class="bar bar-nav flight-order-head">
+					<a class="icon pull-left icon-back"></a>
+					<div class="search-input">
+						<i class="icon-search"></i><input type="input" id="search_city" value=""
+							placeholder="请输入城市名、行政区或景区">
+					</div>
+				</header>
+				<div class="page-content page-select">
+					<div class="current-city">
+						<div class="page-title"></div>
+						<div class="get-city">
+							<i class="icon-position"></i>点击获取当前城市
+						</div>
+					</div>
+					<div class="search-history" style="display: none;">
+						<div class="page-title">搜索历史</div>
+						<div class="city-list">
+							<ul></ul>
+						</div>
+					</div>
+					<div class="hot-city">
+						<div class="page-title">热门城市</div>
+						<div class="city-list">
+							<ul>
+								<li city-id="101" area-type="" area-id="" sug-origin=""
+									class=""><span>北京</span></li>
+								<li city-id="201" area-type="" area-id="" sug-origin=""
+									class=""><span>上海</span></li>
+								<li city-id="2001" area-type="" area-id="" sug-origin=""
+									class=""><span>广州</span></li>
+								<li city-id="1201" area-type="" area-id="" sug-origin=""
+									class=""><span>杭州</span></li>
+								<li city-id="2003" area-type="" area-id="" sug-origin=""
+									class=""><span>深圳</span></li>
+								<li city-id="1801" area-type="" area-id="" sug-origin=""
+									class=""><span>武汉</span></li>
+								<li city-id="2301" area-type="" area-id="" sug-origin=""
+									class=""><span>成都</span></li>
+								<li city-id="2701" area-type="" area-id="" sug-origin=""
+									class=""><span>西安</span></li>
+								<li city-id="1101" area-type="" area-id="" sug-origin=""
+									class=""><span>南京</span></li>
+								<li city-id="401" area-type="" area-id="" sug-origin=""
+									class=""><span>重庆</span></li>
+								<li city-id="1901" area-type="" area-id="" sug-origin=""
+									class=""><span>长沙</span></li>
+								<li city-id="1401" area-type="" area-id="" sug-origin=""
+									class=""><span>厦门</span></li>
+								<li city-id="301" area-type="" area-id="" sug-origin=""
+									class=""><span>天津</span></li>
+								<li city-id="3201" area-type="" area-id="" sug-origin=""
+									class=""><span>香港</span></li>
+								<li city-id="1001" area-type="" area-id="" sug-origin=""
+									class=""><span>哈尔滨</span></li>
+								<li city-id="1701" area-type="" area-id="" sug-origin=""
+									class=""><span>郑州</span></li>
+								<li city-id="1102" area-type="" area-id="" sug-origin=""
+									class=""><span>苏州</span></li>
+								<li city-id="1301" area-type="" area-id="" sug-origin=""
+									class=""><span>合肥</span></li>
+								<li city-id="1602" area-type="" area-id="" sug-origin=""
+									class=""><span>济南</span></li>
+								<li city-id="2201" area-type="" area-id="" sug-origin=""
+									class=""><span>三亚</span></li>
+							</ul>
+						</div>
+					</div>					
+				</div>
+				<div class="page-content page-search">
+					<ul></ul>
+				</div>
+				<div class="inner-mask"></div>
+			</div>
+			<div class="list-pop-city list-pop-search plugin-inited page-plugin">
+				<header class="bar bar-nav flight-order-head bdb">
+					<a class="icon pull-left icon-back"></a>
+					<div class="search-input">
+						<form class="submitSearchForm">
+							<i></i><input type="search" value="" id="query" name="queryText"
+								placeholder="输入酒店名、地址等">
+						</form>
+					</div><!-- 
+					<div class="search-btn">搜索</div> -->
+				</header>
+				<div class="page-select page-content">
+					<div class="current-city"></div>
+					<div class="search-history" >
+						<div class="page-title">
+							搜索历史<span class="sea-clear">清除历史</span>
+						</div>
+						<div class="keyword-list">
+							<ul></ul>
+						</div>
+					</div>
+				</div>
+				<div class="page-content page-search">
+					<ul>
+					</ul>
+				</div>
+				<div class="inner-mask"></div>
+			</div>
+		</div>
+	</div>
+	<!-- 隐藏域 -->
+	<input type="hidden" id="cityId" value="${cityId}" /> <!-- 当前页面的城市ID -->
+	<input type="hidden" id="webpath" value="$!webPath" />
+	<input type="hidden" id="starval" value="" />
+	<input type="hidden" id="LowRate" value="" />
+	<input type="hidden" id="HighRate" value="" />
+	<input type="hidden" id="Sort" value="" />
+	<!-- 隐藏域以上 -->
+	
+	<script type="text/javascript"
+		src="$!webPath/resources/elong/js/jquery-2.0.0.min.js"></script>
+	<script type="text/javascript"
+		src="$!webPath/resources/elong/js/jquery.plug.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/elong/js/function.js"></script>
+<script type="text/javascript" src="$!webPath/resources/elong/js/cld.js"></script>	
+	<script type="text/javascript"
+		src="$!webPath/resources/elong/js/hotel_list.js"></script>
+	<script type="text/javascript"
+		src="$!webPath/resources/elong/js/loading.js"></script>
+	<script src="$!webPath/resources/elong/js/jquery.cookie.js"
+		type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="$!webPath/resources/elong/js/index.js"></script>
+	<script>
+	var stop = true; 
+	var isend=false;
+	var pagenum=2;
+	
+	$("#scrollContent").scroll(function () {
+		processor.process();
+	});
+	
+	function scrollContent_scroll(){
+		totalheight = parseFloat($("#scrollContent").height()) + parseFloat($("#scrollContent").scrollTop()+100);
+	    if (document.getElementById("scrollContent").scrollHeight <= totalheight) {
+	        if (stop == true) {
+	            stop = false;	            
+	            if(!isend)
+	            {
+	                GetData(pagenum,10);
+	            }
+	        }
+	    }
+	}
+	
+	var processor = {  
+	    timeoutId: null, 		 
+	    performProcessing: function(){
+	    	scrollContent_scroll();
+	    },  		 
+	    process: function(){
+	        clearTimeout(this.timeoutId);  
+	        this.timeoutId  = setTimeout(function(){ 
+	            processor.performProcessing();  
+	        }, 100);  
+	    }  
+	};
+	function isEmptyObject(e) {  
+	    var t;  
+	    for (t in e) return !1;  
+	    return !0  
+	}  
+	
+	function GetData(pageIndex,pageSize) {
+		var arrivalDate=$(".sea-date .indate").attr("data-value");
+		var departureDate=$(".sea-date .outdate").attr("data-value");
+		var cityId=$("#cityId").val();
+		var queryText=$("input[name=queryText]").val();
+		var webpath=$("#webpath").val();
+		var StarRate=$("#starval").val();
+		var LowRate=$("#LowRate").val();
+		var HighRate=$("#HighRate").val();
+		var Sort=$("#Sort").val();
+		$(".nomore").eq(0).show();
+		$(".list-noresult").hide();
+		if(pageIndex==1){
+			$("#hotels-list").empty();			
+		}
+	    $.ajax({
+	        type: "POST",
+	        url: $("#webpath").val()+"/v1/hotel_list.htm",
+	        data: {arrivalDate:arrivalDate,departureDate:departureDate,cityId:cityId,queryText:queryText,StarRate:StarRate,pageIndex:pageIndex,pageSize:pageSize,LowRate:LowRate,HighRate:HighRate,Sort:Sort},
+	        dataType: "json",
+	        success: function (data) {
+	        	stop = true;
+	        	if(!isEmptyObject(data)){	        		
+	        		var html="";
+		            for(var i=0,len=data.length;i<len;i++){
+		            	html+="<li class=\"hotel-item bdt\" data-url=\""+webpath+"/v1/elong_hotel_detail.htm?hotelId="+data[i].hotelId+"&cityId="+cityId+"\">";
+						html+="<div class=\"pic\"><img src-set=\""+data[i].thumbnailUrl+"\"></div>";
+						html+="<div class=\"info\">";
+						html+="		<p class=\"name\">";
+						html+="<em>"+data[i].hotelName+"</em> <i class=\"grade grade1\"></i>";
+						html+="</p>";
+						html+="<p class=\"comt\">";
+						html+="<span class=\"comt_no\"><b>"+data[i].grade+"</b>分</span> <span class=\"comt_nmb\">"+data[i].reviewCount+"条点评</span>";
+						html+="		</p>";
+						html+="		<p class=\"fac\">";
+						if(data[i].category==3){
+							html+="<span>舒适</span>";
+						}
+						if(data[i].category==4){
+							html+="<span>高档</span>";
+						}
+						if(data[i].category==5){
+							html+="<span>豪华</span>";
+						}
+						html+="</p>";
+						html+="<p class=\"district\">";			
+						html+="<span>"+data[i].businessZoneName+" | "+data[i].address+"</span>";		
+						html+="</p>";
+						html+="<p class=\"reserve_time\">";
+						if(data[i].recentTimeInterval){
+							html+="<span>最新预订"+data[i].recentTimeInterval+"分钟前</span>";
+						}
+						html+="</p>";
+						html+="</div>";
+						html+="<div class=\"right-wrap\">";
+						html+="<div class=\"r-tab\">";
+						html+="<p class=\"pri\">";
+						html+="<b></b><span><i>"+data[i].currencyFlag+"</i>"+data[i].lowRate+"</span>";
+						html+="</p>";
+						html+="<p class=\"tags\">";
+						if(data[i].hotelFlags){
+							html+="<span style=\"color: #4499ff; border: 1px solid #4499ff\">门票套餐</span>";
+							html+="<span style=\"color: #4499ff; border: 1px solid #4499ff\">促销</span>";
+							html+="<span style=\"color: #FF5555; border: 1px solid #FF5555\">返</span>";						
+						}
+						html+="</p></div></div></li>";
+		            }
+		            
+		            //拼接完之后pageIndex自增           
+		            $("#hotels-list").append(html);
+		            $(".nomore").eq(0).hide();
+		            _wait_load();
+		            pagenum=pagenum+1;
+		            
+	        	}else{
+	        		isend=true;
+	        		if(pagenum==1){
+	        			$(".nomore").eq(0).hide();
+	        			$(".list-noresult").show();
+	        		}else{
+		            	$(".nomore").eq(0).hide();
+		            	$(".nomore").eq(1).show();
+	        		}
+	        	}
+	        	
+	        },
+	        error: function () {
+	            alert("服务器繁忙，请稍后..");
+	            return;
+	        }
+	    })
+	};
+	//设置cookie
+	var expiresDate= new Date();
+	expiresDate.setTime(expiresDate.getTime() + (365*24*60 * 60 * 1000)); 
+	function setCookie(val) {
+		var hotel_historyList = $.cookie('hotel_historyList');				
+		if (hotel_historyList) {
+			var arr = hotel_historyList.split(',');	
+			 var new_arr = [];
+			arr.push(val);				  
+		for(var i=0;i<arr.length;i++) {
+			　　var items=arr[i];
+			　　if($.inArray(items,new_arr)==-1) {
+			　　　　new_arr.push(items);
+			　　}
+			};
+				hotel_historyList = new_arr.join(',');				
+		} else {
+			hotel_historyList = val;
+		}
+		$.cookie('hotel_historyList', hotel_historyList,{expires:expiresDate});						
+	};
+	//显示历史记录
+	show_historyList();
+	function show_historyList() {
+		var hotel_historyList = $.cookie('hotel_historyList');
+		if (hotel_historyList) {
+			var arr = hotel_historyList.split(',');			
+			var html_historyList = "";	
+			$(".search-history").find('.keyword-list ul li').remove();
+				for (var i = 0; i < arr.length; i++) {
+					html_historyList += "<li data-url=\""+$("#webpath").val()+"/v1/elong_hotel_detail.htm?hotelId="+arr[i].split('-')[0]+"\"><span>" + arr[i].split('-')[1] + "</span></li>";
+				};	
+				$(".search-history").find('.keyword-list ul').append(html_historyList);
+				$(".search-history").find('.keyword-list ul').each(function(){
+			           var length = $(this).find('li').size();
+			           var btn = '<li class="icon-bottom"></li><li class="icon-top hide"></li>';
+			           if(length >5 ){				        	   
+			        	   $(".search-history").find('.keyword-list ul').append(btn);
+			           }
+			           $(this).find('li:gt(4) span').parents('li').addClass('hide');
+				});
+		};
+	};
+	//历史记录展开
+	$(".keyword-list ul").on('click','li.icon-bottom',function(event) {
+       	$(this).parents(".keyword-list ul").find('li:gt(4) span').parents('li').removeClass('hide');
+       	$(this).addClass('hide');
+       	$(this).siblings('.icon-top').removeClass('hide');     	
+       });
+	//历史记录收起
+	$(".keyword-list ul").on('click','li.icon-top',function(event) {
+       	$(this).parents(".keyword-list ul").find('li:gt(4) span').parents('li').addClass('hide');
+       	$(this).addClass('hide');
+       	$(this).siblings('.icon-bottom').removeClass('hide');
+       });
+	//历史记录点击事件
+	$(".keyword-list ul").on(
+			'click',
+			'li:not([class^="icon"])',
+			function(event) {
+				var val = $(this).find('span').text();
+				if ($(this).hasClass('on'))
+					return;
+				$(this).addClass("on").siblings().removeClass("on");
+				setTimeout(function() {
+					$(".list-pop-city").css("transform",
+							'translate3d(100%, 0px, 0px)');
+				}, 230);
+				//根据val重新加载列表
+				var arrivalDate=$(".indate").attr("data-value");
+		       var departureDate=$(".outdate").attr("data-value");
+		       location.href=$(this).attr("data-url")+"&arrivalDate="+arrivalDate+"&departureDate="+departureDate;
+				//$(".nameoraddress").val(val);
+			});
+	//搜索list点击
+	$(".list-pop-city  .page-search ul").on('click','li',function(){
+		var val_name = $(this).attr('hotelname');
+		var val_id =  $(this).attr('hotel-id');
+		var val = val_id+ '-' +val_name;
+		setCookie(val);
+		show_historyList();
+		setTimeout(function() { 
+			$(".list-pop-city").css("transform",
+					'translate3d(100%, 0px, 0px)');
+		}, 230);
+		$(".nameoraddress").val(val_name);
+		$(".list-pop-city .page-select").show();
+		$(".submitSearchForm input").val('');
+		$(".list-pop-city .page-search ul li").remove();
+	}); 
+	//清除cookie
+	$(".sea-clear").click(function() {
+		$(".keyword-list ul li").remove();
+		$.cookie('hotel_historyList',null);
+		$(".nameoraddress").val('');
+	});
+	</script>
+</body>
+</html>

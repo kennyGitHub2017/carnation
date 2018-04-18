@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>红包分享</title>
+    <meta charset="UTF-8" />  
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="Expires" content="-1">           
+    <meta http-equiv="Cache-Control" content="no-cache">           
+    <meta http-equiv="Pragma" content="no-cache">         
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="$!webPath/resources/js/redpackage/jquery-1.11.2.min.js"></script>
+	<link href="$!webPath/resources/wx_red_package/css/css.css" rel="stylesheet" />
+	
+	
+  <script type="text/javascript">
+        setFontSize();
+        window.onresize = function () {
+            setFontSize();
+        }
+        function setFontSize() {
+            var screenWidth = document.documentElement.clientWidth||document.body.clientWidth;
+            if (screenWidth < 750) {
+                document.documentElement.style.fontSize = parseInt(screenWidth / 750 * 100) + "px";
+            }
+        }
+
+    </script>    
+    
+<script>
+    var isAndroid, isiOS;
+    (function() {
+        var u = navigator.userAgent, app = navigator.appVersion;
+        isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+        isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    }());
+</script>		
+		
+<script type="text/javascript">
+    $(document).ready(function() { 
+     // 点击分享微信、其它平台
+     $('.share').click(function(){
+         callback();
+   });
+     
+     // 点击跳转app活动页面
+     $('.share2').click(function(){
+         callback2();
+   });
+});
+
+    function wave(obj) {
+    	
+    	 alert(obj);
+    	
+      }
+    
+	function callback() {  
+	 var url='$!webPath/wx_act/index.htm?invitationCode=';
+		if(isAndroid)
+		{
+			java.requestRedNote(url);
+		}
+		if(isiOS)
+		{
+			requestRedNote(url);
+		}
+		
+		//alert(url);
+	}
+	
+	
+	function callback2() {  
+			if(isAndroid)
+			{
+				java.requestActivity();
+			}
+			if(isiOS)
+			{
+				requestActivity();
+			}
+			
+			//alert();
+		}
+</script>
+    
+   
+</head>
+
+<body>
+  <div class="wrapper">
+        <div class="top"></div>
+        <div id="count" class="count">
+        </div>
+        <div class="words">
+            <p class="one">用收获的目光送走2015，用期待的眼神迎来2016！在这辞旧迎新的美好时刻，云尚健康管理综合服务平台恭祝您财源广进、步步高升、阖家欢乐！</p>
+            <p class="tow">嘴上得来终觉浅，最是实际发红包！云尚百万红包已备好——<span class="ye">“客官，请！”</span></p>
+        </div>
+        <div class="content">
+            <div class="title">红包的正确打开方式</div>
+            <div class="step">STEP 1</div>
+            <p>大家好才是真的好——邀请朋友下载云尚app，惊喜时刻，怎能独享？</p>
+            <div class="step">STEP 2</div>
+            <p>特别的爱给特别的你——点击页面传喜讯，分享之后莫走开。新老猴王来聚会，互动对话派红包。</p>
+            <div class="step">STEP 3</div>
+            <p>不看手速不看网速看气质——打开您的分享链接，选择最爱的猴王形象，抢下新年第一份祝福。（温馨提示：常抢常晒，红包常在）</p>
+            <a href="javascript:void(0)" class="share">转发秒抢</a>
+        </div>
+        <div class="pbottom">
+             <a href="javascript:void(0)" class="share2">  
+             <img src="$!webPath/resources/wx_red_package/images/pbottom.png">
+             </a>
+            <div><p>听说元旦云豆红包和商城更配哟——别让你的云豆烂在钱包里。云尚商城买不了房子，买不了车子，只能买到全网最专业的健康产品，只能让您过一个与众不同的健康年！</p></div>
+        </div>
+    </div>
+<script type="text/javascript">
+    (function(){
+        var now = new Date().getTime()/1000;
+        var end = new Date(2016, 0, 4, 0, 0, 0).getTime()/1000;
+        var times = setInterval(function(){
+            time_down();
+        }, 1000)
+        function time_down(){
+            var total =Math.floor(end - now);
+            if(total < 0){
+                clearInterval(times);
+                //开始
+                document.getElementById("count").innerHTML="00:00:00";
+                return ;
+            }
+            var hour =Math.floor(total/(60*60));
+            total = total - hour*60*60;
+            var minute  = Math.floor(total/(60));
+            total = total - minute*60
+            var second  = total
+            hours = hour.toString().split("");
+            var hour1;
+            var hour2;
+            var hour3;
+            var min1;
+            var min2;
+            var sec1;
+            var sec2;
+
+            if(hours.length == 3){
+                hour1 = hours[0];
+                hour2 = hours[1];
+                hour3 = hours[2];
+            }else if(hours.length == 2){
+                hour1 = 0;
+                hour2 = hours[0];
+                hour3 = hours[1];
+            }else{
+                hour1 = 0;
+                hour2 = 0;
+                hour3 = hours[0];
+            }
+
+            if(minute>9){
+                min1 = 	Math.floor(minute/10);
+                min2 = 	Math.floor(minute%10);
+            }else{
+                min1 = 0;
+                min2 = 	Math.floor(minute%10);
+            }
+            if(second>9){
+                sec1 = 	Math.floor(second/10);
+                sec2 = 	Math.floor(second%10);
+            }else{
+                sec1 = 0;
+                sec2 = 	Math.floor(second%10);
+            }
+            document.getElementById("count").innerHTML=hour2+hour3+":"+min1+min2+":"+sec1+sec2;
+            now = now + 1;
+        }
+    })();
+</script>
+<!-- 站长统计 -->
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan style='display: none;' id='cnzz_stat_icon_1255206113'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s11.cnzz.com/z_stat.php%3Fid%3D1255206113' type='text/javascript'%3E%3C/script%3E"));</script>
+<!-- 百度统计 -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8b2f2c6656ec077454798a10e8660852";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

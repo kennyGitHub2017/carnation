@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta name="format-detection" content="telephone=no">
+        <meta name="format-detection" content="email=no">
+        <title>疾病风险自测选择</title>
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/common.css"/>
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/tijian.css"/>
+	    <script>
+    		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+			document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+	    </script>
+	</head>
+	<body>
+		<div class="tjHolder jibing">
+			<div class="chooseType">
+				<div class="tishi">
+					以下是多选项，可以几项测试同时开始哦！
+				</div>
+			   #foreach($!obj1 in $!list)
+			   	<div class="typeList">
+					<a class="title">$!obj1.groupTitle</a>
+					<div class="option fn-hide">
+					 #foreach($!obj2 in $!obj1.subNodeList)
+						<a href="javascript:;" data-id="$!obj2.id"><span class="circle"></span>$!obj2.groupTitle</a>
+					 #end
+					</div>
+				</div>
+			   #end
+			</div>			
+			<a href="javascript:;" class="submitBtn typelistBtn" id="next">下一步(<span id="selectedLength">0</span>)</a>
+		</div>
+		<form action="${apiPath}/v1/jibing/questionList" method="post" id="form">
+			<input type="hidden" id="group_ids" name="groupID"/>
+			<input type="hidden" id="uid" name="userID" value="$!uid"/>
+		</form>
+		<script src="${apiPath}/resources/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/jQuery.fn/tap.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/tipsbox.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function(){
+				var first=true;
+				jQuery(".typeList .title").tap(function(){
+					if(first){
+						$(".typelistBtn").css("margin-top","0");
+						first=false;
+						$(".tishi").addClass("curr");
+					} 
+					var length=jQuery(".typeList .curr").length;
+					if(!$(this).hasClass("curr")){
+						$(this).next().find("a").show();
+						$(this).addClass("curr").next().removeClass("fn-hide").parent().siblings(".typeList").each(function(){							
+							if(!$(this).find(".option a").hasClass("curr")){
+								$(this).find("a.title").removeClass("curr").next().addClass("fn-hide");								
+							}else{
+								$(this).find("a.title").removeClass("curr").next().find("a").not(".curr").hide();
+							}
+						});
+					}
+				});
+				jQuery(".typeList .option a").tap(function(){
+					$(this).toggleClass("curr");
+					var length=$(".option a.curr").length;
+					$("#selectedLength").html(length);
+				});
+				jQuery("#next").tap(function(){
+					var length=$(".option a.curr").length;
+					if(length==0){
+						tipsbox("您还没有选择检测内容呢..");
+						return;
+					}
+					var arrID=[];
+					jQuery(".option a.curr").each(function(){
+						arrID.push($(this).attr("data-id"));
+					});
+					console.log("......"+arrID);
+					jQuery("#group_ids").val(arrID);
+					jQuery("#form").submit();
+				});
+			})
+		</script>
+	</body>
+</html>

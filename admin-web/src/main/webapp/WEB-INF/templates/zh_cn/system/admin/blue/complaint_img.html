@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>图片列表</title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="cont">
+<h3 class="seth">图片列表</h3>
+  <div class="orderdetail">
+
+    <div class="tousul">
+      <ul>
+        #if($!type=="buyer")
+        #if($!obj.fromAcc1)
+        <li><span><div style="width:100%; height:400px;overflow:scroll;">
+          <img src="$!obj.fromAcc1" />
+        </div><i class="del_all"></i></span></li>
+        #end
+        #if($!obj.fromAcc2)
+        <li><span><div style="width:100%; height:400px;overflow:scroll;">
+          <img src="$!obj.fromAcc2" />
+        </div><i class="del_all"></i></span></li>
+        #end
+        #if($!obj.fromAcc3)
+        <li><span><div style="width:100%; height:400px;overflow:scroll;">
+          <img src="$!obj.fromAcc3" />
+        </div><i class="del_all"></i></span></li>
+        #end
+        #end
+        #if($!type=="seller")
+        #if($!obj.toAcc1)
+        <li><span><div style="width:100%; height:400px;overflow:scroll;">
+          <img src="$!obj.toAcc1" />
+        </div><i class="del_all"></i></span></li>
+        #end
+        #if($!obj.toAcc2)
+        <li><span><div style="width:100%; height:400px;overflow:scroll;">
+          <img src="$!obj.toAcc2" />
+        </div><i class="del_all"></i></span></li>
+        #end
+        #if($!obj.toAcc3)
+        <li><span><div style="width:100%; height:400px;overflow:scroll;">
+          <img src="$!obj.toAcc3" />
+        </div><i class="del_all"></i></span></li>
+        #end
+        #end
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<link href="$!webPath/resources/style/common/css/window.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script>
+jQuery(document).ready(function(){
+   jQuery("#theForm").validate({
+       rules: {
+			pdPayment:{required:true},
+			pdAmount:{required:true,range:[0.01,1000000000]},
+			pdRemittanceUser:{required:true},
+			pdRemittanceBank:{required:true},
+			pdRemittanceTime:{required:true}
+		  },
+	   messages: {
+		    pdPayment:{required:"支付方式不能为空"},
+			pdAmount:{required:"充值金额不能为空",range:"请输入大于{0}的金额数字"},
+			pdRemittanceUser:{required:"汇款人不能为空"},
+			pdRemittanceBank:{required:"汇款银行不能为空"},
+			pdRemittanceTime:{required:"汇款时间不能为空"}
+	     }
+  });
+   //
+    jQuery('#pdRemittanceTime').datepicker({
+        dateFormat:"yy-mm-dd",
+		yearRange:"1950:2020",
+		changeMonth: true,
+		changeYear: true
+  });
+});
+</script>
+<form action="$!webPath/buyer/predeposit_save.htm" method="post" id="theForm">
+  <table style="float:left;" width="480" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tr>
+      <td align="right" valign="top">支付方式：</td>
+                    #if($!obj.pdPayment=="alipay")
+                      #set($pdPayment="支付宝")
+                    #end
+	                #if($!obj.pdPayment=="wxqrpay")
+	                	#set($pdPayment="微信扫码")
+	                #end
+      <td align="left">$!pdPayment</td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">支付金额：</td>
+      <td align="left">¥$!{obj.pdAmount}</td>
+    </tr>
+    #if($!obj.pdPayment=="outline")
+    <tr>
+      <td width="100" align="right" valign="top">汇款人姓名：
+      </td>
+      <td align="left"><input name="pdRemittanceUser" type="text" id="pdRemittanceUser" value="$!obj.pdRemittanceUser" size="35" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">汇款银行：</td>
+      <td align="left"><input name="pdRemittanceBank" type="text" id="pdRemittanceBank" value="$!obj.pdRemittanceBank" size="35" /></td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">汇款日期：</td>
+      <td align="left"><input name="pdRemittanceTime" type="text" id="pdRemittanceTime" value="$!obj.pdRemittanceTime" size="35" /></td>
+    </tr>
+    #end
+    <tr>
+      <td align="right" valign="top">会员备注：</td>
+      <td align="left"><textarea name="pdRemittanceInfo" cols="35" rows="6" id="pdRemittanceInfo">$!obj.pdRemittanceInfo</textarea></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><span class="inputbtn">
+        <input type="submit" value="支付" style="cursor:pointer;"/>
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        <input name="id" type="hidden" id="id" value="$!obj.id" />
+        <input name="pdPayment" type="hidden" id="pdPayment" value="$!obj.pdPayment" />
+      </span></td>
+    </tr>
+  </table>
+</form>

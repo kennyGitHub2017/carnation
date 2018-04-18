@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">
+#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+ jQuery.validator.addMethod("verify",function(value,element){
+	  var re = /^[0-9a-zA-Z]*$/;
+        if(re.test(jQuery("#userName").val())){			
+			return true;
+		  } 
+		  else {
+		    return false;
+			  }		  
+});								
+  jQuery("#theForm").validate({
+    rules:{
+    	loginName:{
+	    required :true,
+		verify:false,
+	     remote:{
+		    url: "$!webPath/verify_username.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "userName": function(){return jQuery("#loginName").val();},
+				  "id":function(){return jQuery("#id").val()}
+		     }
+			}
+	  },
+	  email:{
+	    required :true,
+		email:true
+	  }#if(!$!edit),
+	  password:{
+	    required:true,
+		minlength:6,
+		maxlength:20
+	  } #end,
+	  nickname:{
+		  required :true
+	  },
+	  name:{
+		  required :true
+	  },
+	  mobile:{
+		  required :true
+	  }
+	 },
+	messages:{
+	  loginName:{
+		  required:"用户名不能为空",
+		  verify:"不可使用特殊字符"
+	  },
+	  email:{required:"电子邮箱不能为空",email:"邮箱格式不对",remote:"该邮箱已被使用"},
+	  password:{required:"密码不能为空",minlength:"密码不能少于{0}位",maxlength:"密码不能大于{0}位"},
+	  nickname:{required:"昵称不能为空"},
+	  name:{required:"姓名不能为空"},
+	  mobile:{required:"手机不能为空"}
+	}
+  });	
+  jQuery(":radio[id=sex]").each(function(){
+    if(jQuery(this).val()=="$!obj.sex")jQuery(this).attr("checked",true);
+  });
+  jQuery(":radio[id=report][value=$!obj.report]").attr("checked",true);
+});
+
+function saveForm(){
+   jQuery("#theForm").submit();
+}
+
+
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth">会员管理</h1>
+  <div class="nav_list">
+      <ul>
+	      <li><a href="$!webPath/admin/reportGroupList.htm"><b>管理</b></a></li>
+	      <li><a href="$!webPath/admin/reportGroupAddView.htm" class="this"><b>#if($!obj) 编辑 #else 新增 #end</b></a></li>
+      </ul>
+     
+     </div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/saveReportGroup.htm" method="post">
+ <input name="id" type="hidden" id="id" value="$!obj.id" />
+      <div class="edit">
+ <div class="editul setcont">
+    <!--鼠标经过样式-->
+    <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>分类名称</li>
+      <li><span class="webname">
+       <input name="groupName" type="text" id="loginName" value="$!obj.groupName" size="40" />
+      </span></li>
+    </ul>
+    <ul class="set1">
+      <li class="setcont_bg">排序</li>
+      <li><span class="webname">
+        <input name="seqenc" type="text" id="loginName" value="$!obj.seqenc" size="40" />
+      </span></li>
+    </ul>
+    
+    </div>
+    </div>
+  </form>
+  <div class="submit">
+   <span class="pad120"><input name="save" type="button" value="提交" onclick="saveForm()" /></span>
+  </div>
+</div>
+</body>
+</html>

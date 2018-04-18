@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="viewport"
+	content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="full-screen" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>登录</title>
+<link href="$!webPath/resources/shop/css/style.css" rel="stylesheet"
+	type="text/css" />
+<script
+	src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+<script>
+	var _hmt = _hmt || [];
+	(function() {
+		var hm = document.createElement("script");
+		hm.src = "//hm.baidu.com/hm.js?5ec07b377284cf8ef95ebaa33fa298f5";
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(hm, s);
+	})();
+</script>
+
+<script>
+	var screenWidth = window.innerWidth || document.documentElement.clientWidth;
+	document.documentElement.style.fontSize = parseInt(screenWidth / 7.5)
+			+ "px";
+</script>
+<style>
+html,body {
+	background: #fff;
+	overflow-x: hidden;
+}
+
+.login-title {
+	overflow: hidden;
+	width: 100%;
+	height: 0.5rem;
+	font-weight: bold;
+	line-height: 0.5rem;
+	text-align: center;
+	position: relative;
+	font-size: 0.44rem;
+	color: #2fc49f;
+	margin-top: 0.2rem
+}
+
+.login-title .close {
+	position: absolute;
+	width: 0.38rem;
+	height: 0.5rem;
+	line-height: 0.5rem;
+	background: url($!webPath/resources/shop/images/login-app-close.png)
+		no-repeat center center;
+	background-size: 0.38rem 0.38rem;
+	right: 0.46rem;
+}
+
+.login-app-phone,.login-app-pwd {
+	position: absolute;
+	display: inline-block;
+	height: 0.5rem;
+	width: 0.32rem;
+}
+
+.login-app-phone {
+	background: url($!webPath/resources/shop/images/login-app-phone.png)
+		no-repeat center center;
+	background-size: 0.32rem 0.5rem;
+}
+
+.login-app-pwd {
+	background: url($!webPath/resources/shop/images/login-app-pwd.png)
+		no-repeat center center;
+	background-size: 0.32rem 0.4rem;
+}
+
+.new-wj-pwd a {
+	font-size: 0.28rem;
+	color: #9b9b9b;
+	float: right;
+}
+
+.username::-webkit-input-placeholder {
+	color: #ddd;
+}
+
+.password::-webkit-input-placeholder {
+	color: #ddd;
+}
+</style>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+
+<script>
+	function saveForm() {
+		var username = $("input[name='username']").val();
+		var password = $("input[name='password']").val();
+		
+		if (!username) {
+			alert("您输入的手机号码或密码有误，请重新输入!");
+			return;
+		}
+		if (!password) {
+			alert("您输入的手机号码或密码有误，请重新输入!");
+			return;
+		}
+		jQuery("#theForm").submit();
+	}
+</script>
+<!-- <script>
+function reurl(){
+	url = location.href;
+	var times = url.split("?t=");
+	if(times[1] != 1){
+	url += "?t=1";
+	self.location.replace(url);
+	}
+	}
+	onload=reurl
+</script> -->
+<script>window.onload=function(){  if (location.href.indexOf("?xyz=")<0) { location.href=location.href+"?xyz="+Math.random(); }}</script>
+</head>
+<body>
+	<div class="main">
+		<form action="$!webPath/b2b2c_login.htm" method="post" name="theForm"
+			id="theForm">
+			<div class="login-title">
+				登录 <a href="javascript:history.go(-1);" class="close"></a>
+			</div>
+			<!--       <input name="ajax_login" type="hidden" id="ajax_login" class="ajax_login" placeholder="ajax_login" value="true" />
+	-->
+			<input type="hidden" name="code" type="text" id="code"
+				autocomplete="off" class="login_code" placeholder="验证码" tabindex="3"
+				value="mobile" />
+			<div class="login-three">
+				<ul>
+					<li><a href="" class="weixin-login"></a></li>
+					<li><a href="" class="qq-login"></a></li>
+					<li><a href="" class="weibo-login"></a></li>
+				</ul>
+			</div>
+			<div class="login-font">
+				<img src="$!webPath/resources/shop/images/login-xt.png" alt="">
+				<span style="display: inline-block; margin: 0rem 0.44rem">已有账号，直接登录</span>
+				<img src="$!webPath/resources/shop/images/login-xt.png" alt="">
+			</div>
+			<div class="login-input">
+				<div class="phone">
+					<span class="login-app-phone">
+						<!-- 手机 -->
+					</span><input class="username" type="text" name="username" id="username"
+						spellcheck="false" placeholder="请输入你的手机号码" tabindex="1">
+
+				</div>
+				<div class="pwd">
+					<span class="login-app-pwd">
+						<!-- 密码 -->
+					</span> <input placeholder="请输入密码" class="password" name="password"
+						type="password" id="password" autocomplete="off" tabindex="2">
+					<span class="new-wj-pwd"><a herf="javascript:void(0)">忘记密码？</a>
+					</span>
+				</div>
+			</div>
+			<input name="login_role" type="hidden" id="login_role" value="user" />
+
+			<div class="login_auto" style="display: none;">
+				<input name="code" type="text" id="code" autocomplete="off"
+					class="login_code" placeholder="验证码" tabindex="3" />
+				#if($!config.securityCodeType=='voice')
+				<script>
+					function readCode(id) {
+						var s = "<embed id='sound_play' name='sound_play' src='$!webPath/resources/flash/soundPlayer.swf?"
+								+ (new Date().getTime())
+								+ "' FlashVars='url=$!webPath"
+								+ "' width='0'   height='0' allowScriptAccess='always' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></embed>";
+						jQuery("#" + id).html(s);
+					}
+				</script>
+				<img id="code_img" src="$!webPath/verify.htm" width="59" height="27"
+					style="display: none;" /> <a href="javascript:void(0);"
+					onclick="readCode('player')" title="朗读验证码" class="code_speech"></a>
+				<a href="javascript:void(0);" onclick="refreshCode();"
+					class="code_refresh"></a> <span id="player"></span> #else <b> <img
+					id="code_img" src="$!webPath/verify.htm" width="59" height="27" />
+				</b> <a href="javascript:void(0);" onclick="refreshCode();"
+					class="code_refresh"></a> #end
+			</div>
+
+			<div class="login-btn">
+				<a class="login" onclick="saveForm()">登录</a>
+			</div>
+			<!-- <div class="login-btn">
+				<a href="$!webPath/index.htm" class="suibgg">随便逛逛</a>
+			</div> -->
+		</form>
+		<div class="login-bottom">
+			<!-- <span class="forgetpwd"> <a href="$!webPath/forget1.htm">忘记密码?</a></span>
+			<span><a href="$!webPath/register.htm">快速注册</a> </span>  -->
+			#if($message)
+			<p class="red ptb-10">${message}</p>
+			#end
+		</div>
+	</div>
+
+</body>
+</html>
+<!-- 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户登录 - $!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/login.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+//新建cookie。
+//hours为空字符串时,cookie的生存期至浏览器会话结束。hours为数字0时,建立的是一个失效的cookie,这个cookie会覆盖已经建立过的同名、同path的cookie（如果这个cookie存在）。
+function setCookie(name,value,hours,path){
+  var name = escape(name);
+  var value = escape(value);
+  var expires = new Date();
+  expires.setTime(expires.getTime() + hours*3600000);
+  path = path == "" ? "" : ";path=" + path;
+  _expires = (typeof hours) == "string" ? "" : ";expires=" + expires.toUTCString();
+  document.cookie = name + "=" + value + _expires + path;
+}
+//获取cookie值
+function getCookieValue(name){
+  var name = escape(name);
+  //读cookie属性，这将返回文档的所有cookie
+  var allcookies = document.cookie;       
+  //查找名为name的cookie的开始位置
+  name += "=";
+  var pos = allcookies.indexOf(name);    
+  //如果找到了具有该名字的cookie，那么提取并使用它的值
+  if (pos != -1){                                             //如果pos值为-1则说明搜索"version="失败
+      var start = pos + name.length;                  //cookie值开始的位置
+      var end = allcookies.indexOf(";",start);        //从cookie值开始的位置起搜索第一个";"的位置,即cookie值结尾的位置
+      if (end == -1) end = allcookies.length;        //如果end值为-1说明cookie列表里只有一个cookie
+      var value = allcookies.substring(start,end);  //提取cookie的值
+      return unescape(value);                           //对它解码      
+      }   
+  else return "";                                             //搜索失败，返回空字符串
+}
+//删除cookie
+function deleteCookie(name,path){
+  var name = escape(name);
+  var expires = new Date(0);
+  path = path == "" ? "" : ";path=" + path;
+  document.cookie = name + "="+ ";expires=" + expires.toUTCString() + path;
+}
+
+
+jQuery(document).ready(function(){
+	//加载用户名和密码
+	 var userNameValue = getCookieValue("userName"); 
+	 jQuery("#username").val(userNameValue); 
+	 var passwordValue = getCookieValue("password");  
+	 jQuery("#password").val(passwordValue); 
+	 
+  jQuery("#theForm").validate({
+    errorPlacement: function(error, element){
+            var error_li = element.parent('li');
+            error_li.append(error);
+        },
+	rules: {
+			username: "required",
+			password: "required"#if($!config.securityCodeLogin),
+			code:"required"#end},
+		messages: {
+			username: "用户名不能为空",
+			password: "密码不能为空"#if($!config.securityCodeLogin),
+			code:"验证码不能为空"#end
+			},
+			 success: function() {
+				  	if( jQuery("#saveCookie").attr("checked")){    
+				         setCookie("userName",jQuery("#username").val(),24,"/");  
+				        // setCookie("password",jQuery("#password").val(),24,"/");  
+				     } else{
+				    	 deleteCookie("userName","/");
+				    	// deleteCookie("password","/");
+				     }  
+			 }
+		
+  });
+  //
+  jQuery(".login_box_nav a").click(function(){
+	 jQuery("#qr_login_img").hide();										
+	 jQuery("#waiting_img").show();										
+	 var target_id=jQuery(this).attr("target_id");
+	 jQuery("#normal_login").hide();
+	 jQuery("#qr_login").hide();
+	 jQuery("#"+target_id).show();
+	 jQuery(".login_box_nav>span").removeClass("this");
+	 jQuery(this).parent().addClass("this");		
+	 if(target_id=="qr_login"){
+	   jQuery.ajax({type:'POST',url:'$!webPath/qr_login_img.htm',data:'',dataType:'json',
+				  success:function(data){
+					  jQuery("#qr_login_img").attr("src",data.qr_img_url);
+					  jQuery("#qr_login_img").show();
+					  jQuery("#waiting_img").hide();
+					  setInterval("qr_login('"+data.qr_session_id+"')", 5000);  
+				  }
+	   });						
+	 } 
+  });
+  //
+    
+});//end
+function qr_login(qr_session_id){
+		jQuery.ajax({type:'POST',url:'$!webPath/qr_login.htm',data:{"qr_session_id":qr_session_id},dataType:'json',
+				  success:function(data){
+					  if(data.ret=="true"){
+						  clearInterval();
+						   window.location.href="$!webPath/qr_login_confirm.htm?user_id="+data.user_id+"&qr_log_mark="+data.qr_log_mark;						   
+					  }
+				  }
+		});
+	}
+
+</script>
+</head>
+<body>
+手机客户端弹出
+<div class="login_box_show_bg" style="display:none;"></div>
+<div class="login_box_show" style="display:none;"> <i><a href="javascript:void(0);" onclick="jQuery('div[class^=login_box_show]').hide();">x</a></i>
+  <dl>
+    <span><img src="$!imageWebServer/$!{config.uploadFilePath}/app/app_dowload.png" /></span>
+    <dd><a href="$!config.ios_download" target="_blank"><img src="$!webPath/resources/style/system/front/default/images/login/for_iphone.png" /></a></dd>
+    <dd><a href="$!config.android_download" target="_blank"><img src="$!webPath/resources/style/system/front/default/images/login/for_andriod.png" /></a></dd>
+  </dl>
+</div>
+
+<div class="main">
+<form action="$!webPath/b2b2c_login.htm"  method="post" name="theForm" id="theForm">
+		<div class="login-three">
+			<ul>
+				<li><a href="" class="weixin-login"></a></li>
+				<li><a href="" class="qq-login"></a></li>
+				<li><a href="" class="weibo-login"></a></li>
+			</ul>
+		</div>
+		<div class="login-font">
+			<img src="$!webPath/resources/shop/images/login-xt.png" alt="">
+			手机账号登录
+			<img src="$!webPath/resources/shop/images/login-xt.png" alt="">
+		</div>
+		<div class="login-input">
+			<div class="phone">
+				<span>手机</span><input type="text" name="username"  id="username"  spellcheck="false" tabindex="1" >
+
+			</div>
+			<div class="pwd">
+				<span>密码</span><input name="password" type="password" id="password"  autocomplete="off"  tabindex="2" >
+			</div>
+		</div>
+
+		<div class="login-btn">
+			<a href="" class="login">登录</a>
+		</div>
+		<div class="login-btn">
+			<a href="$!webPath/index.htm" class="suibgg">随便逛逛</a>
+		</div>
+	</form>
+		<div class="login-bottom">
+			<span class="forgetpwd"> <a href="$!webPath/forget1.htm">忘记密码?</a> </span><span><a href="$!webPath/register.htm">快速注册</a> </span>
+		</div>
+	</div>
+
+
+
+
+          <div class="login_box_left"> #if($!config.qr_login==1)
+            有二维码登录
+            <div class="login_box_nav" style="display:;"> <span class="this"><a href="javascript:void(0);" target_id="normal_login">普通登录</a></span> <span style="border-right:none;"><a href="javascript:void(0);" target_id="qr_login">二维码登录</a></span> </div>
+            #else
+            没有二维码登录
+            <h3 class="login_box_h3" style="display:">用户登录</h3>
+            #end
+
+            <form action="$!webPath/b2b2c_login.htm" method="post" name="theForm" id="theForm">
+              <div  id="normal_login">
+                <div class="login_box_login" style="display:;">
+                  <ul class="login_ul">
+                    <li class="login_ul_li">
+                      <input name="username" type="text" id="username" class="login_input_name" placeholder="手机号码" spellcheck="false" tabindex="1" />
+                    </li>
+                    <li class="login_ul_li">
+                      <input  name="password" type="password" id="password"  autocomplete="off" class="login_input_pwd" placeholder="登录密码" tabindex="2" />
+                    </li>
+                    #if($!config.securityCodeLogin)
+                    <script>
+                     function refreshCode(){
+                         jQuery("#code_img").attr("src","$!webPath/verify.htm?d"+new Date().getTime());
+                     }
+                 </script>
+                    <li class="login_auto">
+                      <input  name="code" type="text" id="code"  autocomplete="off"  class="login_code" placeholder="验证码" tabindex="3"/>
+                      #if($!config.securityCodeType=='voice')
+                      <script>
+                       function readCode(id){
+                             var  s = "<embed id='sound_play' name='sound_play' src='$!webPath/resources/flash/soundPlayer.swf?" + (new Date().getTime()) + "' FlashVars='url=$!webPath"+ "' width='0'   height='0' allowScriptAccess='always' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/go/getflashplayer' /></embed>";
+                        jQuery("#"+id).html(s);
+                        }
+                 </script>
+                      <img id="code_img" src="$!webPath/verify.htm" width="59" height="27" style="display:none;" /> <a href="javascript:void(0);" onclick="readCode('player')" title="朗读验证码" class="code_speech"></a><a href="javascript:void(0);" onclick="refreshCode();" class="code_refresh"></a> <span id="player"></span> #else <b> <img id="code_img" src="$!webPath/verify.htm" width="59" height="27" /> </b>  <a href="javascript:void(0);" onclick="refreshCode();" class="code_refresh"></a>#end </li>
+                    #end
+                     <li style="line-height: 40px;">
+                     <input id="saveCookie" type="checkbox" value="" style="vertical-align: middle;"/><label for="saveCookie" style="font-size: 12px;color: #999;margin-left: 5px;vertical-align: middle;">记住用户名</label>  
+                    </li>
+                  </ul>
+                </div>
+                  #if($message)
+                  <p class="red ptb-10">${message}</p>
+                  #end
+                <div class="login_btn">
+                  <input name="" type="submit" class="btn btn-blue"  value="立即登录" />
+                  <input name="login_role" type="hidden" id="login_role" value="user" />
+                </div>
+
+                <div class="login_box_bottom">
+                    <a  href="$!webPath/forget1.htm" class="forget_psd">忘记密码？1</a>
+                    <a href="$!webPath/register.htm">免费注册</a>
+                </div>
+              </div>
+            </form>
+           </div>
+</body>
+</html>
+ -->

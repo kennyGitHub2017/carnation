@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.TransportMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.Transport">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="trans_ems" property="transEms" jdbcType="BIT" />
+		<result column="trans_express" property="transExpress"
+			jdbcType="BIT" />
+		<result column="trans_mail" property="transMail" jdbcType="BIT" />
+		<result column="trans_name" property="transName" jdbcType="VARCHAR" />
+		<result column="trans_time" property="transTime" jdbcType="INTEGER" />
+		<result column="trans_type" property="transType" jdbcType="INTEGER" />
+		<result column="trans_user" property="transUser" jdbcType="INTEGER" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.Transport"
+		extends="BaseResultMap">
+		<result column="trans_ems_info" property="transEmsInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="trans_express_info" property="transExpressInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="trans_mail_info" property="transMailInfo"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap type="com.sinco.carnation.shop.bo.TransportBO" id="BOResultMapWithBLOBs"
+		extends="ResultMapWithBLOBs"></resultMap>
+	<select id="findPageByType" resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_transport
+		where delete_status = 0
+		<if test="type != null and type != ''">
+			and trans_user = #{type}
+		</if>
+		<if test="storeId != null">
+			and store_id = #{storeId}
+		</if>
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, trans_ems, trans_express, trans_mail,
+		trans_name, trans_time,
+		trans_type, trans_user, store_id
+	</sql>
+	<sql id="Blob_Column_List">
+		trans_ems_info, trans_express_info, trans_mail_info
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.shop.model.TransportExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_transport
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.shop.model.TransportExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_transport
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_transport
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_transport
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.TransportExample">
+		delete from shop_transport
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.Transport">
+		insert into shop_transport (id, add_time, delete_status,
+		trans_ems, trans_express, trans_mail,
+		trans_name, trans_time, trans_type,
+		trans_user, store_id, trans_ems_info,
+		trans_express_info, trans_mail_info
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{transEms,jdbcType=BIT}, #{transExpress,jdbcType=BIT}, #{transMail,jdbcType=BIT},
+		#{transName,jdbcType=VARCHAR}, #{transTime,jdbcType=INTEGER},
+		#{transType,jdbcType=INTEGER},
+		#{transUser,jdbcType=INTEGER}, #{storeId,jdbcType=BIGINT}, #{transEmsInfo,jdbcType=LONGVARCHAR},
+		#{transExpressInfo,jdbcType=LONGVARCHAR},
+		#{transMailInfo,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.Transport">
+		insert into shop_transport
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="transEms != null">
+				trans_ems,
+			</if>
+			<if test="transExpress != null">
+				trans_express,
+			</if>
+			<if test="transMail != null">
+				<if test="transMail == false || transMail == true">
+					trans_mail,
+				</if>
+			</if>
+			<if test="transName != null">
+				trans_name,
+			</if>
+			<if test="transTime != null">
+				trans_time,
+			</if>
+			<if test="transType != null">
+				trans_type,
+			</if>
+			<if test="transUser != null">
+				trans_user,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="transEmsInfo != null">
+				trans_ems_info,
+			</if>
+			<if test="transExpressInfo != null">
+				trans_express_info,
+			</if>
+			<if test="transMailInfo != null">
+				trans_mail_info,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="transEms != null">
+				#{transEms,jdbcType=BIT},
+			</if>
+			<if test="transExpress != null">
+				#{transExpress,jdbcType=BIT},
+			</if>
+			<if test="transMail != null">
+				#{transMail,jdbcType=BIT},
+			</if>
+			<if test="transName != null">
+				#{transName,jdbcType=VARCHAR},
+			</if>
+			<if test="transTime != null">
+				#{transTime,jdbcType=INTEGER},
+			</if>
+			<if test="transType != null">
+				#{transType,jdbcType=INTEGER},
+			</if>
+			<if test="transUser != null">
+				#{transUser,jdbcType=INTEGER},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="transEmsInfo != null">
+				#{transEmsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="transExpressInfo != null">
+				#{transExpressInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="transMailInfo != null">
+				#{transMailInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.TransportExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_transport
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_transport
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.transEms != null">
+				trans_ems = #{record.transEms,jdbcType=BIT},
+			</if>
+			<if test="record.transExpress != null">
+				trans_express = #{record.transExpress,jdbcType=BIT},
+			</if>
+			<if test="record.transMail != null">
+				<if test="record.transMail == false || record.transMail == true">
+					trans_mail = #{record.transMail,jdbcType=BIT},
+				</if>
+			</if>
+			<if test="record.transName != null">
+				trans_name = #{record.transName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.transTime != null">
+				trans_time = #{record.transTime,jdbcType=INTEGER},
+			</if>
+			<if test="record.transType != null">
+				trans_type = #{record.transType,jdbcType=INTEGER},
+			</if>
+			<if test="record.transUser != null">
+				trans_user = #{record.transUser,jdbcType=INTEGER},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.transEmsInfo != null">
+				trans_ems_info = #{record.transEmsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.transExpressInfo != null">
+				trans_express_info = #{record.transExpressInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.transMailInfo != null">
+				trans_mail_info = #{record.transMailInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_transport
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		trans_ems = #{record.transEms,jdbcType=BIT},
+		trans_express = #{record.transExpress,jdbcType=BIT},
+		trans_mail = #{record.transMail,jdbcType=BIT},
+		trans_name = #{record.transName,jdbcType=VARCHAR},
+		trans_time = #{record.transTime,jdbcType=INTEGER},
+		trans_type = #{record.transType,jdbcType=INTEGER},
+		trans_user = #{record.transUser,jdbcType=INTEGER},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		trans_ems_info = #{record.transEmsInfo,jdbcType=LONGVARCHAR},
+		trans_express_info = #{record.transExpressInfo,jdbcType=LONGVARCHAR},
+		trans_mail_info = #{record.transMailInfo,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_transport
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		trans_ems = #{record.transEms,jdbcType=BIT},
+		trans_express = #{record.transExpress,jdbcType=BIT},
+		trans_mail = #{record.transMail,jdbcType=BIT},
+		trans_name = #{record.transName,jdbcType=VARCHAR},
+		trans_time = #{record.transTime,jdbcType=INTEGER},
+		trans_type = #{record.transType,jdbcType=INTEGER},
+		trans_user = #{record.transUser,jdbcType=INTEGER},
+		store_id = #{record.storeId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.Transport">
+		update shop_transport
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="transEms != null">
+				trans_ems = #{transEms,jdbcType=BIT},
+			</if>
+			<if test="transExpress != null">
+				trans_express = #{transExpress,jdbcType=BIT},
+			</if>
+			<if test="transMail != null">
+				trans_mail = #{transMail,jdbcType=BIT},
+			</if>
+			<if test="transName != null">
+				trans_name = #{transName,jdbcType=VARCHAR},
+			</if>
+			<if test="transTime != null">
+				trans_time = #{transTime,jdbcType=INTEGER},
+			</if>
+			<if test="transType != null">
+				trans_type = #{transType,jdbcType=INTEGER},
+			</if>
+			<if test="transUser != null">
+				trans_user = #{transUser,jdbcType=INTEGER},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="transEmsInfo != null">
+				trans_ems_info = #{transEmsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="transExpressInfo != null">
+				trans_express_info = #{transExpressInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="transMailInfo != null">
+				trans_mail_info = #{transMailInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.Transport">
+		update shop_transport
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		trans_ems = #{transEms,jdbcType=BIT},
+		trans_express = #{transExpress,jdbcType=BIT},
+		trans_mail = #{transMail,jdbcType=BIT},
+		trans_name = #{transName,jdbcType=VARCHAR},
+		trans_time = #{transTime,jdbcType=INTEGER},
+		trans_type = #{transType,jdbcType=INTEGER},
+		trans_user = #{transUser,jdbcType=INTEGER},
+		store_id = #{storeId,jdbcType=BIGINT},
+		trans_ems_info = #{transEmsInfo,jdbcType=LONGVARCHAR},
+		trans_express_info = #{transExpressInfo,jdbcType=LONGVARCHAR},
+		trans_mail_info = #{transMailInfo,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.Transport">
+		update shop_transport
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		trans_ems = #{transEms,jdbcType=BIT},
+		trans_express = #{transExpress,jdbcType=BIT},
+		trans_mail = #{transMail,jdbcType=BIT},
+		trans_name = #{transName,jdbcType=VARCHAR},
+		trans_time = #{transTime,jdbcType=INTEGER},
+		trans_type = #{transType,jdbcType=INTEGER},
+		trans_user = #{transUser,jdbcType=INTEGER},
+		store_id = #{storeId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="selectByVo" resultMap="BOResultMapWithBLOBs">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM shop_transport
+		where 1=1
+		<if test="vo.transUser != null">
+			and trans_user = #{vo.transUser,jdbcType=INTEGER}
+		</if>
+		<if test="vo.storeId != null">
+			and store_id = #{vo.storeId,jdbcType=BIGINT}
+		</if>
+	</select>
+</mapper>

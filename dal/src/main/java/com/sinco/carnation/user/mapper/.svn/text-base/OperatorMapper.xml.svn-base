@@ -1,0 +1,952 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.OperatorMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.Operator">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="level" property="level" jdbcType="CHAR" />
+		<result column="operator_name" property="operatorName"
+			jdbcType="VARCHAR" />
+		<result column="operator_code" property="operatorCode"
+			jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="id_card" property="idCard" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="CHAR" />
+		<result column="operator_area_id" property="operatorAreaId"
+			jdbcType="VARCHAR" />
+		<result column="nation" property="nation" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+		<result column="sub_bank_name" property="subBankName" jdbcType="VARCHAR" />
+		<result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
+		<result column="registration_no" property="registrationNo"
+			jdbcType="VARCHAR" />
+		<result column="registration_path" property="registrationPath"
+			jdbcType="VARCHAR" />
+		<result column="organization_no" property="organizationNo"
+			jdbcType="VARCHAR" />
+		<result column="organization_path" property="organizationPath"
+			jdbcType="VARCHAR" />
+		<result column="tax_no" property="taxNo" jdbcType="VARCHAR" />
+		<result column="tax_path" property="taxPath" jdbcType="VARCHAR" />
+		<result column="assigned_time" property="assignedTime"
+			jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+		<result column="cn_username" property="cn_username" jdbcType="VARCHAR" />
+		<result column="extension_seller_uid" property="extensionSellerUid"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.OperatorBO"
+		extends="BaseResultMap" />
+	<select id="selectOperatorCountByArea" resultType="int">
+		SELECT count(0) FROM
+		user_operator o
+		<if test="areaId != null and  areaId != ''">
+			INNER JOIN dic_area a ON o.operator_area_id = a.id
+		</if>
+		LEFT JOIN sys_user sus on sus.id = o.user_id
+		WHERE o.`status` = 1
+		AND
+		sus.status = 1
+		<if test="areaId != null and  areaId != ''">
+			AND (a.id = #{areaId} OR a.parent_id = #{areaId})
+		</if>
+	</select>
+	<select id="selectOperatorByAreaAndCode" resultMap="BOResultMap">
+		SELECT
+		uo.*
+		FROM
+		user_operator uo
+		INNER JOIN dic_area da ON da.id = uo.operator_area_id
+		WHERE
+		CASE
+		uo.`level`
+		WHEN 1 THEN da.id = #{areaId}
+		WHEN 2 THEN da.parent_id = #{areaId}
+		WHEN 3 THEN da.parent_id = #{areaId}
+		END
+		AND uo.operator_code =
+		#{operatorCode}
+	</select>
+	<select id="selectOperatorBySellerUserId" resultMap="BOResultMap">
+		SELECT
+		uo.*
+		FROM
+		user_seller us
+		INNER JOIN shop_store ss ON us.store_id = ss.id
+		INNER JOIN dic_area
+		da ON da.id = ss.area_id
+		LEFT JOIN user_operator uo ON
+		<choose>
+			<when test="queryLevel == 1">uo.operator_area_id = da.parent_id</when>
+			<when test="queryLevel == 2">uo.operator_area_id = da.id</when>
+			<otherwise>1=2</otherwise>
+		</choose>
+		WHERE
+		us.uid = #{sellerUserId}
+		AND uo.`level` = #{queryLevel}
+		AND uo.is_deleted = 0
+		AND uo.`status` = 1
+	</select>
+	<select id="queryOperatorInfo" resultMap="BOResultMap">
+		SELECT * FROM user_operator WHERE user_id=#{uid}
+	</select>
+
+	<select id="getCheckOkOperatorByOperatorAreaId" resultMap="BOResultMap">
+		SELECT
+		o.*,
+		(SELECT COUNT(0) FROM user_owns own WHERE own.own_operator_id = o.id) as
+		countShop
+		FROM
+		user_operator o
+		WHERE
+		o.operator_area_id = #{operatorAreaId}
+		AND o.is_deleted = 0
+		AND
+		o.status = 1
+		ORDER BY o.`level` asc, o.id DESC
+	</select>
+
+	<select id="selectByInvitationCode" resultMap="BOResultMap">
+		SELECT
+		o.*
+		FROM
+		user_operator o,
+		sys_user u
+		WHERE
+		u.id = o.user_id
+		AND o.is_deleted = 0
+		AND u.is_deleted = 0
+		AND
+		u.invitation_code = #{invitationCode}
+	</select>
+	<select id="selectOperatorPageList" resultMap="BOResultMap"
+		parameterType="com.sinco.carnation.user.vo.OperatorVO">
+		SELECT
+		o.*,
+		uo.operator_code as refereeOperatorCode,
+		uo.user_name as
+		refereeUserName,
+		u.invitation_code,
+		u.status userStatus
+		FROM
+		user_operator o
+		INNER JOIN dic_area a ON o.operator_area_id = a.id
+		INNER JOIN sys_user u ON o.user_id = u.id
+		LEFT JOIN user_relation r ON o.user_id = r.user_id
+		LEFT JOIN user_operator uo ON r.referee_user_id = uo.user_id
+		WHERE o.is_deleted = 0
+		<if test="vo.phone != null and vo.phone != ''">
+			AND o.phone = #{vo.phone}
+		</if>
+		<if test="vo.userName != null and vo.userName != ''">
+			AND o.user_name LIKE CONCAT('%',#{vo.userName},'%')
+		</if>
+		<if test="vo.status != null and vo.status != ''">
+			AND o.status = #{vo.status}
+		</if>
+		<if test="vo.operatorCode != null and vo.operatorCode != ''">
+			AND o.operator_code = #{vo.operatorCode}
+		</if>
+		<if test="vo.level != null and vo.level != ''">
+			AND o.`level` = #{vo.level}
+		</if>
+		<if test="vo.idCard != null and vo.idCard != ''">
+			AND o.id_card = #{vo.idCard}
+		</if>
+		<if test="vo.operatorAreaId != null and vo.operatorAreaId != ''">
+			AND (a.id = #{vo.operatorAreaId} OR a.parent_id = #{vo.operatorAreaId} )
+		</if>
+		<if test="vo.refereeUserName != null and vo.refereeUserName != ''">
+			AND uo.user_name LIKE CONCAT('%',#{vo.refereeUserName},'%')
+		</if>
+		<if test="vo.refereeOperatorCode != null and vo.refereeOperatorCode != ''">
+			AND uo.operator_code = #{vo.refereeOperatorCode}
+		</if>
+		<if test="vo.startDate != null and vo.startDate != ''">
+			AND DATE_FORMAT(o.create_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.startDate},'%Y-%m-%d')
+		</if>
+		<if test="vo.endDate != null and vo.endDate != ''">
+			AND DATE_FORMAT(o.create_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{vo.endDate},'%Y-%m-%d')
+		</if>
+		ORDER BY o.create_time DESC
+	</select>
+	<select id="selectRegisterOperatorCount" resultType="int">
+		SELECT
+		count(0)
+		FROM
+		user_operator o
+		INNER JOIN user_relation r
+		LEFT JOIN sys_user sus on
+		sus.id = o.user_id
+		WHERE
+		r.user_id = o.user_id
+
+		AND sus.status = 1
+		AND o.is_deleted = 0
+		AND o.status = 1
+		AND
+		r.referee_user_id = #{vo.userId}
+		<if test="vo.startDate != null and vo.startDate != ''">
+			AND DATE_FORMAT(o.create_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.startDate},'%Y-%m-%d')
+		</if>
+		<if test="vo.endDate != null and vo.endDate != ''">
+			AND DATE_FORMAT(o.create_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{vo.endDate},'%Y-%m-%d')
+		</if>
+	</select>
+	<select id="selectRegisterOperatorPageList" resultMap="BOResultMap"
+		parameterType="com.sinco.carnation.user.vo.OperatorVO">
+		SELECT
+		o.*,
+		consumeTable.rebateConsumeAmount,
+		feeTable.rebateFeeAmount,
+		(SELECT count(0) FROM user_owns own WHERE own.own_operator_id = o.id)
+		as countShop
+		FROM
+		(user_operator o
+		INNER JOIN user_relation r)
+		LEFT JOIN (SELECT
+		SUM(urr.rebate_amount) rebateConsumeAmount, urr.user_id FROM
+		user_rebate_record urr WHERE urr.rebate_status = 1 AND urr.rebate_type
+		BETWEEN 100 AND 200 GROUP BY user_id) consumeTable ON
+		consumeTable.user_id = o.user_id
+		LEFT JOIN (SELECT
+		SUM(urr.rebate_amount) rebateFeeAmount, urr.user_id FROM
+		user_rebate_record urr WHERE urr.rebate_status = 1 AND urr.rebate_type
+		BETWEEN 200 AND 300 GROUP BY user_id) feeTable ON feeTable.user_id =
+		o.user_id
+		LEFT JOIN sys_user sus on sus.id = o.user_id
+		WHERE
+		r.user_id = o.user_id
+		AND o.is_deleted = 0
+		AND sus.status = 1
+		AND
+		o.status = 1
+		AND r.referee_user_id = #{vo.userId}
+		<if test="vo.userName != null and vo.userName != ''">
+			AND o.user_name LIKE CONCAT('%',#{vo.userName},'%')
+		</if>
+		<if test="vo.operatorCode != null and vo.operatorCode != ''">
+			AND o.operator_code = #{vo.operatorCode}
+		</if>
+		<if test="vo.level != null and vo.level != ''">
+			AND o.level = #{vo.level}
+		</if>
+		<if test="vo.isOwn != null and vo.isOwn != ''">
+			<choose>
+				<when test="vo.isOwn == 1">
+					AND (SELECT count(0) FROM user_owns own WHERE own.own_operator_id =
+					#{vo.id}) <![CDATA[ > ]]>
+					0
+				</when>
+				<when test="vo.isOwn == 0">
+					AND (SELECT count(0) FROM user_owns own WHERE
+					own.own_operator_id = #{vo.id}) = 0
+				</when>
+			</choose>
+		</if>
+		ORDER BY o.create_time DESC
+	</select>
+	<select id="selectOwnOperatorCount" resultType="int"
+		parameterType="com.sinco.carnation.user.vo.OperatorVO">
+		SELECT
+		count(0)
+		FROM
+		user_operator o
+		LEFT JOIN sys_user sus on sus.id = o.user_id
+		WHERE
+		o.is_deleted = 0
+		AND sus.status = 1
+		AND o.status = 1
+		AND o.id != #{vo.id}
+		<choose>
+			<when test="vo.userLevel == 1">
+				AND (SELECT count(0) FROM dic_area a WHERE a.id = o.operator_area_id
+				AND a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+				0
+				AND o.level in(2, 3)
+			</when>
+			<when test="vo.userLevel == 2">
+				AND o.operator_area_id = #{vo.operatorAreaId}
+				AND o.level = 3
+			</when>
+			<otherwise>
+				AND 1 = 2
+			</otherwise>
+		</choose>
+		<if test="vo.startDate != null and vo.startDate != ''">
+			AND DATE_FORMAT(o.create_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.startDate},'%Y-%m-%d')
+		</if>
+		<if test="vo.endDate != null and vo.endDate != ''">
+			AND DATE_FORMAT(o.create_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{vo.endDate},'%Y-%m-%d')
+		</if>
+	</select>
+	<select id="selectOwnOperatorPageList" resultMap="BOResultMap"
+		parameterType="com.sinco.carnation.user.vo.OperatorVO">
+		SELECT
+		o.*,
+		consumeTable.rebateConsumeAmount,
+		feeTable.rebateFeeAmount,
+		(SELECT count(0) FROM user_owns own WHERE own.own_operator_id = o.id) as
+		countShop,
+		(SELECT COUNT(r.user_id) FROM user_relation r, user_owns uowns, shop_store s
+		WHERE s.create_user_id = r.seller_user_id AND s.store_status = 15 AND
+		r.seller_user_id = uowns.seller_user_id AND uowns.own_operator_id =
+		o.id) AS countShopMember,
+		(SELECT count(0) FROM user_relation ur WHERE ur.referee_user_id = o.user_id)
+		as countRegisterUser,
+		(SELECT count(0) FROM user_relation ur, o2o_group_order go WHERE
+		ur.referee_user_id = o.user_id AND go.user_id = ur.user_id AND
+		go.order_status <![CDATA[ >= ]]>
+		30) as countRegisterUserOrder,
+		(SELECT SUM(record.rebate_amount) FROM user_rebate_record record WHERE
+		record.rebate_status = 1 AND record.user_id = o.user_id AND
+		DATE_FORMAT(record.create_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+		date_sub(curdate(),INTERVAL WEEKDAY(curdate()) DAY) AND
+		DATE_FORMAT(record.create_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+		date_sub(curdate(),INTERVAL WEEKDAY(curdate())-6 DAY))
+		currentWeekRebate,
+		(SELECT SUM(record.rebate_amount) FROM user_rebate_record record WHERE
+		record.rebate_status = 1 AND record.user_id = o.user_id AND
+		DATE_FORMAT(record.create_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+		concat(date_format(LAST_DAY(now()),'%Y-%m-'),'01') AND
+		DATE_FORMAT(record.create_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+		LAST_DAY(now())) currentMonthRebate
+		FROM
+		user_operator o
+		LEFT JOIN (SELECT SUM(urr.rebate_amount) rebateConsumeAmount, urr.user_id 
+		FROM user_rebate_record urr WHERE urr.rebate_status = 1 AND	urr.rebate_type BETWEEN 100 AND 200 GROUP BY user_id) consumeTable ON consumeTable.user_id = o.user_id
+		LEFT JOIN (SELECT SUM(urr.rebate_amount) rebateFeeAmount, urr.user_id 
+		FROM user_rebate_record urr WHERE urr.rebate_status = 1 GROUP BY user_id) feeTable ON feeTable.user_id = o.user_id
+		LEFT JOIN sys_user sus on sus.id = o.user_id
+		WHERE
+		o.is_deleted = 0
+		AND o.status = 1
+		AND sus.status = 1
+		AND o.id != #{vo.id}
+		<if test="vo.userName != null and vo.userName != ''">
+			AND o.user_name LIKE CONCAT('%',#{vo.userName},'%')
+		</if>
+		<if test="vo.operatorCode != null and vo.operatorCode != ''">
+			AND o.operator_code = #{vo.operatorCode}
+		</if>
+		<if test="vo.level != null and vo.level != ''">
+			AND o.level = #{vo.level}
+		</if>
+		<choose>
+			<when test="vo.userLevel == 1">
+				AND (SELECT count(0) FROM dic_area a WHERE a.id = o.operator_area_id
+				AND a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+				0
+				AND o.level in(2, 3)
+			</when>
+			<when test="vo.userLevel == 2">
+				AND o.operator_area_id = #{vo.operatorAreaId}
+				AND o.level = 3
+			</when>
+			<otherwise>
+				AND 1 = 2
+			</otherwise>
+		</choose>
+		ORDER BY o.create_time DESC
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, user_id, level, operator_name, operator_code, user_name, status,
+		id_card, sex, operator_area_id,
+		nation, phone, address, bank_name, sub_bank_name, bank_no, registration_no,
+		registration_path,
+		organization_no, organization_path, tax_no, tax_path, assigned_time, update_by,
+		update_time, create_by,
+		create_time, is_deleted,cn_username,extension_seller_uid
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.user.model.OperatorExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_operator
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_operator
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_operator
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.OperatorExample">
+		delete from user_operator
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.Operator"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_operator (id, user_id, level, operator_name,
+		operator_code, user_name, status,
+		id_card, sex, operator_area_id,
+		nation, phone, address,
+		bank_name, sub_bank_name, bank_no,
+		registration_no, registration_path, organization_no,
+		organization_path, tax_no, tax_path, assigned_time,
+		update_by, update_time, create_by,
+		create_time, is_deleted)
+		values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+		#{level,jdbcType=CHAR}, #{operatorName}
+		#{operatorCode,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+		#{status,jdbcType=VARCHAR},
+		#{idCard,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, #{operatorAreaId,jdbcType=VARCHAR},
+		#{nation,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+		#{address,jdbcType=VARCHAR},
+		#{bankName,jdbcType=VARCHAR}, #{subBankName,jdbcType=VARCHAR}, #{bankNo,jdbcType=VARCHAR},
+		#{registrationNo,jdbcType=VARCHAR},
+		#{registrationPath,jdbcType=VARCHAR},
+		#{organizationNo,jdbcType=VARCHAR},
+		#{organizationPath,jdbcType=VARCHAR}, #{taxNo,jdbcType=VARCHAR},
+		#{taxPath,jdbcType=VARCHAR}, #{assignedTime, jdbcType=VARCHAR}
+		#{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},
+		#{createBy,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.Operator"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_operator
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			<if test="operatorName != null">
+				operator_name,
+			</if>
+			<if test="operatorCode != null">
+				operator_code,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="idCard != null">
+				id_card,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="operatorAreaId != null">
+				operator_area_id,
+			</if>
+			<if test="nation != null">
+				nation,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="bankName != null">
+				bank_name,
+			</if>
+			<if test="subBankName != null">
+				sub_bank_name,
+			</if>
+			<if test="bankNo != null">
+				bank_no,
+			</if>
+			<if test="registrationNo != null">
+				registration_no,
+			</if>
+			<if test="registrationPath != null">
+				registration_path,
+			</if>
+			<if test="organizationNo != null">
+				organization_no,
+			</if>
+			<if test="organizationPath != null">
+				organization_path,
+			</if>
+			<if test="taxNo != null">
+				tax_no,
+			</if>
+			<if test="taxPath != null">
+				tax_path,
+			</if>
+			<if test="assignedTime != null">
+				assigned_time,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+			<if test="cn_username != null">
+				cn_username,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="level != null">
+				#{level,jdbcType=CHAR},
+			</if>
+			<if test="operatorName != null">
+				#{operatorName,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorCode != null">
+				#{operatorCode,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="idCard != null">
+				#{idCard,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=CHAR},
+			</if>
+			<if test="operatorAreaId != null">
+				#{operatorAreaId,jdbcType=VARCHAR},
+			</if>
+			<if test="nation != null">
+				#{nation,jdbcType=VARCHAR},
+			</if>
+			<if test="phone != null">
+				#{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="bankName != null">
+				#{bankName,jdbcType=VARCHAR},
+			</if>
+			<if test="subBankName != null">
+				#{subBankName,jdbcType=VARCHAR},
+			</if>
+			<if test="bankNo != null">
+				#{bankNo,jdbcType=VARCHAR},
+			</if>
+			<if test="registrationNo != null">
+				#{registrationNo,jdbcType=VARCHAR},
+			</if>
+			<if test="registrationPath != null">
+				#{registrationPath,jdbcType=VARCHAR},
+			</if>
+			<if test="organizationNo != null">
+				#{organizationNo,jdbcType=VARCHAR},
+			</if>
+			<if test="organizationPath != null">
+				#{organizationPath,jdbcType=VARCHAR},
+			</if>
+			<if test="taxNo != null">
+				#{taxNo,jdbcType=VARCHAR},
+			</if>
+			<if test="taxPath != null">
+				#{taxPath,jdbcType=VARCHAR},
+			</if>
+			<if test="assignedTime != null">
+				#{assignedTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+			<if test="cn_username != null">
+				#{cn_username,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.OperatorExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_operator
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_operator
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.level != null">
+				level = #{record.level,jdbcType=CHAR},
+			</if>
+			<if test="record.operatorName != null">
+				operator_name = #{record.operatorName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.operatorCode != null">
+				operator_code = #{record.operatorCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userName != null">
+				user_name = #{record.userName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=VARCHAR},
+			</if>
+			<if test="record.idCard != null">
+				id_card = #{record.idCard,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sex != null">
+				sex = #{record.sex,jdbcType=CHAR},
+			</if>
+			<if test="record.operatorAreaId != null">
+				operator_area_id = #{record.operatorAreaId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.nation != null">
+				nation = #{record.nation,jdbcType=VARCHAR},
+			</if>
+			<if test="record.phone != null">
+				phone = #{record.phone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.address != null">
+				address = #{record.address,jdbcType=VARCHAR},
+			</if>
+			<if test="record.bankName != null">
+				bank_name = #{record.bankName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.subBankName != null">
+				sub_bank_name = #{record.subBankName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.bankNo != null">
+				bank_no = #{record.bankNo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.registrationNo != null">
+				registration_no = #{record.registrationNo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.registrationPath != null">
+				registration_path = #{record.registrationPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.organizationNo != null">
+				organization_no = #{record.organizationNo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.organizationPath != null">
+				organization_path = #{record.organizationPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.taxNo != null">
+				tax_no = #{record.taxNo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.taxPath != null">
+				tax_path = #{record.taxPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.assignedTime != null">
+				assigned_time = #{record.assignedTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updateBy != null">
+				update_by = #{record.updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_operator
+		set id = #{record.id,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		level = #{record.level,jdbcType=CHAR},
+		operator_name = #{record.operatorName,jdbcType=VARCHAR},
+		operator_code = #{record.operatorCode,jdbcType=VARCHAR},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		status = #{record.status,jdbcType=VARCHAR},
+		id_card = #{record.idCard,jdbcType=VARCHAR},
+		sex = #{record.sex,jdbcType=CHAR},
+		operator_area_id = #{record.operatorAreaId,jdbcType=VARCHAR},
+		nation = #{record.nation,jdbcType=VARCHAR},
+		phone = #{record.phone,jdbcType=VARCHAR},
+		address = #{record.address,jdbcType=VARCHAR},
+		bank_name = #{record.bankName,jdbcType=VARCHAR},
+		sub_bank_name = #{record.subBankName,jdbcType=VARCHAR},
+		bank_no = #{record.bankNo,jdbcType=VARCHAR},
+		registration_no = #{record.registrationNo,jdbcType=VARCHAR},
+		registration_path = #{record.registrationPath,jdbcType=VARCHAR},
+		organization_no = #{record.organizationNo,jdbcType=VARCHAR},
+		organization_path = #{record.organizationPath,jdbcType=VARCHAR},
+		tax_no = #{record.taxNo,jdbcType=VARCHAR},
+		tax_path = #{record.taxPath,jdbcType=VARCHAR},
+		assigned_time = #{record.assignedTime,jdbcType=TIMESTAMP},
+		update_by = #{record.updateBy,jdbcType=VARCHAR},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		create_by = #{record.createBy,jdbcType=VARCHAR},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{record.isDeleted,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.Operator">
+		update user_operator
+		<set>
+			update_time = now()
+			<if test="userId != null">
+				, user_id = #{userId,jdbcType=BIGINT}
+			</if>
+			<if test="level != null">
+				, level = #{level,jdbcType=CHAR}
+			</if>
+			<if test="operatorName != null">
+				, operator_name = #{operatorName,jdbcType=VARCHAR}
+			</if>
+			<if test="operatorCode != null">
+				, operator_code = #{operatorCode,jdbcType=VARCHAR}
+			</if>
+			<if test="userName != null">
+				, user_name = #{userName,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				, status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="idCard != null">
+				, id_card = #{idCard,jdbcType=VARCHAR}
+			</if>
+			<if test="sex != null">
+				, sex = #{sex,jdbcType=CHAR}
+			</if>
+			<if test="operatorAreaId != null">
+				, operator_area_id = #{operatorAreaId,jdbcType=VARCHAR}
+			</if>
+			<if test="nation != null">
+				, nation = #{nation,jdbcType=VARCHAR}
+			</if>
+			<if test="phone != null">
+				, phone = #{phone,jdbcType=VARCHAR}
+			</if>
+			<if test="address != null">
+				, address = #{address,jdbcType=VARCHAR}
+			</if>
+			<if test="bankName != null">
+				, bank_name = #{bankName,jdbcType=VARCHAR}
+			</if>
+			<if test="subBankName != null">
+				, sub_bank_name = #{subBankName,jdbcType=VARCHAR}
+			</if>
+			<if test="bankNo != null">
+				, bank_no = #{bankNo,jdbcType=VARCHAR}
+			</if>
+			<if test="registrationNo != null">
+				, registration_no = #{registrationNo,jdbcType=VARCHAR}
+			</if>
+			<if test="registrationPath != null">
+				, registration_path = #{registrationPath,jdbcType=VARCHAR}
+			</if>
+			<if test="organizationNo != null">
+				, organization_no = #{organizationNo,jdbcType=VARCHAR}
+			</if>
+			<if test="organizationPath != null">
+				, organization_path = #{organizationPath,jdbcType=VARCHAR}
+			</if>
+			<if test="taxNo != null">
+				, tax_no = #{taxNo,jdbcType=VARCHAR}
+			</if>
+			<if test="taxPath != null">
+				, tax_path = #{taxPath,jdbcType=VARCHAR}
+			</if>
+			<if test="assignedTime != null">
+				, assigned_time = #{assignedTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy != null">
+				, update_by = #{updateBy,jdbcType=VARCHAR}
+			</if>
+			<if test="createBy != null">
+				, create_by = #{createBy,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				,create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="isDeleted != null">
+				,is_deleted = #{isDeleted,jdbcType=BIT}
+			</if>
+			<if test="extensionSellerUid != null">
+				,extension_seller_uid = #{extensionSellerUid,jdbcType=BIT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.Operator">
+		update user_operator
+		set user_id = #{userId,jdbcType=BIGINT},
+		level = #{level,jdbcType=CHAR},
+		operator_name = #{operatorName,jdbcType=VARCHAR},
+		operator_code = #{operatorCode,jdbcType=VARCHAR},
+		user_name = #{userName,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR},
+		id_card = #{idCard,jdbcType=VARCHAR},
+		sex = #{sex,jdbcType=CHAR},
+		operator_area_id = #{operatorAreaId,jdbcType=VARCHAR},
+		nation = #{nation,jdbcType=VARCHAR},
+		phone = #{phone,jdbcType=VARCHAR},
+		address = #{address,jdbcType=VARCHAR},
+		bank_name = #{bankName,jdbcType=VARCHAR},
+		sub_bank_name = #{subBankName,jdbcType=VARCHAR},
+		bank_no = #{bankNo,jdbcType=VARCHAR},
+		registration_no = #{registrationNo,jdbcType=VARCHAR},
+		registration_path = #{registrationPath,jdbcType=VARCHAR},
+		organization_no = #{organizationNo,jdbcType=VARCHAR},
+		organization_path = #{organizationPath,jdbcType=VARCHAR},
+		tax_no = #{taxNo,jdbcType=VARCHAR},
+		tax_path = #{taxPath,jdbcType=VARCHAR},
+		assigned_time = #{assignedTime,jdbcType=TIMESTAMP},
+		update_by = #{updateBy,jdbcType=VARCHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_by = #{createBy,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{isDeleted,jdbcType=BIT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="selectOperatorByCnUserName" parameterType="map"
+		resultMap="BOResultMap">
+		select * from user_operator where
+		cn_username=#{cn_username,jdbcType=VARCHAR}
+	</select>
+
+	<select id="getLevelAndArea" resultMap="BaseResultMap">
+		SELECT * FROM user_operator WHERE operator_area_id =
+		#{areaId,jdbcType=VARCHAR}
+		AND level = #{level,jdbcType=INTEGER}
+	</select>
+	
+	<select id="queryOperatorByOperatorCode" resultMap="BOResultMap">
+		SELECT * FROM user_operator WHERE operator_code = #{operatorCode,jdbcType=VARCHAR}
+	</select>
+
+	<select id="listAllOperator" resultMap="BOResultMap">
+		SELECT user_id FROM user_operator order by user_id desc 
+	</select>
+
+</mapper>

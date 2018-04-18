@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/style/system/manage/blue/act.css">
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js" ></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+	<script>
+	function saveForm(){
+		jQuery("#form").submit();
+	}
+	</script>
+	<style>
+	.template_submit_btn{background-image:linear-gradient(-180deg, #47e4ff 0%, #13b9e5 100%);border:1px solid #30cafb;box-shadow:inset 0px 4px 3px 0px rgba(240,240,240,0.78);border-radius:5px;width:110px;height:34px;font-size:16px;color:#fff;margin: 10px 0 0 266px;}
+	</style>
+</head>
+
+<body>
+<div class="actmain">
+<form action="$!webPath/admin/act_sale_template_save.htm" method="post" id="form" enctype="multipart/form-data">
+	<div class="settings">
+		<div class="tit">
+			<span class="required">*</span>模板名称:
+		</div>
+		<div class="content">
+			<input type="text" class="input actName" name="title" value="$!{obj.title}"/>
+			<input type="hidden" name="id" value="$!{obj.id}"/>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit">
+			<span class="required">*</span>模板图片:
+		</div>
+		<div class="content">
+			<input class="input uploadPath" type="text" readonly="readonly" id="src_mbtp" name="templateImage" value="$!{obj.picture}"/>
+			<div class="selectImage">
+				<input id="mbtp" name="imgFile" class="file" type="file"/>选择弹框图片
+			</div>
+			<div class="showUpload">
+				<img src="" class="thumbnail" id="show_mbtp"  />
+			</div>
+		</div>
+	</div>
+	<div class="settings">
+		<div class="tit"><span class="required">*</span>样式代码:</div>
+		<div class="content"><textarea id="code_template" name="content">$!{obj.content}</textarea></div>
+	</div>
+  <div class="submit">
+    <span class="pad120">
+   		<input class="template_submit_btn" name="" type="button" value="提交" onclick="saveForm();"/>
+    </span> 
+  </div>
+</form>
+</div>
+<script src="$!webPath/resources/js/calender.js" type="text/javascript" language="javascript"></script>
+<script>
+	$(function(){
+		var show_imgs= jQuery("img[id^=show_]");
+		show_imgs.each(function(){
+			if(jQuery(this).attr("src")==""){
+				jQuery(this).hide();
+			}
+		});		
+		
+	})
+	
+	
+	//商品图片ajax上传
+	jQuery("input[type=file]").change(function(){
+		var that=this;
+		var id=this.id;
+		jQuery(this).parent().next("div").find("img").attr("src","$!webPath/resources/style/system/manage/blue/images/loading.gif");
+			
+		jQuery.ajaxFileUpload({
+			  url:'$!webPath/upload.htm',
+			  dataType:'text',
+			  fileElementId:[that.id],
+			  secureuri: false, //一般设置为false
+			  success:function(data){						    
+				var json = eval('(' + data + ')');
+				jQuery("#src_"+id).val(json.url);
+				jQuery("#show_"+id).show().attr("src",json.url);			
+			  }
+		});
+	})
+	
+</script>
+
+</html>
+

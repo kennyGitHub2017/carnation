@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [-1..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/overlay.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+//
+jQuery(document).ready(function(){
+	
+  //
+});
+function ajax_update(id,fieldName,obj,value){
+   var val;
+   if(value==undefined){
+	 val=jQuery(obj).val();
+   }else val=value; 
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/zero_act/goods_zero_act_ajax.htm',
+				  data:{"goodsId":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }    
+				 if(value!=undefined){
+				   jQuery(obj.parentNode.parentNode).remove();
+				 }
+              }
+	    });
+}
+
+function query_form(){
+jQuery("#ListForm").submit();
+	}
+</script>
+</head><body scroll="yes">
+<div class="cont">
+  <form name="ListForm" id="ListForm" action="$!webPath/admin/zero_act/goods_zero_act_list.htm" method="post">
+	<div class="search">
+		<span>商品名称</span> <span class="size100"> <input
+			name="goodsName" type="text" id="goodsName" value="$!vo.goodsName" />
+		</span>
+
+		<span> <input name="" type="button" value="查询"
+			style="cursor: pointer;" onclick="query_form()" class="search_btn" />
+		</span>
+	</div>
+
+    <div class="fshoptb page-fixed-mb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="5%"><input type="checkbox" onclick="selectAll(this)"/>
+            </th>
+          <th width="25%"><span class="form_btna">名称</span></th>
+          <th width="5%"><span class="form_btna">商品原价</span></th>
+          <th width="15%"><span class="form_btna">店铺价格</span></th>
+          <th width="5%"><span class="form_btna">邮费</span></th>
+          <th width="5%"><span class="form_btna">购买量</span></th>
+          <th width="5%"><span class="form_btna">库存量</span></th>
+          <th width="5%"><span class="form_btna">发布时间</span></th>
+          <th width="5%" align="center"><span class="form_btna">查看次数</span></th>
+          <th width="10%" align="center"><b class="form_btnb">操作</b></th>
+        </tr>
+        #foreach($obj in $objs)
+        <tr>
+          <td class="check_position"><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td>
+	          <div class="shop_manage1">
+	            <span style=" display:block; float:left; margin-right:10px;"> 
+	            	<a href="$!{shopPath}/goods_$!{obj.goodsId}.htm?admin_view=true" target="_blank"> <img src="$!{obj.goodsMainPhotoPath}" width="55px" height="55px"/> </a> </span>
+	            <label>
+	              <textarea name="textarea" cols="26" rows="3"  title="可编辑" onblur="ajax_update('$!obj.goodsId','goodsName',this)">$!obj.goodsName</textarea>
+	            </label>
+          </td>
+          <td align="center">$!obj.oldGoodsPrice</td>
+          <td align="center">$!obj.storePrice</td>
+          <td align="center">$!obj.shipFee</td>
+          <td align="center">$!obj.goodsSalenum</td><!--售出数量 -->
+          <td align="center">$!obj.goodsInventory</td><!-- 库存 -->
+          <td align="center">$!CommUtil.formatShortDate($!obj.creatTime)</td>
+          <td align="center">$!obj.goodsClick</td>
+          <td class="hui oprate_con" align="center" style="white-space:nowrap">
+				<a href="javascript:void(0);" class="blue" dialog_uri="$!webPath/admin/zero_act/goods_zero_act_update.htm?id=$!obj.goodsId&currentPage=$!currentPage" dialog_title="编辑" dialog_width="410" dialog_height="100" dialog_id="order_shipping">编辑</a> 
+				#if($!obj.goodsStatus == false)
+					<a href="$!webPath/admin/zero_act/goods_zero_act_change_status.htm?mulitId=$!obj.id&status=1" class="blue">上架</a>
+				#end
+				#if($!obj.goodsStatus == true)
+					<a href="$!webPath/admin/zero_act/goods_zero_act_change_status.htm?mulitId=$!obj.id&status=0" class="blue">下架</a>
+				#end
+				<a href="javascript:if(confirm('删除后不可恢复?'))window.location.href='$!webPath/admin/zero_act/goods_zero_act_delete.htm?mulitId=$!obj.id'" class="blue">删除</a>
+		  </td>
+        </tr>
+        #end
+      </table>
+    </div>
+    <div class="operate_bar page-fixed">
+		<div class="fenye"> 
+			<span id="queryCondition" style="display:none"> 
+				#foreach($sm in $sms)
+					<input name="$!sm.key" id="$!sm.key" type="hidden" value="$!sm.value"/>
+		        #end 
+	        </span>
+        <input name="mulitId" type="hidden" id="mulitId" />
+	        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+	        $!gotoPageFormHTML 
+		</div>
+      <div class="oper_sp"> 
+      	<span class="oper_check">
+			<label for="all">
+	          <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>全部
+			</label>
+        </span> 
+        <span class="oper_del">
+        	<input name="" type="button" value="删除" onclick="cmd('$!webPath/admin/zero_act/goods_zero_act_delete.htm');" style="cursor:pointer;" />
+        </span> 
+        <span class="oper_del">
+        	<input name="" type="button" value="下架" onclick="cmd('$!webPath/admin/zero_act/goods_zero_act_change_status.htm?status=0');" style="cursor:pointer;" />
+        </span> 
+      </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

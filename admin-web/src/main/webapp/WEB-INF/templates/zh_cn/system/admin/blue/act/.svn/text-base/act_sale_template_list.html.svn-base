@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>模板管理</title>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+	
+	<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+	<style type="text/css">
+		.nav_list ul li a.addtemplate{ color:#fff; background:url("$!webPath/resources/style/im/images/btn.png")no-repeat center center; background-image:linear-gradient(-180deg, #47e4ff 0%, #13b9e5 100%);border:1px solid #30cafb;box-shadow:inset 0px 4px 3px 0px rgba(240,240,240,0.78);border-radius:5px;width:84px;height:24px;}
+		.nav_list ul li a.addtemplate b {height:25px;line-height:25px; background: none;padding-left: 15px;}.nav_list ul li a.addtemplate:hover{color: #fff}
+		.template_list{width: 100%;overflow: hidden;height: auto;}
+		.template_list ul li{float: left;margin: 16px 20px 7px 29px;}
+		.template_list ul li img{width:222px;height:355px;}
+		.template_list_footer{padding-top: 8px;}
+		.template_list_footer a{float: right; display:inline-block; width:42px; margin-left:4px; height:24px;line-height:23px;text-align:center; background:url("$!webPath/resources/style/im/images/btn2.png")no-repeat center center; font-size:12px;color:#333333;}
+		.model{width:100%;height:100%;position:fixed;left:0;top:0;background:#000;opacity:0.4;filter:alpha(opacity=40);z-index:999;display:none}
+		.comfire{background:#f7f7f7;border:solid rgba(60,60,60,0.36) 6px;background-clip: content-box;border-radius:5px;width:400px;height:191px;position:fixed;z-index:1000;left:50%;top:50%;margin:-95px 0 0 -200px;display:none}
+		.comfire .tit{height:43px;line-height:43px;border-bottom:solid 1px #e9e9e9;font-size:16px;color:#333;text-align:center}
+		.comfire .ask{line-height:93px;text-align:center;font-size:18px;color:#333}
+		.comfire .ask img{vertical-align:middle}
+		.comfire .btns{font-size:0;text-align:center}
+		.comfire .btns a{display:inline-block;font-size:14px;line-height:30px}
+		.comfire .btns .ok{
+			background-image:linear-gradient(-180deg, #47e4ff 0%, #13b9e5 100%);
+			border:1px solid #30cafb;
+			box-shadow:inset 0px 4px 3px 0px rgba(240,240,240,0.78);
+			border-radius:5px;
+			width:84px;
+			height:30px;
+			color:#fff
+		}
+		.comfire .btns .cancel{
+			background-image:linear-gradient(-180deg, #ffffff 0%, #eeeeee 100%);
+			border:1px solid #d0d0d0;
+			border-radius:5px;
+			width:84px;
+			height:30px;
+			color:#797979;
+			margin-left:10px
+		}
+	</style>
+</head>
+<body>
+	<div class="cont">
+		<h3 class="seth">模板管理</h3>
+		 <div class="nav_list">
+			 <ul>
+			  	<li><a href="JavaScript:;" class="this"><b>全部模板</b></a> </li>
+			 	<li>
+			 		<a class="addtemplate" href="$!webPath/admin/act_sale_template_edit.htm">
+			 			<b>添加模板</b>
+			 		</a>
+			 	</li>
+			  </ul>
+		  </div>
+	</div>
+	<div class="template_list">
+		<ul>
+			#foreach($obj in $objs)
+				<li>
+					
+					<img alt="" src="$obj.picture">
+					<div class="template_list_footer">
+						<span>$obj.title</span>
+						<a href="$!webPath/admin/act_sale_template_delete.htm?id=$obj.id">删除</a>
+						<a href="$!webPath/admin/act_sale_template_edit.htm?id=$obj.id">编辑</a>
+					</div>
+				</li>
+			#end
+		</ul>
+	</div>	
+	
+	<div class="operate_bar">
+	    <div class="fenye">
+	        <input type="hidden" name="mulitId" id="mulitId" />
+			<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+	        $!gotoPageFormHTML
+	    </div> 
+  	</div>
+  	<div class="model"></div>
+  	<div class="comfire">
+  		<div class="tit">系统提示</div>
+  		<div class="ask">
+  			<img src="$!webPath/resources/style/system/manage/blue/images/icon_ask.png" /> 确认删除h5模板？
+  		</div>
+  		<div class="btns">
+  			<a href="javascript:;" class="ok">确认</a>
+  			<a href="javascript:;" class="cancel">取消</a>
+  		</div>
+  	</div>
+	<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+	<script type="text/javascript">
+			var id;
+			function del(id){
+				jQuery(".model").show();
+				jQuery(".comfire").show();	
+				id=id;
+			}
+			jQuery(function(){
+				jQuery(".btns .ok").click(function(){
+					ajaxdel(id);
+				});
+				jQuery(".btns .cancel").click(function(){
+					jQuery(".model").hide();
+					jQuery(".comfire").hide();	
+				});
+			});
+			function ajaxdel(id){
+				$.ajax({
+				    url:'',
+				    type:'POST', //GET
+				    async:true,    
+				    data:{
+				        id:id
+				    },
+				    timeout:5000,    //超时时间
+				    dataType:'json',  
+				    success:function(data,textStatus,jqXHR){
+				        
+				    },
+				    error:function(xhr,textStatus){
+				        
+				    },
+				    complete:function(){
+				    }
+				})
+			}
+		
+	</script>
+</body>
+</html>

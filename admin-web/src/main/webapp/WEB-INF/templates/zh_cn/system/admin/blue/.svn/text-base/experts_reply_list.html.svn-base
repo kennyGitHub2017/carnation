@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/blue/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet"/>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#condition").val("$!condition");	
+  jQuery(".memimg").mouseover(function(){
+     jQuery(this).css("cursor","pointer");
+	 jQuery(".mem_detail[id^=user_detail_]").hide();
+     var id=jQuery(this).attr("id");
+	 jQuery("#user_detail_"+id).show();
+  });
+  jQuery(".mem_detail[id^=user_detail_]").mouseleave(function(){
+    jQuery(this).hide();
+  });
+  
+	jQuery('#beginTimeStr').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+	  jQuery('#endTimeStr').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+  
+});
+</script>
+<body>
+  <div class="cont">
+    <h1 class="seth">专家问答</h1>
+    <div class="nav_list">
+    <ul> 
+    <li><a href="$!webPath/admin/experts_reply_list.htm"  class="this"><b>专家咨询</b></a> </li>
+     </ul> 
+     </div>
+		<FORM name="ListForm" id="ListForm"  action="$!webPath/admin/experts_reply_list.htm" method="post">
+    <div class="search">
+      <span>标题
+          </span> <span class="size150">
+          <input name="title" type="text" id="title" value="$!vo.title" />
+          </span>
+          <span>专家</span><span class="size150">
+          <input name="expName" type="text" id="expName" value="$!vo.expName" />
+          </span>
+          <span>时间</span>
+          <span class="size100">
+      <input name="beginTimeStr" type="text" id="beginTimeStr" value="$!vo.beginTimeStr" readonly="readonly" />
+      </span> <span class="size100">
+      <input name="endTimeStr" type="text" id="endTimeStr" value="$!vo.endTimeStr" readonly="readonly" />
+      </span> 
+          <span>
+          <input name="" type="submit"  value="搜索" style="cursor:pointer;" title="搜索专家答"  class="search_btn"/>
+          </span>
+
+    </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="4%" align="center">序号</th>
+          <th width="31%" align="center"><span class="form_btna">标题</span></th>
+          <th width="15%" align="center"><span class="form_btna">提问人姓名</span></th>
+          <th width="10%" align="center"><span class="form_btna">专家姓名</span></th>
+          <th width="10%" align="center"><span class="form_btna">回复数</span></th>
+          <th width="15%" align="center"><span class="form_btna">提问时间</span></th>
+          <th width="15%" align="center"><span class="form_btna">操作</span></th>
+        </tr>
+       #foreach($!obj in $pages) 
+        <tr>
+          <td class="check_position"><input name="uid" type="checkbox" id="uid" style="width:16px; border:none;" value="$!obj.id" /></td>
+           #if($!obj.expertsUserId == $!obj.replyUserId)
+          <td class="lightred"><img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/wei.png"/>&nbsp;&nbsp;$!obj.title</td>
+          #elseif($!obj.userId == $!obj.replyUserId)
+           <td class="lightred"><img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/new.png"/>&nbsp;&nbsp;$!obj.title</td>
+          #else
+          <td class="lightred"><img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/wei.png"/>&nbsp;&nbsp;$!obj.title</td>
+          #end
+          <td class="lightred">$!obj.customerName</td>
+          <td class="lightred">$!obj.ename</td>
+          <td class="lightred">$!obj.replyCount</td>
+          <td class="lightred">$!CommUtil.formatLongDate($!obj.createTime)</td>
+          <td class="lightred"><a href="$!webPath/admin/consulting_details.htm?consId=$!obj.id" class="blue">查看详情</a></td>
+        </tr>
+         #end
+        <tr>
+        <td colspan="9" style="border-bottom:0px; padding:0px;">
+        <div class="operate_bar">
+                <div class="fenye">
+		<input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML
+         </div> 
+    
+         <!--  <div class="oper_sp"> <span class="oper_check"><label><input name="all" type="checkbox" id="all" onclick="selectAll(this)" value="" />全部</label></span>
+         <span class="oper_del">  <input name="" type="button" value="删除" style="cursor:pointer;" onclick="cmd('$!webPath/admin/user_del.htm')"/></span></div>-->
+            
+         </div>
+        
+        </td>
+        </tr>
+      </table>
+    </div>
+	</FORM>
+  </div>
+</body>
+</html>

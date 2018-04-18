@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>云尚健康城市,健康生活在云尚 - 云尚健康生活圈</title>
+    <meta name="keywords" content="云尚健康城市,健康生活在云尚,云尚健康生活圈" />
+	<meta name="description" content="本地生活服务精全面覆盖，享受到店优惠，便捷支付等功能。精准推送商家位置，一键导航轻松便捷，为用户查找周边吃喝玩乐一站式服务。云尚服务热线：400-888-2933 。云尚服务热线：400-888-2933 。" />
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet" />
+    <link href="$!webPath/resources/style/service/public.css" type="text/css" rel="stylesheet" />
+
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script type="text/javascript">
+	    $(function (){
+	    	jQuery("#area1").change(function(){
+		        var level=jQuery(this).attr("level");
+		   	 	var id=jQuery(this).val();
+			   	  jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+			   	     jQuery("#area"+level).empty();
+			   	    jQuery.each(data, function(index,item){
+			   		  jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+			   		  jQuery("#area"+level).show();
+			   		});
+			   	  },"json");
+		     });
+	    })
+	    function selectCity(){
+	    	var cityId=$("#area2").val();
+	    	location.href="$webPath/group/saecity_select_save.htm?cityId="+cityId;
+	    }
+    </script>
+
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/group/head.htm")
+$!httpInclude.include("/group/nav.htm")
+
+<div class="main clearfix">
+    <div class="city-wrap">
+        <div class="city-title">
+            按省份选择:
+            <select name="area1" id="area1" level="2" >
+ 				  #foreach($area in $areas)
+          			<option value="$!area.id">$!area.areaName</option>
+				  #end
+        	</select>
+	        <select name="area2" id="area2" >
+ 				  #foreach($area in $citys)
+          			<option value="$!area.id">$!area.areaName</option>
+				  #end
+	        </select>
+        	<input class="btn btn-blue btn-mini" value="确定" type="button" onclick="selectCity()"/>
+        </div>
+        <div class="city-hot">
+            <h3>热门城市：</h3>
+            <ul class="city-list">
+            	 #foreach($area in $hotCitys)
+                	<li><a href="$webPath/group/saecity_select_save.htm?cityId=${area.id}">$!area.areaName</a></li>
+                 #end
+            </ul>
+        </div>
+        <div class="city-content">
+            <h3>按拼音首字母选择：</h3>
+        	 #foreach($param in ${cityAll.keySet()})
+	        	 <div class="city-group">
+	                <span class="city-label">$param</span>
+	                <ul class="city-list">
+	                #foreach($city in ${cityAll.get($param)})
+	                    <li><a href="$webPath/group/saecity_select_save.htm?cityId=${city.id}">$!city.areaName</a> </li>
+	                #end
+	                </ul>
+	            </div>        	 
+        	 #end
+        </div>
+    </div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

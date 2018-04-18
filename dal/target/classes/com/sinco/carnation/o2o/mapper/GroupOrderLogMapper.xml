@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.o2o.mapper.GroupOrderLogMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.o2o.model.GroupOrderLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="log_info" property="logInfo" jdbcType="VARCHAR" />
+		<result column="log_user_id" property="logUserId" jdbcType="BIGINT" />
+		<result column="of_id" property="ofId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.o2o.bo.GroupOrderLogBO"
+		extends="BaseResultMap">
+		<association property="userCustomer"
+			javaType="com.sinco.carnation.user.model.UserCustomer" columnPrefix="customer_"
+			resultMap="com.sinco.carnation.user.mapper.UserCustomerMapper.BaseResultMap" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.o2o.model.GroupOrderLog"
+		extends="BaseResultMap">
+		<result column="state_info" property="stateInfo" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, log_info, log_user_id, of_id
+	</sql>
+	<sql id="Blob_Column_List">
+		state_info
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.o2o.model.GroupOrderLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from o2o_group_order_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByVO" parameterType="com.sinco.carnation.o2o.vo.GroupOrderLogVO"
+		resultMap="BOResultMap">
+		select l.id, l.add_time, l.delete_status, l.log_info, l.log_user_id,
+		l.of_id,u.nickname customer_nickname
+		from o2o_group_order_log l
+		left
+		join user_customer u on u.uid=l.log_user_id
+		where 1=1
+		<if test="vo.ofId != null and vo.ofId != ''">
+			and l.of_id = #{vo.ofId}
+		</if>
+		order by l.add_time asc
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.o2o.model.GroupOrderLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from o2o_group_order_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from o2o_group_order_log
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		o2o_group_order_log
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.o2o.model.GroupOrderLogExample">
+		delete from o2o_group_order_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.o2o.model.GroupOrderLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into o2o_group_order_log
+		(id, add_time, delete_status,
+		log_info, log_user_id, of_id,
+		state_info)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{logInfo,jdbcType=VARCHAR},
+		#{logUserId,jdbcType=BIGINT}, #{ofId,jdbcType=BIGINT},
+		#{stateInfo,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.o2o.model.GroupOrderLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into o2o_group_order_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="logInfo != null">
+				log_info,
+			</if>
+			<if test="logUserId != null">
+				log_user_id,
+			</if>
+			<if test="ofId != null">
+				of_id,
+			</if>
+			<if test="stateInfo != null">
+				state_info,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="logInfo != null">
+				#{logInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="logUserId != null">
+				#{logUserId,jdbcType=BIGINT},
+			</if>
+			<if test="ofId != null">
+				#{ofId,jdbcType=BIGINT},
+			</if>
+			<if test="stateInfo != null">
+				#{stateInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.o2o.model.GroupOrderLogExample"
+		resultType="java.lang.Integer">
+		select count(*) from o2o_group_order_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update o2o_group_order_log
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.logInfo != null">
+				log_info = #{record.logInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.logUserId != null">
+				log_user_id = #{record.logUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.ofId != null">
+				of_id = #{record.ofId,jdbcType=BIGINT},
+			</if>
+			<if test="record.stateInfo != null">
+				state_info = #{record.stateInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update o2o_group_order_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=BIT},
+		log_info =
+		#{record.logInfo,jdbcType=VARCHAR},
+		log_user_id =
+		#{record.logUserId,jdbcType=BIGINT},
+		of_id =
+		#{record.ofId,jdbcType=BIGINT},
+		state_info =
+		#{record.stateInfo,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update o2o_group_order_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=BIT},
+		log_info =
+		#{record.logInfo,jdbcType=VARCHAR},
+		log_user_id =
+		#{record.logUserId,jdbcType=BIGINT},
+		of_id =
+		#{record.ofId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.o2o.model.GroupOrderLog">
+		update o2o_group_order_log
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="logInfo != null">
+				log_info = #{logInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="logUserId != null">
+				log_user_id = #{logUserId,jdbcType=BIGINT},
+			</if>
+			<if test="ofId != null">
+				of_id = #{ofId,jdbcType=BIGINT},
+			</if>
+			<if test="stateInfo != null">
+				state_info = #{stateInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.o2o.model.GroupOrderLog">
+		update
+		o2o_group_order_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		log_info =
+		#{logInfo,jdbcType=VARCHAR},
+		log_user_id =
+		#{logUserId,jdbcType=BIGINT},
+		of_id = #{ofId,jdbcType=BIGINT},
+		state_info = #{stateInfo,jdbcType=LONGVARCHAR}
+		where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.o2o.model.GroupOrderLog">
+		update
+		o2o_group_order_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		log_info =
+		#{logInfo,jdbcType=VARCHAR},
+		log_user_id =
+		#{logUserId,jdbcType=BIGINT},
+		of_id = #{ofId,jdbcType=BIGINT}
+		where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+</mapper>

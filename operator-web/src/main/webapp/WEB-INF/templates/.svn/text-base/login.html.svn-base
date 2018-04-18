@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/login.css">
+    
+    <script>
+    	if (parent.frames.length > 0) {
+    		parent.location.href = window.location.href;
+    	}
+    </script>
+
+    <script src="/resources/js/jquery-1.8.2.js"></script>
+    <script src="/resources/js/jquery.validate.min.js"></script>
+    
+</head>
+<body>
+#if($!message)
+<div class="ui-warn">
+	$!{message}
+</div>
+#end
+<div class="login-wrap">
+    <div class="text-center pb-20"><img src="/resources/images/logo.png" /></div>
+    <div class="login-panel">
+        <div class="login-box">
+            <div class="title">用户登陆</div>
+            <form class="login-form" id="loginForm" action="/operator_login.htm" method="post">
+                <div class="item">
+                    <span>用户名：</span>
+                    <input type="text" class="txt" id="username" name="username" />
+                </div>
+                <div class="item">
+                    <span>密　码：</span>
+                    <input type="password" class="txt" name="password" />
+                </div>
+                <div class="item">
+                    <span>验证码：</span>
+                    <img id="codeImg" src="/verify.htm" class="login-code" title="点击更新" onclick="refreshCode()" />
+                    <input type="text" class="txt very-code" name="code" id="code" />
+                </div>
+                <div class="item btns">
+                    <input type="submit" class="btn btn-blue btn-block btn-large" value="登录" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="login-copyright">Copyright © 2016 YSYSGO.COM 云尚</div>
+    <img alt="" src="/resources/images/login-touying.png" style=" position: absolute;margin-top: -342px;right: -299px;z-index: -10;">
+</div>
+<script>
+
+    function refreshCode(){
+        jQuery("#codeImg").attr("src","/verify.htm?d"+new Date().getTime());
+    }
+
+    jQuery("#loginForm").validate({
+        rules:{
+        	username:{required :true, minlength:8},
+            password:{required :true, minlength:6},
+            code: {required:true,
+                remote:{
+                    type:"POST",
+                    url:"/verify_code.htm",
+                    data:{
+                        code:function(){return $("#code").val();}
+                    }
+                }
+            }
+        },
+        messages:{
+        	username:{required:"用户名不能为空",minlength:"用户名至少为8位"},
+            password:{required:"密码不能为空",minlength:"密码至少为6位"},
+            code:  {required:"请输入验证码",remote:"验证码错误"}
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,616 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!{config.title} - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="Thinkervc 1.3" />
+<meta name="author" content="$!{config.meta_author}" />
+<meta name="copyright" content="$!{config.copyRight}" />
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.base.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-1.2.6.pack.js"></script>
+<script src="$!webPath/resources/js/jquery.messager.js"></script>
+<script>
+var countNum = 0;
+Date.prototype.Format = function (fmt) { 
+    var o = {
+        "M+": this.getMonth() + 1, //月份 
+        "d+": this.getDate(), //日 
+        "h+": this.getHours(), //小时 
+        "m+": this.getMinutes(), //分 
+        "s+": this.getSeconds(), //秒 
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+        "S": this.getMilliseconds() //毫秒 
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+jQuery(document).ready(function(){
+	$("#aio_data_op").click(function(){
+		var startTime=new Date(new Date().setDate(1)).Format('yyyy-MM-dd');		
+		var endTime=new Date().Format('yyyy-MM-dd');		
+		var url="$!webPath/admin/aio_data_list.htm?startTime="+startTime+"&endTime="+endTime;
+		openURL('url',url,'main_workspace','aio_data_op');
+	});
+	
+	if($!ret){
+		var int=self.setInterval(function(){
+			//查询未回复的贴子数
+			jQuery.ajax({type:'POST',
+		              	url:'$!webPath/admin/count_consulting.htm',
+				   	success:function(data){
+				   		var getNum = data.split(",")[0];
+				   		if(getNum>countNum){
+				   			countNum = getNum;
+				   			var cid = data.split(",")[1];
+				   			$.messager.lays(300, 200);
+							$.messager.show('通知消息', '<span style="font-size:16px;">您有'+data.split(",")[0]+'条未回复的咨询<a href="$!webPath/admin/consulting_details.htm?consId='+cid+'" target="main_workspace">&nbsp;&nbsp;[查看]</a></span>', 0);
+				   		}
+	              }
+			});
+		},5000);
+	}
+	
+	jQuery("a[id^=complex_]").click(function(){
+	    var suffix=jQuery(this).attr("suffix");									 
+	    if(jQuery("#"+suffix+"info").css("display")!="block"){									 
+	     jQuery(this).parent().parent().find("a[id^=complex_]").each(function(index,item){
+		    jQuery(item).find("img").attr("src","$!webPath/resources/style/system/manage/blue/images/spread.jpg");
+		    jQuery(item).parent().find("ul").hide();
+	     });
+	   }
+	   if(jQuery("#"+suffix+"info").css("display")=="block"){
+	      jQuery("#"+suffix+"info").hide();
+		  jQuery("#"+suffix+"img").attr("src","$!webPath/resources/style/system/manage/blue/images/spread.jpg");
+	   }else{
+	      jQuery("#"+suffix+"info").show();
+		  jQuery("#"+suffix+"img").attr("src","$!webPath/resources/style/system/manage/blue/images/contract.jpg");	  
+	   }
+	});
+	
+	var oneLi= jQuery("#oneMenu > li:first > a");
+	oneLi.click();
+});	
+
+</script>
+</head>
+<body scroll="yes">
+<div class="main">
+  <div class="top">
+    <div class="login">
+    	<ul>
+            <a href="$!webPath/admin_logout.htm" target="_self"><li>
+            	<span class="login_img"><img src="$!webPath/resources/style/system/manage/blue/images/exit.png" /></span>
+                <span class="login_word">安全退出</span>
+            </li></a>
+            <a href="$!webPath/admin/admin_pws.htm" target="main_workspace"><li>
+            	<span class="login_img"><img src="$!webPath/resources/style/system/manage/blue/images/password.png" /></span>
+                <span class="login_word">修改密码</span>
+            </li></a>
+            <a href="$!webPath/index.htm" target="_blank"><li>
+            	<span class="login_img"><img src="$!webPath/resources/style/system/manage/blue/images/home.png" /></span>
+                <span class="login_word">商城首页</span>
+            </li></a>
+        </ul>
+    </div>
+    <div class="logo"> #if($!config.admin_manage_logo)
+      #set($imgUrl ="$!imageWebServer/$!config.admin_manage_logo.path/$!config.admin_manage_logo.name")
+      #else
+      #set($imgUrl ="$!webPath/resources/style/system/manage/blue/images/logo.png")
+      #end <a href="javascript:;" onclick="openURL('show','common_operation')"><img src="$!{imgUrl}" width="247" height="35" /></a> </div>
+    <div class="nav">
+      <ul id="oneMenu"> 
+      	#if(${sec.anyGranted("ROLE_ADMIN_INDEX")})
+       	 <li class="this"><a href="javascript:;" id="common_operation_menu" onclick="openURL('show','common_operation')"><em class="nav_home"></em><b>首页</b></a></li>
+       	 #end
+       	#if(${sec.anyGranted("ROLE_ADVERT_ADMIN","ROLE_ARTICLE_CLASS","ROLE_ARTICLE","ROLE_CONSULT_ADMIN","ROLE_DOCUMENT_MANAGE","ROLE_EXPERT","ROLE_OPERATOR_NOTICE_DETAIL","ROLE_RECOMMEND_MANAGE","ROLE_CHECK_ADMIN","ROLE_USER_MANAGER","ROLE_ADMIN","ROLE_INFORMATION_ADMIN","ROLE_CHECK_REPORT_ADMIN","ROLE_CIRCLE_CLASS_ADMIN","ROLE_INVITATION_REPLY","ROLE_CIRCLE_ADMIN","ROLE_INVITATION_CLASS_ADMIN","ROLE_FOOD_ADMIN","ROLE_EXPERT_KNOWLEDGE_ADMIN","ROLE_INFORMATION_CLASS_ADMIN","ROLE_INFORMATION_FLOOR","ROLE_INFORMATION_REPLY")})
+       	<li><a href="javascript:;" id="content_set_menu" onclick="openURL('show','content_set')" ><em class="nav_website"></em><b>内容管理</b></a></li>
+       	#end
+       #if(${sec.anyGranted("ROLE_ADMIN_AREA_SET","ROLE_COMPLAINT_MANAGE","ROLE_COUPON_ADMIN","ROLE_EVALUATE_ADMIN","ROLE_ADMIN_KUAIDI","ROLE_ADMIN_EXPRESS_COMPANY","ROLE_GOODS_BRAND","ROLE_GOODS_CASE","ROLE_GOODS_CLASS","ROLE_GOODS_FLOOR","ROLE_GOODS_TYPE","ROLE_INTEGRAL_GOODS_ADMIN","ROLE_USER_INTEGRAL","ROLE_USER_INTEGRAL_MANAGE","ROLE_INTEGRAL_RULE","ROLE_SHIP_ADRESS","ROLE_ADMIN_TRANS_AREA","ROLE_ADMIN_GOODS","ROLE_ORDER_ADMIN","ROLE_ACTIVITY_SELF","ROLE_OFCARD_LIST","ROLE_ALBUM_ADMIN","ROLE_BUYGIFT_SELF_MANAGE","ROLE_CONSULT_SELF_MANAGE","ROLE_CRM_ADMIN","ROLE_ENOUGHREDUCE_SELF_ADMIN","ROLE_SELF_EVALUATE_ADMIN","ROLE_ECC_SELF","ROLE_SELF_FREEGOODS_ADMIN","ROLE_GOODS_FORMAT_SELF","ROLE_GOODS_SELF_ADD","ROLE_GOODS_SELF","ROLE_GOODS_SPEC","ROLE_SELF_STAT_GOODS","ROLE_GROUP_SELF","ROLE_GROUP_SELF_CODE","ROLE_SELFING_MANAGE","ROLE_ORDER_SELF","ROLE_ORDER_SHIP","ROLE_ORDER_CONFIRM","ROLE_ORDER_SELF_RETURN","ROLE_TAOBAO_SELF","ROLE_TRANSPORT_SELF","ROLE_STAT_ORDER","ROLE_STAT_GOODS","ROLE_STAT_AREA")})
+       	<li><a href="javascript:;" id="shop_set_menu" onclick="openURL('show','shop_set')" ><em class="nav_shop"></em><b>商城管理</b></a></li>
+       	#end
+       #if(${sec.anyGranted("ROLE_ADMIN_EVAS","ROLE_GROUP_CASE","ROLE_GROUP_FLOOR","ROLE_ADMIN_MERCHANT","ROLE_ADMIN_GROUP_CLASS","ROLE_ADMIN_GROUP_EVALUATION","ROLE_GROUP_HOT_ADMIN","ROLE_ADMIN_GROUP_GOODS","ROLE_ADMIN_ONLINE_ORDER","ROLE_ADMIN_OFFLINE_ORDER","ROLE_ADMIN_OFFLINE_REFUND","ROLE_O2O_STATISTICS","ROLE_REFUND_LOG","ROLE_MERCHANT_ADJUST_MANAGE","ROLE_ADJUST_MANAGE","ROLE_STORE_GRADE","ROLE_ADMIN_STORE_SET")})
+       	<li><a href="javascript:;" id="seller_set_menu" onclick="openURL('show','seller_set')" ><em class="nav_product"></em><b>商户管理</b></a></li>
+       	#end
+       	#if(${sec.anyGranted("ROLE_OPERATOR_MANAGE","ROLE_OPERATOR_CHECK_STORE_LIST","ROLE_OPERATOR_REBATE","ROLE_OPERATOR_NOTICE_LIST")})
+       	<li><a href="javascript:;" id="operator_set_menu" onclick="openURL('show','operator_set')" ><em class="nav_self"></em><b>运营商管理</b></a></li>
+       	#end
+       	#if(${sec.anyGranted("ROLE_MARKET_RED_PACKAGE_ADMIN","")})
+       	<li><a href="javascript:;" id="market_manage_menu" onclick="openURL('show','market_manage')" ><em class="nav_menber"></em><b>营销管理</b></a></li>
+       	#end
+       	
+        #if(${sec.anyGranted("ROLE_USER_IMAGE","ROLE_STAT_USER","ROLE_ADMIN_FEEDBACK","ROLE_USER_CONSULING","ROLE_USER_COLLECTIONS_POST","ROLE_USER_COLLECTIONS_SELLER","ROLE_USER_COLLECTIONS_EXPERT","ROLE_USER_COLLECTIONS_GOODS","ROLE_USER_COLLECTIONS_SERVICE","ROLE_USER_EVALUATION","ROLE_USER_LEVEL","ROLE_USER_DETAIL","ROLE_USER_MSG")})
+       	<li><a href="javascript:;" id="user_set_menu" onclick="openURL('show','user_set')" ><em class="nav_menber"></em><b>用户管理</b></a></li>
+       	#end
+       	#if(${sec.anyGranted("ROLE_PREDEPOSIT","ROLE_PREDEPOSIT_LOG","ROLE_ADMIN_PAYOFF","ROLE_ADMIN_PAYOFF_SET")})
+       	<li><a href="javascript:;" id="finance_set_menu" onclick="openURL('show','finance_set')" ><em class="nav_pay"></em><b>财务管理</b></a></li>
+       	#end
+      #if(${sec.anyGranted("ROLE_ADMIN_SET_SITE","ROLE_ADMIN_SET_SECOND_DOMAIN","ROLE_ADMIN_SET_SMS","ROLE_ADMIN_SET_EMAIL","ROLE_ADMIN_SET_SEO","ROLE_ADMIN_SET_IMAG","ROLE_NAV_MANAGE","ROLE_TEMPLATE_SET","ROLE_EXPERT_MANAGE","ROLE_ADMIN_MANAGE","ROLE_SET_ORDER_CONFIRM","ROLE_ADMIN_LUCENE","ROLE_PAYMENT_SET")})
+       	<li><a href="javascript:;" id="system_set_menu" onclick="openURL('show','system_set')" ><em class="nav_set"></em><b>系统管理</b></a></li>
+       	#end
+<!--        	#if(${sec.anyGranted("ROLE_EXPERT")}) -->
+<!--        	 <li><a href="javascript:;" id="self_check_menu" onclick="openURL('show','expert_answer')" ><em class=nav_shop></em><b>咨询</b></a></li> -->
+<!--        	#end -->
+      </ul>
+    </div>
+  </div>
+  <div class="index" id="workspace">
+    <div class="left">
+      <div class="left_box">
+        <div class="lefttop"> </div>
+        <div class="left_ul">
+          <ul class="ulleft" id="common_operation" style="display:none">
+            <div class="leftone">欢迎页面</div>
+            <li><a class="this" id="welcome_op" href="javascript:;" onclick="openURL('url','$!webPath/admin/welcome.htm','main_workspace','welcome_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>欢迎页面</span></a> </li>
+          </ul>
+          <ul class="ulleft" id="content_set" style="display:none">
+            <div class="leftone">内容管理</div>
+	       	#if(${sec.anyGranted("ROLE_INFORMATION_CLASS_ADMIN","ROLE_INFORMATION_ADMIN","ROLE_FOOD_ADMIN")})
+			<li><a class="this" href="javascript:;" id="complex_app_information" suffix="app_"><img id="app_img" src="$!webPath/resources/style/system/manage/blue/images/contract.jpg" width="13" height="13" /><span>APP资讯</span></a>
+              <ul id="app_info">
+					#if(${sec.anyGranted("ROLE_INFORMATION_ADMIN")})
+		            <li><a href="javascript:;" id="info_list" onclick="openURL('url','$!webPath/admin/information_class_list.htm','main_workspace','info_list');"><span>资讯分类</span></a></li>
+					<li><a href="javascript:;" id="information_op" onclick="openURL('url','$!webPath/admin/information_list.htm','main_workspace','information_op');"><span>资讯管理</span></a></li>
+					#end
+		            <li><a href="javascript:;" id="food_list" onclick="openURL('url','$!webPath/admin/food_calories_list.htm','main_workspace','food_list');"><span>食物热量管理</span></a></li>
+              </ul>
+            </li>
+            #end
+            #if(${sec.anyGranted("ROLE_CIRCLE_ADMIN")})
+			<li><a href="javascript:;" id="complex_circle" suffix="circle_"><img id="circle_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>社区管理</span></a>
+              <ul id="circle_info" style="display:none;">
+                <li><a href="javascript:;" id="info_op" onclick="openURL('url','$!webPath/admin/circle_invitation.htm','main_workspace','info_op');"><span>用户帖子</span></a></li>
+                <li><a href="javascript:;" id="info_official" onclick="openURL('url','$!webPath/admin/circle_official_invitation.htm','main_workspace','info_official');"><span>官方帖子</span></a></li>
+				<li><a href="javascript:;" id="circle_op" onclick="openURL('url','$!webPath/admin/circle_list.htm','main_workspace','circle_op');"><span>圈子管理</span></a></li>
+                <li><a href="javascript:;" id="info_reply" onclick="openURL('url','$!webPath/admin/invitation_reply.htm','main_workspace','info_reply');"><span>帖子回复</span></a></li>
+              </ul>
+            </li>
+            #end
+            #if(${sec.anyGranted("ROLE_ARTICLE_CLASS","ROLE_ARTICLE","ROLE_DOCUMENT_MANAGE")})
+			<li><a href="javascript:;" id="complex_article" suffix="article_"><img id="article_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>文章管理</span></a>
+              <ul id="article_info" style="display:none;">
+				<li><a href="javascript:;" id="articleClass_op" onclick="openURL('url','$!webPath/admin/articleclass_list.htm','main_workspace','articleClass_op');"><span>文章分类</span></a> </li>
+             	<li><a href="javascript:;" id="article_op" onclick="openURL('url','$!webPath/admin/article_list.htm','main_workspace','article_op');"><span>文章管理</span></a></li>
+              	<li><a href="javascript:;" id="document_op" onclick="openURL('url','$!webPath/admin/document_list.htm','main_workspace','document_op');"><span>系统文章</span></a></li> 				
+              </ul>
+            </li>
+            #end
+            #if(${sec.anyGranted("ROLE_BUSINESS_ACTIVITIES","ROLE_ARTICLE","ROLE_DOCUMENT_MANAGE")})
+			<li><a href="javascript:;" id="complex_activity" suffix="activity_"><img id="activity_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>活动新闻</span></a>
+              <ul id="activity_info" style="display:none;">
+				<li><a href="javascript:;" id="actapplylist" onclick="openURL('url','$!webPath/admin/actapply_list.htm','main_workspace','actapplylist');"><span>申请查看</span></a> </li>
+             	<li><a href="javascript:;" id="snsactivitylist" onclick="openURL('url','$!webPath/admin/snsactivity_list.htm','main_workspace','snsactivitylist');"><span>活动查看</span></a></li>
+<!--  	<li><a href="javascript:;" id="activity_document_op" onclick="openURL('url','$!webPath/admin/document_list.htm','main_workspace','document_op');"><span>文章管理</span></a></li> 	 -->			
+              </ul>
+            </li>
+            #end
+            #if(${sec.anyGranted("ROLE_CHECK_ADMIN")})
+			<li><a href="javascript:;" id="complex_health" suffix="health_"><img id="health_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>健康管理</span></a>
+              <ul id="health_info" style="display:none;">
+		            #if(${sec.anyGranted("ROLE_CHECK_ADMIN")})
+					<li><a href="javascript:;" id="self_check_op" onclick="openURL('url','$!webPath/admin/check_group_list.htm','main_workspace','self_check_op');"><span>自测题管理</span></a></li>
+					<li><a href="javascript:;" id="aio_data_op"><span>一体机健康数据管理</span></a></li>
+					#end
+              </ul>
+            </li>
+            #end
+            #if(${sec.anyGranted("ROLE_CHECK_REPORT_ADMIN", "ROLE_EXPERT")})
+			<li><a href="javascript:;" id="complex_check" suffix="check_"><img id="check_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>体检管理</span></a>
+              <ul id="check_info" style="display:none;">
+				 <li><a href="javascript:;" id="rewfdsfa23sd" onclick="openURL('url','$!webPath/admin/reportList.htm?status=2','main_workspace','rewfdsfa23sd')"><span>体检报告</span></a></li>
+	             <li><a href="javascript:;" id="jjjdsuks3" onclick="openURL('url','$!webPath/admin/reportGroupList.htm','main_workspace','jjjdsuks3')"><span>体检项分类</span></a></li>
+	             <li><a href="javascript:;" id="kkdkaqws3c" onclick="openURL('url','$!webPath/admin/checkResultItemList.htm','main_workspace','kkdkaqws3c')"><span>体检项</span></a></li>
+	              <li><a href="javascript:;" id="kkdkaqws3cwq" onclick="openURL('url','$!webPath/admin/checkValuation/pageList.htm','main_workspace','kkdkaqws3cwq')"><span>体检参考值管理</span></a></li>
+	              <li><a href="javascript:;" id="CheckPhysicalType" onclick="openURL('url','$!webPath/admin/CheckPhysicalType.htm','main_workspace','CheckPhysicalType')"><span>体检项管理</span></a></li>
+	              <li><a href="javascript:;" id="checkPhysicalResultList" onclick="openURL('url','$!webPath/admin/checkPhysicalResultList.htm','main_workspace','checkPhysicalResultList')"><span>体检记录管理</span></a></li>
+	              <li><a href="javascript:;" id="kkdkaqws3cEE" onclick="openURL('url','$!webPath/admin/checkSuggest/pageList.htm','main_workspace','kkdkaqws3cEE')"><span>建议管理</span></a></li>
+                  <li><a href="javascript:;" id="dsdas3cdd" onclick="openURL('url','$!webPath/admin/physicalKeyWord/pageList.htm','main_workspace','dsdas3cdd')"><span>关键字管理</span></a></li>
+                  <li><a href="javascript:;" id="sys_task_manager_list" onclick="openURL('url','$!webPath/admin/checkValuation/sys_task_manager_list.htm','main_workspace','sys_task_manager_list')"><span>任务管理</span></a></li>
+	              <li><a href="javascript:;" id="sys_task_log" onclick="openURL('url','$!webPath/admin/sys_task_log.htm','main_workspace','sys_task_log')"><span>用户任务</span></a></li>
+	              
+               </ul>
+            </li>
+            #end
+            #if(${sec.anyGranted("ROLE_CONSULT_ADMIN", "ROLE_EXPERT","ROLE_EXPERT_KNOWLEDGE_ADMIN")})
+            <li><a href="javascript:;" id="complex_consult" suffix="consulting_"><img id="consulting_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>咨询管理</span></a>
+            <ul id="consulting_info" style="display:none;">
+			      <li><a href="javascript:;" id="user_msg_op" onclick="openURL('url','$!webPath/admin/experts_reply_list.htm','main_workspace','user_msg_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>咨询管理</span></a></li>
+			      #if(${sec.anyGranted("ROLE_EXPERT_KNOWLEDGE_ADMIN")})
+		            <li><a href="javascript:;" id="info_knowledge_list" onclick="openURL('url','$!webPath/admin/expert_knowledge.htm','main_workspace','info_knowledge_list');"><span>知识库</span></a></li>
+		            <li><a href="javascript:;" id="info_know_class" onclick="openURL('url','$!webPath/admin/knowledge_class.htm','main_workspace','info_know_class');"><span>知识库分类</span></a></li>
+					#end
+			</ul>
+			</li>
+			#end
+					
+		
+            <li><a href="javascript:;" id="complex_label" suffix="label_"><img id="consulting_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>标签管理</span></a>
+            <ul id="label_info" style="display:none;">
+                  <li><a href="javascript:;" id="labelclass_list" onclick="openURL('url','$!webPath/admin/labelclass_list.htm','main_workspace','labelclass_list')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>标签分类</span></a></li>			     
+			      <li><a href="javascript:;" id="label_manage_list" onclick="openURL('url','$!webPath/admin/label_manage_list.htm','main_workspace','label_manage_list')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>标签管理</span></a></li>
+			</ul>
+			</li>
+			 <li><a href="javascript:;" id="complex_post" suffix="post_"><img id="consulting_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>健康圈管理</span></a>
+              <ul id="post_info" style="display:none;">
+                  <li><a href="javascript:;" id="post_list" onclick="openURL('url','$!webPath/admin/post_list.htm','main_workspace','post_list')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>健康圈管理</span></a></li>		
+                  <li><a href="javascript:;" id="post_blacklist" onclick="openURL('url','$!webPath/admin/post_blacklist.htm','main_workspace','post_blacklist')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>黑名单管理</span></a></li>		     
+			  </ul>
+			</li>
+			<li><a href="javascript:;" id="complex_wenJuan" suffix="wenJuan_">
+					<img id="consulting_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" />
+					<span>问卷管理</span>
+				</a>
+                <ul id="wenJuan_info" style="display:none;">
+                  <li>
+                  	<a href="javascript:;" id="wj_theme_list" onclick="openURL('url','$!webPath/admin/wj_theme_list.htm','main_workspace','wj_theme_list')">
+                  		<img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" />
+                  		<span>问卷主题</span>
+                  	</a>
+                  </li>
+                   <li>
+                  	<a href="javascript:;" id="wj_group_list" onclick="openURL('url','$!webPath/admin/wj_Group_list.htm','main_workspace','wj_group_list')">
+                  		<img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" />
+                  		<span>问卷题组</span>
+                  	</a>
+                  </li>				     
+			  	</ul>		  	
+			</li>
+			
+			
+			
+			#if(${sec.anyGranted("ROLE_LABEL_ADMIN")})
+			#end
+					
+			#if(${sec.anyGranted("ROLE_ADVERT_ADMIN")})
+			 <li><a href="javascript:;" id="advert_set_op" onclick="openURL('url','$!webPath/admin/advert_list.htm','main_workspace','advert_set_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>广告管理</span></a></li> 
+			  #end
+			
+			
+			<li><a href="javascript:;" id="message_set_op" onclick="openURL('url','$!webPath/admin/message_list.htm','main_workspace','message_set_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>消息管理</span></a></li>
+			
+			<li><a href="javascript:;" id="share_set_op" onclick="openURL('url','$!webPath/admin/share_list.htm','main_workspace','share_set_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>分享管理</span></a></li>
+			#if(${sec.anyGranted("ROLE_MESSAGE_ADMIN")})
+			#end			
+          </ul>
+          <ul class="ulleft" id="shop_set" style="display:none">
+            <div class="leftone">商城管理</div>
+            #if(${sec.anyGranted("ROLE_GOODS_SELF","ROLE_GOODS_CLASS_SELLER","ROLE_GOODS_SELF_ADD","ROLE_GOODS_FORMAT_SELF","ROLE_GOODS_SPEC","ROLE_ORDER_SELF","ROLE_ORDER_SHIP","ROLE_GOODS_BRAND","ROLE_GOODS_TYPE","ROLE_SELF_EVALUATE_ADMIN","ROLE_SELF_RETURN","ROLE_COMPLAINT_MANAGE","ROLE_CONSULT_SELF_MANAGE","ROLE_COUPON_ADMIN","ROLE_USER_IMAGE","ROLE_SELFIMG_MANAGE")})
+            <li><a class="this" href="javascript:;" id="complex_self" suffix="self_"><img id="self_img" src="$!webPath/resources/style/system/manage/blue/images/contract.jpg" width="13" height="13" /><span>自营管理</span></a>
+              <ul id="self_info">
+				<li><a href="javascript:;" id="goods_self_manage_op" onclick="openURL('url','$!webPath/admin/goods_self_list.htm','main_workspace','goods_self_manage_op')"><span>商品管理</span></a></li>
+   				<li><a href="javascript:;" id="goods_class_op" onclick="openURL('url','$!webPath/admin/goods_class_list.htm','main_workspace','goods_class_op')"><span>分类管理</span></a> </li>
+                <li><a href="javascript:;" id="add_goods_op" onclick="openURL('url','$!webPath/admin/add_goods_first.htm','main_workspace','add_goods_op')"><span>商品发布</span></a> </li>
+                <li><a href="javascript:;" id="goods_format_self_manage_op" onclick="openURL('url','$!webPath/admin/goods_format_list.htm','main_workspace','goods_format_self_manage_op')"><span>商品版式</span></a></li>
+                <li><a href="javascript:;" id="goods_spec_op" onclick="openURL('url','$!webPath/admin/goods_spec_list.htm','main_workspace','goods_spec_op')"><span>规格管理</span></a></li>
+                <li><a href="javascript:;" id="self_order_op" onclick="openURL('url','$!webPath/admin/self_order.htm','main_workspace','self_order_op')"><span>订单管理</span></a></li>
+				<li><a href="javascript:;" id="self_order_ship_op" onclick="openURL('url','$!webPath/admin/self_order_ship.htm','main_workspace','self_order_ship_op')"><span>发货管理</span></a></li>
+            	<li><a href="javascript:;" id="goods_brand_op" onclick="openURL('url','$!webPath/admin/goods_brand_list.htm','main_workspace','goods_brand_op')"><span>品牌管理</span></a></li>
+				<li><a href="javascript:;" id="goods_type_op" onclick="openURL('url','$!webPath/admin/goods_type_list.htm','main_workspace','goods_type_op')"><span>属性管理</span></a></li>
+			    <li><a href="javascript:;" id="self_evaluate_list_op" onclick="openURL('url','$!webPath/admin/self_evaluate_list.htm','main_workspace','self_evaluate_list_op')"><span>评价管理</span></a></li>
+                <li><a href="javascript:;" id="self_return_op" onclick="openURL('url','$!webPath/admin/self_return.htm','main_workspace','self_return_op')"><span>退货管理</span></a></li>
+                <li><a href="javascript:;" id="self_complaint_op" onclick="openURL('url','$!webPath/admin/self_complaint_list.htm?status=talk','main_workspace','self_complaint_op')"><span>商品投诉</span></a></li>
+                <li><a href="javascript:;" id="self_consult_op" onclick="openURL('url','$!webPath/admin/consult_self.htm','main_workspace','self_consult_op')"><span>商品咨询</span></a></li>
+				<li><a href="javascript:;" id="coupon_set_op" onclick="openURL('url','$!webPath/admin/coupon_list.htm','main_workspace','coupon_set_op')"><span>优惠券管理</span></a></li>
+            	<li><a href="javascript:;" id="imageself_list_op" onclick="openURL('url','$!webPath/admin/imageself_list.htm','main_workspace','imageself_list_op')"><span>图片管理</span></a></li>
+				<li><a href="javascript:;" id="album_op" onclick="openURL('url','$!webPath/admin/album.htm','main_workspace','album_op')"><span>相册管理</span></a></li>
+              </ul>
+            </li>
+            #end
+            #if(${sec.anyGranted("ROLE_INTEGRAL_GOODS_ADMIN")})
+			<li><a href="javascript:;" id="integral_shop_op" onclick="openURL('url','$!webPath/admin/integral_goods.htm','main_workspace','integral_shop_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>积分商城</span></a></li>
+			#end
+			#if(${sec.anyGranted("ROLE_ADMIN_STORE_SET","ROLE_ADMIN_GOODS","ROLE_STORE_GRADE","ROLE_ADJUST_MANAGE","ROLE_COMPLAINT_MANAGE","ROLE_CONSULT_ADMIN","ROLE_EVALUATE_ADMIN")})
+			<li><a href="javascript:;" id="complex_shop" suffix="shop_"><img id="shop_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>商家管理</span></a>
+              <ul id="shop_info" style="display:none;">
+                <li><a href="javascript:;" id="storeCheck_manage_op" onclick="openURL('url','$!webPath/admin/store_listCheck.htm','main_workspace','storeCheck_manage_op')"><span>商家审核</span></a></li>
+              	<li><a href="javascript:;" id="store_manage_op" onclick="openURL('url','$!webPath/admin/store_list.htm','main_workspace','store_manage_op')"><span>商家管理</span></a></li>
+              	<li><a href="javascript:;" id="goods_manage_op" onclick="openURL('url','$!webPath/admin/goods_list.htm','main_workspace','goods_manage_op')"><span>商品管理</span></a></li>
+              	<li><a href="javascript:;" id="order_manage_op" onclick="openURL('url','$!webPath/admin/order_list.htm','main_workspace','order_manage_op')"><span>订单管理</span></a> </li>
+              	<li><a href="javascript:;" id="store_grade_op" onclick="openURL('url','$!webPath/admin/storegrade_list.htm','main_workspace','store_grade_op')"><span>商家类型</span></a></li>
+            	<li><a href="javascript:;" id="adjust_info_op" onclick="openURL('url','$!webPath/admin/adjust_info.htm','main_workspace','adjust_info_op')"><span>商家变更</span></a></li>
+            	<li><a href="javascript:;" id="complaint_manage_op" onclick="openURL('url','$!webPath/admin/complaint_list.htm','main_workspace','complaint_manage_op')"><span>商品投诉</span></a></li>
+            	<li><a href="javascript:;" id="consult_manage_op" onclick="openURL('url','$!webPath/admin/consult_list.htm','main_workspace','consult_manage_op')"><span>咨询管理</span></a></li>
+            	<li><a href="javascript:;"  id="evaluate_manage_op" onclick="openURL('url','$!webPath/admin/evaluate_list.htm','main_workspace','evaluate_manage_op')"><span>评价管理</span></a></li>
+              </ul>
+            </li>
+            #end
+            #if(${sec.anyGranted("ROLE_GOODS_FLOOR","ROLE_GOODS_CASE")})
+			<li><a href="javascript:;" id="complex_fitment" suffix="fitment_"><img id="fitment_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>商城装修</span></a>
+              <ul id="fitment_info" style="display:none;">
+				<li><a href="javascript:;" id="goods_floor_op" onclick="openURL('url','$!webPath/admin/goods_floor_list.htm','main_workspace','goods_floor_op')"><span>首页楼层</span></a></li>
+            	<li><a href="javascript:;" id="goods_case_op" onclick="openURL('url','$!webPath/admin/goods_case_list.htm','main_workspace','goods_case_op')"><span>橱窗管理</span></a></li>
+              </ul>
+            </li>
+            #end
+            #if(${sec.anyGranted("ROLE_SHIP_ADRESS","ROLE_ECC_SELF","ROLE_ADMIN_AREA_SET","ROLE_TRANSPORT_SELF","ROLE_ADMIN_TRANS_AREA","ROLE_ADMIN_EXPRESS_COMPANY")})
+			<li><a href="javascript:;" id="complex_rule" suffix="rule_"><img id="rule_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>常规项目</span></a>
+              <ul id="rule_info" style="display:none;">
+				<li><a href="javascript:;" id="self_ship_address_op" onclick="openURL('url','$!webPath/admin/ship_address_list.htm','main_workspace','self_ship_address_op')"><span>发货地址</span></a></li>
+                <li><a href="javascript:;" id="ecc_list_op" onclick="openURL('url','$!webPath/admin/ecc_set.htm','main_workspace','ecc_list_op')"><span>常用物流</span></a></li>
+                <li><a id="arealist_op" href="javascript:;" onclick="openURL('url','$!webPath/admin/area_list.htm','main_workspace','arealist_op')"><span>地区管理</span></a></li>
+                <li><a href="javascript:;" id="transport_list_op" onclick="openURL('url','$!webPath/admin/transport_list.htm','main_workspace','transport_list_op')"><span>运费模板</span></a></li>
+                <li><a href="javascript:;" id="trans_area_op" onclick="openURL('url','$!webPath/admin/trans_area_list.htm','main_workspace','trans_area_op')"><span>运费区域</span></a></li>
+				<li><a href="javascript:;" id="kaudi_company_op" onclick="openURL('url','$!webPath/admin/express_company_list.htm','main_workspace','kaudi_company_op')"><span>快递管理</span></a></li>
+              </ul>
+            </li>
+            #end
+
+            #if(${sec.anyGranted("ROLE_GOODS_FLOOR","ROLE_GOODS_CASE")})
+			<li><a href="javascript:;" id="complex_juanpi" suffix="juanpi_"><img id="juanpi_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>卷皮管理</span></a>
+              <ul id="juanpi_info" style="display:none;">
+              	<li><a href="javascript:;" id="juanpi_leimu_op" onclick="openURL('url','$!webPath/admin/juanpi_leimu.htm','main_workspace','juanpi_leimu_op')"><span>类目管理</span></a></li>
+				<li><a href="javascript:;" id="juanpi_goods_op" onclick="openURL('url','$!webPath/admin/juanpi_goods_list.htm?type=sell','main_workspace','juanpi_goods_op')"><span>商品管理</span></a></li>
+            	<li><a href="javascript:;" id="juanpi_order_op" onclick="openURL('url','$!webPath/admin/juanpi_order.htm','main_workspace','juanpi_order_op')"><span>订单管理</span></a></li>
+            	<li><a href="javascript:;" id="juanpi_settlement_op" onclick="openURL('url','$!webPath/admin/juanpi_settlement.htm','main_workspace','juanpi_settlement_op')"><span>结算管理</span></a></li>
+              </ul>
+            </li>
+            #end
+            
+            
+            <li><a href="javascript:;" id="complex_jiuye" suffix="jiuye_"><img id="jiuye_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>酒业管理</span></a>
+              <ul id="jiuye_info" style="display:none;">
+              	<li><a href="javascript:;" id="jiuye_order_op" onclick="openURL('url','$!webPath/admin/jiuye_order.htm','main_workspace','jiuye_order_op')"><span>订单管理</span></a></li>
+            	<li><a href="javascript:;" id="jiuye_settlement_op" onclick="openURL('url','$!webPath/admin/jiuye_settlement.htm','main_workspace','jiuye_settlement_op')"><span>结算管理</span></a></li>
+              </ul>
+            </li>
+            
+          </ul>
+          <ul class="ulleft" id="seller_set" style="display:none">
+            <div class="leftone">商户管理</div>
+            #if(${sec.anyGranted("ROLE_ADMIN_GROUP_GOODS")})
+            <li><a href="javascript:;" id="serve_manage_op" onclick="openURL('url','$!webPath/admin/group_goods_list.htm','main_workspace','serve_manage_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>服务管理</span></a></li>
+            #end
+            #if(${sec.anyGranted("ROLE_ADMIN_MERCHANT")})
+            <li><a href="javascript:;" id="merchant_manage_op" onclick="openURL('url','$!webPath/admin/merchant_list.htm','main_workspace','merchant_manage_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>商户管理</span></a></li>
+            #end
+            #if(${sec.anyGranted("ROLE_MERCHANT_ADJUST_MANAGE")})
+          	<li><a href="javascript:;" id="merchant_adjust_info_op" onclick="openURL('url','$!webPath/admin/merchant_adjust_info_list.htm','main_workspace','merchant_adjust_info_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>商户变更</span></a></li>
+          	#end
+            #if(${sec.anyGranted("ROLE_ADMIN_GROUP_CLASS")})            
+            <li><a href="javascript:;" id="serve_class_op" onclick="openURL('url','$!webPath/admin/group_class_list.htm','main_workspace','serve_class_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>分类管理</span></a> </li>
+            #end
+            #if(${sec.anyGranted("ROLE_ADMIN_ONLINE_ORDER","ROLE_ADMIN_OFFLINE_ORDER")})
+            <li><a href="javascript:;" id="complex_ordero2o" suffix="ordero2o_"><img id="ordero2o_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>订单管理</span></a>
+              <ul id="ordero2o_info" style="display:none;">
+	            <li><a href="javascript:;" id="online_group_order_manage_op" onclick="openURL('url','$!webPath/admin/online_group_order_list.htm?orderType=1','main_workspace','online_group_order_manage_op')"><span>券订单管理</span></a> </li>
+	            <li><a href="javascript:;" id="offline_group_order_manage_op" onclick="openURL('url','$!webPath/admin/offline_group_order_list.htm?orderType=2','main_workspace','offline_group_order_manage_op')"><span>扫码订单管理</span></a> </li>
+	            <li><a href="javascript:;" id="hotel_group_order_manage_op" onclick="openURL('url','$!webPath/admin/hotel_group_order_list.htm?orderType=3','main_workspace','hotel_group_order_manage_op')"><span>酒店订单管理</span></a> </li>              		
+              </ul>
+            </li>          	
+            #end
+            #if(${sec.anyGranted("ROLE_GROUP_FLOOR","ROLE_GROUP_CASE","ROLE_GROUP_HOT_ADMIN")})
+            <li><a href="javascript:;" id="complex_shzx" suffix="shzx_"><img id="shzx_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>商户装修</span></a>
+              <ul id="shzx_info" style="display:none;">
+	            <li><a href="javascript:;" id="group_floor_op" onclick="openURL('url','$!webPath/admin/group_floor_list.html','main_workspace','group_floor_op')"><span>服务楼层</span></a></li>
+	            <li><a href="javascript:;" id="group_case_op" onclick="openURL('url','$!webPath/admin/group_case_list.html','main_workspace','group_case_op')"><span>服务橱窗</span></a></li>
+                <li><a href="javascript:;" id="group_hot_op" onclick="openURL('url','$!webPath/admin/group_hot_list.htm','main_workspace','group_hot_op')"><span>热门城市管理</span></a></li>	      
+               <!--  <li><a href="javascript:;" id="group_content_op" onclick="openURL('url','$!webPath/admin/group_content_list.htm','main_workspace','group_content_op')"><span>内容管理</span></a></li>    -->                 	            
+                  <li><a href="javascript:;" id="advert_zone" onclick="openURL('url','$!webPath/admin/areaAd/list.htm','main_workspace','advert_zone')"><span>专区管理</span></a></li>			     
+			      <li><a href="javascript:;" id="advert_area" onclick="openURL('url','$!webPath/admin/advert_area_list.htm','main_workspace','advert_area')"><span>区域管理</span></a></li>
+			      <li><a href="javascript:;" id="advert_content" onclick="openURL('url','$!webPath/admin/advert/advert_content.htm','main_workspace','advert_content')"><span>内容管理</span></a></li>
+				      
+              </ul>
+            </li>
+            #end
+            #if(${sec.anyGranted("ROLE_ADMIN_GROUP_EVALUATION")})
+            <li><a href="javascript:;"  id="group_evaluation_op" onclick="openURL('url','$!webPath/admin/group_evaluation_list.htm','main_workspace','group_evaluation_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>商户服务评价</span></a></li>
+            #end
+            #if(${sec.anyGranted("ROLE_REFUND_LOG")})
+            <li><a href="javascript:;" id="return_fesdsdf_dsfs" onclick="openURL('url','$!webPath/group/refund/applyList.htm','main_workspace','return_fesdsdf_dsfs')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>服务退款审核</span></a></li>
+            #end
+            <li><a href="javascript:;" id="afwe113dsafw" onclick="openURL('url','$!webPath/admin/group/compaintList.htm','main_workspace','afwe113dsafw')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>服务投诉</span></a></li>
+            #if(${sec.anyGranted("ROLE_O2O_STATISTICS")})
+            <li><a href="javascript:;" id="o2o_statistics" onclick="openURL('url','$!webPath/admin/group/o2o_statistics.htm','main_workspace','o2o_statistics')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>服务统计</span></a></li>
+            #end
+            <li><a href="javascript:;" id="merchant_share_list" onclick="openURL('url','$!webPath/admin/merchant_share_list.htm','main_workspace','merchant_share_list')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>商户返润明细</span></a></li>
+          </ul>
+          <ul class="ulleft" id="operator_set" style="display:none">
+            <div class="leftone">运营商管理</div>
+            #if(${sec.anyGranted("ROLE_OPERATOR_MANAGE")})
+             <li><a href="javascript:;" id="operator_manage_op" onclick="openURL('url','$!webPath/admin/operator_list.htm','main_workspace','operator_manage_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>运营商管理</span></a> </li>
+             #end
+            #if(${sec.anyGranted("ROLE_OPERATOR_CHECK_STORE_LIST")})
+             <li><a href="javascript:;" id="operator_check_store_list" onclick="openURL('url','$!webPath/admin/operator_check_store_list.htm','main_workspace','operator_check_store_list')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>未审核商户</span></a> </li>
+             #end
+            #if(${sec.anyGranted("ROLE_OPERATOR_REBATE")})
+             <li><a href="javascript:;" id="rebate_record_list_op" onclick="openURL('url','$!webPath/admin/operator_rebate_list.htm','main_workspace','rebate_record_list_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>返润明细</span></a></li>
+             #end
+            #if(${sec.anyGranted("ROLE_OPERATOR_NOTICE_ADMIN")})
+             <li><a href="javascript:;" id="notice_set_op" onclick="openURL('url','$!webPath/admin/operator_notice_list.htm','main_workspace','notice_set_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>公告管理</span></a></li>
+             #end
+          </ul>
+          
+   
+
+						<ul class="ulleft" id="market_manage" style="display: none">
+							<div class="leftone">营销管理</div>
+							#if(${sec.anyGranted("ROLE_MARKET_RED_PACKAGE_ADMIN")})
+
+							<li><a href="javascript:;" id="red_package_list"
+								onclick="openURL('url','$!webPath/admin/red_package_list.htm','main_workspace','red_package_list');"><span>红包管理</span></a></li>
+
+							#end #if(${sec.anyGranted("ROLE_MARKET_RED_PACKAGE_ADMIN")})
+							<li><a href="javascript:;" id="red_package_get_list"
+								onclick="openURL('url','$!webPath/admin/red_package_get_list.htm','main_workspace','red_package_get_list');"><span>红包查询</span></a></li>
+
+							#end #if(${sec.anyGranted("ROLE_MARKET_HOT_SALE_ADMIN")})
+							<li><a class="this" href="javascript:;"
+								id="complex_hot_sale_list" suffix="template_"
+								onclick="openURL('url','$!webPath/admin/act_sale_list.htm','main_workspace','complex_hot_sale_list');">
+									<img id="template_img"
+									src="$!webPath/resources/style/system/manage/blue/images/contract.jpg"
+									width="13" height="13" /> <span>热销活动管理</span>
+							</a>
+								<ul id="template_info">
+									<li><a href="javascript:;" id="activity_manage"
+										onclick="openURL('url','$!webPath/admin/hot_sale_list.htm','main_workspace','activity_manage');">
+											<span>活动管理</span>
+									</a></li>
+									<li><a href="javascript:;" id="template_manage"
+										onclick="openURL('url','$!webPath/admin/act_sale_template_list.htm','main_workspace','template_manage');">
+											<span>模板管理</span>
+									</a></li>
+								</ul></li> #end #if(${sec.anyGranted("ROLE_MARKET_DOUBLE_SCORE_ADMIN")})
+							<li><a href="javascript:;" id="double_score_set"
+								onclick="openURL('url','$!webPath/admin/double_score_set.htm','main_workspace','double_score_set');"><img
+									src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif"
+									width="5" height="9" /><span>双倍积分设置</span></a></li> #end
+
+							<li><a href="javascript:;" id="market_coupon_setList"
+								onclick="openURL('url','$!webPath/admin/market_coupon_setList.htm','main_workspace','market_coupon_setList');"><img
+									src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif"
+									width="5" height="9" /><span>春节优惠券活动</span></a></li>
+
+							<li><a href="javascript:;" id="goods_zero_act_list"
+								onclick="openURL('url','$!webPath/admin/zero_act/goods_zero_act_list.htm','main_workspace','goods_zero_act_list');"><img
+									src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif"
+									width="5" height="9" /><span>零元购商品管理</span></a></li>
+							<!-- 拆金蛋 -->
+							<li><a class="this" href="javascript:;"
+								id="complex_app_information" suffix="circle_"> <img
+									id="app_img"
+									src="$!webPath/resources/style/system/manage/blue/images/contract.jpg"
+									width="13" height="13" /> <span>拆金蛋</span>
+							</a>
+								<ul id="gold_egg">
+									<li><a href="javascript:;" id="gold_egg_edit"
+										onclick="openURL('url','$!webPath/admin/gold_egg_edit.htm','main_workspace','gold_egg_edit');">
+											<span>编辑</span>
+									</a></li>
+									<li><a href="javascript:;" id="glod_egg_record"
+										onclick="openURL('url','$!webPath/admin/glod_egg_record_list.htm','main_workspace','glod_egg_record');">
+											<span>详情</span>
+									</a></li>
+								</ul></li>
+						</ul>
+          
+          <ul class="ulleft" id="user_set" style="display:none">
+            <div class="leftone">用户管理</div>
+            #if(${sec.anyGranted("ROLE_USER_MANAGE")})
+				<li><a href="javascript:;" id="member_manage_op" onclick="openURL('url','$!webPath/admin/user_list.htm?isDeleted=0','main_workspace','member_manage_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>用户管理</span></a> </li>
+				#end
+            #if(${sec.anyGranted("ROLE_USER_LEVEL")})
+	            <li><a href="javascript:;" id="user_level_op"  onclick="openURL('url','$!webPath/admin/user_level.htm','main_workspace','user_level_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>等级管理</span></a> </li>
+	            #end
+	            <li><a href="javascript:;" id="sfwewsd2d" onclick="openURL('url','$!webPath/admin/userRebate.htm','main_workspace','sfwewsd2d')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>反润明细</span></a></li>
+            #if(${sec.anyGranted("ROLE_USER_INTEGRAL_MANAGE","ROLE_USER_INTEGRAL")})
+	            <li><a href="javascript:;" id="complex_user_integral_manage" suffix="user_integral_"><img id="user_integral_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>积分管理</span></a>
+	              <ul id="user_integral_info"  style="display:none;">
+		             <li><a href="javascript:;" id="user_integral_op" onclick="openURL('url','$!webPath/admin/user_integral.htm','main_workspace','user_integral_op')"><span>积分操作</span></a></li>
+		             <li><a href="javascript:;" id="integrallog_list_op" onclick="openURL('url','$!webPath/admin/integrallog_list.htm','main_workspace','integrallog_list_op')"><span>积分明细</span></a></li> 
+	              </ul>
+	            </li>  
+	            #end
+            #if(${sec.anyGranted("ROLE_STAT_USER")})
+	            <li><a href="javascript:;" id="user_statistic" onclick="openURL('url','$!webPath/admin/user_statistic.htm','main_workspace','user_statistic')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>用户统计</span></a></li>
+	            #end
+            #if(${sec.anyGranted("ROLE_ADMIN_FEEDBACK")})	                      
+                <li><a href="javascript:;" id="feedback_list_op" onclick="openURL('url','$!webPath/admin/feedback_list.htm','main_workspace','feedback_list_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>问题反馈</span></a></li>
+                #end
+            <!-- add by yuleijia -->
+            #if($!isAdmin)	                      
+                <li>
+                	<a href="javascript:;" id="del_user_list" onclick="openURL('url','$!webPath/admin/user_ClearAccount_Page.htm','main_workspace','del_user_list')">
+                		<img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" />
+                		<span>帐号清除</span>
+                	</a>
+                </li>
+                #end
+          </ul>
+          <ul class="ulleft" id="finance_set" style="display:none">
+            <div class="leftone">财务管理</div>
+            #if(${sec.anyGranted("ROLE_REFUND_LOG")})
+            <li><a href="javascript:;" id="complex_finance_shop" suffix="finance_shop_"><img id="finance_shop_img" src="$!webPath/resources/style/system/manage/blue/images/contract.jpg" width="13" height="13" /><span>商城管理</span></a>
+              <ul id="finance_shop_info">
+            	<li><a href="javascript:;" id="return_manage_op" onclick="openURL('url','$!webPath/admin/refund_list.htm','main_workspace','return_manage_op')"><span>商品退款管理</span></a></li>              	
+              </ul>
+            </li>
+            #end
+            #if(${sec.anyGranted("ROLE_REFUND_APPLYLIST","ROLE_ADMIN_OFFLINE_REFUND_ORDER")})  
+            <li><a href="javascript:;" id="complex_finance_seller" suffix="finance_seller_"><img id="finance_seller_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>商户管理</span></a>
+              <ul id="finance_seller_info"  style="display:none;">
+              	  <li><a href="javascript:;" id="refdgf34llukj" onclick="openURL('url','$!webPath/group/refund/refundList.htm','main_workspace','refdgf34llukj')"><span>线上服务退款</span></a></li>
+            	  <li><a href="javascript:;" id="offline_group_order_refund" onclick="openURL('url','$!webPath/admin/offline_group_order_refund_list.htm?orderType=2&localReturnStatus=2','main_workspace','offline_group_order_refund')"><span>线下服务退款</span></a></li>              	  
+              </ul>
+            </li>  
+            #end
+            #if(${sec.anyGranted("ROLE_PREDEPOSIT")})
+            <li><a href="javascript:;" id="complex_finance_yunbi" suffix="finance_yunbi_"><img id="finance_yunbi_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>云豆管理</span></a>
+              <ul id="finance_yunbi_info"  style="display:none;">
+	             <li><a href="javascript:;" id="predeposit_list_op" onclick="openURL('url','$!webPath/admin/predeposit_list.htm','main_workspace','predeposit_list_op')"><span>云豆管理</span></a></li> 
+	             <li><a href="javascript:;" id="predepositlog_list_op" onclick="openURL('url','$!webPath/admin/predepositlog_list.htm','main_workspace','predepositlog_list_op')"><span>云豆明细</span></a></li>              
+              </ul>
+            </li>  
+            #end
+            #if(${sec.anyGranted("ROLE_ADMIN_PAYOFF")})
+            <li><a href="javascript:;" id="payoff_list_op" onclick="openURL('url','$!webPath/admin/payofflog_list.htm','main_workspace','payoff_list_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>结算管理</span></a></li>
+            #end
+          </ul>
+          <ul class="ulleft" id="system_set" style="display:none">
+            <div class="leftone">系统管理</div>
+            #if(${sec.anyGranted("ROLE_ADMIN_SET_SITE","ROLE_ADMIN_SET_IMAGE","ROLE_TEMPLATE_SET","ROLE_NAV_MANAGE","ROLE_INTEGRAL_RULE")})
+            <li><a href="javascript:;" id="complex_system_manage" suffix="system_manage_"><img id="system_manage_img" src="$!webPath/resources/style/system/manage/blue/images/contract.jpg" width="13" height="13" /><span>站点管理</span></a>
+              <ul id="system_manage_info">
+				<li><a href="javascript:;" id="set_site_op" onclick="openURL('url','$!webPath/admin/set_site.htm','main_workspace','set_site_op')"><span>站点设置</span></a></li>
+	            <li><a href="javascript:;" id="set_image_op" onclick="openURL('url','$!webPath/admin/set_image.htm','main_workspace','set_image_op')"><span>上传设置</span></a></li>
+	            <li><a href="javascript:;" id="template_list_op" onclick="openURL('url','$!webPath/admin/template_list.htm','main_workspace','template_list_op')"><span>短信模板</span></a></li>
+	            <li><a href="javascript:;" id="nav_op" onclick="openURL('url','$!webPath/admin/navigation_list.htm','main_workspace','nav_op');"><span>前台导航</span></a></li>
+	            <li><a href="javascript:;" id="integral_rule_op" onclick="openURL('url','$!webPath/admin/integral_reg_list.htm','main_workspace','integral_rule_op')"><span>积分规则</span></a></li>   
+	            <li><a href="javascript:;" id="version_control" onclick="openURL('url','$!webPath/admin/version_control.htm','main_workspace','version_control')"><span>APP版本</span></a></li>              	
+              </ul>
+            </li>
+            #end
+            #if(${sec.anyGranted("ROLE_SET_ORDER_CONFIRM","ROLE_ADMIN_SET_KUAIDI")}) 
+            <li><a href="javascript:;" id="complex_system_shop" suffix="system_shop_"><img id="system_shop_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>商城管理</span></a>
+              <ul id="system_shop_info"  style="display:none;">
+            	<li><a href="javascript:;" id="set_order_confirm_op" onclick="openURL('url','$!webPath/admin/set_order_confirm.htm','main_workspace','set_order_confirm_op')"><span>订单设置</span></a> </li>
+                <li><a href="javascript:;" id="kaudi_set_op" onclick="openURL('url','$!webPath/admin/set_kuaidi.htm','main_workspace','kaudi_set_op')"><span>快递设置</span></a></li>            	              	
+              </ul>
+            </li> 
+            #end
+            #if(${sec.anyGranted("ROLE_ADMIN_MANAGE", "ROLE_EXPERT_MANAGE")})
+            <li><a href="javascript:;" id="complex_system_account" suffix="system_account_"><img id="system_account_img" src="$!webPath/resources/style/system/manage/blue/images/spread.jpg" width="13" height="13" /><span>账号管理</span></a>
+              <ul id="system_account_info"  style="display:none;">
+           		<li><a href="javascript:;" id="admin_list_op" onclick="openURL('url','$!webPath/admin/admin_list.htm','main_workspace','admin_list_op')"><span>管理员管理</span></a></li> 
+             	<li><a href="javascript:;" id="experts_manage_op" onclick="openURL('url','$!webPath/admin/experts_list.htm','main_workspace','experts_manage_op')"><span>专家管理</span></a> </li>              		
+              </ul>
+            </li> 
+            #end
+            #if(${sec.anyGranted("ROLE_ADMIN_LUCENE")})
+            <li><a href="javascript:;" id="lucene_op" onclick="openURL('url','$!webPath/admin/set_lucene.htm','main_workspace','lucene_op');"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>搜索引擎</span></a></li>
+          	#end  
+          	
+          	          
+          </ul>
+<!--           <ul class="ulleft" style="display:none;" id="expert_answer"> -->
+<!--             <div class="leftone">咨询相关</div> -->
+<!--              <li><a href="javascript:;" id="user_msg_op" onclick="openURL('url','$!webPath/admin/experts_reply_list.htm','main_workspace','user_msg_op')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>咨询管理</span></a></li> -->
+<!--              <li><a href="javascript:;" id="rewfdsfa23sd" onclick="openURL('url','$!webPath/admin/reportList.htm?status=2','main_workspace','rewfdsfa23sd')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>体检报告</span></a></li> -->
+<!--              <li><a href="javascript:;" id="jjjdsuks3" onclick="openURL('url','$!webPath/admin/reportGroupList.htm','main_workspace','jjjdsuks3')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>体检项分类</span></a></li> -->
+<!--              <li><a href="javascript:;" id="kkdkaqws3c" onclick="openURL('url','$!webPath/admin/checkResultItemList.htm','main_workspace','kkdkaqws3c')"><img src="$!webPath/resources/style/system/manage/blue/images/menu_empty.gif" width="5" height="9" /><span>体检项</span></a></li> -->
+<!--           </ul> -->
+        </div>
+        <div class="statement">$!{config.poweredby} V2015
+          ©$!{config.company_name} Inc.</div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="content_box">
+        <div class="content_bar">
+			<div class="position"> 您的位置：<a href="">首页</a> > <span id="top_nav_info">站点设置</span></div>
+        </div>
+        <div class="content_bottom">
+          <iframe id="main_workspace" name="main_workspace" src="$!webPath/admin/welcome.htm" style="overflow:auto;height:550px" frameborder="0" width="100%" height="100%" scrolling="yes" onload="window.parent"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

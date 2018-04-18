@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">体检报告</h1>
+  <div class="nav_list">
+    <ul>
+      #if(!$!request.getParameter('self'))
+      <li><a href="$!webPath/admin/reportList.htm?status=2"><b>未处理</b></a></li>
+      <li><a href="$!webPath/admin/reportList.htm?status=3"><b>已处理</b></a></li>
+      #end
+      <li><a href="#" class="this"><b>体检报告详情</b></a></li>
+    </ul>
+  </div>
+  
+  
+  <div class="backcomp_box">
+        <dl class="backcomp_d">
+          <dt>体检报告详情页面</dt>
+          <dd>
+            <ul class="backcomp_u">
+	          <li> 报告名称：$!obj.resultName</li>
+	          <li> 检查日期：$!CommUtil.formatLongDate($!obj.createTime)</li>
+	          <li> 体检医院机构：$!obj.hospital</li>
+	          <li> &nbsp;</li>
+	          <li>姓名：$!obj.userCustomerBO.nickname</li>
+				<li>性别：#if($!obj.userCustomerBO.sex == 1) 男 #else 女 #end</li>
+				<li>手机：$!obj.userCustomerBO.mobile</li>
+				<li>邮箱：$!obj.userCustomerBO.email</li>
+            </ul>
+          </dd>
+        </dl>
+      </div>
+
+	
+	
+	<div class="fshoptb" style="margin: 0 10px; padding: 20px 0;">
+		<p style="font-weight: bold; font-size:14px; padding-bottom: 10px;"> 共：$!obj.checkResultDetailsBOList.size()项&emsp;&emsp;&emsp;正常项：$!obj.normalNumber项&emsp;&emsp;&emsp;超标：<span style="color:#f00;">$!obj.overproofNumber</span>项</p>
+	
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+	  <tr>
+	    <th scope="col">体检项</th>
+	    <th scope="col">体检结果</th>
+	    <th scope="col">参考值</th>
+	  </tr>
+	  #foreach($o in $!obj.checkResultDetailsBOList)
+	  <tr>
+	    <td>$!o.physicalName</td>
+	    <td #if($!o.result == 1) style="color: red;" #end>
+	      #if($!o.type == 0)
+	        $!o.referenceValue
+	      #else
+	        #if($!o.referenceValue == 0) 阴 #else 阳 #end
+	      #end
+	    </td>
+	    <td>
+	      #if($!o.type == 0)
+	        $!o.minVale ~ $!o.maxValue $!o.unit
+	      #else
+	        #if($!o.positive == 0) 阴 #else 阳 #end
+	      #end
+	    </td>
+	  </tr>
+	  #end
+	</table>
+    #if($!request.getParameter('self'))
+	    #if($!obj.status == 3)
+			<a class="blue_btn" href="javascript:;" style="margin-top: 20px;" dialog_uri="$!webPath/admin/saveReportResultView.htm?id=$!obj.id&self=true" dialog_title="处理" dialog_width="400" dialog_height="300">
+			查看体检结果
+			</a>
+		#end
+	#else
+		<a class="blue_btn" href="javascript:;" style="margin-top: 20px;" dialog_uri="$!webPath/admin/saveReportResultView.htm?id=$!obj.id" dialog_title="处理" dialog_width="400" dialog_height="300">
+		#if($!obj.status == 2) 处理 #else 修改处理结果 #end
+		</a>
+	#end
+	</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>我的在线服务订单</title>
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/service/public.css" type="text/css" rel="stylesheet"/>
+    
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/group/head.htm")
+$!httpInclude.include("/group/nav.htm")
+
+#set($map = $!orderFormTools.queryGroupInfo("$!order.groupInfo"))
+#set($goods_id = "$!{map.get('goods_id')}")	
+#set($goods_name = "$!{map.get('goods_name')}")	
+#set($goods_begin_time = "$!{map.get('goods_begin_time')}")
+#set($goods_end_time = "$!{map.get('goods_end_time')}")
+#set($goods_total_price = "$!{map.get('goods_total_price')}")
+#set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+#set($goods_price = "$!{map.get('goods_price')}")
+
+<div class="main clearfix">
+    <div class="position"><a href="$!webPath/index.htm"><b>首页</b></a><i>&gt;</i>
+    <a href="$!webPath/buyer/group.htm?orderType=2">我的订单</a><i>&gt;</i>$!order.orderId</div>
+    <div class="order_pay">
+        <div class="order_pay_note">
+            #if($!order.orderStatus==10)
+               #set($status="未支付")
+             #end
+             #if($!order.orderStatus==0)
+               #set($status="已取消")
+             #end
+             #if($!order.orderStatus==20)
+               #set($status="已支付")
+             #end
+             #if($!order.orderStatus==30)
+               #set($status="已使用")
+             #end
+             #if($!order.orderStatus>=50)
+               #set($status="已完成")
+             #end
+            <h3><span>订单号：$!order.orderId</span><span>状态：<b style="color:#f60;">$!status</b> </span></h3>
+        </div>
+    </div>
+    #if($!order.paymentMark == 'alipay')
+       #set($paymentMarkString="支付宝")
+     #end
+     #if($!order.paymentMark == 'alipayB')
+       #set($paymentMarkString="网银支付")
+     #end
+     #if($!order.paymentMark == 'alipayC')
+       #set($paymentMarkString="信用卡支付")
+     #end
+     #if($!order.paymentMark == 'alipay_wap')
+       #set($paymentMarkString="支付宝手机网页支付")
+     #end
+     #if($!order.paymentMark == 'alipay_app')
+       #set($paymentMarkString="支付宝APP版")
+     #end
+     #if($!order.paymentMark == '99bill')
+       #set($paymentMarkString="快钱")
+     #end
+     #if($!order.paymentMark == 'tenpay')
+       #set($paymentMarkString="财付通")
+     #end
+     #if($!order.paymentMark == 'balance')
+       #set($paymentMarkString="云豆")
+     #end
+     #if($!order.paymentMark == 'payafter')
+       #set($paymentMarkString="货到付款")
+     #end
+     #if($!order.paymentMark == 'outline')
+       #set($paymentMarkString="线下支付")
+     #end
+     #if($!order.paymentMark == 'wx_app')
+       #set($paymentMarkString="手机端微信支付")
+     #end
+     #if($!order.paymentMark == 'wx_pay')
+       #set($paymentMarkString="手机端微信支付")
+     #end
+     #if($!order.paymentMark == 'wxqrpay')
+       #set($paymentMarkString="微信扫码支付")
+     #end
+    <div class="order-view-box">
+        <div class="order-view-title">订单信息</div>
+        <div class="order-view-cont">
+            <div class="col-md-3">订单编号：$!order.orderId </div>
+            <div class="col-md-6">下单时间：$!CommUtil.formatLongDate($!order.addTime)</div>
+            <div class="col-md-3">付款方式：线下刷卡</div>
+            <div class="col-md-6">订单金额：¥$!order.totalPrice</div>
+            <div class="col-md-3">消费者：$!order.userCustomer.nickname</div>
+            <div class="col-md-6">手机号码：$!order.userCustomer.mobile</div>
+        </div>
+    </div>
+    
+</div>
+
+$!httpInclude.include("/footer.htm")
+
+<script>
+function refund(wid) {
+    showDialog("warning","","确定此商品退货吗！",1,"warning",3,function() {
+    	location.href = '/buyer/refundInfo_view.htm?id=' + wid;
+    });
+}
+</script>
+</body>
+</html>

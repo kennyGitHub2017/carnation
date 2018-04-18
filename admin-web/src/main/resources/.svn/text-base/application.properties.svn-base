@@ -1,0 +1,106 @@
+jdbc.type=mysql
+jdbc.driver=com.mysql.jdbc.Driver
+#jdbc.url=jdbc:mysql://localhost:3306/carnation?autoReconnect=true&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+jdbc.url=jdbc:mysql://192.168.1.209:3306/carnation?autoReconnect=true&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+jdbc.username=root
+jdbc.password=123456
+#jdbc.password=123456
+#jdbc.password=123456
+
+#pool settings
+jdbc.pool.minIdle=3
+jdbc.pool.maxActive=20
+
+
+#file server
+fs.server.ip=192.168.1.209
+fs.server.port=9333
+fs.filerserver.ip=192.168.1.209
+fs.filerserver.port=8081
+fs.filerserver.puburl=192.168.1.209:8081
+
+
+ ##########################################################
+ #
+ # properities for hibernate-redis
+ #
+ ##########################################################
+# http session redis
+#session.redis.host=192.168.1.209
+session.redis.host=192.168.1.209
+session.redis.port=6379
+session.redis.database=3
+# Redis Server for hibernate 2nd cache
+#redis.host=192.168.1.209
+redis.host=192.168.1.209
+redis.port=6379
+
+sms.handler2.username=cf_ysysgo888
+sms.handler2.pwd=ysysgo0755
+
+#es
+es.host=192.168.1.209
+es.port=9300
+
+
+#jpush use shizj 
+jpush.masterSecret_seller=cbe4448e2f632f3e9ca13aa6
+jpush.appKey_seller=a67042a49564cfa66d970145
+
+jpush.masterSecret=623dfb022864d08e30ebe372
+jpush.appKey=4f74f353ab356e7afb5c3f1e
+jpush.alias.flag=t_
+
+
+
+#\u7b2c\u4e09\u65b9\u652f\u4ed8url
+eeepay.url=http://120.237.91.166:4567
+
+ # redis.timeout=2000
+ # redis.password=
+
+ # database for hibernate cache
+ # redis.database=0
+ redis.database=1
+
+ # hiberante 2nd cache default expiry (seconds)
+ redis.expiryInSeconds=120
+
+ # expiry of hibernate.common region (seconds) // hibernate is prefix, region name is common
+ redis.expiryInSeconds.hibernate.common=0
+
+ # expiry of hibernate.account region (seconds) // hibernate is prefix, region name is account
+ redis.expiryInSeconds.hibernate.account=1200
+ 
+ #order payofftime if goods receipt unit:day
+order.payofflog.daycount=0
+
+#orcl.code=YUNSHANG
+#orcl.key=123456
+#orcl.url=http://112.175.238.37:8090/DataInterface.aspx
+orcl.code=YUNSHANG
+orcl.key=123456
+orcl.url=http://222.122.195.61:8090/DataInterface.aspx
+
+#porn
+porn.regionId=cn-hangzhou
+porn.accessKeyId=LTAIBrLB1TKXxIb2
+porn.secret=Ss8BuI2wseQ2m4utQTjbSzJvls3sh0
+porn.sms.mobile=15989324705
+porn.rate=50
+
+#staticPath
+static.path=htpp://www.sdfl.com
+
+#isDebug -->1 Debug  other no
+carnation.isDebug=1
+
+#coupon send
+register.start.time=2016-12-23 11:36:17
+register.end.time=2017-06-05 11:36:17
+send.coupon.name=康宁优惠卷
+
+#seven system
+seven.clientId=YUNSHANG
+seven.sevenKey=123456
+seven.sevenUrl=http://211.219.83.86:8090/scapi.aspx

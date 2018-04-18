@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>$!valuationBO.physicalTypeName测试结果</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <script>
+    var jgGlobal={
+            screenWidth:window.innerWidth||document.documentElement.clientWidth,
+            screenHeight:window.innerHeight||document.documentElement.clientHeight,
+            isALlowTouchMove:true,
+            setFontSize:function(){
+                var sw=window.innerWidth||document.documentElement.clientWidth;
+                if (sw < 640) {
+                    document.documentElement.style.fontSize = parseInt(sw / 640 * 100) + "px";
+                }else{
+                    document.documentElement.style.fontSize="100px";
+                }
+            },
+            setTranslate:function(node, positionY,containCss, useAnimate) {
+                var cssText = [
+                    containCss,
+                    'display: block',
+                    'transform: translate3d(0, ' + positionY + 'px, 0)',
+                    '-webkit-transform: translate3d(0, ' + positionY + 'px, 0)',
+                ].join(';');
+                if (useAnimate) {
+                    cssText = [
+                        cssText,
+                        'transition: .5s transform ease',
+                        '-webkit-transition: .5s -webkit-transform ease'
+                    ].join(';');
+                }
+                node.style.cssText = cssText;
+            },
+            setTranslateX:function(node, positionX,containCss, useAnimate) {
+                var cssText = [
+                    containCss,
+                    'display: block',
+                    'transform: translate3d(' + positionX + 'px,0, 10px)',
+                    '-webkit-transform: translate3d( ' + positionX + 'px,0, 10px)',
+                ].join(';');
+                if (useAnimate) {
+                    cssText = [
+                        cssText,
+                        'transition: 1.5s transform ease-in-out',
+                        '-webkit-transition: 1.5s -webkit-transform ease-in-out'
+                    ].join(';');
+                }
+                node.style.cssText = cssText;
+            },
+            isTouchMove:function(){
+                var _this=this;
+                document.addEventListener("touchmove",function(e){
+                    if(!_this.isALlowTouchMove){
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                },false);
+                if (navigator.userAgent.toLowerCase().indexOf('firefox')>=0)
+                {
+
+                    addEventListener('DOMMouseScroll',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }else{
+                    addEventListener('mousewheel',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }
+            },
+            init:function(){
+                this.isTouchMove();
+                this.setFontSize();
+            }
+        }
+    </script>
+    <link type="text/css" href="${staticPath}/static/physical/assets/css/tijian.css" rel="stylesheet">
+    <link type="text/css" href="http://localhost:8081/static/physical/assets/css/tijian.css" rel="stylesheet">
+</head>
+<body>
+    <div class="area result">
+    	<!-- 测试结果 -->
+    	
+    	
+    	#if ($!physicalType == 5 )
+        <div class="title">$!valuationBO.physicalTypeName测试结果</div>
+        
+	        <div class="jb jb_feihuoliang" id="jb">
+	            <span class="low">低</span>
+	            <span class="high">高</span>
+	            <span class="zero">20HZ</span>
+	            <span class="hundred">20000HZ</span>
+	            <span class="amount" id="amount"><span class="numberical">0%</span></span>
+	        </div>
+        #end
+    	#if ($!physicalType == 6 )
+        <div class="title">$!valuationBO.physicalTypeName测试结果</div>
+        	  <canvas id="result">不支持canvas</canvas>
+        #end
+    	
+    	#if ($!physicalType == 7 )
+        <div class="title">$!valuationBO.physicalTypeName测试结果</div>
+        
+	        <div class="jb jb_feihuoliang" id="jb">
+	            <span class="low">低</span>
+	            <span class="high">高</span>
+	            <span class="zero">30</span>
+	            <span class="hundred">220</span>
+	            <span class="amount" id="amount"><span class="numberical">0%</span></span>
+	        </div>
+        #end
+    	
+    	#if ($!physicalType == 8 )
+        <div class="title">$!valuationBO.physicalTypeName测试结果</div>
+        <div class="jb jb_feihuoliang" id="jb">
+            <span class="low">低</span>
+            <span class="high">高</span>
+            <span class="zero">0ml</span>
+            <span class="hundred">10000ml</span>
+            <span class="amount" id="amount"><span class="numberical">0%</span></span>
+        </div>
+        #end
+        
+        #if ($!physicalType == 9 )
+        <div class="title">$!valuationBO.physicalTypeName测试结果</div>
+         <div class="jb jb_xueyang" id="jb">
+            <span class="low">低</span>
+            <span class="high">高</span>
+            <span class="zero">0%</span>
+            <span class="hundred">100%</span>
+            <span class="amount" id="amount"><span class="numberical">0%</span></span>
+        </div>
+        #end
+        
+        <!-- <div class="des">$!valuationBO.physicalTypeName<span class="red">偏低</span>，说明您的身体开始亮红灯了，请注意定期检测血压，请重视！</div> -->
+         <div class="des">$!valuationBO.physicalTypeName<span class="red">$!valuationBO.resultDesc</span>，$!valuationBO.memo</div>
+        <a href="#" class="askOnline">在线咨询 ></a>
+    </div>
+    <div class="area history">
+        <div class="title">最近7次$!valuationBO.physicalTypeName变化记录</div>
+        <canvas id="history" style="background: rgba(254,178,171,0.08);">不支持canvas</canvas>
+    </div>
+    <div class="area suggest">
+        <div class="title">改善建议<span class="title_tips">点击<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAWlBMVEUAAADxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVTxqVSyYEwsAAAAHXRSTlMA7PqZH9k/8MJTE8Z8gdXOqodmMOGun41sWg94Qo3RrdkAAADWSURBVCjPfZPRcoMgEEUXUCGCMWraJmnP//9mW+MsIzHcJ4azA5fdi6iWFEZrx5AWKXVqUbWnHWriunlx7rIWxSazzoAfmq0weTCdMguuF1XvwG60Mdib7HSzmOdBAe5S6A5h9QlOXuTg33OL0fv8Ve81tH9uIGk96HKATiboj2ADkwTOcgTlTBDD5zH8wIjl6+kF1XXza4+gV1g7tm5owr5/Sgffb5rwU7TP79tXb7wEmEs2Q9RhzwVbh51j8sjooTHRgKUyYPVo1kOdtQxxhDEO+Tv8Aot8Fgk/LbzUAAAAAElFTkSuQmCC">生成任务</span></div>
+        <div class="listTit">饮食</div>
+        <!-- <div class="content">1.饮食要清淡,要多喝水,多吃蔬菜.传统医学认为天寒,
+            寒邪易伤肾阳,宜食温性食物.而肾是人体的所在.是人
+            体生命活动的源泉.它滋五脏的阴气发的阳气.
+        </div>
+        <div class="content">2.饮食要清淡,要多喝水,多吃蔬菜.传统医学认为天寒,
+            寒邪易伤肾阳,宜食温性食物.而肾是人体.<span class="task_btn"></span>
+        </div> -->
+        
+		#set($var = $suggestMap.get(0).size())
+		
+		#if ($var > 0 )
+	        #foreach($data in $suggestMap.get(0))
+	        	<div class="content">
+	        		 ${data.priority}.${data.content}
+	        		 #if($!data.taskId != 0 && $!data.taskId > 0)
+			        		 <span class="task_btn task_add" tid="$!{data.taskId}"></span>
+		        		 #end
+	        	</div>
+	       		
+			#end
+		#else
+			<div class="content">
+        		暂无相关建议
+        	</div>
+			
+		#end
+        <div class="listTit">运动</div>
+	      <!--   <div class="content">
+            		每天早上多跑步,注意锻炼!<span class="task_btn"></span>
+	        </div> -->
+	       #set($var1 = $suggestMap.get(1).size())
+			
+			#if ($var1 > 0 )
+		        #foreach($data in $suggestMap.get(1))
+		        	<div class="content">
+		        		 ${data.priority}.${data.content}
+		        	</div>
+		       		
+				#end
+			#else
+				<div class="content">
+	        		暂无相关建议
+	        	</div>
+			#end
+        <div class="listTit">生活</div>
+	        <!-- <div class="content">
+	            饮食要清淡,要多喝水,多吃蔬菜.传统医学认为冬季天
+	            寒，寒邪易伤肾阳，宜食温性食物.<span class="task_btn task_add"></span>
+	        </div> -->
+	         #set($var2 = $suggestMap.get(2).size())
+			
+			#if ($var2 > 0 )
+		        #foreach($data in $suggestMap.get(2))
+		        	<div class="content">
+		        		 ${data.priority}.${data.content}
+		        	</div>
+		       		
+				#end
+			#else
+				<div class="content">
+	        		暂无相关建议
+	        	</div>
+			#end
+			
+		<!-- 医疗 -->
+		 <div class="listTit">医疗</div>
+	      <!--   <div class="content">
+            		每天早上多跑步,注意锻炼!<span class="task_btn"></span>
+	        </div> -->
+	       #set($var3 = $suggestMap.get(3).size())
+			
+			#if ($var3 > 0 )
+		        #foreach($data in $suggestMap.get(3))
+		        	<div class="content">
+		        		 ${data.priority}.${data.content}
+		        	</div>
+		       		
+				#end
+			#else
+				<div class="content">
+	        		暂无相关建议
+	        	</div>
+			#end
+			
+		<!-- 更多-->
+		 <div class="listTit">更多</div>
+	       #set($var4 = $suggestMap.get(4).size())
+			
+			#if ($var4 > 0 )
+		        #foreach($data in $suggestMap.get(4))
+		        	<div class="content">
+		        		 ${data.priority}.${data.content}
+		        	</div>
+		       		
+				#end
+			#else
+				<div class="content">
+	        		暂无相关建议
+	        	</div>
+			#end
+    </div>
+    <div class="area groom">
+        <div class="title">精华推荐</div>
+        <div class="p_filter fc_title">
+            <div class="dd"><a href="javascript:m1.titleClickEvent(0);" class="selected"><i></i>帖子</a></div>
+            <div class="dd"><a href="javascript:m1.titleClickEvent(1);" class=""><i></i>商品</a></div>
+            <div class="dd"><a href="javascript:m1.titleClickEvent(2);" class=""><i></i>服务</a></div>
+        </div>
+        <div id="fc_con" class="m_touch">
+            <div class="touch_content">
+                <div class="touch_con">
+                    <div class="touch_tab">
+                        <ul class="list_con tiezi">
+                        	<!-- 帖子 -->
+                        	#set($postNum = $circleList.size())
+							
+							#if ($postNum > 0 )
+						        #foreach($circleInvitation in $circleList)
+                        			<li>
+		                                <a href="javascript:void(0)" onclick='callback($!{circleInvitation.id})'>
+		                                   #if ($!circleInvitation.thumbnail)
+		                                    <img src='$!{circleInvitation.thumbnail}'>
+		                                   #else
+		                                   	 <img src='http://static.ysysgo.com/static/person.png'>
+		                                   #end
+		                                    <div class="content">
+		                                        <p class="tit">$!{circleInvitation.title}</p>
+		                                        <div class="bot">
+		                                        #set($str=$!circleInvitation.content)
+
+												#if($str.length()>15)
+												    #set($str=$str.substring(0,15))
+												    <p>$str ...</p>
+												#else
+													 <p>$str ...</p>
+												#end
+		                                            
+		                                            <span>人气 $!{circleInvitation.praiseCount}</span>
+		                                        </div>
+		                                    </div>
+		                                </a>
+		                            </li>
+                        		#end
+							#else
+					        		暂无相关帖子数据
+							#end
+                        	
+                           <!--  <li>
+                                <a href="#">
+                                    <img src="images/tiezi.png">
+                                    <div class="content">
+                                        <p class="tit">头发很油怎么办？</p>
+                                        <div class="bot">
+                                            <p>秋冬天气干燥头发容易秋冬天气干燥头发容易</p>
+                                            <span>人气532</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li> -->
+                        </ul>
+                    </div>
+                    <div class="touch_tab">
+                        <ul class="list_con goods">
+                        <!-- 商品-->
+                        	#set($goodsNum = $goodsList.size())
+							
+							#if ($goodsNum > 0 )
+						        #foreach($goods in $goodsList)
+						         <li>
+	                                <a href="javascript:void(0)" onclick='callback($!{goods.id})'>
+	                                    <div class="goodsdiv">
+	                                        <img src="$!{goods.goodsMainPhotoPath}">
+	                                        <p class="tit">$!{goods.goodsName}</p>
+	                                        <span class="price">
+	                                         	#if($!goods.hasMobilePrice !=0 && $!goods.goodsMobilePrice)
+	                                        		<span class="fn-rmb">￥</span>$!{goods.goodsMobilePrice}
+	                                        	#else
+	                                        		<span class="fn-rmb">￥</span>$!{goods.goodsCurrentPrice}
+	                                        	#end
+	                                        		
+	                                        </span>
+	                                    </div>
+	                                </a>
+	                            </li>
+                        			
+                        		#end
+							#else
+					        		暂无相关商品数据
+							#end
+                           <!--  <li>
+                                <a href="#">
+                                    <div class="goodsdiv">
+                                        <img src="images/goods.jpg">
+                                        <p class="tit">胡庆余堂 固元膏果仁阿胶片280克*2女士阿胶</p>
+                                        <span class="price"><span class="fn-rmb">￥</span>236.00</span>
+                                    </div>
+                                </a>
+                            </li> -->
+                            
+                        </ul>
+                    </div>
+                    <div class="touch_tab">
+                        <ul class="list_con service">
+                             <!-- 服务-->
+                        	#set($storeNum = $storeList.size())
+							
+							#if ($storeNum > 0 )
+						        #foreach($store in $storeList)
+						        <li>
+	                                <a href="javascript:void(0)" onclick='callback($!{store.id})'>
+	                                    <img src="$!{store.goodsPath}">
+	                                    <div class="right">
+	                                        <p class="tit">$!{store.goodsName}</p>
+	                                        <span class="price"><span class="fn-rmb">￥</span>$!{store.price}</span>
+	                                        <div class="pos">
+	                                            <p class="icon_p">$!{store.distance}km</p>
+	                                            <p>已售$!{store.sales}份</p>
+	                                        </div>
+	                                    </div>
+	                                </a>
+	                            </li>
+                        			
+                        		#end
+							#else
+					        		暂无相关服务数据
+							#end
+							
+                            <!-- <li>
+                                <a href="#">
+                                    <img src="images/tiezi.png">
+                                    <div class="right">
+                                        <p class="tit">金砖奶茶</p>
+                                        <p class="star"><span class="rate_score"><em data-width="4.5"></em></span><span class="star_num">4.5</span></p>
+                                        <span class="price"><span class="fn-rmb">￥</span>25</span>
+                                        <div class="pos">
+                                            <p class="icon_p">341km</p>
+                                            <p>已售125份</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li> -->
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <!-- 任务 -->
+   <div class="task" id="task">
+        <div class="taskContent">
+            <div class="tit" id="taskNameId">喝水</div>
+            <div class="content" id="taskContent">每天喝8杯水</div>
+        </div>
+        <div class="taskTime">
+            <div class="tit">提醒时间</div>
+            <div id="datePlugin"></div>
+        </div>
+        <div class="taskDuring">
+            <div class="tit">提醒周期（可多选）</div>
+            <div class="week">
+                <ul>
+                    <li>周一</li><li>周二</li><li>周三</li><li>周四</li><li>周五</li><li>周六</li><li>周日</li>
+                </ul>
+            </div>
+        </div>
+        <div class="taskbtns">
+            <span id="dateconfirm" class="taskBtn taskComfirm">确定</span>
+            <span id="taskCancel" class="taskBtn taskCancel">取消</span>
+        </div>
+    </div>
+   	<input type="hidden" id="hidden_tid">
+    <script type="text/javascript" src="${staticPath}/static/physical/assets/js/jquery-1.4.1.min.js"></script>
+      <script type="text/javascript" src="${staticPath}/static/physical/assets/js/jquery.easing.min.js"></script>  
+    <script type="text/javascript" src="${staticPath}/static/physical/assets/js/touchSlider.js"></script>
+     <script type="text/javascript" src="${staticPath}/static/physical/assets/js/date.js"></script>
+     <script type="text/javascript" src="${staticPath}/static/physical/assets/js/iscroll.js" ></script>
+      <script type="text/javascript" src="${staticPath}/static/physical/assets/js/tools.js"></script>
+      
+    <script type="text/javascript" src="http://localhost:8081/static/physical/assets/js/jquery-1.4.1.min.js"></script>
+     <script type="text/javascript" src="http://localhost:8081/static/physical/assets/js/jquery.easing.min.js"></script>  
+    <script type="text/javascript" src="http://localhost:8081/static/physical/assets/js/touchSlider.js"></script>
+    <script type="text/javascript" src="http://localhost:8081/static/physical/assets/js/date.js"></script>
+    <script type="text/javascript" src="http://localhost:8081/static/physical/assets/js/iscroll.js" ></script>
+    <script type="text/javascript" src="http://localhost:8081/static/physical/assets/js/tools.js"></script>
+    
+  
+    <script>
+        var m1=new m_Touch("fc_con","fc_title");
+        $(function(){
+            jgGlobal.setTranslate(document.getElementById("task"),-jgGlobal.screenHeight,"height:"+jgGlobal.screenHeight+"px",false);
+            $('#beginTime').date({},function(){
+                //alert(arguments[0]);
+                //alert(arguments[1]);
+
+                var strArr=[];
+                for(var i= 0,c=$(".week ul li").length;i< c;i++){
+                    strArr[i]=$(".week ul li").eq(i).hasClass("curr")==true?1:0;
+                }
+                str=strArr.join(",");
+                var fen=arguments[1]+"",shi=arguments[0];
+                if(fen.length==1){
+                	fen="0"+fen;
+                }
+                var myDate = new Date();
+                var month = myDate.getMonth()+1;
+                var remindTimeStr = myDate.getFullYear()+"-"+month+"-"+myDate.getDate()+" "+shi+":"+fen+":00";
+               // alert(shi+":"+fen);
+                //alert(str);
+                if(str=="0,0,0,0,0,0,0"){
+                    tips("请选择提醒时间");
+                }else{
+                	jQuery.ajax({
+              		  type:'POST',
+  		              url:'${apiPath}/physical/saveTaskByUser',
+  					  data:{"taskId":$("#hidden_tid").val(),
+  						    "remindDay":str ,
+  						  	"reminderTimeStr":remindTimeStr,
+  						    "taskContent":$('#taskContent').val()
+  						   },
+  					  beforeSend:function(){
+  					  
+  						},
+  					   success:function(data){
+  						 if(data == '1'){
+  							 //保存成功
+  		                    tips("设置成功");
+  		                    jgGlobal.setTranslate(document.getElementById("task"),-jgGlobal.screenHeight,"height:"+jgGlobal.screenHeight+"px",true);  		                    
+  		                   $(".task_btn[tid="+$("#hidden_tid").val()+"]").removeClass("task_add").unbind("click");
+  						 }else{
+  							tips("保存失败，请重试");
+  						 }
+  		              }
+  		  	     });
+                	
+                   
+                }
+            });
+
+
+            $(".task_add").click(function(){
+            	$("#hidden_tid").val($(this).attr("tid"));
+            	 console.log($(this).attr("tid"));
+            	 $(".loading").show();
+            	 jQuery.ajax({
+            		  type:'POST',
+	            	  url:'${apiPath}/physical/getTaskInfoById',
+					  data:{"id":$("#hidden_tid").val()},
+					  async:false,
+					  beforeSend:function(){
+					  
+						},
+					   success:function(data){
+						   var dataObj = JSON.parse(data);
+						   //console.log(dataObj);
+						   if(data != null){
+							   $('#taskNameId').html(dataObj.taskName);
+							   $('#taskContent').html(dataObj.content);
+						   }
+						   return;
+		              }
+		  	     });
+            	 $(".loading").hide();            	
+                jgGlobal.setTranslate(document.getElementById("task"),0,"height:"+jgGlobal.screenHeight+"px",true);
+            });
+            $("#taskCancel").click(function(){
+                jgGlobal.setTranslate(document.getElementById("task"),-jgGlobal.screenHeight,"height:"+jgGlobal.screenHeight+"px",true);
+            });
+            
+            $(".week ul li").each(function(){
+                $(this).click(function(){
+                    if($(this).hasClass("curr")){
+                        $(this).removeClass("curr");
+                    }else{
+                        $(this).addClass("curr");
+                    }
+                });
+            });
+        });
+    </script>
+     #if ($!physicalType != 6 )
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("em").each(function(){
+                $(this).width(12*$(this).attr("data-width"));
+            });
+
+            var num=$!{physicalValue};//肺活量测试的数值
+            var jbWidth=$("#jb").width(),
+                    left=jbWidth*num/10000,
+                    amount=document.getElementById("amount"),
+                    $numberical=$(".numberical");
+            jgGlobal.setTranslateX(amount,left,"width:15px",true);
+            var per=0;
+            var t=setInterval(function(){
+                per+=parseInt(num/50);
+                if(per>=num){
+                    per=num
+                    clearInterval(t);
+                }
+                $numberical.html(per);
+            },30)
+
+            var tScale  = window.devicePixelRatio,
+                    tWidth=	jgGlobal.screenWidth,
+                    tHeight=jgGlobal.screenHeight;
+            var RAF = (function () {
+                return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+                            return window.setTimeout(callback, 1000 / 60);
+                        };
+            })();
+
+            var dataH = [];
+            #foreach($hisResult in $physicalHisList)
+            	#if($!hisResult.rangeMax != 0)
+            		dataH.push($!hisResult.rangeMax);
+            	#else
+            		dataH.push(0);
+            	#end
+            	
+            #end
+            console.log(dataH);
+            //var dataH = [3600,3800,3400,3140,2540,2410,3000];//最近七次历史记录值
+
+            var history=document.getElementById("history"),
+                    ctx2=history.getContext("2d");
+            history.style.width = tWidth + "px";
+            history.style.height =  "150px";
+            history.width = tWidth * tScale;
+            history.height = 150 * tScale;
+            ctx2.translate(0,150*tScale);
+
+            drawlinegrid();
+            drawNum();
+            drawHline();
+            function drawlinegrid() {
+                ctx2.beginPath();
+                for (var i = 0; i <= 6; i++) {
+                    var y = i * tWidth * 0.7 / 6 + 0.3 * tWidth / 2;
+                    ctx2.moveTo(y * tScale, 0);
+                    ctx2.lineTo(y * tScale, -150 * tScale);
+                }
+                ctx2.moveTo(0, 0);
+                ctx2.lineTo(tWidth * tScale, 0);
+                ctx2.lineWidth = 1 * tScale;
+                ctx2.strokeStyle = "#d4d3d3";
+                ctx2.stroke();
+            }
+            function drawNum(){
+                ctx2.beginPath();
+                ctx2.fillStyle="#999";
+                ctx2.font=12*tScale + "px Arial";
+                ctx2.textAlign="center";
+                ctx2.textBaseline="bottom";
+                ctx2.fillText("0",0.3 * tWidth / 4*tScale,0);
+                var middleVal ;
+                var maxStVal;
+                
+                #if ($!physicalType == 8 )
+                    middleVal = 5000;
+               		 maxStVal = 10000;
+                #end
+                #if ($!physicalType == 5 )
+                	middleVal = 2250;//听力分贝5
+                	maxStVal = 4500;
+                #end
+                #if ($!physicalType == 7 )
+                	middleVal = 80;//心率7
+                	maxStVal = 120;
+                #end
+                #if ($!physicalType == 9 )
+                	 middleVal = 50;//血氧9 
+                	 maxStVal = 100;
+                #end
+                //to-do 视力最小值和最大值
+                ctx2.fillText(middleVal,0.3 * tWidth / 4*tScale,-60*tScale);
+                //ctx2.fillText("5000",0.3 * tWidth / 4*tScale,-60*tScale);
+                ctx2.fillText(maxStVal,0.3 * tWidth /4*tScale,-120*tScale);
+            }
+
+            function drawHline(){
+                var pointsH = [];
+                for( var i=0; i < dataH.length; i++){
+                    var v= dataH[i];
+                    var px = i * tWidth * 0.7 / 6 + 0.3 * tWidth / 2;
+                    var py = v/10000*150;
+                    pointsH.push({"x":px*tScale,"y":-py*tScale});
+                }
+                ctx2.beginPath();
+                ctx2.moveTo(pointsH[0].x, pointsH[0].y);
+                for(var i= 1; i< pointsH.length; i++){
+                    ctx2.lineTo(pointsH[i].x,pointsH[i].y);
+                }
+                ctx2.lineWidth = 2*tScale;
+                ctx2.strokeStyle = "#f36c60";
+                ctx2.stroke();
+
+                ctx2.font=11*tScale + "px Arial";
+                ctx2.textAlign="center";
+                ctx2.textBaseline="bottom";
+                for(var i=0;i<pointsH.length;i++){
+                    ctx2.beginPath();
+                    ctx2.fillStyle="#f36c60";
+                    ctx2.fillText(dataH[i],pointsH[i].x, pointsH[i].y-10*tScale);
+                    ctx2.arc(pointsH[i].x,pointsH[i].y,3*tScale,0,2*Math.PI,false);
+                    ctx2.fill();
+                }
+
+            }
+
+        });
+
+    </script>
+ #end
+ 
+ #if ($!physicalType == 6 )
+ 
+ <script type="text/javascript">
+        $(document).ready(function(){
+            $("em").each(function(){
+                $(this).width(12*$(this).attr("data-width"));
+            });
+            var tScale  = window.devicePixelRatio,
+                    tWidth=	jgGlobal.screenWidth,
+                    tHeight=jgGlobal.screenHeight;
+            var RAF = (function () {
+                return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+                            return window.setTimeout(callback, 1000 / 60);
+                        };
+            })();
+
+            var dataH = [],dataL =[];
+            #foreach($hisResult in $physicalHisList)
+            	#if($!hisResult.rangeMin != 0)
+            		dataL.push($!hisResult.rangeMin);
+            	#else
+            		dataL.push(0);
+            	#end
+            
+            	#if($!hisResult.rangeMax != 0)
+            		dataH.push($!hisResult.rangeMax);
+            	#else
+            		dataH.push(0);
+            	#end
+            	
+            	
+            	
+            #end
+            console.log(dataH);
+           	 console.log(dataL);
+            
+            var Hmax=$!physicalValue,Lmax=$!physicalMinValue;
+          /*   var dataH = [143,135,145,130,140,135,130];
+            var dataL=[70,75,70,78,50,66,69]; */
+            var highNum=140,lowNum=60;
+            var minScale=getMaxOrMin(dataL,"min"),maxScale=getMaxOrMin(dataH,"max");
+            var canvas=document.getElementById("result"),
+                    ctx=canvas.getContext("2d");
+            canvas.style.width = tWidth + "px";
+            canvas.style.height =  "90px";
+            canvas.width = tWidth * tScale;
+            canvas.height = 90 * tScale;
+
+            ctx.translate(canvas.width/2,canvas.height);
+            ctx.lineWidth=10*tScale;
+            function drawBG(){
+                ctx.beginPath();
+                ctx.strokeStyle="#f1f1f1";
+                ctx.arc(0,0,52*tScale,180*Math.PI/180,360*Math.PI/180,false);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(0,0,70*tScale,180*Math.PI/180,360*Math.PI/180,false);
+                ctx.stroke();
+            }
+
+            setTimeout(drawResult,1000/60);
+            var angel_h= 0,angel_l= 0,timeid,num_h= 0,num_l=0;
+            function drawResult()
+            {
+                Hangle=Math.round(Hmax/250*180);
+                Langle=Math.round(Lmax/250*180);
+                ctx.clearRect(-canvas.width/2,-canvas.height,canvas.width,canvas.height);
+                if(angel_h<Hangle){
+                    angel_h+=2;
+                }
+                if(angel_l<Langle){
+                    angel_l++;
+                }
+                if(num_h<Hmax){
+                    num_h+=2;
+                }else{
+                    num_h=Hmax;
+                }
+                if(num_l<Lmax){
+                    num_l++;
+                }
+                drawBG();
+                drawH(angel_h);
+                drawL(angel_l);
+                drawText(num_h,num_l);
+                if(angel_h>=Hangle&&angel_l>=Langle&&num_h>=Hmax&&num_l>=Lmax){
+                    return;
+                }
+                timeid= setTimeout(drawResult,1000/60);
+            }
+
+            function drawH(angle){
+                ctx.beginPath();
+                ctx.strokeStyle="#916ced";
+                ctx.arc(0,0,70*tScale,180*Math.PI/180,(180+angle)*Math.PI/180,false);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.fillStyle="#916ced";
+                ctx.arc(-70*tScale*Math.cos(angle*Math.PI/180),-70*tScale*Math.sin(angle*Math.PI/180),5*tScale,0,360*Math.PI/180,false);
+                ctx.fill();
+            }
+            function drawL(angle){
+                ctx.beginPath();
+                ctx.strokeStyle="#dc83fe";
+                ctx.arc(0,0,52*tScale,180*Math.PI/180,(180+angle)*Math.PI/180,false);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.fillStyle="#dc83fe";
+                ctx.arc(-52*tScale*Math.cos(angle*Math.PI/180),-52*tScale*Math.sin(angle*Math.PI/180),5*tScale,0,360*Math.PI/180,false);
+                ctx.fill();
+            }
+            function drawText(hnum,lnum){
+                ctx.beginPath();
+                ctx.fillStyle="#333";
+                ctx.font=20*tScale + "px Arial";
+                ctx.textAlign="center";
+                ctx.textBaseline="bottom";
+                ctx.fillText(hnum+"/"+lnum,0,-13*tScale);
+                ctx.beginPath();
+                ctx.font=12*tScale + "px Arial";
+                ctx.textBaseline="top";
+                ctx.fillText("mmHg",0,-13*tScale);
+            }
+
+            var history=document.getElementById("history"),
+                    ctx2=history.getContext("2d");
+            history.style.width = tWidth + "px";
+            history.style.height =  "150px";
+            history.width = tWidth * tScale;
+            history.height = 150 * tScale;
+            ctx2.translate(0,150*tScale);
+
+            drawlinegrid();
+            drawNum();
+            drawHline();
+            drawLline();
+            function drawlinegrid() {
+                ctx2.beginPath();
+                for (var i = 0; i <= 6; i++) {
+                    var y = i * tWidth * 0.7 / 6 + 0.3 * tWidth / 2;
+                    ctx2.moveTo(y * tScale, 0);
+                    ctx2.lineTo(y * tScale, -150 * tScale);
+                }
+                ctx2.moveTo(0, 0);
+                ctx2.lineTo(tWidth * tScale, 0);
+                ctx2.lineWidth = 1 * tScale;
+                ctx2.strokeStyle = "#d4d3d3";
+                ctx2.stroke();
+            }
+            function drawNum(){
+                ctx2.beginPath();
+                ctx2.fillStyle="#999";
+                ctx2.font=12*tScale + "px Arial";
+                ctx2.textAlign="center";
+                ctx2.textBaseline="bottom";
+                ctx2.fillText(minScale-10,0.3 * tWidth / 4*tScale,0);
+                ctx2.fillText(maxScale-minScale,0.3 * tWidth / 4*tScale,-70*tScale);
+                ctx2.fillText("mmHg",0.3 * tWidth / 4*tScale,-125*tScale);
+                ctx2.fillText(maxScale+10,0.3 * tWidth /4*tScale,-135*tScale);
+            }
+
+            function drawHline(){
+                var pointsH = [];
+                for( var i=0; i < dataH.length; i++){
+                    var v= dataH[i];
+                    var px = i * tWidth * 0.7 / 6 + 0.3 * tWidth / 2;
+                    var py = (v-minScale+10)/(maxScale-minScale+20)*150;
+                    pointsH.push({"x":px*tScale,"y":-py*tScale});
+                }
+                ctx2.beginPath();
+                ctx2.moveTo(pointsH[0].x, pointsH[0].y);
+                for(var i= 1; i< pointsH.length; i++){
+                    ctx2.lineTo(pointsH[i].x,pointsH[i].y);
+                }
+                ctx2.lineWidth = 2*tScale;
+                ctx2.strokeStyle = "#6e51b6";
+                ctx2.stroke();
+
+                ctx2.font=11*tScale + "px Arial";
+                ctx2.textAlign="center";
+                ctx2.textBaseline="bottom";
+                for(var i=0;i<pointsH.length;i++){
+                    ctx2.beginPath();
+                    if(dataH[i]>highNum){
+                        ctx2.fillStyle="#fe1010";
+                    }else{
+                        ctx2.fillStyle="#6e51b6";
+                    }
+                    ctx2.fillText(dataH[i],pointsH[i].x, pointsH[i].y-3);
+                    ctx2.arc(pointsH[i].x,pointsH[i].y,3*tScale,0,2*Math.PI,false);
+                    ctx2.fill();
+                }
+
+            }
+            function drawLline(){
+                var pointsL = [];
+                for( var i=0; i < dataL.length; i++){
+                    var v= dataL[i];
+                    var px = i * tWidth * 0.7 / 6 + 0.3 * tWidth / 2;
+                    var py = (v-minScale+10)/(maxScale-minScale+20)*150;
+                    pointsL.push({"x":px*tScale,"y":-py*tScale});
+                }
+                ctx2.beginPath();
+                ctx2.moveTo(pointsL[0].x, pointsL[0].y);
+                for(var i= 1; i< pointsL.length; i++){
+                    ctx2.lineTo(pointsL[i].x,pointsL[i].y);
+                }
+                ctx2.lineWidth = 2*tScale;
+                ctx2.strokeStyle = "#d974ff";
+                ctx2.stroke();
+
+                ctx2.font=11*tScale + "px Arial";
+                ctx2.textAlign="center";
+                ctx2.textBaseline="top";
+                for(var i=0;i<pointsL.length;i++){
+                    ctx2.beginPath();
+                    if(dataL[i]<lowNum){
+                        ctx2.fillStyle="#fe1010";
+                    }else{
+                        ctx2.fillStyle="#d974ff";
+                    }
+                    ctx2.fillText(dataL[i],pointsL[i].x, pointsL[i].y+3);
+                    ctx2.arc(pointsL[i].x,pointsL[i].y,3*tScale,0,2*Math.PI,false);
+                    ctx2.fill();
+                }
+            }
+
+
+
+
+
+        });
+
+
+        function getMaxOrMin (arr,type) {
+            if (type == "max") {
+                return Math.max.apply(Math, arr);
+            }else if (type == "min") {
+                return Math.min.apply(Math, arr);
+            }
+        }
+    </script>
+ #end
+</body>
+</html>

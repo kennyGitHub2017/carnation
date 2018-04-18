@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta name="format-detection" content="telephone=no">
+        <meta name="format-detection" content="email=no">
+        <title>健康评估</title>
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/common.css"/>
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/tijian.css" />
+	    <script>
+    		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+			document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+	    </script>
+	</head>
+	<body>
+		<div class="tjHolder">
+			<div class="resBg">
+				<div class="circle">
+					<span class="s1">100%</span>
+					<span class="s2">测试完成</span>
+				</div>		
+			</div>
+			<div class="jifenAdd">
+				<div class="congratulations">恭喜你！</div>
+				<div class="jifen">已完成基本健康评估，获取<span class="score">2</span>积分</div>
+			</div>
+			<div class="pingfen">
+				<div class="tit">
+					<a href="javascript:;" class="reCheck">重评&nbsp;></a>
+					<span><span class="left">健康评分</span><span class="score">$!bo.totalScore&nbsp;分</span></span>
+				</div>
+				<div class="colorBar">
+					<span class="arraw"></span>
+					<ul>
+						<li>慢性病</li>
+						<li>高风险</li>
+						<li>亚健康</li>
+						<li>健康</li>
+					</ul>
+				</div>
+			</div>
+			<div class="submitBtnCon">
+				<a href="javascript:;" class="submitBtn">确&nbsp;&nbsp;定</a>
+			</div>
+		</div>
+		
+		<script src="${apiPath}/resources/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function(){
+				$(".submitBtn").on('touchstart',funtion(){
+					fn.requestBack();
+				});
+			})
+		
+			setTimeout(function(){
+				var jq=jQuery.noConflict(); 
+				var isChronic = $!bo.groupResultBo.isChronic;
+				var isHigh = $!bo.groupResultBo.isHigh;
+				var isYjk = $!bo.groupResultBo.isYjk;
+				var isHealthy = $!bo.groupResultBo.isHealthy;
+				var type = "";
+				console.log("....isChronic:"+isChronic+" isHigh:"+isHigh
+							+" isYjk:"+isYjk+" isHealthy:"+isHealthy);
+				if(isChronic)
+				{
+					type = "20%";
+				}
+				else if(isHigh)
+				{
+					type = "40%";
+				}
+				else if(isYjk)
+				{
+					type = "60%";
+				}
+				else if(isHealthy)
+				{
+					type = "80%";
+				} 
+				jq(".pingfen .colorBar .arraw").css("left",type);
+			},1);			
+		</script>
+	</body>
+</html>

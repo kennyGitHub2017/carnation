@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+	console.log('$!type')
+  jQuery("#type").val("$!type");
+  //
+});
+</script>
+</head>
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css"
+	type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<body>
+	<div class="cont">
+		<div class="nav_list">
+			<ul>
+				<li><a href="$!webPath/admin/user_collections_expert.htm?userId=$!userId" ><b>专家列表</b></a>
+				</li>
+				<li><a href="$!webPath/admin/user_collections_post.htm?userId=$!userId"><b>帖子列表</b></a></li>
+				<li><a href="$!webPath/admin/user_collections_goods.htm?userId=$!userId"><b>商品列表</b></a>
+				<li><a href="$!webPath/admin/user_collections_seller.htm?userId=$!userId" class="this"><b>店铺列表</b></a>
+				<li><a href="$!webPath/admin/user_collections_service.htm?userId=$!userId"><b>服务列表</b></a>
+				</li>
+			</ul>
+		</div>
+		<form action="$!webPath/admin/user_collections_seller.htm?userId=$!userId" id="ListForm" name="ListForm" method="post">
+    <div class="search"> 
+<!--       <span>收藏人昵称</span> <span class="size150">
+      <input name="nickName" type="text" id="userName"  value="$!nickName" />
+      </span> -->
+      <span class="size150">
+          <select name="type" id="type">
+          <option value="">请选择..</option>
+          <option value="shop">商城</option>
+          <option value="o2o">服务</option>
+          </select>
+      </span>
+      <span class="btn_search">
+      <input name="" type="submit"  value="搜索" style="cursor:pointer;"  class="search_btn"/>
+      </span> 
+    </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+            <tr>
+            <th>收藏人昵称</th>
+              <th width="30%">店铺</th>
+              <th width="15%" align="center">收藏时间</th>
+            </tr>
+        #foreach($obj in $objs)
+           #if($!obj.storeLogoPath)
+            #set($store_logo="$!{obj.storeLogoPath}")
+           #else
+            #set($store_logo="$!{config.storeImage.path}")
+           #end
+
+           #set($store_url="$!webPath/store_$!{obj.id}.htm")
+           #if($!config.secondDomainOpen && $!obj.goodsType==1 && $!obj.storeSecondDomain !="")
+            #set($store_url="http://$!{obj.storeSecondDomain}.$!{domainPath}")
+           #end
+            <tr>
+            <td align="center">$!obj.nickname</td>
+              <td><ul class="goodsul">
+                  <li style=" height:60px;"><span class="goodsimg" style="margin-top:-7px;">
+                  <!-- <a href="$!store_url" target="_blank">
+                  </a> -->
+                  <img src="$!store_logo" width="100" height="33" />
+                  </span></li>
+                  <li class="goodsp" style=" height:60px;"><span style=" width:258px; margin-top:17px; text-align:center; ">
+                  <!-- <a href="$!store_url" target="_blank">
+                  </a> -->
+                  $!obj.storeName
+                  </span> </li>
+                </ul>
+               </td>
+              <td style="text-align:center;" >$!CommUtil.formatShortDate($!obj.createTime)</td>
+            </tr>  
+          #end
+          </table>
+        </div>
+    <div class="operate_bar">
+      <div class="fenye">
+        <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+        <input name="mulitId" type="hidden" id="mulitId" />
+        $!gotoPageFormHTML </div>
+    </div>
+  </form>
+	</div>
+</body>
+</html>

@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="$!webPath/resources/js/base64.js"></script>
+	<script type="text/javascript">
+		function is_weixin(){
+			var ua = navigator.userAgent.toLowerCase();
+			if(ua.match(/MicroMessenger/i)=="micromessenger") {
+				return true;
+		 	} else {
+				return false;
+			}
+		}
+		function getUrlPar(name) {
+			   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+			   var r = window.location.search.substr(1).match(reg);
+			   if (r!=null) return (r[2]); return null;
+		}
+		function changeUrl(){
+			if(location.href.indexOf("goods_")>-1){
+				var args="";					
+				if(location.href.indexOf('?')>-1){
+					args=location.href.split('?')[1];
+				}
+				if(args==""){
+					location.href="$!webPath"+"/goods.htm?id="+$!obj.id
+				}else{
+					location.href="$!webPath"+"/goods.htm?id="+$!obj.id+"&"+args;
+				}						
+			}
+		}
+		
+		function wxlogin(){
+			var tag = "$!isflag";	
+			if(is_weixin()&&getUrlPar('isflag')==null){
+				if(tag!=null && tag!=""){
+					return;  //用户已登录
+				}
+				var url=Base64.encode(location.href);
+				var invitationCode=getUrlPar('invitationCode');
+				if(parseInt(invitationCode)==NaN) return;
+				location.href="$!webPath/user/loginUrl.htm?url='"+url+"'&invitationCode="+invitationCode+"";
+			}
+		}
+		changeUrl();
+		wxlogin();	
+		
+	</script>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="initial-scale=1, width=device-width, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="full-screen" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>商品详情</title>
+<link href="$!webPath/resources/shop/css/style.css" rel="stylesheet" type="text/css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script src="$!webPath/resources/js/gongzhonghao.js"></script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?5ec07b377284cf8ef95ebaa33fa298f5";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<style type="text/css">
+	#slide .bd li img {
+		height: 7.5rem;
+		background: none;
+	}
+	
+	#slide div.goodsde-hd {
+		top: 7.15rem;
+	}
+	
+	.goods-price .huijia .small {
+		font-size: 0.2rem
+	}
+	.actGotop{bottom:2rem;}
+	#Marquee_x ul li{height:auto}
+	.img_spec{float:left;margin-left:10px;color:#a2a2a2;box-sizing: border-box;display:flex;align-items: center;padding:0 5px;border:solid 1px #ffffff;height:30px;line-height:30px;font-size:12px}
+	.img_spec.this{color:#27a333;border: solid 1px #27a333;}
+    .goodsde-goods-message .bvzhi{width: auto;margin-top: 0.2rem!important;}
+</style>
+<script>
+	var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+	document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+</script>
+<!-- 微信分享 -->
+<script src="$!webPath/resources/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
+<script src="$!webPath/resources/js/tipsbox.js"></script>
+<script src="$!webPath/resources/js/tools.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+    wx.config({
+        debug: false,
+        appId: '${appId}',
+        timestamp: '${timestamp}',
+        nonceStr: '${nonceStr}',
+        signature: '${signature}',
+        jsApiList: [
+         'checkJsApi',
+          'onMenuShareTimeline',
+          'onMenuShareAppMessage',
+        ]
+    });
+</script>
+<script>
+    wx.ready(function () {
+	    wx.onMenuShareTimeline({
+	    	title: "$!{obj.goodsName}", // 分享标题
+	    	desc: "我发现了一个专业健康品牌商城，货真价值，轻松分享还能赚钱，打开看看",
+	    	link: location.href,// 分享链接
+	    	imgUrl: "$!{obj.goodsMainPhotoPath}", // 分享图标
+	        success: function () { 
+	            // 用户确认分享后执行的回调函数
+	        },
+	        cancel: function () { 
+	            // 用户取消分享后执行的回调函数
+	        }
+    });
+   	wx.onMenuShareAppMessage({
+    	   title: "$!{obj.goodsName}",
+           desc: "我发现了一个专业健康品牌商城，货真价值，轻松分享还能赚钱，打开看看",
+           link: location.href,
+            imgUrl: "$!{obj.goodsMainPhotoPath}",
+            trigger: function (res) {
+            },
+            success: function (res) {
+            },
+            cancel: function (res) {
+            },
+            fail: function (res) {
+            }
+        });
+    });
+    wx.error(function (res) {
+    	//alert('xx' + res);
+    });
+</script>
+<script>
+var act_price=0;
+
+#set($group=0)
+#set($current_price=$!obj.goodsShowPrice)
+#if($!{obj.group_buy}==2)
+  #foreach($info in $obj.groupGoodsList)
+	  #if($!obj.group.id==$!{info.group.id})
+				#if($info.gg_status==1)
+				  var store_price=$!info.gg_price;
+				  jQuery("#store_price").val("¥$!{info.gg_price}");
+				  #set($group=1)
+				  #set($current_price=$!{info.gg_price})
+					  #if($!info.gg_max_count>0)
+						var goods_inventory=$!info.gg_max_count;
+					  #else
+						var goods_inventory=$!info.gg_count;
+					  #end
+				#end
+		#end
+
+  #end
+#else
+  var goods_inventory=$!obj.goodsInventory;
+  var store_price=$!obj.goodsShowPrice;  
+	#if($!{obj.activity_status}==2 && $!user)
+	#set($activity_map=$!activityViewTools.getActivityGoodsInfo("$!obj.id","$!user.id")) 
+	store_price=$!{activity_map.get("rate_price")};
+	#end
+#end
+   #if($!obj.activityStatus==2 && $!user)
+	#set($activity_map=$!activityViewTools.getActivityGoodsInfo("$!obj.id","$!user.id"))
+	//act_price = $!activity_map.rate_price;
+   #end
+</script>
+</head>
+<body>
+
+	<div class="main">
+		<div class="app">
+			<div id="head">
+				<!-- banner开始 -->
+				<div class="row goodsde-row">
+					<div id="slide">
+						<div class="hd goodsde-hd">
+							<ul>
+								<li class="on">1</li>
+								<li class="on">2</li>
+								<li class="on">3</li>
+							</ul>
+						</div>
+						<div class="bd" style="width: 100%;">
+							<div class="tempWrap"
+								style="width: 100%; overflow: hidden; position: relative;">
+								<ul
+									style="width: 100%; position: relative; overflow: hidden; padding: 0px; margin: 0px; transition-duration: 200ms; transform: translateX(-768px);">
+									#if($!obj.goodsMainPhotoPath)
+									#set($small_img="$!{obj.goodsMainPhotoPath}")
+									#set($big_img="$!{obj.goodsMainPhotoPath}") #else
+									#set($small_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+									#set($big_img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+									#end #if($!{obj.goodsInventory}>0)
+									#set($goodsNo=$!{obj.goodsInventory}) #else #set($goodsNo=0)
+									#end
+
+									<!-- 商品详情主图片 -->
+									<li><img src="$!{obj.goodsMainPhotoPath}"
+										style="width: 100% !important;"></li>
+									<!-- 商品详情多图片 -->
+									#foreach($img in $obj.goodsPhotosList)
+									<li><img src="$!{img.accessory.path}"
+										style="width: 100% !important;"></li> #end
+								</ul>
+							</div>
+						</div>
+					</div>
+					
+					<!-- 分享 -->
+					<a href="javascript:;" class="share"></a>
+				</div>
+				<!-- banner结束 -->
+				
+				
+				<div class="goodsde-goods-message">
+					<div class="goods-title">
+						$!obj.goodsName  
+						#if($!obj.goodsType == 0) <span
+							class="zyby">自营</span> #end #if($!obj.goodsTransfee ==1) <span
+							class="zyby">包邮</span> #end
+					</div>
+					<div class="goods-price">
+						#if($!zeroFlag && $!zeroFlag == 1)
+						<span class="meiy">¥</span><span class="old-price">0.00</span>
+						#else
+						<span class="meiy">¥</span><span class="old-price">$!obj.goodsShowPrice</span>
+						#end
+						
+						
+						<!-- 
+							#set($thisPrice=$!{obj.goodsPrice})
+							#if($!obj.goodsType==0)
+		                	#set($thisPrice=$!{obj.goodsPrice})
+		                #else
+			                #set($thisPrice=$!{obj.goodsPrice}-$!{obj.selfAddPrice})
+		                #end -->
+				       <!--  #if($!obj.inventoryType=="spec" && $!obj.goodsType==1)
+			                #set($thisPrice=$!{obj.goodsPrice} + $!{obj.selfAddPrice})
+		                #else
+			                #set($thisPrice=$!{obj.goodsPrice})
+		                #end -->
+		                #set($thisPrice=$!{obj.goodsPrice})
+						<span class="huijia">¥${thisPrice}</span>
+							<!-- BV值  -->
+						<!-- #if($!obj.selfAddPrice.equals("0.00") || $!obj.selfAddPrice==0)
+ 						#else
+     						<span class="bvzhi">$!obj.selfAddPrice</span>
+     					#end -->
+					</div>
+					#if($!{isCN})
+					<div class="gou_price">
+					#if($!{obj.needYgb} > 0 && $!{obj.needMoney} > 0)
+
+						<span class="goubi">$!{obj.needYgb} + $!{obj.needMoney}元</span>
+
+					#elseif($!{obj.needYgb} > 0)
+						<span class="goubi">$!{obj.needYgb}</span>
+					#elseif($!{obj.needMoney} > 0)
+						<span class="goubi">$!{obj.needMoney}元</span>
+					#end
+					#if($!{obj.cnSelfAddPrice} > 0)
+						<span class="bvzhi">$!{obj.cnSelfAddPrice}</span>
+					#end
+					</div>
+					#end
+					#if($!zeroFlag && $!zeroFlag == 1)
+					<div class="goods-youfei"><span>邮费：$!zeroShipFee元</span>
+					<span class="goods-kucun">库存: $!zeroInventory（每人限购1件）</span> </div>
+					#end
+					
+					#if($!obj.hasExchangeIntegral)
+					<div class="goods-jiefen">
+						<img src="$!webPath/resources/shop/images/jifen.png" alt="">
+						<span class="jifen-price">¥ $!{obj.goodsIntegralPrice}</span> <span
+							class="jiajif">+$!{obj.exchangeIntegral}积分</span>
+					</div>
+					#end
+				</div>
+				
+				
+				<div class="goodsde-check">
+					<dl>
+						#if($!config.secondDomainOpen && $!store.storeSecondDomain!="")
+						#set($store_url="http://$!{store.storeSecondDomain}.$!{domainPath}")
+						#else
+						<dd>
+							<span>承诺</span><span class="fna seven">七天无理由退货</span>
+						</dd>
+						<dd>
+							<span>支付</span>
+							<span class="fna ybzf">云豆支付</span>
+							<span class="fna ysjf">微信支付</span>
+						</dd>
+						#end
+					</dl>
+				</div>
+				<!-- 店铺信息  -->
+				#if($!store)
+				<div class="goods_store">
+					<img alt="" src="$!store.storeLogoPath">
+					<div class="goods_store_tit">$!store.storeName</div>
+					#set($store_url="$!webPath/store_$!{obj.goodsStoreId}.htm")
+			        #if($!config.secondDomainOpen && $!store.storeSecondDomain!="")
+			        #set($store_url="http://$!{store.storeSecondDomain}.$!{domainPath}")
+			        #end
+					<a class="go_shop" href="$store_url">进入店铺</a>
+				</div> 
+				<!---->
+				<div class="goodsde-select" id="select-shuxing">
+					<span></span> 请选择 规格
+				</div>
+				#end
+				<!--  选择商品属性 -->
+
+				<div class="goodsde-pgj">评价($!{evaObjsTotal})</div>
+				<div class="goodsde-detail">
+					<ul>
+						<li>
+							#foreach($objpj in $eva_objs)
+								#set($img="$!{config.memberIcon.path}") #if($objpj.headImgPath)
+								#set($img="$!{objpj.headImgPath}") #end
+								<div class="yh-img">
+									<img data-original="$!img" alt=""> <span>$!orderFormTools.dealNickNameDisplay($!{objpj.nickName})</span>
+									<span>$!CommUtil.formatShortDate($!objpj.addTime)</span>
+								</div>
+								<div class="pj-neir">$!{objpj.evaluateInfo}</div>
+								<div class="pj-neir2">$!objpj.goodsName</div> 
+							#end
+						</li>
+
+						
+					</ul>
+				</div>
+
+				<!-- 	猜你喜欢 -->
+				$!httpInclude.include("/goods_list_bottom.htm")
+				<div class="look-xq">
+					<img src="$!webPath/resources/shop/images/goods-hent.png" alt="">
+					上拉查看详细图文 <img src="$!webPath/resources/shop/images/goods-hent.png"
+						alt="">
+				</div>
+				<div class="grenn_img_mes">图文详情</div>
+				<div class="xq-img">$!{obj.goodsTopFormatContent}
+					$!{obj.goodsDetails} $!{obj.goodsBottomFormatContent}</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<!-- 选择属性 -->
+	<div id="fade" class="black_overlay"></div>
+	<div id="MyDiv" class="white_content">
+		<div class="goods-shux" style="">
+			<img src="$!{obj.goodsMainPhotoPath}_100x100">
+			<div class="goods-detail">
+				<div class="goods-price">
+					#if($!zeroFlag && $!zeroFlag == 1)
+					<span class="meiy">¥</span><span class="old-price">0.00</span>
+					#else
+						<span class="meiy">¥</span><span class="old-price" id="store_price">$!obj.goodsShowPrice</span>
+					#end
+					
+					#if($!obj.goodsType==0)
+	                	#set($thisPrice=$!{obj.goodsPrice})
+	                #else
+		                #set($thisPrice=$!{obj.goodsPrice}-$!{obj.selfAddPrice})
+	                #end
+				</div>
+				<div class="goods-kucun">库存：<span id="goods_inventory">$goodsNo</span></div>
+				
+				
+				<!-- 
+				#if($!zeroFlag && $!zeroFlag == 1)
+				<div class="goods-kucun" id="goods-kucun">库存：<span>$zeroInventory</span></div>
+				#else
+				<div class="goods-kucun" id="goods-kucun">库存：<span>$goodsNo</span></div>
+				
+				#end -->
+			</div>
+			<span id="close-shuxing"></span>
+		</div>
+ 	
+
+		<div class="xz-shuxing">
+			<div class="right-number wrapper">
+				#if($!zeroFlag && $!zeroFlag == 1)
+					<a href="javascript:void(0)" class="btn-jian-nofn"> <span
+					class="glyphicon"></span>
+					</a> 
+					<input type="tel" class="amount"  id="goods_count" value="1" readonly="readonly">
+					<a href="javascript:void(0)" class="btn-jia-nofn"> 
+					<span class="glyphicon"></span>
+					</a>
+				#else				
+				<a href="javascript:void(0)" class="btn-jian"> <span
+					class="glyphicon"></span>
+				</a> 
+				<input type="tel" class="amount"  id="goods_count" value="1" oninput="setvalue()">
+				<a href="javascript:void(0)" class="btn-jia"> 
+				<span class="glyphicon"></span>
+				</a>
+				#end
+			</div>
+			<span class="number">购买数量</span>
+		</div>
+
+		#foreach($spec in $goodsViewTools.generic_spec("$!obj.id"))
+		<div class="guige" id="specName">$!{spec.name}：</div>
+		<div class="guige-ul" id="shuxing_id">
+			<ul class="product_choose">
+				<span class="choose_right"> 
+				#foreach($gsp in $obj.goodsSpecsList) 
+					#if($!{gsp.spec.id}==$!spec.id)
+					#if($!spec.type=="img") <!-- 判断商品属性是否图片 --> 
+					<a class="img_spec"	href="javascript:void(0);" onclick="goods_spec_set(this);" sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id">
+						#if($!{gsp.specImageId}) 
+						<img src="$!{gsp.specImageId}" width="20" height="20" /> #end 
+						<b>$!gsp.value</b>
+					</a> 
+					#else<!-- 商品属性不是图片就是文字 --> 
+					<a href="javascript:void(0);" onclick="goods_spec_set(this);" sname="$!gsp.value" spec="$!gsp.spec.id" gsp="$!gsp.id">
+						<li>$!gsp.value</li>
+					</a> 
+					#end 
+					#end 
+					#end<!-- 商品属性循环结束 -->
+				</span>
+			</ul>
+		</div>
+		#end
+		
+		<div class="bottom-btn">
+			<ul id="btn2">
+				<li><a href="javascript:void(0);" onclick="add_cart()">加入购物车</a></li>
+				<li><a href="javascript:void(0);" onclick="buy_goods()">立刻购买</a></li>
+			</ul>
+			<ul syle="display:none" id="btn1">
+			 #if($!boughtFlag && $!boughtFlag == 1)
+			  <li style="width: 100%;"><a href="javascript:void(0);"onclick="alert('您已购买过，限购一件')">确定</a></li>
+			 #else
+			 <li style="width: 100%;"><a href="javascript:void(0);"onclick="buy_goods()">确定 </a></li>
+			 #end
+				
+					
+					
+			</ul>
+		</div>
+	</div>
+	
+	<div class="actGotop">
+		<a href="javascript:;" title="返回顶部">
+			<img src="$!webPath/resources/shop/images/dinzhi.png" alt="">
+		</a> 
+	</div>
+	<!-- 底部浮层 -->
+	<div class="footer-fc">
+		<img src="$!webPath/resources/shop/images/fd-img.png" alt="">
+		<span class="footer-font">云生活 尚品质 健康与众不同</span>
+		<a class="xiazaibtn" href="javascript:void(0)"><!-- 点击下载按钮 --></a>
+		<a class="fc-close" href="javascript:void(0)"><!-- close --></a>
+	</div>
+	
+	<footer class="shopping_cart">
+
+		#if($!zeroFlag && $!zeroFlag == 1)
+		<ul>
+			<li id="buynow" style="width: 100%;">立刻购买</li>
+		</ul>
+		#else
+		<ul>
+			<li class="collect_product"><a href="javascript:void(0);">
+					<i class="guanzhu"></i> <span class="text">收藏</span>
+			</a></li>
+			<li><a href="javascript:void(0);" onclick="go_cart()"> <i class="addcar"></i> <span class="text">购物车</span>
+			</a></li>
+			<li class="goods-addcar" id="addcar">加入购物车</li>
+			<li id="buynow">立刻购买</li>
+		</ul>
+		#end
+	</footer>
+
+
+
+	<script src="$!webPath/resources/js/jquery.min.js"	type="text/javascript"></script>
+	<script src="$!webPath/resources/js/common.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/jQuery1.7.js"></script>
+	<script type="text/javascript"	src="$!webPath/resources/js/TouchSlide.js"></script>
+	<script src="$!webPath/resources/js/srcolltop.js" type="text/javascript"></script>
+	<script src="$!webPath/resources/js/addCar2.js" type="text/javascript"></script>
+	<script src="$!webPath/resources/js/jquery.lazyload2.js" type="text/javascript"></script>
+	<script src="$!webPath/resources/js/goToHtml.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	
+	//默认值
+	var default_value= document.getElementById("goods_count").value;
+	var kucun=parseInt($("div.goods-kucun span").text());
+	
+	//分享加载方法
+ 	$(function(){
+ 		if(fn.getQueryPar("tag")=="true"){
+ 			//应用内
+ 			shareInfo("$!{obj.goodsName}",location.href,"$!{obj.goodsMainPhotoPath}","产品描述");
+ 		}else{
+ 		}
+ 		$('img').lazyload();
+	}); 
+	
+	
+	
+
+	TouchSlide({
+		slideCell:"#slide",
+		titCell:".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+		mainCell:".bd ul",
+		effect:"left",
+		autoPlay:true,//自动播放
+		autoPage:true, //自动分页
+		switchLoad:"_src" //切换加载，真实图片路径为"_src"
+	});
+
+	$(function(){
+		/*选择商品属性*/
+		
+		$("#close-shuxing").click(function() {
+			$("#fade").hide();
+			$("#MyDiv").hide();
+		});
+		
+		$("#addcar,#select-shuxing").click(function() {
+			$("#fade").show();
+			$("#MyDiv").show();
+			$("#btn2").show();
+			$("#btn1").hide();
+		}); 
+		
+		$("#buynow").click(function() {
+			$("#fade").show();
+			$("#MyDiv").show();
+			$("#btn1").show();
+			$("#btn2").hide(); 
+		});
+		
+		/*选中的属性*/
+		$(".guige-ul ul li").click(function() {
+			$(this).addClass('crr').parent().siblings().find("li").removeClass('crr');
+		});
+	});
+	
+	function if_userlogin(){
+		  #if($!user)
+			  
+		  #else
+				if(fn.getQueryPar("tag")=="true"){
+					fn.requestLogin();
+					return;
+				}
+		  
+				  tipsbox("请先登录！",function(){
+					   location.href="$!webPath/user/login.htm";
+				 });
+		  #end
+		  }	
+	
+	function go_cart(){
+		#if($!user)
+			location.href="$!webPath/goods_cart1_load.htm";
+		#else
+			tipsbox("请先登录！",function(){
+				   location.href="$!webPath/user/login.htm";
+			 });
+		#end
+	}
+	//添加购物车
+	function add_cart(){
+		  #if($!user)
+				#if($!userDetails.storeId && $!obj.goodsStoreId && $!userDetails.storeId==$!obj.goodsStoreId)
+				  tipsbox("不能购买自己的商品！");
+				#else
+				  var add=true
+				  var gsp="";
+				  if(jQuery(".guige-ul").length==0){
+				    add=true;
+				  }else{
+					jQuery(".guige-ul").each(function(){
+					   jQuery.each(jQuery(this).find("a.this"),function(){
+						  gsp=jQuery(this).attr("gsp")+","+gsp; 
+						  console.log(gsp);
+						  jQuery(this).parent().parent().attr("status","selected");
+					   });
+				       if(jQuery(this).find("a.this").length==0) 
+					   add=false;
+					});
+					console.log(jQuery(".guige-ul").length);
+					console.log(jQuery(".product_choose a.crr").length);
+					if(jQuery(".guige-ul").length==jQuery(".product_choose .choose_right a.this").length){
+						
+						   add=true;
+						}else{
+							  add=false;
+							  var specName='';
+							  jQuery(".guige-ul").each(function(){
+								  if(!jQuery(this).find("a").hasClass("this")){
+									  specName= jQuery(this).prev("div").html().replace("：","");
+									  console.log(specName);
+									  return false;
+								  }
+							  });					  
+							  tipsbox("请选择"+specName+"属性");  
+							  return;
+					    }
+				  }
+				  console.log(add);
+				  var count=jQuery("#goods_count").val();
+				  if(count==0){
+				    add=false;
+					tipsbox("至少购买一件商品！");
+					return;
+				  }
+				  if($goodsNo==0){
+				    add=false;
+					tipsbox("商品库存为0,不能购买！");
+					return;
+				  }
+				  if($!obj.goodsType == 1 && "15"!="$!obj.goodsStore.storeStatus"){
+					add=false;
+					tipsbox("商品店铺已停业");
+					return;
+				  } 
+				  if(parseInt(document.getElementById("goods_count").value)>kucun){
+		        	   tipsbox("库存不足！");
+		        	   document.getElementById("goods_count").value=kucun;
+		        	   return;	  
+		           }
+				  if(add){
+					#if($!obj.activityStatus==2)
+					store_price = $!obj.goodsShowPrice;
+					#end
+					console.log("add gsp2="+gsp);
+					jQuery.post("$!current_webPath/add_goods_cart.htm",{"id":"$!obj.id","count":count,"price":store_price,"gsp":gsp},
+								function(data){
+											if(data.code==0){
+												  /* window.location.href="$!webPath/goods_cart0.htm?gid=$!{obj.id}"; */
+												}
+					                    	if(data.code==-1){
+												  tipsbox("添加失败，请刷新重试！");
+												}
+										   if(data.code==-2){
+												  tipsbox("商品已下架，添加失败！");
+												}
+										   if(data.code==-3){
+											  tipsbox("库存不足，添加失败！");
+											  return;
+											}	
+										    tipsbox("加入购物车成功！",function(){
+												$("#fade").hide();
+												$("#MyDiv").hide();
+										 	});
+										 },"json");
+
+					 
+				  }else{
+						 tipsbox("加入购物车失败！");
+				  }
+				 #end  
+		  #else
+				if(fn.getQueryPar("tag")=="true"){
+					fn.requestLogin();
+					return;
+				}
+				  
+		 
+		   tipsbox("请先登录！",function(){
+			   location.href="$!webPath/user/login.htm";
+		 });
+		   
+		  #end
+		  }	
+//直接购买
+	function buy_goods(){
+	#if($!addrs)
+		#if($!adinfoNotNull == false)
+		tipsbox("请先填写详细收货地址",function(){
+			   location.href="$!webPath/buyer/address.htm";
+		});
+		#elseif($!user)
+			#if($!userDetails.storeId && $!obj.goodsStoreId &&  $!userDetails.storeId==$!obj.goodsStoreId)
+				 tipsbox("不能购买自己的商品！");
+			#else				
+				  var add=true
+				  var gsp="";
+				  if(jQuery(".product_choose .choose_right").length==0){
+				    add=true;
+				  }else{
+					jQuery(".product_choose .choose_right").each(function(){
+					   jQuery.each(jQuery(this).find("a.this"),function(){
+						  gsp=jQuery(this).attr("gsp")+","+gsp; 
+						  jQuery(this).parent().attr("status","selected");
+					   });
+				       if(jQuery(this).find("a.this").length==0) 
+					   add=false;
+					});
+					if(jQuery(".product_choose .choose_right").length==jQuery(".product_choose span[status='selected']").length){
+						 add=true;
+						}else{
+						add=false;	
+					    }
+				  }
+				  var count=jQuery("#goods_count").val();
+				  if(count==0){
+				    add=false;
+					tipsbox("至少购买一件商品！");
+					return;
+				  }
+				  
+				  #if($!zeroFlag && $!zeroFlag == 1)
+					  #if($!zeroInventory && $!zeroInventory <= 0 )
+						  add=false;
+						  tipsbox("0元商品库存为0,不能购买！");
+						  return;
+						  #end
+				  #end
+				  
+				  if($goodsNo==0){
+				    add=false;
+					tipsbox("商品库存为0,不能购买！");
+					return;
+				  } 
+				  if(document.getElementById("shuxing_id")&&jQuery(".guige").length!=jQuery("#shuxing_id a.this").length){
+					  //如果有多规格，则必须选择规格
+					  add=false;
+					  var specName='';
+					  jQuery(".guige-ul").each(function(){
+						  if(!jQuery(this).find("a").hasClass("this")){
+							  specName= jQuery(this).prev("div").html().replace("：","");
+							  console.log(specName);
+							  return false;
+						  }
+					  });					  
+					  tipsbox("请选择"+specName+"属性");  
+					  return;
+				  }
+				  if($!obj.goodsType == 1 && "15"!="$!obj.goodsStore.storeStatus"){
+					add=false;
+					tipsbox("商品店铺已停业");
+					return;
+				  }
+				  if(parseInt(document.getElementById("goods_count").value)>kucun){
+		        	   tipsbox("库存不足！");
+		        	   document.getElementById("goods_count").value=kucun;
+		        	   return;	  
+		           }
+				  var buy_type=arguments[0];
+				  var combin_ids=arguments[1];
+				  if(add){
+					#if($!obj.activityStatus==2) 
+					store_price = $!obj.goodsShowPrice;
+					#end
+					/* alert("id="+$!obj.id+"count="+count+"&price="+store_price+"&gsp="+gsp); */ 
+					var href="$!webPath/now-buy?id=$!obj.id&count="
+						+count+"&price="+store_price+"&gsp="+gsp;
+						location.href=href;
+				  }else{
+					  error_show();
+				  }
+				 #end  
+		 #else
+			if(fn.getQueryPar("tag")=="true"){
+				fn.requestLogin();
+				return;
+			}
+			tipsbox("请先登录！",function(){
+				   location.href="$!webPath/user/login.htm";
+			 });
+		 #end
+		#else
+			#if($!adinfoNotNull == false)
+				tipsbox("请先填写详细收货地址",function(){
+					   location.href="$!webPath/buyer/address.htm";
+				});
+			#else
+				tipsbox("请先填写收货地址",function(){
+					   location.href="$!webPath/buyer/address.htm";
+				});
+			#end
+		#end
+	}
+//收藏商品
+var count = $!{obj.goodsCollect}-0;
+jQuery(".collect_product a").click(function(){
+	#if($!user)
+			#if($!isFavorite)
+				 tipsbox("已经收藏该商品！");
+			#else
+			  jQuery.post("$!current_webPath/add_goods_favorite.htm",{"id":"$!obj.id"},function(data){
+				 if(data==0){
+					 tipsbox("商品收藏成功！");
+				 }
+				 if(data==1){
+				   tipsbox("已经收藏该商品！");
+				   jQuery(".collect_product").addClass("this");
+				 }
+			  },"text");
+			#end
+	 #else
+			if(fn.getQueryPar("tag")=="true"){
+				fn.requestLogin();
+				return;
+			}
+			tipsbox("请先登录！",function(){
+				   location.href="$!webPath/user/login.htm";
+			 });
+	#end
+});
+//
+	</script>
+
+	<script>
+	//规格
+function goods_spec_set(obj){
+	var spec=jQuery(obj).attr("spec");
+	var gsp="";
+	var sname="";
+	var load=true;
+	var count=0;
+	jQuery(".choose_right a[spec="+spec+"]").removeClass("this");
+    jQuery(obj).addClass("this");
+	jQuery(".choose_right").each(function(){
+           jQuery.each(jQuery(this).find("a.this"),function(){									
+		  gsp=jQuery(this).attr("gsp")+","+gsp;
+		  if(count==0){
+		      sname="“"+jQuery(this).attr("sname")+"“";	  
+			  }else{
+			  sname="“"+jQuery(this).attr("sname")+"”,"+sname;	  
+				  }
+		  count++;
+		});
+       });
+	jQuery(".choose_right").each(function(){
+            if(jQuery(this).find("a.this").length==0) load=false;
+        });
+	jQuery("#show_spec_li").show().find("strong").html(sname);
+  if(load){
+	error_hide(); 
+	console.log(gsp);
+	jQuery.post("$!current_webPath/load_goods_gsp.htm",{"id":"$!obj.id","gsp":gsp},function(data){
+	   goods_inventory=data.count;
+	   store_price=data.price;
+		jQuery("#store_price").html(store_price);
+		jQuery("#goods_inventory").html(goods_inventory);
+		if(data.integralPrice && data.integralCount && data.integralPrice > 0 && data.integralCount > 0)
+		{
+			jQuery("#showGoodsIntegralPrice").html(data.integralPrice);
+			jQuery("#showExchangeIntegral").html(data.integralCount);   
+			jQuery(".details-integral").show();
+		}
+		else
+		{
+			jQuery(".details-integral").hide();
+		}
+		if(data.mobilePrice && data.mobilePrice > 0)
+		{
+			jQuery("#showGoodsMobilePrice").html(data.mobilePrice);
+			jQuery(".details-block").show();
+		}
+		else
+		{
+			jQuery(".details-block").hide();
+		}
+		
+	   if(data.act_price!=null){
+		    act_price = data.act_price;
+		    jQuery("#act_price").html("¥"+act_price);
+		}
+	    jQuery("#goods_inventory").html(goods_inventory);
+		if(goods_inventory==0){
+			jQuery("#add_car_g").attr("class","add_car_btn_no").removeAttr("onclick");
+			jQuery("#buy_g").attr("class","add_atonce_buy_no").removeAttr("onclick");
+			jQuery("#buy_f").attr("class","add_atonce_buy_no").removeAttr("onclick");
+			jQuery("#goods_inventory").attr("style","color:#F00; font-size:16px");
+			jQuery("#notice").show();
+		}else{
+		    jQuery("#add_car_g").attr("class","add_car_btn");
+			jQuery("#buy_g").attr("class","add_atonce_buy");
+			jQuery("#buy_f").attr("class","add_atonce_buy");
+			#if($!{obj.activity_status}==2)
+				#if($!user)
+			 jQuery("#add_car_g").attr("onclick","add_cart();");
+			 jQuery("#buy_f").attr("onclick","f_cart();");
+			 	#end
+			 #else
+			 #if($!user)
+			 	jQuery("#buy_g").attr("onclick","buy_goods();");
+			 #else
+				jQuery("#buy_g").removeAttr("onclick");
+			 #end
+			 jQuery("#add_car_g").attr("onclick","add_cart();");
+			 jQuery("#buy_f").attr("onclick","f_cart();");
+			#end
+			jQuery("#goods_inventory").removeAttr("style");
+			jQuery("#notice").hide();
+		}
+	  },"json");
+    }
+}
+//
+function goods_count_sub(){
+	   var goods_count=Number(jQuery("#goods_count").val());
+	   var goods_inventory=Number(jQuery("#goods_inventory").html());
+	   if(goods_count>1){
+			goods_count--;
+			jQuery("#goods_count").val(goods_count);
+		}
+}
+function goods_count_add(){
+   var goods_count= Number(jQuery("#goods_count").val());
+   var goods_inventory=Number(jQuery("#goods_inventory").html());
+   console.log(goods_count+","+goods_inventory);
+   if(goods_count < goods_inventory){
+		goods_count++;
+		jQuery("#goods_count").val(goods_count);
+	 }
+}
+function error_show(){
+  jQuery(".product_choose").addClass("choose_this");
+}
+function error_hide(){
+  jQuery(".product_choose").removeClass("choose_this");
+}
+//
+	</script>
+
+	<script>
+	$(".xiazaibtn").click(function(event) {
+		gzhBox();//扫描二维码
+	});
+
+	
+          jQuery(".pro_choose_li[mark='spec']").each(function(){
+			var th = jQuery(this).find("a").first();
+			goods_spec_set(th); 
+		   });
+		  jQuery(function(){ 
+		     jQuery(".value_top").click(function(){
+			     jQuery(".pro_shop_date").slideUp();
+				 jQuery(".value_top").hide();
+				 jQuery(".value_down").show();
+			  });
+			 jQuery(".value_down").click(function(){
+			     jQuery(".pro_shop_date").slideDown();
+				 jQuery(".value_top").show();
+				 jQuery(".value_down").hide();
+			  });
+		  })
+		  
+		  $(".old-price").each(function(){			
+			var html=$(this).html().split('.').join(".</span><span class=\"small\">");
+			$(this).html(html);
+		  });
+		  $(".lun-price span").each(function(){			
+				var html=$(this).html().split('.').join(".</span><span class=\"small\">");
+				$(this).html(html);
+			  });
+		  $(".huijia").each(function(){			
+				var html=$(this).html().split('.').join(".</span><span class=\"small\">");
+				$(this).html(html);
+			});
+		  $(".jifen-price").each(function(){			
+				var html=$(this).html().split('.').join(".</span><span class=\"small\">");
+				$(this).html(html);
+			});
+		  
+		
+
+		function setvalue()
+		{    
+			var new_value=document.getElementById("goods_count").value;
+			if(default_value==1){
+				default_value= "";
+			  document.getElementById("goods_count").value= new_value.substring(1);
+			}
+			if(parseInt(document.getElementById("goods_count").value)>kucun){
+				tipsbox("库存不足！");
+				
+				document.getElementById("goods_count").value=kucun;
+
+				return;	  
+			}
+		}
+
+		$(".fc-close").click(function() {
+			$(".footer-fc").hide();
+		});
+
+		var fade=document.getElementById("fade"),
+		MyDiv=document.getElementById("MyDiv");
+		[fade,MyDiv].forEach(function(value, index, array){
+			value.addEventListener("touchmove",function(e){
+				e.preventDefault();
+			},false);
+		});
+     </script>
+</body>
+</html>

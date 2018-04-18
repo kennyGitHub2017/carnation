@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.label.mapper.LabelMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.label.model.Label">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="label_name" property="labelName" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="ispush" property="ispush" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="class_id" property="class_id" jdbcType="BIGINT" />
+		<result column="ordering" property="ordering" jdbcType="INTEGER" />
+		<result column="serviceType" property="serviceType" jdbcType="INTEGER" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.label.bo.LabelBO"
+		extends="BaseResultMap">
+		<result column="className" property="className" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, label_name, state, type, ispush,
+		user_id,ordering
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.label.model.LabelExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from label
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="bo_base_Column_List" />
+		,ac.class_Name as className
+		from label a
+		left join label_class ac on a.class_id =ac.id
+		where a.id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from label
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.label.model.LabelExample">
+		delete from label
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.label.model.Label"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into label
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="labelName != null">
+				label_name,
+			</if>
+			<if test="state != null">
+				state,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="ispush != null">
+				ispush,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="labelName != null">
+				#{labelName,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="ispush != null">
+				#{ispush,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.label.model.LabelExample"
+		resultType="java.lang.Integer">
+		select count(*) from label
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update label
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.labelName != null">
+				label_name = #{record.labelName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.state != null">
+				state = #{record.state,jdbcType=INTEGER},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=INTEGER},
+			</if>
+			<if test="record.ispush != null">
+				ispush = #{record.ispush,jdbcType=INTEGER},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update label
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		label_name = #{record.labelName,jdbcType=VARCHAR},
+		state = #{record.state,jdbcType=INTEGER},
+		type = #{record.type,jdbcType=INTEGER},
+		ispush = #{record.ispush,jdbcType=INTEGER},
+		user_id = #{record.userId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.label.model.Label">
+		update label
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="labelName != null">
+				label_name = #{labelName,jdbcType=VARCHAR},
+			</if>
+			<if test="state != null">
+				state = #{state,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="ispush != null">
+				ispush = #{ispush,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="class_id != null">
+				class_id = #{class_id,jdbcType=BIGINT},
+			</if>
+			<if test="ordering != null">
+				ordering = #{ordering,jdbcType=INTEGER},
+			</if>
+			<if test="memo != null">
+				memo = #{memo,jdbcType=VARCHAR},
+			</if>
+			<if test="serviceType != null">
+				serviceType = #{serviceType,jdbcType=INTEGER},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.label.model.Label">
+		update label
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		label_name = #{labelName,jdbcType=VARCHAR},
+		state = #{state,jdbcType=INTEGER},
+		type = #{type,jdbcType=INTEGER},
+		ispush = #{ispush,jdbcType=INTEGER},
+		user_id = #{userId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<!-- caibin -->
+	<sql id="column_list">
+		a.id, a.add_time, a.delete_status,a.label_name
+	</sql>
+	<select id="selectList" resultMap="BaseResultMap" parameterType="map">
+		select
+		<include refid="column_list" />
+		from label a
+		where a.delete_status=0
+		<if test="vo.ispush!=null and vo.ispush!=0">
+			and a.ispush=#{vo.ispush}
+		</if>
+		<if test="vo.labelName!=null and vo.labelName!=''">
+			and a.label_name like CONCAT('%',#{vo.labelName},'%')
+		</if>
+		<if test="vo.serviceType!=null">
+			and a.serviceType=#{vo.serviceType}
+		</if>
+		<if test="vo.state!=null">
+			and a.state=#{vo.state}
+		</if>
+		ORDER BY a.add_time DESC
+	</select>
+	<insert id="insert" parameterType="com.sinco.carnation.label.model.Label"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into label (id, add_time,
+		label_name, user_id,
+		type,class_id,ordering,memo,serviceType,ispush,state)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{labelName,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT},
+		#{type,jdbcType=INTEGER}, #{class_id,jdbcType=BIGINT},
+		#{ordering,jdbcType=INTEGER},
+		#{memo,jdbcType=VARCHAR},#{serviceType,jdbcType=INTEGER}
+		,#{ispush,jdbcType=INTEGER},#{state,jdbcType=INTEGER})
+	</insert>
+	<sql id="bo_base_Column_List">
+		a.id, a.add_time, a.delete_status, a.label_name, a.state, a.type, a.ispush,
+		a.user_id,a.ordering,a.serviceType,a.class_id,a.memo
+	</sql>
+	<select id="findByPage" resultMap="BOResultMap" parameterType="map">
+		select
+		<include refid="bo_base_Column_List" />
+		,ac.class_Name as className
+		from label a
+		left join label_class ac on a.class_id =ac.id
+		where 1=1
+		<if test="name != null and name != ''">
+			and a.label_name like concat('%',#{name},'%')
+		</if>
+		order by a.ordering asc
+	</select>
+
+	<select id="getIdNameMap" resultMap="BaseResultMap">
+		select id,label_name from label
+	</select>
+</mapper>

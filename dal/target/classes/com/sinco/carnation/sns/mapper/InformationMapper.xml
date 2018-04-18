@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.InformationMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.Information">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="author" property="author" jdbcType="VARCHAR" />
+		<result column="author_id" property="authorId" jdbcType="BIGINT" />
+		<result column="classid" property="classid" jdbcType="BIGINT" />
+		<result column="clicktimes" property="clicktimes" jdbcType="INTEGER" />
+		<result column="cover" property="cover" jdbcType="BIGINT" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="store" property="store" jdbcType="VARCHAR" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="info_Source" property="infoSource" jdbcType="VARCHAR" />
+		<result column="recommend" property="recommend" jdbcType="INTEGER" />
+		<result column="synopsis" property="synopsis" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.sns.model.Information"
+		extends="BaseResultMap">
+		<result column="article" property="article" jdbcType="LONGVARCHAR" />
+		<result column="failreason" property="failreason" jdbcType="LONGVARCHAR" />
+		<result column="info_Icon_Data" property="infoIconData"
+			jdbcType="LONGVARCHAR" />
+		<result column="info_User_Data" property="infoUserData"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<resultMap id="BoResultMap" type="com.sinco.carnation.sns.bo.InformationBO"
+		extends="BaseResultMap">
+		<result column="article" property="article" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="selectByListWhere">
+		where delete_Status = 0
+		<if test="vo.classIds != null">
+			and classid in
+			<foreach collection="vo.classIds" item="listItem" open="("
+				close=")" separator=",">
+				#{listItem}
+			</foreach>
+		</if>
+		<if test="vo.title != null and vo.title != ''">
+			and title like concat('%', #{vo.title}, '%')
+		</if>
+		<if test="vo.verifyStatus != null">
+			and status in
+			<foreach collection="vo.verifyStatus" item="statusItem" open="("
+				close=")" separator=",">
+				#{statusItem}
+			</foreach>
+		</if>
+	</sql>
+	<select id="selectByList" resultMap="BoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		, article
+		from sns_information
+		<include refid="selectByListWhere" />
+	</select>
+	<select id="selectByCountList" resultType="int">
+		select count(1)
+		from sns_information
+		<include refid="selectByListWhere" />
+	</select>
+	<select id="selectById" resultMap="BoResultMap" parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		, article
+		from sns_information
+		where id = #{id}
+	</select>
+	<select id="queryByIds" resultMap="BoResultMap">
+		select
+		id, title
+		from sns_information
+		where id in
+		<foreach collection="ids" index="index" item="id" open="("
+			separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+	<select id="selectPageByClassId" resultMap="BoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sns_information
+		where class_id = #{classId}
+		and delete_Status = 0
+		and status = 20
+		order by add_Time desc
+	</select>
+
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, author, author_id, classid, clicktimes,
+		cover, sequence,
+		status, store, store_id, title, type, info_Source, recommend, synopsis
+	</sql>
+	<sql id="Blob_Column_List">
+		article, failreason, info_Icon_Data, info_User_Data
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.sns.model.InformationExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sns.model.InformationExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectBOByExample" resultMap="BoResultMap"
+		parameterType="com.sinco.carnation.sns.model.InformationExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_information
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sns_information
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sns.model.InformationExample">
+		delete from sns_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.Information">
+		insert into sns_information (id, add_Time, delete_Status,
+		author, author_id, classid,
+		clicktimes, cover, sequence,
+		status, store, store_id,
+		title, type, info_Source,
+		recommend, synopsis, article,
+		failreason, info_Icon_Data, info_User_Data
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{author,jdbcType=VARCHAR}, #{authorId,jdbcType=BIGINT}, #{classid,jdbcType=BIGINT},
+		#{clicktimes,jdbcType=INTEGER}, #{cover,jdbcType=BIGINT},
+		#{sequence,jdbcType=INTEGER},
+		#{status,jdbcType=INTEGER}, #{store,jdbcType=VARCHAR}, #{storeId,jdbcType=BIGINT},
+		#{title,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+		#{infoSource,jdbcType=VARCHAR},
+		#{recommend,jdbcType=INTEGER}, #{synopsis,jdbcType=VARCHAR}, #{article,jdbcType=LONGVARCHAR},
+		#{failreason,jdbcType=LONGVARCHAR},
+		#{infoIconData,jdbcType=LONGVARCHAR},
+		#{infoUserData,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.Information">
+		insert into sns_information
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="author != null">
+				author,
+			</if>
+			<if test="authorId != null">
+				author_id,
+			</if>
+			<if test="classid != null">
+				classid,
+			</if>
+			<if test="clicktimes != null">
+				clicktimes,
+			</if>
+			<if test="cover != null">
+				cover,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="store != null">
+				store,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="infoSource != null">
+				info_Source,
+			</if>
+			<if test="recommend != null">
+				recommend,
+			</if>
+			<if test="synopsis != null">
+				synopsis,
+			</if>
+			<if test="article != null">
+				article,
+			</if>
+			<if test="failreason != null">
+				failreason,
+			</if>
+			<if test="infoIconData != null">
+				info_Icon_Data,
+			</if>
+			<if test="infoUserData != null">
+				info_User_Data,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="author != null">
+				#{author,jdbcType=VARCHAR},
+			</if>
+			<if test="authorId != null">
+				#{authorId,jdbcType=BIGINT},
+			</if>
+			<if test="classid != null">
+				#{classid,jdbcType=BIGINT},
+			</if>
+			<if test="clicktimes != null">
+				#{clicktimes,jdbcType=INTEGER},
+			</if>
+			<if test="cover != null">
+				#{cover,jdbcType=BIGINT},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="store != null">
+				#{store,jdbcType=VARCHAR},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="infoSource != null">
+				#{infoSource,jdbcType=VARCHAR},
+			</if>
+			<if test="recommend != null">
+				#{recommend,jdbcType=INTEGER},
+			</if>
+			<if test="synopsis != null">
+				#{synopsis,jdbcType=VARCHAR},
+			</if>
+			<if test="article != null">
+				#{article,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="failreason != null">
+				#{failreason,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="infoIconData != null">
+				#{infoIconData,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="infoUserData != null">
+				#{infoUserData,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sns.model.InformationExample"
+		resultType="java.lang.Integer">
+		select count(*) from sns_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sns_information
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.author != null">
+				author = #{record.author,jdbcType=VARCHAR},
+			</if>
+			<if test="record.authorId != null">
+				author_id = #{record.authorId,jdbcType=BIGINT},
+			</if>
+			<if test="record.classid != null">
+				classid = #{record.classid,jdbcType=BIGINT},
+			</if>
+			<if test="record.clicktimes != null">
+				clicktimes = #{record.clicktimes,jdbcType=INTEGER},
+			</if>
+			<if test="record.cover != null">
+				cover = #{record.cover,jdbcType=BIGINT},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.store != null">
+				store = #{record.store,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=INTEGER},
+			</if>
+			<if test="record.infoSource != null">
+				info_Source = #{record.infoSource,jdbcType=VARCHAR},
+			</if>
+			<if test="record.recommend != null">
+				recommend = #{record.recommend,jdbcType=INTEGER},
+			</if>
+			<if test="record.synopsis != null">
+				synopsis = #{record.synopsis,jdbcType=VARCHAR},
+			</if>
+			<if test="record.article != null">
+				article = #{record.article,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.failreason != null">
+				failreason = #{record.failreason,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.infoIconData != null">
+				info_Icon_Data = #{record.infoIconData,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.infoUserData != null">
+				info_User_Data = #{record.infoUserData,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update sns_information
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		author = #{record.author,jdbcType=VARCHAR},
+		author_id = #{record.authorId,jdbcType=BIGINT},
+		classid = #{record.classid,jdbcType=BIGINT},
+		clicktimes = #{record.clicktimes,jdbcType=INTEGER},
+		cover = #{record.cover,jdbcType=BIGINT},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		status = #{record.status,jdbcType=INTEGER},
+		store = #{record.store,jdbcType=VARCHAR},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		title = #{record.title,jdbcType=VARCHAR},
+		type = #{record.type,jdbcType=INTEGER},
+		info_Source = #{record.infoSource,jdbcType=VARCHAR},
+		recommend = #{record.recommend,jdbcType=INTEGER},
+		synopsis = #{record.synopsis,jdbcType=VARCHAR},
+		article = #{record.article,jdbcType=LONGVARCHAR},
+		failreason = #{record.failreason,jdbcType=LONGVARCHAR},
+		info_Icon_Data = #{record.infoIconData,jdbcType=LONGVARCHAR},
+		info_User_Data = #{record.infoUserData,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sns_information
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		author = #{record.author,jdbcType=VARCHAR},
+		author_id = #{record.authorId,jdbcType=BIGINT},
+		classid = #{record.classid,jdbcType=BIGINT},
+		clicktimes = #{record.clicktimes,jdbcType=INTEGER},
+		cover = #{record.cover,jdbcType=BIGINT},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		status = #{record.status,jdbcType=INTEGER},
+		store = #{record.store,jdbcType=VARCHAR},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		title = #{record.title,jdbcType=VARCHAR},
+		type = #{record.type,jdbcType=INTEGER},
+		info_Source = #{record.infoSource,jdbcType=VARCHAR},
+		recommend = #{record.recommend,jdbcType=INTEGER},
+		synopsis = #{record.synopsis,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.Information">
+		update sns_information
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="author != null">
+				author = #{author,jdbcType=VARCHAR},
+			</if>
+			<if test="authorId != null">
+				author_id = #{authorId,jdbcType=BIGINT},
+			</if>
+			<if test="classid != null">
+				classid = #{classid,jdbcType=BIGINT},
+			</if>
+			<if test="clicktimes != null">
+				clicktimes = #{clicktimes,jdbcType=INTEGER},
+			</if>
+			<if test="cover != null">
+				cover = #{cover,jdbcType=BIGINT},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="store != null">
+				store = #{store,jdbcType=VARCHAR},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="infoSource != null">
+				info_Source = #{infoSource,jdbcType=VARCHAR},
+			</if>
+			<if test="recommend != null">
+				recommend = #{recommend,jdbcType=INTEGER},
+			</if>
+			<if test="synopsis != null">
+				synopsis = #{synopsis,jdbcType=VARCHAR},
+			</if>
+			<if test="article != null">
+				article = #{article,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="failreason != null">
+				failreason = #{failreason,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="infoIconData != null">
+				info_Icon_Data = #{infoIconData,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="infoUserData != null">
+				info_User_Data = #{infoUserData,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.sns.model.Information">
+		update sns_information
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		author = #{author,jdbcType=VARCHAR},
+		author_id = #{authorId,jdbcType=BIGINT},
+		classid = #{classid,jdbcType=BIGINT},
+		clicktimes = #{clicktimes,jdbcType=INTEGER},
+		cover = #{cover,jdbcType=BIGINT},
+		sequence = #{sequence,jdbcType=INTEGER},
+		status = #{status,jdbcType=INTEGER},
+		store = #{store,jdbcType=VARCHAR},
+		store_id = #{storeId,jdbcType=BIGINT},
+		title = #{title,jdbcType=VARCHAR},
+		type = #{type,jdbcType=INTEGER},
+		info_Source = #{infoSource,jdbcType=VARCHAR},
+		recommend = #{recommend,jdbcType=INTEGER},
+		synopsis = #{synopsis,jdbcType=VARCHAR},
+		article = #{article,jdbcType=LONGVARCHAR},
+		failreason = #{failreason,jdbcType=LONGVARCHAR},
+		info_Icon_Data = #{infoIconData,jdbcType=LONGVARCHAR},
+		info_User_Data = #{infoUserData,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.Information">
+		update sns_information
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		author = #{author,jdbcType=VARCHAR},
+		author_id = #{authorId,jdbcType=BIGINT},
+		classid = #{classid,jdbcType=BIGINT},
+		clicktimes = #{clicktimes,jdbcType=INTEGER},
+		cover = #{cover,jdbcType=BIGINT},
+		sequence = #{sequence,jdbcType=INTEGER},
+		status = #{status,jdbcType=INTEGER},
+		store = #{store,jdbcType=VARCHAR},
+		store_id = #{storeId,jdbcType=BIGINT},
+		title = #{title,jdbcType=VARCHAR},
+		type = #{type,jdbcType=INTEGER},
+		info_Source = #{infoSource,jdbcType=VARCHAR},
+		recommend = #{recommend,jdbcType=INTEGER},
+		synopsis = #{synopsis,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

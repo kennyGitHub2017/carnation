@@ -1,0 +1,85 @@
+﻿
+
+    <style>
+   	.c_blue strong{color: #ff2256;font-family: serif;font-size: 14px;}	
+	.c_blue .botomListBv{float: right;margin-right: 12px;font-size: 14px; color: #757575; font-weight: normal; text-indent: 17px; background: url("$!webPath/resources/img/shopbv.png")no-repeat left center; height: 15px; line-height:15px; width: auto;min-width: 30px;}
+    </style>
+    <!--<div class="main_bottom_left">-->
+    <!--<h3><span>最近浏览</span></h3>-->
+    <!--#foreach($goods in $goods_last)-->
+    <!--#if($!goods.goodsMainPhotoPath)-->
+    <!--#set($img="$!{goods.goodsMainPhotoPath}_150x150")-->
+    <!--#else-->
+    <!--#set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")-->
+    <!--#end-->
+
+    <!--#set($goods_url="$!webPath/goods_$!{goods.id}.htm")-->
+    <!--#if($!config.secondDomainOpen && $!goods.goodsType==1 && $!goods.goodsStore.storeSecondDomain!="")-->
+    <!--#set($goods_url="http://$!{goods.goodsStore.storeSecondDomain}.$!{domainPath}/goods_$!{goods.id}.htm")-->
+    <!--#end-->
+    <!--<dl>-->
+    <!--<dt><a href="$!goods_url" target="_blank"><span class="img_cspan"><img src="$!{img}" width="50" height="50" /></span></a></dt>-->
+    <!--<dd>-->
+    <!--<h4><a href="$!goods_url" target="_blank">$!goods.goodsName</a></h4>-->
+    <!--<b>¥$!{goods.goodsShowPrice}</b></dd>-->
+    <!--</dl>-->
+    <!--#end <span class="main_bleft_a"></span>-->
+    <!--</div>-->
+
+	<style>
+   	.c_blue strong{color: #ff2256;font-family: serif;font-size: 14px;}	
+	.c_blue .botomListBv{float: right;margin-right: 12px;font-size: 14px; color: #757575; font-weight: normal; text-indent: 17px; background: url("$!webPath/resources/img/shopbv.png")no-repeat left center; height: 15px; line-height:15px; width: auto;min-width: 30px;}
+    </style>
+    <div class="slideBox-wrap">
+
+        <div class="multipleColumn">
+            <div class="slideBox-title"><h3>猜你喜欢</h3></div>
+            <div class="hd">
+                <a class="next"></a>
+                <ul></ul>
+                <a class="prev"></a>
+            </div>
+            <div class="bd">
+
+                <div class="ulWrap">
+
+                    #foreach($goods in $your_like_goods)
+                    #if($!goods.goodsMainPhotoPath)
+                    #set($img="$!{goods.goodsMainPhotoPath}")
+                    #else
+                    #set($img="$!imageWebServer/$!{config.goodsImage.path}/$!{config.goodsImage.name}")
+                    #end
+
+                    #set($goods_url="$!webPath/goods_$!{goods.id}.htm")
+                    #if($!config.secondDomainOpen && $!goods.goodsType==1 && $!goods.goodsStore.storeSecondDomain!="")
+                    #set($goods_url="http://$!{goods.goodsStore.storeSecondDomain}.$!{domainPath}/goods_$!{goods.id}.htm")
+                    #end
+                    <ul class="rbox_ul">
+                        <li class="rbox_ul_img">
+                            <a href="$!goods_url"><img src="$!{img}_150x150" /></a>
+                        </li>
+                        <li class="rbox_ul_name"><a href="$!goods_url">$!goods.goodsName</a>
+                        </li>
+                        <li class="c_blue">
+                        	<strong>¥ $!{goods.goodsShowPrice}</strong>
+                        	<!-- <b class="botomListBv">25</b> -->
+                        	#if($!{isCN})
+                        	#if($!{goods.cnSelfAddPrice} > 0)
+                  				#if($!{goods.exPriceFlag}==1)
+                  					<b class="botomListBv">$!{goods.cnSelfAddPrice}</b>
+                  				#end
+                  			#end
+                    		#end
+                        </li>
+                    </ul>
+                    #end
+                </div>
+                <!-- ulWrap End -->
+            </div>
+            <!-- bd End -->
+        </div>
+        <!-- multipleColumn End -->
+
+
+    </div>
+

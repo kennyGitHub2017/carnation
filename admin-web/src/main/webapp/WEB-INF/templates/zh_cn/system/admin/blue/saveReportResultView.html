@@ -1,0 +1,12 @@
+
+<form action="$!webPath/admin/saveCheckResult.htm" method="post" style="text-align: left; padding: 5px 10px;">
+  <input name="id" type="hidden" value="$!obj.id" />
+  <input name="status" type="hidden" value="3" />
+  <p style="text-align: left;">处理结果</p>
+  <textarea name="result" style="width: 350px; height: 200px" required="required">$!obj.result</textarea>
+  #if(!$!request.getParameter('self'))
+  <p style="text-align: center; margin: 15px 0px 0px;">
+    <input name="saveButton" type="submit" value=" 保 存 " style="font-size: 16px;">
+  </p>
+  #end
+</form>

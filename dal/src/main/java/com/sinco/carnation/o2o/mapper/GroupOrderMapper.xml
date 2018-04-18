@@ -1,0 +1,1371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.o2o.mapper.GroupOrderMapper" >
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.o2o.model.GroupOrder" >
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus" jdbcType="BIT" />
+		<result column="finish_time" property="finishTime" jdbcType="TIMESTAMP" />
+		<result column="goods_amount" property="goodsAmount" jdbcType="DECIMAL" />
+		<result column="order_form" property="orderForm" jdbcType="INTEGER" />
+		<result column="order_id" property="orderId" jdbcType="VARCHAR" />
+		<result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+		<result column="order_return_count" property="orderReturnCount" jdbcType="INTEGER" />
+		<result column="order_type" property="orderType" jdbcType="INTEGER" />
+		<result column="order_source" property="orderSource" jdbcType="VARCHAR" />
+		<result column="out_order_id" property="outOrderId" jdbcType="VARCHAR" />
+		<result column="return_ship_time" property="returnShipTime" jdbcType="TIMESTAMP" />
+		<result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+		<result column="store_id" property="storeId" jdbcType="VARCHAR" />
+		<result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+		<result column="trade_no" property="tradeNo" jdbcType="VARCHAR" />
+		<result column="is_sys_user" property="isSysUser" jdbcType="BIT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="payment_mark" property="paymentMark" jdbcType="VARCHAR" />
+		<result column="is_mobile" property="isMobile" jdbcType="BIT" />
+		<result column="user_nickname" property="userNickname" jdbcType="VARCHAR" />
+		<result column="local_return_status" property="localReturnStatus" jdbcType="INTEGER" />
+		<result column="local_group_name" property="localGroupName" jdbcType="VARCHAR" />
+		<result column="cash_id" property="cashId" jdbcType="BIGINT" />
+		<result column="proportion" property="proportion" jdbcType="DECIMAL" />
+		<result column="original_price" property="originalPrice" jdbcType="DECIMAL" />
+		<result column="group_rebate_amount" property="groupRebateAmount" jdbcType="DECIMAL" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.o2o.bo.GroupOrderBO"
+		extends="ResultMapWithBLOBs">
+		<result column="status_count" property="statusCount" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.o2o.bo.GroupOrderBO"
+		extends="BaseResultMap">
+		<result column="coupon_info" property="couponInfo" jdbcType="LONGVARCHAR" />
+		<result column="group_info" property="groupInfo" jdbcType="LONGVARCHAR" />
+		<result column="pay_msg" property="payMsg" jdbcType="LONGVARCHAR" />
+		<result column="original_price" property="originalPrice" jdbcType="DECIMAL" />
+	</resultMap>
+	
+	<resultMap type="com.sinco.carnation.o2o.bo.GroupOrderBO" id="QueryMerchantOrder"
+		extends="ResultMapWithBLOBs">
+		<result column="group_sn" property="groupSn" jdbcType="VARCHAR" />
+		<result column="nickname" property="nickName" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="group_acc_path" property="groupAccPath"
+			jdbcType="VARCHAR" />
+		<result column="gg_name" property="ggName" jdbcType="VARCHAR" />
+		<result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+		<result column="original_price" property="originalPrice" jdbcType="DECIMAL" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="store_address" property="storeAddress"
+			jdbcType="VARCHAR" />
+		<result column="store_telephone" property="storeTelephone"
+			jdbcType="VARCHAR" />
+		<result column="store_lat" property="storeLat" jdbcType="DECIMAL" />
+		<result column="store_lon" property="storeLon" jdbcType="DECIMAL" />
+		<result column="group_price" property="groupPrice" jdbcType="DECIMAL" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.sinco.carnation.o2o.bo.GroupOrderBO" id="GroupOrderResultMap"
+		extends="ResultMapWithBLOBs">
+		<association property="store"
+			javaType="com.sinco.carnation.store.model.Store" columnPrefix="store_"
+			resultMap="com.sinco.carnation.store.mapper.StoreMapper.BaseResultMap" />
+		<association property="userCustomer"
+			javaType="com.sinco.carnation.user.model.UserCustomer" columnPrefix="customer_"
+			resultMap="com.sinco.carnation.user.mapper.UserCustomerMapper.BaseResultMap" />
+	</resultMap>
+
+	<resultMap type="com.sinco.carnation.o2o.bo.GroupOrderBO" id="QueryGroupOrderByMonth"
+		extends="BaseResultMap">
+		<result column="years" property="years" jdbcType="INTEGER" />
+		<result column="months" property="months" jdbcType="INTEGER" />
+		<result column="total_amout" property="monthTotalPrice"
+			jdbcType="DECIMAL" />
+	</resultMap>
+
+	<select id="queryRebateAmountById"  parameterType="java.lang.Long" resultType="java.math.BigDecimal">
+		SELECT group_rebate_amount FROM o2o_group_order WHERE id = #{id}
+	</select>
+	
+	<!-- 代金券 分润未启用-->
+	<select id="findGroupOrderPayByCashCoupon" resultMap="BaseResultMap">
+		 SELECT grouporder.id AS id,IFNULL(seller.`uid`,0) AS seller_user_id
+         FROM o2o_group_order AS grouporder
+         LEFT JOIN `user_seller` AS seller ON seller.`store_id` = grouporder.`store_id`
+         LEFT JOIN `o2o_group_info` AS groupinfo ON groupinfo.`order_id` = grouporder.`id`
+         WHERE  grouporder.`order_id` NOT IN (select `rebate_code` from user_rebate_record where rebate_status=1 and rebate_type in
+		 ('303','304','305','306','307','308','309','310','311','312','313','314','315','316','317','318','319','320','321','322','323','324','325','326','327','328','329','330','331'))
+		 AND groupinfo.`status`=1
+		 AND grouporder.order_type=5
+		 AND grouporder.order_status<![CDATA[>=]]>30
+		 GROUP BY grouporder.id 
+         ORDER BY groupinfo.id ASC
+	</select>
+	
+	<!-- 套餐券 分润未启用-->
+	<select id="findGroupOrderPayByCouPon" resultMap="BaseResultMap">
+		 SELECT grouporder.id AS id,IFNULL(seller.`uid`,0) AS seller_user_id
+         FROM o2o_group_order AS grouporder
+         LEFT JOIN `user_seller` AS seller ON seller.`store_id` = grouporder.`store_id`
+         LEFT JOIN `o2o_group_info` AS groupinfo ON groupinfo.`order_id` = grouporder.`id`
+         WHERE  grouporder.`order_id` NOT IN (select `rebate_code` from user_rebate_record where rebate_status=1 and rebate_type in
+		 ('303','304','305','306','307','308','309','310','311','312','313','314','315','316','317','318','319','320','321','322','323','324','325','326','327','328','329','330','331'))
+		 AND groupinfo.`status`=1
+		 AND grouporder.order_type=4
+		 AND grouporder.order_status<![CDATA[>=]]>30
+		 GROUP BY grouporder.id 
+         ORDER BY groupinfo.id ASC
+	</select>
+	
+	<!--线上订单 套餐券 代金券 线上支付购买 -->
+	<select id="findGroupOrderCanPayOff" resultMap="BaseResultMap">
+		 SELECT grouporder.id AS id,IFNULL(seller.`uid`,0) AS seller_user_id
+         FROM o2o_group_order AS grouporder
+         LEFT JOIN `user_seller` AS seller ON seller.`store_id` = grouporder.`store_id`
+         LEFT JOIN `o2o_group_info` AS groupinfo ON groupinfo.`order_id` = grouporder.`id`
+         WHERE  grouporder.`order_id` NOT IN (select `rebate_code` from user_rebate_record where rebate_status=1 and rebate_type in
+		 ('303','304','305','306','307','308','309','310','311','312','313','314','315','316','317','318','319','320','321','322','323','324','325','326','327','328','329','330','331'))
+		 AND groupinfo.`status`=1
+		 AND grouporder.order_type in (1,4,5)
+		 AND grouporder.order_status<![CDATA[>=]]>30
+		 GROUP BY grouporder.id 
+         ORDER BY groupinfo.id ASC
+	</select>
+	
+	<!-- 线下订单：扫码支付，优惠买单 -->
+	<select id="findGroupOrderPayByUpline" resultMap="BaseResultMap">
+		 SELECT grouporder.id AS id,IFNULL(seller.`uid`,0) AS seller_user_id
+         FROM o2o_group_order AS grouporder
+         LEFT JOIN `user_seller` AS seller ON seller.`store_id` = grouporder.`store_id`
+         LEFT JOIN `o2o_group_info` AS groupinfo ON groupinfo.`order_id` = grouporder.`id`
+         WHERE  grouporder.`order_id` NOT IN (select `rebate_code` from user_rebate_record where rebate_status=1 and rebate_type in
+		 ('303','304','305','306','307','308','309','310','311','312','313','314','315','316','317','318','319','320','321','322','323','324','325','326','327','328','329','330','331'))
+		 AND groupinfo.`status`=1
+		 AND grouporder.order_type in (2,3)
+		 AND grouporder.order_status<![CDATA[>=]]>30
+		 GROUP BY grouporder.id 
+         ORDER BY groupinfo.id ASC
+	</select>
+
+	<select id="selectGroupOrderCountByArea" resultType="int">
+		SELECT count(0) FROM o2o_group_order o
+		<if test="areaId != null and  areaId != ''">
+			INNER JOIN shop_store s ON o.store_id = s.id
+			INNER JOIN dic_area a ON s.area_id = a.id
+		</if>
+		WHERE o.order_status <![CDATA[>=]]> 20
+		<if test="areaId != null and  areaId != ''">
+			AND (a.id = #{areaId} OR a.parent_id = #{areaId})
+		</if>
+	</select>
+	<select id="queryGroupOrderById" resultMap="QueryMerchantOrder">
+		SELECT u.nickname,u.mobile,o.* FROM o2o_group_order o LEFT JOIN
+		user_customer u ON o.user_id=u.uid WHERE o.id=#{orderId}
+	</select>
+
+	<select id="statusCount" resultMap="BOResultMap" parameterType="map">
+		select order_status, count(*) status_count
+		from o2o_group_order
+		where user_id=#{userId}
+		<if test="statusList != null and statusList.size() > 0">
+			and order_status in
+			<foreach collection="statusList" item="listItem" open="("
+				close=")" separator=",">
+				#{listItem}
+			</foreach>
+		</if>
+		group by order_status
+	</select>
+	
+	<select id="selectLastMonthOrder" resultMap="BOResultMap">
+		SELECT
+		*
+		FROM
+		o2o_group_order o
+		WHERE
+		o.order_status <![CDATA[ >= ]]>
+		20
+		AND (o.order_type = 2 or o.order_type = 3)
+		AND (SELECT count(0) FROM user_rebate_record urr
+		WHERE urr.rebate_status = 0 AND urr.order_id = o.id AND
+		urr.rebate_type BETWEEN 200 AND 300) != 0
+		AND (SELECT count(0) FROM
+		user_rebate_record urr WHERE urr.rebate_status = 1 AND urr.order_id =
+		o.id AND urr.rebate_type BETWEEN 200 AND 300) = 0
+		<!-- 先做时时返润，后续需要改过来,为了应付30号的演示 ；add by bill.tang 2015-10-29 -->
+		AND o.pay_time <![CDATA[ <= ]]>
+		last_day(date_add(NOW(), INTERVAL - 1 MONTH))
+		AND o.pay_time <![CDATA[ >= ]]>
+		DATE_FORMAT(concat(extract(YEAR_MONTH FROM date_add(NOW(), INTERVAL -
+		1 MONTH) ), '01' ), '%Y-%m-%d')
+		<!-- 先做时时返润，后续需要改过来,为了应付30号的演示 ；add by bill.tang 2015-10-29 -->
+	</select>
+
+	<select id="queryOrderCouponInfo" resultMap="QueryMerchantOrder">
+		SELECT i.group_sn,g.group_acc_path,i.`status`,s.store_name,o.* from
+		o2o_group_goods g
+		INNER JOIN shop_store s ON s.id=g.store_id
+		INNER JOIN o2o_group_order o ON o.store_id=s.id
+		INNER JOIN o2o_group_info i ON o.id=i.order_id
+		WHERE o.id=#{orderId}
+	</select>
+
+	<select id="queryGroupOrderId" resultMap="QueryMerchantOrder">
+		SELECT
+		s.store_lat,s.store_lon,s.store_name,s.store_address,s.store_telephone,c.mobile,c.nickname,i.`status`,i.end_time,i.check_reasion,i.refused_info,i.read_status,o.*
+		FROM o2o_group_order o
+		left JOIN o2o_group_info i ON o.id=i.order_id
+		left JOIN user_customer c ON c.uid=o.user_id
+		LEFT JOIN shop_store s ON s.id=o.store_id
+		WHERE o.id=#{orderId}
+	</select>
+
+	<select id="queryGroupOrderLinePageList" resultMap="QueryMerchantOrder">
+		SELECT
+		s.store_name,o.id,o.local_group_name,o.total_price,o.original_price,i.`status`,o.order_status,o.local_return_status,o.pay_time
+		FROM o2o_group_order o
+		LEFT JOIN o2o_group_info i ON o.id=i.order_id
+		LEFT JOIN shop_store s ON s.id=o.store_id WHERE o.user_id=#{uid} and
+		o.order_type=#{orderType} AND o.order_status=20 ORDER BY o.add_time
+		DESC
+	</select>
+	
+	<select id="queryAllGroupOrderPageList" resultMap="QueryMerchantOrder">
+		SELECT o.* FROM o2o_group_order o WHERE o.user_id=#{uid} AND (o.order_status &gt;= 20 OR o.order_type NOT IN (2,3))
+		<if test="status != null">
+			<if test="status == 100">
+				AND o.local_return_status = 2
+			</if>
+			<if test="status != 100">
+				AND o.order_status = #{status}
+			</if>
+		</if>
+		<if test="orderType != null">
+			AND o.order_type = #{orderType}
+		</if>
+		ORDER BY o.add_time DESC
+	</select>
+
+	<select id="queryGroupOrderlist" resultMap="QueryMerchantOrder">
+		<!-- 
+		SELECT
+		u.mobile,s.store_name,o.add_time,user_nickname,o.id,o.local_group_name,o.order_id,o.total_price,o.original_price,o.order_status,o.local_return_status,o.pay_time
+		FROM o2o_group_order o
+		LEFT JOIN user_customer u ON u.uid=o.user_id
+		LEFT JOIN shop_store s ON s.id=o.store_id
+		WHERE o.user_id=#{uid} and o.order_type=#{orderType} AND o.order_status=20
+		ORDER BY o.add_time DESC -->
+		SELECT o.* FROM o2o_group_order o 
+		WHERE o.user_id=#{uid} AND (o.order_type=2 OR o.order_type=3) AND o.order_status &gt;= 30 order by add_time desc
+	</select>
+
+	<select id="queryGroupOrderPageList" resultMap="QueryMerchantOrder">
+		<!-- SELECT DISTINCT o.id oid, g.group_acc_path,g.gg_name, o.* FROM o2o_group_order 
+			o LEFT JOIN shop_store s ON s.id=o.store_id LEFT JOIN o2o_group_goods g ON 
+			g.store_id=s.id LEFT JOIN o2o_group_info i ON i.order_id=o.id -->
+		SELECT o.* FROM o2o_group_order o
+		WHERE o.user_id=#{uid} AND  (o.order_type=1 OR o.order_type=4 OR o.order_type=5) 
+		<if test="status != null">
+			<choose>
+				<when test="status ==  30">
+					AND o.order_status &gt;= 30
+				</when>
+				<when test="status ==  100">
+					and o.local_return_status =2
+				</when>
+				<when test="status ==  10">
+					and o.order_status=10
+				</when>
+				<otherwise>
+					AND o.order_status=#{status}
+				</otherwise>
+			</choose>
+		</if>
+		order by add_time desc
+	</select>
+
+	<select id="queryOnLineTotalPrice" resultType="DECIMAL">
+		SELECT SUM(o.total_price) as total_amout FROM o2o_group_order o
+		LEFT JOIN o2o_group_info i ON i.order_id=o.id
+		LEFT JOIN o2o_group_goods g ON g.id=i.goods_id
+		WHERE (o.order_type=1 OR o.order_type=4 OR o.order_type=5) and o.store_id=#{storeId} AND i.`status`=1
+		<if test="startTime != null">
+			and DATE_FORMAT(o.add_time ,'%Y-%m-%d') <![CDATA[>=]]>
+			DATE_FORMAT(#{startTime} ,'%Y-%m-%d')
+		</if>
+		<if test="endTime != null">
+			and DATE_FORMAT(o.add_time ,'%Y-%m-%d') <![CDATA[<=]]>
+			DATE_FORMAT(#{endTime} ,'%Y-%m-%d')
+		</if>
+	</select>
+
+	<select id="queryLineTotalPrice" resultType="DECIMAL">
+		SELECT SUM(total_price) from o2o_group_order WHERE (order_type = 2 or order_type = 3) AND
+		store_id=#{storeId} and order_status <![CDATA[>]]>
+		10
+		<if test="startTime != null">
+			and DATE_FORMAT(add_time ,'%Y-%m-%d') <![CDATA[>=]]>
+			DATE_FORMAT(#{startTime} ,'%Y-%m-%d')
+		</if>
+		<if test="endTime != null">
+			and DATE_FORMAT(add_time ,'%Y-%m-%d') <![CDATA[<=]]>
+			DATE_FORMAT(#{endTime} ,'%Y-%m-%d')
+		</if>
+	</select>
+
+	<select id="queryTotalPrice" resultType="DECIMAL">
+		SELECT SUM(total_price) from o2o_group_order where store_id=#{storeId} AND
+		order_status > 10
+	</select>
+
+	<select id="groupOrderDetails" resultMap="QueryMerchantOrder">
+		SELECT
+		o.local_group_name,o.id,i.group_sn,c.nickname,c.mobile,o.user_nickname,o.add_time,g.group_price,o.group_info,o.proportion
+		FROM o2o_group_order o
+		LEFT JOIN user_customer c ON o.user_id=c.uid
+		LEFT JOIN o2o_group_info i ON i.order_id=o.id
+		LEFT JOIN o2o_group_goods g ON i.goods_id=g.id
+		WHERE o.store_id=#{storeId} AND i.`status`=1
+		<if test="orderType != null">
+			<if test="orderType == 1">
+				AND (o.order_type=1 OR o.order_type=4 OR o.order_type=5)
+			</if>
+			<if test="orderType == 2">
+				AND (o.order_type=2 OR o.order_type=3)
+			</if>
+		</if>
+		order by o.add_time desc
+	</select>
+
+	<select id="queryGroupOrderLineDetails" resultMap="QueryMerchantOrder">
+		SELECT
+		o.user_id,o.total_price,o.original_price,o.local_group_name,o.id,c.nickname,c.mobile,o.user_nickname,o.add_time,o.group_info,o.proportion
+		FROM o2o_group_order o
+		LEFT JOIN user_customer c ON o.user_id=c.uid
+		WHERE o.store_id=#{storeId} AND (o.order_type=2 OR o.order_type=3)
+		AND o.order_status <![CDATA[>=]]> 30
+		order by o.add_time desc
+	</select>
+
+	<select id="queryGroupOrderByMonth" resultMap="QueryGroupOrderByMonth">
+		SELECT YEAR(o.add_time) AS years,MONTH( o.add_time) AS months
+		,SUM(g.group_price) AS total_amout
+		FROM o2o_group_order o LEFT JOIN o2o_group_info i ON i.order_id=o.id
+		LEFT JOIN o2o_group_goods g ON g.id=i.goods_id
+		WHERE DATE_FORMAT(o.add_time ,'%y')=DATE_FORMAT(CURDATE(),'%y') and
+		o.store_id=#{storeId} AND o.order_type=#{orderType} AND i.`status`=1
+		GROUP BY YEAR(o.add_time) DESC,MONTH( o.add_time) DESC
+	</select>
+
+	<select id="queryOrderTotalPrice" resultType="DECIMAL">
+		SELECT SUM(g.group_price) as total_amout FROM o2o_group_order o
+		LEFT JOIN o2o_group_info i ON i.order_id=o.id
+		LEFT JOIN o2o_group_goods g ON g.id=i.goods_id
+		WHERE o.order_type=#{orderType} and o.store_id=#{storeId} AND i.`status`=1
+		<if test="startTime != null">
+			and i.add_time <![CDATA[ >= #{startTime}]]>
+		</if>
+		<if test="endTime != null">
+			and i.add_time <![CDATA[ <= #{endTime}]]>
+		</if>
+	</select>
+
+	<select id="queryOrderPriceByDate" resultType="java.math.BigDecimal">
+		SELECT SUM(o.total_price) as total_amout FROM o2o_group_order o WHERE
+		o.store_id=#{storeId} AND o.order_status <![CDATA[>]]>
+		10
+		<if test="startDate != null and startDate != ''">
+		<![CDATA[AND date(o.add_time) >=#{startDate,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="endDate != null and endDate != ''">
+		<![CDATA[AND date(o.add_time) <= #{endDate,jdbcType=TIMESTAMP}]]>
+		</if>
+
+	</select>
+	<select id="queryOrderCountByDate" resultType="int">
+		SELECT count(distinct o.id) as total_amout FROM o2o_group_order o
+		WHERE o.store_id=#{storeId} AND o.order_status <![CDATA[>]]>
+		10
+		<if test="startDate != null and startDate != ''">
+		<![CDATA[AND date(o.add_time) >=#{startDate,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="endDate != null and endDate != ''">
+		<![CDATA[AND date(o.add_time) <= #{endDate,jdbcType=TIMESTAMP}]]>
+		</if>
+
+	</select>
+	
+	<select id="staticsDiscountPayAmount" parameterType="java.lang.Long"  resultType="java.math.BigDecimal">
+     SELECT SUM(total_price) FROM o2o_group_order WHERE (order_type=2 OR order_type=3) AND order_status<![CDATA[>=]]>30 
+     AND store_id = #{storeId}
+    </select>
+
+	<select id="search" resultMap="BOResultMap">
+		select * from o2o_group_order where user_id=#{vo.userId} 
+		<if test="vo.orderType != null">
+			<if test="vo.orderType == 1">
+				and (order_type=1 or order_type=4 or order_type=5)
+			</if>
+			<if test="vo.orderType == 2">
+				and (order_type=2 or order_type=3)
+				and order_status<![CDATA[>=]]>30
+			</if>
+		</if>
+		<choose>
+			<when test="vo.orderStatus != null and vo.orderStatus == 995">
+				and order_status<![CDATA[>=]]>20
+			</when>
+			<when test="vo.orderStatus != null and vo.orderStatus == 999">
+				and id in (select order_id from o2o_group_info where
+				user_id=#{vo.userId} and (status=3 or status=5 or status=6 or
+				status=7))
+			</when>
+			<otherwise>
+				<if test="vo.orderStatus != null and vo.orderStatus != 0">
+					and order_status=#{vo.orderStatus}
+				</if>
+			</otherwise>
+		</choose>
+		<if test="vo.orderId != null and vo.orderId != ''">
+			and order_id=#{vo.orderId}
+		</if>
+		<if test="vo.startDate != null and vo.startDate != ''">
+			and #{vo.startDate}<![CDATA[<=]]>date(add_time)
+		</if>
+		<if test="vo.endDate != null and vo.endDate != ''">
+			and date(add_time)<![CDATA[<=]]>#{vo.endDate}
+		</if>
+		order by id desc
+	</select>
+
+	<select id="offLine" resultMap="BOResultMap">
+		select go.*, ss.store_name from o2o_group_order go, shop_store ss
+		where go.store_id=ss.id and (go.order_type = 2 or go.order_type = 3) and local_return_status=2
+		<if test="vo.storeName != null and vo.storeName != ''">
+			and ss.store_name like "%"#{vo.storeName}"%"
+		</if>
+		<if test="vo.userNickname != null and vo.userNickname != ''">
+			and go.user_nickname like "%"#{vo.userNickname}"%"
+		</if>
+		order by go.id desc
+	</select>
+	
+	<select id="getGroupOrderBOById" parameterType="java.lang.Long"
+		resultMap="GroupOrderResultMap">
+		select 
+		o.id, 
+		o.add_time, 
+		o.delete_status,
+		o.finish_time, 
+		o.goods_amount,
+		o.order_form, 
+		o.order_id, 
+		o.order_status,
+		o.order_return_count, 
+		o.order_type, 
+		o.order_source, 
+		o.out_order_id, 
+		o.return_ship_time,
+		o.pay_time,
+		o.store_id, 
+		o.total_price, 
+		o.trade_no, 
+		o.is_sys_user, 
+		o.user_id, 
+		o.payment_mark,
+		o.is_mobile, 
+		o.user_nickname, 
+		o.local_return_status,
+		o.local_group_name, 
+		o.group_info,
+		o.original_price, 
+		c.nickname customer_nickname
+		from o2o_group_order o
+		left join user_customer c on c.uid=o.user_id
+		where o.id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="selectListByVo" resultMap="ResultMapWithBLOBs">
+		SELECT u.mobile,
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		FROM o2o_group_order so LEFT JOIN user_customer u ON u.uid=so.user_id
+		WHERE 1=1
+		<if test="vo.userId != null and vo.userId!=0">
+			AND so.user_id=#{vo.userId}
+		</if>
+		<if test="vo.storeId != null and vo.storeId != ''">
+			AND so.store_id=#{vo.storeId}
+		</if>
+		<if test="vo.orderStatus != null  ">
+			and so.order_status = #{vo.orderStatus}
+		</if>
+		<if test="vo.orderType != null ">
+			<if test="vo.orderType == 1 ">
+				and (so.order_type = 1 or so.order_type = 4 or so.order_type = 5)
+			</if>
+			<if test="vo.orderType == 2 ">
+				and (so.order_type = 2 or so.order_type = 3) and so.order_status <![CDATA[ >= ]]> 30
+			</if>
+		</if>
+		<if test="vo.localReturnStatus != null ">
+			and so.local_return_status = #{vo.localReturnStatus}
+		</if>
+		<if test="vo.statusCode!= null and vo.statusCode!= ''">
+			<if test="vo.statusCode== 'order_submit'">
+			<![CDATA[AND  so.order_status = 10  ]]>
+			</if>
+			<if test="vo.statusCode == 'order_pay'">
+			<![CDATA[AND  so.order_status = 20 ]]>
+			</if>
+			<if test="vo.statusCode == 'order_finish'">
+			<![CDATA[AND so.order_status >= 30 ]]>
+			</if>
+			<if test="vo.statusCode == 'order_cancel'">
+			<![CDATA[AND so.order_status = 0 ]]>
+			</if>
+		</if>
+		<if test="vo.orderId != null and vo.orderId !=''">
+			AND so.order_id like concat('%',#{vo.orderId},'%')
+		</if>
+
+		<if test="vo.buyerUsername != null and vo.buyerUsername !=''">
+			AND so.user_nickname like concat('%',#{vo.buyerUsername},'%')
+		</if>
+		<if test="vo.startDate != null and vo.startDate != ''">
+		<![CDATA[AND date(so.pay_time) >=#{vo.startDate,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="vo.endDate != null and vo.endDate != ''">
+		<![CDATA[AND date(so.pay_time) <= #{vo.endDate,jdbcType=TIMESTAMP}]]>
+		</if>
+		ORDER BY so.add_time DESC
+	</select>
+
+	<select id="queryAllMerchantOrderList" resultMap="QueryMerchantOrder">
+		SELECT s.nickname,s.mobile,i.group_sn,o.* FROM o2o_group_order o LEFT
+		JOIN o2o_group_info i ON o.id=i.order_id
+		LEFT JOIN user_customer s ON s.uid=o.user_id where
+		 o.store_id=#{storeId} 
+	 	<if test="orderStatus != null">
+			<choose>
+				<when test="orderStatus >=  30">
+					AND o.order_status &gt;= 30
+				</when>
+				<otherwise>
+					AND o.order_status=#{orderStatus}
+				</otherwise>
+			</choose>
+		</if>
+
+		<if test="localStatus != null">
+			and o.local_return_status=#{localStatus}
+		</if>
+		group by o.id
+		order by o.add_time desc
+	</select>
+	
+	<select id="queryMerchantOrderList" resultMap="QueryMerchantOrder">
+		SELECT s.nickname,s.mobile,i.group_sn,o.* FROM o2o_group_order o LEFT
+		JOIN o2o_group_info i ON o.id=i.order_id
+		LEFT JOIN user_customer s ON s.uid=o.user_id where
+		(o.order_type=1 OR o.order_type=4 OR o.order_type=5) AND o.store_id=#{storeId}
+		<if test="orderStatus != null">
+			<choose>
+				<when test="orderStatus >=  30">
+					AND o.order_status &gt;= 30
+				</when>
+				<otherwise>
+					AND o.order_status=#{orderStatus}
+				</otherwise>
+			</choose>
+		</if>
+
+		<if test="localStatus != null">
+			and o.local_return_status=#{localStatus}
+		</if>
+		group by o.id
+		order by o.add_time desc
+	</select>
+
+	<select id="queryMerchantOrderLineList" resultMap="QueryMerchantOrder">
+		SELECT s.nickname,s.mobile,i.group_sn,o.* FROM o2o_group_order o LEFT
+		JOIN o2o_group_info i ON o.id=i.order_id
+		LEFT JOIN user_customer s ON s.uid=o.user_id where
+		(o.order_type=2 OR o.order_type=3) AND o.store_id=#{storeId} and o.order_status &gt;= 30
+		group by o.id
+		order by o.add_time desc
+	</select>
+
+	<select id="selectOrderBySellerId" parameterType="com.sinco.carnation.o2o.vo.GroupOrderVO"
+		resultMap="ResultMapWithBLOBs">
+		SELECT
+		o.*
+		FROM
+		o2o_group_order o
+		INNER JOIN shop_store s ON o.store_id = s.id
+		WHERE
+		o.delete_status = 0
+		AND o.order_status <![CDATA[ >= ]]>
+		20
+		<if test="vo.orderId != null and vo.orderId != ''">
+			AND o.order_id=#{vo.orderId}
+		</if>
+		<if test="vo.orderType != null and vo.orderType != ''">
+			AND o.order_type=#{vo.orderType}
+		</if>
+		<if test="vo.orderStatus != null and vo.orderStatus != ''">
+			AND o.order_status=#{vo.orderStatus}
+		</if>
+		AND s.create_user_id = #{vo.sellerId}
+		<if test="vo.goodsName != null and vo.goodsName != ''">
+			AND o.group_info LIKE
+			CONCAT('%goods_name":"%',#{vo.goodsName},'%","goods_mainphoto_path%')
+		</if>
+		ORDER BY o.add_time DESC
+	</select>
+	<select id="queryGroupOrderListByVO" parameterType="com.sinco.carnation.o2o.vo.GroupOrderVO"
+		resultMap="GroupOrderResultMap">
+		SELECT o.*,s.store_name store_store_name,c.nickname customer_nickname
+		FROM o2o_group_order o
+		LEFT JOIN shop_store s ON o.store_id=s.id
+		LEFT JOIN user_customer c on c.uid=o.user_id
+		where 1=1
+		<if test="vo.userId != null and vo.userId != 0">
+			AND o.user_id=#{vo.userId}
+		</if>
+		<if test="vo.orderType != null and vo.orderType != ''">
+		<choose>  
+	            <when test="vo.orderType == 1 ">  
+					AND (o.order_type=1 OR o.order_type=4 OR o.order_type=5)
+	            </when >
+				<otherwise>
+					AND (o.order_type=2 OR o.order_type=3)
+	            </otherwise>  
+            	</choose>
+			
+		</if>
+		<if test="vo.orderId != null and vo.orderId != ''">
+			AND o.order_id=#{vo.orderId}
+		</if>
+		<if test="vo.orderStatus != null and vo.orderStatus != ''">
+			<if test="vo.orderStatus == -1">
+				AND o.order_status <![CDATA[ >= ]]> 30
+			</if>
+			<if test="vo.orderStatus == 10">
+				AND o.order_status=10
+			</if>
+			<if test="vo.orderStatus == 20">
+				AND o.order_status=20
+			</if>
+			<if test="vo.orderStatus == 30">
+				AND (o.order_status=0 or o.order_status=30 or o.order_status=50 or
+				o.order_status=60)
+			</if>
+		</if>
+		<if test="vo.tradeNo != null and vo.tradeNo != ''">
+			AND o.trade_no like concat('%',#{vo.tradeNo},'%')
+		</if>
+		<if test="vo.storeName != null and vo.storeName != ''">
+			AND s.store_name like concat('%',#{vo.storeName},'%')
+		</if>
+		<if test="vo.userNickname != null and vo.userNickname != ''">
+			AND c.nickname like concat('%',#{vo.userNickname},'%')
+		</if>
+		<if test="vo.beginTimeStr!=null and vo.beginTimeStr != ''">
+			AND DATE_FORMAT(o.add_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.beginTimeStr},'%Y-%m-%d')
+		</if>
+		<if test="vo.endTimeStr!=null and vo.endTimeStr != ''">
+			AND DATE_FORMAT(o.add_time,'%Y-%m-%d') <![CDATA[ < ]]>
+			DATE_FORMAT(#{vo.endTimeStr},'%Y-%m-%d')
+		</if>
+		order by o.add_time desc
+	</select>
+
+	<select id="queryGroupOrderIdByStatus" resultMap="QueryMerchantOrder">
+		SELECT
+		s.store_lat,s.store_lon,s.store_name,s.store_address,s.store_telephone,c.mobile,c.nickname,i.`status`,i.end_time,o.*
+		FROM o2o_group_order o
+		left JOIN o2o_group_info i ON o.id=i.order_id
+		left JOIN user_customer c ON c.uid=o.user_id
+		LEFT JOIN shop_store s ON s.id=o.store_id
+		WHERE o.id=#{orderId} and o.order_status = 20
+	</select>
+	
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, add_time, delete_status, finish_time, goods_amount, order_form, order_id, order_status, 
+    order_return_count, order_type, order_source, out_order_id, return_ship_time, pay_time, 
+    store_id, total_price, trade_no, is_sys_user, user_id, payment_mark, is_mobile, user_nickname, 
+    local_return_status, local_group_name, cash_id, proportion, original_price, group_rebate_amount
+  </sql>
+  <sql id="Blob_Column_List" >
+    coupon_info, group_info, pay_msg
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.o2o.model.GroupOrderExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from o2o_group_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.sinco.carnation.o2o.model.GroupOrderExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from o2o_group_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      limit ${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from o2o_group_order
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from o2o_group_order
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.o2o.model.GroupOrderExample" >
+    delete from o2o_group_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinco.carnation.o2o.model.GroupOrder" useGeneratedKeys="true" keyProperty="id" >
+    insert into o2o_group_order (id, add_time, delete_status, 
+      finish_time, goods_amount, order_form, 
+      order_id, order_status, order_return_count, 
+      order_type, order_source, out_order_id, 
+      return_ship_time, pay_time, store_id, 
+      total_price, trade_no, is_sys_user, 
+      user_id, payment_mark, is_mobile, 
+      user_nickname, local_return_status, local_group_name, 
+      cash_id, proportion, original_price, 
+      group_rebate_amount, coupon_info, group_info, 
+      pay_msg)
+    values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP}, #{deleteStatus,jdbcType=BIT}, 
+      #{finishTime,jdbcType=TIMESTAMP}, #{goodsAmount,jdbcType=DECIMAL}, #{orderForm,jdbcType=INTEGER}, 
+      #{orderId,jdbcType=VARCHAR}, #{orderStatus,jdbcType=INTEGER}, #{orderReturnCount,jdbcType=INTEGER}, 
+      #{orderType,jdbcType=INTEGER}, #{orderSource,jdbcType=VARCHAR}, #{outOrderId,jdbcType=VARCHAR}, 
+      #{returnShipTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, #{storeId,jdbcType=VARCHAR}, 
+      #{totalPrice,jdbcType=DECIMAL}, #{tradeNo,jdbcType=VARCHAR}, #{isSysUser,jdbcType=BIT}, 
+      #{userId,jdbcType=BIGINT}, #{paymentMark,jdbcType=VARCHAR}, #{isMobile,jdbcType=BIT}, 
+      #{userNickname,jdbcType=VARCHAR}, #{localReturnStatus,jdbcType=INTEGER}, #{localGroupName,jdbcType=VARCHAR}, 
+      #{cashId,jdbcType=BIGINT}, #{proportion,jdbcType=DECIMAL}, #{originalPrice,jdbcType=DECIMAL}, 
+      #{groupRebateAmount,jdbcType=DECIMAL}, #{couponInfo,jdbcType=LONGVARCHAR}, #{groupInfo,jdbcType=LONGVARCHAR}, 
+      #{payMsg,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinco.carnation.o2o.model.GroupOrder" useGeneratedKeys="true" keyProperty="id" >
+    insert into o2o_group_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status,
+      </if>
+      <if test="finishTime != null" >
+        finish_time,
+      </if>
+      <if test="goodsAmount != null" >
+        goods_amount,
+      </if>
+      <if test="orderForm != null" >
+        order_form,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="orderStatus != null" >
+        order_status,
+      </if>
+      <if test="orderReturnCount != null" >
+        order_return_count,
+      </if>
+      <if test="orderType != null" >
+        order_type,
+      </if>
+      <if test="orderSource != null" >
+        order_source,
+      </if>
+      <if test="outOrderId != null" >
+        out_order_id,
+      </if>
+      <if test="returnShipTime != null" >
+        return_ship_time,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="storeId != null" >
+        store_id,
+      </if>
+      <if test="totalPrice != null" >
+        total_price,
+      </if>
+      <if test="tradeNo != null" >
+        trade_no,
+      </if>
+      <if test="isSysUser != null" >
+        is_sys_user,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="paymentMark != null" >
+        payment_mark,
+      </if>
+      <if test="isMobile != null" >
+        is_mobile,
+      </if>
+      <if test="userNickname != null" >
+        user_nickname,
+      </if>
+      <if test="localReturnStatus != null" >
+        local_return_status,
+      </if>
+      <if test="localGroupName != null" >
+        local_group_name,
+      </if>
+      <if test="cashId != null" >
+        cash_id,
+      </if>
+      <if test="proportion != null" >
+        proportion,
+      </if>
+      <if test="originalPrice != null" >
+        original_price,
+      </if>
+      <if test="groupRebateAmount != null" >
+        group_rebate_amount,
+      </if>
+      <if test="couponInfo != null" >
+        coupon_info,
+      </if>
+      <if test="groupInfo != null" >
+        group_info,
+      </if>
+      <if test="payMsg != null" >
+        pay_msg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        #{deleteStatus,jdbcType=BIT},
+      </if>
+      <if test="finishTime != null" >
+        #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsAmount != null" >
+        #{goodsAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="orderForm != null" >
+        #{orderForm,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="orderReturnCount != null" >
+        #{orderReturnCount,jdbcType=INTEGER},
+      </if>
+      <if test="orderType != null" >
+        #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="orderSource != null" >
+        #{orderSource,jdbcType=VARCHAR},
+      </if>
+      <if test="outOrderId != null" >
+        #{outOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="returnShipTime != null" >
+        #{returnShipTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPrice != null" >
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="tradeNo != null" >
+        #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="isSysUser != null" >
+        #{isSysUser,jdbcType=BIT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="paymentMark != null" >
+        #{paymentMark,jdbcType=VARCHAR},
+      </if>
+      <if test="isMobile != null" >
+        #{isMobile,jdbcType=BIT},
+      </if>
+      <if test="userNickname != null" >
+        #{userNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="localReturnStatus != null" >
+        #{localReturnStatus,jdbcType=INTEGER},
+      </if>
+      <if test="localGroupName != null" >
+        #{localGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="cashId != null" >
+        #{cashId,jdbcType=BIGINT},
+      </if>
+      <if test="proportion != null" >
+        #{proportion,jdbcType=DECIMAL},
+      </if>
+      <if test="originalPrice != null" >
+        #{originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="groupRebateAmount != null" >
+        #{groupRebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="couponInfo != null" >
+        #{couponInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="groupInfo != null" >
+        #{groupInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="payMsg != null" >
+        #{payMsg,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.o2o.model.GroupOrderExample"
+		resultType="java.lang.Integer">
+		select count(*) from o2o_group_order
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update o2o_group_order
+    <trim prefix="set" suffixOverrides=",">
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteStatus != null" >
+        delete_status = #{record.deleteStatus,jdbcType=BIT},
+      </if>
+      <if test="record.finishTime != null" >
+        finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.goodsAmount != null" >
+        goods_amount = #{record.goodsAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderForm != null" >
+        order_form = #{record.orderForm,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderStatus != null" >
+        order_status = #{record.orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderReturnCount != null" >
+        order_return_count = #{record.orderReturnCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderType != null" >
+        order_type = #{record.orderType,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderSource != null" >
+        order_source = #{record.orderSource,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outOrderId != null" >
+        out_order_id = #{record.outOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.returnShipTime != null" >
+        return_ship_time = #{record.returnShipTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.payTime != null" >
+        pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.storeId != null" >
+        store_id = #{record.storeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalPrice != null" >
+        total_price = #{record.totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.tradeNo != null" >
+        trade_no = #{record.tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isSysUser != null" >
+        is_sys_user = #{record.isSysUser,jdbcType=BIT},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.paymentMark != null" >
+        payment_mark = #{record.paymentMark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isMobile != null" >
+        is_mobile = #{record.isMobile,jdbcType=BIT},
+      </if>
+      <if test="record.userNickname != null" >
+        user_nickname = #{record.userNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.localReturnStatus != null" >
+        local_return_status = #{record.localReturnStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.localGroupName != null" >
+        local_group_name = #{record.localGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cashId != null" >
+        cash_id = #{record.cashId,jdbcType=BIGINT},
+      </if>
+      <if test="record.proportion != null" >
+        proportion = #{record.proportion,jdbcType=DECIMAL},
+      </if>
+      <if test="record.originalPrice != null" >
+        original_price = #{record.originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.groupRebateAmount != null" >
+        group_rebate_amount = #{record.groupRebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.couponInfo != null" >
+        coupon_info = #{record.couponInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.groupInfo != null" >
+        group_info = #{record.groupInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.payMsg != null" >
+        pay_msg = #{record.payMsg,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update o2o_group_order
+    set id = #{record.id,jdbcType=BIGINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=BIT},
+      finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
+      goods_amount = #{record.goodsAmount,jdbcType=DECIMAL},
+      order_form = #{record.orderForm,jdbcType=INTEGER},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      order_status = #{record.orderStatus,jdbcType=INTEGER},
+      order_return_count = #{record.orderReturnCount,jdbcType=INTEGER},
+      order_type = #{record.orderType,jdbcType=INTEGER},
+      order_source = #{record.orderSource,jdbcType=VARCHAR},
+      out_order_id = #{record.outOrderId,jdbcType=VARCHAR},
+      return_ship_time = #{record.returnShipTime,jdbcType=TIMESTAMP},
+      pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      store_id = #{record.storeId,jdbcType=VARCHAR},
+      total_price = #{record.totalPrice,jdbcType=DECIMAL},
+      trade_no = #{record.tradeNo,jdbcType=VARCHAR},
+      is_sys_user = #{record.isSysUser,jdbcType=BIT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      payment_mark = #{record.paymentMark,jdbcType=VARCHAR},
+      is_mobile = #{record.isMobile,jdbcType=BIT},
+      user_nickname = #{record.userNickname,jdbcType=VARCHAR},
+      local_return_status = #{record.localReturnStatus,jdbcType=INTEGER},
+      local_group_name = #{record.localGroupName,jdbcType=VARCHAR},
+      cash_id = #{record.cashId,jdbcType=BIGINT},
+      proportion = #{record.proportion,jdbcType=DECIMAL},
+      original_price = #{record.originalPrice,jdbcType=DECIMAL},
+      group_rebate_amount = #{record.groupRebateAmount,jdbcType=DECIMAL},
+      coupon_info = #{record.couponInfo,jdbcType=LONGVARCHAR},
+      group_info = #{record.groupInfo,jdbcType=LONGVARCHAR},
+      pay_msg = #{record.payMsg,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update o2o_group_order
+    set id = #{record.id,jdbcType=BIGINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=BIT},
+      finish_time = #{record.finishTime,jdbcType=TIMESTAMP},
+      goods_amount = #{record.goodsAmount,jdbcType=DECIMAL},
+      order_form = #{record.orderForm,jdbcType=INTEGER},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      order_status = #{record.orderStatus,jdbcType=INTEGER},
+      order_return_count = #{record.orderReturnCount,jdbcType=INTEGER},
+      order_type = #{record.orderType,jdbcType=INTEGER},
+      order_source = #{record.orderSource,jdbcType=VARCHAR},
+      out_order_id = #{record.outOrderId,jdbcType=VARCHAR},
+      return_ship_time = #{record.returnShipTime,jdbcType=TIMESTAMP},
+      pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      store_id = #{record.storeId,jdbcType=VARCHAR},
+      total_price = #{record.totalPrice,jdbcType=DECIMAL},
+      trade_no = #{record.tradeNo,jdbcType=VARCHAR},
+      is_sys_user = #{record.isSysUser,jdbcType=BIT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      payment_mark = #{record.paymentMark,jdbcType=VARCHAR},
+      is_mobile = #{record.isMobile,jdbcType=BIT},
+      user_nickname = #{record.userNickname,jdbcType=VARCHAR},
+      local_return_status = #{record.localReturnStatus,jdbcType=INTEGER},
+      local_group_name = #{record.localGroupName,jdbcType=VARCHAR},
+      cash_id = #{record.cashId,jdbcType=BIGINT},
+      proportion = #{record.proportion,jdbcType=DECIMAL},
+      original_price = #{record.originalPrice,jdbcType=DECIMAL},
+      group_rebate_amount = #{record.groupRebateAmount,jdbcType=DECIMAL}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.o2o.model.GroupOrder" >
+    update o2o_group_order
+    <trim prefix="set" suffixOverrides=",">
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status = #{deleteStatus,jdbcType=BIT},
+      </if>
+      <if test="finishTime != null" >
+        finish_time = #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsAmount != null" >
+        goods_amount = #{goodsAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="orderForm != null" >
+        order_form = #{orderForm,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="orderReturnCount != null" >
+        order_return_count = #{orderReturnCount,jdbcType=INTEGER},
+      </if>
+      <if test="orderType != null" >
+        order_type = #{orderType,jdbcType=INTEGER},
+      </if>
+      <if test="orderSource != null" >
+        order_source = #{orderSource,jdbcType=VARCHAR},
+      </if>
+      <if test="outOrderId != null" >
+        out_order_id = #{outOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="returnShipTime != null" >
+        return_ship_time = #{returnShipTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="storeId != null" >
+        store_id = #{storeId,jdbcType=VARCHAR},
+      </if>
+      <if test="totalPrice != null" >
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="tradeNo != null" >
+        trade_no = #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="isSysUser != null" >
+        is_sys_user = #{isSysUser,jdbcType=BIT},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="paymentMark != null" >
+        payment_mark = #{paymentMark,jdbcType=VARCHAR},
+      </if>
+      <if test="isMobile != null" >
+        is_mobile = #{isMobile,jdbcType=BIT},
+      </if>
+      <if test="userNickname != null" >
+        user_nickname = #{userNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="localReturnStatus != null" >
+        local_return_status = #{localReturnStatus,jdbcType=INTEGER},
+      </if>
+      <if test="localGroupName != null" >
+        local_group_name = #{localGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="cashId != null" >
+        cash_id = #{cashId,jdbcType=BIGINT},
+      </if>
+      <if test="proportion != null" >
+        proportion = #{proportion,jdbcType=DECIMAL},
+      </if>
+      <if test="originalPrice != null" >
+        original_price = #{originalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="groupRebateAmount != null" >
+        group_rebate_amount = #{groupRebateAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="couponInfo != null" >
+        coupon_info = #{couponInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="groupInfo != null" >
+        group_info = #{groupInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="payMsg != null" >
+        pay_msg = #{payMsg,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.o2o.model.GroupOrder" >
+    update o2o_group_order
+    set add_time = #{addTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=BIT},
+      finish_time = #{finishTime,jdbcType=TIMESTAMP},
+      goods_amount = #{goodsAmount,jdbcType=DECIMAL},
+      order_form = #{orderForm,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      order_status = #{orderStatus,jdbcType=INTEGER},
+      order_return_count = #{orderReturnCount,jdbcType=INTEGER},
+      order_type = #{orderType,jdbcType=INTEGER},
+      order_source = #{orderSource,jdbcType=VARCHAR},
+      out_order_id = #{outOrderId,jdbcType=VARCHAR},
+      return_ship_time = #{returnShipTime,jdbcType=TIMESTAMP},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      store_id = #{storeId,jdbcType=VARCHAR},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
+      trade_no = #{tradeNo,jdbcType=VARCHAR},
+      is_sys_user = #{isSysUser,jdbcType=BIT},
+      user_id = #{userId,jdbcType=BIGINT},
+      payment_mark = #{paymentMark,jdbcType=VARCHAR},
+      is_mobile = #{isMobile,jdbcType=BIT},
+      user_nickname = #{userNickname,jdbcType=VARCHAR},
+      local_return_status = #{localReturnStatus,jdbcType=INTEGER},
+      local_group_name = #{localGroupName,jdbcType=VARCHAR},
+      cash_id = #{cashId,jdbcType=BIGINT},
+      proportion = #{proportion,jdbcType=DECIMAL},
+      original_price = #{originalPrice,jdbcType=DECIMAL},
+      group_rebate_amount = #{groupRebateAmount,jdbcType=DECIMAL},
+      coupon_info = #{couponInfo,jdbcType=LONGVARCHAR},
+      group_info = #{groupInfo,jdbcType=LONGVARCHAR},
+      pay_msg = #{payMsg,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.o2o.model.GroupOrder" >
+    update o2o_group_order
+    set add_time = #{addTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=BIT},
+      finish_time = #{finishTime,jdbcType=TIMESTAMP},
+      goods_amount = #{goodsAmount,jdbcType=DECIMAL},
+      order_form = #{orderForm,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      order_status = #{orderStatus,jdbcType=INTEGER},
+      order_return_count = #{orderReturnCount,jdbcType=INTEGER},
+      order_type = #{orderType,jdbcType=INTEGER},
+      order_source = #{orderSource,jdbcType=VARCHAR},
+      out_order_id = #{outOrderId,jdbcType=VARCHAR},
+      return_ship_time = #{returnShipTime,jdbcType=TIMESTAMP},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      store_id = #{storeId,jdbcType=VARCHAR},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
+      trade_no = #{tradeNo,jdbcType=VARCHAR},
+      is_sys_user = #{isSysUser,jdbcType=BIT},
+      user_id = #{userId,jdbcType=BIGINT},
+      payment_mark = #{paymentMark,jdbcType=VARCHAR},
+      is_mobile = #{isMobile,jdbcType=BIT},
+      user_nickname = #{userNickname,jdbcType=VARCHAR},
+      local_return_status = #{localReturnStatus,jdbcType=INTEGER},
+      local_group_name = #{localGroupName,jdbcType=VARCHAR},
+      cash_id = #{cashId,jdbcType=BIGINT},
+      proportion = #{proportion,jdbcType=DECIMAL},
+      original_price = #{originalPrice,jdbcType=DECIMAL},
+      group_rebate_amount = #{groupRebateAmount,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

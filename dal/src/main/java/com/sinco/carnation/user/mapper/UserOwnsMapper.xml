@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.UserOwnsMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.UserOwns">
+		<id column="seller_user_id" property="sellerUserId" jdbcType="BIGINT" />
+		<result column="own_operator_id" property="ownOperatorId"
+			jdbcType="BIGINT" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.UserOwnsBO"
+		extends="BaseResultMap">
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		seller_user_id, own_operator_id, update_time, create_time
+	</sql>
+	<select id="selectBOBySellerId" resultMap="BOResultMap">
+		SELECT
+		u.*, o.user_id ownOperatorUserId
+		FROM user_owns u
+		LEFT JOIN user_operator o ON u.own_operator_id = o.id
+		where seller_user_id = #{sellerUserId,jdbcType=BIGINT}
+		<if test="ownType != null">
+			AND u.own_type = #{ownType}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.user.model.UserOwnsExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_owns
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_owns
+		where seller_user_id = #{sellerUserId,jdbcType=BIGINT} and own_type = #{ownType}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_owns
+		where seller_user_id = #{sellerUserId,jdbcType=BIGINT} AND own_type=#{ownType}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.UserOwnsExample">
+		delete from user_owns
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.UserOwns">
+		insert into user_owns (seller_user_id, own_operator_id, update_time,
+		create_time)
+		values (#{sellerUserId,jdbcType=BIGINT}, #{ownOperatorId,jdbcType=BIGINT},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{createTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.UserOwns">
+		insert into user_owns
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sellerUserId != null">
+				seller_user_id,
+			</if>
+			<if test="ownOperatorId != null">
+				own_operator_id,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="ownType != null">
+				own_type,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sellerUserId != null">
+				#{sellerUserId,jdbcType=BIGINT},
+			</if>
+			<if test="ownOperatorId != null">
+				#{ownOperatorId,jdbcType=BIGINT},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ownType != null">
+				#{ownType,jdbcType=INTEGER}
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.UserOwnsExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_owns
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_owns
+		<set>
+			<if test="record.sellerUserId != null">
+				seller_user_id = #{record.sellerUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.ownOperatorId != null">
+				own_operator_id = #{record.ownOperatorId,jdbcType=BIGINT},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_owns
+		set seller_user_id = #{record.sellerUserId,jdbcType=BIGINT},
+		own_operator_id = #{record.ownOperatorId,jdbcType=BIGINT},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.UserOwns">
+		update user_owns
+		<set>
+			<if test="ownOperatorId != null">
+				own_operator_id = #{ownOperatorId,jdbcType=BIGINT},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where seller_user_id = #{sellerUserId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.UserOwns">
+		update user_owns
+		set own_operator_id = #{ownOperatorId,jdbcType=BIGINT},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_time = #{createTime,jdbcType=TIMESTAMP}
+		where seller_user_id = #{sellerUserId,jdbcType=BIGINT}
+	</update>
+	<select id="findAllSellerByOperId" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		SELECT ss.store_name FROM user_owns uo
+		LEFT JOIN shop_store ss ON ss.create_user_id = uo.seller_user_id
+		WHERE uo.own_operator_id = #{operId}
+	</select>
+
+	<select id="findAllSellerNotBySellerUID" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		user_owns
+		where
+		own_operator_id = #{operId,jdbcType=BIGINT}
+		and
+		seller_user_id <![CDATA[<>]]>
+		#{sellerUID,jdbcType=BIGINT}
+	</select>
+</mapper>

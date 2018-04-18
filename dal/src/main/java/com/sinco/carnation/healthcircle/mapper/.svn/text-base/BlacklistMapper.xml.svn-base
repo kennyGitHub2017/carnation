@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.healthcircle.mapper.BlacklistMapper">
+
+
+	<sql id="column_list">
+		id,
+		user_id userId,
+		delete_status deleteStatus,
+		remark,
+		create_time createTime,
+		last_update_time lastUpdateTime
+	</sql>
+
+
+
+	<insert id="add" parameterType="com.sinco.carnation.healthcircle.model.BlacklistPO"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		health_circle_blacklist (user_id, delete_status,remark,
+		create_time,
+		last_update_time)
+		values
+		(#{userId},0,#{remark},now(),now())
+	</insert>
+
+	<update id="update" parameterType="com.sinco.carnation.healthcircle.model.BlacklistPO">
+		update health_circle_blacklist
+		<trim prefix="set" suffixOverrides=",">
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus},
+			</if>
+			<if test="remark != null">
+				remark = #{remark},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test="lastUpdateTime != null">
+				last_update_time = now()
+			</if>
+		</trim>
+		where id = #{id}
+	</update>
+
+	<select id="findAllBlacklist" parameterType="map"
+		resultType="com.sinco.carnation.healthcircle.bo.BlacklistBO">
+		select * from (
+		SELECT
+		b.id,b.user_id userId,b.create_time
+		createTime,b.last_update_time
+		lastUpdateTime,b.remark,c.name,c.nickname,c.mobile,c.sex,a.login_name
+		cnAccount
+		from health_circle_blacklist b
+		left join user_customer c on
+		b.user_id =c.uid
+		left join sys_user_account a on a.uid = b.user_id
+		where
+		b.delete_status
+		= 0 AND (a.login_name like 'CN%' OR a.login_name
+		like '1%')
+		order by a.login_name
+		DESC
+		) tt GROUP BY userId
+	</select>
+
+	<select id="getBlacklistByUid" parameterType="java.lang.Long"
+		resultType="com.sinco.carnation.healthcircle.bo.BlacklistBO">
+		select
+		<include refid="column_list" />
+		from health_circle_blacklist
+		where user_id = #{userId,jdbcType=BIGINT}
+		and delete_status = 0
+	</select>
+
+</mapper>

@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<link href="$!webPath/resources/shop/ysysgo/css/97zzw.css" type="text/css" rel="stylesheet">
+
+<style>
+	#goCart, #goChat, #goTop {
+    position: relative;
+    width: 63px;
+    height: 59px;
+    cursor: pointer;
+    line-height: 59px;
+    text-align: center;
+   	margin: 0px;
+   	padding:2px 0px;
+   	font-weight: normal;
+}
+#Fixed{
+	right: 0px;
+	margin-left: 0px;
+	
+}
+/* #Fixed a.top-app:hover{background:url("../images/ma.png")no-repeat center center; }
+#Fixed a.ppg-car-cb:hover{background:url("../images/gou.png")no-repeat center center; }
+#Fixed a.go-top:hover{background:url("../images/top.png")no-repeat center center; } */
+</style>
+</head>
+<body>
+
+
+<div id="Fixed" style="display: none;">
+<a id="goCart" class="btn fl top-app" title="App" href="$!webPath/appDownLoad.htm">APP</a>
+<a id="goChat" class="btn fl ppg-car-cb" title="购物车" href="$!webPath/goods_cart1.htm">购物车</a>
+<a id="goTop" class="fl go-top" title="TOP" href="javascript:;" style="line-height: normal;">
+<span class="topimg" style="display: block;margin: 10px 0px;"><img class="topimg" src="$!webPath/resources/shop/ysysgo/images/goptop.png" alt="" /></span>
+TOP
+</a>
+</div>
+<script type="text/javascript" src="$!webPath/resources/shop/ysysgo/js/97zzw.js"></script>
+<script type="text/javascript">
+		if((document.body.scrollTop||document.documentElement.scrollTop)>673){
+			   		$("#Fixed").show();
+			   	}else{
+			   		$("#Fixed").hide();
+			   	}
+
+		$(function(){
+	     $("#Fixed a.go-top").hover(function() {
+				$("#Fixed a.go-top .topimg").attr("src","$!webPath/resources/shop/ysysgo/images/goptop2.png");  
+                }, function() {
+                $("#Fixed a.go-top .topimg").attr("src","$!webPath/resources/shop/ysysgo/images/goptop.png"); 
+                });	
+
+
+		}); 
+		 
+</script>
+</body>
+</html>

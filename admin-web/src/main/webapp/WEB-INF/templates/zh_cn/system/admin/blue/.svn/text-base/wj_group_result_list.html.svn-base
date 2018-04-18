@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<body>
+<div class="cont">
+  <h3 class="seth">问卷题题目管理</h3>
+  <div class="nav_list">
+    <ul>
+      <li>
+      	<a href="$!webPath/admin/wj_GroupResult_list.htm?groupID=$!groupID&themeID=$!themeID" class="this">
+      		<b>题目结果列表</b>
+      	</a>
+      </li>
+      <li>
+      	<a href="$!webPath/admin/add_WenJuanGroupResult.htm?themeID=$!themeID&groupID=$!groupID">
+      		<b>新增结果</b>
+      	</a>
+      </li>
+    </ul>
+  </div>
+  <form action="$!webPath/admin/check_group_list.htm" id="ListForm" name="ListForm" method="post">
+
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="15%">
+          	<span class="form_btna">开始分值</span>
+          </th>
+          <th width="15%">
+          	<span class="form_btna">结束分值</span>
+          </th>
+          <th width="50%">
+          	<span class="form_btna">健康状态</span>
+          </th>
+          <th>
+          	<b class="form_btnb">操作</span>
+          </th>
+        </tr>
+        #foreach($!obj in $!objs)
+        <tr>
+          <td align="center">
+          	$!obj.startScore
+          </td>
+          <td align="center">
+          	$!obj.endScore
+          </td>
+          <td align="center">
+          	#if($!obj.isChronic)
+          		慢性病
+          	#elseif($!obj.isHigh)
+          		高风险
+          	#elseif($!obj.isYjk)
+          		亚健康
+          	#elseif($!obj.isHealthy)
+          		健康
+          	#end
+          </td>
+          <td class="hui oprate_con" align="center">
+	         <a href="javascript:void(0);" id="del" onclick="if(confirm('删除后不可恢复，是否继续?'))window.location.href='$!webPath/admin/del_WenJuanGroupResult.htm?id=$!obj.id&groupId=$!groupId&themeID=$!themeID'" class="blue">
+	          	删除
+	         </a>
+	      </td>
+	         
+        </tr>
+        #end
+      </table>
+    </div>
+    <div class="operate_bar">
+    </div>
+  </FORM>
+</div>
+</body>
+</html>

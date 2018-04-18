@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.UserFootPointMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.UserFootPoint">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="addTime" property="addtime" jdbcType="TIMESTAMP" />
+		<result column="deleteStatus" property="deletestatus" jdbcType="INTEGER" />
+		<result column="fp_date" property="fpDate" jdbcType="DATE" />
+		<result column="fp_goods_count" property="fpGoodsCount"
+			jdbcType="INTEGER" />
+		<result column="fp_user_id" property="fpUserId" jdbcType="BIGINT" />
+		<result column="fp_user_name" property="fpUserName" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.user.model.UserFootPoint"
+		extends="BaseResultMap">
+		<result column="fp_goods_content" property="fpGoodsContent"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, addTime, deleteStatus, fp_date, fp_goods_count, fp_user_id,
+		fp_user_name
+	</sql>
+	<sql id="Blob_Column_List">
+		fp_goods_content
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.user.model.UserFootPointExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_foot_point
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.user.model.UserFootPointExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_foot_point
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_foot_point
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryByUserId" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select *
+		from user_foot_point
+		where fp_user_id = #{userId,jdbcType=BIGINT}
+		order by fp_date desc
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_foot_point
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.UserFootPointExample">
+		delete from user_foot_point
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.UserFootPoint">
+		insert into user_foot_point (id, addTime, deleteStatus,
+		fp_date, fp_goods_count, fp_user_id,
+		fp_user_name, fp_goods_content)
+		values (#{id,jdbcType=BIGINT}, #{addtime,jdbcType=TIMESTAMP},
+		#{deletestatus,jdbcType=INTEGER},
+		#{fpDate,jdbcType=DATE}, #{fpGoodsCount,jdbcType=INTEGER}, #{fpUserId,jdbcType=BIGINT},
+		#{fpUserName,jdbcType=VARCHAR},
+		#{fpGoodsContent,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.UserFootPoint">
+		insert into user_foot_point
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addtime != null">
+				addTime,
+			</if>
+			<if test="deletestatus != null">
+				deleteStatus,
+			</if>
+			<if test="fpDate != null">
+				fp_date,
+			</if>
+			<if test="fpGoodsCount != null">
+				fp_goods_count,
+			</if>
+			<if test="fpUserId != null">
+				fp_user_id,
+			</if>
+			<if test="fpUserName != null">
+				fp_user_name,
+			</if>
+			<if test="fpGoodsContent != null">
+				fp_goods_content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addtime != null">
+				#{addtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deletestatus != null">
+				#{deletestatus,jdbcType=INTEGER},
+			</if>
+			<if test="fpDate != null">
+				#{fpDate,jdbcType=DATE},
+			</if>
+			<if test="fpGoodsCount != null">
+				#{fpGoodsCount,jdbcType=INTEGER},
+			</if>
+			<if test="fpUserId != null">
+				#{fpUserId,jdbcType=BIGINT},
+			</if>
+			<if test="fpUserName != null">
+				#{fpUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="fpGoodsContent != null">
+				#{fpGoodsContent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.UserFootPointExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_foot_point
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_foot_point
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addtime != null">
+				addTime = #{record.addtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deletestatus != null">
+				deleteStatus = #{record.deletestatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.fpDate != null">
+				fp_date = #{record.fpDate,jdbcType=DATE},
+			</if>
+			<if test="record.fpGoodsCount != null">
+				fp_goods_count = #{record.fpGoodsCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.fpUserId != null">
+				fp_user_id = #{record.fpUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.fpUserName != null">
+				fp_user_name = #{record.fpUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.fpGoodsContent != null">
+				fp_goods_content = #{record.fpGoodsContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update user_foot_point
+		set id = #{record.id,jdbcType=BIGINT},
+		addTime = #{record.addtime,jdbcType=TIMESTAMP},
+		deleteStatus = #{record.deletestatus,jdbcType=INTEGER},
+		fp_date = #{record.fpDate,jdbcType=DATE},
+		fp_goods_count = #{record.fpGoodsCount,jdbcType=INTEGER},
+		fp_user_id = #{record.fpUserId,jdbcType=BIGINT},
+		fp_user_name = #{record.fpUserName,jdbcType=VARCHAR},
+		fp_goods_content = #{record.fpGoodsContent,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_foot_point
+		set id = #{record.id,jdbcType=BIGINT},
+		addTime = #{record.addtime,jdbcType=TIMESTAMP},
+		deleteStatus = #{record.deletestatus,jdbcType=INTEGER},
+		fp_date = #{record.fpDate,jdbcType=DATE},
+		fp_goods_count = #{record.fpGoodsCount,jdbcType=INTEGER},
+		fp_user_id = #{record.fpUserId,jdbcType=BIGINT},
+		fp_user_name = #{record.fpUserName,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.UserFootPoint">
+		update user_foot_point
+		<set>
+			<if test="addtime != null">
+				addTime = #{addtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deletestatus != null">
+				deleteStatus = #{deletestatus,jdbcType=INTEGER},
+			</if>
+			<if test="fpDate != null">
+				fp_date = #{fpDate,jdbcType=DATE},
+			</if>
+			<if test="fpGoodsCount != null">
+				fp_goods_count = #{fpGoodsCount,jdbcType=INTEGER},
+			</if>
+			<if test="fpUserId != null">
+				fp_user_id = #{fpUserId,jdbcType=BIGINT},
+			</if>
+			<if test="fpUserName != null">
+				fp_user_name = #{fpUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="fpGoodsContent != null">
+				fp_goods_content = #{fpGoodsContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.user.model.UserFootPoint">
+		update user_foot_point
+		set addTime = #{addtime,jdbcType=TIMESTAMP},
+		deleteStatus = #{deletestatus,jdbcType=INTEGER},
+		fp_date = #{fpDate,jdbcType=DATE},
+		fp_goods_count = #{fpGoodsCount,jdbcType=INTEGER},
+		fp_user_id = #{fpUserId,jdbcType=BIGINT},
+		fp_user_name = #{fpUserName,jdbcType=VARCHAR},
+		fp_goods_content = #{fpGoodsContent,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.UserFootPoint">
+		update user_foot_point
+		set addTime = #{addtime,jdbcType=TIMESTAMP},
+		deleteStatus = #{deletestatus,jdbcType=INTEGER},
+		fp_date = #{fpDate,jdbcType=DATE},
+		fp_goods_count = #{fpGoodsCount,jdbcType=INTEGER},
+		fp_user_id = #{fpUserId,jdbcType=BIGINT},
+		fp_user_name = #{fpUserName,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

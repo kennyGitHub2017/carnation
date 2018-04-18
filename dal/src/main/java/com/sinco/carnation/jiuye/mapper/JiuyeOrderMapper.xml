@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.jiuye.mapper.JiuyeOrderMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.jiuye.model.JiuyeOrder">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="order_id" property="orderId" jdbcType="VARCHAR" />
+		<result column="is_comment" property="isComment" jdbcType="VARCHAR" />
+		<result column="order_detail_dto" property="orderDetailDto"
+			jdbcType="LONGVARCHAR" />
+		<result column="order_dt" property="orderDt" jdbcType="TIMESTAMP" />
+		<result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+		<result column="order_type" property="orderType" jdbcType="INTEGER" />
+		<result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+		<result column="pay_money" property="payMoney" jdbcType="DECIMAL" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="plat_pay_no" property="platPayNo" jdbcType="VARCHAR" />
+		<result column="real_pay_money" property="realPayMoney"
+			jdbcType="DECIMAL" />
+		<result column="total_count" property="totalCount" jdbcType="INTEGER" />
+		<result column="total_free" property="totalFree" jdbcType="DECIMAL" />
+		<result column="trans_fee" property="transFee" jdbcType="DECIMAL" />
+		<result column="user_id" property="ysuserId" jdbcType="BIGINT" />
+		<result column="address" property="address" jdbcType="LONGVARCHAR" />
+		<result column="coupon_no" property="couponNo" jdbcType="VARCHAR" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="last_update_time" property="lastUpdateTime"
+			jdbcType="TIMESTAMP" />
+		<result column="payment_id" property="paymentId" jdbcType="INTEGER" />
+		<result column="trade_no" property="tradeNo" jdbcType="VARCHAR" />
+		<result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+		<result column="receiver" property="receiver" jdbcType="VARCHAR" />
+		<result column="show_status" property="showStatus" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.jiuye.bo.JiuyeOrderBO"
+		extends="BaseResultMap" />
+	<resultMap id="TotalResultMap" type="com.sinco.carnation.jiuye.bo.JiuyeTotalDataBO"
+		extends="BaseResultMap">
+		<result column="totalSales" property="totalSales" jdbcType="BIGINT" />
+		<result column="totalCommission" property="totalCommission"
+			jdbcType="BIGINT" />
+		<result column="totalRefunds" property="totalRefunds" jdbcType="BIGINT" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, order_id, is_comment, order_detail_dto, order_dt,
+		order_status, order_type,
+		order_no,
+		pay_money, phone,
+		plat_pay_no,real_pay_money,total_count,total_free,trans_fee,user_id,address,coupon_no,
+		add_time,last_update_time,payment_id,trade_no,pay_time,receiver,show_status
+	</sql>
+
+	<insert id="insertSelective" parameterType="com.sinco.carnation.jiuye.model.JiuyeOrder"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into jiuye_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="isComment != null">
+				is_comment,
+			</if>
+			<if test="orderDetailDto != null">
+				order_detail_dto,
+			</if>
+			<if test="orderDt != null">
+				order_dt,
+			</if>
+			<if test="orderStatus != null">
+				order_status,
+			</if>
+			<if test="orderType != null">
+				order_type,
+			</if>
+			<if test="orderNo != null">
+				order_no,
+			</if>
+			<if test="payMoney != null">
+				pay_money,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="platPayNo != null">
+				plat_pay_no,
+			</if>
+			<if test="realPayMoney != null">
+				real_pay_money,
+			</if>
+			<if test="totalCount != null">
+				total_count,
+			</if>
+			<if test="totalFree != null">
+				total_free,
+			</if>
+			<if test="transFee != null">
+				trans_fee,
+			</if>
+			<if test="ysuserId != null">
+				user_id,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="couponNo != null">
+				coupon_no,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="lastUpdateTime != null">
+				last_update_time,
+			</if>
+			<if test="paymentId != null">
+				payment_id,
+			</if>
+			<if test="tradeNo != null">
+				trade_no,
+			</if>
+			<if test="receiver != null">
+				receiver,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="orderId != null">
+				#{orderId,jdbcType=BIGINT},
+			</if>
+			<if test="isComment != null">
+				#{isComment},
+			</if>
+			<if test="orderDetailDto != null">
+				#{orderDetailDto},
+			</if>
+			<if test="orderDt != null">
+				#{orderDt},
+			</if>
+			<if test="orderStatus != null">
+				#{orderStatus},
+			</if>
+			<if test="orderType != null">
+				#{orderType},
+			</if>
+			<if test="orderNo != null">
+				#{orderNo},
+			</if>
+			<if test="payMoney != null">
+				#{payMoney},
+			</if>
+			<if test="phone != null">
+				#{phone},
+			</if>
+			<if test="platPayNo != null">
+				#{platPayNo},
+			</if>
+			<if test="realPayMoney != null">
+				#{realPayMoney},
+			</if>
+			<if test="totalCount != null">
+				#{totalCount},
+			</if>
+			<if test="totalFree != null">
+				#{totalFree},
+			</if>
+			<if test="transFee != null">
+				#{transFee},
+			</if>
+			<if test="ysuserId != null">
+				#{ysuserId},
+			</if>
+			<if test="address != null">
+				#{address},
+			</if>
+			<if test="couponNo != null">
+				#{couponNo},
+			</if>
+			<if test="addTime != null">
+				#{addTime},
+			</if>
+			<if test="lastUpdateTime != null">
+				#{lastUpdateTime},
+			</if>
+			<if test="paymentId != null">
+				#{paymentId},
+			</if>
+			<if test="tradeNo != null">
+				#{tradeNo},
+			</if>
+			<if test="receiver != null">
+				#{receiver},
+			</if>
+
+		</trim>
+	</insert>
+
+	<update id="updateByOrderId" parameterType="com.sinco.carnation.jiuye.model.JiuyeOrder">
+		update jiuye_order
+		<set>
+			<if test="isComment != null">
+				is_comment = #{isComment,jdbcType=VARCHAR},
+			</if>
+			<if test="orderDetailDto != null">
+				order_detail_dto =
+				#{orderDetailDto,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="orderDt != null">
+				order_dt = #{orderDt,jdbcType=TIMESTAMP},
+			</if>
+			<if test="orderStatus != null">
+				order_status = #{orderStatus,jdbcType=INTEGER},
+			</if>
+			<if test="orderType != null">
+				order_type = #{orderType,jdbcType=INTEGER},
+			</if>
+			<if test="orderNo != null">
+				order_no = #{orderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="payMoney != null">
+				pay_money = #{payMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="phone != null">
+				phone = #{phone,jdbcType=VARCHAR},
+			</if>
+			<if test="platPayNo != null">
+				plat_pay_no = #{platPayNo,jdbcType=VARCHAR},
+			</if>
+			<if test="realPayMoney != null">
+				real_pay_money = #{realPayMoney,jdbcType=DECIMAL},
+			</if>
+			<if test="totalCount != null">
+				total_count = #{totalCount,jdbcType=INTEGER},
+			</if>
+			<if test="totalFree != null">
+				total_free = #{totalFree,jdbcType=DECIMAL},
+			</if>
+			<if test="transFee != null">
+				trans_fee = #{transFee,jdbcType=DECIMAL},
+			</if>
+			<if test="ysuserId != null">
+				user_id = #{ysuserId,jdbcType=BIGINT},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="couponNo != null">
+				coupon_no = #{couponNo,jdbcType=VARCHAR},
+			</if>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastUpdateTime != null">
+				last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="paymentId != null">
+				payment_id = #{paymentId,jdbcType=INTEGER},
+			</if>
+			<if test="tradeNo != null">
+				trade_no = #{tradeNo,jdbcType=VARCHAR},
+			</if>
+			<if test="payTime != null">
+				pay_time = #{payTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="receiver != null">
+				receiver = #{receiver,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where order_id = #{orderId,jdbcType=BIGINT}
+	</update>
+	<select id="findByOrderId" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from jiuye_order
+		where order_id = #{orderId,jdbcType=BIGINT}
+	</select>
+
+	<select id="payStateCheck" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from jiuye_order
+		where order_id = #{orderId,jdbcType=BIGINT} and
+		order_status = 2
+	</select>
+
+	<select id="querySynOrderId" resultType="java.lang.String">
+		select order_id from
+		jiuye_order where show_status is null or (show_status != 7 and
+		show_status != 9 and show_status != 10) limit #{start},#{end}
+	</select>
+	<update id="updateOrderStatusByOrderId">
+		update jiuye_order set show_status=#{orderStatus}
+		where order_id = #{orderId}
+	</update>
+	<select id="getRefundOrderByOrderId" resultType="java.util.Map">
+		select user_id,pay_money from jiuye_order
+		where order_id = #{orderId} and show_status=9 and pay_time is not null
+	</select>
+
+	<select id="findOrderList" parameterType="com.sinco.carnation.jiuye.vo.JiuyeOrderManageVO"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from jiuye_order
+		where 1=1
+		<if test="vo.orderNo != '' and vo.orderNo != null">
+			AND order_no = #{vo.orderNo}
+		</if>
+		<if test="vo.status != '' and vo.status != null">
+			AND order_status = #{vo.status}
+		</if>
+		<if test="vo.startOrderTime != '' and vo.startOrderTime != null">
+			AND order_dt <![CDATA[ >= ]]>
+			#{vo.startOrderTime}
+		</if>
+		<if test="vo.endOrderTime != '' and vo.endOrderTime != null">
+			AND order_dt <![CDATA[ <= ]]>
+			#{vo.endTime}
+		</if>
+	</select>
+
+	<select id="findOrderTotalPayMoney" parameterType="com.sinco.carnation.jiuye.vo.JiuyeOrderManageVO"
+		resultMap="TotalResultMap">
+		SELECT SUM(pay_money) as totalSales
+		FROM
+		jiuye_order
+		WHERE
+		order_status =4
+		<if test="vo.startTime!= '' and vo.startTime != null">
+			AND order_dt <![CDATA[ >= ]]>
+			#{vo.startTime}
+		</if>
+		<if test="vo.endTime != '' and vo.endTime!= null">
+			AND order_dt <![CDATA[ <= ]]>
+			#{vo.endTime}
+		</if>
+	</select>
+
+	<select id="findOrderTotalRefundsMoney" parameterType="com.sinco.carnation.jiuye.vo.JiuyeOrderManageVO"
+		resultMap="TotalResultMap">
+		SELECT SUM(pay_money) as totalRefunds
+		FROM
+		jiuye_order
+		WHERE
+		order_status
+		=9
+		<if test="vo.startTime!= '' and vo.startTime != null">
+			AND order_dt <![CDATA[ >= ]]>
+			#{vo.startTime}
+		</if>
+		<if test="vo.endTime != '' and vo.endTime!= null">
+			AND order_dt <![CDATA[ <= ]]>
+			#{vo.endTime}
+		</if>
+	</select>
+
+</mapper>

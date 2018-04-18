@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.healthcircle.mapper.PostMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.healthcircle.model.Post">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="praise_num" property="praiseNum" jdbcType="INTEGER" />
+		<result column="evaluate_num" property="evaluateNum" jdbcType="INTEGER" />
+		<result column="read_num" property="readNum" jdbcType="INTEGER" />
+		<result column="location" property="location" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="thumbnail" property="thumbnail" jdbcType="VARCHAR" />
+		<result column="nickname" property="nickname" jdbcType="VARCHAR" />
+		<result column="headImgPath" property="headImgPath" />
+		<result column="sex" property="sex" />
+		<result column="level" property="level" />
+		<result column="uid" property="uid" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="labelIds" property="labelIds" jdbcType="VARCHAR" />
+		<result column="is_add_integral" property="isAddIntegral" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.healthcircle.bo.PostBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.healthcircle.model.Post"
+		extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, title, praise_num, evaluate_num, read_num,
+		location,user_id,is_add_integral
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.healthcircle.model.PostExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from health_circle_post
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.healthcircle.model.PostExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from health_circle_post
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		a.user_id,
+		<include refid="column_list" />
+		,
+		uc.head_img_path as headImgPath
+		from health_circle_post a
+		LEFT JOIN user_customer uc ON a.user_id=uc.uid
+		where a.id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from health_circle_post
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.healthcircle.model.PostExample">
+		delete from health_circle_post
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.healthcircle.model.Post"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into health_circle_post (id, add_time, delete_status,praise_num,
+		evaluate_num, read_num, location,
+		content,thumbnail,user_id,nickname,label_ids)
+		values (#{id,jdbcType=BIGINT},now(),
+		#{deleteStatus,jdbcType=INTEGER},#{praiseNum,jdbcType=INTEGER},#{evaluateNum,jdbcType=INTEGER},
+		#{readNum,jdbcType=INTEGER}, #{location,jdbcType=VARCHAR},
+		#{content,jdbcType=VARCHAR},
+		#{thumbnail,jdbcType=VARCHAR},#{userId,jdbcType=BIGINT},#{nickname,jdbcType=VARCHAR},#{labelIds,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.healthcircle.model.Post"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into health_circle_post
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="praiseNum != null">
+				praise_num,
+			</if>
+			<if test="evaluateNum != null">
+				evaluate_num,
+			</if>
+			<if test="readNum != null">
+				read_num,
+			</if>
+			<if test="location != null">
+				location,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=VARCHAR},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="praiseNum != null">
+				#{praiseNum,jdbcType=INTEGER},
+			</if>
+			<if test="evaluateNum != null">
+				#{evaluateNum,jdbcType=INTEGER},
+			</if>
+			<if test="readNum != null">
+				#{readNum,jdbcType=INTEGER},
+			</if>
+			<if test="location != null">
+				#{location,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.healthcircle.model.PostExample"
+		resultType="java.lang.Integer">
+		select count(*) from health_circle_post
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update health_circle_post
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=VARCHAR},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.praiseNum != null">
+				praise_num = #{record.praiseNum,jdbcType=INTEGER},
+			</if>
+			<if test="record.evaluateNum != null">
+				evaluate_num = #{record.evaluateNum,jdbcType=INTEGER},
+			</if>
+			<if test="record.readNum != null">
+				read_num = #{record.readNum,jdbcType=INTEGER},
+			</if>
+			<if test="record.location != null">
+				location = #{record.location,jdbcType=VARCHAR},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update health_circle_post
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=VARCHAR},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		title = #{record.title,jdbcType=VARCHAR},
+		praise_num = #{record.praiseNum,jdbcType=INTEGER},
+		evaluate_num = #{record.evaluateNum,jdbcType=INTEGER},
+		read_num = #{record.readNum,jdbcType=INTEGER},
+		location = #{record.location,jdbcType=VARCHAR},
+		content = #{record.content,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update health_circle_post
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=VARCHAR},
+		delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+		title = #{record.title,jdbcType=VARCHAR},
+		praise_num = #{record.praiseNum,jdbcType=INTEGER},
+		evaluate_num = #{record.evaluateNum,jdbcType=INTEGER},
+		read_num = #{record.readNum,jdbcType=INTEGER},
+		location = #{record.location,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.healthcircle.model.Post">
+		update health_circle_post
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=VARCHAR},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="praiseNum != null">
+				praise_num = #{praiseNum,jdbcType=INTEGER},
+			</if>
+			<if test="evaluateNum != null">
+				evaluate_num = #{evaluateNum,jdbcType=INTEGER},
+			</if>
+			<if test="readNum != null">
+				read_num = #{readNum,jdbcType=INTEGER},
+			</if>
+			<if test="location != null">
+				location = #{location,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="ispush != null">
+				ispush = #{ispush,jdbcType=INTEGER},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.healthcircle.model.Post">
+		update health_circle_post
+		set add_time = #{addTime,jdbcType=VARCHAR},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		title = #{title,jdbcType=VARCHAR},
+		praise_num = #{praiseNum,jdbcType=INTEGER},
+		evaluate_num = #{evaluateNum,jdbcType=INTEGER},
+		read_num = #{readNum,jdbcType=INTEGER},
+		location = #{location,jdbcType=VARCHAR},
+		content = #{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.healthcircle.model.Post">
+		update health_circle_post
+		set add_time = #{addTime,jdbcType=VARCHAR},
+		delete_status = #{deleteStatus,jdbcType=INTEGER},
+		title = #{title,jdbcType=VARCHAR},
+		praise_num = #{praiseNum,jdbcType=INTEGER},
+		evaluate_num = #{evaluateNum,jdbcType=INTEGER},
+		read_num = #{readNum,jdbcType=INTEGER},
+		location = #{location,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- <resultMap id="Add3EvaluateMap" type="com.sinco.carnation.healthcircle.bo.PostBO" 
+		extends="BaseResultMap" > <collection property="evaluateList" ofType="com.sinco.carnation.healthcircle.model.PostEvaluate" 
+		column="id" select="getEvaluate"> </collection> </resultMap> <select id="getEvaluate" 
+		resultType="com.sinco.carnation.healthcircle.model.PostEvaluate"> select 
+		e.content,e.from_username from health_circle_evaluate e where e.post_id=#{id} 
+		and type=0 ORDER BY e.add_time DESC limit 0,3; </select> -->
+
+	<select id="getEvaluate" resultType="com.sinco.carnation.healthcircle.model.PostEvaluate">
+		<foreach collection="postIds" index="index" item="id"
+			separator="union all">
+			(select post_id,content,from_username,add_time from health_circle_evaluate
+			where post_id = ${id} and type=0 ORDER BY add_time desc LIMIT 3)
+		</foreach>
+	</select>
+
+	<sql id="column_list">
+		a.id, a.add_time,
+		a.delete_status,a.title,a.praise_num,a.evaluate_num,a.nickname,a.content,a.location,a.thumbnail,a.label_ids,a.ispush,a.top_third_evaluate
+	</sql>
+	<select id="findPageByVo" resultType="com.sinco.carnation.healthcircle.bo.PostBO"
+		parameterType="map">
+		select
+		<include refid="column_list" />
+		,
+		uc.head_img_path as headImgPath,
+		uc.sex as sex,
+		uc.level,
+		uc.uid as uid
+		from health_circle_post a
+		LEFT JOIN user_customer uc ON a.user_id=uc.uid
+		where a.delete_status=0
+		<!-- <if test="vo.postType!=null" > and a.post_type=#{vo.postType} </if> -->
+		<if test="vo.ispush!=null">
+			and a.ispush=#{vo.ispush}
+		</if>
+		<if test="vo.userId!=null and vo.userId!=''">
+			and a.user_id=#{vo.userId}
+		</if>
+		ORDER BY a.add_time DESC
+	</select>
+	<select id="findHotPageByVo" resultType="com.sinco.carnation.healthcircle.bo.PostBO"
+		parameterType="map">
+		select
+		<include refid="column_list" />
+		,
+		uc.head_img_path as headImgPath,
+		uc.sex as sex,
+		uc.level,
+		uc.uid as uid
+		from health_circle_post a
+		LEFT JOIN user_customer uc ON a.user_id=uc.uid
+		where a.delete_status=0 and a.praise_num>0
+		ORDER BY a.praise_num DESC
+	</select>
+	<!-- <select id="findPageByLabel" resultMap="BaseResultMap" parameterType="map"> 
+		select <include refid="column_list"/>, uc.head_img_path as headImgPath, uc.sex 
+		as sex, uc.level, la.id as labelcentID from health_circle_post a LEFT JOIN 
+		user_customer uc ON a.user_id=uc.uid LEFT JOIN label_center la ON la.data_id=a.id 
+		where a.delete_status=0 and la.label_id=#{vo.labelId} and la.type=#{vo.type} 
+		ORDER BY a.add_time DESC </select> -->
+	<select id="findPageByLabel" resultType="com.sinco.carnation.healthcircle.bo.PostBO"
+		parameterType="map">
+		select
+		<include refid="column_list" />
+		,
+		uc.head_img_path as headImgPath,
+		uc.sex as sex,
+		uc.level,
+		uc.uid as uid
+		from health_circle_post a LEFT JOIN user_customer uc ON
+		a.user_id=uc.uid,label_center lc,label lb
+		where a.id=lc.data_id and lc.label_id=lb.id and lc.type=#{vo.type} and
+		lb.label_name=#{vo.labelName}
+		ORDER BY a.add_time DESC
+	</select>
+
+	<update id="updatePraiseNum" parameterType="java.lang.Long">
+		update health_circle_post set praise_num=praise_num+1 where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateDecPraiseNum" parameterType="java.lang.Long">
+		update health_circle_post set praise_num=praise_num-1 where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateEvalueteNum">
+		update health_circle_post set evaluate_num=evaluate_num+1,
+		top_third_evaluate=#{topThirdEvaluate,jdbcType=VARCHAR} where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+	<select id="selectById" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="column_list" />
+		,
+		uc.head_img_path as headImgPath,
+		uc.sex as sex,
+		uc.level,
+		uc.uid as uid,
+		a.user_id
+		from health_circle_post a
+		LEFT JOIN user_customer uc ON a.user_id=uc.uid
+		where a.id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="findByPage" resultMap="BOResultMap" parameterType="map">
+		select
+		<include refid="column_list" />
+		,
+		uc.sex as sex,
+		uc.uid as uid
+		from health_circle_post a
+		LEFT JOIN user_customer uc ON a.user_id=uc.uid
+		<if test="vo.labelName!=null and vo.labelName!=''">
+			,label_center lc,label lb
+		</if>
+		where a.delete_status=0
+		<if test="vo.sex!=null and vo.sex!=''">
+			and ac.sex=#{vo.sex}
+		</if>
+		<if test="vo.addTime!=null and vo.addTime!=''">
+			and a.add_time=#{vo.addTime}
+		</if>
+		<if test="vo.nickName!=null and vo.nickName!=''">
+			and a.nickname like '%${vo.nickName}%'
+		</if>
+		<if test="vo.labelName!=null and vo.labelName!=''">
+			and a.id=lc.data_id and lc.label_id=lb.id and lc.type=1 and
+			lb.label_name=#{vo.labelName}
+		</if>
+		ORDER BY a.add_time DESC
+	</select>
+	<delete id="deleteByUIdPId" parameterType="map">
+		delete from health_circle_post
+		where id = #{postId,jdbcType=BIGINT} and user_id=#{userId,jdbcType=BIGINT}
+	</delete>
+	<select id="selectCurrentNumber" parameterType="map"
+		resultType="java.lang.Integer">
+		select COUNT(1) from health_circle_post where to_days(add_time) =
+		to_days(now()) AND user_id=#{userId,jdbcType=BIGINT};
+	</select>
+	<select id="selectLatelyPost" parameterType="map" resultMap="BaseResultMap">
+		SELECT a.add_time,a.user_id,a.id FROM health_circle_post a where
+		user_id=#{userId,jdbcType=BIGINT} ORDER BY add_time DESC LIMIT 1;
+	</select>
+	
+	<select id="listByisAddIntegral" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from health_circle_post
+		where is_add_integral = 0;
+	</select>
+	<update id="updateIsAddIntegralByid" parameterType="java.lang.Long">
+		update health_circle_post set is_add_integral = 1
+		where id = #{id};
+	</update>
+</mapper>

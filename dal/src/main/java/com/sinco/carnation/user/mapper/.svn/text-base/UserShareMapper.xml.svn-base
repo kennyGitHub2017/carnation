@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.UserShareMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.UserShare">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="share_goods_id" property="shareGoodsId"
+			jdbcType="BIGINT" />
+		<result column="share_goods_name" property="shareGoodsName"
+			jdbcType="VARCHAR" />
+		<result column="share_goods_photo" property="shareGoodsPhoto"
+			jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.UserShareBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.user.model.UserShare"
+		extends="BaseResultMap">
+		<result column="share_content" property="shareContent"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, share_goods_id, share_goods_name,
+		share_goods_photo,
+		user_id, user_name
+	</sql>
+	<sql id="Blob_Column_List">
+		share_content
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.user.model.UserShareExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_share
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.user.model.UserShareExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_share
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from user_share
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_share
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.UserShareExample">
+		delete from user_share
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.UserShare"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_share (id, add_time, delete_status,
+		share_goods_id, share_goods_name, share_goods_photo,
+		user_id, user_name, share_content
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{shareGoodsId,jdbcType=BIGINT}, #{shareGoodsName,jdbcType=VARCHAR},
+		#{shareGoodsPhoto,jdbcType=VARCHAR},
+		#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{shareContent,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.UserShare"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_share
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="shareGoodsId != null">
+				share_goods_id,
+			</if>
+			<if test="shareGoodsName != null">
+				share_goods_name,
+			</if>
+			<if test="shareGoodsPhoto != null">
+				share_goods_photo,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="shareContent != null">
+				share_content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="shareGoodsId != null">
+				#{shareGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="shareGoodsName != null">
+				#{shareGoodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="shareGoodsPhoto != null">
+				#{shareGoodsPhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="shareContent != null">
+				#{shareContent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.UserShareExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_share
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_share
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.shareGoodsId != null">
+				share_goods_id = #{record.shareGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="record.shareGoodsName != null">
+				share_goods_name = #{record.shareGoodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.shareGoodsPhoto != null">
+				share_goods_photo = #{record.shareGoodsPhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userName != null">
+				user_name = #{record.userName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.shareContent != null">
+				share_content = #{record.shareContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update user_share
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		share_goods_id = #{record.shareGoodsId,jdbcType=BIGINT},
+		share_goods_name = #{record.shareGoodsName,jdbcType=VARCHAR},
+		share_goods_photo = #{record.shareGoodsPhoto,jdbcType=VARCHAR},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		user_name = #{record.userName,jdbcType=VARCHAR},
+		share_content = #{record.shareContent,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_share
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		share_goods_id = #{record.shareGoodsId,jdbcType=BIGINT},
+		share_goods_name = #{record.shareGoodsName,jdbcType=VARCHAR},
+		share_goods_photo = #{record.shareGoodsPhoto,jdbcType=VARCHAR},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		user_name = #{record.userName,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.UserShare">
+		update user_share
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="shareGoodsId != null">
+				share_goods_id = #{shareGoodsId,jdbcType=BIGINT},
+			</if>
+			<if test="shareGoodsName != null">
+				share_goods_name = #{shareGoodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="shareGoodsPhoto != null">
+				share_goods_photo = #{shareGoodsPhoto,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="shareContent != null">
+				share_content = #{shareContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.user.model.UserShare">
+		update user_share
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		share_goods_id = #{shareGoodsId,jdbcType=BIGINT},
+		share_goods_name = #{shareGoodsName,jdbcType=VARCHAR},
+		share_goods_photo = #{shareGoodsPhoto,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=BIGINT},
+		user_name = #{userName,jdbcType=VARCHAR},
+		share_content = #{shareContent,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.UserShare">
+		update user_share
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		share_goods_id = #{shareGoodsId,jdbcType=BIGINT},
+		share_goods_name = #{shareGoodsName,jdbcType=VARCHAR},
+		share_goods_photo = #{shareGoodsPhoto,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=BIGINT},
+		user_name = #{userName,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

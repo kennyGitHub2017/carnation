@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.ArticleMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.Article">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="display" property="display" jdbcType="BIT" />
+		<result column="mark" property="mark" jdbcType="VARCHAR" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="img" property="img" jdbcType="VARCHAR" />
+		<result column="art_desc" property="artDesc" jdbcType="VARCHAR" />
+		<result column="keywords" property="keywords" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="article_Class_id" property="articleClassId"
+			jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.sys.model.Article"
+		extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="ExtendResultMap" type="com.sinco.carnation.sys.bo.ArticleBO"
+		extends="ResultMapWithBLOBs">
+		<result column="class_name" property="articleClassName" />
+	</resultMap>
+	<resultMap id="ArticleBOResultMap" type="com.sinco.carnation.sys.bo.ArticleBO"
+		extends="BaseResultMap" />
+
+	<sql id="column_list">
+		a.id, a.add_Time, a.delete_Status, a.display, a.mark, a.sequence, a.title,
+		a.type, a.url, a.article_Class_id, art_desc, img, keywords,
+		description
+	</sql>
+
+	<sql id="column_view">
+		a.id,a.title,a.content,a.add_Time,a.img,a.art_desc
+	</sql>
+
+	<select id="queryUserArticList" resultMap="ExtendResultMap">
+		SELECT c.class_Name,a.* FROM sys_article a,sys_articleclass c WHERE
+		a.article_Class_id=c.id AND c.id=#{id} and a.`type`=#{user}
+		order by a.add_Time desc
+	</select>
+
+	<select id="queryMerchantNoticeList" resultMap="ExtendResultMap"
+		parameterType="map">
+		select
+		a.id, a.add_Time, a.delete_Status, a.display, a.mark, a.sequence,a.title,
+		a.type, a.url, a.article_Class_id
+		FROM sys_article a
+		LEFT JOIN `sys_articleclass` ac ON ac.`id` = a.`article_Class_id`
+
+		<where>
+			ac.mark = #{mark,jdbcType=VARCHAR}
+		</where>
+		order by a.add_Time desc
+	</select>
+
+	<select id="findShopByVO" resultMap="ExtendResultMap"
+		parameterType="map">
+		select
+		<include refid="column_list" />
+		,ac.class_Name
+		from sys_article a
+		INNER join sys_articleclass ac on a.article_Class_id =ac.id
+		AND ac.mark not in ('sellernotice','o2osellernotice','operatornotice',
+		'gongsidongtai')
+		AND ac.mark not like 'ZS_%'
+		<where>
+			<if test="gtAddTime != null">
+				and a.add_Time &gt; #{gtAddTime}
+			</if>
+			<if test="ltAddTime != null">
+				and a.add_Time &lt; #{ltAddTime}
+			</if>
+			<if test="classId != null">
+				and a.article_Class_id =#{classId}
+			</if>
+			<if test="type != null and type != ''">
+				and a.type = #{type}
+			</if>
+			<if test="display != null">
+				and a.display = #{display}
+			</if>
+		</where>
+		ORDER BY a.add_Time DESC,a.sequence ASC 
+		<if test="count != null">
+			limit 0,#{count}
+		</if>
+	</select>
+
+	<select id="findShopPageByVO" resultMap="ExtendResultMap"
+		parameterType="map">
+		select
+		<include refid="column_list" />
+		,ac.class_Name
+		from sys_article a
+		INNER join sys_articleclass ac on a.article_Class_id =ac.id
+		AND ac.mark not in ("sellernotice","o2osellernotice","operatornotice")
+		<where>
+			<if test="vo.gtAddTime != null">
+				and a.add_Time &gt; #{vo.gtAddTime}
+			</if>
+			<if test="vo.ltAddTime != null">
+				and a.add_Time &lt; #{vo.ltAddTime}
+			</if>
+			<if test="vo.classId != null">
+				and a.article_Class_id =#{vo.classId}
+			</if>
+			<if test="vo.classIds != null and vo.classIds.size() > 0">
+				and a.article_Class_id in
+				<foreach collection="vo.classIds" item="listItem" open="("
+					close=")" separator=",">
+					#{listItem}
+				</foreach>
+			</if>
+			<if test="vo.type != null and vo.type != ''">
+				and a.type = #{vo.type}
+			</if>
+			<if test="vo.display != null">
+				and a.display = #{vo.display}
+			</if>
+		</where>
+		ORDER BY a.add_Time DESC,a.sequence ASC 
+	</select>
+
+
+	<select id="selectPageByClassId" resultMap="ExtendResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM sys_article
+		WHERE article_Class_id = #{classId}
+		AND delete_Status = 0
+		<if test="type != null">
+			AND type = #{type}
+		</if>
+		ORDER BY add_Time DESC,sequence ASC 
+	</select>
+
+	<select id="top6" resultMap="ArticleBOResultMap">
+		select * from sys_article order by
+		add_Time desc limit 6
+	</select>
+
+	<select id="findByParentClassMark" resultMap="ExtendResultMap">
+		SELECT
+		<include refid="column_list" />
+		,a.content,ac.class_Name
+		FROM sys_article a
+		INNER join sys_articleclass ac on a.article_Class_id= ac.id AND ac.mark not
+		in ("sellernotice","o2osellernotice","operatornotice")
+		inner join sys_articleclass pac on ac.parent_id=pac.id
+		WHERE a.delete_Status = 0
+		and a.display=#{display}
+		<if test="type != null">
+			AND type = #{type}
+		</if>
+		<if test="marks != null">
+			and pac.mark in
+			<foreach collection="marks" item="listItem" open="(" close=")"
+				separator=",">
+				#{listItem}
+			</foreach>
+		</if>
+		ORDER BY add_Time DESC
+		<if test="count != null">
+			limit 0,#{count}
+		</if>
+	</select>
+
+	<select id="findByPage" resultMap="ExtendResultMap"
+		parameterType="map">
+		select
+		<include refid="column_list" />
+		,ac.class_Name
+		from sys_article a
+		INNER join sys_articleclass ac on a.article_Class_id =ac.id
+		<where>
+			<if test="title != null and title != ''">
+				and a.title like CONCAT("%",#{title},"%")
+			</if>
+			<if test="articleClassName != null and articleClassName != ''">
+				and ac.class_Name like concat('%',#{articleClassName},'%')
+			</if>
+		</where>
+		ORDER BY a.add_Time DESC
+	</select>
+
+	<select id="selectByClassId" resultMap="ExtendResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		,content
+		FROM sys_article
+		WHERE article_Class_id = #{classId}
+		AND delete_Status = 0
+		<if test="type != null">
+			AND type = #{type}
+		</if>
+		ORDER BY add_Time DESC
+		<if test="count != null">
+			limit 0,#{count}
+		</if>
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, display, mark, sequence, title, type, url,
+		article_Class_id,rate, art_desc, img, keywords, description
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ExtendResultMap"
+		parameterType="com.sinco.carnation.sys.model.ArticleExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sys_article
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+
+
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sys.model.ArticleExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_article
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sys_article
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sys_article
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.ArticleExample">
+		delete from sys_article
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.Article">
+		insert into sys_article (id, add_Time, delete_Status,
+		display, mark, sequence,
+		title, type, url, article_Class_id,
+		content, art_desc, img, keywords, description)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{display,jdbcType=BIT}, #{mark,jdbcType=VARCHAR}, #{sequence,jdbcType=INTEGER},
+		#{title,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR}, #{articleClassId,jdbcType=BIGINT},
+		#{content,jdbcType=LONGVARCHAR}, #{artDesc}, #{img}, #{keywords},
+		#{description})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.Article">
+		insert into sys_article
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="display != null">
+				display,
+			</if>
+			<if test="mark != null">
+				mark,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="articleClassId != null">
+				article_Class_id,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="artDesc != null">
+				art_desc,
+			</if>
+			<if test="img != null">
+				img,
+			</if>
+			<if test="keywords != null">
+				keywords,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="display != null">
+				#{display,jdbcType=BIT},
+			</if>
+			<if test="mark != null">
+				#{mark,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="articleClassId != null">
+				#{articleClassId,jdbcType=BIGINT},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="artDesc != null">
+				#{artDesc},
+			</if>
+			<if test="img != null">
+				#{img},
+			</if>
+			<if test="keywords != null">
+				#{keywords},
+			</if>
+			<if test="description != null">
+				#{description},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.ArticleExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_article
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_article
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.display != null">
+				display = #{record.display,jdbcType=BIT},
+			</if>
+			<if test="record.mark != null">
+				mark = #{record.mark,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=VARCHAR},
+			</if>
+			<if test="record.url != null">
+				url = #{record.url,jdbcType=VARCHAR},
+			</if>
+			<if test="record.articleClassId != null">
+				article_Class_id = #{record.articleClassId,jdbcType=BIGINT},
+			</if>
+			<if test="record.artDesc != null">
+				art_desc = #{record.artDesc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.img != null">
+				img = #{record.img},
+			</if>
+			<if test="record.keywords != null">
+				keywords = #{record.keywords},
+			</if>
+			<if test="record.description != null">
+				description = #{record.description},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update sys_article
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		display = #{record.display,jdbcType=BIT},
+		mark = #{record.mark,jdbcType=VARCHAR},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		title = #{record.title,jdbcType=VARCHAR},
+		type = #{record.type,jdbcType=VARCHAR},
+		url = #{record.url,jdbcType=VARCHAR},
+		article_Class_id = #{record.articleClassId,jdbcType=BIGINT},
+		art_desc = #{record.artDesc},
+		img = #{record.img},
+		keywords = #{record.keywords},
+		description = #{record.description},
+		content = #{record.content,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sys_article
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		display = #{record.display,jdbcType=BIT},
+		mark = #{record.mark,jdbcType=VARCHAR},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		title = #{record.title,jdbcType=VARCHAR},
+		type = #{record.type,jdbcType=VARCHAR},
+		url = #{record.url,jdbcType=VARCHAR},
+		art_desc = #{record.artDesc},
+		img = #{record.img},
+		keywords = #{record.keywords},
+		description = #{record.description},
+		article_Class_id = #{record.articleClassId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.Article">
+		update sys_article
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="display != null">
+				display = #{display,jdbcType=BIT},
+			</if>
+			<if test="mark != null">
+				mark = #{mark,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="articleClassId != null">
+				article_Class_id = #{articleClassId,jdbcType=BIGINT},
+			</if>
+			<if test="artDesc != null">
+				art_desc = #{artDesc},
+			</if>
+			<if test="img != null">
+				img = #{img},
+			</if>
+			<if test="keywords != null">
+				keywords = #{keywords},
+			</if>
+			<if test="description != null">
+				description = #{description},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="rate != null">
+				rate = #{rate,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.sys.model.Article">
+		update sys_article
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		display = #{display,jdbcType=BIT},
+		mark = #{mark,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=INTEGER},
+		title = #{title,jdbcType=VARCHAR},
+		type = #{type,jdbcType=VARCHAR},
+		url = #{url,jdbcType=VARCHAR},
+		article_Class_id = #{articleClassId,jdbcType=BIGINT},
+		art_desc = #{artDesc},
+		img = #{img},
+		keywords = #{keywords},
+		description = #{description},
+		content = #{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.Article">
+		update sys_article
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		display = #{display,jdbcType=BIT},
+		mark = #{mark,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=INTEGER},
+		title = #{title,jdbcType=VARCHAR},
+		type = #{type,jdbcType=VARCHAR},
+		url = #{url,jdbcType=VARCHAR},
+		art_desc = #{artDesc},
+		img = #{img},
+		keywords = #{keywords},
+		description = #{description},
+		article_Class_id = #{articleClassId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- begin -->
+
+	<select id="selectViewPageList" resultMap="ExtendResultMap"
+		parameterType="map">
+		select
+
+		<include refid="column_view" />
+
+		,date_format(a.add_Time,'%Y-%m-%d')
+
+		from sys_article a
+
+		<where>
+
+			a.article_Class_id in(select id from sys_articleclass where mark ='gongsidongtai')
+			AND a.display = 1
+
+		</where>
+		ORDER BY a.sequence asc, a.id desc
+
+	</select>
+	<select id="selectViewPageListByMark" resultMap="ExtendResultMap"
+		parameterType="map">
+		select
+		*
+		from sys_article a
+		INNER JOIN sys_articleclass c
+		where
+		a.article_Class_id = c.id
+		AND a.display = 1
+		AND c.mark = #{vo.mark}
+		ORDER BY a.sequence asc, a.id desc
+	</select>
+
+
+	<select id="findByParentMark" resultMap="ExtendResultMap"
+		parameterType="map">
+		select
+		a.id, a.add_Time, a.delete_Status, a.display, a.mark, a.sequence,a.title,
+		a.type, a.url, a.article_Class_id, a.img,a.art_desc
+		FROM sys_article a
+		INNER JOIN
+		(
+		SELECT ac.id FROM `sys_articleclass` ac WHERE ac.mark =
+		#{mark,jdbcType=VARCHAR}
+		UNION ALL
+		SELECT apc.id FROM `sys_articleclass` ac
+		LEFT JOIN `sys_articleclass` apc ON apc.`parent_id` = ac.`id` WHERE
+		ac.mark = #{mark,jdbcType=VARCHAR}
+		) AS t ON a.`article_Class_id` = t.id
+		ORDER BY a.add_Time DESC,a.sequence ASC 
+	</select>
+	
+	
+	<select id="listByParentMarkAndCount" resultMap="ExtendResultMap"
+		parameterType="map">
+		select
+		a.id, a.add_Time, a.delete_Status, a.display, a.mark, a.sequence,a.title,
+		a.type, a.url, a.article_Class_id, a.img,a.art_desc
+		FROM sys_article a
+		INNER JOIN
+		(
+		SELECT ac.id FROM `sys_articleclass` ac WHERE ac.mark =
+		#{mark,jdbcType=VARCHAR}
+		UNION ALL
+		SELECT apc.id FROM `sys_articleclass` ac
+		LEFT JOIN `sys_articleclass` apc ON apc.`parent_id` = ac.`id` WHERE
+		ac.mark = #{mark,jdbcType=VARCHAR}
+		) AS t ON a.`article_Class_id` = t.id
+		ORDER BY a.add_Time DESC,a.sequence ASC 
+		<if test="count != null">
+			limit 4
+		</if>
+	</select>
+
+	<!-- select details -->
+	<select id="selectViewDetailsPrevious" resultMap="ExtendResultMap"
+		parameterType="map">
+		select * from sys_article where article_Class_id = #{cid} and id &lt; #{aid}
+		order by id desc limit 1
+	</select>
+
+
+	<select id="selectViewDetailsNext" resultMap="ExtendResultMap"
+		parameterType="map">
+		select * from sys_article where article_Class_id = #{cid} and id &gt; #{aid}
+		order by id asc limit 1
+	</select>
+
+
+	<!-- end -->
+</mapper>

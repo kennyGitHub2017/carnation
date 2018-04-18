@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.ExpertKnowledgeMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.ExpertKnowledge">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="knowledge_type" property="knowledgeType"
+			jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sns.bo.ExpertKnowledgeBO"
+		extends="BaseResultMap">
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="class_name" property="className" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.sns.model.ExpertKnowledge"
+		extends="BaseResultMap">
+		<result column="context" property="context" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, title, knowledge_type, create_time, user_id
+	</sql>
+	<sql id="Blob_Column_List">
+		context
+	</sql>
+
+	<select id="searchKnowList" resultMap="BOResultMap">
+		SELECT * FROM sns_expert_knowledge WHERE 1=1
+		<if test="id != null and id != ''">
+			and knowledge_type=#{id}
+		</if>
+		<if test="name != null and name != ''">
+			and title LIKE concat('%',#{name},'%')
+		</if>
+		order by create_time desc
+	</select>
+
+	<select id="queryKnowledgeByclassId" resultMap="BOResultMap">
+		SELECT e.`name` ,k.* FROM sns_expert_knowledge k,user_experts e WHERE
+		e.uid=k.user_id and knowledge_type=#{id} order by create_time desc
+	</select>
+
+	<select id="queryExpertKnowledgeList" resultMap="BOResultMap">
+		SELECT c.`name` class_name,e.`name`,k.* FROM sns_expert_knowledge k
+		INNER JOIN sns_knowledge_class c ON c.id=k.knowledge_type
+		LEFT JOIN user_experts e ON k.user_id=e.uid
+		<if test="title != null and title != ''">
+			where k.title LIKE CONCAT('%',#{title},'%')
+		</if>
+		order by create_time desc
+	</select>
+
+	<select id="selectByExampleWithBLOBs"
+		parameterType="com.sinco.carnation.sns.model.ExpertKnowledgeExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_expert_knowledge
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.sns.model.ExpertKnowledgeExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_expert_knowledge
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_expert_knowledge
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sns_expert_knowledge
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sns.model.ExpertKnowledgeExample">
+		delete from sns_expert_knowledge
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.ExpertKnowledge"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sns_expert_knowledge (id, title, knowledge_type,
+		create_time, user_id, context
+		)
+		values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR},
+		#{knowledgeType,jdbcType=BIGINT},
+		#{createTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=BIGINT}, #{context,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.ExpertKnowledge"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sns_expert_knowledge
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="knowledgeType != null">
+				knowledge_type,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="context != null">
+				context,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="knowledgeType != null">
+				#{knowledgeType,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="context != null">
+				#{context,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sns.model.ExpertKnowledgeExample"
+		resultType="java.lang.Integer">
+		select count(*) from sns_expert_knowledge
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sns_expert_knowledge
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.knowledgeType != null">
+				knowledge_type = #{record.knowledgeType,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.context != null">
+				context = #{record.context,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update sns_expert_knowledge
+		set id = #{record.id,jdbcType=BIGINT},
+		title = #{record.title,jdbcType=VARCHAR},
+		knowledge_type = #{record.knowledgeType,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		context = #{record.context,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sns_expert_knowledge
+		set id = #{record.id,jdbcType=BIGINT},
+		title = #{record.title,jdbcType=VARCHAR},
+		knowledge_type = #{record.knowledgeType,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		user_id = #{record.userId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.ExpertKnowledge">
+		update sns_expert_knowledge
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="knowledgeType != null">
+				knowledge_type = #{knowledgeType,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="context != null">
+				context = #{context,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.sns.model.ExpertKnowledge">
+		update sns_expert_knowledge
+		set title = #{title,jdbcType=VARCHAR},
+		knowledge_type = #{knowledgeType,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		user_id = #{userId,jdbcType=BIGINT},
+		context = #{context,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.ExpertKnowledge">
+		update sns_expert_knowledge
+		set title = #{title,jdbcType=VARCHAR},
+		knowledge_type = #{knowledgeType,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		user_id = #{userId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

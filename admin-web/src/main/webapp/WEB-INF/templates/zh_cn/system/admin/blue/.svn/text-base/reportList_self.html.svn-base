@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('#startDate').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endDate').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">体检报告</h1>
+  <!-- <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/admin/reportList.htm?status=2" class="this"><b>未处理</b></a></li>
+      <li><a href="$!webPath/admin/reportList.htm?status=3" ><b>已处理</b></a></li>
+    </ul>
+  </div>
+  <form action="$!webPath/admin/reportList.htm?status=2" method="post">
+    <input name="userId" type="hidden" id="userIda" value="$!vo.userId" />
+  <div class="search">
+    <ul>
+      <li>
+        <span>昵称</span> <span class="size200">
+          <input name="nickname" type="text" id="nicknamea" value="$!vo.nickname" />
+        </span>
+        <span>手机号</span> <span class="size150">
+          <input name="mobile" type="text" id="mobilea" value="$!vo.mobile" />
+        </span>
+        <span>开始时间</span> <span class="size150">
+          <input name="startDate" type="text" id="startDate" value="$!vo.startDate" readonly="readonly" />
+        </span>
+        <span>结束时间</span> <span class="size150">
+          <input name="endDate" type="text" id="endDate" value="$!vo.endDate" readonly="readonly" />
+        </span>
+        <span>
+          <input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn"/>
+        </span>
+      </li>
+    </ul>
+  </div>
+  </form> -->
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/admin/reportList.htm" method="post">
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th><span class="form_btna">昵称</span></th>
+        <th><span class="form_btna">手机号</span></th>
+        <th><span class="form_btna">邮箱</span></th>
+        <th><span class="form_btna">生日</span></th>
+        <th><span class="form_btna">性别</span></th>
+        <th><span class="form_btna">体检报名</span></th>
+        <th><span class="form_btna">提交时间</span></th>
+        <th><span class="form_btna">状态</span></th>
+        <th><span class="form_btna">操作</span></th>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+        <td align="center">$!obj.nickname</td>
+        <td align="center">$!obj.mobile</td>
+        <td align="center">$!obj.email</td>
+        <td align="center">$!CommUtil.formatShortDate($!obj.birthdate)</td>
+        <td align="center">#if($!obj.sex == 1) 男 #else 女 #end</td>
+        <td align="center">$!obj.resultName</td>
+        <td align="center">$!CommUtil.formatLongDate($!obj.createTime)</td>
+        <td align="center">#if($!obj.status == 1) 未提交 #elseif($!obj.status == 2) 待处理 #else 已处理 #end</td>
+        <td align="center">
+          <a href="$!webPath/admin/reportDetailed.htm?id=$!obj.id&self=true">查看体检报告</a>
+          <!-- <a dialog_uri="$!webPath/admin/saveReportResultView.htm?id=$!obj.id" class="blue" dialog_title="处理" dialog_width="400" dialog_height="300">处理</a> -->
+        </td>
+      </tr>
+      #end
+    </table>
+  </div>
+  
+      <div class="operate_bar">
+     
+    
+    <div class="fenye"><input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+      <input name="userId" type="hidden" id="userId" value="$!vo.userId" />
+      <!-- <input name="nickname" type="hidden" id="nickname" value="$!vo.nickname" />
+      <input name="mobile" type="hidden" id="mobile" value="$!vo.mobile" />
+      <input name="startDate" type="hidden" id="sfwefws" value="$!vo.startDate" />
+      <input name="endDate" type="hidden" id="ccccae" value="$!vo.endDate" /> -->
+	  $!gotoPageFormHTML</div>
+             
+ </div>
+ </FORM>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.IntegralLogMapper" >
+  <resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.IntegralLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="addTime" property="addtime" jdbcType="TIMESTAMP" />
+    <result column="deleteStatus" property="deletestatus" jdbcType="INTEGER" />
+    <result column="integral" property="integral" jdbcType="INTEGER" />
+    <result column="sign_day" property="signDay" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="balance" property="balance" jdbcType="INTEGER" />
+    <result column="integral_user_id" property="integralUserId" jdbcType="BIGINT" />
+    <result column="operate_user_id" property="operateUserId" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.IntegralLogBO" extends="BaseResultMap" />
+  <resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.user.model.IntegralLog" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <resultMap id="QueryIntegralPageList" type="com.sinco.carnation.user.bo.IntegralLogBO" extends="BaseResultMap">
+  	<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+  	<result column="operate_name" property="operateName" jdbcType="VARCHAR" />
+  	<result column="type_name" property="typeName"  jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, addTime, deleteStatus, integral, type,balance, integral_user_id, operate_user_id,sign_day
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  
+  <select id="queryIntegralPageList" resultMap="QueryIntegralPageList">
+  	SELECT a.login_name operate_name,u.login_name,integ.* FROM user_integral_log integ 
+    LEFT JOIN  sys_user_account u on (integ.integral_user_id=u.uid and u.account_type=2) 
+    LEFT  JOIN sys_user_account a ON (a.uid=integ.operate_user_id and a.account_type=9) where deleteStatus=0
+  	<if test="loginName != null and loginName != ''">
+  		and u.login_name like concat('%',#{loginName,jdbcType=VARCHAR},'%')
+  	</if>
+  	order by integ.id DESC
+  </select>
+  
+    <select id="selectIntegralPageList" resultMap="QueryIntegralPageList">
+  	SELECT a.login_name operate_name,u.login_name,integ.* FROM user_integral_log integ 
+    LEFT JOIN  sys_user_account u on (integ.integral_user_id=u.uid and u.account_type=2) 
+    LEFT  JOIN sys_user_account a ON (a.uid=integ.operate_user_id and a.account_type=9) where deleteStatus=0
+  	<if test="loginName != null and loginName != ''">
+  		and u.login_name like concat('%',#{loginName,jdbcType=VARCHAR},'%')
+  	</if>
+  	<if test="type != null and type != ''">
+  	   and integ.type=#{type}
+  	</if>
+  	<if test="beginTime != null and beginTime != ''">
+		<![CDATA[AND date(integ.addTime) >=#{beginTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="endTime != null and endTime != ''">
+		<![CDATA[AND date(integ.addTime) <= #{endTime,jdbcType=TIMESTAMP}]]>
+	</if>
+  	order by integ.id DESC
+  </select>
+  
+  
+  <select id="queryIntegralPageListByUid" resultMap="QueryIntegralPageList">
+	SELECT a.login_name operate_name,u.login_name,integ.*,IFNULL(r.name,'') `type_name` FROM user_integral_log integ 
+	    LEFT JOIN  sys_user_account u ON integ.integral_user_id=u.uid
+	    LEFT  JOIN sys_user_account a ON (a.uid=integ.operate_user_id AND a.account_type=9) 
+	    LEFT JOIN `sys_integral_reg` r ON r.type=integ.type
+    WHERE deleteStatus=0
+  	AND u.`uid` = #{uid}
+  	GROUP BY integ.`id` 
+  	order by integ.id DESC
+  </select>
+  
+    <!-- 根据用户uid查找积分明细信息 -->
+  <select id="queryUserIntegralPageListByUid" resultMap="QueryIntegralPageList">
+  	SELECT uil.id, uil.addTime, uil.deleteStatus, uil.integral, uil.type,uil.balance, uil.integral_user_id, 
+		uil.operate_user_id,uil.sign_day,uil.content, IFNULL(r.name,'') `type_name` FROM user_integral_log uil
+		LEFT JOIN `sys_integral_reg` r ON r.type=uil.type
+  	WHERE deleteStatus=0
+  	and uil.integral!=0
+  	AND uil.integral_user_id = #{uid} AND uil.type != #{markType}
+  	GROUP BY uil.`id`
+  	ORDER BY uil.id DESC
+  </select>
+  
+  
+  
+  <select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.user.model.IntegralLogExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from user_integral_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.sinco.carnation.user.model.IntegralLogExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_integral_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from user_integral_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_integral_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.IntegralLogExample" >
+    delete from user_integral_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinco.carnation.user.model.IntegralLog" useGeneratedKeys="true" keyProperty="id" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user_integral_log (id, addTime, deleteStatus,
+      integral, type, integral_user_id, 
+      operate_user_id, content, sign_day,balance)
+    values (#{id,jdbcType=BIGINT}, #{addtime,jdbcType=TIMESTAMP}, #{deletestatus,jdbcType=INTEGER}, 
+      #{integral,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{integralUserId,jdbcType=BIGINT}, 
+      #{operateUserId,jdbcType=BIGINT}, #{content,jdbcType=LONGVARCHAR}, #{signDay,jdbcType=INTEGER},#{balance,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinco.carnation.user.model.IntegralLog" useGeneratedKeys="true" keyProperty="id" >
+    insert into user_integral_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="addtime != null" >
+        addTime,
+      </if>
+      <if test="deletestatus != null" >
+        deleteStatus,
+      </if>
+      <if test="signDay != null" >
+        sign_day,
+      </if>
+      <if test="integral != null" >
+        integral,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="integralUserId != null" >
+        integral_user_id,
+      </if>
+      <if test="operateUserId != null" >
+        operate_user_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test=" balance != null" >
+         balance
+      </if>
+     
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
+      <if test="addtime != null" >
+        #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletestatus != null" >
+        #{deletestatus,jdbcType=INTEGER},
+      </if>
+      <if test="signDay != null" >
+         #{signDay,jdbcType=INTEGER},
+      </if>
+      <if test="integral != null" >
+        #{integral,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="integralUserId != null" >
+        #{integralUserId,jdbcType=BIGINT},
+      </if>
+      <if test="operateUserId != null" >
+        #{operateUserId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+       <if test="balance != null" >
+        #{balance,jdbcType=INTEGER}
+      </if> 
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinco.carnation.user.model.IntegralLogExample" resultType="java.lang.Integer" >
+    select count(*) from user_integral_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update user_integral_log
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.addtime != null" >
+        addTime = #{record.addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deletestatus != null" >
+        deleteStatus = #{record.deletestatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.signDay != null" >
+        sign_day = #{record.signDay,jdbcType=INTEGER},
+      </if>
+      <if test="record.integral != null" >
+        integral = #{record.integral,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.integralUserId != null" >
+        integral_user_id = #{record.integralUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.operateUserId != null" >
+        operate_user_id = #{record.operateUserId,jdbcType=BIGINT},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update user_integral_log
+    set id = #{record.id,jdbcType=BIGINT},
+      addTime = #{record.addtime,jdbcType=TIMESTAMP},
+      deleteStatus = #{record.deletestatus,jdbcType=INTEGER},
+      sign_day = #{record.signDay,jdbcType=INTEGER},
+      integral = #{record.integral,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=VARCHAR},
+      integral_user_id = #{record.integralUserId,jdbcType=BIGINT},
+      operate_user_id = #{record.operateUserId,jdbcType=BIGINT},
+      content = #{record.content,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update user_integral_log
+    set id = #{record.id,jdbcType=BIGINT},
+      addTime = #{record.addtime,jdbcType=TIMESTAMP},
+      deleteStatus = #{record.deletestatus,jdbcType=INTEGER},
+      sign_day = #{record.signDay,jdbcType=INTEGER},
+      integral = #{record.integral,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=VARCHAR},
+      integral_user_id = #{record.integralUserId,jdbcType=BIGINT},
+      operate_user_id = #{record.operateUserId,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.IntegralLog" >
+    update user_integral_log
+    <set >
+      <if test="addtime != null" >
+        addTime = #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletestatus != null" >
+        deleteStatus = #{deletestatus,jdbcType=INTEGER},
+      </if>
+      <if test="signDay != null" >
+        sign_day = #{signDay,jdbcType=INTEGER},
+      </if>
+      <if test="integral != null" >
+        integral = #{integral,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="integralUserId != null" >
+        integral_user_id = #{integralUserId,jdbcType=BIGINT},
+      </if>
+      <if test="operateUserId != null" >
+        operate_user_id = #{operateUserId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <update id="updateBlanceByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.IntegralLog" >
+    update user_integral_log
+    <set >
+      <if test="addtime != null" >
+        addTime = #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deletestatus != null" >
+        deleteStatus = #{deletestatus,jdbcType=INTEGER},
+      </if>
+      <if test="signDay != null" >
+        sign_day = #{signDay,jdbcType=INTEGER},
+      </if>
+      <if test="integral != null" >
+        integral = #{integral,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="integralUserId != null" >
+        integral_user_id = #{integralUserId,jdbcType=BIGINT},
+      </if>
+      <if test="balance != null" >
+        balance = #{balance,jdbcType=INTEGER},
+      </if>
+      <if test="operateUserId != null" >
+        operate_user_id = #{operateUserId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.user.model.IntegralLog" >
+    update user_integral_log
+    set addTime = #{addtime,jdbcType=TIMESTAMP},
+      deleteStatus = #{deletestatus,jdbcType=INTEGER},
+      sign_day = #{signDay,jdbcType=INTEGER},
+      integral = #{integral,jdbcType=INTEGER},
+      type = #{type,jdbcType=VARCHAR},
+      integral_user_id = #{integralUserId,jdbcType=BIGINT},
+      operate_user_id = #{operateUserId,jdbcType=BIGINT},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.IntegralLog" >
+    update user_integral_log
+    set addTime = #{addtime,jdbcType=TIMESTAMP},
+      deleteStatus = #{deletestatus,jdbcType=INTEGER},
+      integral = #{integral,jdbcType=INTEGER},
+      sign_day = #{signDay,jdbcType=INTEGER},
+      type = #{type,jdbcType=VARCHAR},
+      integral_user_id = #{integralUserId,jdbcType=BIGINT},
+      operate_user_id = #{operateUserId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="checkIntegralLog"  resultType="java.lang.Integer">
+    SELECT count(*)
+    FROM user_integral_log so
+    WHERE 1=1
+	<if test="vo.timesLimitType == 3">
+		<![CDATA[and DATE_FORMAT(so.addTime ,'%Y-%m-%d') = DATE_FORMAT(now() ,'%Y-%m-%d')]]>
+	</if> 	
+	<if test="vo.integralUserId != null and vo.integralUserId != ''">
+		and so.integral_user_id = #{vo.integralUserId,jdbcType=BIGINT}
+	</if> 
+	<if test="vo.type != null and vo.type != ''">
+		and so.type = #{vo.type,jdbcType=VARCHAR}
+	</if> 
+  </select>
+  
+  <select id="checkIntegralLogByTime"  resultType="java.lang.Integer">
+    SELECT count(*)
+    FROM user_integral_log so
+    WHERE 1=1
+	<if test="vo.timesLimitType == 3">
+		<![CDATA[and DATE_FORMAT(so.addTime ,'%Y-%m-%d') = DATE_FORMAT(#{vo.addTime} ,'%Y-%m-%d')]]>
+	</if> 	
+	<if test="vo.integralUserId != null and vo.integralUserId != ''">
+		and so.integral_user_id = #{vo.integralUserId,jdbcType=BIGINT}
+	</if> 
+	<if test="vo.type != null and vo.type != ''">
+		and so.type = #{vo.type,jdbcType=VARCHAR}
+	</if> 
+  </select>
+  
+  <select id="querySignIntegralLogYestoday" parameterType="java.util.HashMap" resultMap="BOResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    FROM user_integral_log so
+    WHERE 1=1
+    <if test="regType != null">
+	    and so.type=#{regType,jdbcType=VARCHAR}
+    </if>
+    <if test="type == '1'.toString()">
+		<![CDATA[and DATE_FORMAT(so.addTime ,'%Y-%m-%d') = DATE_ADD(DATE_FORMAT(now() ,'%Y-%m-%d'),INTERVAL -1 day)]]>
+	</if> 
+	<if test="type == '3'.toString()">
+		<![CDATA[and DATE_FORMAT(so.addTime ,'%Y-%m-%d') = DATE_ADD(DATE_FORMAT(now() ,'%Y-%m-%d'),INTERVAL -2 day)]]>
+	</if> 
+	<if test="type == '2'.toString()">
+		<![CDATA[and DATE_FORMAT(so.addTime ,'%Y-%m-%d') = DATE_FORMAT(now() ,'%Y-%m-%d')]]>
+	</if> 
+    and so.integral_user_id = #{integralUserId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="queryByVO" parameterType="com.sinco.carnation.user.vo.IntegralLogVO" resultMap="BOResultMap">
+  select * from user_integral_log
+  WHERE 1=1
+  <if test="vo.userId!=null">
+  and	integral_user_id=#{vo.userId,jdbcType=BIGINT}
+  </if>
+  ORDER BY id DESC
+  </select>
+  
+ <select id="findListByUid" resultMap="BOResultMap">
+	SELECT   uil.`id`,uil.`addTime`,uil.`deleteStatus`,uil.`content`,uil.`integral`,uil.`sign_day`,uil.`type`,uil.`balance`,uil.`integral_user_id`,uil.`operate_user_id`
+ 	FROM `user_integral_log` uil 
+	WHERE CURDATE()=DATE(uil.addTime)
+	<if test="uid!=null">
+		and uil.integral_user_id=#{uid,jdbcType=BIGINT}
+	</if>
+ </select>
+ 
+ <select id="findListByUidTime" resultMap="BOResultMap">
+	SELECT   uil.`id`,uil.`addTime`,uil.`deleteStatus`,uil.`content`,uil.`integral`,uil.`sign_day`,uil.`type`,uil.`balance`,uil.`integral_user_id`,uil.`operate_user_id`
+ 	FROM `user_integral_log` uil 
+	WHERE 1=1
+	<if test="addTime != null">
+		<![CDATA[and DATE_FORMAT(uil.addTime ,'%Y-%m-%d') = DATE_FORMAT(#{addTime} ,'%Y-%m-%d')]]>
+	</if> 	
+	<if test="uid!=null">
+		and uil.integral_user_id=#{uid,jdbcType=BIGINT}
+	</if>
+ </select>
+ 
+   <select id="getByUidTimeType" resultMap="BOResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    FROM user_integral_log
+    where 
+    integral_user_id = #{uid}
+    and addTime = #{time}
+    and type = #{type}
+    </select>
+    
+    <select id="getLastByUidType" resultMap="BOResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    FROM user_integral_log
+    where 
+    integral_user_id = #{uid}
+    and type = #{type}
+    order by addTime desc limit 1;
+    </select>
+  
+    <select id="listErrorUidByType" resultMap="BOResultMap">
+	SELECT * FROM ( <![CDATA[
+		SELECT id,integral_user_id,COUNT(0) ct  FROM user_integral_log 
+		WHERE (`type`='integral_jianKangQuan_beiDianZan' OR `type`='integral_jianKangQuan_DianZan') AND integral>0 AND `addTime`>'2017-05-18' AND `addTime`<'2017-06-01' GROUP BY integral_user_id
+	) ta WHERE ta.ct>280 ORDER BY ct DESC]]>
+    </select>
+    <select id="sumErrorByUidType" resultType="java.lang.Integer">
+		SELECT SUM(integral) FROM (
+			SELECT  * FROM `user_integral_log` WHERE  integral_user_id = #{uid} AND <![CDATA[ `addTime`>'2017-05-18' AND `addTime`<'2017-06-01' AND integral >0]]>
+			AND `type` = #{type} LIMIT 140,9999999
+		) ta
+    </select>
+    
+    <select id="listErrorByUidId" resultMap="BOResultMap">
+	SELECT * FROM `user_integral_log` WHERE integral_user_id = #{uid} AND<![CDATA[ id >= ]]> #{id} order by id asc
+    </select>
+    <select id="listErrorByUidType" resultMap="BOResultMap">
+	SELECT * FROM `user_integral_log` WHERE <![CDATA[ integral > 0 AND `addTime`>'2017-05-18' AND `addTime`<'2017-06-01' ]]>
+	AND integral_user_id = #{uid} AND `type`= #{type} ORDER BY id ASC
+    </select>
+	
+	
+</mapper>

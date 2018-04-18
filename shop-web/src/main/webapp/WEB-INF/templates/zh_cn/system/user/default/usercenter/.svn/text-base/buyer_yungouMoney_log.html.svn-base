@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>云购币-奖金$!{config.title}-$!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm")
+$!httpInclude.include("/nav1.htm")
+<div class="main clearfix">
+  <div class="usercenter">
+    $!httpInclude.include("/buyer/nav.htm?op=predeposit_log")
+    <div class="usercenter_right">
+      <div class="myorder">
+        <h4><span class="myorder_fright"></span><strong>消费明细</strong></h4>
+      </div>
+      <div class="user_list">
+        <div class="user_list_title">
+        <span class="user_title_sp"><b class="red"></b></span>
+          <ul class="user_title_ul">
+            <li class="this"><i></i><a href="$!webPath/buyer/predeposit_log.htm">收支明细</a></li>
+            <li class="this"><i></i><a href="$!webPath/buyer/yungouMoney_log.htm">重消明细</a></li>
+          </ul>
+        </div>
+        #if($!objs.size()>0)
+        <form method="post" id="ListForm">
+          <div class="show_smallimg">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="smallimg_table" >
+              <tr>
+                <th width="10%" align="center">编号</th>
+                <th width="10%" align="center">金额(元)</th>
+                <th width="20%" align="center">时间</th>
+                <th width="20%" align="center">类型</th>
+                <th width="40%"  align="center">描述</th>
+              </tr>
+              #foreach($obj in $objs)
+              <tr>
+                <td align="center">$!obj.id</td>
+                
+                <td align="center">¥
+                  #if($!obj.type == 0)
+                    -$!obj.usedRepeatMoney
+                  #else if($!obj.type == 1)
+                    +$!obj.usedRepeatMoney
+                  #end
+                </td>
+                <td  align="center">$!CommUtil.formatLongDate($!obj.dateTime)</td>
+                 
+                 
+                  #if($!obj.type == 0)
+                   #set($typeStr="购物消费")
+                  #else if($!obj.type == 1)
+                   #set($typeStr="退款返回")
+                  #end
+                <td  align="center">$!typeStr</td>
+
+                <td  align="center">订单$!obj.orderId</td>   
+              #end
+            </table>
+            
+          </div>
+          <div class="userlist_allop">
+            <div class="user_list_page"><span class="user_page_sp">
+              <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+              $!gotoPageFormHTML</span> </div>
+          </div>
+          
+        </form>
+         #else
+          <div class="nothing">
+            <div class="nothing_left"><img src="$!webPath/resources/style/system/front/default/images/nothing.png" /></div>
+            <div class="nothing_right">您目前还没有消费明细记录！</div>
+          </div>
+          #end
+      </div>
+    </div>
+  </div>
+
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

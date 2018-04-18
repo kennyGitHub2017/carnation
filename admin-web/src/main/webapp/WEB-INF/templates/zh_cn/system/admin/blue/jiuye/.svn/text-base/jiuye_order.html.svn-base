@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type=text/css rel=stylesheet />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/smallalert.js" charset="utf-8"></script>
+
+<script>
+	//获取现在时间
+	function getNewDate(){
+		var date = new Date();
+	    var seperator1 = "-";
+	    var month = date.getMonth() + 1;
+	    var strDate = date.getDate();
+	    if (month >= 1 && month <= 9) {
+	        month = "0" + month;
+	    }
+	    if (strDate >= 0 && strDate <= 9) {
+	        strDate = "0" + strDate;
+	    }
+	    var rendate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
+	    return rendate;
+	}
+	//判断筛选时间是否合法
+	function istrue(startdate,enddate){
+		startdate = startdate.split("-"); 
+		enddate = enddate.split("-"); 
+		if(startdate[0] > enddate[0]){
+			return false;
+		}
+		if(startdate[0] == enddate[0]){
+			if(startdate[1] > enddate[1]){
+				return false;
+			}
+			if(startdate[1] == enddate[1]){
+				if(startdate[2] > enddate[2]){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	//提交表单
+	function sub_search(){
+		var startdate = $("#startTime").val();
+		var enddate = $("#endTime").val();
+		if(startdate != "" && enddate != ""){
+			if(!istrue(startdate,enddate)){
+				alert("日期选择错误");
+				return ;
+			}
+		}
+		$("#queryForm").submit();
+	}
+	jQuery(document).ready(function() {
+		jQuery('#startTime').datepicker({
+			dateFormat : "yy-mm-dd",
+			maxDate:getNewDate(),
+			changeMonth : true,
+			changeYear : true
+		});
+		jQuery('#endTime').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+	});
+
+	// 导出报表
+/*
+	function export_excel(){
+		var orderno = $("#orderno").val();
+		var platid = $("#platid").val();
+		var startTime = $("#startTime").val();
+		var endTime = $("#endTime").val();
+		var ids="";
+		if(!checkFilter()){
+			alert("璇烽�夋嫨瀵煎嚭鏉′欢!");
+			return;
+		}else{
+			#if($!objs.size()>0)
+				document.forms[0].action = "$!webPath/admin/juanpi_order_export.htm";
+				document.forms[0].submit();
+			#else
+				alert("褰撳墠娌℃湁鍙鍑虹殑鏁版嵁!");
+			#end
+		}		
+	}*/
+
+
+	function checkFilter(){
+		if($("#orderno").val()==""
+			  & $("#platid").val()==""
+				  &$("#startTime").val()==""
+					  &$("#endTime").val()==""
+					   ){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
+</script>
+</head>
+<body>
+	<div class="cont">
+		<h3 class="seth">订单管理</h3>
+		<div class="nav_list">
+		  	<ul>
+		    	<li><a href="$!webPath/admin/jiuye_order.htm" class="this"><b>所有订单</b></a></li>
+		    </ul>
+		</div>
+		<form action="$!webPath/admin/jjiuye_order.htm" method="post" id="queryForm">
+		
+			<div class="search">
+				<ul>
+					<li>
+						<span>订单状态</span>
+						<span class="size150"> 
+							<select style="width:108px;">
+								<option value="">全部</option>
+								<option value="">待付款</option>
+								<option value="">待发货</option>
+								<option value="">已发货</option>
+								<option value="">已完成</option>
+								<option value="">退款中</option>
+								<option value="">已取消</option>
+								<option value="">已关闭</option>
+								<option value="">退货中</option>
+								<option value="">已退款</option>
+							</select>
+						</span>
+						<span>支付类型</span>
+						<span> 
+							<select style="width:110px;">
+								<option value="">全部</option>
+								<option value="">云豆</option>
+								<option value="">云豆（直销）</option>
+								<option value="">云豆</option>
+								<option value="">云豆（直销）</option>
+								<option value="">云豆</option>
+								<option value="">云豆（直销）</option>
+								<option value="">云豆</option>
+								<option value="">云豆（直销）</option>
+							</select>
+						</span>
+						<span>订单号</span> 
+						<span class="size150"> 
+							<input name="" type="text" value="" />
+						</span>
+						<span>下单时间</span>
+						<span class="size100"> 
+							<input name="startTime" type="text" id="startTime" value="" readonly="readonly" />
+						</span>
+						<span>—</span>
+						<span class="size100"> <input name="endTime" type="text" value="" id="endTime" readonly="readonly" />
+						</span>
+					</li>
+					<li>
+						<span>下单人手机</span> 
+						<span class="size100"> 
+							<input name="" type="text" value="" />
+						</span>
+						<span>收货人姓名</span> 
+						<span class="size100"> 
+							<input name="" type="text" value="" />
+						</span>
+						<span>收货人姓名</span> 
+						<span class="size100"> 
+							<input name="" type="text" value="" />
+						</span>
+						<span>订单金额</span> 
+						<span class="size100"> 
+							<input name="" type="text" value="" />
+						</span>
+						<span>—</span>
+						<span class="size100"> 
+							<input name="" type="text" value="" />
+						</span>
+						
+						<span>
+							<input  type="button" onclick="sub_search()" value="搜索" style="cursor: pointer;" class="search_btn" />
+						</span>
+						<span>
+							<input name="importExcel" onclick="export_excel()" type="button" value="导出Excel" style="cursor: pointer;" class="search_btn" />
+						</span>
+					</li>
+				</ul>
+			</div>
+		</form>
+		<form action="$!webPath/admin/jiuye_order.htm" method="post" id="ListForm">
+			<div class="fshoptb">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					class="fshop_table">
+					<tr>
+						<th width="5%"><span class="form_btna">订单号</span></th>
+						<th width="5%"><span class="form_btna">交易号</span></th>
+						<th width="5%"><span class="form_btna">下单时间</span></th>
+						<th width="5%"><span class="form_btna">下单人手机</span></th>
+						<th width="5%"><span class="form_btna">订单总金额</span></th>
+						<th width="5%"><span class="form_btna">订单应付金额</span></th>
+						<th width="5%"><span class="form_btna">运费</span></th>
+						<th width="5%"><span class="form_btna">商品总量</span></th>
+						<th width="5%"><span class="form_btna">收货人姓名</span></th>
+						<th width="5%"><span class="form_btna">收货人手机</span></th>
+						<th width="5%"><span class="form_btna">支付类型</span></th>
+						<th width="5%"><span class="form_btna">云豆</span></th>
+						<th width="5%"><span class="form_btna">云豆（直销）</span></th>
+						<th width="5%"><span class="form_btna">微信</span></th>
+						<th width="5%"><span class="form_btna">支付宝</span></th>
+						<th width="5%"><span class="form_btna">支付状态</span></th>
+						<th width="5%"><span class="form_btna">订单状态</span></th>
+						<th width="5%"><span class="form_btna">操作</span></th>
+					</tr>
+					
+					<tr>
+						<td align="center">123665555</td>
+						<td align="center">920000</td>
+						<td align="center">2017-10-10 10:52:25</td>
+						<td align="center">15563655441</td>
+						<td align="center">120.60</td>
+						<td align="center">115.20</td>
+						<td align="center">10.00</td>
+						<td align="center">2</td>
+						<td align="center">张三</td>
+						<td align="center">136551155</td>
+						<td align="center">云豆</td>
+						<td align="center">125.00</td>
+						<td align="center">-</td>
+						<td align="center">-</td>
+						<td align="center">-</td>
+						<td align="center">已支付</td>
+						<td align="center">已发货</td>
+						<td align="center">
+							<a href="$!webPath/admin/jiuye_order_detail.htm?orderId=111" class="blue">查看</a>
+						</td>
+					</tr>
+					<tr>
+						<td align="center">123665555</td>
+						<td align="center">920000</td>
+						<td align="center">2017-10-10 10:52:25</td>
+						<td align="center">15563655441</td>
+						<td align="center">120.60</td>
+						<td align="center">115.20</td>
+						<td align="center">10.00</td>
+						<td align="center">2</td>
+						<td align="center">张三</td>
+						<td align="center">136551155</td>
+						<td align="center">云豆</td>
+						<td align="center">125.00</td>
+						<td align="center">-</td>
+						<td align="center">-</td>
+						<td align="center">-</td>
+						<td align="center">已支付</td>
+						<td align="center">已发货</td>
+						<td align="center">
+							<a href="$!webPath/admin/jiuye_order_detail.htm?orderId=111" class="blue">查看</a>
+						</td>
+					</tr>
+					
+				</table>
+			</div>
+			
+			  <div class="operate_bar">
+			     <div class="fenye">
+			    	<input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+				 	<input name="mulitId" type="hidden" id="mulitId" />
+			      	$!gotoPageFormHTML
+			     </div>  
+			   </div>
+			</form>
+			
+	</div>
+</body>
+</html>
+

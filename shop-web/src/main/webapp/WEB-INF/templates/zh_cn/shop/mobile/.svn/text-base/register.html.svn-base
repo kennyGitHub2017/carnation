@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+
+    <title> #if($wxShareTitle)$!wxShareTitle #else 噢耶！我已轻松加入云尚，且获取20积分，积分可兑换商品！速点！  #end</title>
+     <link href="$!webPath/resources/assets/css/normalize.css?v=1" rel="stylesheet" type="text/css">
+	<link href="$!webPath/resources/assets/css/font.css?v=2" rel="stylesheet" type="text/css">
+	<link href="$!webPath/resources/assets/css/style.css?v=3" rel="stylesheet" type="text/css">
+	<script>
+		    var isAndroid, isiOS;
+		    (function() {
+		        var u = navigator.userAgent, app = navigator.appVersion;
+		        isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+		        isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+		    }());
+		        
+
+		    var url = window.location.href;
+		    var bool = url.indexOf("ysysgo.cn");
+		    //var bool = url.indexOf("localhost");
+		    if(bool > -1){
+		 		window.location = "http://shop.ysysgo.com/mobile_register.htm?invitationCode=$!{request.getParameter("invitationCode")}";
+		    }
+		    
+	</script>
+</head>
+<body>
+
+    <div class="reg-wrap">
+        <h1 class="text-center"><img src="$!webPath/resources/assets/images/logo1.png?v=1"  width="0px" height="0px" style="width:0px;height:0px;"><br/><img src="$!webPath/resources/assets/images/logo.png?v=1" style="max-width: 55%;"></h1>
+        <div class="reg-title"> 注册成功后，下载云尚APP，登录开启健康生活。</div>
+        <font color="red">$!{request.getParameter("message")}</font>
+        <form id="regForm" method="post" action="$!webPath/mobile_register_finish.htm">
+        	<input  type ="hidden" name ="invitationCode"  value='$!{request.getParameter("invitationCode")}'/>
+            <ul class="list reg-form">
+                <li class="item item-ico">
+                    <i class="icon-phone2"></i><input type="text" class="text" name="mobile"  id="mobile" placeholder="请输入手机号" />
+                </li>
+                <li class="item item-ico">
+                    <i class="icon-lock"></i><input type="password" class="text" name="password" placeholder="6-14位，建议数字、字母、符号组合" />
+                </li>
+                <li class="item">
+                    <div class="fr">
+                        <input type="button" value="发送验证码" class="btn btn-blue" id="mobile_verify_code_generic" onclick="generic_mobile_verify_code()" />
+                        <span id="time_out_generic"></span>
+                    </div>
+                    <div class="v-code">
+                        <input type="text" placeholder="请输入手机验证码" class="text" name="mobileCode" />
+                    </div>
+                </li>
+                <li class="item">
+                    <input type="submit" value="立即注册" class="btn btn-blue btn-block" />
+                </li>
+                <li class="text-right fz-s" >
+                    <a href="http://static.ysysgo.com/static/platform/appDownload.jsp">下载云尚APP</a>
+                </li>
+            </ul>
+        </form>
+        <p class="text-center reg-copyright">
+            版权所有：云尚
+        </p>
+
+
+    </div>
+
+
+	<div id="v-code-box" style="display: none;">
+		<div style="position: fixed; top: 50%; width: 80%; margin: -50px 10% 0; border: 4px  #aaccee solid; background-color: #fff; padding: 20px; z-index: 1; box-sizing: border-box; ">
+			<div class="item">
+	              <div class="text-center">
+	                <script>
+				        function refreshCode(){
+				            jQuery("#code_img").attr("src","$!webPath/verify.htm?d"+new Date().getTime());
+				        }
+				     </script>
+	                  <input type="text" placeholder="请输入验证码" style="width: 108px; vertical-align: top;height: 25px;" class="text" name="code"  id="code"/>
+	                  <a href="javascript:void(0);" onclick="refreshCode();" class="code_refresh"><img id="code_img" src="$!webPath/verify.htm" width="62" height="30" /></a>
+	              </div>
+	          </div>
+	          <div class="text-center pt-10">
+	          	<input type="button" value="发送" class="btn btn-blue"  id="sendCodeBtn"/>
+	          	<input type="button" value="取消" class="btn" id="quxiaoBtn"/>
+	          </div>
+		</div>
+		<div class="mask"></div>
+	</div>
+
+
+    <!--<div class="fixed-bottom-bar double-btn-bar pt-10">-->
+        <!--<button class="btn btn-blue">附近医院</button>-->
+        <!--<button class="btn btn-blue">咨询专家</button>-->
+    <!--</div>-->
+
+    <script src="$!webPath/resources/assets/js/jquery-2.1.4.min.js"></script>
+    <script src="$!webPath/resources/assets/js/jquery-validate.min.js"></script>
+ 
+
+    <script>
+    
+    jQuery(document).ready(function(){
+    	jQuery.validator.addMethod("isMobile", function(value, element) {
+    		var length = value.length;
+    		var mobile = /^((13[0-9])|(14[0-9])|(15([0-9]))|(17([0-9]))|(18[0-9]))\d{8}$/;
+    		return this.optional(element) || (length == 11 && mobile.test(value));
+    		}, "请正确填写您的手机号码");
+    	
+        $("#regForm").validate({
+            rules: {
+                mobile:{
+          		  required:true,
+        		  isMobile:true,
+        		  remote:{
+        		    url: "$!webPath/verify_mobile.htm",     //后台处理程序
+                    type: "post",               //数据发送方式
+                    dataType: "json",           //接受数据格式   
+                    data: {                     //要传递的数据
+                          "mobile": function(){return jQuery("#mobile").val();}
+        		     }
+        		  }
+        		},
+                password:{
+                	  required:true,
+                	  minlength:6,
+            		  maxlength:14
+                },
+                mobileCode:{
+                	  required:true
+                }
+            },
+            messages: {
+            	mobile:{
+          		  required:"手机号不能为空",
+          		  isMobile:"请正确填写您的手机号码",
+          		  remote:"该手机号已经存在"
+          		},
+                password: {
+                	required:"请输入您的密码",
+              		  minlength:"密码不能小于{0}个字符",
+              		  maxlength:"密码不能大于{0}个字符" 
+                },
+                mobileCode:{
+                	required:"请输入您的验证码"
+                }
+            }
+        });
+    	
+    });
+      
+        function generic_mobile_verify_code(){
+        	var mobile = jQuery("#mobile").val();
+        	if(mobile==''){
+        		return;
+        	}
+    		var mobilerule = /^((13[0-9])|(14[0-9])|(15([0-9]))|(17([0-9]))|(18[0-9]))\d{8}$/;
+    		if(mobilerule.test(mobile)==false){
+    			return;
+    		}
+        	 jQuery.ajax({
+        		 type:'POST',
+        		 url:'$!webPath/verify_mobile.htm',
+        		 data:{"mobile": function(){return jQuery("#mobile").val();}},
+        		 success:function(ret){
+        			if(ret=='true'){
+        				 jQuery("#code_img").attr("src","$!webPath/verify.htm?d"+new Date().getTime());
+        				 $("#v-code-box").show();
+        			}
+ 		   		}
+        	});
+        	
+        		
+        }
+        var time=60;
+        var time_id="";
+        function countDown(){
+            --time;
+            jQuery("#time_out_generic").html(time+"秒后可重试");
+            if(time<=0){
+                clearInterval(time_id);
+                time=60;
+                jQuery("#time_out_generic").html("");
+                jQuery("#mobile_verify_code_generic").show();
+            }
+        }
+        $("#sendCodeBtn").click(function() {
+		        jQuery("#mobile_verify_code_generic").hide();
+		        countDown();
+		        time_id=setInterval(countDown,1000);
+		    	var mobile=$("#mobile").val();
+		    	var code=$("#code").val();
+		        //jQuery.post("xxx",{"type":"password_vetify_code"},function(data){
+		       // },"text");
+		        jQuery.ajax({type:'POST',url:'$!webPath/moblie_reg_code_get.htm',data:{"mobile":mobile,"code":code},success:function(ret){
+		 		     if(ret=="1"){
+		 		    	$("#v-code-box").hide();
+		 			 }else{
+		 			 	alert("请输入正确的验证码!");
+		 			 	 clearInterval(time_id);
+		 			 	 time=60;
+		     			  jQuery("#time_out_generic").html("");
+		                  jQuery("#mobile_verify_code_generic").show();
+		 			 }
+	 		   }});
+        });
+        $("#quxiaoBtn").click(function() {
+        	$("#v-code-box").hide();
+        });
+        
+    </script>
+   
+  <script type="text/javascript" src="$!webPath/resources/wx_red_package/images/jweixin-1.0.0.js"></script>    
+  <script type="text/javascript" src="$!webPath/resources/wx_red_package/images/wx_share.js?v=12"></script> 
+  
+     <!-- 微信分享 -->    
+    <script>
+    jQuery(document).ready(function(){ 
+	    wxConfig('${appId}',${timestamp},'${nonceStr}','${signature}');
+	    
+	    var title='我向您推荐云尚！';
+	    var desc='加入云尚，立马赠送20积分，积分可兑换商品！速点！';
+	    var link='${currentUrl}';
+	    var imgUrl='http://static.ysysgo.com/static/person.png';
+	    wxReady(title,desc,link,imgUrl);
+    });
+    </script>
+
+</body>
+</html>

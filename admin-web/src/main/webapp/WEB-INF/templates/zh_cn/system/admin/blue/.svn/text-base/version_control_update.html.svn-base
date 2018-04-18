@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+//设置默认状态以及判断初始显示状态
+	var state = jQuery("#display").val();
+	if(state==""){
+		jQuery("#display").val("true");
+		jQuery("#displayOff").hide();
+	}else{
+		 if(state=="true"){
+			jQuery("#displayOff").hide();
+		}else{
+			jQuery("#displayOn").hide();
+		}
+	}	
+//
+  jQuery("#theForm").validate({
+    rules:{
+	  title:{
+	    required :true
+	  },
+	  sequence: {
+		  required: true,
+		  number: true
+	  }
+	 },
+	messages:{
+	  title:{required:"导航标题不能为空"},
+	  sequence:{required:"序号不能为空，只能是数字", number: '序号不能为空，只能是数字'}
+	}
+  });
+  jQuery(":radio[id=vcType][value='$!obj.vcType']").attr("checked",true);
+});
+function saveForm(){
+/*  var type=jQuery(":radio[id='type'][checked=true]").val();
+ var type_id=jQuery("#"+type+"_id");
+ jQuery("#type_id").val(type_id); */
+ jQuery("#theForm").submit();
+}
+</script>
+</head><body>
+<div class="cont">
+  <h1 class="seth">页面导航</h1>
+  <div class="nav_list">
+    <ul>
+      <li> <a href="$!webPath/admin/version_control.htm"><b>管理</b></a></li>
+      <li> <a href="$!webPath/admin/version_control_update.htm" #if(!$!edit) class="this" #end ><b>新增</b></a> </li>
+      #if($!edit)
+      <li> <a href="javascript:void(0);" class="this"><b>编辑</b></a></li>
+      #end
+    </ul>
+  </div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/version_control_save.htm" method=post>
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/navigation_list.htm" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/navigation_add.htm" />
+    <div class="edit">
+      <div class="editul setcont">
+      
+<!--         <th width="10%"><span class="form_btna">类型</span></th>
+        11.IOS appStore 12 IOS 蒲公英 21.安卓
+        <th width="10%" align="center"><span class="form_btna">版本</span></th>
+        <th width="10%" align="center"><span class="form_btna">更新时间</span></th>
+        <th  align="center"><span class="form_btna">描述</span></th>
+        <th width="10%" align="center"><span class="form_btna">是否开启</span></th>
+        <th width="10%" align="center"><span class="form_btna">是否强制</span></th>
+        <th width="10%" align="center"><span class="form_btna">下载次数</span></th>
+        <th width="10%" align="center"><span class="form_btna">下载链接</span></th> -->
+        
+        <ul class="set1" id="ul_place">
+          <li class="setcont_bg">类型</li>
+          <li  class="radiosp">
+            <label> <span>
+              <input id="vcType" name="vcType" type="radio"  value="11"/>
+              </span> <span>IOS APP store</span> </label>
+            <label> <span>
+              <input id="vcType" name="vcType" type="radio"  value="12"/>
+              </span> <span>IOS 蒲公英</span> </label>
+            <label> <span>
+              <input id="vcType" name="vcType" type="radio" value="21"/>
+              </span> <span>安卓</span> </label>
+          </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>版本号</li>
+          <li><span class="webname">
+            <input name="vcNumber" type="text" id="vcNumber" value="$!obj.vcNumber" size="40" />
+            </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>描述</li>
+          <li><span class="webname">
+            <input name="vcDescribe" type="text" id="vcDescribe" value="$!obj.vcDescribe" size="40" />
+            </span></li>
+        </ul>
+        <ul class="set1" id="url_set">
+          <li class="setcont_bg">下载链接</li>
+          <li>
+          	<span class="webname">
+            	<input name="downloadUrl" type="text" id="downloadUrl" value="$!obj.downloadUrl" size="40"/>
+      		</span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">是否开启</li>
+          <li>
+            <input name="ifOpen" id="ifOpen" type="hidden" value="$!obj.ifOpen" >
+            <img #if($!obj.ifOpen)src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg"#else src="$!webPath/resources/style/system/manage/blue/images/no.jpg"#end width="61" height="23" id="ifOpen_img" style="cursor:pointer"/> </li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">是否强制</li>
+          <li>
+            <input name="ifMandatory" id="ifMandatory" type="hidden" value="$!obj.ifMandatory" >
+            <img #if($!obj.ifMandatory==1)src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg"#else src="$!webPath/resources/style/system/manage/blue/images/no.jpg"#end width="61" height="23" id="ifMandatory_img" style="cursor:pointer"/> </li>
+        </ul>
+      </div>
+    </div>
+  </form>
+  <div class="submit"> <span class="pad120">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+    </span> </div>
+</div>
+</body>
+</html>

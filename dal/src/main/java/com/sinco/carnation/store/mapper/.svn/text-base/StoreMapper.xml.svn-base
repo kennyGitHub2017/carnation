@@ -1,0 +1,2768 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinco.carnation.store.mapper.StoreMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.store.model.Store">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="bank_account_name" property="bankAccountName"
+			jdbcType="VARCHAR" />
+		<result column="bank_c_account" property="bankCAccount"
+			jdbcType="VARCHAR" />
+		<result column="bank_line_num" property="bankLineNum" jdbcType="VARCHAR" />
+		<result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+		<result column="buygift_meal_end_Time" property="buygiftMealEndTime"
+			jdbcType="TIMESTAMP" />
+		<result column="combin_end_time" property="combinEndTime"
+			jdbcType="TIMESTAMP" />
+		<result column="domain_modify_count" property="domainModifyCount"
+			jdbcType="INTEGER" />
+		<result column="enoughreduce_meal_end_Time" property="enoughreduceMealEndTime"
+			jdbcType="TIMESTAMP" />
+		<result column="favorite_count" property="favoriteCount"
+			jdbcType="INTEGER" />
+		<result column="gc_main_id" property="gcMainId" jdbcType="BIGINT" />
+		<result column="group_meal_end_Time" property="groupMealEndTime"
+			jdbcType="TIMESTAMP" />
+		<result column="organization_code" property="organizationCode"
+			jdbcType="VARCHAR" />
+		<result column="send_email_count" property="sendEmailCount"
+			jdbcType="INTEGER" />
+		<result column="send_sms_count" property="sendSmsCount"
+			jdbcType="INTEGER" />
+		<result column="store_address" property="storeAddress"
+			jdbcType="VARCHAR" />
+		<result column="store_commission_amount" property="storeCommissionAmount"
+			jdbcType="DECIMAL" />
+		<result column="store_credit" property="storeCredit" jdbcType="INTEGER" />
+		<result column="store_decorate_old_theme" property="storeDecorateOldTheme"
+			jdbcType="VARCHAR" />
+		<result column="store_decorate_theme" property="storeDecorateTheme"
+			jdbcType="VARCHAR" />
+		<result column="store_email_count" property="storeEmailCount"
+			jdbcType="INTEGER" />
+		<result column="store_msn" property="storeMsn" jdbcType="VARCHAR" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="store_ower" property="storeOwer" jdbcType="VARCHAR" />
+		<result column="store_ower_card" property="storeOwerCard"
+			jdbcType="VARCHAR" />
+		<result column="store_payoff_amount" property="storePayoffAmount"
+			jdbcType="DECIMAL" />
+		<result column="store_qq" property="storeQq" jdbcType="VARCHAR" />
+		<result column="store_recommend" property="storeRecommend"
+			jdbcType="BIT" />
+		<result column="store_recommend_time" property="storeRecommendTime"
+			jdbcType="TIMESTAMP" />
+		<result column="store_sale_amount" property="storeSaleAmount"
+			jdbcType="DECIMAL" />
+		<result column="store_second_domain" property="storeSecondDomain"
+			jdbcType="VARCHAR" />
+		<result column="store_sms_count" property="storeSmsCount"
+			jdbcType="INTEGER" />
+		<result column="store_start_time" property="storeStartTime"
+			jdbcType="TIMESTAMP" />
+		<result column="store_status" property="storeStatus" jdbcType="INTEGER" />
+		<result column="store_telephone" property="storeTelephone"
+			jdbcType="VARCHAR" />
+		<result column="store_ww" property="storeWw" jdbcType="VARCHAR" />
+		<result column="store_zip" property="storeZip" jdbcType="VARCHAR" />
+		<result column="validity" property="validity" jdbcType="TIMESTAMP" />
+		<result column="area_id" property="areaId" jdbcType="BIGINT" />
+		<result column="bank_area_id" property="bankAreaId" jdbcType="BIGINT" />
+		<result column="bank_permit_image_path" property="bankPermitImagePath"
+			jdbcType="VARCHAR" />
+		<result column="card_id" property="cardId" jdbcType="BIGINT" />
+		<result column="grade_id" property="gradeId" jdbcType="BIGINT" />
+		<result column="store_banner_path" property="storeBannerPath"
+			jdbcType="VARCHAR" />
+		<result column="store_license_path" property="storeLicensePath"
+			jdbcType="VARCHAR" />
+		<result column="store_logo_path" property="storeLogoPath"
+			jdbcType="VARCHAR" />
+		<result column="store_cover_path" property="storeCoverPath"
+			jdbcType="VARCHAR" />
+		<result column="is_shop" property="isShop" jdbcType="BIT" />
+		<result column="is_o2o" property="isO2o" jdbcType="BIT" />
+		<result column="store_lat" property="storeLat" jdbcType="DECIMAL" />
+		<result column="store_lon" property="storeLon" jdbcType="DECIMAL" />
+		<result column="invitation_code" property="invitationCode"
+			jdbcType="VARCHAR" />
+		<result column="coupon_pay_amount" property="couponPayAmount"
+			jdbcType="DECIMAL" />
+		<result column="charge_pay_amount" property="chargePayAmount"
+			jdbcType="DECIMAL" />
+		<result column="rebate_amount" property="rebateAmount"
+			jdbcType="DECIMAL" />
+		<result column="commission_rebate" property="commissionRebate"
+			jdbcType="DECIMAL" />
+		<result column="create_user_id" property="createUserId"
+			jdbcType="BIGINT" />
+		<result column="eepay_mid" property="eepayMid" jdbcType="VARCHAR" />
+		<result column="eepay_key" property="eepayKey" jdbcType="VARCHAR" />
+		<result column="is_eepay" property="isEepay" jdbcType="BIT" />
+		<result column="group_main_id" property="groupMainId" jdbcType="BIGINT" />
+		<result column="group_detail_info" property="groupDetailInfo"
+			jdbcType="VARCHAR" />
+		<result column="group_discount" property="groupDiscount" />
+		<result column="license_c_mobile" property="licenseCMobile"
+			jdbcType="VARCHAR" />
+		<result column="license_c_name" property="licenseCName"
+			jdbcType="VARCHAR" />
+		<result column="implement_number" property="implementNumber"
+			jdbcType="VARCHAR" />
+		<result column="pos_type" property="posType" jdbcType="INTEGER" />
+		<result column="add_type" property="addType" jdbcType="INTEGER" />
+		<result column="line_number" property="lineNumber" jdbcType="VARCHAR" />
+		<result column="profit_amount" property="profitAmount"
+			jdbcType="DECIMAL" />
+		<result column="store_target" property="storeTarget" jdbcType="LONGVARCHAR" />
+		<result column="license_c_contact" property="licenseCContact"
+			jdbcType="VARCHAR" />
+		<result column="license_legal_name" property="licenseLegalName"
+			jdbcType="VARCHAR" />
+		<result column="license_legal_id_Card" property="licenseLegalIdCard"
+			jdbcType="VARCHAR" />
+		<result column="license_legal_id_card_front_path" property="licenseLegalIdCardFrontPath"
+			jdbcType="VARCHAR" />
+		<result column="license_legal_id_card_back_path" property="licenseLegalIdCardBackPath"
+			jdbcType="VARCHAR" />
+		<result column="license_image_path" property="licenseImagePath"
+			jdbcType="VARCHAR" />
+		<result column="other_photo_path" property="otherPhotoPath"
+			jdbcType="VARCHAR" />
+		<result column="license_c_email" property="licenseCEmail"
+			jdbcType="VARCHAR" />
+		<result column="organization_image_path" property="organizationImagePath"
+			jdbcType="VARCHAR" />
+		<result column="industry" property="industry" jdbcType="VARCHAR" />
+		<result column="isExtension" property="isExtension" jdbcType="BIT" />
+		<result column="recommend" property="recommend" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap extends="ResultMapWithBLOBs" id="BOResultMap"
+		type="com.sinco.carnation.store.bo.StoreBO">
+		<result column="fail_reseaon" jdbcType="VARCHAR" property="failReseaon" />
+		<result column="grade_name" jdbcType="VARCHAR" property="gradeName" />
+		<result column="content" jdbcType="VARCHAR" property="gradeContent" />
+		<result column="user_name" jdbcType="VARCHAR" property="userName" />
+		<result column="nickname" jdbcType="VARCHAR" property="nickname" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+		<result column="gc_detail_info" jdbcType="VARCHAR" property="gcDetailInfo" />
+		<result column="login_name" jdbcType="VARCHAR" property="loginName" />
+		<result column="store_evaluate" property="storeEvaluate" />
+		<result column="store_seo_description" jdbcType="LONGVARCHAR"
+			property="storeSeoDescription" />
+		<result column="store_seo_keywords" jdbcType="LONGVARCHAR"
+			property="storeSeoKeywords" />
+		<result column="store_info_path" property="storeInfoPath" />
+		<result column="license_business_scope" property="licenseBusinessScope"
+			jdbcType="LONGVARCHAR" />
+		<result column="fail_reseaon" property="failReseaon" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="class_name" property="className" jdbcType="VARCHAR" />
+		<result column="operatorId" property="operatorId" jdbcType="VARCHAR" />
+		<result column="uid" property="uid" jdbcType="INTEGER" />
+		<result column="operatorPhone" property="operatorPhone"
+			jdbcType="VARCHAR" />
+		<result column="operator_code" property="operatorCode"
+			jdbcType="VARCHAR" />
+		<result column="operator_name" property="operatorName"
+			jdbcType="VARCHAR" />
+		<result column="operator_area_id" property="operatorAreaId"
+			jdbcType="VARCHAR" />
+		<association property="point" column="store_id"
+			javaType="com.sinco.carnation.store.model.StorePoint"
+			resultMap="com.sinco.carnation.store.mapper.StorePointMapper.BaseResultMap"></association>
+		<association property="evaluationStoreTotal" columnPrefix="est_"
+			javaType="com.sinco.carnation.o2o.model.GroupEvaluationStoreTotal"
+			resultMap="com.sinco.carnation.o2o.mapper.GroupEvaluationStoreTotalMapper.BaseResultMap"></association>
+	</resultMap>
+	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+		type="com.sinco.carnation.store.model.Store">
+		<result column="gc_detail_info" property="gcDetailInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="sms_email_info" property="smsEmailInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="store_decorate_background_info" property="storeDecorateBackgroundInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="store_decorate_background_old_info" property="storeDecorateBackgroundOldInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="store_decorate_base_info" property="storeDecorateBaseInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="store_decorate_base_old_info" property="storeDecorateBaseOldInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="store_decorate_info" property="storeDecorateInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="store_decorate_old_info" property="storeDecorateOldInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="store_info" property="storeInfo" jdbcType="LONGVARCHAR" />
+		<result column="store_quick_menu" property="storeQuickMenu"
+			jdbcType="LONGVARCHAR" />
+		<result column="store_seo_description" property="storeSeoDescription"
+			jdbcType="LONGVARCHAR" />
+		<result column="store_seo_keywords" property="storeSeoKeywords"
+			jdbcType="LONGVARCHAR" />
+		<result column="violation_reseaon" property="violationReseaon"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap type="com.sinco.carnation.store.bo.StoreBO" id="QueryMerchantBO"
+		extends="ResultMapWithBLOBs">
+		<result column="operator_code" property="operatorCode"
+			jdbcType="VARCHAR" />
+		<result column="coupon_pay_amount" property="couponPayAmount"
+			jdbcType="DECIMAL" />
+		<result column="charge_pay_amount" property="chargePayAmount"
+			jdbcType="DECIMAL" />
+		<result column="rebate_amount" property="rebateAmount"
+			jdbcType="DECIMAL" />
+		<result column="invitation_code" property="invitatCode"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="QueryStoreBO" type="com.sinco.carnation.store.bo.StoreBO"
+		extends="BaseResultMap">
+		<result column="fail_reseaon" property="failReseaon" jdbcType="VARCHAR" />
+		<association property="point" column="store_id"
+			javaType="com.sinco.carnation.store.model.StorePoint"
+			resultMap="com.sinco.carnation.store.mapper.StorePointMapper.BaseResultMap"></association>
+		<association property="evaluationStoreTotal" columnPrefix="est_"
+			javaType="com.sinco.carnation.o2o.model.GroupEvaluationStoreTotal"
+			resultMap="com.sinco.carnation.o2o.mapper.GroupEvaluationStoreTotalMapper.BaseResultMap"></association>
+	</resultMap>
+
+	<resultMap id="LinePayKeyMap" type="com.sinco.carnation.store.bo.StoreBO"
+		extends="BaseResultMap">
+		<result column="store_lat" property="storeLat" jdbcType="DECIMAL" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="operatorPhone" property="operatorPhone"
+			jdbcType="VARCHAR" />
+		<result column="operator_code" property="operatorCode"
+			jdbcType="VARCHAR" />
+		<result column="operator_name" property="operatorName"
+			jdbcType="VARCHAR" />
+		<result column="op_user_name" property="operatorUserName"
+			jdbcType="VARCHAR" />
+		<result column="operator_area_id" property="operatorAreaId"
+			jdbcType="VARCHAR" />
+		<result column="store_lon" property="storeLon" jdbcType="DECIMAL" />
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="uid" property="uid" jdbcType="INTEGER" />
+		<result column="store_telephone" property="storeTelephone"
+			jdbcType="VARCHAR" />
+		<result column="license_c_desc" property="licenseCDesc"
+			jdbcType="VARCHAR" />
+		<result column="store_info" property="storeInfo"
+			jdbcType="VARCHAR" />
+		<result column="is_shop" property="isShop" jdbcType="BIT" />
+		<result column="is_o2o" property="isO2o" jdbcType="BIT" />
+		<association property="point" column="store_id"
+			javaType="com.sinco.carnation.store.model.StorePoint"
+			resultMap="com.sinco.carnation.store.mapper.StorePointMapper.BaseResultMap"></association>
+		<association property="evaluationStoreTotal" columnPrefix="est_"
+			javaType="com.sinco.carnation.o2o.model.GroupEvaluationStoreTotal"
+			resultMap="com.sinco.carnation.o2o.mapper.GroupEvaluationStoreTotalMapper.BaseResultMap"></association>
+	</resultMap>
+
+	<resultMap id="BusinessPageMap" type="com.sinco.carnation.store.bo.StoreBO"
+		extends="BaseResultMap">
+		<result column="rebateConsumeAmount" property="rebateConsumeAmount"
+			jdbcType="DECIMAL" />
+		<result column="rebateFeeAmount" property="rebateFeeAmount"
+			jdbcType="DECIMAL" />
+		<result column="sellerid" property="storeId" jdbcType="BIGINT" />
+	</resultMap>
+
+	<select id="selectStoreByArea" resultType="int">
+		SELECT count(0) FROM shop_store s
+		<if test="areaId != null and  areaId != ''">
+			INNER JOIN dic_area a ON s.area_id = a.id
+		</if>
+		WHERE s.store_status = 15 AND s.is_o2o = 1
+		<if test="areaId != null and  areaId != ''">
+			AND (a.id = #{areaId} OR a.parent_id = #{areaId})
+		</if>
+	</select>
+	<select id="queryStoreByCreateUserId" resultMap="BOResultMap">
+		SELECT id,bank_account_name,bank_c_account,bank_name FROM shop_store WHERE
+		create_user_id=#{uid}
+	</select>
+
+	<select id="queryBusinessPageList" resultMap="BusinessPageMap">
+		SELECT
+		s.*,
+		ss.id AS sellerid,
+		ss.store_name,
+		ss.store_telephone,
+		ss.isExtension,
+		<!-- temp1.sum rebateConsumeAmount, -->
+		temp2.sum rebateFeeAmount
+		FROM
+		user_seller s
+		INNER JOIN shop_store ss ON ss.id = s.store_id
+		INNER JOIN user_owns own ON s.uid = own.seller_user_id
+		<!-- INNER JOIN sys_user_account a ON s.uid = a.uid 登录账号有多个 -->
+		INNER JOIN sys_user su ON s.uid = su.id
+		<!-- LEFT JOIN (SELECT SUM(rr.rebate_amount) sum, rr.seller_user_id FROM 
+			user_rebate_record rr WHERE rr.rebate_status = 1 AND rr.user_id = #{vo.operatorUserId} 
+			AND rr.rebate_type BETWEEN 100 AND 200 <if test="vo.startTime != null"> AND 
+			DATE_FORMAT(rr.create_time ,'%Y-%m-%d') <![CDATA[ >= ]]> DATE_FORMAT(#{vo.startTime} 
+			,'%Y-%m-%d') </if> <if test="vo.endTime != null"> AND DATE_FORMAT(rr.create_time 
+			,'%Y-%m-%d') <![CDATA[ <= ]]> DATE_FORMAT(#{vo.endTime} ,'%Y-%m-%d') </if> 
+			GROUP BY rr.seller_user_id ) temp1 ON temp1.seller_user_id = s.uid -->
+		LEFT JOIN(SELECT SUM(code_amount) SUM,seller_user_id FROM
+		(SELECT
+		code_amount,seller_user_id FROM user_rebate_record rr
+		WHERE rr.rebate_status = 1 AND rr.rebate_type BETWEEN 303 AND 331
+		<if test="vo.startTime != null">
+			AND DATE_FORMAT(rr.create_time ,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.startTime} ,'%Y-%m-%d')
+		</if>
+		<if test="vo.endTime != null">
+			AND DATE_FORMAT(rr.create_time ,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{vo.endTime} ,'%Y-%m-%d')
+		</if>
+		GROUP BY rebate_code ORDER BY id
+		)rc GROUP BY seller_user_id
+		) temp2 ON temp2.seller_user_id = s.uid
+		WHERE
+		ss.store_status = 15
+		<choose>
+			<when test="vo.isBeLong == 1">
+				<choose>
+					<when test="vo.level == 1">
+						AND (SELECT count(0) FROM dic_area a WHERE a.id = ss.area_id AND
+						a.parent_id = #{vo.operatorAreaId}) <![CDATA[ > ]]>
+						0
+						AND (own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.level == 2">
+						AND ss.area_id = #{vo.operatorAreaId}
+						AND (own.own_operator_id != #{vo.operatorId} OR
+						ISNULL(own.own_operator_id))
+					</when>
+					<when test="vo.level == 3">
+						AND 1=2
+					</when>
+				</choose>
+			</when>
+			<when test="vo.isBeLong== 0">
+				AND own.own_operator_id = #{vo.operatorId}
+			</when>
+		</choose>
+		ORDER BY s.uid DESC
+	</select>
+
+	<select id="queryRecommStore" resultMap="LinePayKeyMap">
+		SELECT s.*,
+		est.one AS est_one,
+		est.two AS est_two,
+		est.three AS est_three,
+		est.five AS est_five,
+		est.four AS est_four,
+		ROUND(6378.138*2*ASIN(SQRT(POW(SIN((#{storeLat}*PI()/180-s.store_lat*PI()/180)/2),2)+COS(#{storeLat}*PI()/180)*COS(s.store_lat*PI()/180)*
+		POW(SIN((#{storeLon}*PI()/180-s.store_lon*PI()/180)/2),2)))*1000) AS
+		juli
+		FROM shop_store s
+		LEFT JOIN o2o_group_evaluation_store_total est ON s.id = est.store_id
+		WHERE s.store_status=15 AND s.group_discount <![CDATA[ > ]]>
+		0 AND s.commission_rebate <![CDATA[ > ]]>
+		0
+		AND s.store_lat IS NOT NULL AND s.store_lon IS NOT NULL order by juli
+	</select>
+
+	<select id="queryRecommStoreByArea" resultMap="LinePayKeyMap">
+		SELECT s.*,
+		est.one AS est_one,
+		est.two AS est_two,
+		est.three AS est_three,
+		est.five AS est_five,
+		est.four AS est_four
+		FROM shop_store s
+		LEFT JOIN o2o_group_evaluation_store_total est ON s.id = est.store_id
+		WHERE s.store_status=15 AND s.group_discount <![CDATA[ > ]]>
+		0 AND s.commission_rebate <![CDATA[ > ]]>
+		0
+		<if test="areaIds != null">
+			AND s.area_id IN
+			<foreach collection="areaIds" index="index" item="id" open="("
+				separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+		ORDER BY s.store_credit DESC
+	</select>
+
+	<select id="queryStoreGoods" resultMap="LinePayKeyMap">
+		SELECT s.*
+		<if test="storeLat != null">
+			<if test="storeLon != null">
+				,ROUND(6378.138*2*ASIN(SQRT(POW(SIN((#{storeLat}*PI()/180-s.store_lat*PI()/180)/2),2)+COS(#{storeLat}*PI()/180)*COS(s.store_lat*PI()/180)*
+				POW(SIN((#{storeLon}*PI()/180-s.store_lon*PI()/180)/2),2)))*1000) AS
+				juli
+			</if>
+		</if>
+		FROM shop_store s, o2o_group_goods o WHERE s.id=o.store_id AND
+		s.store_status=15 AND o.gg_status=0
+		AND s.store_lat IS NOT NULL AND
+		s.store_lon IS NOT NULL
+		<if test="store_recommend != null">
+			AND s.store_recommend=#{store_recommend}
+		</if>
+		group by s.id
+		<if test="storeLat != null">
+			<if test="storeLon != null">
+				order by juli
+			</if>
+		</if>
+	</select>
+
+	<select id="queryStoreGoodsByArea" resultMap="LinePayKeyMap">
+		SELECT *FROM (
+		SELECT s.*,o.selled_count FROM shop_store s, o2o_group_goods o WHERE
+		s.id=o.store_id AND s.store_status=15 AND o.gg_status=0
+		<if test="store_recommend != null">
+			AND s.store_recommend=#{store_recommend}
+		</if>
+		<if test="areaIds != null">
+			AND s.area_id IN
+			<foreach collection="areaIds" index="index" item="id" open="("
+				separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+		ORDER BY o.selled_count DESC) t
+		GROUP BY id ORDER BY selled_count DESC
+	</select>
+
+	<select id="queryStoreFavorites" resultMap="QueryStoreBO">
+		SELECT
+		s.id,s.store_name,s.store_credit,s.store_lat,s.store_lon,s.create_user_id,s.store_cover_path,
+		est.one AS est_one,
+		est.two AS est_two,
+		est.three AS est_three,
+		est.five AS est_five,
+		est.four AS est_four
+		FROM user_customer_favorites f
+		LEFT JOIN shop_store s ON s.id=f.fid
+		LEFT JOIN o2o_group_evaluation_store_total est ON s.id = est.store_id
+		WHERE f.uid=#{uid} AND f.type=#{type}
+	</select>
+
+	<select id="findInitRoleList" resultMap="BOResultMap">
+		SELECT
+		ss.id,
+		ss.create_user_id,
+		ss.is_shop,
+		ss.is_o2o
+		FROM
+		shop_store ss
+		WHERE ss.delete_Status=0
+	</select>
+
+	<select id="findInitLuceneList" resultType="long">
+		SELECT
+		ss.id
+		FROM
+		shop_store ss
+		WHERE ss.delete_Status=0 and ss.store_status=15
+	</select>
+
+	<select id="selectAllotStoreList" resultMap="LinePayKeyMap">
+		SELECT
+		s.store_name,
+		a.login_name,
+		u.user_name,
+		s.store_ower,
+		s.area_id,
+		s.group_main_id,
+		s.add_Time,
+		u.uid,
+		s.id
+		FROM
+		shop_store s,
+		user_seller u,
+		sys_user_account a,
+		user_owns o,
+		dic_area dic
+		WHERE
+		s.id = u.store_id
+		AND u.uid = o.seller_user_id
+		AND u.uid = a.uid
+		AND
+		a.account_type=2
+		AND s.store_status = 15
+		AND s.delete_status = 0
+		AND
+		s.is_o2o = 1
+		AND dic.id = s.area_id
+		AND ISNULL(o.own_operator_id)
+		<if test="vo.areaId != null and vo.areaId != ''">
+			AND (dic.id = #{vo.areaId} OR dic.parent_id =
+			#{vo.areaId})
+		</if>
+		<if test="vo.storeName != null and vo.storeName != ''">
+			AND s.store_name LIKE CONCAT('%',#{vo.storeName},'%')
+		</if>
+		ORDER BY s.add_Time DESC
+	</select>
+	<select id="selectOperatorCheckList" resultMap="LinePayKeyMap">
+		SELECT
+		uo.operator_code,
+		uo.operator_name,
+		uo.user_name op_user_name,
+		uo.operator_area_id,
+		uo.phone operatorPhone,
+		s.store_name,
+		s.add_Time,
+		s.id
+		FROM
+		shop_store s,
+		user_owns o,
+		user_operator uo
+		WHERE
+		s.create_user_id = o.seller_user_id
+		AND uo.id = o.own_operator_id
+		AND s.store_status = 1
+		AND s.delete_status = 0
+		<if test="operatorCode != null and operatorCode != ''">
+			AND uo.operator_code = #{operatorCode}
+		</if>
+		<if test="operatorUserName != null and operatorUserName != ''">
+			AND uo.operator_name LIKE
+			CONCAT('%',#{operatorUserName},'%')
+		</if>
+		<if test="operatorName != null and operatorName != ''">
+			AND uo.operator_name LIKE CONCAT('%',#{operatorName},'%')
+		</if>
+		<if test="storeName != null and storeName != ''">
+			AND s.store_name LIKE CONCAT('%',#{storeName},'%')
+		</if>
+		ORDER BY s.add_Time DESC
+	</select>
+	<select id="selectCheckListByOperatorId" resultMap="LinePayKeyMap">
+		SELECT
+		s.store_name,
+		s.store_ower,
+		s.area_id,
+		s.add_Time,
+		s.id,
+		us.name,
+		s.store_telephone
+		FROM
+		shop_store s
+		left join user_seller us on s.create_user_id = us.uid
+		,
+		user_owns o
+		WHERE
+		s.create_user_id = o.seller_user_id
+		AND s.store_status = 1
+		AND s.delete_status = 0
+		AND
+		o.own_operator_id = #{operatorId}
+		<if test="storeName != null and storeName != ''">
+			AND s.store_name LIKE CONCAT('%',#{storeName},'%')
+		</if>
+		ORDER BY s.add_Time DESC
+	</select>
+	<select id="queryStoreById" resultMap="LinePayKeyMap">
+		SELECT
+		store.store_telephone,store.id,store.store_lat,store.store_lon,store.store_name,store.is_shop,store.is_o2o,store.store_cover_path,
+		store.store_address,store.store_info,store.store_credit,store.eepay_mid,store.eepay_key,store.create_user_id,store.commission_rebate,
+		est.one AS est_one,
+		est.two AS est_two,
+		est.three AS est_three,
+		est.five AS est_five,
+		est.four AS est_four,
+		i.license_c_desc
+		FROM shop_store store
+		LEFT JOIN o2o_group_evaluation_store_total est ON store.id = est.store_id
+		LEFT JOIN shop_store_apply_info i on i.store_id=store.id
+		WHERE store.id=#{storeId}
+	</select>
+	<select id="queryByIds" resultMap="BOResultMap">
+		SELECT
+		store.id,store.store_telephone,store.store_lat,store.store_lon,store.store_name,
+		store.store_address,store.store_info,
+		est.one AS est_one,
+		est.two AS
+		est_two,
+		est.three AS est_three,
+		est.five AS est_five,
+		est.four AS
+		est_four
+		FROM shop_store store
+		LEFT JOIN o2o_group_evaluation_store_total est ON store.id = est.store_id
+		WHERE store.id in
+		<foreach collection="ids" index="index" item="id" open="("
+			separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+	<!-- <select id="getStoreStatus" resultMap="ResultMapWithBLOBs"> -->
+	<select id="selectOwnStoreByOperatorId" resultMap="LinePayKeyMap">
+		SELECT
+		s.*
+		FROM
+		shop_store s,
+		user_owns o
+		WHERE
+		s.create_user_id = o.seller_user_id
+		AND s.store_status = 15
+		AND s.delete_status = 0
+		AND
+		s.id = #{storeId}
+		<choose>
+			<when test="operatorLevel == 1">
+				AND (SELECT count(0) FROM dic_area a WHERE a.id = s.area_id AND
+				a.parent_id = #{operatorAreaId}) <![CDATA[ > ]]>
+				0
+			</when>
+			<otherwise>
+				AND s.area_id = #{operatorAreaId}
+			</otherwise>
+		</choose>
+	</select>
+	<select id="getStoreStatus" resultMap="BOResultMap">
+		SELECT
+		<include refid="STORE_JOIN_COlUMN"></include>
+		,a.fail_reseaon 
+		FROM
+		shop_store ss LEFT JOIN shop_store_apply_info a  ON a.store_id = ss.id 
+		where ss.id=#{id}
+	</select>
+
+	<select id="queryStoreStatus" resultMap="QueryStoreBO">
+		SELECT
+		s.id,s.store_status,s.is_eepay,a.fail_reseaon,s.is_shop,s.is_o2o,a.fail_reseaon
+		FROM shop_store s LEFT JOIN shop_store_apply_info a ON a.store_id=s.id
+		WHERE create_user_id=#{uid,jdbcType=BIGINT}
+		<if test="group != null">
+			AND s.is_o2o = #{group}
+		</if>
+		<if test="shop != null">
+			AND s.is_shop = #{shop}
+		</if>
+	
+	</select>
+
+	<select id="findGroupStoreList" parameterType="com.sinco.carnation.store.vo.GroupStoreListVO"
+		resultMap="BOResultMap">
+		SELECT
+		ss.id,
+		ss.store_address,
+		ss.store_name,
+		ss.group_discount,
+		est.one AS est_one,
+		est.two AS est_two,
+		est.three AS est_three,
+		est.five AS est_five,
+		est.four AS est_four,
+		sa.path AS store_info_path
+		FROM
+		shop_store ss
+		<if test="floorId != null">
+			INNER JOIN o2o_group_floor_content gfc on
+			ss.id=gfc.store_id
+		</if>
+		LEFT JOIN o2o_group_evaluation_store_total est ON ss.id = est.store_id
+		LEFT JOIN user_album ua ON ss.create_user_id = ua.user_id
+		AND
+		ua.store_info_default = 1
+		LEFT JOIN sys_accessory sa ON
+		ua.album_cover_id = sa.id
+		WHERE ss.delete_Status=0
+		<if test="floorId != null">
+			and gfc.floor_id=#{floorId}
+		</if>
+		<if test="cityId != null">
+			and gfc.city_id=#{cityId}
+		</if>
+		<if test="floorId != null">
+			order by gfc.add_time
+		</if>
+		<if test="count != null">
+			limit 0,#{count}
+		</if>
+	</select>
+
+	<select id="queryStoreInfo" resultMap="QueryMerchantBO">
+		SELECT 
+		  store.store_address,
+		  store.area_id,
+		  store.store_telephone,
+		  s.invitation_code,
+		  store.id,
+		  store.store_name,
+		  store.store_banner_path,
+		  store.commission_rebate,
+		  store.store_cover_path,
+		  store.area_id,
+		  store.store_logo_path,
+		  c.coupon_pay_amount,
+		  c.charge_pay_amount,
+		  c.rebate_amount,
+		  store.profit_amount,
+		  store.is_o2o 
+		FROM
+		  shop_store store 
+		  LEFT JOIN shop_comsume c 
+		    ON c.store_id = store.id 
+		  INNER JOIN sys_user s 
+		    ON s.id = store.create_user_id 
+		WHERE store.create_user_id = #{uid,jdbcType=BIGINT}
+		<if test="group != null">
+			AND store.is_o2o= #{group}
+		</if>
+		<if test="shop != null">
+			AND store.is_shop=#{shop}
+		</if>
+	</select>
+
+	<select id="queryFavaStorePageList" resultMap="BOResultMap">
+		SELECT s.id,s.store_name,s.store_logo_path FROM user_customer_favorites u
+		LEFT JOIN shop_store s
+		ON u.fid=s.id WHERE u.type=#{type,jdbcType=VARCHAR} AND
+		u.uid=#{userid,jdbcType=BIGINT} AND s.store_status=15
+		order by create_time
+	</select>
+
+	<update id="addStoreAmount">
+		update shop_store
+		<set>
+			<if test="storeCommissionAmount != null">
+				store_commission_amount = store_commission_amount +
+				#{storeCommissionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="storePayoffAmount != null">
+				store_payoff_amount = store_payoff_amount + #{storePayoffAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="storeSaleAmount != null">
+				store_sale_amount = store_sale_amount + #{storeSaleAmount,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+	<update id="increaseFavoriteCount">
+		update shop_store set favorite_count=favorite_count+1 where id=#{id}
+	</update>
+
+	<update id="subductionFavoriteCount">
+		update shop_store set favorite_count=favorite_count-1 where id=#{id}
+	</update>
+
+	<select id="findStoreByKeywords" resultMap="BOResultMap">
+		select
+		s.*, p.*
+		from shop_store s, shop_store_point p
+		where s.delete_status = 0 and p.store_id = s.id and s.store_seo_keywords
+		like concat('%', #{keywords}, '%')
+	</select>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_status, bank_account_name, bank_c_account,
+		bank_line_num, bank_name,
+		buygift_meal_end_Time, combin_end_time, domain_modify_count, enoughreduce_meal_end_Time,
+		favorite_count, gc_main_id, group_meal_end_Time, organization_code,
+		send_email_count,
+		send_sms_count, store_address, store_commission_amount, store_credit,
+		store_decorate_old_theme,
+		store_decorate_theme, store_email_count, store_msn, store_name, store_ower,
+		store_ower_card,
+		store_payoff_amount, store_qq, store_recommend, store_recommend_time, store_sale_amount,
+		store_second_domain, store_sms_count, store_start_time, store_status,
+		store_telephone,
+		store_ww, store_zip, validity, area_id, bank_area_id, bank_permit_image_path,
+		card_id,
+		grade_id, store_banner_path, store_license_path, store_logo_path, store_cover_path, is_shop,
+		is_o2o,
+		store_lat, store_lon, invitation_code, coupon_pay_amount, charge_pay_amount,
+		rebate_amount,
+		commission_rebate, create_user_id, eepay_mid, eepay_key, is_eepay, group_main_id,
+		group_detail_info, group_discount, license_c_mobile,
+		license_c_name,profit_amount,store_target
+	</sql>
+	<sql id="Blob_Column_List">
+		gc_detail_info, sms_email_info, store_decorate_background_info,
+		store_decorate_background_old_info,
+		store_decorate_base_info, store_decorate_base_old_info, store_decorate_info,
+		store_decorate_old_info,
+		store_info, store_quick_menu, store_seo_description, store_seo_keywords,
+		violation_reseaon
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.store.model.StoreExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_store
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.store.model.StoreExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_store
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		SELECT
+		ss.id,
+		ss.add_Time,
+		ss.delete_Status,
+		ss.bank_account_name,
+		ss.bank_c_account,
+		ss.bank_line_num,
+		ss.bank_name,
+		ss.buygift_meal_end_Time,
+		ss.combin_end_time,
+		ss.domain_modify_count,
+		ss.enoughreduce_meal_end_Time,
+		ss.favorite_count,
+		ss.gc_main_id,
+		ss.group_meal_end_Time,
+		ss.license_c_mobile,
+		ss.license_c_name,
+		ss.organization_code,
+		ss.send_email_count,
+		ss.send_sms_count,
+		ss.store_address,
+		ss.store_info,
+		ss.store_commission_amount,
+		ss.store_credit,
+		ss.store_decorate_old_theme,
+		ss.store_decorate_theme,
+		ss.store_email_count,
+		ss.store_msn,
+		ss.store_name,
+		ss.store_ower,
+		ss.store_ower_card,
+		ss.store_payoff_amount,
+		ss.store_qq,
+		ss.store_recommend,
+		ss.store_recommend_time,
+		ss.store_sale_amount,
+		ss.store_second_domain,
+		ss.store_sms_count,
+		ss.store_start_time,
+		ss.store_status,
+		ss.store_telephone,
+		ss.store_ww,
+		ss.store_zip,
+		ss.validity,
+		ss.area_id,
+		ss.bank_area_id,
+		ss.bank_permit_image_path,
+		ss.card_id,
+		grade_id,
+		ss.store_banner_path,
+		ss.store_license_path,
+		ss.store_seo_keywords,
+		ss.store_seo_description,
+		ss.store_logo_path,
+		ss.store_cover_path,
+		ss.is_shop,
+		ss.is_o2o,
+		ss.store_lat,
+		ss.store_lon,
+		ss.commission_rebate,
+		ss.invitation_code,
+		ss.coupon_pay_amount,
+		ss.charge_pay_amount,
+		ss.rebate_amount,
+		ss.store_logo_path,
+		ss.is_shop,
+		ss.is_o2o,
+		ss.store_lat,
+		ss.store_lon,
+		ss.create_user_id,
+		ss.is_eepay,
+		ss.eepay_key,
+		ss.eepay_mid,
+		ss.group_detail_info,
+		ss.group_discount,
+		ss.group_main_id,
+		ss.implement_number,
+		ss.pos_type,
+		ss.add_type,
+		ss.line_number,
+		us. NAME,
+		us.user_name,
+		uc.nickname,
+		us.telephone,
+		us.email,
+		us.mobile,
+		ssg.grade_name,
+		ssg.content,
+		ss.gc_detail_info,
+		sp.*, sua.login_name,
+		est.one AS est_one,
+		est.two AS est_two,
+		est.three AS est_three,
+		est.five AS est_five,
+		est.four AS est_four,
+		sai.license_business_scope,
+		sai.fail_reseaon,
+		sa.path AS store_info_path,
+		ss.store_target,
+		sai.license_c_contact,
+		sai.license_legal_name,
+		sai.license_legal_id_Card,
+		sai.license_legal_id_card_front_path,
+		sai.license_legal_id_card_back_path,
+		sai.license_image_path,
+		sai.other_photo_path,
+		sai.license_c_email,
+		sai.organization_image_path,
+		sai.industry,
+		sai.operate_number operator_code
+
+		FROM
+		shop_store ss
+		LEFT JOIN user_seller us ON us.store_id = ss.id
+		LEFT JOIN
+		user_customer uc ON uc.uid = ss.create_user_id
+		LEFT JOIN
+		sys_user_account sua ON (us.uid = sua.uid and sua.account_type = 2)
+		LEFT JOIN shop_store_grade ssg ON ss.grade_id = ssg.id
+		LEFT JOIN
+		shop_store_point sp ON sp.store_id = ss.id
+		LEFT JOIN
+		shop_store_apply_info sai ON sai.store_id = ss.id
+		LEFT JOIN
+		o2o_group_evaluation_store_total est ON ss.id = est.store_id
+		LEFT JOIN
+		user_album ua ON ss.create_user_id = ua.user_id AND
+		ua.store_info_default = 1
+		LEFT JOIN sys_accessory sa ON
+		ua.album_cover_id = sa.id
+		WHERE ss.id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_store
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.store.model.StoreExample">
+		delete from shop_store
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" keyProperty="id"
+		parameterType="com.sinco.carnation.store.model.Store"
+		useGeneratedKeys="true">
+		insert into shop_store (id, add_Time, delete_status,
+		bank_account_name, bank_c_account, bank_line_num,
+		bank_name, buygift_meal_end_Time, combin_end_time,
+		domain_modify_count, enoughreduce_meal_end_Time,
+		favorite_count, gc_main_id, group_meal_end_Time,
+		organization_code, send_email_count, send_sms_count,
+		store_address, store_commission_amount, store_credit,
+		store_decorate_old_theme, store_decorate_theme,
+		store_email_count, store_msn, store_name,
+		store_ower, store_ower_card, store_payoff_amount,
+		store_qq, store_recommend, store_recommend_time,
+		store_sale_amount, store_second_domain, store_sms_count,
+		store_start_time, store_status, store_telephone,
+		store_ww, store_zip, validity,
+		area_id, bank_area_id, bank_permit_image_path,
+		card_id, grade_id, store_banner_path,
+		store_license_path, store_cover_path, store_logo_path, is_shop,
+		is_o2o, store_lat, store_lon,
+		invitation_code, coupon_pay_amount, charge_pay_amount,
+		rebate_amount, commission_rebate, create_user_id,
+		eepay_mid, eepay_key, is_eepay,
+		group_main_id, group_detail_info, group_discount,
+		license_c_mobile, license_c_name, gc_detail_info,
+		sms_email_info, store_decorate_background_info,
+		store_decorate_background_old_info, store_decorate_base_info,
+		store_decorate_base_old_info, store_decorate_info,
+		store_decorate_old_info, store_info,
+		store_quick_menu, store_seo_description,
+		store_seo_keywords, violation_reseaon,profit_amount,store_target
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{bankAccountName,jdbcType=VARCHAR}, #{bankCAccount,jdbcType=VARCHAR}, #{bankLineNum,jdbcType=VARCHAR},
+		#{bankName,jdbcType=VARCHAR},
+		#{buygiftMealEndTime,jdbcType=TIMESTAMP},
+		#{combinEndTime,jdbcType=TIMESTAMP},
+		#{domainModifyCount,jdbcType=INTEGER},
+		#{enoughreduceMealEndTime,jdbcType=TIMESTAMP},
+		#{favoriteCount,jdbcType=INTEGER}, #{gcMainId,jdbcType=BIGINT},
+		#{groupMealEndTime,jdbcType=TIMESTAMP},
+		#{organizationCode,jdbcType=VARCHAR},
+		#{sendEmailCount,jdbcType=INTEGER}, #{sendSmsCount,jdbcType=INTEGER},
+		#{storeAddress,jdbcType=VARCHAR},
+		#{storeCommissionAmount,jdbcType=DECIMAL},
+		#{storeCredit,jdbcType=INTEGER},
+		#{storeDecorateOldTheme,jdbcType=VARCHAR},
+		#{storeDecorateTheme,jdbcType=VARCHAR},
+		#{storeEmailCount,jdbcType=INTEGER}, #{storeMsn,jdbcType=VARCHAR},
+		#{storeName,jdbcType=VARCHAR},
+		#{storeOwer,jdbcType=VARCHAR}, #{storeOwerCard,jdbcType=VARCHAR},
+		#{storePayoffAmount,jdbcType=DECIMAL},
+		#{storeQq,jdbcType=VARCHAR}, #{storeRecommend,jdbcType=BIT},
+		#{storeRecommendTime,jdbcType=TIMESTAMP},
+		#{storeSaleAmount,jdbcType=DECIMAL},
+		#{storeSecondDomain,jdbcType=VARCHAR},
+		#{storeSmsCount,jdbcType=INTEGER},
+		#{storeStartTime,jdbcType=TIMESTAMP}, #{storeStatus,jdbcType=INTEGER},
+		#{storeTelephone,jdbcType=VARCHAR},
+		#{storeWw,jdbcType=VARCHAR}, #{storeZip,jdbcType=VARCHAR}, #{validity,jdbcType=TIMESTAMP},
+		#{areaId,jdbcType=BIGINT}, #{bankAreaId,jdbcType=BIGINT},
+		#{bankPermitImagePath,jdbcType=VARCHAR},
+		#{cardId,jdbcType=BIGINT}, #{gradeId,jdbcType=BIGINT}, #{storeBannerPath,jdbcType=VARCHAR},
+		#{storeLicensePath,jdbcType=VARCHAR},
+		#{storeCoverPath,jdbcType=VARCHAR},
+		#{storeLogoPath,jdbcType=VARCHAR}, #{isShop,jdbcType=BIT},
+		#{isO2o,jdbcType=BIT}, #{storeLat,jdbcType=DECIMAL},
+		#{storeLon,jdbcType=DECIMAL},
+		#{invitationCode,jdbcType=VARCHAR}, #{couponPayAmount,jdbcType=DECIMAL},
+		#{chargePayAmount,jdbcType=DECIMAL},
+		#{rebateAmount,jdbcType=DECIMAL}, #{commissionRebate,jdbcType=DECIMAL},
+		#{createUserId,jdbcType=BIGINT},
+		#{eepayMid,jdbcType=VARCHAR}, #{eepayKey,jdbcType=VARCHAR}, #{isEepay,jdbcType=BIT},
+		#{groupMainId,jdbcType=BIGINT}, #{groupDetailInfo,jdbcType=VARCHAR},
+		#{groupDiscount},
+		#{licenseCMobile,jdbcType=VARCHAR}, #{licenseCName,jdbcType=VARCHAR},
+		#{gcDetailInfo,jdbcType=LONGVARCHAR},
+		#{smsEmailInfo,jdbcType=LONGVARCHAR},
+		#{storeDecorateBackgroundInfo,jdbcType=LONGVARCHAR},
+		#{storeDecorateBackgroundOldInfo,jdbcType=LONGVARCHAR},
+		#{storeDecorateBaseInfo,jdbcType=LONGVARCHAR},
+		#{storeDecorateBaseOldInfo,jdbcType=LONGVARCHAR},
+		#{storeDecorateInfo,jdbcType=LONGVARCHAR},
+		#{storeDecorateOldInfo,jdbcType=LONGVARCHAR},
+		#{storeInfo,jdbcType=LONGVARCHAR},
+		#{storeQuickMenu,jdbcType=LONGVARCHAR},
+		#{storeSeoDescription,jdbcType=LONGVARCHAR},
+		#{storeSeoKeywords,jdbcType=LONGVARCHAR},
+		#{violationReseaon,jdbcType=LONGVARCHAR},
+		#{profitAmount,jdbcType=DECIMAL},#{storeTarget,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" keyProperty="id"
+		parameterType="com.sinco.carnation.store.model.Store"
+		useGeneratedKeys="true">
+		insert into shop_store
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="bankAccountName != null">
+				bank_account_name,
+			</if>
+			<if test="bankCAccount != null">
+				bank_c_account,
+			</if>
+			<if test="bankLineNum != null">
+				bank_line_num,
+			</if>
+			<if test="bankName != null">
+				bank_name,
+			</if>
+			<if test="buygiftMealEndTime != null">
+				buygift_meal_end_Time,
+			</if>
+			<if test="combinEndTime != null">
+				combin_end_time,
+			</if>
+			<if test="domainModifyCount != null">
+				domain_modify_count,
+			</if>
+			<if test="enoughreduceMealEndTime != null">
+				enoughreduce_meal_end_Time,
+			</if>
+			<if test="favoriteCount != null">
+				favorite_count,
+			</if>
+			<if test="gcMainId != null">
+				gc_main_id,
+			</if>
+			<if test="groupMealEndTime != null">
+				group_meal_end_Time,
+			</if>
+			<if test="organizationCode != null">
+				organization_code,
+			</if>
+			<if test="sendEmailCount != null">
+				send_email_count,
+			</if>
+			<if test="sendSmsCount != null">
+				send_sms_count,
+			</if>
+			<if test="storeAddress != null">
+				store_address,
+			</if>
+			<if test="storeCommissionAmount != null">
+				store_commission_amount,
+			</if>
+			<if test="storeCredit != null">
+				store_credit,
+			</if>
+			<if test="storeDecorateOldTheme != null">
+				store_decorate_old_theme,
+			</if>
+			<if test="storeDecorateTheme != null">
+				store_decorate_theme,
+			</if>
+			<if test="storeEmailCount != null">
+				store_email_count,
+			</if>
+			<if test="storeMsn != null">
+				store_msn,
+			</if>
+			<if test="storeName != null">
+				store_name,
+			</if>
+			<if test="storeOwer != null">
+				store_ower,
+			</if>
+			<if test="storeOwerCard != null">
+				store_ower_card,
+			</if>
+			<if test="storePayoffAmount != null">
+				store_payoff_amount,
+			</if>
+			<if test="storeQq != null">
+				store_qq,
+			</if>
+			<if test="storeRecommend != null">
+				store_recommend,
+			</if>
+			<if test="storeRecommendTime != null">
+				store_recommend_time,
+			</if>
+			<if test="storeSaleAmount != null">
+				store_sale_amount,
+			</if>
+			<if test="storeSecondDomain != null">
+				store_second_domain,
+			</if>
+			<if test="storeSmsCount != null">
+				store_sms_count,
+			</if>
+			<if test="storeStartTime != null">
+				store_start_time,
+			</if>
+			<if test="storeStatus != null">
+				store_status,
+			</if>
+			<if test="storeTelephone != null">
+				store_telephone,
+			</if>
+			<if test="storeWw != null">
+				store_ww,
+			</if>
+			<if test="storeZip != null">
+				store_zip,
+			</if>
+			<if test="validity != null">
+				validity,
+			</if>
+			<if test="areaId != null">
+				area_id,
+			</if>
+			<if test="bankAreaId != null">
+				bank_area_id,
+			</if>
+			<if test="bankPermitImagePath != null">
+				bank_permit_image_path,
+			</if>
+			<if test="cardId != null">
+				card_id,
+			</if>
+			<if test="gradeId != null">
+				grade_id,
+			</if>
+			<if test="storeBannerPath != null">
+				store_banner_path,
+			</if>
+			<if test="storeLicensePath != null">
+				store_license_path,
+			</if>
+			<if test="storeLogoPath != null">
+				store_logo_path,
+			</if>
+			<if test="storeCoverPath != null">
+				store_cover_path,
+			</if>
+			<if test="isShop != null">
+				is_shop,
+			</if>
+			<if test="isO2o != null">
+				is_o2o,
+			</if>
+			<if test="storeLat != null">
+				store_lat,
+			</if>
+			<if test="storeLon != null">
+				store_lon,
+			</if>
+			<if test="invitationCode != null">
+				invitation_code,
+			</if>
+			<if test="couponPayAmount != null">
+				coupon_pay_amount,
+			</if>
+			<if test="chargePayAmount != null">
+				charge_pay_amount,
+			</if>
+			<if test="rebateAmount != null">
+				rebate_amount,
+			</if>
+			<if test="commissionRebate != null">
+				commission_rebate,
+			</if>
+			<if test="createUserId != null">
+				create_user_id,
+			</if>
+			<if test="eepayMid != null">
+				eepay_mid,
+			</if>
+			<if test="eepayKey != null">
+				eepay_key,
+			</if>
+			<if test="isEepay != null">
+				is_eepay,
+			</if>
+			<if test="groupMainId != null">
+				group_main_id,
+			</if>
+			<if test="groupDetailInfo != null">
+				group_detail_info,
+			</if>
+			<if test="groupDiscount != null">
+				group_discount,
+			</if>
+			<if test="licenseCMobile != null">
+				license_c_mobile,
+			</if>
+			<if test="licenseCName != null">
+				license_c_name,
+			</if>
+			<if test="gcDetailInfo != null">
+				gc_detail_info,
+			</if>
+			<if test="smsEmailInfo != null">
+				sms_email_info,
+			</if>
+			<if test="storeDecorateBackgroundInfo != null">
+				store_decorate_background_info,
+			</if>
+			<if test="storeDecorateBackgroundOldInfo != null">
+				store_decorate_background_old_info,
+			</if>
+			<if test="storeDecorateBaseInfo != null">
+				store_decorate_base_info,
+			</if>
+			<if test="storeDecorateBaseOldInfo != null">
+				store_decorate_base_old_info,
+			</if>
+			<if test="storeDecorateInfo != null">
+				store_decorate_info,
+			</if>
+			<if test="storeDecorateOldInfo != null">
+				store_decorate_old_info,
+			</if>
+			<if test="storeInfo != null">
+				store_info,
+			</if>
+			<if test="storeQuickMenu != null">
+				store_quick_menu,
+			</if>
+			<if test="storeSeoDescription != null">
+				store_seo_description,
+			</if>
+			<if test="storeSeoKeywords != null">
+				store_seo_keywords,
+			</if>
+			<if test="violationReseaon != null">
+				violation_reseaon,
+			</if>
+			<if test="profitAmount != null">
+				profit_amount,
+			</if>
+			<if test="storeTarget != null">
+				store_target,
+			</if>
+			<if test="recommend != null">
+				recommend
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="bankAccountName != null">
+				#{bankAccountName,jdbcType=VARCHAR},
+			</if>
+			<if test="bankCAccount != null">
+				#{bankCAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="bankLineNum != null">
+				#{bankLineNum,jdbcType=VARCHAR},
+			</if>
+			<if test="bankName != null">
+				#{bankName,jdbcType=VARCHAR},
+			</if>
+			<if test="buygiftMealEndTime != null">
+				#{buygiftMealEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="combinEndTime != null">
+				#{combinEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="domainModifyCount != null">
+				#{domainModifyCount,jdbcType=INTEGER},
+			</if>
+			<if test="enoughreduceMealEndTime != null">
+				#{enoughreduceMealEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="favoriteCount != null">
+				#{favoriteCount,jdbcType=INTEGER},
+			</if>
+			<if test="gcMainId != null">
+				#{gcMainId,jdbcType=BIGINT},
+			</if>
+			<if test="groupMealEndTime != null">
+				#{groupMealEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="organizationCode != null">
+				#{organizationCode,jdbcType=VARCHAR},
+			</if>
+			<if test="sendEmailCount != null">
+				#{sendEmailCount,jdbcType=INTEGER},
+			</if>
+			<if test="sendSmsCount != null">
+				#{sendSmsCount,jdbcType=INTEGER},
+			</if>
+			<if test="storeAddress != null">
+				#{storeAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="storeCommissionAmount != null">
+				#{storeCommissionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="storeCredit != null">
+				#{storeCredit,jdbcType=INTEGER},
+			</if>
+			<if test="storeDecorateOldTheme != null">
+				#{storeDecorateOldTheme,jdbcType=VARCHAR},
+			</if>
+			<if test="storeDecorateTheme != null">
+				#{storeDecorateTheme,jdbcType=VARCHAR},
+			</if>
+			<if test="storeEmailCount != null">
+				#{storeEmailCount,jdbcType=INTEGER},
+			</if>
+			<if test="storeMsn != null">
+				#{storeMsn,jdbcType=VARCHAR},
+			</if>
+			<if test="storeName != null">
+				#{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="storeOwer != null">
+				#{storeOwer,jdbcType=VARCHAR},
+			</if>
+			<if test="storeOwerCard != null">
+				#{storeOwerCard,jdbcType=VARCHAR},
+			</if>
+			<if test="storePayoffAmount != null">
+				#{storePayoffAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="storeQq != null">
+				#{storeQq,jdbcType=VARCHAR},
+			</if>
+			<if test="storeRecommend != null">
+				#{storeRecommend,jdbcType=BIT},
+			</if>
+			<if test="storeRecommendTime != null">
+				#{storeRecommendTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="storeSaleAmount != null">
+				#{storeSaleAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="storeSecondDomain != null">
+				#{storeSecondDomain,jdbcType=VARCHAR},
+			</if>
+			<if test="storeSmsCount != null">
+				#{storeSmsCount,jdbcType=INTEGER},
+			</if>
+			<if test="storeStartTime != null">
+				#{storeStartTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="storeStatus != null">
+				#{storeStatus,jdbcType=INTEGER},
+			</if>
+			<if test="storeTelephone != null">
+				#{storeTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="storeWw != null">
+				#{storeWw,jdbcType=VARCHAR},
+			</if>
+			<if test="storeZip != null">
+				#{storeZip,jdbcType=VARCHAR},
+			</if>
+			<if test="validity != null">
+				#{validity,jdbcType=TIMESTAMP},
+			</if>
+			<if test="areaId != null">
+				#{areaId,jdbcType=BIGINT},
+			</if>
+			<if test="bankAreaId != null">
+				#{bankAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="bankPermitImagePath != null">
+				#{bankPermitImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="cardId != null">
+				#{cardId,jdbcType=BIGINT},
+			</if>
+			<if test="gradeId != null">
+				#{gradeId,jdbcType=BIGINT},
+			</if>
+			<if test="storeBannerPath != null">
+				#{storeBannerPath,jdbcType=VARCHAR},
+			</if>
+			<if test="storeLicensePath != null">
+				#{storeLicensePath,jdbcType=VARCHAR},
+			</if>
+			<if test="storeLogoPath != null">
+				#{storeLogoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="storeCoverPath != null">
+				#{storeCoverPath,jdbcType=VARCHAR},
+			</if>
+			<if test="isShop != null">
+				#{isShop,jdbcType=BIT},
+			</if>
+			<if test="isO2o != null">
+				#{isO2o,jdbcType=BIT},
+			</if>
+			<if test="storeLat != null">
+				#{storeLat,jdbcType=DECIMAL},
+			</if>
+			<if test="storeLon != null">
+				#{storeLon,jdbcType=DECIMAL},
+			</if>
+			<if test="invitationCode != null">
+				#{invitationCode,jdbcType=VARCHAR},
+			</if>
+			<if test="couponPayAmount != null">
+				#{couponPayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="chargePayAmount != null">
+				#{chargePayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateAmount != null">
+				#{rebateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="commissionRebate != null">
+				#{commissionRebate,jdbcType=DECIMAL},
+			</if>
+			<if test="createUserId != null">
+				#{createUserId,jdbcType=BIGINT},
+			</if>
+			<if test="eepayMid != null">
+				#{eepayMid,jdbcType=VARCHAR},
+			</if>
+			<if test="eepayKey != null">
+				#{eepayKey,jdbcType=VARCHAR},
+			</if>
+			<if test="isEepay != null">
+				#{isEepay,jdbcType=BIT},
+			</if>
+			<if test="groupMainId != null">
+				#{groupMainId,jdbcType=BIGINT},
+			</if>
+			<if test="groupDetailInfo != null">
+				#{groupDetailInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="groupDiscount != null">
+				#{groupDiscount},
+			</if>
+			<if test="licenseCMobile != null">
+				#{licenseCMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseCName != null">
+				#{licenseCName,jdbcType=VARCHAR},
+			</if>
+			<if test="gcDetailInfo != null">
+				#{gcDetailInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="smsEmailInfo != null">
+				#{smsEmailInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeDecorateBackgroundInfo != null">
+				#{storeDecorateBackgroundInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeDecorateBackgroundOldInfo != null">
+				#{storeDecorateBackgroundOldInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeDecorateBaseInfo != null">
+				#{storeDecorateBaseInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeDecorateBaseOldInfo != null">
+				#{storeDecorateBaseOldInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeDecorateInfo != null">
+				#{storeDecorateInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeDecorateOldInfo != null">
+				#{storeDecorateOldInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeInfo != null">
+				#{storeInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeQuickMenu != null">
+				#{storeQuickMenu,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeSeoDescription != null">
+				#{storeSeoDescription,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeSeoKeywords != null">
+				#{storeSeoKeywords,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="violationReseaon != null">
+				#{violationReseaon,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="profitAmount != null">
+				#{profitAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="storeTarget != null">
+				#{storeTarget,jdbcType=LONGVARCHAR}
+			</if>
+			<if test="recommend != null">
+				#{recommend,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.store.model.StoreExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_store
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_store
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.bankAccountName != null">
+				bank_account_name = #{record.bankAccountName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.bankCAccount != null">
+				bank_c_account = #{record.bankCAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="record.bankLineNum != null">
+				bank_line_num = #{record.bankLineNum,jdbcType=VARCHAR},
+			</if>
+			<if test="record.bankName != null">
+				bank_name = #{record.bankName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.buygiftMealEndTime != null">
+				buygift_meal_end_Time =
+				#{record.buygiftMealEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.combinEndTime != null">
+				combin_end_time = #{record.combinEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.domainModifyCount != null">
+				domain_modify_count = #{record.domainModifyCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.enoughreduceMealEndTime != null">
+				enoughreduce_meal_end_Time =
+				#{record.enoughreduceMealEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.favoriteCount != null">
+				favorite_count = #{record.favoriteCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.gcMainId != null">
+				gc_main_id = #{record.gcMainId,jdbcType=BIGINT},
+			</if>
+			<if test="record.groupMealEndTime != null">
+				group_meal_end_Time = #{record.groupMealEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.organizationCode != null">
+				organization_code = #{record.organizationCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sendEmailCount != null">
+				send_email_count = #{record.sendEmailCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.sendSmsCount != null">
+				send_sms_count = #{record.sendSmsCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.storeAddress != null">
+				store_address = #{record.storeAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeCommissionAmount != null">
+				store_commission_amount =
+				#{record.storeCommissionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.storeCredit != null">
+				store_credit = #{record.storeCredit,jdbcType=INTEGER},
+			</if>
+			<if test="record.storeDecorateOldTheme != null">
+				store_decorate_old_theme =
+				#{record.storeDecorateOldTheme,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeDecorateTheme != null">
+				store_decorate_theme = #{record.storeDecorateTheme,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeEmailCount != null">
+				store_email_count = #{record.storeEmailCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.storeMsn != null">
+				store_msn = #{record.storeMsn,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeName != null">
+				store_name = #{record.storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeOwer != null">
+				store_ower = #{record.storeOwer,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeOwerCard != null">
+				store_ower_card = #{record.storeOwerCard,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storePayoffAmount != null">
+				store_payoff_amount = #{record.storePayoffAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.storeQq != null">
+				store_qq = #{record.storeQq,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeRecommend != null">
+				store_recommend = #{record.storeRecommend,jdbcType=BIT},
+			</if>
+			<if test="record.storeRecommendTime != null">
+				store_recommend_time = #{record.storeRecommendTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.storeSaleAmount != null">
+				store_sale_amount = #{record.storeSaleAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.storeSecondDomain != null">
+				store_second_domain = #{record.storeSecondDomain,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeSmsCount != null">
+				store_sms_count = #{record.storeSmsCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.storeStartTime != null">
+				store_start_time = #{record.storeStartTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.storeStatus != null">
+				store_status = #{record.storeStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.storeTelephone != null">
+				store_telephone = #{record.storeTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeWw != null">
+				store_ww = #{record.storeWw,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeZip != null">
+				store_zip = #{record.storeZip,jdbcType=VARCHAR},
+			</if>
+			<if test="record.validity != null">
+				validity = #{record.validity,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.areaId != null">
+				area_id = #{record.areaId,jdbcType=BIGINT},
+			</if>
+			<if test="record.bankAreaId != null">
+				bank_area_id = #{record.bankAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="record.bankPermitImagePath != null">
+				bank_permit_image_path =
+				#{record.bankPermitImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.cardId != null">
+				card_id = #{record.cardId,jdbcType=BIGINT},
+			</if>
+			<if test="record.gradeId != null">
+				grade_id = #{record.gradeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.storeBannerPath != null">
+				store_banner_path = #{record.storeBannerPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeLicensePath != null">
+				store_license_path = #{record.storeLicensePath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.storeLogoPath != null">
+				store_logo_path = #{record.storeLogoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.isShop != null">
+				is_shop = #{record.isShop,jdbcType=BIT},
+			</if>
+			<if test="record.isO2o != null">
+				is_o2o = #{record.isO2o,jdbcType=BIT},
+			</if>
+			<if test="record.storeLat != null">
+				store_lat = #{record.storeLat,jdbcType=DECIMAL},
+			</if>
+			<if test="record.storeLon != null">
+				store_lon = #{record.storeLon,jdbcType=DECIMAL},
+			</if>
+			<if test="record.invitationCode != null">
+				invitation_code = #{record.invitationCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.couponPayAmount != null">
+				coupon_pay_amount = #{record.couponPayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.chargePayAmount != null">
+				charge_pay_amount = #{record.chargePayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateAmount != null">
+				rebate_amount = #{record.rebateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.commissionRebate != null">
+				commission_rebate = #{record.commissionRebate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.createUserId != null">
+				create_user_id = #{record.createUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.eepayMid != null">
+				eepay_mid = #{record.eepayMid,jdbcType=VARCHAR},
+			</if>
+			<if test="record.eepayKey != null">
+				eepay_key = #{record.eepayKey,jdbcType=VARCHAR},
+			</if>
+			<if test="record.isEepay != null">
+				is_eepay = #{record.isEepay,jdbcType=BIT},
+			</if>
+			<if test="record.groupMainId != null">
+				group_main_id = #{record.groupMainId,jdbcType=BIGINT},
+			</if>
+			<if test="record.groupDetailInfo != null">
+				group_detail_info = #{record.groupDetailInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.groupDiscount != null">
+				group_discount = #{record.groupDiscount},
+			</if>
+			<if test="record.licenseCMobile != null">
+				license_c_mobile = #{record.licenseCMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.licenseCName != null">
+				license_c_name = #{record.licenseCName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.gcDetailInfo != null">
+				gc_detail_info = #{record.gcDetailInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.smsEmailInfo != null">
+				sms_email_info = #{record.smsEmailInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.storeDecorateBackgroundInfo != null">
+				store_decorate_background_info =
+				#{record.storeDecorateBackgroundInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.storeDecorateBackgroundOldInfo != null">
+				store_decorate_background_old_info =
+				#{record.storeDecorateBackgroundOldInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.storeDecorateBaseInfo != null">
+				store_decorate_base_info =
+				#{record.storeDecorateBaseInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.storeDecorateBaseOldInfo != null">
+				store_decorate_base_old_info =
+				#{record.storeDecorateBaseOldInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.storeDecorateInfo != null">
+				store_decorate_info = #{record.storeDecorateInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.storeDecorateOldInfo != null">
+				store_decorate_old_info =
+				#{record.storeDecorateOldInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.storeInfo != null">
+				store_info = #{record.storeInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.storeQuickMenu != null">
+				store_quick_menu = #{record.storeQuickMenu,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.storeSeoDescription != null">
+				store_seo_description =
+				#{record.storeSeoDescription,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.storeSeoKeywords != null">
+				store_seo_keywords = #{record.storeSeoKeywords,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.violationReseaon != null">
+				violation_reseaon = #{record.violationReseaon,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.profitAmount!= null">
+				profit_amount = #{record.profitAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.storeTarget != null">
+				store_target = #{record.storeTarget,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.isExtension != null">
+				isExtension = #{record.isExtension,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_store
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		bank_account_name = #{record.bankAccountName,jdbcType=VARCHAR},
+		bank_c_account = #{record.bankCAccount,jdbcType=VARCHAR},
+		bank_line_num = #{record.bankLineNum,jdbcType=VARCHAR},
+		bank_name = #{record.bankName,jdbcType=VARCHAR},
+		buygift_meal_end_Time = #{record.buygiftMealEndTime,jdbcType=TIMESTAMP},
+		combin_end_time = #{record.combinEndTime,jdbcType=TIMESTAMP},
+		domain_modify_count = #{record.domainModifyCount,jdbcType=INTEGER},
+		enoughreduce_meal_end_Time =
+		#{record.enoughreduceMealEndTime,jdbcType=TIMESTAMP},
+		favorite_count = #{record.favoriteCount,jdbcType=INTEGER},
+		gc_main_id = #{record.gcMainId,jdbcType=BIGINT},
+		group_meal_end_Time = #{record.groupMealEndTime,jdbcType=TIMESTAMP},
+		organization_code = #{record.organizationCode,jdbcType=VARCHAR},
+		send_email_count = #{record.sendEmailCount,jdbcType=INTEGER},
+		send_sms_count = #{record.sendSmsCount,jdbcType=INTEGER},
+		store_address = #{record.storeAddress,jdbcType=VARCHAR},
+		store_commission_amount = #{record.storeCommissionAmount,jdbcType=DECIMAL},
+		store_credit = #{record.storeCredit,jdbcType=INTEGER},
+		store_decorate_old_theme = #{record.storeDecorateOldTheme,jdbcType=VARCHAR},
+		store_decorate_theme = #{record.storeDecorateTheme,jdbcType=VARCHAR},
+		store_email_count = #{record.storeEmailCount,jdbcType=INTEGER},
+		store_msn = #{record.storeMsn,jdbcType=VARCHAR},
+		store_name = #{record.storeName,jdbcType=VARCHAR},
+		store_ower = #{record.storeOwer,jdbcType=VARCHAR},
+		store_ower_card = #{record.storeOwerCard,jdbcType=VARCHAR},
+		store_payoff_amount = #{record.storePayoffAmount,jdbcType=DECIMAL},
+		store_qq = #{record.storeQq,jdbcType=VARCHAR},
+		store_recommend = #{record.storeRecommend,jdbcType=BIT},
+		store_recommend_time = #{record.storeRecommendTime,jdbcType=TIMESTAMP},
+		store_sale_amount = #{record.storeSaleAmount,jdbcType=DECIMAL},
+		store_second_domain = #{record.storeSecondDomain,jdbcType=VARCHAR},
+		store_sms_count = #{record.storeSmsCount,jdbcType=INTEGER},
+		store_start_time = #{record.storeStartTime,jdbcType=TIMESTAMP},
+		store_status = #{record.storeStatus,jdbcType=INTEGER},
+		store_telephone = #{record.storeTelephone,jdbcType=VARCHAR},
+		store_ww = #{record.storeWw,jdbcType=VARCHAR},
+		store_zip = #{record.storeZip,jdbcType=VARCHAR},
+		validity = #{record.validity,jdbcType=TIMESTAMP},
+		area_id = #{record.areaId,jdbcType=BIGINT},
+		bank_area_id = #{record.bankAreaId,jdbcType=BIGINT},
+		bank_permit_image_path = #{record.bankPermitImagePath,jdbcType=VARCHAR},
+		card_id = #{record.cardId,jdbcType=BIGINT},
+		grade_id = #{record.gradeId,jdbcType=BIGINT},
+		store_banner_path = #{record.storeBannerPath,jdbcType=VARCHAR},
+		store_license_path = #{record.storeLicensePath,jdbcType=VARCHAR},
+		store_logo_path = #{record.storeLogoPath,jdbcType=VARCHAR},
+		store_cover_path = #{record.storeCoverPath,jdbcType=VARCHAR},
+		is_shop = #{record.isShop,jdbcType=BIT},
+		is_o2o = #{record.isO2o,jdbcType=BIT},
+		store_lat = #{record.storeLat,jdbcType=DECIMAL},
+		store_lon = #{record.storeLon,jdbcType=DECIMAL},
+		invitation_code = #{record.invitationCode,jdbcType=VARCHAR},
+		coupon_pay_amount = #{record.couponPayAmount,jdbcType=DECIMAL},
+		charge_pay_amount = #{record.chargePayAmount,jdbcType=DECIMAL},
+		rebate_amount = #{record.rebateAmount,jdbcType=DECIMAL},
+		commission_rebate = #{record.commissionRebate,jdbcType=DECIMAL},
+		create_user_id = #{record.createUserId,jdbcType=BIGINT},
+		eepay_mid = #{record.eepayMid,jdbcType=VARCHAR},
+		eepay_key = #{record.eepayKey,jdbcType=VARCHAR},
+		is_eepay = #{record.isEepay,jdbcType=BIT},
+		group_main_id = #{record.groupMainId,jdbcType=BIGINT},
+		group_detail_info = #{record.groupDetailInfo,jdbcType=VARCHAR},
+		group_discount = #{record.groupDiscount},
+		license_c_mobile = #{record.licenseCMobile,jdbcType=VARCHAR},
+		license_c_name = #{record.licenseCName,jdbcType=VARCHAR},
+		gc_detail_info = #{record.gcDetailInfo,jdbcType=LONGVARCHAR},
+		sms_email_info = #{record.smsEmailInfo,jdbcType=LONGVARCHAR},
+		store_decorate_background_info =
+		#{record.storeDecorateBackgroundInfo,jdbcType=LONGVARCHAR},
+		store_decorate_background_old_info =
+		#{record.storeDecorateBackgroundOldInfo,jdbcType=LONGVARCHAR},
+		store_decorate_base_info =
+		#{record.storeDecorateBaseInfo,jdbcType=LONGVARCHAR},
+		store_decorate_base_old_info =
+		#{record.storeDecorateBaseOldInfo,jdbcType=LONGVARCHAR},
+		store_decorate_info =
+		#{record.storeDecorateInfo,jdbcType=LONGVARCHAR},
+		store_decorate_old_info =
+		#{record.storeDecorateOldInfo,jdbcType=LONGVARCHAR},
+		store_info = #{record.storeInfo,jdbcType=LONGVARCHAR},
+		store_quick_menu = #{record.storeQuickMenu,jdbcType=LONGVARCHAR},
+		store_seo_description =
+		#{record.storeSeoDescription,jdbcType=LONGVARCHAR},
+		store_seo_keywords = #{record.storeSeoKeywords,jdbcType=LONGVARCHAR},
+		violation_reseaon = #{record.violationReseaon,jdbcType=LONGVARCHAR},
+		profit_amount= #{record.profitAmount,jdbcType=DECIMAL},
+		store_target = #{record.storeTarget,jdbcType=LONGVARCHAR},
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_store
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		bank_account_name = #{record.bankAccountName,jdbcType=VARCHAR},
+		bank_c_account = #{record.bankCAccount,jdbcType=VARCHAR},
+		bank_line_num = #{record.bankLineNum,jdbcType=VARCHAR},
+		bank_name = #{record.bankName,jdbcType=VARCHAR},
+		buygift_meal_end_Time = #{record.buygiftMealEndTime,jdbcType=TIMESTAMP},
+		combin_end_time = #{record.combinEndTime,jdbcType=TIMESTAMP},
+		domain_modify_count = #{record.domainModifyCount,jdbcType=INTEGER},
+		enoughreduce_meal_end_Time =
+		#{record.enoughreduceMealEndTime,jdbcType=TIMESTAMP},
+		favorite_count = #{record.favoriteCount,jdbcType=INTEGER},
+		gc_main_id = #{record.gcMainId,jdbcType=BIGINT},
+		group_meal_end_Time = #{record.groupMealEndTime,jdbcType=TIMESTAMP},
+		organization_code = #{record.organizationCode,jdbcType=VARCHAR},
+		send_email_count = #{record.sendEmailCount,jdbcType=INTEGER},
+		send_sms_count = #{record.sendSmsCount,jdbcType=INTEGER},
+		store_address = #{record.storeAddress,jdbcType=VARCHAR},
+		store_commission_amount = #{record.storeCommissionAmount,jdbcType=DECIMAL},
+		store_credit = #{record.storeCredit,jdbcType=INTEGER},
+		store_decorate_old_theme = #{record.storeDecorateOldTheme,jdbcType=VARCHAR},
+		store_decorate_theme = #{record.storeDecorateTheme,jdbcType=VARCHAR},
+		store_email_count = #{record.storeEmailCount,jdbcType=INTEGER},
+		store_msn = #{record.storeMsn,jdbcType=VARCHAR},
+		store_name = #{record.storeName,jdbcType=VARCHAR},
+		store_ower = #{record.storeOwer,jdbcType=VARCHAR},
+		store_ower_card = #{record.storeOwerCard,jdbcType=VARCHAR},
+		store_payoff_amount = #{record.storePayoffAmount,jdbcType=DECIMAL},
+		store_qq = #{record.storeQq,jdbcType=VARCHAR},
+		store_recommend = #{record.storeRecommend,jdbcType=BIT},
+		store_recommend_time = #{record.storeRecommendTime,jdbcType=TIMESTAMP},
+		store_sale_amount = #{record.storeSaleAmount,jdbcType=DECIMAL},
+		store_second_domain = #{record.storeSecondDomain,jdbcType=VARCHAR},
+		store_sms_count = #{record.storeSmsCount,jdbcType=INTEGER},
+		store_start_time = #{record.storeStartTime,jdbcType=TIMESTAMP},
+		store_status = #{record.storeStatus,jdbcType=INTEGER},
+		store_telephone = #{record.storeTelephone,jdbcType=VARCHAR},
+		store_ww = #{record.storeWw,jdbcType=VARCHAR},
+		store_zip = #{record.storeZip,jdbcType=VARCHAR},
+		validity = #{record.validity,jdbcType=TIMESTAMP},
+		area_id = #{record.areaId,jdbcType=BIGINT},
+		bank_area_id = #{record.bankAreaId,jdbcType=BIGINT},
+		bank_permit_image_path = #{record.bankPermitImagePath,jdbcType=VARCHAR},
+		card_id = #{record.cardId,jdbcType=BIGINT},
+		grade_id = #{record.gradeId,jdbcType=BIGINT},
+		store_banner_path = #{record.storeBannerPath,jdbcType=VARCHAR},
+		store_license_path = #{record.storeLicensePath,jdbcType=VARCHAR},
+		store_logo_path = #{record.storeLogoPath,jdbcType=VARCHAR},
+		store_cover_path = #{record.storeCoverPath,jdbcType=VARCHAR},
+		is_shop = #{record.isShop,jdbcType=BIT},
+		is_o2o = #{record.isO2o,jdbcType=BIT},
+		store_lat = #{record.storeLat,jdbcType=DECIMAL},
+		store_lon = #{record.storeLon,jdbcType=DECIMAL},
+		invitation_code = #{record.invitationCode,jdbcType=VARCHAR},
+		coupon_pay_amount = #{record.couponPayAmount,jdbcType=DECIMAL},
+		charge_pay_amount = #{record.chargePayAmount,jdbcType=DECIMAL},
+		rebate_amount = #{record.rebateAmount,jdbcType=DECIMAL},
+		commission_rebate = #{record.commissionRebate,jdbcType=DECIMAL},
+		create_user_id = #{record.createUserId,jdbcType=BIGINT},
+		eepay_mid = #{record.eepayMid,jdbcType=VARCHAR},
+		eepay_key = #{record.eepayKey,jdbcType=VARCHAR},
+		is_eepay = #{record.isEepay,jdbcType=BIT},
+		group_main_id = #{record.groupMainId,jdbcType=BIGINT},
+		group_detail_info = #{record.groupDetailInfo,jdbcType=VARCHAR},
+		group_discount = #{record.groupDiscount},
+		license_c_mobile = #{record.licenseCMobile,jdbcType=VARCHAR},
+		license_c_name = #{record.licenseCName,jdbcType=VARCHAR},
+		profit_amount= #{record.profitAmount,jdbcType=DECIMAL},
+		store_target = #{record.storeTarget,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.store.model.Store">
+		update shop_store
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="bankAccountName != null">
+				bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+			</if>
+			<if test="bankCAccount != null">
+				bank_c_account = #{bankCAccount,jdbcType=VARCHAR},
+			</if>
+			<if test="bankLineNum != null">
+				bank_line_num = #{bankLineNum,jdbcType=VARCHAR},
+			</if>
+			<if test="bankName != null">
+				bank_name = #{bankName,jdbcType=VARCHAR},
+			</if>
+			<if test="buygiftMealEndTime != null">
+				buygift_meal_end_Time = #{buygiftMealEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="combinEndTime != null">
+				combin_end_time = #{combinEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="domainModifyCount != null">
+				domain_modify_count = #{domainModifyCount,jdbcType=INTEGER},
+			</if>
+			<if test="enoughreduceMealEndTime != null">
+				enoughreduce_meal_end_Time =
+				#{enoughreduceMealEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="favoriteCount != null">
+				favorite_count = #{favoriteCount,jdbcType=INTEGER},
+			</if>
+			<if test="gcMainId != null">
+				gc_main_id = #{gcMainId,jdbcType=BIGINT},
+			</if>
+			<if test="groupMealEndTime != null">
+				group_meal_end_Time = #{groupMealEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="organizationCode != null">
+				organization_code = #{organizationCode,jdbcType=VARCHAR},
+			</if>
+			<if test="sendEmailCount != null">
+				send_email_count = #{sendEmailCount,jdbcType=INTEGER},
+			</if>
+			<if test="sendSmsCount != null">
+				send_sms_count = #{sendSmsCount,jdbcType=INTEGER},
+			</if>
+			<if test="storeAddress != null">
+				store_address = #{storeAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="storeCommissionAmount != null">
+				store_commission_amount = #{storeCommissionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="storeCredit != null">
+				store_credit = #{storeCredit,jdbcType=INTEGER},
+			</if>
+			<if test="storeDecorateOldTheme != null">
+				store_decorate_old_theme = #{storeDecorateOldTheme,jdbcType=VARCHAR},
+			</if>
+			<if test="storeDecorateTheme != null">
+				store_decorate_theme = #{storeDecorateTheme,jdbcType=VARCHAR},
+			</if>
+			<if test="storeEmailCount != null">
+				store_email_count = #{storeEmailCount,jdbcType=INTEGER},
+			</if>
+			<if test="storeMsn != null">
+				store_msn = #{storeMsn,jdbcType=VARCHAR},
+			</if>
+			<if test="storeName != null">
+				store_name = #{storeName,jdbcType=VARCHAR},
+			</if>
+			<if test="storeOwer != null">
+				store_ower = #{storeOwer,jdbcType=VARCHAR},
+			</if>
+			<if test="storeOwerCard != null">
+				store_ower_card = #{storeOwerCard,jdbcType=VARCHAR},
+			</if>
+			<if test="storePayoffAmount != null">
+				store_payoff_amount = #{storePayoffAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="storeQq != null">
+				store_qq = #{storeQq,jdbcType=VARCHAR},
+			</if>
+			<if test="storeRecommend != null">
+				store_recommend = #{storeRecommend,jdbcType=BIT},
+			</if>
+			<if test="storeRecommendTime != null">
+				store_recommend_time = #{storeRecommendTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="storeSaleAmount != null">
+				store_sale_amount = #{storeSaleAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="storeSecondDomain != null">
+				store_second_domain = #{storeSecondDomain,jdbcType=VARCHAR},
+			</if>
+			<if test="storeSmsCount != null">
+				store_sms_count = #{storeSmsCount,jdbcType=INTEGER},
+			</if>
+			<if test="storeStartTime != null">
+				store_start_time = #{storeStartTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="storeStatus != null">
+				store_status = #{storeStatus,jdbcType=INTEGER},
+			</if>
+			<if test="storeTelephone != null">
+				store_telephone = #{storeTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="storeWw != null">
+				store_ww = #{storeWw,jdbcType=VARCHAR},
+			</if>
+			<if test="storeZip != null">
+				store_zip = #{storeZip,jdbcType=VARCHAR},
+			</if>
+			<if test="validity != null">
+				validity = #{validity,jdbcType=TIMESTAMP},
+			</if>
+			<if test="areaId != null">
+				area_id = #{areaId,jdbcType=BIGINT},
+			</if>
+			<if test="bankAreaId != null">
+				bank_area_id = #{bankAreaId,jdbcType=BIGINT},
+			</if>
+			<if test="bankPermitImagePath != null">
+				bank_permit_image_path = #{bankPermitImagePath,jdbcType=VARCHAR},
+			</if>
+			<if test="cardId != null">
+				card_id = #{cardId,jdbcType=BIGINT},
+			</if>
+			<if test="gradeId != null">
+				grade_id = #{gradeId,jdbcType=BIGINT},
+			</if>
+			<if test="storeBannerPath != null">
+				store_banner_path = #{storeBannerPath,jdbcType=VARCHAR},
+			</if>
+			<if test="storeLicensePath != null">
+				store_license_path = #{storeLicensePath,jdbcType=VARCHAR},
+			</if>
+			<if test="storeLogoPath != null">
+				store_logo_path = #{storeLogoPath,jdbcType=VARCHAR},
+			</if>
+			<if test="storeCoverPath != null">
+				store_cover_path = #{storeCoverPath,jdbcType=VARCHAR},
+			</if>
+			<if test="isShop != null">
+				is_shop = #{isShop,jdbcType=BIT},
+			</if>
+			<if test="isO2o != null">
+				is_o2o = #{isO2o,jdbcType=BIT},
+			</if>
+			<if test="storeLat != null">
+				store_lat = #{storeLat,jdbcType=DECIMAL},
+			</if>
+			<if test="storeLon != null">
+				store_lon = #{storeLon,jdbcType=DECIMAL},
+			</if>
+			<if test="invitationCode != null">
+				invitation_code = #{invitationCode,jdbcType=VARCHAR},
+			</if>
+			<if test="couponPayAmount != null">
+				coupon_pay_amount = #{couponPayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="chargePayAmount != null">
+				charge_pay_amount = #{chargePayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateAmount != null">
+				rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="commissionRebate != null">
+				commission_rebate = #{commissionRebate,jdbcType=DECIMAL},
+			</if>
+			<if test="createUserId != null">
+				create_user_id = #{createUserId,jdbcType=BIGINT},
+			</if>
+			<if test="eepayMid != null">
+				eepay_mid = #{eepayMid,jdbcType=VARCHAR},
+			</if>
+			<if test="eepayKey != null">
+				eepay_key = #{eepayKey,jdbcType=VARCHAR},
+			</if>
+			<if test="isEepay != null">
+				is_eepay = #{isEepay,jdbcType=BIT},
+			</if>
+			<if test="groupMainId != null">
+				group_main_id = #{groupMainId,jdbcType=BIGINT},
+			</if>
+			<if test="groupDetailInfo != null">
+				group_detail_info = #{groupDetailInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="groupDiscount != null">
+				group_discount = #{groupDiscount},
+			</if>
+			<if test="licenseCMobile != null">
+				license_c_mobile = #{licenseCMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="licenseCName != null">
+				license_c_name = #{licenseCName,jdbcType=VARCHAR},
+			</if>
+			<if test="gcDetailInfo != null">
+				gc_detail_info = #{gcDetailInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="smsEmailInfo != null">
+				sms_email_info = #{smsEmailInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeDecorateBackgroundInfo != null">
+				store_decorate_background_info =
+				#{storeDecorateBackgroundInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeDecorateBackgroundOldInfo != null">
+				store_decorate_background_old_info =
+				#{storeDecorateBackgroundOldInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeDecorateBaseInfo != null">
+				store_decorate_base_info = #{storeDecorateBaseInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeDecorateBaseOldInfo != null">
+				store_decorate_base_old_info =
+				#{storeDecorateBaseOldInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeDecorateInfo != null">
+				store_decorate_info = #{storeDecorateInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeDecorateOldInfo != null">
+				store_decorate_old_info = #{storeDecorateOldInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeInfo != null">
+				store_info = #{storeInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeQuickMenu != null">
+				store_quick_menu = #{storeQuickMenu,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeSeoDescription != null">
+				store_seo_description = #{storeSeoDescription,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="storeSeoKeywords != null">
+				store_seo_keywords = #{storeSeoKeywords,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="violationReseaon != null">
+				violation_reseaon = #{violationReseaon,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="implementNumber != null">
+				implement_number = #{implementNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="posType != null">
+				pos_type = #{posType,jdbcType=INTEGER},
+			</if>
+			<if test="addType != null">
+				add_type = #{addType,jdbcType=INTEGER},
+			</if>
+			<if test="lineNumber != null">
+				line_number = #{lineNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="profitAmount != null">
+				profit_amount = #{profitAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="storeTarget != null">
+				store_target = #{storeTarget,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="isExtension != null">
+				isExtension = #{isExtension,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.store.model.Store">
+		update shop_store
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+		bank_c_account = #{bankCAccount,jdbcType=VARCHAR},
+		bank_line_num = #{bankLineNum,jdbcType=VARCHAR},
+		bank_name = #{bankName,jdbcType=VARCHAR},
+		buygift_meal_end_Time = #{buygiftMealEndTime,jdbcType=TIMESTAMP},
+		combin_end_time = #{combinEndTime,jdbcType=TIMESTAMP},
+		domain_modify_count = #{domainModifyCount,jdbcType=INTEGER},
+		enoughreduce_meal_end_Time = #{enoughreduceMealEndTime,jdbcType=TIMESTAMP},
+		favorite_count = #{favoriteCount,jdbcType=INTEGER},
+		gc_main_id = #{gcMainId,jdbcType=BIGINT},
+		group_meal_end_Time = #{groupMealEndTime,jdbcType=TIMESTAMP},
+		organization_code = #{organizationCode,jdbcType=VARCHAR},
+		send_email_count = #{sendEmailCount,jdbcType=INTEGER},
+		send_sms_count = #{sendSmsCount,jdbcType=INTEGER},
+		store_address = #{storeAddress,jdbcType=VARCHAR},
+		store_commission_amount = #{storeCommissionAmount,jdbcType=DECIMAL},
+		store_credit = #{storeCredit,jdbcType=INTEGER},
+		store_decorate_old_theme = #{storeDecorateOldTheme,jdbcType=VARCHAR},
+		store_decorate_theme = #{storeDecorateTheme,jdbcType=VARCHAR},
+		store_email_count = #{storeEmailCount,jdbcType=INTEGER},
+		store_msn = #{storeMsn,jdbcType=VARCHAR},
+		store_name = #{storeName,jdbcType=VARCHAR},
+		store_ower = #{storeOwer,jdbcType=VARCHAR},
+		store_ower_card = #{storeOwerCard,jdbcType=VARCHAR},
+		store_payoff_amount = #{storePayoffAmount,jdbcType=DECIMAL},
+		store_qq = #{storeQq,jdbcType=VARCHAR},
+		store_recommend = #{storeRecommend,jdbcType=BIT},
+		store_recommend_time = #{storeRecommendTime,jdbcType=TIMESTAMP},
+		store_sale_amount = #{storeSaleAmount,jdbcType=DECIMAL},
+		store_second_domain = #{storeSecondDomain,jdbcType=VARCHAR},
+		store_sms_count = #{storeSmsCount,jdbcType=INTEGER},
+		store_start_time = #{storeStartTime,jdbcType=TIMESTAMP},
+		store_status = #{storeStatus,jdbcType=INTEGER},
+		store_telephone = #{storeTelephone,jdbcType=VARCHAR},
+		store_ww = #{storeWw,jdbcType=VARCHAR},
+		store_zip = #{storeZip,jdbcType=VARCHAR},
+		validity = #{validity,jdbcType=TIMESTAMP},
+		area_id = #{areaId,jdbcType=BIGINT},
+		bank_area_id = #{bankAreaId,jdbcType=BIGINT},
+		bank_permit_image_path = #{bankPermitImagePath,jdbcType=VARCHAR},
+		card_id = #{cardId,jdbcType=BIGINT},
+		grade_id = #{gradeId,jdbcType=BIGINT},
+		store_banner_path = #{storeBannerPath,jdbcType=VARCHAR},
+		store_license_path = #{storeLicensePath,jdbcType=VARCHAR},
+		store_logo_path = #{storeLogoPath,jdbcType=VARCHAR},
+		is_shop = #{isShop,jdbcType=BIT},
+		is_o2o = #{isO2o,jdbcType=BIT},
+		store_lat = #{storeLat,jdbcType=DECIMAL},
+		store_lon = #{storeLon,jdbcType=DECIMAL},
+		invitation_code = #{invitationCode,jdbcType=VARCHAR},
+		coupon_pay_amount = #{couponPayAmount,jdbcType=DECIMAL},
+		charge_pay_amount = #{chargePayAmount,jdbcType=DECIMAL},
+		rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+		commission_rebate = #{commissionRebate,jdbcType=DECIMAL},
+		create_user_id = #{createUserId,jdbcType=BIGINT},
+		eepay_mid = #{eepayMid,jdbcType=VARCHAR},
+		eepay_key = #{eepayKey,jdbcType=VARCHAR},
+		is_eepay = #{isEepay,jdbcType=BIT},
+		group_main_id = #{groupMainId,jdbcType=BIGINT},
+		group_detail_info = #{groupDetailInfo,jdbcType=VARCHAR},
+		group_discount = #{groupDiscount},
+		license_c_mobile = #{licenseCMobile,jdbcType=VARCHAR},
+		license_c_name = #{licenseCName,jdbcType=VARCHAR},
+		gc_detail_info = #{gcDetailInfo,jdbcType=LONGVARCHAR},
+		sms_email_info = #{smsEmailInfo,jdbcType=LONGVARCHAR},
+		store_decorate_background_info =
+		#{storeDecorateBackgroundInfo,jdbcType=LONGVARCHAR},
+		store_decorate_background_old_info =
+		#{storeDecorateBackgroundOldInfo,jdbcType=LONGVARCHAR},
+		store_decorate_base_info =
+		#{storeDecorateBaseInfo,jdbcType=LONGVARCHAR},
+		store_decorate_base_old_info =
+		#{storeDecorateBaseOldInfo,jdbcType=LONGVARCHAR},
+		store_decorate_info = #{storeDecorateInfo,jdbcType=LONGVARCHAR},
+		store_decorate_old_info = #{storeDecorateOldInfo,jdbcType=LONGVARCHAR},
+		store_info = #{storeInfo,jdbcType=LONGVARCHAR},
+		store_quick_menu = #{storeQuickMenu,jdbcType=LONGVARCHAR},
+		store_seo_description = #{storeSeoDescription,jdbcType=LONGVARCHAR},
+		store_seo_keywords = #{storeSeoKeywords,jdbcType=LONGVARCHAR},
+		violation_reseaon = #{violationReseaon,jdbcType=LONGVARCHAR},
+		profit_amount = #{profitAmount,jdbcType=DECIMAL},
+		store_target = #{storeTarget,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.store.model.Store">
+		update shop_store
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+		bank_c_account = #{bankCAccount,jdbcType=VARCHAR},
+		bank_line_num = #{bankLineNum,jdbcType=VARCHAR},
+		bank_name = #{bankName,jdbcType=VARCHAR},
+		buygift_meal_end_Time = #{buygiftMealEndTime,jdbcType=TIMESTAMP},
+		combin_end_time = #{combinEndTime,jdbcType=TIMESTAMP},
+		domain_modify_count = #{domainModifyCount,jdbcType=INTEGER},
+		enoughreduce_meal_end_Time = #{enoughreduceMealEndTime,jdbcType=TIMESTAMP},
+		favorite_count = #{favoriteCount,jdbcType=INTEGER},
+		gc_main_id = #{gcMainId,jdbcType=BIGINT},
+		group_meal_end_Time = #{groupMealEndTime,jdbcType=TIMESTAMP},
+		organization_code = #{organizationCode,jdbcType=VARCHAR},
+		send_email_count = #{sendEmailCount,jdbcType=INTEGER},
+		send_sms_count = #{sendSmsCount,jdbcType=INTEGER},
+		store_address = #{storeAddress,jdbcType=VARCHAR},
+		store_commission_amount = #{storeCommissionAmount,jdbcType=DECIMAL},
+		store_credit = #{storeCredit,jdbcType=INTEGER},
+		store_decorate_old_theme = #{storeDecorateOldTheme,jdbcType=VARCHAR},
+		store_decorate_theme = #{storeDecorateTheme,jdbcType=VARCHAR},
+		store_email_count = #{storeEmailCount,jdbcType=INTEGER},
+		store_msn = #{storeMsn,jdbcType=VARCHAR},
+		store_name = #{storeName,jdbcType=VARCHAR},
+		store_ower = #{storeOwer,jdbcType=VARCHAR},
+		store_ower_card = #{storeOwerCard,jdbcType=VARCHAR},
+		store_payoff_amount = #{storePayoffAmount,jdbcType=DECIMAL},
+		store_qq = #{storeQq,jdbcType=VARCHAR},
+		store_recommend = #{storeRecommend,jdbcType=BIT},
+		store_recommend_time = #{storeRecommendTime,jdbcType=TIMESTAMP},
+		store_sale_amount = #{storeSaleAmount,jdbcType=DECIMAL},
+		store_second_domain = #{storeSecondDomain,jdbcType=VARCHAR},
+		store_sms_count = #{storeSmsCount,jdbcType=INTEGER},
+		store_start_time = #{storeStartTime,jdbcType=TIMESTAMP},
+		store_status = #{storeStatus,jdbcType=INTEGER},
+		store_telephone = #{storeTelephone,jdbcType=VARCHAR},
+		store_ww = #{storeWw,jdbcType=VARCHAR},
+		store_zip = #{storeZip,jdbcType=VARCHAR},
+		validity = #{validity,jdbcType=TIMESTAMP},
+		area_id = #{areaId,jdbcType=BIGINT},
+		bank_area_id = #{bankAreaId,jdbcType=BIGINT},
+		bank_permit_image_path = #{bankPermitImagePath,jdbcType=VARCHAR},
+		card_id = #{cardId,jdbcType=BIGINT},
+		grade_id = #{gradeId,jdbcType=BIGINT},
+		store_banner_path = #{storeBannerPath,jdbcType=VARCHAR},
+		store_license_path = #{storeLicensePath,jdbcType=VARCHAR},
+		store_logo_path = #{storeLogoPath,jdbcType=VARCHAR},
+		is_shop = #{isShop,jdbcType=BIT},
+		is_o2o = #{isO2o,jdbcType=BIT},
+		store_lat = #{storeLat,jdbcType=DECIMAL},
+		store_lon = #{storeLon,jdbcType=DECIMAL},
+		invitation_code = #{invitationCode,jdbcType=VARCHAR},
+		coupon_pay_amount = #{couponPayAmount,jdbcType=DECIMAL},
+		charge_pay_amount = #{chargePayAmount,jdbcType=DECIMAL},
+		rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+		commission_rebate = #{commissionRebate,jdbcType=DECIMAL},
+		create_user_id = #{createUserId,jdbcType=BIGINT},
+		eepay_mid = #{eepayMid,jdbcType=VARCHAR},
+		eepay_key = #{eepayKey,jdbcType=VARCHAR},
+		is_eepay = #{isEepay,jdbcType=BIT},
+		group_main_id = #{groupMainId,jdbcType=BIGINT},
+		group_detail_info = #{groupDetailInfo,jdbcType=VARCHAR},
+		group_discount = #{groupDiscount},
+		license_c_mobile = #{licenseCMobile,jdbcType=VARCHAR},
+		license_c_name = #{licenseCName,jdbcType=VARCHAR},
+		profit_amount = #{profitAmount,jdbcType=DECIMAL},
+		store_target=#{storeTarget,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="findListByVO" resultMap="BOResultMap">
+		SELECT
+		ss.id,
+		ss.add_Time,
+		ss.delete_Status,
+		ss.bank_account_name,
+		ss.bank_c_account,
+		ss.bank_line_num,
+		ss.bank_name,
+		ss.buygift_meal_end_Time,
+		ss.combin_end_time,
+		ss.domain_modify_count,
+		ss.enoughreduce_meal_end_Time,
+		ss.favorite_count,
+		ss.gc_main_id,
+		ss.group_meal_end_Time,
+		ss.organization_code,
+		ss.send_email_count,
+		ss.send_sms_count,
+		ss.store_address,
+		ss.store_commission_amount,
+		ss.store_credit,
+		ss.store_decorate_old_theme,
+		ss.store_decorate_theme,
+		ss.store_email_count,
+		ss.store_msn,
+		ss.store_name,
+		ss.store_ower,
+		ss.store_ower_card,
+		ss.store_payoff_amount,
+		ss.store_qq,
+		ss.store_recommend,
+		ss.store_recommend_time,
+		ss.store_sale_amount,
+		ss.store_second_domain,
+		ss.store_sms_count,
+		ss.store_start_time,
+		ss.store_status,
+		ss.store_telephone,
+		ss.store_ww,
+		ss.store_zip,
+		ss.store_info,
+		ss.validity,
+		ss.area_id,
+		ss.bank_area_id,
+		ss.bank_permit_image_path,
+		ss.card_id,
+		grade_id,
+		ss.store_banner_path,
+		ss.store_license_path,
+		ss.store_logo_path,
+		ss.is_shop,
+		ss.is_o2o,
+		ss.store_lat,
+		ss.store_lon,
+		ss.is_eepay,
+		ss.create_user_id,
+		ssg.grade_name,
+		ssg.content,
+		us. NAME,
+		us.user_name,
+		uc.nickname,
+		sc.class_name,
+		(SELECT login_name FROM `sys_user_account` sa WHERE sa.uid=uc.uid AND
+		sa.account_type=2) AS mobile,
+		sua.login_name,
+		sua.uid,
+		uo.id as operatorId,
+		uo.operator_name,
+		uo.operator_code,
+		uo.phone as operatorPhone,
+		uo.operator_area_id,
+		ss.license_c_name,
+		sai.fail_reseaon
+		FROM
+		shop_store ss
+		LEFT JOIN shop_store_grade ssg ON ss.grade_id = ssg.id
+		LEFT JOIN user_seller us ON us.store_id = ss.id
+		inner JOIN user_customer uc ON uc.uid = ss.create_user_id
+		LEFT JOIN sys_user_account sua ON (sua.uid = us.uid and sua.account_type =
+		2)
+		LEFT JOIN dic_area a ON ss.area_id = a.id
+		LEFT JOIN dic_area b ON b.id = a.parent_id
+		LEFT JOIN shop_goods_class sc ON sc.id = ss.gc_main_id
+		LEFT JOIN user_owns owns ON ss.create_user_id = owns.seller_user_id
+		LEFT JOIN user_operator uo ON owns.own_operator_id = uo.id
+		LEFT JOIN dic_area c ON uo.operator_area_id = c.id
+		LEFT JOIN dic_area d ON d.id = c.parent_id
+		LEFT JOIN shop_store_apply_info sai ON sai.store_id = ss.id
+		<where>
+			<if test="vo.storeStatus != null">
+				ss.store_status = #{vo.storeStatus}
+			</if>
+			<if test="vo.storeName != null and vo.storeName != ''">
+				and (ss.store_name like concat('%',trim(#{vo.storeName}),'%')
+				or ss.license_c_name like concat('%',trim(#{vo.storeName}),'%') )
+			</if>
+			<if test="vo.gradeId != null and vo.gradeId > 0">
+				and ss.grade_id = #{vo.gradeId}
+			</if>
+			<if test="vo.isShop != null and vo.isShop != '' ">
+				and ss.is_shop = #{vo.isShop}
+			</if>
+			<if test="vo.isO2o != null and vo.isO2o != '' ">
+				and ss.is_o2o = #{vo.isO2o}
+			</if>
+			<if test="vo.storeRecommend != null">
+				and ss.store_recommend = #{vo.storeRecommend}
+			</if>
+			<if test="vo.areaId != null and vo.areaId != '' ">
+				and (b.parent_id = #{vo.areaId}
+				or a.parent_id = #{vo.areaId})
+			</if>
+			<if test="vo.operatorAreaId != null and vo.operatorAreaId != '' ">
+				and (b.parent_id = #{vo.operatorAreaId}
+				or a.parent_id = #{vo.operatorAreaId})
+			</if>
+			<if test="vo.gcMainId != null and vo.gcMainId > 0">
+				and ss.gc_main_id = #{vo.gcMainId}
+			</if>
+			<if test="vo.groupMainId != null and vo.groupMainId > 0">
+				and ss.group_main_id = #{vo.groupMainId}
+			</if>
+			<if test="vo.mobile != null and vo.mobile != '' ">
+				and uc.mobile like CONCAT('%',#{vo.mobile},'%')
+			</if>
+			<if test="vo.loginName != null and vo.loginName != ''">
+				and sua.login_name like CONCAT('%',#{vo.loginName},'%')
+			</if>
+			<if test="vo.operatorCode != null and vo.operatorCode != ''">
+				and uo.operator_code = #{vo.operatorCode}
+			</if>
+			<if test="vo.operatorName != null and vo.operatorName != ''">
+				and uo.operator_name like CONCAT('%',#{vo.operatorName},'%')
+			</if>
+			<if test="vo.operatorPhone != null and vo.operatorPhone != ''">
+				and uo.phone = #{vo.operatorPhone}
+			</if>
+			<if test="vo.beginTimeStr != null and vo.beginTimeStr != ''">
+				AND DATE_FORMAT(ss.add_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.beginTimeStr},'%Y-%m-%d')
+			</if>
+			<if test="vo.endTimeStr != null and vo.endTimeStr != ''">
+				AND DATE_FORMAT(ss.add_time,'%Y-%m-%d') <![CDATA[ < ]]>
+				DATE_FORMAT(#{vo.endTimeStr},'%Y-%m-%d')
+			</if>
+			<if test="vo.ownType != null ">
+				 AND owns.own_type=#{vo.ownType}
+			</if>
+		</where>
+		order by ss.add_Time desc
+	</select>
+	<select id="findStore" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM shop_store ss
+		WHERE ss.store_name = #{storeName}
+		AND id != #{id}
+	</select>
+	<select id="fetchStoreByCreateUserId" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM shop_store
+		WHERE create_user_id = #{userId}
+	</select>
+
+	<update id="update_Store_IsExtension_By_IDList">
+		update
+		shop_store
+		<set>
+			isExtension = #{isExtension,jdbcType=BIT}
+		</set>
+		<where>
+			id in
+			<foreach item="item" index="index" collection="list" open="("
+				separator="," close=")">
+				#{item}
+			</foreach>
+		</where>
+	</update>
+	<sql id="STORE_JOIN_COlUMN">
+		ss.id,
+		ss.add_Time,
+		ss.delete_Status,
+		ss.bank_account_name,
+		ss.bank_c_account,
+		ss.bank_line_num,
+		ss.bank_name,
+		ss.buygift_meal_end_Time,
+		ss.combin_end_time,
+		ss.domain_modify_count,
+		ss.enoughreduce_meal_end_Time,
+		ss.favorite_count,
+		ss.gc_main_id,
+		ss.group_meal_end_Time,
+		ss.license_c_mobile,
+		ss.license_c_name,
+		ss.organization_code,
+		ss.send_email_count,
+		ss.send_sms_count,
+		ss.store_address,
+		ss.store_info,
+		ss.store_commission_amount,
+		ss.store_credit,
+		ss.store_decorate_old_theme,
+		ss.store_decorate_theme,
+		ss.store_email_count,
+		ss.store_msn,
+		ss.store_name,
+		ss.store_ower,
+		ss.store_ower_card,
+		ss.store_payoff_amount,
+		ss.store_qq,
+		ss.store_recommend,
+		ss.store_recommend_time,
+		ss.store_sale_amount,
+		ss.store_second_domain,
+		ss.store_sms_count,
+		ss.store_start_time,
+		ss.store_status,
+		ss.store_telephone,
+		ss.store_ww,
+		ss.store_zip,
+		ss.validity,
+		ss.area_id,
+		ss.bank_area_id,
+		ss.bank_permit_image_path,
+		ss.card_id,
+		grade_id,
+		ss.store_banner_path,
+		ss.store_license_path,
+		ss.store_seo_keywords,
+		ss.store_seo_description,
+		ss.store_logo_path,
+		ss.store_cover_path,
+		ss.is_shop,
+		ss.is_o2o,
+		ss.store_lat,
+		ss.store_lon,
+		ss.commission_rebate,
+		ss.invitation_code,
+		ss.coupon_pay_amount,
+		ss.charge_pay_amount,
+		ss.rebate_amount,
+		ss.store_logo_path,
+		ss.is_shop,
+		ss.is_o2o,
+		ss.store_lat,
+		ss.store_lon,
+		ss.create_user_id,
+		ss.is_eepay,
+		ss.eepay_key,
+		ss.eepay_mid,
+		ss.group_detail_info,
+		ss.group_discount,
+		ss.group_main_id,
+		ss.implement_number,
+		ss.pos_type,
+		ss.add_type
+	</sql>
+</mapper>

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.UserMoneyLogMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.UserMoneyLog">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="uid" property="uid" jdbcType="BIGINT" />
+		<result column="record_log" property="recordLog" jdbcType="DECIMAL" />
+		<result column="record_type" property="recordType" jdbcType="VARCHAR" />
+		<result column="record_info" property="recordInfo" jdbcType="VARCHAR" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.UserMoneyLogBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, uid, record_log, record_type, record_info, delete_status, add_time
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.user.model.UserMoneyLogExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_money_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_money_log
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from user_money_log
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.UserMoneyLogExample">
+		delete from user_money_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.UserMoneyLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_money_log (id, uid, record_log,
+		record_type, record_info, delete_status,
+		add_time)
+		values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=BIGINT},
+		#{recordLog,jdbcType=DECIMAL},
+		#{recordType,jdbcType=VARCHAR}, #{recordInfo,jdbcType=VARCHAR}, #{deleteStatus,jdbcType=BIT},
+		#{addTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.UserMoneyLog"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_money_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="recordLog != null">
+				record_log,
+			</if>
+			<if test="recordType != null">
+				record_type,
+			</if>
+			<if test="recordInfo != null">
+				record_info,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="recordLog != null">
+				#{recordLog,jdbcType=DECIMAL},
+			</if>
+			<if test="recordType != null">
+				#{recordType,jdbcType=VARCHAR},
+			</if>
+			<if test="recordInfo != null">
+				#{recordInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.UserMoneyLogExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_money_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_money_log
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.uid != null">
+				uid = #{record.uid,jdbcType=BIGINT},
+			</if>
+			<if test="record.recordLog != null">
+				record_log = #{record.recordLog,jdbcType=DECIMAL},
+			</if>
+			<if test="record.recordType != null">
+				record_type = #{record.recordType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.recordInfo != null">
+				record_info = #{record.recordInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_money_log
+		set id = #{record.id,jdbcType=INTEGER},
+		uid = #{record.uid,jdbcType=BIGINT},
+		record_log = #{record.recordLog,jdbcType=DECIMAL},
+		record_type = #{record.recordType,jdbcType=VARCHAR},
+		record_info = #{record.recordInfo,jdbcType=VARCHAR},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.UserMoneyLog">
+		update user_money_log
+		<set>
+			<if test="uid != null">
+				uid = #{uid,jdbcType=BIGINT},
+			</if>
+			<if test="recordLog != null">
+				record_log = #{recordLog,jdbcType=DECIMAL},
+			</if>
+			<if test="recordType != null">
+				record_type = #{recordType,jdbcType=VARCHAR},
+			</if>
+			<if test="recordInfo != null">
+				record_info = #{recordInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.UserMoneyLog">
+		update user_money_log
+		set uid = #{uid,jdbcType=BIGINT},
+		record_log = #{recordLog,jdbcType=DECIMAL},
+		record_type = #{recordType,jdbcType=VARCHAR},
+		record_info = #{recordInfo,jdbcType=VARCHAR},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		add_time = #{addTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="findByUid" parameterType="java.lang.Long" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_money_log
+		where uid = #{uid,jdbcType=BIGINT}
+	</select>
+</mapper>

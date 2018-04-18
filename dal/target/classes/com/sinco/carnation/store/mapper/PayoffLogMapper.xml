@@ -1,0 +1,906 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.store.mapper.PayoffLogMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.store.model.PayoffLog">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus" jdbcType="BIT" />
+		<result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+		<result column="commission_amount" property="commissionAmount" jdbcType="DECIMAL" />
+		<result column="complete_time" property="completeTime" jdbcType="TIMESTAMP" />
+		<result column="finance_user_name" property="financeUserName" jdbcType="VARCHAR" />
+		<result column="o_id" property="oId" jdbcType="VARCHAR" />
+		<result column="order_id" property="orderId" jdbcType="VARCHAR" />
+		<result column="order_total_price" property="orderTotalPrice" jdbcType="DECIMAL" />
+		<result column="payoff_type" property="payoffType" jdbcType="INTEGER" />
+		<result column="pl_info" property="plInfo" jdbcType="VARCHAR" />
+		<result column="pl_sn" property="plSn" jdbcType="VARCHAR" />
+		<result column="reality_amount" property="realityAmount" jdbcType="DECIMAL" />
+		<result column="refund_user_name" property="refundUserName" jdbcType="VARCHAR" />
+		<result column="refund_user_id" property="refundUserId" jdbcType="BIGINT" />
+		<result column="return_service_id" property="returnServiceId" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+		<result column="ship_amount" property="shipAmount" jdbcType="DECIMAL" />
+		<result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+		<result column="admin_id" property="adminId" jdbcType="BIGINT" />
+		<result column="seller_id" property="sellerId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.store.bo.PayoffLogBO" extends="ResultMapWithBLOBs">
+		<result column="managerName" property="managerName" jdbcType="VARCHAR" />
+		<result column="sellerNickname" property="sellerNickname" jdbcType="VARCHAR" />
+		<result column="storeName" property="storeName" jdbcType="VARCHAR" />
+		<association property="seller" column="seller_id" javaType="com.sinco.carnation.user.model.Seller" resultMap="com.sinco.carnation.user.mapper.SellerMapper.BaseResultMap"></association>
+		<association property="admin" column="admin_id" javaType="com.sinco.carnation.user.model.Manager" resultMap="com.sinco.carnation.user.mapper.ManagerMapper.BaseResultMap"></association>
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.store.model.PayoffLog" extends="BaseResultMap">
+		<result column="goods_info" property="goodsInfo" jdbcType="LONGVARCHAR" />
+		<result column="payoff_remark" property="payoffRemark" jdbcType="LONGVARCHAR" />
+		<result column="return_goods_info" property="returnGoodsInfo" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<select id="selectBOByVO" resultMap="BOResultMap">
+		SELECT p.*, s.*, m.*, m.name managerName FROM shop_payoff_log p
+		INNER JOIN user_seller s ON p.seller_id =
+		s.uid
+		LEFT JOIN user_manager m ON p.admin_id = m.uid
+		WHERE p.delete_status = 0 AND p.id = #{id}
+	</select>
+	<select id="selectBOByOidAndOrderId" resultMap="BOResultMap">
+		SELECT p.* FROM shop_payoff_log p WHERE p.o_id = #{oid} AND p.order_id =
+		#{orderId}
+	</select>
+	<select id="selectPayoffLogListByVO" resultMap="BOResultMap" parameterType="com.sinco.carnation.store.vo.PayoffLogVO">
+		SELECT p.*,s.nickname as sellerNickname, st.store_name as storeName
+		FROM shop_payoff_log p
+		INNER JOIN user_seller s ON p.seller_id = s.uid
+		INNER JOIN
+		shop_store st ON s.store_id = st.id
+		LEFT JOIN user_manager m ON p.admin_id = m.uid
+		WHERE
+		p.delete_status = 0
+		<if test="vo.status != null and vo.status != ''">
+			AND p.`status` = #{vo.status}
+		</if>
+		<if test="vo.typeData != null and vo.typeData != ''">
+			<if test="vo.type != null and vo.type == 'payoff'">
+				AND p.pl_sn = #{vo.typeData}
+			</if>
+			<if test="vo.type != null and vo.type == 'seller'">
+				AND s.nickname = CONCAT('%', #{vo.typeData}, '%')
+			</if>
+			<if test="vo.type != null and vo.type == 'order'">
+				AND p.order_id = #{vo.typeData}
+			</if>
+		</if>
+		<if test="vo.beginPrice != null and vo.beginPrice != ''">
+			AND p.total_amount <![CDATA[ >= ]]>
+			#{vo.beginPrice}
+		</if>
+		<if test="vo.endPrice != null and vo.endPrice != ''">
+			AND p.total_amount <![CDATA[ <= ]]>
+			#{vo.endPrice}
+		</if>
+		<if test="vo.status == 1">
+			<if test="vo.beginTime != null and vo.beginTime != ''">
+				AND DATE_FORMAT(p.add_time, '%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.beginTime}, '%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(p.add_time, '%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{vo.endTime}, '%Y-%m-%d')
+			</if>
+			<choose>
+				<when test="vo.tempStatus != null and vo.tempStatus == 'ok'">
+					AND DATE_FORMAT(DATE_ADD(p.add_time,INTERVAL #{vo.dayCount} DAY),
+					'%Y-%m-%d') <![CDATA[ <= ]]>
+					DATE_FORMAT(NOW(), '%Y-%m-%d')
+				</when>
+			</choose>
+			ORDER BY p.add_time desc
+		</if>
+		<if test="vo.status == 3">
+			<if test="vo.beginTime != null and vo.beginTime != ''">
+				AND DATE_FORMAT(p.apply_time, '%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.beginTime}, '%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(p.apply_time, '%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{vo.endTime}, '%Y-%m-%d')
+			</if>
+			ORDER BY p.apply_time desc
+		</if>
+		<if test="vo.status == 6">
+			<if test="vo.beginTime != null and vo.beginTime != ''">
+				AND DATE_FORMAT(p.complete_time, '%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.beginTime}, '%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(p.complete_time, '%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{vo.endTime}, '%Y-%m-%d')
+			</if>
+			ORDER BY p.complete_time desc
+		</if>
+	</select>
+	<select id="selectShopPageListByVO" resultMap="BOResultMap" parameterType="com.sinco.carnation.store.vo.PayoffLogVO">
+		SELECT p.* FROM shop_payoff_log p
+		INNER JOIN user_seller s ON p.seller_id = s.uid
+		<if test="vo.sellerId != null">
+			AND p.seller_id = #{vo.sellerId}
+		</if>
+		LEFT JOIN user_manager m ON p.admin_id = m.uid
+		WHERE
+		p.delete_status = 0
+		<if test="vo.status != null and vo.status != ''">
+			AND p.`status` = #{vo.status}
+		</if>
+		<if test="vo.plSn != null and vo.plSn != ''">
+			AND p.pl_sn = #{vo.plSn}
+		</if>
+		<if test="vo.orderId != null and vo.orderId != ''">
+			AND p.order_id = #{vo.orderId}
+		</if>
+		<if test="vo.beginTime != null and vo.beginTime != ''">
+			AND DATE_FORMAT(p.add_time, '%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{vo.beginTime}, '%Y-%m-%d')
+		</if>
+		<if test="vo.endTime != null and vo.endTime != ''">
+			AND DATE_FORMAT(p.add_time, '%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{vo.endTime}, '%Y-%m-%d')
+		</if>
+		<if test="vo.status != null and vo.status == 1 ">
+			<choose>
+				<when test="vo.tempStatus != null and vo.tempStatus == 'not'">
+					AND
+					(
+					DATE_FORMAT(DATE_ADD(p.add_time,INTERVAL #{vo.dayCount} DAY), '%Y-%m-%d') <![CDATA[ > ]]>
+					DATE_FORMAT(NOW(), '%Y-%m-%d')
+					OR (SELECT count(0) FROM shop_return_goods_log rel WHERE
+					rel.return_order_id = p.o_id AND rel.goods_return_status
+					in(1, 5,
+					6, 7, 10)) <![CDATA[ > ]]>
+					0
+					)
+				</when>
+				<when test="vo.tempStatus != null and vo.tempStatus == 'ok'">
+					AND
+					(
+					DATE_FORMAT(DATE_ADD(p.add_time,INTERVAL #{vo.dayCount} DAY), '%Y-%m-%d') <![CDATA[ <= ]]>
+					DATE_FORMAT(NOW(), '%Y-%m-%d')
+					AND (SELECT count(0) FROM shop_return_goods_log rel WHERE
+					rel.return_order_id = p.o_id AND rel.goods_return_status
+					in(1, 5,
+					6, 7, 10)) <![CDATA[ = ]]>
+					0
+					)
+				</when>
+			</choose>
+		</if>
+		ORDER BY p.add_time desc
+	</select>
+	<select id="selectPayoffLogStatByVO" resultType="java.util.HashMap" parameterType="com.sinco.carnation.store.vo.PayoffLogVO">
+		SELECT sum(p.order_total_price) all_order_price,
+		sum(p.commission_amount) all_commission_price, sum(p.total_amount)
+		all_total_amount, count(0)
+		data_size FROM shop_payoff_log p
+		INNER JOIN user_seller s ON p.seller_id = s.uid
+		WHERE
+		p.delete_status = 0
+		<if test="vo.status != null and vo.status != ''">
+			AND p.`status` = #{vo.status}
+		</if>
+		<if test="vo.status != null and vo.status == 1 ">
+			<if test="vo.beginTime != null and vo.beginTime != ''">
+				AND DATE_FORMAT(p.add_time, '%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.beginTime}, '%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(p.add_time, '%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{vo.endTime}, '%Y-%m-%d')
+			</if>
+			<choose>
+				<when test="vo.tempStatus != null and vo.tempStatus == 'not'">
+					AND DATE_FORMAT(DATE_ADD(p.add_time,INTERVAL #{vo.dayCount} DAY),
+					'%Y-%m-%d') <![CDATA[ > ]]>
+					DATE_FORMAT(NOW(), '%Y-%m-%d')
+				</when>
+				<when test="vo.tempStatus != null and vo.tempStatus == 'ok'">
+					AND DATE_FORMAT(DATE_ADD(p.add_time,INTERVAL #{vo.dayCount} DAY),
+					'%Y-%m-%d') <![CDATA[ <= ]]>
+					DATE_FORMAT(NOW(), '%Y-%m-%d')
+				</when>
+			</choose>
+		</if>
+		<if test="vo.typeData != null and vo.typeData != ''">
+			<if test="vo.type != null and vo.type == 'payoff'">
+				<if test="vo.plSn != null and vo.plSn != ''">
+					AND p.pl_sn = #{vo.plSn}
+				</if>
+			</if>
+			<if test="vo.type != null and vo.type == 'seller'">
+				<if test="vo.userName != null and vo.userName != ''">
+					AND s.user_name = #{vo.userName}
+				</if>
+			</if>
+			<if test="vo.type != null and vo.type == 'order'">
+				<if test="vo.orderId != null and vo.orderId != ''">
+					AND p.order_id = #{vo.orderId}
+				</if>
+			</if>
+		</if>
+		<if test="vo.beginPrice != null and vo.beginPrice != ''">
+			AND p.total_amount <![CDATA[ >= ]]>
+			#{vo.startTotalAmount}
+		</if>
+		<if test="vo.endPrice != null and vo.endPrice != ''">
+			AND p.total_amount <![CDATA[ <= ]]>
+			#{vo.endTotalAmount}
+		</if>
+		<if test="vo.status == 0">
+			<if test="vo.beginTime != null and vo.beginTime != ''">
+				AND DATE_FORMAT(p.add_time, '%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.beginTime}, '%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(p.add_time, '%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{vo.endTime}, '%Y-%m-%d')
+			</if>
+			ORDER BY p.add_time desc
+		</if>
+		<if test="vo.status == 3">
+			<if test="vo.beginTime != null and vo.beginTime != ''">
+				AND DATE_FORMAT(p.apply_time, '%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.beginTime}, '%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(p.apply_time, '%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{vo.endTime}, '%Y-%m-%d')
+			</if>
+			ORDER BY p.apply_time desc
+		</if>
+		<if test="vo.status == 6">
+			<if test="vo.beginTime != null and vo.beginTime != ''">
+				AND DATE_FORMAT(p.complete_time, '%Y-%m-%d') <![CDATA[ >= ]]>
+				DATE_FORMAT(#{vo.beginTime}, '%Y-%m-%d')
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+				AND DATE_FORMAT(p.complete_time, '%Y-%m-%d') <![CDATA[ <= ]]>
+				DATE_FORMAT(#{vo.endTime}, '%Y-%m-%d')
+			</if>
+			ORDER BY p.complete_time desc
+		</if>
+	</select>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem" open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, apply_time, commission_amount,
+		complete_time, finance_user_name,
+		o_id, order_id, order_total_price,
+		payoff_type, pl_info, pl_sn,
+		reality_amount, refund_user_name,
+		refund_user_id, return_service_id, status, total_amount, ship_amount, admin_id,
+		seller_id, return_amount
+	</sql>
+	<sql id="Blob_Column_List">
+		goods_info, payoff_remark, return_goods_info
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.store.model.PayoffLogExample" resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_payoff_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.store.model.PayoffLogExample" resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_payoff_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_payoff_log
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_payoff_log
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.store.model.PayoffLogExample">
+		delete from shop_payoff_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.store.model.PayoffLog" useGeneratedKeys="true" keyProperty="id">
+		insert into shop_payoff_log
+		(id, add_time, delete_status,
+		apply_time, commission_amount, complete_time,
+		finance_user_name, o_id, order_id,
+		order_total_price, payoff_type, pl_info,
+		pl_sn, reality_amount, refund_user_name,
+		refund_user_id, return_service_id, status,
+		total_amount, ship_amount, admin_id, seller_id,
+		goods_info,
+		payoff_remark, return_goods_info, return_amount
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{applyTime,jdbcType=TIMESTAMP}, #{commissionAmount,jdbcType=DECIMAL},
+		#{completeTime,jdbcType=TIMESTAMP},
+		#{financeUserName,jdbcType=VARCHAR},
+		#{oId,jdbcType=VARCHAR},
+		#{orderId,jdbcType=VARCHAR},
+		#{orderTotalPrice,jdbcType=DECIMAL}, #{payoffType,jdbcType=INTEGER}, #{plInfo,jdbcType=VARCHAR},
+		#{plSn,jdbcType=VARCHAR}, #{realityAmount,jdbcType=DECIMAL},
+		#{refundUserName,jdbcType=VARCHAR},
+		#{refundUserId,jdbcType=BIGINT},
+		#{returnServiceId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+		#{totalAmount,jdbcType=DECIMAL}, #{ship_amount,jdbcType=DECIMAL},
+		#{adminId,jdbcType=BIGINT}, #{sellerId,jdbcType=BIGINT},
+		#{goodsInfo,jdbcType=LONGVARCHAR},
+		#{payoffRemark,jdbcType=LONGVARCHAR},
+		#{returnGoodsInfo,jdbcType=LONGVARCHAR},
+		#{returnAmount,jdbcType=DECIMAL}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.store.model.PayoffLog" useGeneratedKeys="true" keyProperty="id">
+		insert into shop_payoff_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="applyTime != null">
+				apply_time,
+			</if>
+			<if test="commissionAmount != null">
+				commission_amount,
+			</if>
+			<if test="completeTime != null">
+				complete_time,
+			</if>
+			<if test="financeUserName != null">
+				finance_user_name,
+			</if>
+			<if test="oId != null">
+				o_id,
+			</if>
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="orderTotalPrice != null">
+				order_total_price,
+			</if>
+			<if test="payoffType != null">
+				payoff_type,
+			</if>
+			<if test="plInfo != null">
+				pl_info,
+			</if>
+			<if test="plSn != null">
+				pl_sn,
+			</if>
+			<if test="realityAmount != null">
+				reality_amount,
+			</if>
+			<if test="refundUserName != null">
+				refund_user_name,
+			</if>
+			<if test="refundUserId != null">
+				refund_user_id,
+			</if>
+			<if test="returnServiceId != null">
+				return_service_id,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="totalAmount != null">
+				total_amount,
+			</if>
+			<if test="shipAmount != null">
+				ship_amount,
+			</if>
+			<if test="adminId != null">
+				admin_id,
+			</if>
+			<if test="sellerId != null">
+				seller_id,
+			</if>
+			<if test="goodsInfo != null">
+				goods_info,
+			</if>
+			<if test="payoffRemark != null">
+				payoff_remark,
+			</if>
+			<if test="returnGoodsInfo != null">
+				return_goods_info,
+			</if>
+			<if test="returnAmount != null">
+				return_amount,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="applyTime != null">
+				#{applyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="commissionAmount != null">
+				#{commissionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="completeTime != null">
+				#{completeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="financeUserName != null">
+				#{financeUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="oId != null">
+				#{oId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderId != null">
+				#{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderTotalPrice != null">
+				#{orderTotalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="payoffType != null">
+				#{payoffType,jdbcType=INTEGER},
+			</if>
+			<if test="plInfo != null">
+				#{plInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="plSn != null">
+				#{plSn,jdbcType=VARCHAR},
+			</if>
+			<if test="realityAmount != null">
+				#{realityAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="refundUserName != null">
+				#{refundUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="refundUserId != null">
+				#{refundUserId,jdbcType=BIGINT},
+			</if>
+			<if test="returnServiceId != null">
+				#{returnServiceId,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="totalAmount != null">
+				#{totalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="shipAmount != null">
+				#{shipAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="adminId != null">
+				#{adminId,jdbcType=BIGINT},
+			</if>
+			<if test="sellerId != null">
+				#{sellerId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsInfo != null">
+				#{goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="payoffRemark != null">
+				#{payoffRemark,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="returnGoodsInfo != null">
+				#{returnGoodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="returnAmount != null">
+				#{returnAmount,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.store.model.PayoffLogExample" resultType="java.lang.Integer">
+		select count(*) from shop_payoff_log
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_payoff_log
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.applyTime != null">
+				apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.commissionAmount != null">
+				commission_amount = #{record.commissionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.completeTime != null">
+				complete_time = #{record.completeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.financeUserName != null">
+				finance_user_name = #{record.financeUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.oId != null">
+				o_id = #{record.oId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.orderId != null">
+				order_id = #{record.orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.orderTotalPrice != null">
+				order_total_price = #{record.orderTotalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="record.payoffType != null">
+				payoff_type = #{record.payoffType,jdbcType=INTEGER},
+			</if>
+			<if test="record.plInfo != null">
+				pl_info = #{record.plInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.plSn != null">
+				pl_sn = #{record.plSn,jdbcType=VARCHAR},
+			</if>
+			<if test="record.realityAmount != null">
+				reality_amount = #{record.realityAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.refundUserName != null">
+				refund_user_name = #{record.refundUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.refundUserId != null">
+				refund_user_id = #{record.refundUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.returnServiceId != null">
+				return_service_id = #{record.returnServiceId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.totalAmount != null">
+				total_amount = #{record.totalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.shipAmount != null">
+				ship_amount = #{record.shipAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.adminId != null">
+				admin_id = #{record.adminId,jdbcType=BIGINT},
+			</if>
+			<if test="record.sellerId != null">
+				seller_id = #{record.sellerId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goodsInfo != null">
+				goods_info = #{record.goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.payoffRemark != null">
+				payoff_remark = #{record.payoffRemark,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.returnGoodsInfo != null">
+				return_goods_info = #{record.returnGoodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.returnAmount != null">
+				return_amount = #{record.returnAmount,jdbcType=DECIMAL},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_payoff_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=BIT},
+		apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+		commission_amount =
+		#{record.commissionAmount,jdbcType=DECIMAL},
+		complete_time = #{record.completeTime,jdbcType=TIMESTAMP},
+		finance_user_name =
+		#{record.financeUserName,jdbcType=VARCHAR},
+		o_id = #{record.oId,jdbcType=VARCHAR},
+		order_id = #{record.orderId,jdbcType=VARCHAR},
+		order_total_price =
+		#{record.orderTotalPrice,jdbcType=DECIMAL},
+		payoff_type = #{record.payoffType,jdbcType=INTEGER},
+		pl_info = #{record.plInfo,jdbcType=VARCHAR},
+		pl_sn =
+		#{record.plSn,jdbcType=VARCHAR},
+		reality_amount = #{record.realityAmount,jdbcType=DECIMAL},
+		refund_user_name =
+		#{record.refundUserName,jdbcType=VARCHAR},
+		refund_user_id = #{record.refundUserId,jdbcType=BIGINT},
+		return_service_id =
+		#{record.returnServiceId,jdbcType=VARCHAR},
+		status = #{record.status,jdbcType=INTEGER},
+		total_amount = #{record.totalAmount,jdbcType=DECIMAL},
+		ship_amount = #{record.shipAmount,jdbcType=DECIMAL},
+		admin_id = #{record.adminId,jdbcType=BIGINT},
+		seller_id = #{record.sellerId,jdbcType=BIGINT},
+		goods_info = #{record.goodsInfo,jdbcType=LONGVARCHAR},
+		payoff_remark = #{record.payoffRemark,jdbcType=LONGVARCHAR},
+		return_goods_info =
+		#{record.returnGoodsInfo,jdbcType=LONGVARCHAR},
+		return_amount = #{record.returnAmount,jdbcType=DECIMAL}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_payoff_log
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=BIT},
+		apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+		commission_amount =
+		#{record.commissionAmount,jdbcType=DECIMAL},
+		complete_time = #{record.completeTime,jdbcType=TIMESTAMP},
+		finance_user_name =
+		#{record.financeUserName,jdbcType=VARCHAR},
+		o_id = #{record.oId,jdbcType=VARCHAR},
+		order_id = #{record.orderId,jdbcType=VARCHAR},
+		order_total_price =
+		#{record.orderTotalPrice,jdbcType=DECIMAL},
+		payoff_type = #{record.payoffType,jdbcType=INTEGER},
+		pl_info = #{record.plInfo,jdbcType=VARCHAR},
+		pl_sn =
+		#{record.plSn,jdbcType=VARCHAR},
+		reality_amount = #{record.realityAmount,jdbcType=DECIMAL},
+		refund_user_name =
+		#{record.refundUserName,jdbcType=VARCHAR},
+		refund_user_id = #{record.refundUserId,jdbcType=BIGINT},
+		return_service_id =
+		#{record.returnServiceId,jdbcType=VARCHAR},
+		status = #{record.status,jdbcType=INTEGER},
+		total_amount = #{record.totalAmount,jdbcType=DECIMAL},
+		ship_amount = #{record.shipAmount,jdbcType=DECIMAL},
+		admin_id = #{record.adminId,jdbcType=BIGINT},
+		seller_id = #{record.sellerId,jdbcType=BIGINT},
+		return_amount = #{record.returnAmount,jdbcType=DECIMAL}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.store.model.PayoffLog">
+		update shop_payoff_log
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="applyTime != null">
+				apply_time = #{applyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="commissionAmount != null">
+				commission_amount = #{commissionAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="completeTime != null">
+				complete_time = #{completeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="financeUserName != null">
+				finance_user_name = #{financeUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="oId != null">
+				o_id = #{oId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderId != null">
+				order_id = #{orderId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderTotalPrice != null">
+				order_total_price = #{orderTotalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="payoffType != null">
+				payoff_type = #{payoffType,jdbcType=INTEGER},
+			</if>
+			<if test="plInfo != null">
+				pl_info = #{plInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="plSn != null">
+				pl_sn = #{plSn,jdbcType=VARCHAR},
+			</if>
+			<if test="realityAmount != null">
+				reality_amount = #{realityAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="refundUserName != null">
+				refund_user_name = #{refundUserName,jdbcType=VARCHAR},
+			</if>
+			<if test="refundUserId != null">
+				refund_user_id = #{refundUserId,jdbcType=BIGINT},
+			</if>
+			<if test="returnServiceId != null">
+				return_service_id = #{returnServiceId,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="totalAmount != null">
+				total_amount = #{totalAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="shipAmount != null">
+				ship_amount = #{shipAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="adminId != null">
+				admin_id = #{adminId,jdbcType=BIGINT},
+			</if>
+			<if test="sellerId != null">
+				seller_id = #{sellerId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsInfo != null">
+				goods_info = #{goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="payoffRemark != null">
+				payoff_remark = #{payoffRemark,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="returnGoodsInfo != null">
+				return_goods_info = #{returnGoodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="returnAmount != null">
+				return_amount = #{returnAmount,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.store.model.PayoffLog">
+		update shop_payoff_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{deleteStatus,jdbcType=BIT},
+		apply_time = #{applyTime,jdbcType=TIMESTAMP},
+		commission_amount = #{commissionAmount,jdbcType=DECIMAL},
+		complete_time =
+		#{completeTime,jdbcType=TIMESTAMP},
+		finance_user_name = #{financeUserName,jdbcType=VARCHAR},
+		o_id = #{oId,jdbcType=VARCHAR},
+		order_id =
+		#{orderId,jdbcType=VARCHAR},
+		order_total_price = #{orderTotalPrice,jdbcType=DECIMAL},
+		payoff_type = #{payoffType,jdbcType=INTEGER},
+		pl_info =
+		#{plInfo,jdbcType=VARCHAR},
+		pl_sn = #{plSn,jdbcType=VARCHAR},
+		reality_amount = #{realityAmount,jdbcType=DECIMAL},
+		refund_user_name =
+		#{refundUserName,jdbcType=VARCHAR},
+		refund_user_id = #{refundUserId,jdbcType=BIGINT},
+		return_service_id = #{returnServiceId,jdbcType=VARCHAR},
+		status =
+		#{status,jdbcType=INTEGER},
+		total_amount = #{totalAmount,jdbcType=DECIMAL},
+		ship_amount = #{shipAmount,jdbcType=DECIMAL},
+		admin_id =
+		#{adminId,jdbcType=BIGINT},
+		seller_id = #{sellerId,jdbcType=BIGINT},
+		goods_info = #{goodsInfo,jdbcType=LONGVARCHAR},
+		payoff_remark =
+		#{payoffRemark,jdbcType=LONGVARCHAR},
+		return_goods_info = #{returnGoodsInfo,jdbcType=LONGVARCHAR},
+		return_amount = #{returnAmount,jdbcType=DECIMAL}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.store.model.PayoffLog">
+		update shop_payoff_log
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{deleteStatus,jdbcType=BIT},
+		apply_time = #{applyTime,jdbcType=TIMESTAMP},
+		commission_amount = #{commissionAmount,jdbcType=DECIMAL},
+		complete_time =
+		#{completeTime,jdbcType=TIMESTAMP},
+		finance_user_name = #{financeUserName,jdbcType=VARCHAR},
+		o_id = #{oId,jdbcType=VARCHAR},
+		order_id =
+		#{orderId,jdbcType=VARCHAR},
+		order_total_price = #{orderTotalPrice,jdbcType=DECIMAL},
+		payoff_type = #{payoffType,jdbcType=INTEGER},
+		pl_info =
+		#{plInfo,jdbcType=VARCHAR},
+		pl_sn = #{plSn,jdbcType=VARCHAR},
+		reality_amount = #{realityAmount,jdbcType=DECIMAL},
+		refund_user_name =
+		#{refundUserName,jdbcType=VARCHAR},
+		refund_user_id = #{refundUserId,jdbcType=BIGINT},
+		return_service_id = #{returnServiceId,jdbcType=VARCHAR},
+		status =
+		#{status,jdbcType=INTEGER},
+		total_amount = #{totalAmount,jdbcType=DECIMAL},
+		ship_amount = #{shipAmount,jdbcType=DECIMAL},
+		admin_id =
+		#{adminId,jdbcType=BIGINT},
+		seller_id = #{sellerId,jdbcType=BIGINT}
+		return_amount = #{returnAmount,jdbcType=DECIMAL}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>服务评价</title>
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet" />
+    <link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+    <link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+    <link href="$!webPath/resources/style/service/public.css?v=6" type="text/css" rel="stylesheet" />
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+    <script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+    <script src="$!webPath/resources/js/angular.min.js"></script>
+    <script src="$!webPath/resources/js/ng-file-upload-all.min.js"></script>
+</head>
+
+<body ng-controller="AppCtrl">
+    $!httpInclude.include("/top.htm")
+$!httpInclude.include("/group/head.htm")
+$!httpInclude.include("/group/nav.htm")
+    <div class="main clearfix">
+        <div class="order_pay">
+            <div class="order_pay_note lh-25">
+                <h3 class="red">注意：</h3>
+                <div class="c_gray">请您根据本次交易，给予真实、客观、仔细地评价。
+                    <br /> 您的评价将是其他买家的参考，也将影响商家的综合评分。
+                    <br /> 累积评分规则： 中评不计分，但会影响该商品的好评率，请慎重本次评价。</div>
+            </div>
+        </div>
+
+        <form name="evaluationForm" ng-submit="submit()">
+            <div class="order-view-box">
+                <div class="order-view-title">服务评价</div>
+                <div class="order-view-cont">
+                    <div class="fl">
+                    #set($goodMap=$!orderFormTools.queryGroupInfo("$!order.groupInfo"))
+                        <a href="#" class="evaluate_pic">
+                            <img src="$!{goodMap.goods_mainphoto_path}_160x118">
+                        </a>
+                    </div>
+                    <ul class="eval_star_ul">
+                        <li class="fz-14">
+                            $!order.storeName
+                        </li>
+                        <li>
+                            <span class="fl"><b>我的总体评价：</b></span>
+                            <div class="eval_star_right">
+                                <span class="eval_star_sp">
+                                    <label>
+                                        <input type="radio" value="1" ng-model="evaluation.score" name="score">
+                                        <i><img width="90" height="18" src="$!webPath/resources/style/system/front/default/images/usercenter/eval_star1.png"></i></label>
+                                </span>
+                                <span class="eval_star_sp">
+                                    <label>
+                                        <input type="radio" value="2" ng-model="evaluation.score" name="score">
+                                        <i><img width="90" height="18" src="$!webPath/resources/style/system/front/default/images/usercenter/eval_star2.png"></i></label>
+                                </span>
+                                <span class="eval_star_sp">
+                                    <label>
+                                        <input type="radio"  value="3" ng-model="evaluation.score" name="score">
+                                        <i><img width="90" height="18" src="$!webPath/resources/style/system/front/default/images/usercenter/eval_star3.png"></i></label>
+                                </span>
+                                <span class="eval_star_sp">
+                                    <label>
+                                        <input type="radio" value="4" ng-model="evaluation.score" name="score">
+                                        <i><img width="90" height="18" src="$!webPath/resources/style/system/front/default/images/usercenter/eval_star4.png"></i></label>
+                                </span>
+                                <span class="eval_star_sp">
+                                    <label>
+                                        <input type="radio" checked="checked" value="5" ng-model="evaluation.score" name="score">
+                                        <i><img width="90" height="18" src="$!webPath/resources/style/system/front/default/images/usercenter/eval_star5.png"></i></label>
+                                </span>
+                            </div>
+                        </li>
+
+                        <li>
+                            <span class="c_gray lh-25">服务周到吗，环境如何？（写够15字，才是好同志～）</span>
+                            <div>
+                                <div class="my_evaluate_txt">
+                                    <textarea id="content" rows="" cols="" ng-required="true" ng-model="evaluation.content" name="content"></textarea>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="fl pt-10"> <b>晒单：</b> </span>
+                            <div class="bask_product_right">
+                                <dl id="eva_imgsdl_1">
+                                    <dt>
+                                        <span class="upload_button" ngf-accept="'.jpg,.gif,.png,.tbi,.bmp,.jpeg'" ngf-select="upload($file)">
+                                            <span class="upload_button_up">
+                                            </span>
+                                            <span class="upload_button_b">
+                                                <a href="">
+                                                    <img src="$!webPath/resources/style/system/front/default/images/upload.png">
+                                                </a>
+                                            </span>
+                                        </span>
+                                    </dt>
+
+                                    <dd ng-repeat="photo in photos">
+                                        <img ng-src="{{photo}}_30*30" alt="" ng-mouseenter="show = true" ng-show="!show">
+                                        <span ng-click='deletePhoto($index)' ng-show="show" ng-mouseleave="show = false">删除</span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </li>
+                        <li class="pt-20">
+                            <div>
+                                <input type="button" class="order_evaluate_ok" style="cursor:pointer;" ng-click="submit()" value="评价" name="按钮">
+                                <input type="button" class="order_evaluate_cancel" onclick="showDialog('msg_info','','确认以后再评论该订单吗?',1,'question',3,function(){window.location.href='$!webPath/buyer/group.htm?orderType=1'});" value="以后再评" name="">
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+    $!httpInclude.include("/footer.htm")
+
+    <script type="text/javascript">
+        angular.module('app', ['ngFileUpload'])
+            .controller('AppCtrl', function($scope, $log, $http, Upload) {
+                $scope.evaluation = {};
+                $scope.photos = [];
+                $scope.evaluation.score = 5
+                $scope.orderId = $!order.id;
+                $scope.photoUrls = #if($!photoUrls) $!photoUrls #else ''  #end ;
+                if ($scope.photoUrls)
+                    $scope.photos = $scope.photoUrls.split(';')
+                //$log.log('$scope.photoUrls:', $scope.photoUrls)
+                //$log.log('$scope.photos:', $scope.photos)
+
+                $scope.deletePhoto = function(index) {
+                    var photos = angular.copy($scope.photos);
+                    photos.splice(index, 1);
+
+                    var url = '$!webPath/group/evaluation/photos?orderId=' + $scope.orderId;
+                    var data = {
+                        photoUrls: photos.join(';')
+                    					  			}
+		                $http.put(url, data)
+		                .success(function(resp) {
+		                    if (resp.error != undefined) {
+		                        showDialog("msg_info", "", resp.error, 2, "warning", 3, function() {});
+		                    			return
+		                            							}
+		
+		                     if (resp.success) {
+		                        $scope.photos.splice(index, 1);
+		                     } else {
+		                        showDialog("msg_info", "", '删除失败', 2, "warning", 3, function() {});
+		                           								 }
+		                      					  })
+		                				}
+
+                $scope.upload = function(file) {
+                    $log.log('upload....', file, $scope.photos.join(';'));
+                    if (file) {
+                        Upload.upload({
+                            url: '$!webPath/group/evaluation/upload.html?orderId=' + $scope.orderId + '&photoUrls=' + $scope.photos.join(';'),
+                            sendFieldsAs: 'form',
+                            file: file,
+                            fileFormDataName: 'myFile',
+
+                        }).progress(function(evt) {
+                            $scope.progressPer = parseInt(100.0 * evt.loaded / evt.total);
+                            $log.log($scope.progressPer)
+                        }).success(function(resp, status, headers, config) {
+                            if (resp.error != undefined) {
+                                showDialog("msg_info", "", resp.error, 2, "warning", 3, function() {});
+                                return;
+                           													 }
+                            $scope.photoUrls = $scope.photos.join(';');
+                            //$log.log('upload::::::', $scope.photos)
+                            if (resp.success) {
+                                if ($scope.photoUrls)
+                                    $scope.photoUrls += ';' + resp.photoUrl;
+                                else
+                                    $scope.photoUrls = resp.photoUrl;
+                                $scope.photos = $scope.photoUrls.split(';')
+                         												   }
+                        }).error(function() {
+                            alert('error...')
+                        })
+                    }
+                }
+           $scope.submit = function() {
+					 var data = $scope.evaluation
+        	   if($scope.evaluation.content==undefined ||$scope.evaluation.content.trim()==''){
+				        			alert('内容不能为空');
+				        			return false;
+				        		}
+                    $scope.evaluation.photoUrls = $scope.photoUrls;
+                    $scope.evaluation.orderId = $scope.orderId;
+                    $log.log('submit...', $scope.evaluation);
+					 var pa='$!webPath/group/evaluation.html';
+                    $http.post(pa,data )
+                        .success(function(resp) {
+                            if (resp.error != undefined) {
+                            	showDialog("msg_info","",resp.error,2,"warning",3,'');
+                            }else{
+                            	  window.location.href = '$!webPath/buyer/group.htm?orderType=1'
+                            }
+                        })
+                }
+            })
+    </script>
+</body>
+
+</html>

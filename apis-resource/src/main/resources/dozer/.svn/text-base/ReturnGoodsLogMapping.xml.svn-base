@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+	http://dozer.sourceforge.net/schema/beanmapping.xsd">
+	
+	<mapping>
+		<class-a>com.sinco.carnation.goods.bo.ReturnGoodsLogBO</class-a>
+		<class-b>com.sinco.carnation.resource.bo.shop.ReturnGoodsLogBO</class-b>
+		<field custom-converter="com.sinco.carnation.resource.converter.ExpressCompanyIdConverter">
+			<a>returnExpressInfo</a>
+			<b>expressCompanyId</b>
+		</field>
+		<field custom-converter="com.sinco.carnation.resource.converter.ExpressCompanyNameConverter">
+			<a>returnExpressInfo</a>
+			<b>expressCompanyName</b>
+		</field>
+	</mapping>
+	
+	<mapping>
+		<class-a>com.sinco.carnation.shop.model.OrderForm</class-a>
+		<class-b>com.sinco.carnation.resource.bo.self.SelfOrderBO</class-b>
+		<field custom-converter="com.sinco.carnation.resource.converter.ExpressCompanyIdConverter">
+			<a>expressInfo</a>
+			<b>expressCompanyId</b>
+		</field>
+	</mapping>
+</mappings> 

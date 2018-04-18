@@ -1,0 +1,14 @@
+#*********************************来源林补 ,微信推荐关系表2016-01-30*********BEGIN
+DROP TABLE IF EXISTS wx_invitation_relation;
+CREATE TABLE `wx_invitation_relation` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `union_id` VARCHAR(100) DEFAULT NULL COMMENT '被推荐人的微信union_id', 
+  `open_id` VARCHAR(100) DEFAULT NULL COMMENT '被推荐人的微信open_id', 
+  `nick_name` VARCHAR(100) DEFAULT NULL COMMENT '被推荐人的微信昵称',
+  `head_img_path` VARCHAR(200) DEFAULT NULL COMMENT '被推荐人的头像地址',
+  `owner_id` BIGINT(20) DEFAULT NULL COMMENT '推荐人user_id',
+  `create_time` DATETIME DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
+
+#*********************************来源林补 ,微信推荐关系表2016-01-30*********END

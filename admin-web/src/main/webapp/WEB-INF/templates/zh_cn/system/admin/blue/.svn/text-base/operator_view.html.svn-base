@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<body>
+	<div class="cont">
+		<h1 class="seth">运营商管理</h1>
+		<div class="nav_list">
+			<ul>
+				<li><a href="$!webPath/admin/operator_list.htm"><b>管理</b></a></li>
+				<li><a href="$!webPath/admin/operator_add.htm"  ><b>新增</b></a></li>
+				<li><a href="javascript:void(0);" class="this"><b>查看</b></a></li>
+				<li><a href="$!webPath/admin/operator_assigned_list.htm"><b>商户分配</b></a> </li>
+			</ul>
+
+		</div>
+			<div class="edit">
+				<div class="editul setcont">
+					<ul class="set1">
+						<li class="setcont_bg">运营商名称</li>
+						<li><span class="webname"><strong class="usecode"> $!obj.operatorName</strong>
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">真实姓名</li>
+						<li><span class="webname"> $!obj.userName
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">性别</li>
+						<li><span class="use_code"> <label>
+							 #if($!obj.sex== 1)
+							 男 
+							#else 
+							女
+							#end
+							</label>
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">身份证号</li>
+						<li><span class="webname"> $!obj.idCard</li>
+					</ul>
+					<ul class="set1">
+			          <li  class="setcont_bg">运营商级别</li>
+			          <li> 
+			          <span> 
+		            	#if($!obj.level == 1)
+		            		市级运营商
+		            	#elseif($!obj.level == 2)
+		            		区级运营商
+		            	#elseif($!obj.level == 3)
+		            		区域级运营商
+		            	#end 
+			          </span><strong></strong>
+			          </li>
+			        </ul>
+					<ul class="set1" id="operatorAreaIdUl" #if(!$!edit) style="display:none;" #end>
+			          <li  class="setcont_bg">运营地</li>
+			          <li> 
+			          	<span>  $!obj.areaName
+			          </span>
+			          </li>
+			        </ul>
+					<ul class="set1">
+						<li class="setcont_bg">手机号码</li>
+						<li><span class="webname">  $!obj.phone </span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">联系地址</li>
+						<li><span class="webname"> $!obj.address
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">民族</li>
+						<li><span class="webname"> $!obj.nation
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">开户行</li>
+						<li><span class="webname"> $!obj.bankName
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">支行</li>
+						<li><span class="webname"> $!obj.subBankName
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">银行账号</li>
+						<li><span class="webname"> $!obj.bankNo
+						</span></li>
+					</ul>
+					<ul class="set1">
+						<li class="setcont_bg">营业执照号</li>
+						<li><span class="webname"> $!obj.registrationNo
+						</span></li>
+					</ul>
+					<ul class="set1">
+			          <li class="setcont_bg">营业执照图片</li>
+			          <li> 
+			            #if(!$!obj.registrationPath)
+			            	<span id="nothis"><strong>暂无图片</strong></span>
+			            #else
+			            <img src="$!{obj.registrationPath}" id="registrationFileShow"/>
+			            #end 
+			            </li>
+			        </ul>
+					<ul class="set1">
+						<li class="setcont_bg">组织机构代码</li>
+						<li><span class="webname"> $!obj.organizationNo
+						</span></li>
+					</ul>
+					<ul class="set1">
+			          <li class="setcont_bg">组织机构代码图片</li>
+			          <li> 
+			            #if(!$!obj.organizationPath)
+			            	<span id="nothis"><strong>暂无图片</strong></span>
+			            #else
+			            <img src="$!{obj.organizationPath}" id="organizationFileShow"/>
+			            #end 
+			            </li>
+			        </ul>
+					<ul class="set1">
+						<li class="setcont_bg">税务登记证</li>
+						<li><span class="webname"> $!obj.taxNo
+						</span></li>
+					</ul>
+					<ul class="set1">
+			          <li class="setcont_bg">税务登记证图片</li>
+			          <li> 
+			            #if(!$!obj.taxPath)
+			            	<span id="nothis"><strong>暂无图片</strong></span>
+			            #else
+			            <img src="$!{obj.taxPath}" id="taxFileShow"/>
+			            #end 
+			            </li>
+			        </ul>
+				</div>
+			</div>
+	</div>
+</body>
+</html>

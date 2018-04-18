@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0"> 
+	<title>供应商提交入驻申请</title>
+	<link rel="stylesheet" href="$!webPath/resources/gongyingshang/css/style.css">
+	<link rel="stylesheet" href="$!webPath/resources/login/css/style.css">
+	<link href="$!webPath/resources/login/css/style.css" type="text/css" rel="stylesheet" />
+    <link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+    <link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css"
+          rel="stylesheet"/>
+    <link href="$!webPath/resources/style/service/public2.css" type="text/css" rel="stylesheet"/>
+	<link href="$!webPath/resources/style/system/front/default/css/seller_apply.css" type="text/css" rel="stylesheet" />
+	   <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+	   <script src="$!webPath/resources/js/jquery.card.js"></script>
+	   <script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+	   <script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+	   <script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+	   <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+	   <script src="$!webPath/resources/js/jquery.custom.validate.js" type="text/javascript"></script>
+	</head>
+	<style>
+	.ruzhucontent input[type='file']{margin-left: -221px;height: 100px;opacity: 0;filter: alpha(opacity=0);-moz-opacity: 0;}
+	.sh_step_one{height: auto;}
+	select{height: 45px;width: 454px;}
+	.join-form li{display: block;overflow: hidden;text-align: left;}
+	.join-form .txt{float: left;}
+	.join-form .txt-label{margin-top: 13px;}
+	.jiben_mes{text-align:center; width:auto;margin:auto 96px; margin-top:48px; margin-bottom:8px; font-size:18px;color:#4a4a4a;}
+	.jiben_mes .tit{width: auto; overflow: hidden;font-size: 24px;font-weight: bold;color: #4a4a4a;}
+	.jiben_mes .tit em{display:inline-block; background:#f3f3f3;width:429px;height:2px;}
+	.join-form .upload-box{top:21px;}
+	.join-form .txt-label{width: 172px;}
+	.gysmain,.two_sh{background-color: #fff;}
+	.join-form label.error{line-height: 38px;}
+	.sh_footer{margin-top: 27px;border-top: 1px solid #0fbf83;background-color:red;}
+	.join-form{padding: 30px 50px;}.join-form .txt-label{width: 235px;}
+	</style>
+<body>
+
+	<form  method="post" id="thenForm" autocomplete="off" action="">
+	<div class="gysmain">
+		<div class="two_sh">
+			<div class="sh_logo">
+				<a href="$!webPath"><img src="$!webPath/resources/img/logo.jpg" alt="云尚" /></a>
+				<span class="sh_title">供应商入驻</span>
+				<span class="enter_help"><a href="$!webPath/doc.htm?mark=apply_help">入驻帮助</a></span>
+			</div>
+		</div>
+	<div class="enter_layout">
+		<div class="enter_step gys">
+			<div class="enter_step_tit">
+				<span class="tit">阅读入驻协议</span>
+				<span class="tit">填写申请入驻资料</span>
+				<span class="tit">审核日志查询</span>
+			</div>
+			<div class="enter_step_mes gys">
+				<ul>
+					<li class="curr2"><span class="step_1"></span></li>
+					<li class="curr"><span class="step_2"></span></li>
+					<li><span class="step_3"></span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="main clearfix">
+		<div class="jiben_mes">
+			<span class="tit"><em></em>&nbsp;&nbsp; 基本信息 &nbsp;&nbsp;<em></em></span>
+		</div>
+		 <ul class="join-form">
+		 	 <li>
+                <span class="txt-label"><span class="c_red">*</span> 店铺名称</span>
+                <input type="text" name="storeName" class="txt" value="$!store.storeName" placeholder="同营业执照上店铺名称一致"/>
+            </li>
+             <li>
+                <span class="txt-label"><span class="c_red">*</span> 主营类目</span>
+                <select name="groupMainId" id="main_category">
+	                <option value="">请选择主营类目</option>
+                	#foreach($gc in $!groupClassList)
+	                    <option style="border-bottom: 1px solid #f3f3f3;width: 163px;height: 45px;" value="$gc.id" #if($gc.id == $store.groupMainId) selected="selected" #end>$gc.className</option>
+                	#end
+                </select>
+            </li>
+             <li>
+                <span class="txt-label">推荐运营商</span>
+                <input type="text" name="operateNumber" class="txt" value="" placeholder="请输入以CN或YY开头的编号"/>
+                <span class="remoteError" style="color:red;font-size:16px;line-height:44px"></span>
+            </li>
+            <li>
+                <span class="txt-label"><span class="c_red">*</span> 身份证正面照</span>
+
+                <div class="upload-box">
+                	<span class="upload_button">
+                        <span class="upload_button_up"><input style="cursor:pointer;" name="id_card_front_file" id="id_card_front_file" mark="id_card_front" type="file"></span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    
+                    <!-- 查看样图 -->
+               		<span data-img="$!webPath/resources/gongyingshang/img/sfzzm.jpg" class="masterdrawing">查看样图</span>
+                    
+                    <span class="setable_img2" id="id_card_front_views">
+                    	#if($!storeBo.licenseLegalIdCardFrontPath)
+	                    	<b class="setable_b J_uploadView"> 
+	                    	<a target="_blank" href="$!storeBo.licenseLegalIdCardFrontPath" class="J_viewLink"> 
+	                    	<img width="100" height="60" src="$!storeBo.licenseLegalIdCardFrontPath" class="J_viewPic"> <span class="J_viewPic_span">查看大图</span>
+							</a>  <a onclick="image_del(this,'id_card_front')" href="javascript:void(0);" 
+							wid="$!storeBo.licenseLegalIdCardFrontPath" class="J_viewLink_delete">删除</a>
+							</b>
+						#end
+					</span>
+
+                    
+                    <b class="settedtab_b" id="id_card_front_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+                    <input value="$!storeBo.licenseLegalIdCardFrontPath" name="licenseLegalIdCardFrontPath" id="id_card_front" type="hidden">
+               		
+                </div>
+                
+                
+            </li>
+            
+            <li>
+                <span class="txt-label"><span class="c_red">*</span>身份证反面照</span>
+
+                <div class="upload-box">
+                	<span class="upload_button">
+                        <span class="upload_button_up"><input style="cursor:pointer;" name="id_card_reverse_file" id="id_card_reverse_file" mark="id_card_reverse" type="file"></span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    <!-- 查看样图 -->
+               		<span data-img="$!webPath/resources/gongyingshang/img/sfzfm.jpg" class="masterdrawing">查看样图</span>
+                    <span class="setable_img2" id="id_card_reverse_views">
+                      	#if($!storeBo.licenseLegalIdCardBackPath)
+	                    	<b class="setable_b J_uploadView"> 
+	                    	<a target="_blank" href="$!storeBo.licenseLegalIdCardBackPath" class="J_viewLink"> 
+	                    	<img width="100" height="60" src="$!storeBo.licenseLegalIdCardBackPath" class="J_viewPic"><span class="J_viewPic_span">查看大图</span>
+							</a><a onclick="image_del(this,'id_card_reverse')" href="javascript:void(0);" 
+							wid="$!storeBo.licenseLegalIdCardBackPath" class="J_viewLink_delete">删除</a>
+							</b>
+						#end
+                    </span>
+
+                    
+                    <b class="settedtab_b" id="id_card_reverse_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+                    <input value="$!storeBo.licenseLegalIdCardBackPath" name="licenseLegalIdCardBackPath" id="id_card_reverse" type="hidden">
+                	
+                </div>
+            </li>
+            <li>
+                <span id="business_licence" class="txt-label"><span class="c_red">*</span> 营业执照</span>
+
+                <div class="upload-box">
+                	<span class="upload_button">
+                        <span class="upload_button_up"><input style="cursor:pointer;" name="license_file" id="license_file" mark="license" type="file"></span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    <!-- 查看样图 -->
+               		<span data-img="$!webPath/resources/gongyingshang/img/sh_yyzz.jpg" class="masterdrawing">查看样图</span>
+                    <span class="setable_img2" id="license_views">
+                    	#if($!storeBo.licenseImagePath)
+	                    	<b class="setable_b J_uploadView"> 
+	                    	<a target="_blank" href="$!storeBo.licenseImagePath" class="J_viewLink"> 
+	                    	<img width="100" height="60" src="$!storeBo.licenseImagePath" class="J_viewPic"><span class="J_viewPic_span">查看大图</span>
+							</a><a onclick="image_del(this,'license')" href="javascript:void(0);" 
+							wid="$!storeBo.licenseImagePath" class="J_viewLink_delete">删除</a>
+							</b>
+						#end
+                    </span>
+
+                    
+                    <b class="settedtab_b" id="license_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+                    <input value="$!storeBo.licenseImagePath" name="licenseImagePath" id="license" type="hidden">
+               
+               		
+                </div>
+            </li>
+            
+             <li>
+                <span id="business_licence" class="txt-label"><span class="c_red">*</span>商标证书</span>
+
+                <div class="upload-box">
+                	<span class="upload_button">
+                        <span class="upload_button_up">
+                        	<input style="cursor:pointer;" type="file" name="organization_imagePath_file" id="organization_imagePath_file" mark="organization_imagePath" />
+                        </span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    <!-- 查看样图 -->
+               		<span data-img="$!webPath/resources/gongyingshang/img/sbzcz.jpg" class="masterdrawing">查看样图</span>
+                    <span class="setable_img2" id="organization_imagePath_views">
+                    	#if($!storeBo.organizationImagePath)
+	                    	<b class="setable_b J_uploadView"> 
+	                    	<a target="_blank" href="$!storeBo.organizationImagePath" class="J_viewLink"> 
+	                    	<img width="100" height="60" src="$!storeBo.organizationImagePath" class="J_viewPic"> <span class="J_viewPic_span">查看大图</span>
+							</a> <a class="J_viewLink_delete" onclick="image_del(this,'organization_imagePath')" href="javascript:void(0);" 
+							wid="$!storeBo.organizationImagePath">删除</a>
+							</b>
+						#end
+                    </span>
+
+                    
+                    <b class="settedtab_b" id="organization_imagePath_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+					 <input value="$!storeBo.organizationImagePath" name="organizationImagePath" id="organization_imagePath" type="hidden">
+               		
+                </div>
+            </li>
+             <li>
+                <span id="business_licence" class="txt-label"><span class="c_red">*</span>授权证明&质检报告等其他资质 <span style="display: block;font-size: 12px;">(资质越齐全, 审核通过机率越高)</span></span>
+                <div class="upload-box">
+                	 <span class="upload_button">
+                        <span class="upload_button_up"><input style="cursor:pointer;" name="other_file" id="other_file" mark="other" multiple="multiple"  type="file"></span>
+                        <span class="upload_button_b"><a href="javascript:void(0)"><img src="$!webPath/resources/style/system/front/default/images/upload.png"></a></span>
+                    </span>
+                    <!-- 查看样图 -->
+               		<span data-img="$!webPath/resources/gongyingshang/img/sh_wts.jpg" class="masterdrawing">查看样图</span>
+                    <span class="setable_img2" id="other_views">
+                    	#if($!$!storeBo.otherPhotoPath)
+                    		#foreach($path in $!storeBo.otherPhotoPath.split(";"))
+	                    	<b class="setable_b J_uploadView"> 
+	                    	<a target="_blank" href="$path" class="J_viewLink"> 
+	                    	<img width="100" height="60" src="$path" class="J_viewPic"><span class="J_viewPic_span">查看大图</span>
+							</a><a onclick="image_del(this,'other')" href="javascript:void(0);" 
+								wid="$path" class="J_viewLink_delete">删除</a>
+							</b>
+								</b>
+							#end
+						#end 
+                    </span>
+
+                   
+                    <b class="settedtab_b" id="other_loader" style="display:none">
+                        <img src="$!webPath/resources/style/system/manage/blue/images/photo/loader.gif">
+                    </b>
+					<input autoconplete="off" value="$!storeBo.otherPhotoPath" name="otherPhotoPath" id="other" type="hidden">
+               
+               		
+                </div>
+            </li>
+            
+            <li style="margin-top: 40px;">
+                   <span class="txt-label" style="margin-top: 0px;"><span class="c_red">*</span> </span>
+                   <input name="nocheck2" type="checkbox" class="regist_check" id="agree11" value="true" checked="checked" />
+                <span style="font-weight: bold;font-size: 14px;">本人承诺以上填写的所有内容及所有附件材料的真实性及准确性；如有虚假，本人愿意承担由此引发的一切后果及承担相应</span><br/>
+                 <span for="agree" style="font-weight: bold;font-size: 14px;margin-left: 265px;">的法律责任！</span>
+            </li>
+            <li class="btns">
+            	<input id="" name="ruzhu_session" value="$!ruzhu_session" type="hidden">
+		        #if(!$!storeId)
+				<input id="button_add" type="button" onclick="formSubmit1()" class="btn btn-blue btn-large" value="提交申请" />
+				#else
+				<input type="hidden" value="$!storeId" name="storeId">
+				<input id="button_update" type="button" onclick="formSubmit2()" class="btn btn-blue btn-large" value="提交申请" />
+				#end
+			</li>
+		 </ul>
+	</div>
+	$!httpInclude.include("/user/footer.htm")
+</div>
+
+
+</form> 
+
+<script type="text/javascript">
+	var remoteError="";
+	function formSubmit1(){
+		$("#thenForm").attr('action','$webPath/seller_apply/group/supplier_save.htm');
+		validate();
+    	var val = $("input[name='nocheck2']").is(':checked');
+    	if(val == false){
+    		alert("请确认资料的真实性");
+    		return false;
+    	}
+    	var operateNumber=jQuery("input[name='operateNumber']").val();
+    	if(operateNumber.trim()!=""){
+      		var ret=false;
+    		$(".remoteError").html("");
+    		$.ajax({
+	   	   		 url:"$!webPath/seller_apply/verifyOperatorCode.htm",
+   	   			 async: false,
+	   	   		 data:{"code": operateNumber},
+	   	   		 success:function(data){
+	   	   			 alert(data);
+	   	   	        if(data=="3" || data=="1"){
+	   	   	        	
+	   	   	        }else{	   	   	        	
+	   	   	        	var errorMsg="";
+			   	   	      switch(data){
+				     		 case "0":
+				     			errorMsg="请联系经销商登录运营商系统完善信息";				     			 
+				     			 break;
+				     		case '7':
+				     			errorMsg="该经销商金卡级别,不能签约供应商";
+				     			 break;
+				     		case '9':
+				     			errorMsg="该经销商银卡级别,不能签约供应商";
+				     			 break;
+				    		case '-1':
+				     			errorMsg="运营商不存在";
+				     			 break;
+				     		default:
+				     			break;
+			     		}
+	   	   	      		$(".remoteError").html(errorMsg);
+	   	   	      		ret=true;
+	   	   	        }	   	  		
+	   	   	        
+	   	   	  		
+	   	   	     }
+	   	   	 });
+    	}	
+    	
+    	if(ret) return false;   	 
+
+		$("#thenForm").submit()
+	 }
+	function formSubmit2(){
+		$("#thenForm").attr('action','$webPath/seller_apply/group/supplier_update.htm');
+		validate();
+    	var val = $("input[name='nocheck2']").is(':checked');
+    	if(val == false){
+    		alert("请确认资料的真实性");
+    		return false;
+    	}
+    	
+    	var operateNumber=jQuery("input[name='operateNumber']").val();
+    	if(operateNumber.trim()!=""){
+    		var ret=false;
+    		$(".remoteError").html("");
+    		$.ajax({
+	   	   		 url:"$!webPath/seller_apply/verifyOperatorCode.htm",
+   	   			 async: false,
+	   	   		 data:{"code": operateNumber},
+	   	   		 success:function(data){
+	   	   	        if(data=="3" || data=="1"){
+	   	   	        	
+	   	   	        }else{
+	   	   	        	var errorMsg="";
+			   	   	      switch(data){
+				     		 case "0":
+				     			errorMsg="请联系经销商登录运营商系统完善信息";				     			 
+				     			 break;
+				     		case '7':
+				     			errorMsg="该经销商金卡级别,不能签约供应商";
+				     			 break;
+				     		case '9':
+				     			errorMsg="该经销商银卡级别,不能签约供应商";
+				     			 break;
+				     		default:
+				     			break;
+			     		}
+	   	   	      		$(".remoteError").html(errorMsg);
+	   	   	      		ret=true;
+	   	   	        }	   	  		
+	   	   	        
+	   	   	  		
+	   	   	     }
+	   	   	 });
+    	}	
+    	
+    	if(ret) return false;
+		
+		$("#thenForm").submit();
+	 
+	}
+		
+	function previewImage(file) {
+		var MAXWIDTH = 260;
+		var MAXHEIGHT = 180;
+		var div = $(file).next()[0];
+		console.log(div);
+		if (file.files && file.files[0]) {
+
+			var img = $(file).next().find("img")[0];
+
+			var reader = new FileReader();
+			reader.onload = function(evt) {
+				img.src = evt.target.result;
+			}
+			reader.readAsDataURL(file.files[0]);
+		} else //兼容IE
+		{
+			var sFilter = 'filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src="';
+			file.select();
+			var src = document.selection.createRange().text;
+			div.innerHTML = '<img id=mybutton>';
+			var img = document.getElementById('mybutton');
+			img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+
+		}
+	}
+		
+		
+		
+
+
+	$(".masterdrawing").hover(function(e) {
+			var that = this;
+			if (document.getElementById("showSL")) {
+
+			} else {
+
+				var ele = document.createElement("div");
+				ele.id = "showSL";
+				document.body.appendChild(ele);
+			}
+			var div = document.getElementById("showSL");
+			div.style.display = "block";
+
+			div.style.left = e.clientX + 10 + "px";
+			div.style.top = e.clientY + 10 + "px";
+			var src = $(that).attr("data-img");
+			$(div).html("<img src="+src+" style='width:350px' />");
+			document.onmousemove = function(e) {
+				div.style.left = e.clientX + 10 + "px";
+				div.style.top = e.clientY + 10 + "px";
+			}
+		}, function(e) {
+			document.onmousemove = null;
+			document.getElementById("showSL").style.display = "none";
+		});
+		
+		
+
+		jQuery(":file[mark]")
+				.live(
+						"change",
+						function() {
+							var that = jQuery(this), mark = that.attr("mark");
+							var eid = this.id, views = jQuery("#" + mark
+									+ "_views"), loader = jQuery("#" + mark
+									+ "_loader"), viewHtml = "", input = jQuery("#"
+									+ mark);
+
+							if ("other" == mark) {
+								if (input.val() != null
+										&& input.val().split(";").length >= 5) {
+									alert("其它附最多上传5个！");
+									return;
+								}
+							}
+
+						
+						loader.show();
+						jQuery.ajaxFileUpload({
+										url : '$!webPath/seller_apply/image_save.htm?mark='
+												+ mark,
+										fileElementId : [ eid ],
+										fileFilter : ".jpg,.gif,.png",
+										fileSize : 1048576,
+										dataType : "json",
+										success : function(data) {											
+											console.log(data);
+											if (data.path) {
+												loader.hide();
+												var imgPath = data.path +"?v="+new Date().getTime();
+												viewHtml = '<b class="setable_b J_uploadView">\
+			                                    <a class="J_viewLink" href="' + imgPath + '" target="_blank">\
+			                                    <img class="J_viewPic" src="' + imgPath + '" height="60" width="100">\
+			                                    <span class="J_viewPic_span">查看大图</span></a><a class="J_viewLink_delete" wid="'
+														+ data.path
+														+ '" href="javascript:void(0);" onclick="image_del(this,\''
+														+ mark
+														+ '\')">删除</a>\
+			                                </b>';
+												if (that.attr("multiple")) {
+													views.append(viewHtml);
+													if (input.val() != null
+															&& input.val().length > 0) {
+														input.val(input.val()
+																+ ";"
+																+ data.path);
+													} else {
+														input.val(data.path);
+													}
+												} else {
+													views.html(viewHtml);
+													input.val(data.path);
+												}
+												that.val("");
+											}
+										}
+									});
+						});
+		
+		
+
+	function image_del(o, mark) {
+		if (confirm("是否删除此图片？")) {
+			var views = jQuery("#" + mark + "_views");
+			var input = jQuery("#" + mark);
+			var file = jQuery("#" + mark + "_file");
+			var that = jQuery(o);
+			if (views.children().length == 1) {
+				views.html("");
+				input.val("");
+			} else {
+				that.parent().remove();
+				input.val((function() {
+					var value = "";
+					views.find("a[wid]").each(function() {
+						value += ($(this).attr("wid") + ";");
+					});
+					if (value != "") {
+						value = value.substring(0, value.length - 1);
+					}
+					return value;
+				}()));
+			}
+		}
+	}
+	
+
+	function validate(){
+		
+	jQuery("#thenForm").validate({
+			errorPlacement : function(error, element) {
+				console.log(error);
+				console.log(element.attr("name"));
+				
+				
+				if (element.attr("name") == "groupDetailInfo"){
+					error.html(error.html()+"<br/>"); 
+					error.appendTo("#groupDetailInfo"); 
+				}else{
+					error.appendTo(element.parent());
+				}
+			},
+			ignore : "",
+			rules : {
+				
+				storeName : {
+					required : true,
+					maxlength : 50
+				},
+				groupMainId : {
+					required : true
+				},
+				operateNumber : {
+				},
+				licenseLegalIdCardFrontPath : {
+					required : true
+				},
+				licenseLegalIdCardBackPath : {
+					required : true
+				},
+				licenseImagePath : {
+					required : true
+				},
+				organizationImagePath : {
+					required : true
+				},
+				otherPhotoPath : {
+					required : true
+				},
+	    		agree:{
+	      		  required:true
+	      		}
+			},
+			messages : {
+				
+				storeName : {
+					required : "店铺名称不能为空",
+					maxlength : "店铺名称不能大于50个字符"
+				},
+				
+				groupMainId : {
+					required : "主营类目不能为空"
+				},
+				operateNumber : {
+					
+					maxlength : "隶属运营商编码不能大于30个字符",
+					remote : "商户所在地不存在该运营商编码"
+				},
+				licenseLegalIdCardFrontPath : {
+					required : "身份证正面照不能为空"
+				},
+				licenseLegalIdCardBackPath : {
+					required : "身份证反面照不能为空"
+				},
+				licenseImagePath : {
+					required : "营业执照不能为空"
+				},
+				organizationImagePath : {
+					required : "商标证书/商标授权不能为空"
+				},
+				otherPhotoPath : {
+					required : "其他资质 ／授权证明不能为空"
+				},
+				agree : {
+					required : "请接受以上协议"
+				}
+			}
+		});
+	
+	}
+	</script>
+	<script type="text/javascript">
+	jQuery(document).ready(function(){
+		$("img").each(function(){
+			var t=+new Date();
+			var _src=$(this).attr("src");
+			$(this).attr("src",_src+"?v="+t);
+		});
+		if(window.localStorage){
+			$(':text').each(function(){
+				var name=$(this).attr("name");
+				$(this).blur(function(){
+					var val=$(this).val();					
+					localStorage[name]=val;
+				});
+				
+				if($(this).val()==""){
+					$(this).val(localStorage[name]);
+				}	
+			});
+		}
+	});	
+	</script>  
+
+</body>
+
+</html>

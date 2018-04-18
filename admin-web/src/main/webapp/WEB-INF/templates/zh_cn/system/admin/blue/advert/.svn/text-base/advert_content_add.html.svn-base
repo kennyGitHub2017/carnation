@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title> </title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/css/style.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.8.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script src="$!webPath/resources/js/jquery.viewpic.js"></script>
+<script>
+var flag = true;
+function showMyAdItems(obj){
+	var adApId = $(obj).val();
+			if(adApId ==""){
+				$("#dname").html("");
+				$("#dname").append("<option value=''>全部</option>");
+			}			
+			$.ajax({
+				type:"post",
+				url:"$!webPath/admin/advert/advert_select.htm",
+				data:"areaAdId="+adApId,
+				dataType:"json",
+				success:function(data){
+						var html = "<option value=''>全部</option>";
+						$.each(data,function(index,dom){
+							html += "<option value='"+dom.id+"'>"+dom.name+"</option>";
+						});
+						$("#dname").html("");
+						$("#dname").append(html);
+				}
+			});
+			if($("#areaAdId").val()!=""){
+				$("#check2").text("");
+				flag = true;				
+			}
+}
+//options为编辑配置属性
+var options = {
+        cssPath : '$!webPath/resources/editor/themes/default/default.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '700px',
+		height:'400px',
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+};
+jQuery(document).ready(function(){
+	
+					$(".error").css("color:red");
+	
+jQuery("#logoShow").mouseover(function() {
+	
+   				 jQuery("#logoImg").css('display', 'block');
+					}).mouseout(function() {
+   				 jQuery("#logoImg").css('display', 'none');
+});
+
+$("#type").change(function(){
+	if(this.value=="7"){
+		$("#txt_link").html("代码");
+	}else{
+		$("#txt_link").html("链接");
+	}
+}).trigger("change");
+
+  jQuery("#theForm").validate({
+	ignore: "",						  
+    rules:{
+      linkName:{required :true}, 
+      city:{required :true},   
+      z_name:{required :true},  
+       z_type:{required :true},  
+	 },
+	messages:{
+	  linkName:{required:"链接不能为空"},	 
+	  city:{required:"城市不能为空"}, 
+	   z_name:{required :"区域不能为空"},
+	   z_type:{required :"类型不能为空"},
+	}
+  });
+  //
+  jQuery("#class_id").val("$!obj.class_id");
+  jQuery("#serviceType").val("$!obj.serviceType");
+  jQuery(":radio[id=ispush][value=$!obj.ispush]").attr("checked",true);
+  jQuery(":radio[id=state][value=$!obj.state]").attr("checked",true);
+  jQuery(":radio[id=type][value=$!obj.type]").attr("checked",true);
+  var option$=jQuery("#wjThemeID option:selected");  //获取选中的项
+  var optionVal = option$.val();
+  if(optionVal!=null){
+	  jQuery.ajax({
+		  type : "get",  
+	      url : "$!webPath/admin/wj_groupByThemeID_Ajax.htm",  
+	      dataType:"json",  
+	      data:{themeID:optionVal},
+	      success : function(msg) {  
+	           var json = msg;
+	           var jsonArr = msg.result;
+	           var groupObj = jQuery("#pid");
+	           var htmlStr1 = "<option value=\"\">请选择</option><option value=\"0\">父级</option>";
+	           var htmlStr2 = "";
+	           var pid = parseInt(jQuery("#gpid").val());
+	           for(var i = 0;i<jsonArr.length;i++){
+	        	  var id = jsonArr[i].id;
+	        	  var title = jsonArr[i].title;
+	        	  if(id==pid){
+	        		  htmlStr2+="<option value=\""+id+"\" selected='selected'>"+title+"</option>";
+	        	  }else{
+	        		  htmlStr2+="<option value=\""+id+"\">"+title+"</option>";
+	        	  }
+	           }
+	          var str =  htmlStr1+htmlStr2;
+	          groupObj.html("");
+	          groupObj.html(str);
+	      }  
+	  });
+  }
+  jQuery("#wjThemeID").change(function(){
+	  var themeID_ = jQuery("#wjThemeID").val();
+	  jQuery.ajax({
+		  type : "get",  
+	      url : "$!webPath/admin/wj_groupByThemeID_Ajax.htm",  
+	      dataType:"json",  
+	      data:{themeID:themeID_},
+	      success : function(msg) {  
+	           var json = msg;
+	           var jsonArr = msg.result;
+	           var groupObj = jQuery("#pid");
+	           var htmlStr1 = "<option value=\"\">请选择</option><option value=\"0\">父级</option>";
+	           var htmlStr2 = "";
+	           for(var i = 0;i<jsonArr.length;i++){
+	        	  var id = jsonArr[i].id;
+	        	  var title = jsonArr[i].title;
+	        	  htmlStr2+="<option value=\""+id+"\">"+title+"</option>";
+	           }
+	          var str =  htmlStr1+htmlStr2;
+	          groupObj.html("");
+	          groupObj.html(str);
+	      }  
+	  });
+  });
+});
+
+function provinceOnchange(){
+	var options='<option value="">请选择...</option>';
+	jQuery.ajax({
+		        type:'POST',
+				url:'$!webPath/admin/get_city_by_province.htm',
+				data:{"parentId":jQuery("#province").val()},
+				success:function(data){
+					var list = jQuery.parseJSON(data);
+					jQuery.each(list,function(index,obj){
+						options+='<option value="'+obj.id+'">'+obj.areaName+'</option>';
+					}); 
+					jQuery("#city").html(options);
+				}
+			});	
+	if($("#province").val()!=""){
+		$("#check1").text("");
+		flag = true;		
+	}
+}
+		function changeCity(){
+			if($("#city").val()!=""){
+				$("#check1").text("");
+				flag = true;					
+			}
+		}
+		function changeQuYu(){
+			if($("#dname").val()!=""){
+				$("#check3").text("");
+				flag = true;					
+			}
+		}
+		
+		function keyupLink(){
+			if($("#link").val()!=""){
+				$("#check5").text("");
+				flag = true;					
+			}
+		}
+		
+//province   city    areaAdId   dname    logoShow   type   link   disabled
+function checkIsNull(){
+			
+				if($("#province").val()==""){
+					$("#check1").text("请选择省份");flag =false;
+				}else if($("#city").val()==""){
+					$("#check1").text("请选择城市");flag =false;	
+				}									
+				if($("#areaAdId").val()==""){
+					
+					$("#check2").text("请选择专区");flag =false;	
+				}
+				if($("#areaAdId").val()!=""&&$("#dname").val()==""){
+					
+					$("#check3").text("请选择区域");flag =false;	
+				}
+				if($("#logoShow").attr("src")==""){
+					
+					$("#check4").text("请选择图片");flag =false;	
+				}
+				if($("#link").val()==""){
+					
+					$("#check5").text("请输入链接/代码");flag =false;
+				}
+				if(flag)
+					$("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">内容管理</h1>
+  <div class="nav_list">
+ 		<ul>
+  				<li><a href="$!webPath/admin/advert/advert_content.htm" ><b>管理</b></a></li>
+                <li><a href="$!webPath/admin/advert/advert_content_add.htm"  class="this"><b>新增</b></a></li> 
+  		</ul>
+  </div>
+   <form name="theForm" id="theForm" action="$!webPath/admin/advert/advert_content_save.htm" method="post"  enctype="multipart/form-data">
+	 <input name="id" type="hidden" id="id" value="$!obj.id" />
+	    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+	    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/advert/advert_content.htm" />
+	    <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/advert/advert_content_save.htm" />
+	    <input name="pic" type="hidden" id="pic" value="$!obj.pic" />
+	    
+   <div class="edit">
+    <div class="editul setcont ">
+      <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>城市</li>
+      <li class="">
+	      <span class="webname">
+	        <select name="province" id="province" onchange="provinceOnchange();">
+	        	<option value="">请选择...</option> 
+	        	#foreach($p in $provinces)
+	        	<option value="$!p.id" #if($vo.parentId == $!p.id) selected="selected"#end>$!p.areaName</option>
+	        	#end
+	        </select>
+	      </span>
+	      
+      </li>
+      <li class="error">
+	      <span class="webname">
+	        <select name="areaId" id="city" onchange="changeCity();">
+	    		<option value="">请选择...</option>
+	    		#foreach($c in $csList)
+	        	<option value="$!c.id" #if($obj.areaId == $!c.id) selected="selected"#end>$!c.cname</option>
+	        	#end
+	        </select>
+	      </span>
+      </li>
+      
+      <li class="error">
+      			<span id="check1">
+      						
+      			</span>
+      </li>
+      
+       </ul>   
+      <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>专区</li> 
+      <li class=""><span class="size200">
+      
+     <select name="areaAdId" id="areaAdId" onchange="showMyAdItems(this);"><option value="">全部</option>
+            	#foreach($areaad in $areaads)
+            		#if($!areaAdId)
+						<option value="$areaad.id" #if($areaAdId==$areaad.id) selected="selected" #end>$areaad.name</option>
+            		#else
+						<option value="$areaad.id" #if($areaAdId==$areaad.id) selected="selected" #end>$areaad.name</option>
+					#end
+                #end       
+            </select>
+            
+            
+        </span></li>   
+        
+        <li class="error">
+        		<span id="check2"></span>
+        
+        </li> 
+      </ul>
+      
+      
+      <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>区域</li>
+      <li class=""><span class="size200"><select  name="parentId" id="dname" onchange="changeQuYu();"><option value=""> 全部</option>
+      				#foreach($area in $areas)
+      					#if($!parentId)
+							<option value="$area.id" #if($area.id==$!parentId) selected="selected" #end>$area.name</option>
+      					#else
+							<option value="$area.id" #if($obj.parentId==$area.id) selected="selected" #end>$area.name</option>
+      					#end
+					#end
+                      </select>
+        </span></li>    
+        
+         <li class="error">
+        		<span id="check3"></span>
+        
+        </li> 
+      </ul>
+      <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>图片</li>
+          <li><span class="webname"> <span class="eidt_li_a" style="position:relative; width:50px; height:22px; line-height:22px;margin-top: 3px; color:#333; border:1px solid #ccc; padding:2px 5px; border-radius:3px;">选择图片
+            <input type="file" id="cover" onchange="changePic('cover')" style="opacity: 0;top:0;left:1px;position:absolute; z-index:100;width:60px; " name="cover">
+            </span>
+             </span>
+            <span class="preview"> 
+            <img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> 
+             
+              </span>
+              #if($!obj.pic)
+				<div class="bigimgpre" id="logoImg" style="display:none; left:270px;"><img src="$!obj.pic"  width="200" height="200" id="thumbnailimg"/> </div>
+			#end
+              <span id="nothis"><strong class="q"> </strong><strong class="w">图片尺寸是(630*292)</strong><strong class="c"> </strong></span>
+                        <div class="pic-view"><img id="preview" alt="" name="pic"></div>
+            </li>
+             <li class="error">
+        		<span id="check4"></span>
+        </li> 
+        </ul>
+      <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>类型</li>
+       <li class="setcont_bg"><span class="size200">
+       <select name="type" id="type">
+				<option value="1" #if($!obj.type=="1") selected="selected" #end>帖子(链接)</option>
+				<option value="2" #if($!obj.type=="2") selected="selected" #end>商品</option> 
+				<option value="3" #if($!obj.type=="3") selected="selected" #end>商户</option>
+				<option value="4" #if($!obj.type=="4") selected="selected" #end>咨询(链接)</option>  
+				<option value="5" #if($!obj.type=="5") selected="selected" #end>服务商户</option>
+				<option value="6" #if($!obj.type=="6") selected="selected" #end>服务</option>         
+				<option value="7" #if($!obj.type=="7") selected="selected" #end>原生</option>         
+             </select>
+        </span></li>   
+        </ul>
+      <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong><i id="txt_link">链接</i></li>
+      <li><span class="webname"><input name="link" type="text" id="link" value="$!obj.link" size="40" onkeyup="keyupLink();"></span></li>  
+      		<li class="error">
+        		<span id="check5"></span>
+        </li> 
+      </ul>
+      <ul class="set1">
+		<li class="setcont_bg"><strong class="sred">*</strong>状态</li>
+			<li>
+			<input type="radio" name="disabled"  value="0" checked="checked" #if($!obj.disabled == 0) checked="checked" #end >显示&nbsp;&nbsp; 
+			<input type="radio" name="disabled" value="1"  #if($!obj.disabled == 1) checked="checked" #end >隐藏
+			</li>	
+	  </ul>
+      <ul class="set1">
+		<li class="setcont_bg"><strong class="sred">*</strong>是否需要登录</li>
+			<li>
+			<input type="radio" name="needLogin"  value="true" checked="checked" #if($!obj.needLogin == true) checked="checked" #end >是&nbsp;&nbsp; 
+			<input type="radio" name="needLogin" value="false"  #if($!obj.needLogin == false) checked="checked" #end >否
+			</li>	
+	  </ul>
+    </div>
+  </div>
+  </form>
+  <div class="submit">
+   		<span class="pad120"><input name="save" type="button" 
+   			value="提交" onclick="checkIsNull();" /></span>
+  </div>
+</div>
+</body>
+</html>

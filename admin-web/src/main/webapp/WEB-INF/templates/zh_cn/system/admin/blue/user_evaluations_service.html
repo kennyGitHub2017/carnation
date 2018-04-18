@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+
+
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css"
+	type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+
+<script>
+jQuery(document).ready(function(){
+  //jQuery("#type").val("$!type");
+  //
+});
+</script>
+</head>
+<body>
+	<div class="cont">
+		<div class="nav_list">
+			<ul>
+				<li><a href="$!webPath/admin/user_evaluations_goods.htm?userId=$!userId"><b>商品评价列表</b></a>
+				</li>
+				<li><a href="$!webPath/admin/user_evaluations_service.htm?userId=$!userId" class="this"><b>商户服务评价列表</b></a></li>
+			</ul>
+		</div>
+		<form action="$!webPath/admin/user_evaluations_service.htm?userId=$!userId" id="ListForm" name="ListForm" method="post">
+    <!-- <div class="search"> 
+      <span>收藏人昵称</span> <span class="size150">
+      <input name="nickName" type="text" id="userName"  value="$!nickName" />
+      </span> 
+      <span class="size150">
+          <select name="type" id="type">
+          <option value="">请选择..</option>
+          <option value="1">套餐券</option>
+          <option value="2">现金券</option>
+          </select>
+      </span>
+      <span class="btn_search">
+      <input name="" type="submit"  value="搜索" style="cursor:pointer;"  class="search_btn"/>
+      </span> </div> -->
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      #if($objs.size()>0)
+            <tr id="opertitle">
+            		<th align="center" width="20%">商家名称</th>
+              <th align="center" width="10%">订单号</th>
+              <th  align="center">服务名称</th>
+              <th width="12%" align="center">评价星级</th>
+              <th width="5%" align="center">评价人</th>
+            </tr>
+            #end
+            #if($objs.size()>0)
+            #foreach($obj in $objs)
+            <tr >
+            <td align="center">$!obj.storeName</td>
+              <td align="center">$!obj.orderId</td>
+              #set($order=$!orderService.fetch($!obj.orderId))
+              #set($goodMap=$!orderFormTools.queryGroupInfo("$!order.groupInfo"))
+              <td align="center">$!goodMap.goods_name</td>
+              						
+              <td align="center"><img src="$!webPath/resources/style/system/front/default/images/usercenter/eval_star$!{obj.score}.png" width="90" height="18" /></td>
+              <td align="center">$!obj.nickName</td>
+              <td align="center">$!reply</td>
+            </tr>
+            #end
+            #else
+            <tr>
+              <td colspan="6" align="center"><div class="seller_center_nothing">
+                  <div class="seller_center_nothing_left"><img src="$!webPath/resources/style/system/front/default/images/seller_center_nothing.png" /></div>
+                  <div class="seller_center_nothing_right">暂时没有数据</div>
+                </div></td>
+            </tr>
+            #end
+          </table>
+    </div>
+    <div class="operate_bar">
+      <div class="fenye">
+        <input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+        <input name="mulitId" type="hidden" id="mulitId" />
+        $!gotoPageFormHTML </div>
+    </div>
+  </form>
+	</div>
+</body>
+</html>

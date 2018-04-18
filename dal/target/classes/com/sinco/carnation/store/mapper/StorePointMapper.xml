@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.store.mapper.StorePointMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.store.model.StorePoint">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="description_evaluate" property="descriptionEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="service_evaluate" property="serviceEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="ship_evaluate" property="shipEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="stat_time" property="statTime" jdbcType="TIMESTAMP" />
+		<result column="store_evaluate" property="storeEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.store.bo.StorePointBO"
+		extends="BaseResultMap" />
+
+	<select id="selectPointByStoreGcAndStatus" resultMap="BaseResultMap">
+		select
+		ss.*
+		from shop_store_point ss, shop_store s
+		where ss.store_id = s.id and s.gc_main_id = #{gcMainId} and s.store_status
+		= #{storeStatus} and ss.delete_status = 0 and s.delete_Status = 0
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, description_evaluate, service_evaluate,
+		ship_evaluate,
+		stat_time, store_evaluate, store_id, user_id
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.store.model.StorePointExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_store_point
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_store_point
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="fetchByStoreId" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_store_point
+		where store_id = #{storeId,jdbcType=BIGINT}
+	</select>
+	<select id="fetchByUserId" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_store_point
+		where user_id = #{userId,jdbcType=BIGINT}
+	</select>
+	<select id="selectByStoreId" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_store_point
+		where store_id = #{storeId,jdbcType=BIGINT}
+	</select>
+	<select id="selectByUserId" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_store_point
+		where user_id = #{userId,jdbcType=BIGINT}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_store_point
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.store.model.StorePointExample">
+		delete from shop_store_point
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.store.model.StorePoint"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_store_point (id, add_time, delete_status,
+		description_evaluate, service_evaluate, ship_evaluate,
+		stat_time, store_evaluate, store_id,
+		user_id)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{descriptionEvaluate,jdbcType=DECIMAL}, #{serviceEvaluate,jdbcType=DECIMAL},
+		#{shipEvaluate,jdbcType=DECIMAL},
+		#{statTime,jdbcType=TIMESTAMP}, #{storeEvaluate,jdbcType=DECIMAL}, #{storeId,jdbcType=BIGINT},
+		#{userId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.store.model.StorePoint"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_store_point
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="descriptionEvaluate != null">
+				description_evaluate,
+			</if>
+			<if test="serviceEvaluate != null">
+				service_evaluate,
+			</if>
+			<if test="shipEvaluate != null">
+				ship_evaluate,
+			</if>
+			<if test="statTime != null">
+				stat_time,
+			</if>
+			<if test="storeEvaluate != null">
+				store_evaluate,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="descriptionEvaluate != null">
+				#{descriptionEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="serviceEvaluate != null">
+				#{serviceEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="shipEvaluate != null">
+				#{shipEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="statTime != null">
+				#{statTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="storeEvaluate != null">
+				#{storeEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.store.model.StorePointExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_store_point
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_store_point
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.descriptionEvaluate != null">
+				description_evaluate =
+				#{record.descriptionEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.serviceEvaluate != null">
+				service_evaluate = #{record.serviceEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.shipEvaluate != null">
+				ship_evaluate = #{record.shipEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.statTime != null">
+				stat_time = #{record.statTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.storeEvaluate != null">
+				store_evaluate = #{record.storeEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_store_point
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		description_evaluate = #{record.descriptionEvaluate,jdbcType=DECIMAL},
+		service_evaluate = #{record.serviceEvaluate,jdbcType=DECIMAL},
+		ship_evaluate = #{record.shipEvaluate,jdbcType=DECIMAL},
+		stat_time = #{record.statTime,jdbcType=TIMESTAMP},
+		store_evaluate = #{record.storeEvaluate,jdbcType=DECIMAL},
+		store_id = #{record.storeId,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.store.model.StorePoint">
+		update shop_store_point
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="descriptionEvaluate != null">
+				description_evaluate = #{descriptionEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="serviceEvaluate != null">
+				service_evaluate = #{serviceEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="shipEvaluate != null">
+				ship_evaluate = #{shipEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="statTime != null">
+				stat_time = #{statTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="storeEvaluate != null">
+				store_evaluate = #{storeEvaluate,jdbcType=DECIMAL},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.store.model.StorePoint">
+		update shop_store_point
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		description_evaluate = #{descriptionEvaluate,jdbcType=DECIMAL},
+		service_evaluate = #{serviceEvaluate,jdbcType=DECIMAL},
+		ship_evaluate = #{shipEvaluate,jdbcType=DECIMAL},
+		stat_time = #{statTime,jdbcType=TIMESTAMP},
+		store_evaluate = #{storeEvaluate,jdbcType=DECIMAL},
+		store_id = #{storeId,jdbcType=BIGINT},
+		user_id = #{userId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

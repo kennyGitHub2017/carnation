@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+ jQuery("#theForm").validate({
+	ignore: "",
+    rules:{
+	  storeOwer:{
+	    required :true
+	  },
+	  storeName:{
+	    required :true,
+		maxlength:20,
+		remote:{
+		  url:"$!webPath/verify_storename.htm",
+		  type : "get",
+		  dataType:"json",
+          data : {
+              "store_name" : function(){return jQuery("#store_name").val();},"id":"$!obj.id"
+		  }
+		}
+	  },
+	  storeOwerCard:{
+	    required:true,
+	    isIdCardNo: true
+	  },
+	  storeZip:{
+		 required:true,
+	     number: true,
+         minlength: 6,
+         maxlength: 6
+	  },
+	  storeStatus:{
+	    required:true
+	  },
+	  storeTelephone:{
+	   required :true,
+	   telNumber:true
+	  },
+	  storeAddress:{
+	   required :true
+	  },
+	  validityStr:{date:false}
+	 },
+	messages:{
+	  storeOwer:{required:"店主名不能为空"},
+	  storeName:{required:"店铺名称不能为空",maxlength:"店铺名最大不能超过20字符",remote:"店铺名已经存在"},
+	  storeOwerCard:{required:"身份证号不能为空", isIdCardNo: "身份证号不正确"},
+	  storeZip:{required:"邮编不能为空", number:"邮编只能为数字",minlength:"只能为6位",maxlength:"只能为6位"},
+	  storeStatus:{required:"店铺状态不能为空"},
+	  storeTelephone:{required :"联系电话不能为空"},
+	  validity:{date:"请输入正确的日期格式，如2012-10-08"},
+	  storeAddress: {required:"店铺详细地址不能为空"}
+	}
+  });
+ //
+ jQuery("select").change(function(){
+     var level=jQuery(this).attr("level");
+	 var id=jQuery(this).val();
+	 if(id!=""){
+	  jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	     jQuery("#area"+level).empty();
+		  jQuery("#area"+level).append("<option value=''>请选择</option>");
+	    jQuery.each(data, function(index,item){
+		  jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+		  jQuery("#area"+level).show();
+		});
+	  },"json");
+	 }else{
+	   for(var i=level;i<=3;i++){
+	    jQuery("#area"+i).empty();
+	    jQuery("#area"+i).hide();
+	   }
+	 }
+  });
+  //
+ jQuery("#area3").change(function(){
+   var id=jQuery(this).val();
+   jQuery("#area_id").val(id);
+ });
+  //
+  //
+  jQuery('#validity').datepicker({
+		    dateFormat:"yy-mm-dd",
+			changeMonth: true,
+			changeYear: true,
+			minDate: new Date()
+  });
+  //
+  jQuery("#sc_id").val("$!obj.sc.id");
+  jQuery("#store_status").val("$!obj.storeStatus");
+});
+
+function saveForm(){
+   jQuery("#theForm").submit();
+}
+
+
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">店铺管理</h1>
+  <div class="nav_list">
+ 
+ <ul>
+   <li><a href="$!webPath/admin/store_list.htm" ><b>管理</b></a></li>
+   <li><a href="$!webPath/admin/store_add.htm"  ><b>新增</b></a></li>
+    #if($!edit)
+    <li><a href="$!webPath/admin/store_add.htm" class="this"><b>编辑</b></a></li>
+   #end
+   </ul>
+   </div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/store_save.htm" method="post">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/store_list.htm" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/store_add.htm" />
+   <div class="edit">
+    <div class="editul setcont">
+      <!--鼠标经过样式-->
+      <div class="reputh">店铺基本信息</div>
+      <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>会员名：</li>
+        <li>
+          <span class="webname"> 
+            #if($!edit)$!obj.userName 
+            #else
+            <input name="userName" type="text" id="userName" value="$!obj.userName" size="40" />
+            #end 
+          </span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg"><strong class="sred">*</strong>店铺名称</li>
+        <li><span class="webname">
+          <input name="storeName" type="text" id="store_name" value="$!obj.storeName" size="40" />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg"><strong class="sred">*</strong>店主真实姓名</li>
+        <li><span class="webname">
+          <input name="storeOwer" type="text" id="store_ower" value="$!obj.storeOwer" size="40" autocomplete="off" />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg"><strong class="sred">*</strong>店主身份证号</li>
+        <li><span class="webname">
+          <input name="storeOwerCard" type="text" id="store_ower_card" value="$!obj.storeOwerCard" size="40"  />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg"><strong class="sred">*</strong>店铺所在地区</li>
+        <li><span>$!area_info</span></li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg"><strong class="sred">*</strong>店铺详细地址</li>
+        <li><span class="webname">
+          <input name="storeAddress" type="text" id="store_address" value="$!obj.storeAddress"  />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg"><strong class="sred">*</strong>邮政编码</li>
+        <li> <span class="webname">
+          <input name="storeZip" type="text" id="store_zip" value="$!obj.storeZip"   />
+          </span> </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg"><strong class="sred">*</strong>联系电话</li>
+        <li><span class="webname">
+          <input name="storeTelephone" type="text" id="store_telephone" value="$!obj.storeTelephone"  />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">店铺联系QQ</li>
+        <li><span class="webname">
+          <input name="storeQq" type="text" id="store_qq" value="$!obj.storeQq" />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">店铺联系MSN</li>
+        <li><span class="webname">
+          <input name="storeMsn" type="text" id="store_msn" value="$!obj.storeMsn"  />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">店铺阿里旺旺</li>
+        <li><span class="webname">
+          <input name="storeWw" type="text" id="store_ww" value="$!obj.storeWw" />
+          </span></li>
+      </ul>
+      <div class="reputh">店铺类型信息</div>
+      <ul class="set1">
+        <li  class="setcont_bg">店铺类型：</li>
+        <li><span class="webname">$!obj.gradeName</span>
+	        #if($!obj.gradeContent && $!obj.gradeContent!="")
+	        <span id="nothis"><strong class="q"></strong><strong class="w">$!obj.gradeContent</strong><strong class="c"></strong></span>
+	        #end
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">店铺主营类目：</li>
+        <li><span class="webname">$!goodsClass_main.className</span></li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">详细经营类目：</li>
+        <li><span class="webname">
+                #if($goodsClass_detail.isEmpty() || $goodsClass_detail.size() == 0)
+					暂未填写
+                #else
+                    #foreach($gc in $goodsClass_detail)
+                       $!gc.className&nbsp;&nbsp;&nbsp;&nbsp;    
+                    #end
+                #end    
+            </span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">有效期至</li>
+        <li><span class="webname">
+          <input name="validityStr" type="text" id="validity" value="$!CommUtil.formatShortDate($!obj.validity)"  />
+        </span><span id="nothis"><strong class="q"></strong><strong class="w">为空表示无限期</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg"><strong class="sred">*</strong>店铺状态</li>
+        <li><span>
+         <select name="storeStatus" id="store_status" onchange="switch_store_status();">
+				  <option value="" selected="selected">请选择店铺状态</option>
+                  <option value="15">正常营业</option>
+	              <option value="20">违规关闭</option>
+	              <option value="10">等待审核</option>
+         </select>
+        </span></li>
+      </ul>
+      <ul class="set1" id="violation_reseaon_ul" #if($!obj.storeStatus!=6&&$!obj.storeStatus!=11&&$!obj.storeStatus!=20) style="display:none" #end>
+        <li  class="setcont_bg">审核原因</li>
+        <li><span class="webname">
+          <textarea name="violationReseaon" cols="40" rows="4" id="violation_reseaon">$!obj.violationReseaon</textarea>
+        </span></li>
+      </ul>
+      <script>
+	    function switch_store_status(){
+		   var status=jQuery("#store_status").val();
+		   if(status=="6"||status=="11"||status=="20"){
+		      jQuery("#violation_reseaon_ul").show();
+		   }else jQuery("#violation_reseaon_ul").hide();
+		}
+	    function change_store_recommend(){
+		   var recommend=jQuery("#store_recommend").val();
+		   if(recommend=="true"){
+		     jQuery("#store_recommend_img").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+			 jQuery("#store_recommend").val("false");
+		   }else{
+		     jQuery("#store_recommend_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+			 jQuery("#store_recommend").val("true");			   
+		   }
+		}
+	  </script>
+          <input name="storeRecommend" id="store_recommend" type="hidden" value="false" />
+    </div>
+    </div>
+  </form>
+  <div class="submit">
+    <span class="pad120"><input name="save" type="button" value="提交" onclick="saveForm()" /></span>
+  </div>
+</div>
+</body>
+</html>

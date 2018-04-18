@@ -1,0 +1,466 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.viewpic.js"></script>
+<style>
+.myset  span {
+     float: none;
+    display: block;
+    vertical-align: text-bottom;
+    text-align:center;
+}
+.img_selected{
+	    box-shadow: 0px 1px 0px 2px #58C6F2;
+}
+.myset  span.size100{
+	float:left;
+}
+.myset  ul.myset_ul  li{
+width:17%;
+float:left;
+ text-align:center;
+}
+.myset ul.myset_ul{
+border-bottom:none;
+padding: 15px 105px 0;
+}
+.selected_type_btn{
+    height: 45px;
+    width: 110px;
+    color: black;
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid #D3D3D3;
+    border-radius: 3px;
+    font-size: 15px;
+}
+.selected_type_btn_selected{
+	background-color:#05ABED;
+	color: white;
+}
+</style>
+<script>
+//表单验证
+jQuery(document).ready(function(){
+ 	jQuery("#theForm").validate({
+    rules:{
+	 name:{required:true},
+	 code:{required:true},
+	 size_img_1:{
+	 	required:true	,	
+	 	},
+	 size_img_2:{required:true	},
+	 orders:{required:true}
+	 },
+    messages:{
+	 name:{required:"名称不能为空"},
+	 code:{required:"专区代码不能为空"},
+	 size_img_1:{required:"请输入宽度"},
+	 size_img_2:{required:"请输入高度"},
+	 orders:{required:"排序不能为空"}
+	}
+  }); 	
+  //样式选取
+   jQuery("li.btn_search input").bind("click",function(){
+   	$('li.btn_search input').removeClass('selected_type_btn_selected');
+   	$(this).addClass('selected_type_btn_selected');
+  	var type_id = $(this).attr("type-id");
+  	$("ul.myset_ul").hide();
+    $("ul."+type_id+"").show();
+ });
+ //点击图片获取选取值
+ jQuery("ul.myset_ul li img").bind('click',function(){
+ 	$('.myset_ul img').removeClass('img_selected');
+ 	$(this).siblings('span').children('input').attr('checked','checked');
+ 	$(this).addClass('img_selected');
+ 	
+ });
+ //样式图片选中效果
+ jQuery('.myset_ul li span input').click(function() {     
+        	$('.myset_ul img').removeClass('img_selected');
+             $(this).parents('span').siblings('img').addClass('img_selected');
+});
+ var style = '$!areaAd.style';
+ if(style){
+	 style = style.substring(0,1);
+	 $(".btn_search input").each(function(){
+		 if($(this).attr("type-id") == "type-" + style){
+			 $(this).trigger("click");
+		 }
+	 });
+ }
+ });
+ function saveForm(method){
+	//参数验证
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">专区管理</h1>
+  <div class="nav_list">
+ 		<ul>
+  				<li><a href="$!webPath/admin/areaAd/list.htm" ><b>管理</b></a></li>
+                <li><a href="$!webPath/admin/areaAd/toEdit.htm"  class="this"><b>新增</b></a></li> 
+  		</ul>
+  </div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/areaAd/update.htm" method="POST"  enctype="multipart/form-data">
+	    <input name="id" type="hidden" id="id" value="$!areaAd.id" />
+	    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+   <div class="edit">
+    <div class="editul setcont myset">
+      <ul class="set1">
+        <li class="setcont_bg">
+        	<strong class="sred">*</strong>
+        	名称
+        </li>
+        <li>
+        	<span class="webname">
+          		<input name="name" id="name" type="text" maxlength="32" value="$!areaAd.name" size="40" />
+            </span>
+        </li>
+         <li class="setcont_bg">
+        	<strong class="sred">*</strong>
+        	专区代码
+        </li>
+        <li>
+        	<span class="webname">
+        		<!-- <select name="code" id="code">
+        			<option value="zhoubian" #if (!$areaAd || $!areaAd.code=="zhoubian") selected="selected" #end>周边</option>
+        			<option value="jiankangshangcheng" #if ($!areaAd.code=="jiankangshangcheng") selected="selected" #end>健康商城</option>
+        		</select> -->
+          		<input name="code" id="code" type="text" maxlength="32" value="$!areaAd.code" size="40" />
+            </span>
+        </li>
+      </ul>
+    <ul class="set1">
+     <li class="setcont_bg">
+        	<strong class="sred">*</strong>
+        	样式类型
+        </li>
+        <li class="btn_search"> <input type="button" class="selected_type_btn selected_type_btn_selected" style="cursor: pointer;" value="样式一" name="" type-id="type-1"></li>
+        <li class="btn_search"> <input type="button" class="selected_type_btn" style="cursor: pointer;" value="样式二" name="" type-id="type-2"></li>
+        <li class="btn_search"> <input type="button" class="selected_type_btn" style="cursor: pointer;" value="样式三" name="" type-id="type-3"></li>
+        <li class="btn_search"> <input type="button" class="selected_type_btn" style="cursor: pointer;" value="样式四" name="" type-id="type-4"></li>
+        <li class="btn_search"> <input type="button" class="selected_type_btn" style="cursor: pointer;" value="样式五" name="" type-id="type-5"></li>
+        <ul class=" myset_ul type-1" style="display:block">
+            <li>
+            	<img src="$!webPath/resources/image/zone_manage/style-1/01-01.png" class="img_selected"  width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="1-1" #if (!$areaAd || $!areaAd.style=="1-1") checked="checked" #end />样式1-1 
+             </span>          
+             </li> 
+             <!-- 
+             <li>
+             	 <img src="$!webPath/resources/image/zone_manage/style-1/01-02.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="1-2" #if ($!areaAd.style=="1-2") checked="checked" #end />样式1-2 
+             </span       
+             </li> 
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-1/01-03.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="1-3" #if ($!areaAd.style=="1-3") checked="checked" #end />样式1-3 
+             </span>             
+             </li>  
+              -->          
+        </ul>
+    <ul class=" myset_ul type-2"style="display:none">
+            <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-2/02-01.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="2-1" #if ($!areaAd.style=="2-1") checked="checked" #end />样式2-1 
+             </span>             
+             </li>  
+             <!-- 
+              <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-2/02-02.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="2-2" #if ($!areaAd.style=="2-2") checked="checked" #end />样式2-2 
+             </span>             
+             </li> 
+              -->                                    	
+        </ul>
+        <ul class=" myset_ul type-3"style="display:none">
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-3/03-01.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="3-1" #if ($!areaAd.style=="3-1") checked="checked" #end />样式3-1 
+             </span>             
+             </li>  
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-3/03-02.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="3-2" #if ($!areaAd.style=="3-2") checked="checked" #end />样式3-2 
+             </span>             
+             </li>  
+             <!-- 
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-3/03-03.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="3-3" #if ($!areaAd.style=="3-3") checked="checked" #end />样式3-3
+             </span>             
+             </li>  
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-3/03-04.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="3-4" #if ($!areaAd.style=="3-4") checked="checked" #end />样式3-4 
+             </span>             
+             </li>  
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-3/03-05.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="3-5" #if ($!areaAd.style=="3-5") checked="checked" #end />样式3-5
+             </span>             
+             </li>  
+              -->                                  	
+        </ul>
+        <ul class=" myset_ul type-4"style="display:none">
+            <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-4/04-01.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="4-1" #if ($!areaAd.style=="4-1") checked="checked" #end />样式4-1
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-4/04-02.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="4-2" #if ($!areaAd.style=="4-2") checked="checked" #end />样式4-2
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-4/04-03.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="4-3" #if ($!areaAd.style=="4-3") checked="checked" #end />样式4-3
+             </span>             
+             </li>
+             <!-- 
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-4/04-04.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="4-4" #if ($!areaAd.style=="4-4") checked="checked" #end />样式4-4
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-4/04-05.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="4-5" #if ($!areaAd.style=="4-5") checked="checked" #end />样式4-5
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-4/04-06.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="4-6" #if ($!areaAd.style=="4-6") checked="checked" #end />样式4-6
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-4/04-07.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="4-7" #if ($!areaAd.style=="4-7") checked="checked" #end />样式4-7
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-4/04-08.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="4-8" #if ($!areaAd.style=="4-8") checked="checked" #end />样式4-8
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-4/04-09.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="4-9" #if ($!areaAd.style=="4-9") checked="checked" #end />样式4-9
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-4/04-10.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="4-10" #if ($!areaAd.style=="4-10") checked="checked" #end />样式4-10
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-4/04-11.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="4-11" #if ($!areaAd.style=="4-11") checked="checked" #end />样式4-11
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-4/04-12.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="4-12" #if ($!areaAd.style=="4-12") checked="checked" #end />样式4-12
+             </span>             
+             </li> 
+              -->                                 	
+        </ul>
+    <ul class=" myset_ul type-5"style="display:none">
+          <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-01.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-1" #if ($!areaAd.style=="5-1") checked="checked" #end />样式5-1
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-02.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-2" #if ($!areaAd.style=="5-2") checked="checked" #end />样式5-2
+             </span>             
+             </li>
+             <!-- 
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-03.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-3" #if ($!areaAd.style=="5-3") checked="checked" #end />样式5-3
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-04.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-4" #if ($!areaAd.style=="5-4") checked="checked" #end />样式5-4
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-05.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-5" #if ($!areaAd.style=="5-5") checked="checked" #end />样式5-5
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-06.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-6" #if ($!areaAd.style=="5-6") checked="checked" #end />样式5-6
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-07.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-7" #if ($!areaAd.style=="5-7") checked="checked" #end />样式5-7
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-08.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-8" #if ($!areaAd.style=="5-8") checked="checked" #end />样式5-8
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-09.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-9" #if ($!areaAd.style=="5-9") checked="checked" #end />样式5-9
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-10.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-10" #if ($!areaAd.style=="5-10") checked="checked" #end />样式5-10
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-11.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-11" #if ($!areaAd.style=="5-11") checked="checked" #end />样式5-11
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-12.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-12" #if ($!areaAd.style=="5-12") checked="checked" #end />样式5-12
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-13.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-13" #if ($!areaAd.style=="5-13") checked="checked" #end />样式5-13
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-14.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-14" #if ($!areaAd.style=="5-14") checked="checked" #end />样式5-14
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-15.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-15" #if ($!areaAd.style=="5-15") checked="checked" #end />样式5-15
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-16.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-16" #if ($!areaAd.style=="5-16") checked="checked" #end />样式5-16
+             </span>             
+             </li>
+             <li> 
+             	 <img src="$!webPath/resources/image/zone_manage/style-5/05-17.png" width="200">
+        	 <span class="webnamesec sizese">
+             <input name="style" type="radio" value="5-17" #if ($!areaAd.style=="5-17") checked="checked" #end />样式5-17
+             </span>             
+             </li> 
+              -->                                 	
+        </ul>
+    </ul>
+    <!--<ul class="set1">
+        <li class="setcont_bg">
+        	<strong class="sred">*</strong>
+        	尺寸
+        </li>
+        <li>
+        	<span class="size100">
+          		<input id="size_img_1" name="size_img_1" type="number" value="$!areaAd.orders"  />&nbsp;&nbsp;x&nbsp;&nbsp;
+          		<input id="size_img_2" name="size_img_2" type="number" value="$!areaAd.orders"  />px        
+            </span>
+            <span id="nothis"><strong class="q"></strong><strong class="w">建议宽高尺寸为:750*400px;</strong><strong class="c"></strong></span>
+        </li>
+    </ul> -->
+      <ul class="set1">
+        <li class="setcont_bg">
+        	<strong class="sred">*</strong>
+        	排序
+        </li>
+        <li>
+        	<span class="webname">
+          		<input id="orders" name="orders" type="number" maxlength="8" title="只能输入数字" value="$!areaAd.orders" size="40" />
+            </span>
+        </li>
+      </ul>
+	  <ul class="set1">
+        <li class="setcont_bg">
+        	<strong class="sred">*</strong>
+        	位置
+        </li>
+        <li>
+        	 <span class="webnamesec sizese">
+             <input name="pos" type="radio" value="0" #if (!$areaAd || $!areaAd.pos==0) checked="checked" #end />PC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+             <input name="pos" type="radio" value="1" #if ($!areaAd.pos==1) checked="checked" #end />APP
+             </span>
+             </li>
+       </ul>
+       <ul class="set1">
+        <li class="setcont_bg">
+        	<strong class="sred">*</strong>
+        	状态
+        </li>
+        <li>
+        	 <span class="webnamesec sizese">
+             <input name="disabled" type="radio" value="0" #if (!$areaAd || $!areaAd.disabled==0) checked="checked" #end />显示&nbsp;&nbsp;&nbsp;
+             <input name="disabled" type="radio" value="1" #if ($!areaAd.disabled==1) checked="checked" #end />隐藏
+             </span>
+             </li>
+       </ul>
+    </div>
+    </div>
+  </form>
+  <div class="submit">
+   		<span class="pad120"><input name="save" type="button" 
+   			value="提交" onclick="saveForm()" /></span>
+  </div>
+</div>
+</body>
+</html>

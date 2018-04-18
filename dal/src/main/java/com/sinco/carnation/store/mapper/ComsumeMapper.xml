@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.store.mapper.ComsumeMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.store.model.Comsume">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="coupon_pay_amount" property="couponPayAmount"
+			jdbcType="DECIMAL" />
+		<result column="charge_pay_amount" property="chargePayAmount"
+			jdbcType="DECIMAL" />
+		<result column="rebate_amount" property="rebateAmount"
+			jdbcType="DECIMAL" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="store_id" property="storeId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.store.bo.ComsumeBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, coupon_pay_amount, charge_pay_amount, rebate_amount, add_time,
+		store_id
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.store.model.ComsumeExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_comsume
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_comsume
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_comsume
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.store.model.ComsumeExample">
+		delete from shop_comsume
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.store.model.Comsume"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_comsume (id, coupon_pay_amount, charge_pay_amount,
+		rebate_amount, add_time, store_id
+		)
+		values (#{id,jdbcType=BIGINT}, #{couponPayAmount,jdbcType=DECIMAL},
+		#{chargePayAmount,jdbcType=DECIMAL},
+		#{rebateAmount,jdbcType=DECIMAL}, #{addTime,jdbcType=TIMESTAMP}, #{storeId,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.store.model.Comsume"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_comsume
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="couponPayAmount != null">
+				coupon_pay_amount,
+			</if>
+			<if test="chargePayAmount != null">
+				charge_pay_amount,
+			</if>
+			<if test="rebateAmount != null">
+				rebate_amount,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="storeId != null">
+				store_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="couponPayAmount != null">
+				#{couponPayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="chargePayAmount != null">
+				#{chargePayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateAmount != null">
+				#{rebateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="storeId != null">
+				#{storeId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.store.model.ComsumeExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_comsume
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_comsume
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.couponPayAmount != null">
+				coupon_pay_amount = #{record.couponPayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.chargePayAmount != null">
+				charge_pay_amount = #{record.chargePayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.rebateAmount != null">
+				rebate_amount = #{record.rebateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.storeId != null">
+				store_id = #{record.storeId,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_comsume
+		set id = #{record.id,jdbcType=BIGINT},
+		coupon_pay_amount = #{record.couponPayAmount,jdbcType=DECIMAL},
+		charge_pay_amount = #{record.chargePayAmount,jdbcType=DECIMAL},
+		rebate_amount = #{record.rebateAmount,jdbcType=DECIMAL},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		store_id = #{record.storeId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.store.model.Comsume">
+		update shop_comsume
+		<set>
+			<if test="couponPayAmount != null">
+				coupon_pay_amount = #{couponPayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="chargePayAmount != null">
+				charge_pay_amount = #{chargePayAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="rebateAmount != null">
+				rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="storeId != null">
+				store_id = #{storeId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.store.model.Comsume">
+		update shop_comsume
+		set coupon_pay_amount = #{couponPayAmount,jdbcType=DECIMAL},
+		charge_pay_amount = #{chargePayAmount,jdbcType=DECIMAL},
+		rebate_amount = #{rebateAmount,jdbcType=DECIMAL},
+		add_time = #{addTime,jdbcType=TIMESTAMP},
+		store_id = #{storeId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

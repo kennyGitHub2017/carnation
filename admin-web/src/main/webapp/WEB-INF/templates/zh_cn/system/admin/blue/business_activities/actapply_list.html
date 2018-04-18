@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+
+<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css"/>
+<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css"/>
+<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="$!webPath/resources/js/easyui/plugins/jquery.validatebox.js"></script>
+
+<!-- 
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script> -->
+<script>
+/* 
+系统通用方法，根据参数来决定处理的url和参数
+*/
+function cmd22(){
+	var url=arguments[0];
+	var mulitId="";
+	jQuery("#ListForm").find(":checkbox:checked").each(function(){
+	  if(jQuery(this).val()!=""){	  
+	    mulitId+=jQuery(this).val()+",";
+	  }
+	});
+	if(mulitId!=""){
+	  jQuery("#ListForm #mulitId").val(mulitId);
+	  if(confirm("确定要执行该操作？")){
+	     jQuery("#ListForm").attr("action",url);
+	     jQuery("#ListForm").submit();
+	  }
+	}else{
+       alert("至少选择一条数据记录");
+	}
+}
+jQuery(document).ready(function(){
+	jQuery("select").change(function(){
+	    var level=jQuery(this).attr("level");
+	  var id=jQuery(this).val();
+	  jQuery("#area_id").val("");
+	  for(var i=3;i>level;i--){
+	   jQuery("#area"+i).empty();	
+	   jQuery("#area"+i).append("<option value=''>请选择</option>");
+	  }
+	  if(id!=""){
+	   jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	      jQuery("#area"+level).empty();
+	     jQuery("#area"+level).append("<option value=''>请选择</option>");
+	       jQuery.each(data, function(index,item){
+	       jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+	     });
+	   },"json");
+	  }else{
+	    for(var i=level;i<=4;i++){
+	     jQuery("#area"+i).empty();
+	    }
+	  }
+	 });
+//
+   #if($!address.id)
+   jQuery("#area_id").val("$!address.areaId"); 
+   jQuery("#area1").val("$!area.parent.parent.id")
+   jQuery("#area2").html("<option>$!area.parent.areaName</option>");
+//   jQuery("#area3").html("<option>$!area.areaName</option>");
+   #end
+   #if($!user.month_income)
+     jQuery("#month_income").val("$!user.month_income"); 
+   #end 
+//
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">申请查看</h3>
+  <div class="nav_list">
+  	<ul>
+<!--     	<li><a href="$!webPath/admin/snsactivity_list.htm"  class="this"><b>管理</b></a></li> -->
+      <!--   <li><a href="$!webPath/admin/snsactivity_add.htm" ><b>新增</b></a></li> -->
+    </ul>
+  </div>
+  <div>
+  <form id="searchForm" method="post" action="$!webPath/admin/actapply_list.htm" >
+	    	<div style="padding:5px 5px;" >
+					<strong>查询：</strong>
+	    			
+					<input id="strStartTime" name="strStartTime" value="$!vo.strStartTime" class="easyui-datetimebox" data-options="prompt:'开始时间'" style="width:150px"/>
+					<strong>至</strong>
+					<input id="strEndTime" name="strEndTime" value="$!vo.strEndTime" class="easyui-datetimebox" data-options="prompt:'结束时间'" style="width:150px"/>
+										
+					<input id="hotName" name="hotName" value="$!vo.hotName" class="easyui-textbox" type="text" style="width:100px;" data-options="prompt:'活动名称'"/>
+					
+	    			<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="formSubmit()">查询</a>
+	    			
+	    	</div>
+	    	<input type="hidden" id="page" name="page" value="$!currentPage"></input>
+	    	<input type="hidden" id="size" name="size" value="$!pageSize"></input>
+	</form>
+  </div>
+ 
+   <!-- <div class="search">
+			<span>申请类型</span> 
+			<span class="size250"> 
+				<input type="text" value="$!title" id="title" name="title">
+			</span> 
+			<span>申请时间</span> 
+			<span class="size250"> 
+				<input type="text" value="$!articleClassName" id="articleClassName" name="articleClassName">
+			</span> 
+			<span class="base_select"> 
+				<select id="area1" name="area1" level="2" class="base_select_check">
+						<option value="">请选择...</option>
+						#foreach($area in $areas)
+							#if($area.id.equals($pid))
+								<option value="$!area.id" selected="selected">$!area.areaName</option>
+							#else
+								<option value="$!area.id">$!area.areaName</option> 
+							#end 
+						#end
+				</select> 
+				<select id="area2" name="area2" level="3" class="base_select_check">
+						<option value="">请选择...</option>
+				</select> 
+				<select id="area3" name="area3" level="4" class="base_select_check">
+						<option value="">请选择...</option>
+				</select> 
+				<input id="area_id" name="area_id" type="hidden" value="$!address.areaId" />
+			</span> 
+			<span class="btn_search"> 
+				<input type="submit" class="search_btn" style="cursor: pointer;" value="搜索" name="">
+			</span>
+	</div> -->
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="3%">&nbsp;</th>
+        <th width="12%"><span class="form_btna">申请类型</span></th>
+        <th width="12%"><span class="form_btna">地址</span></th>
+<!--         <th width="10%"><span class="form_btna">是否显示</span></th> -->
+        <th width="12%"><span class="form_btna">申请人姓名</span></th>
+        <th width="12%"><span class="form_btna">申请人联系方式</span></th>
+        <th width="12%"><span class="form_btna">申请人邮箱</span></th>
+        <th width="12%"><span class="form_btna">申请人留言</span></th>
+        <th width="12%"><span class="form_btna">申请时间</span></th>
+        
+        <th ><b class="form_btnb">操作</b></th>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+        <td class="check_position"><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+        #if($!obj.applyType==0)<td align="center">加盟申请</td>#end
+        #if($!obj.applyType==1)<td align="center">活动申请</td>#end
+       <!--  #if($!obj.address)<td align="center">$!obj.address</td>#end
+        #if($obj.address)<td align="center">sssss</td>#end -->
+        <td align="center">$!obj.address</td>
+        <td align="center">$!obj.name</td>
+		<td align="center">$!obj.mobile</td>
+		<td align="center">$!obj.email</td>
+		<td align="center">$!obj.message</td>
+		<td align="center">$!CommUtil.formatLongDate($!obj.createTime)</td>
+		        
+    <!--     <td align="center">#if($!obj.display==true)是#else 否#end</td> -->
+        <td class="hui oprate_con" align="center">
+        <!-- 	<a href="$!webPath/admin/snsactivity_edit.htm?id=$!obj.id&amp;currentPage=$!currentPage" class="blue">编辑</a>  |-->
+           
+            <a href="javascript:void(0);" onclick="if(confirm('是否删除？'))window.location.href='$!webPath/admin/actapply_del.htm?mulitId=$!obj.id&amp;currentPage=$!currentPage'" class="blue">删除</a>
+      </tr>
+      #end
+    </table>
+ </div> 	
+ 
+<input type="hidden" id="page" name="page" value="$!currentPage"></input>
+<input type="hidden" id="size" name="size" value="$!pageSize"></input>
+	<div id="listPager" class="easyui-pagination" data-options="total:$!rows,pageSize:$!pageSize,pageNumber:$!currentPage,pageList:[10,20,50,100]" style="background:#efefef;border:1px solid #ccc;"></div> 
+   
+ <div class="operate_bar">
+ 	<div class="oper_sp"> 
+    	<span class="oper_check"><label><input type="checkbox" name="all" id="all" onclick="selectAll(this)" value="" />全部</label></span>
+    	<span class="oper_del"><input name="" type="button" value="删除" style="cursor:pointer;" onclick="cmd22('$!webPath/admin/snsactivity_del.htm')"/></span>
+   
+    </div>
+    <!-- <div class="fenye">
+    	<input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+	  	<input name="mulitId" type="hidden" id="mulitId" />
+	  	$!gotoPageFormHTML
+    </div>    -->    
+ </div>
+</div>
+</body>
+
+<script>
+ jQuery('#listPager').pagination({
+	onSelectPage:function(pageNumber, pageSize){
+		jQuery(this).pagination('loading');
+		jQuery('#page').attr("value",pageNumber);
+		jQuery('#size').attr("value",pageSize);
+		jQuery(this).pagination('loaded');
+		formSubmit();
+	},
+}); 
+ 
+ function formSubmit(){
+ 	jQuery("#searchForm").submit();
+ }
+</script>
+</html>

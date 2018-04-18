@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>领取红包</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <link href="$!webPath/resources/style/app/css/css.css" rel="stylesheet" />
+
+	<script type="text/javascript">
+		
+		if(window.applicationCache){
+		window.applicationCache.addEventListener('updateready', function(e) {  
+			if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+				applicationCache.swapCache()
+				window.location.reload(); 
+			} else {  
+				// Manifest没有改动，nothing to do 
+			}  
+		}, false);
+		
+		// 错误处理
+		window.applicationCache.addEventListener('error', function(e) {  
+			// nothing to do 
+			return false;
+		}, false);  
+	}
+		
+		
+		
+</script> 
+	<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <link href="$!webPath/resources/style/app/css/jquery.dialogbox.css" rel="stylesheet" />
+    <script src="$!webPath/resources/js/redpackage/jquery-1.11.2.min.js"></script>
+    <script src="$!webPath/resources/js/redpackage/jquery.dialogBox.js"></script>
+	
+	<script src="$!webPath/resources/js/redpackage/zepto.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/wx_red_package/images/jweixin-1.0.0.js"></script>
+	
+    <script src="$!webPath/resources/js/lhgdialog/lhgdialog.min.js?skin=iblue"></script>
+
+    <!-- 弹出框特效 -->
+    <script src="$!webPath/resources/js/jAlert/jAlert-v3.js"></script>
+    <script src="$!webPath/resources/js/jAlert/jAlert-functions.js"></script>
+    <link href="$!webPath/resources/js/jAlert/jAlert-v3.css" rel="stylesheet">
+        <script type="text/javascript">
+        setFontSize();
+        window.onresize = function () {
+            setFontSize();
+        }
+        function setFontSize() {
+            var screenWidth = document.documentElement.clientWidth||document.body.clientWidth;
+            if (screenWidth < 750) {
+                document.documentElement.style.fontSize = parseInt(screenWidth / 750 * 100) + "px";
+            }
+        }        
+        function closealert(){
+    		$(".model").hide();
+    		$("body").removeClass("ovfHiden");
+    		$(".alert").removeClass("bouncein");
+    	}
+        
+        function alertbox(str,bl){
+        	if(str!="") $(".pdiv").html(str);
+        	var h=window.innerHeight||document.documentElement.clientHeight;
+            var w = document.documentElement.clientWidth||document.body.clientWidth;
+            if(w>750) w=750;
+            $(".downloadlink").removeClass("btn_ok");
+            if(bl){//关闭
+            	$("#con").html("<a href='javascript:void(0)' class='downloadlink' onclick='closealert()'>确定</a>");
+            }
+            $(".alert").css("top",(window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0)+h/2-parseInt(w / 750 * 100));
+        	$(".model").css("height",$(document).height());
+            $(".alert").addClass("bouncein");
+            $(".alert .close").show();
+        	$(".model").show();
+        	$("body").addClass("ovfHiden");
+        }
+        $(document).ready(function(){
+        	
+        	$(".alert .close").click(function(){
+        		$(".model").hide();
+        		$("body").removeClass("ovfHiden");
+        		$(".alert").removeClass("bouncein");
+        	});       	
+        	
+        });
+    </script>
+<style type="text/css">
+div .fhbutton{
+height:clientwidth;
+}
+.ja_close
+{
+font-size:0.22rem;
+}
+.ja_title div
+{
+font-size:0.22rem;
+}
+.ja_btn_red, .ja_btn_red:link, .ja_btn_red:visited
+{
+font-size:0.22rem;
+}
+.optBack
+{
+margin: 1px -20px -10px;
+    padding: 0.5em 0;
+}
+
+.ja_sm{ width:5rem}
+.ja_body span{font-size:0.22rem}
+
+/* .ui_border td, .ui_dialog td {
+    background-color: #D99AA6;
+    D43039
+} */
+
+.ui_lt, .ui_rt, .ui_lb, .ui_rb, .ui_t, .ui_b, .ui_l, .ui_r{
+	background-image: none;
+}
+.ui_lt, .ui_rt, .ui_t{
+	height:16px;
+}
+.ui_content.ui_state_full iframe {
+    border-radius: 0 0 0 0;
+    allowtransparency: true;
+}
+.ui_title_buttons{display:none;}
+#sbyt{scrolling:no;}
+
+table.ui_border{
+    -webkit-border-radius: 25px;
+}
+table.ui_border, table.ui_dialog {
+    background-color: #FD253D;
+}
+
+</style>
+<!--  #E84655 -->
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	$('.downloadlink').click(function(){
+		 window.location.href="http://shop.ysysgo.com/mobile_register.htm?invitationCode="+$("#invitationCode").val();
+	 });
+	
+   $('#btn').click(function(){  
+	   var phone=$('#phone').val(); //获取手机号
+	   //如果手机号码不能通过验证
+	   if(phone!=''){
+		   if(!/^1[3|4|5|7|8]\d{9}$/.test(phone)){
+			   alertbox("您填写的号码有误。",true);
+				//showMessage("您填写的号码有误。",false);
+			    return;
+		   }
+	   }else{
+		   console.log("1");
+		   alertbox("请输入您的手机号码。",true);
+		   //showMessage("请输入您的手机号码。",false);
+		   return;
+	   }
+	   
+  	$.ajax({
+          type: "post",
+          url: "$!webPath/grab_redpackage.htm",
+          data:"id=$!id"+"&phone="+phone,
+          dataType: "json",
+          success: function (result) { 
+          	if(result=="-1"){
+		       	  $.dialog({
+		  		   id: 'redpackage',
+		  			esc: true,
+		  			dialogClass: 'alert',
+		  			max: false,
+		  			min: false,
+		  			title: '',
+		  			closed:false,
+		  			width: 500,
+					height: 398,
+		  			lock: true,
+		  			content: "url:$!webPath/register_redpackage.htm"+"?id=$!id"+"&phone="+phone+"&invitationCode="+$("#invitationCode").val()
+		  		}); 
+		       	//$("body div")[0].style='position: absolute; left: 10em; top: 20em; visibility: visible; width: 500px; z-index: 1979;border-radius: 2%;background-color: #FD253D;';
+       	   }else if(result=="0"){
+       		$(".alert .close").hide();
+       		alertbox("您的"+$!money+"元红包已存到您的云尚钱包里，赶快下载云尚APP并查看您的钱包。别忘了分享给您的好友哦！");
+       	   }else if(result=="1"){
+       		   alertbox("红包不存在");
+       	   }else if(result=="2"){
+       		   alertbox("亲爱哒，不要再戳我啦，红包已存，赶紧下载云尚APP查看钱包吧。不要忘记分享给你的小伙伴哟！");
+       	   } else if(result=="3"){
+       		   alertbox("该红包已经充值,不要贪心");       		
+       	   }         	  
+          },error: function (XMLHttpRequest, textStatus, errorThrown) { 
+        	   
+        	  alertbox(errorThrown,true);
+   		} 
+      });
+   });
+});
+
+
+//消息框
+function showMessage(message,status){ //message 弹出文本 ,status true 下载 false 无下载
+	var theme ='red';//样式
+	var title='云尚';
+	var buttonOne='下载云 e 生 APP';
+	var buttonTwo='确定';
+	var buttonTheme='red';//按钮样式
+    if(status==true){
+    	
+    	 $.jAlert({
+             'title':title, 
+             'content':"<span style='font-size:1.6em;color:#ffffff'>"+message+"</span><div><br/><hr style='border-top:0.1px solid #FDC9CE;'></div>", 
+ 	        'btns': [
+ 		        		{'text':buttonOne, 'theme':buttonTheme ,'onClick': function(e, btn){
+ 					           e.preventDefault();
+ 					          window.location.href="http://static.ysysgo.com/static/platform/appDownload.jsp";
+ 					       /*     alert('开始下载.....'); */
+ 					           return false;
+ 				           }}
+ 			        ],'theme': theme
+   		});	
+    	 
+    }else{
+    	
+    	$.jAlert({
+            'title':title, 
+            'content':"<span style='font-size:0.22em;color:#ffffff'>"+message+"</span><div><br/><hr style='border-top:0.1px solid #FE6F7F;'></div>",
+	        'btns': [
+		        		{'text':buttonTwo, 'theme':buttonTheme}
+			        ],'theme': theme
+  		});	
+    }
+}
+function showMessage_getredpackage(message){ //message 弹出文本 去掉关闭按钮让用户只能点击下载
+	var theme ='red';//样式
+	var title='云尚';
+	var buttonOne='下载云 e 生 APP';
+	var buttonTwo='确定';
+	var buttonTheme='red';//按钮样式
+   	$.jAlert({
+           'title':title, 
+           'closeBtn': false,
+           'content':"<span style='font-size:20px;color:#ffffff'>"+message+"</span><div><br/><hr style='border-top:0.1px solid #FDC9CE;'></div>", 
+	        'btns': [
+		        		{'text':buttonOne, 'theme':buttonTheme ,'onClick': function(e, btn){
+					           e.preventDefault();
+					          window.location.href="http://static.ysysgo.com/static/platform/appDownload.jsp";
+					       /*     alert('开始下载.....'); */
+					           return false;
+				           }}
+			        ],'theme': theme
+  		});	
+}
+</script>
+
+<!-- 微信 -->
+  <script>
+    wx.config({
+        debug: false,
+        appId: '${appId}',
+        timestamp: ${timestamp},
+        nonceStr: '${nonceStr}',
+        signature: '${signature}',
+        jsApiList: [
+         'checkJsApi',
+          'onMenuShareTimeline',
+          'onMenuShareAppMessage'
+        ]
+    });
+    </script>
+    <script src="$!webPath/resources/wx_red_package/images/zepto.min.js"></script>
+
+    <script>
+        wx.ready(function () {
+           /*  wx.onMenuShareAppMessage({
+                title: '云尚•云尚给您发红包啦！', // 分享标题
+                desc: '云尚一大波红包袭来，快点开看看', // 分享描述');
+                type: 'link', // 分享类型,music、video或link，不填默认为link
+                dataUrl: 'http://www.libt.cn/weixin/index.html', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+
+                },
+                cancel: function () {
+                }
+            }); 
+        	'token: ${token}'
+        	'ticket: ${ticket}'
+        	'currentUrl: ${currentUrl}'
+        */
+
+            wx.onMenuShareAppMessage({
+        	   title: '红包是一颗幸福的子弹，我被云尚“射”死了！',
+               desc: '我被$!money个云豆击中了！',
+               link: '$!webPath${url}',
+                imgUrl: '$!webPath/resources/wx_red_package/images/shareico1.jpg',
+                trigger: function (res) {
+                },
+                success: function (res) {
+                },
+                cancel: function (res) {
+                },
+                fail: function (res) {
+                }
+            });
+        });
+
+        wx.error(function (res) {
+        	//alert('xx' + res);
+        });
+    </script>
+    
+</head>
+<body style="text-align:center;" >
+	<div class="top2">
+        <div class="container">
+            <p class="title1">一年&nbsp;365&nbsp;天&nbsp;就等<span class="yellow">这一天!</span></p>
+            <p class="title2"><span>2016</span>红包第一波</p>
+            <p class="title3"><span class="yellow">百万</span>大派送</p>
+            <p class="title4">元旦节果然还是要和红包最配!</p>
+        </div>
+    </div>
+    <div class="corn"></div>
+    <div class="rcontent">
+        <p class="congratu">恭喜您！</p>
+            #set($m = $math.toDouble($!money))
+        <p class="number">抢到<span>$!money</span>云豆</p>
+        #if( $m <= 1 )
+				<p class="tips1">下次再加油，</p>
+				<p class="tips2">赶快领取后分享好友，让好友也来抢吧！</p>
+			#end
+			#if( 1 < $m &&  $m <= 5 )
+				<p class="tips1">手气不错哦，</p>
+				<p class="tips2">赶快领取后分享好友，让好友也来抢吧！</p>	
+			#end
+			#if( 5 < $m &&  $m <= 10 )
+			<p class="tips1">今天是我的幸运日嘛！</p>
+			<p class="tips2">赶快领取后分享好友，让好友也来抢吧！</p>
+			#end
+			#if( 10 < $m )
+				<p class="tips1">哇，您抢得最多！</p>
+				<p class="tips2">赶快领取后分享好友，让好友也来抢吧！</p>		    	
+			#end 
+        <input id="phone" type="text" placeholder="输手机号，领红包" value="">
+        <input id="btn" type="button" value="点击领取">
+        <span class="logo"></span>
+    </div>
+    <div class="model"></div>
+    <div class="alert">
+        <a href="javascript:void(0)" class="close"><img src="$!webPath/resources/wx_red_package/images/close.png"></a>
+        <div class="content">
+            <div class="pdiv">矮油，别急，红包还有一会才到达战场，来来来，先坐下来思考思考人生。</div>
+        </div>
+        <span id="con"><a href="javascript:void(0)" class="downloadlink">下载云尚&nbsp;APP</a></span>
+    </div>
+	  <!--邀请码-->
+     <input type="hidden" id="invitationCode" value="$!invitationCode">
+</body>
+</html>

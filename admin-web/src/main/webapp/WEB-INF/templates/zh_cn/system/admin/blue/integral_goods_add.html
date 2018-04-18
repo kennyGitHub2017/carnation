@@ -1,0 +1,395 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<link rel="stylesheet" href="$!webPath/resources/editor/themes/default/default.css" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+var options = {
+        cssPath : '$!webPath/resources/editor/plugins/code/prettify.css',
+        filterMode : true,
+		uploadJson:'$!webPath/file/upload.htm?module=integral/goods/detail',
+		width : '860px',
+		height:'400px',
+		resizeType : 1,
+		allowImageUpload : true,
+		allowFlashUpload : false,
+		allowMediaUpload : false,
+		allowFileManager : false,
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+};
+jQuery(document).ready(function(){
+	jQuery(" input[name='igUserLevel']").each(function(index, element) {
+  		if(jQuery(this).val()=="$!obj.igUserLevel"){
+			jQuery(this).attr("checked", "checked");
+		}
+    });
+	jQuery("input[name^='medal_count']").each(function(index, element) {
+     	jQuery(element).addClass("mark");
+		jQuery(element).val("");
+		if(index=="0"){
+			jQuery(element).removeClass("mark");
+			jQuery(element).val("1");
+		}
+     });	
+  jQuery("input[name='medal']").change(function(){
+	 var str = jQuery(this).val();
+	 jQuery("input[name^='medal_count']").each(function(index, element) {
+     	jQuery(element).addClass("mark");
+		jQuery(element).val("");
+		if(str==index){
+			jQuery(element).removeClass("mark");
+			jQuery(element).val("1");
+		}
+     });
+  });
+  editor = KindEditor.create('#ig_content',options); 
+  jQuery("#integralGoodsImg").change(function(){
+     jQuery("#img_text").val(jQuery(this).val()); 
+  });
+  for(var i=0;i<24;i++){
+    jQuery("#begin_hour").append("<option value='"+i+"'>"+i+"</option>");
+	jQuery("#end_hour").append("<option value='"+i+"'>"+i+"</option>");
+  }
+ jQuery("#theForm").validate({
+	ignore:".mark",
+	debug:false,							   
+    rules:{
+	 igGoodsName:{required:true},
+	 igGoodsPrice:{required:true,number:true},
+	 igGoodsIntegral:{required:true,digits:true},
+	 igGoodsCount:{required:true,digits:true},
+	 igLimitCount:{required:true,digits:true},
+	 igTransfee:{required:true,number:true},
+	 igBeginTime:{required:true},
+	 igEndTime:{required:true}
+	 #if(!$!obj),
+	 integralGoodsImg:{
+		 required:true,
+	    accept:"$!config.imageSuffix"
+	  }
+	  #end
+	 },
+    messages:{
+	 igGoodsName:{required:"礼品名称不能为空"},
+	 igGoodsPrice:{required:"礼品价格不能为空",number:"礼品价格只能为数字"},
+	 igGoodsIntegral:{required:"兑换积分不能为空",digits:"兑换积分只能为整数"},
+	 igGoodsCount:{required:"库存数量不能为空",digits:"库存数量只能为整数"},
+	 igLimitCount:{required:"会员兑换数量不能为空",digits:"会员兑换数量只能为整数"},
+	 igTransfee:{required:"运费不能为空",number:"运费只能为数字"},
+	 igBeginTime:{required:"开始时间不能为空"},
+	 igEndTime:{required:"结束时间不能为空"}
+	 #if(!$!obj),	 
+	 integralGoodsImg:{
+		 required:"商品图片不能为空",
+	    accept:"不允许的图片格式"
+	  }
+	  #end
+	}
+  });
+ 	//改变系统提示的样式
+  jQuery("span .w").mousemove(function(){
+	var id=jQuery(this.parentNode).attr("id");
+	if(id="nothis"){
+	   jQuery(this.parentNode).attr("id","this")
+	}
+  }).mouseout(function(){
+     var id=jQuery(this.parentNode).attr("id");
+	 if(id="this"){
+	   jQuery(this.parentNode).attr("id","nothis")
+	 }
+  });
+  //
+  jQuery(":radio[id^=ig_limit_type]").click(function(){
+	 var type=jQuery(this).val();
+	 if(type=="true"){
+	   jQuery("#ig_limit_count_info").show();
+	 }else{
+	   jQuery("#ig_limit_count_info").hide();
+	 }
+  });
+  //
+  jQuery(":radio[id^=ig_transfee]").click(function(){
+    var type=jQuery(this).val();
+	if(type=="1"){
+	  jQuery("#ig_transfee_info").show();
+	}else{
+	  jQuery("#ig_transfee_info").hide();	
+	}
+  });
+  //
+  jQuery(":radio[id^=ig_time_type]").click(function(){
+    var type=jQuery(this).val();
+	if(type=="true"){
+	   jQuery("div[id^=limitime_]").show();
+	   jQuery("div[id^=limitime_]").removeClass("mark");
+	}else{
+	   jQuery("div[id^=limitime_]").hide();
+	   jQuery("div[id^=limitime_]").addClass("mark");
+	}
+  })
+  //
+ jQuery('#ig_begin_time').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#ig_end_time').attr("readonly","readonly").datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  //
+  jQuery(":radio[id=ig_limit_type][value=$!obj.igLimitType]").attr("checked","checked");
+  #if($!obj.igLimitType==true)
+    jQuery("#ig_limit_count_info").show();
+  #end
+  jQuery(":radio[id=ig_transfee_type][value=$!obj.igTransfeeType]").attr("checked","checked");
+  #if($!obj.igTransfeeType==1)
+    jQuery("#ig_transfee_info").show();
+  #end  
+  jQuery(":radio[id=ig_time_type][value=$!obj.igTimeType]").attr("checked","checked");
+  #if($!obj.igTimeType==true)
+    jQuery("#limitime_begin").show();
+	jQuery("#limitime_end").show();
+  #end
+  jQuery("#begin_hour").val($!CommUtil.formatTime("HH",$!obj.igBeginTime));
+  jQuery("#end_hour").val($!CommUtil.formatTime("HH",$!obj.igEndTime));
+  jQuery(":radio[id=ig_show][value=$!obj.igShow]").attr("checked","checked");
+  jQuery(":radio[id=ig_recommend][value=$!obj.igRecommend]").attr("checked","checked");
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">积分商城</h1>
+ <div class="nav_list">
+ 
+ <ul>
+ <li><a href="$!webPath/admin/integral_goods.htm"><b>礼品列表</b></a> </li>
+ <li><a href="$!webPath/admin/integral_goods_add.htm"  #if(!$!edit) class="this" #end><b>新增礼品</b></a> </li>
+ <li><a href="$!webPath/admin/integral_order.htm"><b>兑换列表</b></a></li>
+ #if($!edit)
+ <li><a href="javascript:void(0);"class="this"><b>编辑礼品</b></a></li>
+ #end 
+ </ul>
+ </span> 
+
+ </div>
+ <form action="$!webPath/admin/integral_goods_save.htm" method="post" enctype="multipart/form-data" id="theForm">
+  <div class="edit">
+    <div class="editul setcont">
+      <h1 class="giftsh">礼品信息</h1>
+      <div class="giftinfor">
+      <div class="giftright">
+          <ul class="set3">
+            <li><strong class="sred">*</strong>礼品名称</li>
+            <li><span class="size200">
+              <input name="igGoodsName" type="text" id="ig_goods_name" value="$!obj.igGoodsName" size="35" />
+              </span></li>
+          </ul>
+          <ul class="set3">
+            <li><strong class="sred">*</strong>礼品原价</li>
+            <li><span class="size200">
+              <input name="igGoodsPrice" type="text" id="ig_goods_price" value="$!obj.igGoodsPrice" size="35" />
+              </span></li>
+          </ul>
+          <ul class="set3">
+            <li><strong class="sred">*</strong>兑换积分</li>
+            <li><span class="size200">
+              <input name="igGoodsIntegral" type="text" id="ig_goods_integral" value="$!obj.igGoodsIntegral" size="35" />
+              </span></li>
+          </ul>
+          <ul class="set3">
+            <li><span style="float:left"><strong class="sred">*</strong>会员等级</span><span id="nothis"><strong class="q"></strong><strong class="w">当前所选会员等级及其以上等级可兑换此礼品</strong><strong class="c"></strong></span></li>
+            <li class="radiosp">
+            	<label style="cursor:pointer"><span>
+          		<input name="igUserLevel" id="user_level" type="radio" value="0" checked="checked"/>
+          		</span><span>铜牌会员</span></label>
+                <label style="cursor:pointer"><span>
+          		<input name="igUserLevel" type="radio" id="user_level" value="1"/>
+        		</span><span>银牌会员</span></label>
+                <label style="cursor:pointer"><span>
+          		<input name="igUserLevel" type="radio" id="user_level" value="2"/>
+        		</span><span>金牌会员</span></label>
+                <label style="cursor:pointer"><span>
+          		<input name="igUserLevel" type="radio" id="user_level" value="3"/>
+        		</span><span>超级会员</span></label>
+             </li>
+          </ul>
+          <ul class="set3">
+            <li><strong class="sred">*</strong>库存</li>
+            <li><span class="size200">
+              <input name="igGoodsCount" type="text" id="ig_goods_count" value="$!obj.igGoodsCount" size="35" />
+              </span></li>
+          </ul>
+          <ul class="set3">
+            <li>礼品标签</li>
+            <li><span class="size200">
+               <input name="igGoodsTag" type="text" id="ig_goods_tag" value="$!obj.igGoodsTag" size="35" />
+              </span></li>
+          </ul>
+        </div>
+        <div class="giftleft">
+          <div style="padding-left:10px">
+            <div class="gift1"><strong class="sred">*</strong>礼品图片</div>
+            #if($!obj.igGoodsImg)
+             #set($img="$!obj.igGoodsImg")
+            #else
+             #set($img="$!webPath/resources/style/common/images/good.jpg")
+            #end
+            <div class="giftimg"><img src="$!img" width="204" height="204" /></div>
+             <div style=" height:33px; padding-top:16px;"><span class=" size13">
+             <input name="imgText" type="text" id="img_text"></span>
+             <span class="filebtn"><input name="" type="button" value=""></span>
+      <span style="float:left;" class="file">
+      <input name="integralGoodsImg" type="file" size="30" id="integralGoodsImg"></span>
+      </div>
+          </div>
+        </div>
+        
+      </div>
+      <h1 class="giftsh">兑换要求</h1>
+      <!-- <ul class="set3">
+        <li>限制会员兑换数量</li>
+        <li class="radiosp"><label style="cursor:pointer"><span>
+          <input name="igLimitType" id="ig_limit_type" type="radio" value="true" />
+          </span><span>限制</span></label><label style="cursor:pointer"><span>
+          <input name="igLimitType" type="radio" id="ig_limit_type" value="false" checked="checked" />
+        </span><span>不限制</span></label></li>
+      </ul> -->
+      <input type="hidden" name="igLimitType" id="ig_limit_type" value="false" />
+      <ul class="set3" id="ig_limit_count_info" style="display:none;">
+        <li>会员兑换数量上限</li>
+        <li><span class="size200">
+        	#set($ig_limit_count="1")
+            #if($!{obj.igLimitCount}!="")#set($ig_limit_count=$!obj.igLimitCount)#end
+          <input name="igLimitCount" type="text" id="ig_limit_count" value="$!ig_limit_count" size="35"/>
+          </span></li>
+      </ul>
+      <ul class="set3">
+        <li>运费承担方式</li>
+        <li class="radiosp"><label style="cursor:pointer"><span>
+          <input name="igTransfeeType" id="ig_transfee_type" type="radio" value="0" checked="checked" />
+          </span><span>商家</span></label><label style="cursor:pointer"><span>
+          <input name="igTransfeeType" id="ig_transfee_type" type="radio" value="1" />
+        </span><span>买家</span></label></li>
+      </ul>
+      <ul class="set3" id="ig_transfee_info" style="display:none;">
+        <li>运费价格</li>
+        <li><span class="size200">
+          <input name="igTransfee" type="text" id="ig_transfee" value="$!CommUtil.null2Double($!{obj.igTransfee})"   size="35"/>
+          </span></li>
+      </ul>
+      <ul class="set3">
+        <li>限制兑换时间</li>
+        <li class="radiosp"><label style="cursor:pointer"> <span>
+          <input name="igTimeType" id="ig_time_type" type="radio" value="true" />
+          </span><span>限制</span></label><label style="cursor:pointer"><span>
+          <input name="igTimeType" id="ig_time_type" type="radio" value="false" checked="checked" />
+        </span><span>不限制</span></label></li>
+      </ul>
+      <div class="limitime" id="limitime_begin" style="display:none;">
+        <div class="limi_left">
+          <div class="starttime">开始时间</div>
+          <div class="timeset"><span class="size100">
+            <input name="beginTime" type="text" id="ig_begin_time" value="$!default_begin_time"  size="15"  class="mark" />
+            </span><span>日</span><span>
+            <select name="beginHour" id="begin_hour">
+              
+            </select>
+          </span><span>时</span></div>
+        </div>
+        <div class="limi_right" id="limitime_end" style="display:none;">
+          <div class="starttime">结束时间<span class="timeset"></span></div>
+          <div class="timeset"><span class="size100">
+            <input name="endTime" type="text" id="ig_end_time"  value="$!default_end_time"  size="15"  class="mark"/>
+            </span><span>日</span><span>
+            <select name="endHour" id="end_hour">
+             
+            </select>
+          </span><span>时</span></div>
+        </div>
+      </div>
+      <h1 class="giftsh">状态设置</h1>
+      <ul class="set3">
+        <li>是否上架</li>
+        <li class="radiosp"><label style="cursor:pointer"><span>
+          <input name="igShow" id="ig_show" type="radio" value="true" checked="checked"  />
+          </span><span>是</span></label><label style="cursor:pointer"><span>
+          <input name="igShow" id="ig_show" type="radio" value="false" />
+        </span><span>否</span></label></li>
+      </ul>
+      <ul class="set3">
+        <li>是否推荐</li>
+         <li class="radiosp"><label style="cursor:pointer"><span>
+          <input name="igRecommend" id="ig_recommend" type="radio" value="true" checked="checked"  />
+          </span><span>是</span><label style="cursor:pointer"><span>
+          <input name="igRecommend" id="ig_recommend" type="radio" value="false" />
+        </span><span>否</span></label></li>
+      </ul>
+       <ul class="set3">
+        <li>礼品排序</li>
+        <li><span class="size200">
+          <input name="igSequence" type="text" id="ig_sequence" value="$!obj.igSequence" size="35" />
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">数值越小排序越靠前</strong><strong class="c"></strong></span></li>
+      </ul>
+      <h1 class="giftsh">seo设置</h1>
+      <ul class="set3">
+        <li>SEO关键字</li>
+        <li><span class="size200">
+          <input name="igSeoKeywords" type="text" id="ig_seo_keywords" value="$!obj.igSeoKeywords" size="35" />
+          </span></li>
+      </ul>
+      <ul class="set3">
+        <li>SEO描述</li>
+        <li><span class="txtarsize2">
+          <textarea name="igSeoDescription" cols="35" rows="6" id="ig_seo_description">$!obj.igSeoDescription</textarea>
+        </span></li>
+      </ul>
+      <h1 class="giftsh">礼品描述</h1>
+      <ul class="set3">
+        <li>
+          <textarea name="igContent" cols="35" rows="6" id="ig_content">$!obj.igContent</textarea>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="submit">
+    <input name="" type="submit" value="提交" />
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input type="hidden" name="hiddenField" id="hiddenField" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/integral_goods.htm" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/integral_goods_add.htm" />
+  </div>
+  </form>
+</div>
+</body>
+</html>

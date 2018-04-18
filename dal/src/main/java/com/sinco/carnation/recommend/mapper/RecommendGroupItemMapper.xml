@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.recommend.mapper.RecommendGroupItemMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.recommend.model.RecommendGroupItem">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="group_id" property="groupId" jdbcType="BIGINT" />
+		<result column="item_id" property="itemid" jdbcType="BIGINT" />
+		<result column="index" property="index" jdbcType="INTEGER" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, group_id, item_id, index, create_by, create_time
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.recommend.model.RecommendGroupItemExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from recommend_group_item
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="Long">
+		select
+		<include refid="Base_Column_List" />
+		from recommend_group_item
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="Long">
+		delete from recommend_group_item
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.recommend.model.RecommendGroupItemExample">
+		delete from recommend_group_item
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert"
+		parameterType="com.sinco.carnation.recommend.model.RecommendGroupItem">
+		insert into recommend_group_item (id, group_id, item_id,
+		index, create_by, create_time
+		)
+		values (#{id,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT},
+		#{itemid,jdbcType=BIGINT},
+		#{index,jdbcType=INTEGER}, #{createBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.sinco.carnation.recommend.model.RecommendGroupItem">
+		insert into recommend_group_item
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="groupId != null">
+				group_id,
+			</if>
+			<if test="itemid != null">
+				item_id,
+			</if>
+			<if test="index != null">
+				index,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="groupId != null">
+				#{groupId,jdbcType=BIGINT},
+			</if>
+			<if test="itemid != null">
+				#{itemid,jdbcType=BIGINT},
+			</if>
+			<if test="index != null">
+				#{index,jdbcType=INTEGER},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.recommend.model.RecommendGroupItemExample"
+		resultType="java.lang.Integer">
+		select count(*) from recommend_group_item
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update recommend_group_item
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.groupId != null">
+				group_id = #{record.groupId,jdbcType=BIGINT},
+			</if>
+			<if test="record.itemid != null">
+				item_id = #{record.itemid,jdbcType=BIGINT},
+			</if>
+			<if test="record.index != null">
+				index = #{record.index,jdbcType=INTEGER},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update recommend_group_item
+		set id = #{record.id,jdbcType=BIGINT},
+		group_id = #{record.groupId,jdbcType=BIGINT},
+		item_id = #{record.itemid,jdbcType=BIGINT},
+		index = #{record.index,jdbcType=INTEGER},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sinco.carnation.recommend.model.RecommendGroupItem">
+		update recommend_group_item
+		<trim prefix="set" suffixOverrides=",">
+			<if test="groupId != null">
+				group_id = #{groupId,jdbcType=BIGINT},
+			</if>
+			<if test="itemid != null">
+				item_id = #{itemid,jdbcType=BIGINT},
+			</if>
+			<if test="index != null">
+				index = #{index,jdbcType=INTEGER},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.sinco.carnation.recommend.model.RecommendGroupItem">
+		update recommend_group_item
+		set group_id = #{groupId,jdbcType=BIGINT},
+		item_id = #{itemid,jdbcType=BIGINT},
+		index = #{index,jdbcType=INTEGER},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

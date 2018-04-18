@@ -1,0 +1,808 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery.imageview.css" type="text/css" rel="stylesheet"/>
+<link href="$!webPath/resources/css/phoneView.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.8.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/qrcode.js"></script>
+<script src="$!webPath/resources/js/phoneView.js"></script>
+<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+<script src="$!webPath/resources/js/jquery.imageview.js"></script>
+<script src="$!webPath/resources/js/smallalert.js"></script>
+<style>
+.device{}
+.goodsNameCon{display:table}
+.goodsNameCon img{display:table-cell}
+.goodsNameCon span{display:table-cell;padding-left:10px;vertical-align:middle}
+.oper_del{float:left}
+/* toggle switch css start */
+.switch-btn {position: relative; display: block; vertical-align: top; width: 50px; height: 18px; border-radius: 15px; cursor: pointer;}
+.checked-switch {position: absolute; top: 0; left: 0; opacity: 0;}
+.text-switch {background-color: #ed5b49; border: 1px solid #d2402e; border-radius: inherit; color: #fff; display: block; font-size: 15px; height: inherit; position: relative; text-transform: uppercase;}
+.text-switch:before, .text-switch:after {position: absolute; top: 50%; margin-top: -.5em; line-height: 1; -webkit-transition: inherit; -moz-transition: inherit; -o-transition: inherit; transition: inherit;}
+.text-switch:before {content: attr(data-no); right: 11px;}
+.text-switch:after {content: attr(data-yes); left: 11px; color: #FFFFFF; opacity: 0;}
+.checked-switch:checked ~ .text-switch {background-color: #00af2c; border: 1px solid #068506;}
+.checked-switch:checked ~ .text-switch:before {opacity: 0;}
+.checked-switch:checked ~ .text-switch:after {opacity: 1;}
+.toggle-btn {background: linear-gradient(#eee, #fafafa); border-radius: 100%; height: 18px; left: 1px; position: absolute; top: 1px; width: 18px;}
+.switch-btn .checked-switch:checked ~ .toggle-btn {left: 31px;}
+.text-switch, .toggle-btn {transition: All 0.3s ease; -webkit-transition: All 0.3s ease; -moz-transition: All 0.3s ease; -o-transition: All 0.3s ease;}
+
+
+/*分享设置弹框*/
+.models{position: fixed;left: 0;top: 0;right: 0;bottom: 0;background: rgba(0,0,0,0.4);filter:Alpha(opacity=40);z-index: 999;display:none}
+.shareSetAlert{width: 560px;min-height: 340px;background:#ffffff;border:6px solid rgba(61,60,60,0.36);border-radius:5px;z-index: 1000;position: fixed;left: 50%;top: 50%;margin: -250px 0 0 -255px;background-clip: padding-box;display:none}
+.shareSetAlert .close{position: absolute;right: 15px;top: 10px;font-size: 32px;color: #959595;text-decoration: none;width: 24px;height: 24px;line-height: 18px;transition: background-color 0.2s;}
+.shareSetAlert .close:hover{background: #eee;}
+.shareSetAlert .title{height: 45px;line-height: 45px;background: #F7F7F7;color: #333;font-size: 16px;text-indent: 26px;}
+
+select{padding:0;top:0}
+.settings .content {width: auto;}
+input.uploadPath {border-radius: 5px 0 0 5px;padding: 0 4px;border: 1px solid #d3d3d3;border-right:none}
+input[type='text']{border: 1px solid #d3d3d3;padding: 2px 4px;}
+.title_s{background:#f2f4f6;height:31px;margin-left: 19px;text-indent: 15px;line-height: 31px;color: #333;font-size: 14px;}
+.settings {overflow: hidden;font-size: 14px;margin-top: 15px;-webkit-user-select: none;}
+.settings .tit {width: 80px;text-align: right;float: left;line-height: 28px;margin-left: 19px;}
+.settings .content{float: left;margin-left: 13px;}
+.settings .content .line{overflow: hidden;}
+.settings .content .mt{margin-top: 10px;}
+.settings .content .line .item{float: left;margin-right: 38px;line-height: 28px;}
+.settings .content input[type='radio']{display: none;}
+.settings .content label{position: relative;padding-left: 23px;display: block;}
+.settings .content label:before{content: '';position: absolute;left: 0;top: 50%;margin-top: -8px;width: 16px;height: 16px; background: url($!webPath/resources/image/radio_bg.png) no-repeat left top;}
+.settings .content .radio:checked+label:before{background-position: left bottom;}
+.settings .content .text{background:#ffffff;border:1px solid #d3d3d3;border-radius:5px;height:26px;}
+.w370{width: 370px;}
+.w303{width: 303px;}
+.hide{display: none;}
+.mt{margin-top:10px}
+.textarea{border:1px solid #d3d3d3;border-radius:5px;width:362px;height:60px;padding: 8px;}
+input.uploadPath {border-radius: 5px 0 0 5px;padding: 0 4px;border: 1px solid #d3d3d3;border-right: none;height: 26px;text-indent: 4px;float: left;width: 273px;}
+.settings .content .selectImage {background: #f2f4f6;    border: 1px solid #d3d3d3;border-radius: 0px 5px 5px 0px;width: 100px;line-height: 26px;text-align: center;float: left;position: relative;cursor: pointer;}
+.settings .content .selectImage input[type=file] {opacity: 0;filter: alpha(opacity=0);position: absolute;left: 0;top: 0;width: 100px;height: 26px;}
+.fn-clear:after {visibility:hidden;display:block;font-size:0;content:" ";clear:both;height:0;}
+.sharePicThumbnail{color: #3497ff;}
+.sharePicThumbnail img{width: 80px;height: 80px;}
+.sharePicThumbnail .zoomup{display: inline-block;margin-left: 8px;background: url($!webPath/resources/image/zoomup.png) no-repeat left center;padding-left: 18px;cursor: pointer;} 
+.sharePicThumbnail .line-sepa{margin: 0 10px;}
+.sharePicThumbnail .del{cursor: pointer;}
+.uploading{width: 16px;height: 16px;margin: 6px 0 0 6px;display:none;float:left}
+.submitBtn{background-image:linear-gradient(-180deg, #47e4ff 0%, #13b9e6 100%);border:1px solid #30cafb;box-shadow:inset 0 2px 3px 0 rgba(240,240,240,0.78);border-radius:5px;width:116px;height:35px;display:block;line-height:35px;text-align:center;color:#fff;font-size:18px;margin:10px 0 10px 105px;float:left}
+.submitBtn:hover{color:#fff}
+.cancelBtn{background-image:linear-gradient(-180deg, #ffffff 0%, #eeeeee 100%);border:1px solid #d0d0d0;border-radius:5px;width:116px;height:35px;display:block;line-height:35px;text-align:center;color:#797979;font-size:18px;margin:10px 0 10px 105px;float:left}
+.cancelBtn:hover{color:#797979}
+
+.sortBy{cursor:pointer}
+.sortBy i{margin-left:5px;font-size:14px;line-height:1}
+.sortBy i.down:before {content: attr(data-down)}
+.sortBy i.up:before {content: attr(data-up)}
+</style>
+<script>
+jQuery(document).ready(function(){
+	$(".sortBy").click(function(){
+		var obj=$(this).find("i");
+		$("#timeType").val(obj.attr("data-type"));
+		if(obj.attr("class")==undefined){
+			$("#sortBy").val("desc");
+		}else{
+			var objClass=obj.attr("class");
+			$("#sortBy").val(objClass=="up"?"desc":"asc");
+		}
+	    jQuery("#currentPage").val(1);
+	    jQuery("#ListForm").submit();
+	});
+	
+	#if($!brand_id)
+	jQuery("#brand_id").val("$!brand_id");
+	#end
+	#if($!gc_id)
+	jQuery("#gc_id").val("$!gc_id");
+	#end
+	#if($!goods_type)
+	jQuery("#goods_type").val("$!goods_type");
+	#end
+	
+	#if($!store_recommend)
+	jQuery("#store_recommend").val("$!store_recommend");
+	#end
+	
+	jQuery('#startDate').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	});
+	jQuery('#endDate').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	});
+	
+
+	$("#fgcId").change(function(){
+		console.log($(this).val());
+		var pid=$(this).val();
+		jQuery.ajax({
+			type : 'POST',
+			url : '$!webPath/admin/goods_load_class.htm',
+			data : {
+				"pid" : pid,
+				"level" : 1,
+				"session" : true
+			},
+			dataType : "json",
+			beforeSend : function() {
+				
+			},
+			success : function(data) {
+				console.log(data);
+				var str="";
+				str+="<option value=\"\">所有分类</option>";
+				jQuery.each(data,function(index, item) {
+					str+="<option value=\""+item.id+"\">"+item.className+"</option>";					
+				});
+				$("#sgcId").empty().append(str);
+				$("#tgcId").empty().append("<option value=\"\">所有分类</option>");
+			}
+		});
+	});
+	
+	$("#sgcId").change(function(){
+		var pid=$(this).val();
+		jQuery.ajax({
+			type : 'POST',
+			url : '$!webPath/admin/goods_load_class.htm',
+			data : {
+				"pid" : pid,
+				"level" : 2,
+				"session" : true
+			},
+			dataType : "json",
+			beforeSend : function() {
+				
+			},
+			success : function(data) {
+				console.log(data);
+				var str="";
+				str+="<option value=\"\">所有分类</option>";
+				jQuery.each(data,function(index, item) {
+					str+="<option value=\""+item.id+"\">"+item.className+"</option>";					
+				});
+				$("#tgcId").empty().append(str);
+			}
+		});
+	});
+	
+	});
+//
+function ajax_update(id,fieldName,obj,value){
+   var val;
+   if(value==undefined){
+	 val=jQuery(obj).val();
+   }else val=value; 
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/goods_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }    
+				 if(value!=undefined){
+				   jQuery(obj.parentNode.parentNode).remove();
+				 }
+              }
+	    });
+}
+
+
+	function deleteGood(obj,ids){
+			$.ajax({
+				url:'$webPath/admin/juanpi_delete.htm',
+				data:"ids="+ids,
+				type:"POST",
+				success:function(flag){
+					if(flag){
+						$(obj).closest("tr").remove();
+						return;
+					}else{
+						alert("删除失败!");
+						return;
+					}
+				}
+			})
+}
+	
+	function deleteGoods(){
+		var ids="";
+		
+		$("td :checked").each(function(){
+			  var id=$(this).attr("data-id");
+			  ids+=id+",";
+		});
+		$.ajax({
+			url:'$webPath/admin/juanpi_delete.htm',
+			data:"ids="+ids,
+			type:"POST",
+			success:function(flag){
+				if(flag){
+					$("td :checked").each(function(){
+						$(this).closest("tr").remove();
+					});
+					return;
+				}else{
+					alert("删除失败!");
+					return;
+				}
+			}
+		})
+}
+
+	
+</script>
+</head><body scroll="yes">
+<div class="cont">
+  <h3 class="seth">商品管理</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/admin/juanpi_goods_list.htm?type=sell" #if($!vo.type == 'sell')class="this"#end><b>出售中的商品</b></a></li>
+      <li><a href="$!webPath/admin/juanpi_goods_list.htm?type=warehouse" #if($!vo.type == 'warehouse')class="this"#end><b>仓库中的商品</b></a></li>
+      <li><a href="$!webPath/admin/juanpi_goods_list.htm?type=stop" #if($!vo.type == 'stop')class="this"#end><b>已下架商品</b></a></li>
+    </ul>
+  </div>
+  <form name="ListForm" id="ListForm" action="" method="post">
+    <div class="search">
+		<span>商品分类</span> 
+		<span> 
+			<select name="fgcId" id="fgcId">
+					<option value="">所有分类</option> 
+					#foreach($obj in $gcs)
+					<option value="$!obj.id" #if($!vo.fgcId==$!obj.id) selected="selected" #end>$!obj.name</option> 
+					#end
+			</select>
+		</span>  
+		<span> 
+			<select name="sgcId" id="sgcId">
+					<option value="">所有分类</option> 
+					#foreach($obj in $gcs2)
+					<option value="$!obj.id" #if($!vo.sgcId==$!obj.id) selected="selected" #end>$!obj.name</option> 
+					#end
+			</select>
+		</span>  
+		<span> 
+			<select name="tgcId" id="tgcId">
+					<option value="">所有分类</option> 
+					#foreach($obj in $gcs3)
+					<option value="$!obj.id" #if($!vo.tgcId==$!obj.id) selected="selected" #end>$!obj.name</option> 
+					#end
+			</select>
+		</span> 
+		<span>商品类型</span> 
+		<span>
+		      <select name="isTuangou" id="goods_type">
+		        <option value="">所有类型</option>
+		        <option value="1" #if($!vo.isTuangou == 1) selected="selected" #end>团购商品</option>
+		        <option value="0" #if($!vo.isTuangou == 0) selected="selected" #end>非团购商品</option>
+		      </select>
+      	</span>
+	  <span>商品名称</span> 
+	  <span class="size150">
+      	<input name="goodsTitle" type="text" id="goods_name" value="$!vo.goodsTitle" />
+      </span>
+	  <span>上架时间</span>
+		<span class="size150"> 
+			<input name="beginTime" type="text" id="startDate" value="$!vo.beginTime" readonly="readonly" />
+		</span>
+		<span>—</span>
+		<span class="size150"> 
+			<input name="endTime" type="text" id="endDate" value="$!vo.endTime" readonly="readonly" />
+		</span> 
+      <span>
+      	<input type="hidden" name="timeType" id="timeType" value="$!vo.timeType"/>
+      	<input type="hidden" name="sortBy" id="sortBy" value="$!vo.sortBy"/>
+      	<input name="" type="button"  value="搜索" style="cursor:pointer;" onclick="query();" class="search_btn"/>
+      </span>
+
+     </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="3%">&nbsp;
+          </th>
+          <th width="15%"><span class="form_btna">商品名称</span></th>
+          <th width="10%"><span class="form_btna">分类名称</span></th>
+          <th width="10%"><span class="form_btna sortBy">上架时间<i #if($!vo.timeType=="on") #if($!vo.sortBy=="asc") class="up" #elseif($!vo.sortBy=="desc") class="down" #end #end data-up="↓" data-down="↑" data-type="on"></i></span></th>
+          <th width="10%"><span class="form_btna sortBy">下架时间<i #if($!vo.timeType=="off") #if($!vo.sortBy=="asc") class="up" #elseif($!vo.sortBy=="desc") class="down" #end #end data-up="↓" data-down="↑" data-type="off"></i></span></th>
+          <th width="8%"><span class="form_btna">原价</span></th>
+          <th width="8%" align="center"><span class="form_btna">团购价</span></th>
+          <th width="8%" align="center"><span class="form_btna">销售价格</span></th>
+          <th width="8%" align="center"><span class="form_btna">销量</span></th>
+           #foreach($obj in $goodsList)
+          	    #if($!obj.sta!=1)
+          <th width="8%" align="center"><span class="form_btna">显示</span></th>
+          		#break
+              #end
+          #end
+          <th align="center"><b class="form_btnb">操作</b></th>
+        </tr>
+        #foreach($obj in $goodsList)
+        <tr id="tr_$!obj.id">
+          <td class="check_position"><input data-group="jp" data-id="$!obj.id" name="checkbox" type="checkbox"  id="checkbox" value="$!obj.id" /></td>
+          <td>
+		  	  <div class="goodsNameCon">
+		  	  	<img src="$!obj.imageUrl" width="55" height="55" />
+		  	  	<span>$!obj.goodsTitle</span>
+		  	  </div>
+		  </td>
+          <td align="center">
+          #if($!obj.class3Name)
+         	 $!obj.className>$!obj.class2Name>$!obj.class3Name
+          #else
+          	
+          #end
+          
+          </td>
+          <td align="center" class="datetime">$!CommUtil.formatLongDate($!obj.goodsOnShelf)</td>          
+          <td align="center" class="datetime">$!CommUtil.formatLongDate($!obj.goodsOffShelf)</td>
+          <td align="center">&yen;$!obj.goodsPrice</td>
+          <td align="center">$!obj.tuanCprice</td>
+          <td align="center">$!obj.goodsCprice</td>
+          <td align="center">$!obj.sales</td>
+          #if($!obj.sta!=1)
+          <td align="center">		
+          	<label class="one switch-btn circle-style" data-id="$!obj.id">
+	            <input class="checked-switch" type="checkbox" #if($!obj.isShow == 1)class="this" checked="checked" #end>
+	            <span class="text-switch" data-yes="开" data-no="关"></span> 
+	            <span class="toggle-btn"></span> 
+	        </label>
+          </td>
+          #end
+          #if($!obj.sta!=1)
+		  <td class="hui oprate_con" align="center">
+		  	  <div>
+		  	  	<a href="$!webPath/admin/goods_recommend.htm?id=$!obj.id&type=jp_" class="blue" >推荐
+		  	  	</a>
+		  	  </div>
+		  	  <div>
+	  	  		<a href="javascript:;" class="blue shareSetBtn" data-id="$!obj.id">分享设置</a>
+				<a href="javascript:;" dialog_uri="$!webPath/admin/juanpi_leimu_edit.htm?mulitId=$!obj.id" dialog_title="批量更改分类" 
+        dialog_width="1020" dialog_height="540" dialog_top="200" dialog_id="changeType" class="blue">更改分类</a>
+		  	  </div>
+		  	  <div>
+		  	  	<a href="javascript:;" class="blue phoneViewBtn" 
+		  	  	data-url="$!obj.targetUrlM">查看H5详情</a>
+		  	  	
+				<a href="$!obj.targetUrlPc&subchannel=$!uid" target="_blank" class="blue" 
+				data-url="">查看PC详情</a>
+		  	  </div>
+		  </td>
+		  #elseif($!obj.sta==1)
+		  	 <td class="hui oprate_con" align="center" >
+		  	 		<a href="javascript:;" style="color:#45abe8;"
+		  	  				 onclick="deleteGood(this,$obj.id);">删除</a>
+		  	 </td>
+		  #end
+        </tr>
+		#end
+      </table>
+    </div>
+    <div class="operate_bar">
+      <div class="fenye"> <span id="queryCondition" style="display:none"> </span>
+        <input name="mulitId" type="hidden" id="mulitId" />
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML </div>
+      <div class="oper_sp"> 
+      <span class="oper_check">
+        <label>
+          <input data-group="jp" type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>
+            	 全部
+            	#foreach($obj in $goodsList)
+          	    #if($!obj.sta==1)
+          		 <a href="javascript:;" onclick="deleteGoods();" style="color:#45abe8;margin-left:10px;"
+		  	  				data-url="">删除</a>
+          		#break
+              #end
+          #end
+          </label>
+        </span> 
+        #if($!status==-5) <span class="oper_del">
+        <input name="" type="button" value="审核" onclick="cmd('$!webPath/admin/goods_audit.htm?status=$!{status}');" style="cursor:pointer;" />
+        </span> 
+        #end
+        
+        
+        #if(!$!status) 
+          #foreach($obj in $goodsList)
+          	#if($!obj.sta!=1)
+        <span class="oper_del">
+        <a href="javascript:void(0);" dialog_uri="$!webPath/admin/juanpi_leimu_edit.htm?mulitId=0" dialog_title="批量移分类" 
+        dialog_width="1020" dialog_height="540" dialog_top="200" dialog_id="order_shipping">
+        	<input name="" type="button" value="批量更改分类" style="cursor:pointer;" /></a>
+        </span> 
+        <span style="float:left">
+   			<label class="pl switch-btn circle-style" style="margin:9px 0 0 20px">
+	            <input class="checked-switch" #if($!vo.type == 'sell') checked="checked" #end type="checkbox">
+	            <span class="text-switch" data-yes="开" data-no="关"></span> 
+	            <span class="toggle-btn"></span> 
+	        </label>
+        </span>
+        		#break
+              #end
+          #end
+        #end 
+        #if($!zero == true)
+        <span class="oper_del">
+        	<input name="" type="button" value="推到0元购" onclick="cmd('$!webPath/admin/zero_act/goods_zero_act_add.htm');" style="cursor:pointer;" />
+        </span>
+        #end 
+        </div>
+    </div>
+    <div class="models"></div>
+	<div class="shareSetAlert">
+		<a href="javascript:;" class="close">×</a>
+		<div class="title">分享设置</div>
+		<div class="settings">
+			<div class="tit">分享标题:</div>
+			<div class="content">
+				<div class="line" id="shareTitle1">
+					<div class="item">
+						<input type="radio" class="radio" name="titleClass" id="r1" value="1"/>
+						<label for="r1">调用商品标题</label>
+					</div>
+					<div class="item">
+						<input type="radio" class="radio" name="titleClass" id="r2" value="2"/>
+						<label for="r2">自定义</label>
+					</div>
+					<div class="item">
+						<input type="radio" class="radio" name="titleClass" id="r3" value="3"/>
+						<label for="r3">自定义+商品标题</label>
+					</div>
+				</div>
+				<div class="hide mt" id="r2_div">
+					<input type="text" class="text w370" placeHolder='请输入分享标题，字数建议在25字左右' name="title" value=""/>
+				</div>
+				<div class="hide mt" id="r3_div">
+					<input type="text" class="text w303" placeHolder='请输入分享标题，字数建议在25字左右' name="title" value=""/>+商品标题
+				</div>
+			</div>
+		</div>
+		<div class="settings">
+			<div class="tit">分享内容:</div>
+			<div class="content">
+				<textarea class="textarea" name="context" placeHolder='请输入分享内容，字数建议在35字以内'></textarea>
+			</div>
+		</div>
+		<div class="settings">
+			<div class="tit">分享图片:</div>
+			<div class="content">
+				<div class="line" id="shareImgClass">
+					<div class="item">
+						<input type="radio" class="radio" name="imgClass" id="pic1" value="1" />
+						<label for="pic1">调用商品图片</label>
+					</div>
+					<div class="item">
+						<input type="radio" class="radio" name="imgClass" id="pic2" value="2" />
+						<label for="pic2">自定义</label>
+					</div>
+				</div>
+				<div class="hide mt fn-clear" id="selectPic">
+					<input class="input uploadPath" name="imgUrl" type="text" id="src_uploadSharePic" readonly="readonly">
+					<div class="selectImage"><input name="imgFile" class="file" type="file" id="uploadSharePic">添加分享图片</div><img id="uploading_uploadSharePic" src="$!webPath/resources/style/system/manage/blue/images/loading.gif" class="uploading"/>
+				</div>
+				<div class="hide mt sharePicThumbnail" id="div_uploadSharePic">
+					<img src="" id="thumbnail_uploadSharePic"  /><span class="zoomup">查看大图</span><span class="line-sepa">|</span><span class="del">删除</span>
+				</div>
+			</div>
+		</div>
+		<div class="settings">
+			<div class="tit">跳转链接:</div>
+			<div class="content">
+				<input type="text" class="text w370" name="url" value=""/>
+			</div>
+		</div>
+		<a href="javascript:;" class="submitBtn" data-id="">确定</a>
+		<a href="javascript:;" class="cancelBtn">取消</a>
+	</div>
+    
+  </form>
+  <script type="text/javascript">
+  $(function(){
+	  //h5预览
+	  var objDevice=new PhoneView();
+	  $(".phoneViewBtn").click(function(){
+		 var url=$(this).attr("data-url");
+		 objDevice.show(url);
+	  });
+	  //日期换行
+	  $(".datetime").each(function(){
+		  var date= $(this).html();
+		  $(this).html(date.replace(" ","<br>"));
+	  });
+
+	  
+	  $("#shareTitle1 .item label").click(function(){
+			var index=$("#shareTitle1 .item label").index(this);
+			switch(index){
+				case 0:
+					$("#r2_div,#r3_div").addClass("hide");
+					break;
+				case 1:
+					$("#r2_div").removeClass("hide").find("input").focus();
+					$("#r3_div").addClass("hide");
+					break;
+				case 2:
+					$("#r3_div").removeClass("hide").find("input").focus();
+					$("#r2_div").addClass("hide");
+					break;
+			}
+		});
+		var selectPic=$("#selectPic"),
+	    sharePicThumbnail=$("#div_uploadSharePic");
+	
+		$("input[name=imgClass]").change(function(){
+			if(1==$(this).val()){
+				selectPic.addClass("hide");
+				sharePicThumbnail.addClass("hide");
+				$("#src_uploadSharePic").val("");
+			}else{
+				selectPic.removeClass("hide");
+			}
+		});
+		jQuery("img").imageview();
+		jQuery(".zoomup").click(function(){//查看大图
+			$(this).prev("img").trigger("dblclick");
+		});
+		jQuery(".del").click(function(){
+			jQuery(this).parent().addClass("hide");
+			jQuery(this).parent().prev().find("input").val("");
+		});
+		
+		//商品图片ajax上传
+		jQuery("input[type=file]").live('change',function(){
+			var that=this;
+			var id=this.id;
+			var uploading=$("#uploading_"+id);
+			uploading.removeClass("hide");
+			jQuery.ajaxFileUpload({
+				  url:'/upload.htm',
+				  dataType:'text',
+				  fileElementId:[that.id],
+				  secureuri: false, //一般设置为false
+				  success:function(data){						    
+					var json = eval('(' + data + ')');
+					jQuery("#src_"+id).val(json.url);
+					jQuery("#div_"+id).removeClass('hide');
+					jQuery("#thumbnail_"+id).attr("src",json.url);
+					uploading.addClass('hide');
+				  }
+			});
+		});
+		
+		
+		//关闭分享设置
+		$(".shareSetAlert .close,.shareSetAlert .cancelBtn").click(function(){
+			closeShareSet();
+		});
+		function closeShareSet(){
+			$(".models").hide();
+			$(".shareSetAlert").hide();
+			shareSetReset();
+		}
+		$(".shareSetBtn").click(function(){
+			var id=$(this).attr("data-id");			
+			showShareSet(id);
+		});
+		
+		//打开分享设置
+		function showShareSet(id){
+			$(".models").show();
+			$(".shareSetAlert").show();
+			$(".submitBtn").attr("data-id",id);
+			var mark="juanpi_goods";
+			var id=id;
+			$.ajax({
+				url:'/admin/share_edit_json.htm',
+				data:{goods_id:id,mark:mark},
+				type:"POST",
+				dataType:"json",
+				success:function(res){
+					console.log(res);
+					if(res.length!=0){
+						var data=res[0];
+						var titleClass=data.titleClass;
+						$("#shareTitle1 .item label").eq(titleClass-1).trigger("click");
+						$("input[name=title]").eq(titleClass-2).val(data.title);
+						$("[name=context]").val(data.context);
+						var imgClass=data.imgClass;
+						$("#shareImgClass .item label").eq(imgClass-1).trigger("click");
+						$("#src_uploadSharePic").val(data.imgUrl);
+						if(imgClass=="2"){
+							$("#div_uploadSharePic").removeClass("hide");
+							$("#thumbnail_uploadSharePic").attr("src",data.imgUrl);
+						}
+						$("input[name=url]").val(data.url);
+					}
+				}
+			})
+		}
+		
+		function shareSetReset(){
+			$(".shareSetAlert :text").each(function(){
+				$(this).val('');
+			});
+			$(".textarea").val('');
+			$(".mt").each(function(){
+				$(this).addClass("hide");
+			})			
+			$(".shareSetAlert :radio").each(function(){
+				$(this).prop("checked",false);
+			});
+		}
+		//分享设置提交
+		$(".submitBtn").click(function(){
+			var id=$(this).attr("data-id");
+			submitShareSet(id);
+		})
+		var flag=true;
+		function submitShareSet(id){
+			var titleClass=$("input[name=titleClass]:checked").val();
+			var imgClass=$("input[name=imgClass]:checked").val();
+			var url=$("input[name=url]").val();
+			var title="",context=$("[name=context]").val(),imgUrl="";
+			var id=id;
+			var mark="juanpi_goods";
+			if(titleClass===undefined){
+				smallalert('请选择分享标题');
+				return;
+			}else{
+				if(titleClass=="2"){
+					title=$("input[name=title]").eq(0).val();
+				}else if(titleClass=="3"){
+					title=$("input[name=title]").eq(1).val();
+				}
+				if(title==""&&titleClass!="1"){
+					smallalert('请填写分享标题');
+					return;
+				}				
+			}
+			if(context==""){
+				smallalert('请填写分享内容');
+				return;
+			}
+			if(imgClass===undefined){
+				smallalert('请选择分享图片');
+				return;
+			}
+			if(imgClass=="2"){
+				imgUrl=$("input[name=imgUrl]").val();
+				if(imgUrl==""){
+					smallalert('请上传分享图片');
+					return;
+				}
+			}
+			if(url==""){
+				smallalert('请填写分享链接');
+				return;
+			}
+			if(!flag){
+				return;
+			}
+			flag=false;
+			$.ajax({
+				url:'/admin/share_save.htm',
+				data:{shareId:id,mark:mark,titleClass:titleClass,title:title,context:context,imgClass:imgClass,imgUrl:imgUrl,url:url},
+				type:"POST",
+				dataType:"text",
+				success:function(data){
+					flag=true;
+					if(data=="保存成功"){
+						closeShareSet();
+						smallalert('保存成功');
+					}else{
+						smallalert(data);
+					}
+				}
+			})
+		}
+  })
+  
+
+  var transitioning=false;
+  $(".switch-btn.pl").click(function(e){
+	  e.preventDefault();
+	  if(transitioning) return;
+	  var checkbox=$(this).find(":checkbox");
+	  var flag= checkbox.prop("checked");
+	  var ids="";
+	  $("td input:checkbox[data-group=jp]:checked").each(function(){
+		  var id=$(this).attr("data-id");
+		  ids+=id+",";
+	  });	  
+	  if(ids==""){
+		smallalert('请选择商品');
+		return;
+	  }
+	  ids=ids.substring(0,ids.length-1);
+	  var isShow=flag?0:1;
+	  if(flag){
+		  checkbox.prop("checked",false);
+		  $("td input:checkbox[data-group=jp]:checked").each(function(){
+			  $(this).closest("tr").find("label.switch-btn :checkbox").prop("checked",false);
+		  });
+	  }else{
+		  checkbox.prop("checked","checked");
+		  $("td input:checkbox[data-group=jp]:checked").each(function(){
+			  $(this).closest("tr").find("label.switch-btn :checkbox").prop("checked","checked");
+		  });
+	  }
+	  transitioning=true;
+	  setTimeout(function(){
+		  $.ajax({
+				type:"post",
+				url:"$!webPath/admin/update_juanpiGoods_IsShow.htm",
+				data:"ids="+ids+"&isShow="+isShow,
+				dataType:"text",
+				success:function(data){
+					transitioning=false;
+					if(data=='true'){
+						 $("td input:checkbox[data-group=jp]:checked").each(function(){
+							  $(this).closest("tr").remove();
+						 });
+						  if(!flag){
+							  checkbox.prop("checked",false);
+						  }else{
+							  checkbox.prop("checked","checked");
+						  }
+					}
+				}
+			});
+	  },500)
+  })
+
+  $(".switch-btn.one").click(function(e){
+	  e.preventDefault();
+	  if(transitioning) return;
+	  var checkbox=$(this).find(":checkbox");
+	  var flag= checkbox.prop("checked");
+	  var ids=$(this).attr("data-id");
+	  var isShow=flag?0:1;
+	  if(flag){
+		  checkbox.prop("checked",false);		 
+	  }else{
+		  checkbox.prop("checked","checked");		  
+	  }
+	  transitioning=true;
+	  setTimeout(function(){
+		  $.ajax({
+				type:"post",
+				url:"$!webPath/admin/update_juanpiGoods_IsShow.htm",
+				data:"ids="+ids+"&isShow="+isShow,
+				dataType:"text",
+				success:function(data){
+					transitioning=false;
+					if(data=='true'){
+						$("#tr_"+ids).remove();
+					}
+				}
+			});
+	  },500)
+  })
+  
+ 	
+  </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.ReportMapper" >
+
+  
+<!-- 商城 -->
+
+<!-- 商城订单信息 -->
+  <select id="findShopGroup" resultType="hashmap">
+	SELECT 
+		SUM(CASE WHEN o.order_status = 20 THEN 1 ELSE 0 END) AS un_send_count, # 未发货订单
+		SUM(CASE WHEN (DATE(o.add_time) = CURDATE() ) THEN 1 ELSE 0 END) AS today_count, # 今日订单
+		SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND WEEKOFYEAR(NOW()) = WEEKOFYEAR(o.add_time) ) THEN 1 ELSE 0 END) AS week_count, # 本周订单
+		SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND MONTH(NOW()) = MONTH(o.add_time) ) THEN 1 ELSE 0 END) AS month_count, # 本月订单
+		SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND WEEKOFYEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK)) = WEEKOFYEAR(o.add_time) ) THEN 1 ELSE 0 END) AS pre_week_count, #上周订单
+		SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND MONTH(DATE_SUB(NOW(),INTERVAL 1 MONTH)) = MONTH(o.add_time) ) THEN 1 ELSE 0 END) AS pre_month_count #上月订单
+	FROM `shop_order_form` AS o
+	WHERE order_status > 10 AND o.delete_status = 0;
+  </select>
+<!--     未回复咨询 -->
+  <select id="findShopGroupConsult" resultType="hashmap">
+	SELECT COUNT(1) AS un_reply_count
+	FROM `shop_consult` AS s 
+	WHERE s.`delete_status` = 0 AND reply = 0;
+  </select>
+<!--   投诉信息 -->
+  <select id="findShopGroupComplaint" resultType="hashmap">
+	SELECT COUNT(1) AS complaint_count
+	FROM `shop_complaint` AS c
+	WHERE c.`delete_status` = 0;
+  </select>
+<!--     商城商家信息 -->
+  <select id="findShopGroupStore" resultType="hashmap">
+	SELECT 
+	SUM(CASE WHEN DATE(o.add_time) = CURDATE()  THEN 1 ELSE 0 END) AS mer_today_count,# 今日入驻商家
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND WEEKOFYEAR(NOW()) = WEEKOFYEAR(o.add_time) ) THEN 1 ELSE 0 END) AS mer_week_count, # 本周入驻商家
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND MONTH(NOW()) = MONTH(o.add_time) ) THEN 1 ELSE 0 END) AS mer_month_count, # 本月订单
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND WEEKOFYEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK)) = WEEKOFYEAR(o.add_time)) THEN 1 ELSE 0 END) AS mer_pre_week_count #上周订单
+	FROM `shop_store` AS o WHERE  o.is_shop = 1 AND o.delete_status = 0;
+  </select>
+  
+<!--   积分商城 -->
+   <select id="findIntegralOrderGroup" resultType="hashmap">
+	SELECT
+	SUM(CASE WHEN o.igo_status = 20 THEN 1 ELSE 0 END) AS un_send_count, # 未发货订单
+	SUM(CASE WHEN (DATE(o.add_time) = CURDATE() ) THEN 1 ELSE 0 END) AS today_count, # 今日订单
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND WEEKOFYEAR(NOW()) = WEEKOFYEAR(o.add_time) ) THEN 1 ELSE 0 END) AS week_count, # 本周订单
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND MONTH(NOW()) = MONTH(o.add_time) ) THEN 1 ELSE 0 END) AS month_count, # 本月订单
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND WEEKOFYEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK)) = WEEKOFYEAR(o.add_time) ) THEN 1 ELSE 0 END) AS pre_week_count, #上周订单
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND MONTH(DATE_SUB(NOW(),INTERVAL 1 MONTH)) = MONTH(o.add_time) ) THEN 1 ELSE 0 END) AS pre_month_count #上月订单
+	FROM `shop_integral_goods_order` AS o
+	WHERE igo_status > 0 AND o.delete_status = 0 ;
+  </select>
+  
+  <!--   会员管理 -->
+   <select id="findMemberGroup" resultType="hashmap">
+	SELECT
+	COUNT(1) AS total_count,
+	SUM(CASE WHEN (DATE(u.create_time) = CURDATE() ) THEN 1 ELSE 0 END) AS today_count, # 今日
+	SUM(CASE WHEN (YEAR(u.create_time) = YEAR(NOW()) AND WEEKOFYEAR(NOW()) = WEEKOFYEAR(u.create_time) ) THEN 1 ELSE 0 END) AS week_count, # 本周
+	SUM(CASE WHEN (YEAR(u.create_time) = YEAR(NOW()) AND MONTH(NOW()) = MONTH(u.create_time) ) THEN 1 ELSE 0 END) AS month_count, # 本月
+	SUM(CASE WHEN (YEAR(u.create_time) = YEAR(NOW()) AND WEEKOFYEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK)) = WEEKOFYEAR(u.create_time) ) THEN 1 ELSE 0 END) AS pre_week_count, #上周
+	SUM(CASE WHEN (YEAR(u.create_time) = YEAR(NOW()) AND MONTH(DATE_SUB(NOW(),INTERVAL 1 MONTH)) = MONTH(u.create_time) ) THEN 1 ELSE 0 END) AS pre_month_count #上月
+	FROM sys_user AS u
+	WHERE u.`is_deleted` = 0 AND user_type = 1;
+  </select>
+  
+ <!--     商户管理 -->
+   <select id="findMerchantGroup" resultType="hashmap">
+	#商户
+	SELECT 
+	COUNT(1) AS total_count,
+	SUM(CASE WHEN (o.store_status = 0 OR o.store_status = 1 OR o.store_status = 5 OR o.store_status = 10) THEN 1 ELSE 0 END) AS un_audit_count,#未审核
+	SUM(CASE WHEN (o.store_status = 6 OR o.store_status = 11 OR o.store_status = 2)  THEN 1 ELSE 0 END) AS audit_out_count,# 审核不通过
+	SUM(CASE WHEN DATE(o.add_time) = CURDATE()  THEN 1 ELSE 0 END) AS today_count,# 今日入驻商家
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND WEEKOFYEAR(NOW()) = WEEKOFYEAR(o.add_time) ) THEN 1 ELSE 0 END) AS week_count, # 本周入驻商家
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND MONTH(NOW()) = MONTH(o.add_time) ) THEN 1 ELSE 0 END) AS month_count, # 本月订单
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND WEEKOFYEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK)) = WEEKOFYEAR(o.add_time)) THEN 1 ELSE 0 END) AS pre_week_count #上周订单
+	FROM `shop_store` AS o WHERE  is_o2o = 1 AND o.delete_status = 0;
+  </select>
+  
+   <select id="findMerchantGroupUnOwn" resultType="hashmap">
+  	# 未分配商户
+	SELECT COUNT(1) AS un_own_store
+	FROM `shop_store` AS s
+	INNER JOIN `user_seller` AS us ON us.`store_id` = s.`id`
+	LEFT JOIN `user_owns` AS o ON us.`uid` = o.`seller_user_id`
+	WHERE s.`is_o2o` = 1 AND s.delete_status = 0 AND IFNULL(o.`own_operator_id`,0) <![CDATA[<=]]> 0;
+	</select>
+
+   <select id="findMerchantGroupOrder" resultType="hashmap">
+	# 服务订单
+	SELECT 
+	SUM(CASE WHEN (DATE(o.add_time) = CURDATE() ) THEN 1 ELSE 0 END) AS o2o_today_count, # 今日订单
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND WEEKOFYEAR(NOW()) = WEEKOFYEAR(o.add_time) ) THEN 1 ELSE 0 END) AS o2o_week_count, # 本周订单
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND MONTH(NOW()) = MONTH(o.add_time) ) THEN 1 ELSE 0 END) AS o2o_month_count, # 本月订单
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND WEEKOFYEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK)) = WEEKOFYEAR(o.add_time) ) THEN 1 ELSE 0 END) AS o2o_pre_week_count, #上周订单
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND MONTH(DATE_SUB(NOW(),INTERVAL 1 MONTH)) = MONTH(o.add_time) ) THEN 1 ELSE 0 END) AS o2o_pre_month_count #上月订单
+	FROM `o2o_group_order` AS o
+	WHERE order_status > 10 AND o.delete_status = 0;
+	</select>
+
+
+ 	<!--   运营商管理 -->
+   <select id="findOperatorGroup" resultType="hashmap">
+	SELECT 
+	COUNT(1) AS total_count,
+	SUM(CASE WHEN o.status = 0  THEN 1 ELSE 0 END) AS un_audit_count,#未审核
+	SUM(CASE WHEN o.status = 1  THEN 1 ELSE 0 END) AS audit_out_count,# 审核不通过
+	SUM(CASE WHEN DATE(o.create_time) = CURDATE()  THEN 1 ELSE 0 END) AS today_count,# 今日入驻商家
+	SUM(CASE WHEN (YEAR(o.create_time) = YEAR(NOW()) AND WEEKOFYEAR(NOW()) = WEEKOFYEAR(o.create_time) ) THEN 1 ELSE 0 END) AS week_count, # 本周入驻商家
+	SUM(CASE WHEN (YEAR(o.create_time) = YEAR(NOW()) AND MONTH(NOW()) = MONTH(o.create_time) ) THEN 1 ELSE 0 END) AS month_count, # 本月订单
+	SUM(CASE WHEN (YEAR(o.create_time) = YEAR(NOW()) AND WEEKOFYEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK)) = WEEKOFYEAR(o.create_time)) THEN 1 ELSE 0 END) AS pre_week_count #上周订单
+	FROM `user_operator` AS o 
+	WHERE is_deleted = 0 ;
+	</select>
+	
+	
+ <!--     社区管理-->
+   <select id="findSnsGroup" resultType="hashmap">
+	SELECT 
+	SUM(CASE WHEN (DATE(o.add_time) = CURDATE() ) THEN 1 ELSE 0 END) AS today_count, # 今日
+	SUM(CASE WHEN  DATE(o.add_time) = DATE(DATE_SUB(NOW(),INTERVAL 1 DAY)) THEN 1 ELSE 0 END) AS yesterday_count, # 昨日
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND WEEKOFYEAR(NOW()) = WEEKOFYEAR(o.add_time) ) THEN 1 ELSE 0 END) AS week_count, # 本周
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND MONTH(NOW()) = MONTH(o.add_time) ) THEN 1 ELSE 0 END) AS month_count, # 本月
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND WEEKOFYEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK)) = WEEKOFYEAR(o.add_time) ) THEN 1 ELSE 0 END) AS pre_week_count, #上周
+	SUM(CASE WHEN (YEAR(o.add_time) = YEAR(NOW()) AND MONTH(DATE_SUB(NOW(),INTERVAL 1 MONTH)) = MONTH(o.add_time) ) THEN 1 ELSE 0 END) AS pre_month_count #上月
+	FROM `sns_invitation` AS o
+	WHERE o.delete_status = 0;
+	</select>
+
+ <!--     专家咨询管理-->
+   <select id="findExportConsultingGroup" resultType="hashmap">
+	SELECT 
+	SUM(CASE WHEN (DATE(o.create_time) = CURDATE() ) THEN 1 ELSE 0 END) AS today_count, # 今日
+	SUM(CASE WHEN  DATE(o.create_time) = DATE(DATE_SUB(NOW(),INTERVAL 1 DAY)) THEN 1 ELSE 0 END) AS yesterday_count, # 昨日
+	SUM(CASE WHEN (YEAR(o.create_time) = YEAR(NOW()) AND WEEKOFYEAR(NOW()) = WEEKOFYEAR(o.create_time) ) THEN 1 ELSE 0 END) AS week_count, # 本周
+	SUM(CASE WHEN (YEAR(o.create_time) = YEAR(NOW()) AND MONTH(NOW()) = MONTH(o.create_time) ) THEN 1 ELSE 0 END) AS month_count, # 本月
+	SUM(CASE WHEN (YEAR(o.create_time) = YEAR(NOW()) AND WEEKOFYEAR(DATE_SUB(NOW(),INTERVAL 1 WEEK)) = WEEKOFYEAR(o.create_time) ) THEN 1 ELSE 0 END) AS pre_week_count, #上周
+	SUM(CASE WHEN (YEAR(o.create_time) = YEAR(NOW()) AND MONTH(DATE_SUB(NOW(),INTERVAL 1 MONTH)) = MONTH(o.create_time) ) THEN 1 ELSE 0 END) AS pre_month_count #上月
+	FROM `sns_consulting` AS o
+	WHERE o.is_deleted = 0;
+	</select>
+
+</mapper>

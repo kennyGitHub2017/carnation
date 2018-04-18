@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>提现详情-$!{config.title}-$!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+</head>
+<body>
+$!httpInclude.include("/seller/top.htm")
+<div class="main">
+  <div class="seller_center">
+  $!httpInclude.include("/seller/nav.htm?op=groupgoods")
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/seller/index.htm">商家中心</a></b>><b>提现管理</b></span></div>
+      <div class="seller_list_title">
+          <ul class="seller_title_ul">
+            <li><a href="$!webPath/seller/seller_cash.htm">提现申请</a></li>
+            <li class="this"><a href="$!webPath/seller/seller_cash_list.htm">提现列表</a></li>
+          </ul>
+      </div>
+      <div class="user_list">  
+        <div class="add_usercenter">      
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="user_base_table">
+            <tr>
+              <td align="right">提现编号：</td>
+              <td>$!obj.cashSn</td>
+            </tr>
+            <tr>
+              <td align="right">提现金额：</td>
+              <td>$!obj.cashAmount
+                </td>
+            </tr>
+            <tr>
+              <td align="right">提现时间：</td>
+              <td>$!CommUtil.formatLongDate($!obj.addTime)
+                </td>
+            </tr>
+            <tr>
+              <td align="right">支付方式：</td>
+              #if($!obj.cashPayment=="alipay")
+                      #set($cash_payment="支付宝")
+                    #end
+                    #if($!obj.cashPayment=="bill")
+                      #set($cash_payment="快钱")
+                    #end
+                    #if($!obj.cashPayment=="chinabank")
+                      #set($cash_payment="网银在线")
+                    #end
+                    #if($!obj.cashPayment=="tenpay")
+                      #set($cash_payment="财付通")
+                    #end
+              <td>$!cash_payment
+                </td>
+            </tr>
+            <tr>
+              <td align="right">提现状态：</td>
+              #if($!obj.cashStatus==0)
+                      #set($cash_status="等待审核")
+                    #end
+                    #if($!obj.cashStatus==1)
+                      #set($cash_status="审核完成")
+                    #end
+              <td>$!cash_status
+                </td>
+            </tr>
+            <tr>
+              <td align="right">支付状态：</td>
+              #if($!obj.cashPayStatus==0)
+                      #set($cash_pay_status="等待支付")
+                    #end
+                    
+                    #if($!obj.cashPayStatus==1)
+                      #set($cash_pay_status="支付完成")
+                    #end
+              <td>$!cash_pay_status
+                </td>
+            </tr>
+            #if($!obj.cashPayment=="outline")
+            <tr>
+              <td align="right">收款人姓名：</td>
+              <td>$!obj.cashUserName
+                </td>
+            </tr>
+            <tr>
+              <td align="right">收款银行：</td>
+              <td>$!obj.cashBank
+                </td>
+            </tr>
+            <tr>
+              <td align="right">提现备注：</td>
+              <td>$!obj.cashRemittanceInfo
+                </td>
+            </tr>
+            #end
+            #if($!obj.cashAdmin)
+            <tr>
+              <td align="right">操作管理员：</td>
+              <td>$!obj.adminName
+                </td>
+            </tr>
+            #end
+            #if($!obj.cashAdminInfo)
+            <tr>
+              <td align="right">操作备注：</td>
+              <td>$!obj.cashAdminInfo
+                </td>
+            </tr>
+            #end
+            <tr>
+              <td>&nbsp;</td>
+              <td>
+                <input type="button" name="button"  value="返回列表" style="cursor:pointer;"  class="save" onclick="window.location.href='$!webPath/seller/seller_cash_list.htm'" />
+              </td>
+            </tr> 
+          </table>
+        </div> 
+      </div>
+    </div>
+  </div>
+
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

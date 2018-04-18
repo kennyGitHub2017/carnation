@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">自测档案</h1>
+  <!-- <form action="$!webPath/admin/userRebate.htm" method="post">
+    <input name="userId" type="hidden" id="userIda" value="$!vo.userId" />
+  <div class="search">
+    <ul>
+      <li>
+        <span>昵称</span> <span class="size200">
+          <input name="nickname" type="text" id="nicknamea" value="$!vo.nickname" />
+        </span>
+        <span>手机号</span> <span class="size200">
+          <input name="mobile" type="text" id="mobilea" value="$!vo.mobile" />
+        </span>
+        <span>
+          <input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn"/>
+        </span>
+      </li>
+    </ul>
+  </div>
+  </form> -->
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/admin/selfTest.htm" method="post">
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="15%"><span class="form_btna">标题</span></th>
+        <th width="5%"><span class="form_btna">得分</span></th>
+        <th><span class="form_btna">结果描述</span></th>
+        <th width="10%"><span class="form_btna">自测时间</span></th>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+        <td align="center">$!obj.groupTitle</td>
+        <td align="center">$!obj.score</td>
+        <td align="center">$!obj.resultDesc</td>
+        <td align="center">$!CommUtil.formatLongDate($!obj.createTime)</td>
+      </tr>
+      #end
+    </table>
+  </div>
+  
+      <div class="operate_bar">
+     
+    
+    <div class="fenye"><input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+      <input name="userId" type="hidden" id="userId" value="$!vo.userId" />
+      <input name="nickname" type="hidden" id="nickname" value="$!vo.nickname" />
+      <input name="mobile" type="hidden" id="mobile" value="$!vo.mobile" />
+	  $!gotoPageFormHTML</div>
+             
+ </div>
+ </FORM>
+</div>
+</body>
+</html>

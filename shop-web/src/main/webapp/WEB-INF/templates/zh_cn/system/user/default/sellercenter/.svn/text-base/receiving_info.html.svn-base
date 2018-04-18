@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-服务管理 - $!config.title - $!{config.poweredby}</title>
+<meta name="renderer" content="webkit">
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/shop/css/store_invitationInfo.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/qcode.js"></script>
+<style>
+.qrCode_content #qrcode{width: 115px;height: 115px;margin: auto;text-align: center;margin-top: 90px;}
+.qrCodeSj{text-align:center; margin-top:37px;   background-image: url("$!webPath/resources/img/myzsm1.png"); background-repeat:no-repeat;background-position:center center; height: 300px;width: 200px;}
+.black-gray{display:none;position: fixed;top: 0%;left: 0%;width: 100%;height: 100%; background-color: black;z-index: 99;-moz-opacity: 0.6;opacity: 0.6;filter: alpha(opacity=60);}
+.lookbigimg{cursor:pointer; display:inline-block;margin:15px 0px 28px 10px; text-align:center; border:1px solid #e8e5e5;border-radius:5px;width:98px;height:28px;line-height:26px;font-size:12px;color:#4a4a4a; background-image:url("$!webPath/resources/img/lookbigimg.png"); background-repeat:no-repeat;background-position:19px;  text-indent: 20px; center #f7f7f7;}
+.bigerweima{display:none;text-align:center; z-index:1000;position: absolute;top:170px;left:38.3%; border-radius:30px;width:468px;height:703px; background-image: url("$!webPath/resources/img/myzsma.png"); background-repeat:no-repeat;background-position:center center; background-size:cover;}
+#qrcode2{width: 255px;height: 255px; margin: auto;text-align: center;margin-top: 220px;}
+.close-erweima{position: absolute;font-size:16px;color:#ffffff;width:100%; text-align:right;background-image: url("$!webPath/resources/img/close-img.png");background-position:90% center;background-repeat:no-repeat; top: -45px;cursor: pointer;}
+</style>
+
+</head>
+<body>
+$!httpInclude.include("/seller/top.htm")
+<div class="black-gray"></div>
+<div class="bigerweima">
+<div class="close-erweima">关闭</div>
+<!-- 查看大图二维码 -->
+    <div id="qrcode2"></div>
+    <input  type="hidden" id="invitationCodeId" value="$!{unified_QrPath}" />
+</div>
+<div class="main">
+  <div class="seller_center"> 
+  $!httpInclude.include("/seller/nav.htm?op=receiving_info")
+    <div class="seller_right">
+      <div class="seller_position"> <span> <b><a href="$!webPath/seller/index.htm">商家中心</a></b>><b>我的专属码</b></span> </div>
+      
+      <!--  <li child_show="true" id="nav_goods"><b><a href="$!webPath/seller/my_invitation_downloadQrcode.htm">二维码</a><s><img src="$!webPath/resources/style/system/front/default/images/usercenter/nav_s.gif" width="9" height="5" /></s></b>
+	       
+      </li> -->
+      <div class="seller_list">
+       <div class="seller_list_title">
+	      <ul class="seller_title_ul">
+	        <li  class="this" ><a href="$!webPath/seller/my_invitationInfo.htm">我的专属码</a></li>
+	      </ul>
+	    </div>
+      </div>
+      <div class="user_sp_right" style="border-bottom:none;">
+		     <div class="common-container fn-clear">
+		       <div class="left_content">
+		       	<div class="left_content-xuzhi"><span>＊</span>  使用须知</div>
+		       	<div class="left-zhushi">1.  此二维码可用来 “收款”和 “注册会员”，且支持多种支付方式；</div>
+		       	<div class="left-zhushi">2. 为方便商户支付使用，可直接下载打印，建议打印制作尺寸为 8*12cm；</div>
+		       	<div class="left-zhushi2">（原图：尺寸：8*12cm，分辨率：300像素/英寸）</div>
+
+		            <form action="$!webPath/seller/my_invitationInfo_save.htm" method="post" name="ListForm" id="saveInvitationInfoForm">
+
+		            
+		             <div class="btns">
+
+		                <a id="down_code" href="javascript:;" onclick="markqrcode()" target="_blank">下载专属码</a>
+		                
+						<div class="-mob-share-ui-bg"></div>
+		            </div>
+		           </form>
+		          
+		       </div>
+		       <div class="qrCode_content qrCodeSj">
+		           <div id="qrcode"></div>
+		            <input  type="hidden" id="invitationCodeId" value="$!user.invitationCode" />
+		       </div>
+		            <span id="lookbigimg" class="lookbigimg">查看大图</span>
+		       
+		   </div>
+      </div>
+    </div>
+    <img src="$!webPath/resources/img/myzsma.png" id="loadbg" style="display:none" />
+   <script type="text/javascript">
+   		function markqrcode(){
+			if(document.createElement("canvas").getContext("2d")){   				
+   				var canvas=document.createElement("canvas");
+   				var ctx=canvas.getContext("2d");
+   				canvas.width=470;
+   				canvas.height=701;   				
+   				var loadbg=document.getElementById("loadbg");   									
+				ctx.drawImage(loadbg,0,0,470,701);			
+				var imgqr=$("#qrcode2 img")[0];			
+				ctx.drawImage(imgqr,106,220,255,255);
+				var src=canvas.toDataURL("image/png");				
+				var odownLoad=document.getElementById('down_code');
+				
+				
+				
+	            /* var img=document.createElement("img");
+	            img.src=src;
+	            odownLoad.appendChild(img);
+	            return; */
+	            				
+		        if (myBrowser()==="IE"||myBrowser()==="Edge"){
+		        	
+		            //IE		 
+		          //  $("#down_code").attr("href","javascript:;");
+		         //   var blob = dataURLtoBlob(src);
+		          //  alert(blob);
+		            //支持IE11  
+		         //   window.navigator.msSaveBlob(blob, "我的专属码.png");	        	
+		            $("#down_code").attr("href","$!webPath/seller/qr_code.htm?url=$!{unified_QrPath}");
+		          			            
+		        }else{
+		        	var blob = dataURLtoBlob(src);  
+		            url = window.URL.createObjectURL(blob);		            
+		            odownLoad.href = url; odownLoad.download = "我的专属码.png";
+		        }
+				
+				
+   			}else{//浏览器不支持canvas
+   				$("#down_code").attr("href","$!webPath/seller/qr_code.htm?url=$!{unified_QrPath}");
+   			}
+   		}
+   		
+function dataURLtoBlob(dataurl) {
+	  var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+	    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+	  while(n--){
+	    u8arr[n] = bstr.charCodeAt(n);
+	  }
+	  return new Blob([u8arr], {type:mime});
+}
+   </script>
+   <script>
+		//判断浏览器类型
+	    function myBrowser(){
+	        var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+	        var isOpera = userAgent.indexOf("Opera") > -1;
+	        if (isOpera) {
+	            return "Opera"
+	        }; //判断是否Opera浏览器
+	        if (userAgent.indexOf("Firefox") > -1) {
+	            return "FF";
+	        } //判断是否Firefox浏览器
+	        if (userAgent.indexOf("Chrome") > -1){
+	            return "Chrome";
+	        }
+	        if (userAgent.indexOf("Safari") > -1) {
+	            return "Safari";
+	        } //判断是否Safari浏览器
+	        if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+	            return "IE";
+	        }; //判断是否IE浏览器
+	        if (userAgent.indexOf("Trident") > -1) {
+	            return "Edge";
+	        } //判断是否Edge浏览器
+	    }
+
+		function SaveAs5(imgURL)
+		{
+		    var oPop = window.open(imgURL,"","width=1, height=1, top=5000, left=5000");
+		    for(; oPop.document.readyState != "complete"; )
+		    {
+		        if (oPop.document.readyState == "complete")break;
+		    }
+		    oPop.document.execCommand("SaveAs");
+		    oPop.close();
+		}
+</script>
+    <input  type="hidden" id="appShareInfoId" value="$!userAccount.appShareInfo" />
+    <input  type="hidden" id="invitationCodeId" value="$!user.invitationCode" />
+
+
+<script>
+	    var url = window.location.href;
+	    var bool = url.indexOf("ysysgo.com");
+	    var domain = 'http://shop.ysysgo.com';//global variable
+	    
+	    if(bool > -1){
+	 		//window.location = "http://shop.ysysgo.com/mobile_register.htm?invitationCode=$!{request.getParameter("invitationCode")}";
+	 		domain = 'http://shop.ysysgo.com';
+	    }
+		    
+</script>
+<script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=e4e564ad10a1"></script>
+<script>
+mobShare.config( {
+
+    debug: true, // 开启调试，将在浏览器的控制台输出调试信息
+
+    appkey: 'e4e564ad10a1', // appkey
+
+    params: {
+        url: domain+'/mobile_register.htm?invitationCode='+$("#invitationCodeId").val(), // 分享链接
+        title: domain+'/mobile_register.htm?invitationCode='+$("#invitationCodeId").val(), // 分享标题
+        description: $('#appShareInfoId').val(),//'邀请注册赚积分', // 分享内容$!{obj.groupClassName}
+        pic: '', // 分享图片，使用逗号,隔开
+    },
+
+    /**
+     * 分享时触发的回调函数
+     * 分享是否成功，目前第三方平台并没有相关接口，因此无法知道分享结果
+     * 所以此函数只会提供分享时的相关信息
+     * 
+     * @param {String} plat 平台名称
+     * @param {Object} params 实际分享的参数 { url: 链接, title: 标题, description: 内容, pic: 图片连接 }
+     */
+    callback: function( plat, params ) {
+    }
+
+} );
+
+</script>
+
+<!-- MOB SHARE END -->
+    
+  </div>
+  
+
+  
+</div>
+
+
+
+$!httpInclude.include("/footer.htm")
+
+
+ <script type="text/javascript">
+
+    window.onload =function(){
+    
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 115,//设置宽高
+            height : 115
+        });
+      //  qrcode.makeCode(domain+'/mobile_register.htm?invitationCode='+$("#invitationCodeId").val()+ location.hash.replace("#", ""));
+         
+      qrcode.makeCode("$!{unified_QrPath}");
+       
+      var qrcode2 = new QRCode(document.getElementById("qrcode2"), {
+            width : 255,//设置宽高
+            height : 255
+        });
+       // qrcode2.makeCode(domain+'/mobile_register.htm?invitationCode='+$("#invitationCodeId").val()+ location.hash.replace("#", ""));
+        qrcode2.makeCode("$!{unified_QrPath}");
+    }
+
+    $("#lookbigimg").click(function() {
+    	$(".black-gray").show();
+    	$(".bigerweima").show();
+	});
+    
+    $(".close-erweima").click(function() {
+    	$(".black-gray").hide();
+    	$(".bigerweima").hide();
+	});
+</script>
+
+</body>
+</html>

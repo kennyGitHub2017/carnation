@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/alertTextarea.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('#beginTimeStr').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery('#endTimeStr').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true
+  });
+  jQuery("#refundStatus").val("$!vo.refundStatus");
+	$('#statusId').val('$!vo.status');
+});
+function applyConfirm(id, status) {
+	var title=(status == 5 ? '通过此退款申请？' : '拒绝此退款申请？');
+	alertTextareaFn(title,function(){
+		var reason=$("#beizhu").val();
+		var form=document.getElementById("Form1");
+		$("#txt_reason").val(reason);
+		$("#txt_id").val(id);
+		$("#txt_status").val(status);
+		//alert(encodeURIComponent(reason));
+		form.submit();
+	});
+};
+</script>
+</head>
+<body>
+<form name="Form1" id="Form1" action="$!webPath/group/refund/applyIng.htm" method="post" style="display:none">
+	<input type="text" id="txt_reason" name="reason" value="" />
+	<input type="text" id="txt_id" name="id" value="" />
+	<input type="text" id="txt_status" name="status" value="" />
+	
+</form>
+<div class="cont">
+  <h3 class="seth">服务退款审核</h3>
+  <div class="nav_list">
+  		<ul>
+        	<li><a href="$!webPath/group/refund/applyList.htm" class="this"><b>服务退款审核</b></a></li>
+            <!-- <li><a href="$!webPath/admin/groupinfo_refund_list.htm"><b>消费码退款</b></a></li> -->
+            <!-- <li><a href="$!webPath/admin/refundlog_list.htm"><b>退款日志</b></a></li> -->
+        </ul>
+  </div>
+  <form name="queryForm" id="queryForm" action="$!webPath/group/refund/applyList.htm" method="post">
+    <div class="search">
+      <span>服务名称</span> 
+      <span class="size150"><input name="groupName" type="text" id="groupName" value="$!vo.groupName" /></span>
+      <span>申请者</span>
+      <span class="size150"><input name="nickName" type="text" id="nickName" value="$!vo.nickName" /></span> 
+      <span>退款状态</span> 
+      <span class="size150">
+        <select name="status" id="statusId">
+          <option value="">－所有状态－</option>
+          <option value="3">待审核</option>
+          <option value="5">审核通过</option>
+          <option value="6">拒绝通过</option>
+          <option value="7">退款完成</option>
+        </select>
+      </span>
+      <span>申请时间</span> 
+      <span class="size100">
+      	<input name="beginTimeStr" type="text" id="beginTimeStr" value="$!vo.beginTimeStr" readonly="readonly" />
+      </span>
+      	&nbsp;—
+      <span class="size100">
+      	<input name="endTimeStr" type="text" id="endTimeStr" value="$!vo.endTimeStr" readonly="readonly" />
+      </span> 
+      <span><input type="submit"  value="搜索" style="cursor: pointer;" class="search_btn" /></span> 
+    </div>
+  </form>
+  <form name="ListForm" id="ListForm" action="$!webPath/group/refund/applyList.htm" method="post">
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="9%">订单id</th>
+          <th width="9%">服务名称</th>
+          <th width="9%">消费码</th>
+          <th width="6%">申请者</th>
+          <th width="8%">申请时间</th>
+          <th width="8%">服务价格</th>
+          <th width="9%">商户名称</th>
+          <th width="8%">退款时间</th>
+          <th width="9%">退款说明</th>
+          <th width="9%">拒退原因</th>
+          <th width="9%">备注</th>
+          <th width="6%">操作</th>
+        </tr>
+        #foreach($obj in $objs)
+          #set($map = $!orderFormTools.queryGroupInfo("$!obj.groupOrderBO.groupInfo"))
+          #set($goods_id = "$!{map.get('goods_id')}")	
+          #set($goods_name = "$!{map.get('goods_name')}")	
+          #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+          #set($img = "$!{goods_mainphoto_path}")
+          #set($goods_count = "$!{map.get('goods_count')}")
+          #set($goods_price = "$!{map.get('goods_price')}")
+          #set($goods_begin_time = "$!{map.get('goods_begin_time')}")
+          #set($goods_end_time = "$!{map.get('goods_end_time')}")
+          #set($goods_total_price = "$!{map.get('goods_total_price')}")
+        <tr>
+          <td align="center">$!obj.orderStr</td>
+          <td><span class="size70"><a href="$!shopPath/group/view_$!{obj.goodsId}.htm" target="_blank" style="color: #00F">$!CommUtil.substring("$!goods_name",35)</a></span></td>
+          <td align="center">$!obj.groupSn</td>
+          <td align="center">$!obj.nickname</td> 
+          <td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td> 
+          <td align="center">$!goods_price</td>     
+          <td align="center">$!obj.storeName</td>
+          <td align="center">$!CommUtil.formatLongDate($!obj.refundCompleteTime)</td>
+          <td align="center" title="$!obj.refundReasion"> <div style='overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:120px;'>
+          $!obj.refundReasion
+          </div></td>
+          <td align="center">$!obj.refusedInfo</td>
+          <td align="center">$!obj.checkReasion</td>
+          <td align="center">
+          	#if($!obj.status==3)
+          	  <a href="javascript:applyConfirm($!obj.id, 5)" style="color: #00F">通过</a>&emsp;
+          	  <a href="javascript:applyConfirm($!obj.id, 6)" style="color: #00F">拒绝</a>
+          	#end
+          	#if($!obj.status==5) 审核通过 #end
+          	#if($!obj.status==6) 审核不通过 #end
+          	#if($!obj.status==7) 退款完成 #end
+          </td>
+        </tr>
+        #end
+    </table>
+    
+    <div class="operate_bar">
+        <div class="fenye" id="queryCondition">
+        	<input name="groupName" type="hidden" id="groupName" value="$!vo.groupName" />
+        	<input name="nickName" type="hidden" id="nickName" value="$!vo.nickName" />
+        	<input name="status" type="hidden" id="status" value="$!vo.status" />
+            <!-- <input name="mulitId" type="hidden" id="mulitId" /> -->
+            <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+           $!gotoPageFormHTML
+        </div> 
+        <div class="oper_sp">
+        </div>         
+ 	</div>
+  </div>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.InvitationClassMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.InvitationClass">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="udpate_time" property="udpateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+	</resultMap>
+
+	<resultMap type="com.sinco.carnation.sns.bo.InvitationClassBO"
+		id="InvitationClassBOResultMap" extends="BaseResultMap">
+
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, parent_id, name, update_by, udpate_time, create_by, create_time,
+		is_deleted
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sns.model.InvitationClassExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_invitation_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sns_invitation_class
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="queryByIds" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sns_invitation_class
+		where id in
+		<foreach collection="ids" index="index" item="id" open="("
+			separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sns_invitation_class
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sns.model.InvitationClassExample">
+		delete from sns_invitation_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.InvitationClass">
+		insert into sns_invitation_class (id, parent_id, name,
+		update_by, udpate_time, create_by,
+		create_time, is_deleted)
+		values (#{id,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT},
+		#{name,jdbcType=VARCHAR},
+		#{updateBy,jdbcType=VARCHAR}, #{udpateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.InvitationClass">
+		insert into sns_invitation_class
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="udpateTime != null">
+				udpate_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="udpateTime != null">
+				#{udpateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sns.model.InvitationClassExample"
+		resultType="java.lang.Integer">
+		select count(*) from sns_invitation_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sns_invitation_class
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=BIGINT},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updateBy != null">
+				update_by = #{record.updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.udpateTime != null">
+				udpate_time = #{record.udpateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sns_invitation_class
+		set id = #{record.id,jdbcType=BIGINT},
+		parent_id = #{record.parentId,jdbcType=BIGINT},
+		name = #{record.name,jdbcType=VARCHAR},
+		update_by = #{record.updateBy,jdbcType=VARCHAR},
+		udpate_time = #{record.udpateTime,jdbcType=TIMESTAMP},
+		create_by = #{record.createBy,jdbcType=VARCHAR},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{record.isDeleted,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.InvitationClass">
+		update sns_invitation_class
+		<set>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="udpateTime != null">
+				udpate_time = #{udpateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.InvitationClass">
+		update sns_invitation_class
+		set parent_id = #{parentId,jdbcType=BIGINT},
+		name = #{name,jdbcType=VARCHAR},
+		update_by = #{updateBy,jdbcType=VARCHAR},
+		udpate_time = #{udpateTime,jdbcType=TIMESTAMP},
+		create_by = #{createBy,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{isDeleted,jdbcType=BIT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- 条件分页 -->
+	<select id="queryInvitationClass" resultMap="InvitationClassBOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sns_invitation_class
+		where 1 = 1
+		<if test="name != null">
+			and name like concat('%',#{name},'%')
+		</if>
+		<if test="parentId != null and parentId > 0">
+			and parent_id = #{parentId}
+		</if>
+	</select>
+
+	<!-- 根据父id 查询 -->
+	<select id="queryInvitationClassBoByParentId" resultMap="InvitationClassBOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sns_invitation_class
+		where parent_id = #{parentId}
+	</select>
+
+	<select id="countChild" resultType="java.lang.Long">
+		select count(1)
+		from sns_invitation_class
+		where parent_id = #{id}
+	</select>
+</mapper>

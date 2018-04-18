@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" href="$!webPath/resources/editor/themes/default/default.css" />
+<script src="$!webPath/resources/js/jquery.shop.base.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/ajaxfileupload.js"></script>
+<script src="$!webPath/resources/js/jquery.imgareaselect.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){	
+	 #if($!obj.status == -10)
+		 jQuery("#reason").show();
+	 #end
+jQuery("#status").change(function(){
+		if(jQuery(this).val()==-10){
+			jQuery("#reason").show();
+			}else{
+				jQuery("#reason").hide();
+				}							 						 
+	});
+	jQuery("#logoShow").mouseover(function(){		
+	    jQuery("#logoImg").css('display','block');	
+   }).mouseout(function(){
+		jQuery("#logoImg").css('display','none');
+	});
+	jQuery.validator.addMethod("fr",
+    	    function(value, element) {
+    			var status=$("#status").val();
+    			var failreason=$("#failreason").val();
+    			if (status == '-10' && failreason.length == 0){
+        			return false;
+        		}else{
+            		return true;
+            	}
+    		});
+	 jQuery("#theForm").validate({
+	        rules: {
+	        	failreason: {
+	        		fr: true
+	            }
+	        },
+	        messages: {
+	        	failreason: {
+	        		fr: "审核不通过需要填写原因!"
+	            }
+	        }
+	 });
+});
+function saveForm(){
+	jQuery("#theForm").submit();	
+}
+</script>
+</head>
+<body>
+<form action="$!webPath/admin/information_verify_save.htm" method="post"  name="theForm" id="theForm">
+  <input name="id" type="hidden" id="id" value="$!obj.id" />
+  <input name="listUrl" type="hidden" id="listUrl" value="$!webPath/admin/information_verifylist.htm" />
+  <div class="cont">
+    <h1 class="seth">资讯管理</h1>
+    <div class="nav_list">
+      <ul>
+        <li> <a href="$!webPath/admin/information_list.htm"><b>所有资讯</b></a></li>
+        <li><a href="$!webPath/admin/information_verifylist.htm"><b>待审核资讯</b></a></li>
+        <li><a href="$!webPath/admin/information_add.htm"><b>新增资讯</b></a></li>
+        <li><a href="javascript:void(0);" class="this"><b>审核</b></a></li>
+      </ul>
+    </div>
+    <div class="edit">
+      <div class="editul setcont" >
+        <ul class="set1">
+          <li class="setcont_bg">资讯标题：</li>
+          <li><span class="webname">$!obj.title </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">资讯分类：</li>
+          <li><span class="webname">$!cmsTools.queryInforClass("$!obj.classid")</span></li>
+        </ul>
+         <ul class="set1">
+          <li class="setcont_bg">发布时间：</li>
+          <li><span class="webname">$!CommUtil.formatLongDate($!obj.addTime)</span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">资讯内容：</li>
+        </ul>
+        <ul class="set1">
+          <li><span class="webname">$!obj.article </span></li>
+        </ul>
+        <ul class="set1">
+          <li class="setcont_bg">审核状态</li>
+          <li> <span class="webname">
+            <select name="status" id="status" #if($!obj.status != 10) disabled=disabled  #end>
+              <option value="20" #if($!obj.status == 20) selected=selected #end>审核通过</option>
+              <option value="-10" #if($!obj.status == -10) selected=selected #end>审核未通过</option>
+            </select>
+            </span></li>
+        </ul>
+        <ul class="set1" id="reason" style="display:none">
+          <li class="setcont_bg">审核失败原因:</li>
+          <li> <span class="webname">
+            <textarea rows="6" cols="40" name="failreason" id="failreason"  #if($!obj.status != 10) disabled=disabled  #end>$!obj.failreason</textarea>
+            </span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="submit"> <span class="pad120">
+    	 #if($!obj.status == 10)
+      <input name="" type="button" value="保存" style="cursor:pointer;" onclick="saveForm();"/>
+      #end
+      </span> </div>
+  </div>
+</form>
+</body>
+</html>

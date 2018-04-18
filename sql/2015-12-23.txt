@@ -1,0 +1,175 @@
+
+
+#******************来源林补 审核拒绝原因******************BEGIN
+
+ALTER  TABLE shop_store_group_adjust ADD COLUMN refusedDesc VARCHAR(1000) DEFAULT NULL;
+
+ALTER TABLE shop_store_group_adjust  MODIFY COLUMN refusedDesc VARCHAR(1000) COMMENT  '审核拒绝原因';
+
+ALTER  TABLE o2o_group_goods ADD COLUMN refusedReasonDesc VARCHAR(2000) DEFAULT NULL;
+
+ALTER TABLE o2o_group_goods  MODIFY COLUMN refusedReasonDesc VARCHAR(2000) COMMENT  '审核拒绝原因';
+
+
+#******************来源林补 审核拒绝原因******************END
+
+
+
+
+#******************来源林补 圣诞活动******************BEGIN
+
+ALTER  TABLE sns_advert ADD COLUMN nativeType INT(11) DEFAULT 1 COMMENT '1：默认是html5链接页面，2：app原生页面';
+
+
+#******************来源林补 圣诞活动******************END
+
+
+
+#*********************************推荐会员赠送积分*********************************BEGIN
+DELETE FROM sys_integral_reg WHERE `type` = 'integral_register_invitation';
+INSERT INTO `sys_integral_reg` (`id`, `delete_status`, `name`, `type`, `times_limit_type`, `times`, `integral`, `sign_integral`, `display`, `add_time`) 
+VALUES('113',0,'推荐新会员注册','integral_register_invitation','1','0','20','0',1,'2015-12-22 16:09:52');
+#*********************************推荐会员赠送积分*********************************END
+
+
+
+#******************来源林补 我的分享设置信息******************BEGIN
+
+ALTER  TABLE sys_user_account ADD COLUMN appShareInfo VARCHAR(1000) DEFAULT NULL COMMENT '我的分享设置信息（app）';
+
+#******************来源林补 我的分享设置信息******************END
+
+
+
+#*********************************用户表增加注册来源字段*********************************BEGIN
+ALTER TABLE `sys_user`  ADD COLUMN `relation_type` INT(1)  AFTER `regist_IP`; 
+#*********************************我的分享设置信息***************************************END
+
+
+#*********************************来源穆喜 ***add by muxi 2015-12-23*********BEGIN
+
+
+DROP TABLE IF EXISTS `sns_knowledge_class`;
+CREATE TABLE `sns_knowledge_class` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `create_time` datetime DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+
+
+DROP TABLE IF EXISTS `sns_expert_knowledge`;
+CREATE TABLE `sns_expert_knowledge` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) DEFAULT NULL COMMENT '标题',
+  `context` longtext COMMENT '类容',
+  `knowledge_type` bigint(50) DEFAULT NULL COMMENT '类型',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+
+#*********************************来源穆喜*********************************END
+
+
+
+
+
+
+#*********************************来源林补 ,更新用户默认设置信息2015-12-24*********BEGIN
+
+UPDATE sys_user_account SET appShareInfo = '加入云尚,立马赠送20积分,积分可兑换商品!速点!' WHERE appShareInfo IS  NULL;
+
+
+#*********************************来源林补 ,更新用户默认设置信息2015-12-24*********end
+
+
+#*********************************商品排序权重 黄国伟 2015-12-25*********BEGIN
+alter table shop_goods add sort_weight int(11) DEFAULT '0' COMMENT '商品排序权重，降序排序，越大排在越前';
+
+#*********************************商品排序权重 黄国伟 2015-12-25*********end
+
+
+
+#*********************************添加商家微信扫码支付 陈舟 2015-12-26*********BEGIN
+DELETE FROM shop_payment WHERE mark = 'mch_wxqrpay';
+INSERT INTO `shop_payment` ( `add_time`, `delete_status`, `alipay_rate`, `app_private_key`, `app_public_key`, `chinabank_account`, `chinabank_key`, `content`, `currency_code`, `install`, `interface_type`, `mark`, `merchant_acctId`, `name`, `partner`, `paypal_user_id`, `pid`, `poundage`, `rmb_key`, `safe_key`, `seller_email`, `spname`, `tenpay_key`, `tenpay_partner`, `trade_mode`, `wx_appSecret`, `wx_appid`, `wx_paySignKey`) 
+VALUES('2015-08-20 12:33:51','','0.00','','','','','','',1,'0','mch_wxqrpay','1236624702','商家微信扫码支付','','','','0.00','','','','','','1265881701','0','','wx3bfc318da13b79af','12hj31vslkjfl32423xcmnvlsldf3csd');
+
+
+
+
+CREATE TABLE `shop_qr_pay_order` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `seller_id` BIGINT(20) NOT NULL COMMENT '卖家Id',
+  `pay_order_no`   VARCHAR(255) DEFAULT NULL COMMENT '本次支付订单号',
+  `wx_transaction_id`   VARCHAR(255) DEFAULT NULL COMMENT '微信订单号',
+  `total_fee` DECIMAL(12,2) DEFAULT NULL COMMENT '总金额',
+  `prepay_id` VARCHAR(255) DEFAULT NULL COMMENT '微信预付订单号',
+  `order_id`  VARCHAR(255) DEFAULT NULL COMMENT '关联订单',  
+  `pay_status` TINYINT DEFAULT 0 COMMENT '支付状态，0-未支付，1-支付成功，2-支付失败',
+  `create_time` DATETIME DEFAULT NULL,
+  `modify_time` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='在商家线下扫描支付订单';
+
+
+#*********************************添加商家微信扫码支付 陈舟 2015-12-26*********END
+
+#*********************************来源林补 ,分享时显示的下载图片2015-12-26*********BEGIN
+
+ALTER  TABLE sns_invitation ADD COLUMN appDownloadPic VARCHAR(100) DEFAULT NULL COMMENT '分享时显示的下载图片';
+
+
+#*********************************来源林补 ,分享时显示的下载图片2015-12-26*********END
+
+
+#*********************************来源任超 ,双倍积分设置2015-12-26*********BEGIN
+
+DROP TABLE IF EXISTS `act_double_score_set`;
+
+CREATE TABLE `act_double_score_set` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name_key` varchar(15) COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'key值',
+  `name_value` varchar(50) COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'value值',
+  `description` varchar(30) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='双倍积分设置';
+
+-- ----------------------------
+-- Records of  ac`_double_score_set 
+-- ----------------------------
+INSERT INTO `act_double_score_set` VALUES ('1', 'number', '2', '双倍积分');
+INSERT INTO `act_double_score_set` VALUES ('2', 'status', '0', '状态');
+INSERT INTO `act_double_score_set` VALUES ('3', 'startDate', '2015.12.01', '开始日期');
+INSERT INTO `act_double_score_set` VALUES ('4', 'endDate', '2015.12.30', '结束日期');
+#*********************************来源任超 ,双倍积分设置2015-12-26*********end
+
+#*********************************黄国伟 2015-12-28*********END
+UPDATE shop_goods SET goods_warn_inventory=10;
+
+alter table shop_goods alter column goods_warn_inventory set default '10';
+
+
+alter table o2o_group_goods add column group_count_warn int(11) default '10' COMMENT '服务库存预警数量';
+
+#*********************************黄国伟 2015-12-28*********END
+
+
+#*********************************来源林补:消息推送表2015-12-29*********BEGIN
+
+CREATE TABLE `notice_message` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `uid` BIGINT(20) DEFAULT NULL COMMENT '用户id',
+  `create_time` DATETIME DEFAULT NULL COMMENT '消息创建时间',
+  `notice_message` VARCHAR(500) DEFAULT NULL COMMENT '消息内容',
+  `notice_type` INT(4) DEFAULT NULL COMMENT '消息类型',
+  `push_status` INT(4) DEFAULT NULL COMMENT '是否推送过。默认：0没推送，1：已推送',
+  `notcie_log_amount` DECIMAL(12,2) DEFAULT NULL COMMENT '数量',
+  `relate_id` BIGINT(20) DEFAULT NULL COMMENT '消息相关的记录id，例如该消息是活动id',
+  `pushToAll` INT(4) DEFAULT NULL COMMENT '向所有用户推送',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
+
+#*********************************来源林补:消息推送表2015-12-29*********BEGIN

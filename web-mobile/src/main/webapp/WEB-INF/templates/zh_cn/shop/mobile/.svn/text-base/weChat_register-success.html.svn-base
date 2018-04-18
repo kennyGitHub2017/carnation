@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+
+    <title>注册成功</title>
+
+    <link href="$!webPath/resources/assets/css/normalize.css" rel="stylesheet" type="text/css">
+	<link href="$!webPath/resources/assets/css/font.css?v=1" rel="stylesheet" type="text/css">
+	<link href="$!webPath/resources/assets/css/style.css?v=5" rel="stylesheet" type="text/css">
+	<script>
+		    var isAndroid, isiOS;
+		    (function() {
+		        var u = navigator.userAgent, app = navigator.appVersion;
+		        isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+		        isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+		    }());
+	</script>
+</head>
+<body>
+
+    <div class="reg-wrap">
+        <h1 class="text-center"><img src="$!webPath/resources/assets/images/logo.png?v=1" style="max-width: 55%;"></h1>
+
+        <p class="page-ico"><img src="$!webPath/resources/assets/images/success.jpg" /></p>
+        <div class="reg-success">
+            <div class="c-blue">恭喜您，已成为云尚会员！</div>
+            <div>系统将 <span class="c-blue" id="timeNum">3秒</span> 后自动跳转到首页页面！</div>
+        </div>
+        <!-- <a href="http://static.ysysgo.com/static/platform/appDownload.jsp" class="btn btn-blue btn-block">立即下载</a> -->
+         <a href="#" class="btn btn-blue btn-block">&nbsp;&nbsp;&nbsp;</a>
+
+
+        <p class="text-center reg-copyright">
+            版权所有：云尚<br>
+            服务热线：xxxxxxxx
+        </p>
+
+
+    </div>
+
+
+
+    <!--<div class="fixed-bottom-bar double-btn-bar pt-10">-->
+        <!--<button class="btn btn-blue">附近医院</button>-->
+        <!--<button class="btn btn-blue">咨询专家</button>-->
+    <!--</div>-->
+
+    <script src="$!webPath/resources/assets/js/jquery-2.1.4.min.js"></script>
+    <script src="$!webPath/resources/assets/js/jquery-validate.min.js"></script>
+
+    <script>
+        var time=10;
+        setInterval(function() {
+            time--
+            if (time == 0) {
+               /*  location.href = "http://static.ysysgo.com/static/platform/appDownload.jsp"; */
+               	 var url="$!webPath/b2b2c_login.htm?username=$!username&password=$!password&encode=true&code=$!code";
+            	 location.href = url;
+            }
+            $("#timeNum").html(time + "秒");
+        },1000);
+    </script>
+
+</body>
+</html>

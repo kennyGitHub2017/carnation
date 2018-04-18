@@ -1,0 +1,44 @@
+<script>
+	jQuery(document).ready(function() {
+		jQuery("#theForm").validate({
+			rules : {
+				content : {
+					required : true
+				}
+			},
+			messages : {
+				content : {
+					required : "圈子描述不能为空"
+				}
+			},
+			errorPlacement: function(error, element) { 
+				var errorShow = jQuery("#errorShow");
+				error.appendTo(errorShow);
+			} 
+		});
+	});
+</script>
+
+<form action="$!webPath/admin/circle_save.htm" method="post" id="theForm">
+	<table style="float: left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="box_table">
+	<input name="id" type="hidden" value="$!obj.id" />
+		<tr>
+			<td align="right" valign="top" style="width:30% ">圈子描述：</td>
+			<td align="left" style="width:70% ">
+				<textarea name="content" id="content" cols="35" rows="5">$!obj.content</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<span id="errorShow"></span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">
+				<span class="inputbtn"> 
+					<input name="" type="submit" value="提交" style="cursor: pointer;" /> 
+				</span>
+			</td>
+		</tr>
+	</table>
+</form>

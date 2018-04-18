@@ -1,0 +1,196 @@
+#*********************************来源林补 ,促销活动优惠券2016-01-12*********BEGIN
+
+
+CREATE TABLE `act_new_year_info` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `user_id` BIGINT(20) DEFAULT NULL COMMENT '用户id',
+  `cookies_id` VARCHAR(40) DEFAULT NULL COMMENT '用户cookies_id',
+  `is_get` VARCHAR(40) DEFAULT NULL COMMENT '用户是否抢到优惠卷/抢到为：1 否则：0',
+  `get_time` DATETIME DEFAULT NULL COMMENT '用户抢时间',
+  `coupon_info_id` BIGINT(20) DEFAULT NULL COMMENT '关联shop_coupon_id记录',
+  `act_coupon_id` BIGINT(20) DEFAULT NULL COMMENT '主优惠券活动id，act_app_new_year',
+  `delete_status` BIT(1) DEFAULT b'0' COMMENT '1:已删除，默认：0',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统优惠券详情类';
+
+
+CREATE TABLE `act_app_new_year` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `vcode` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'code编码',
+  `min_money` DECIMAL(12,2) DEFAULT '0.00' COMMENT '优惠券最小使用金额',
+  `scheme_name` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '0' COMMENT '方案名称',
+  `current_open_count` BIGINT(20) DEFAULT '0' COMMENT '拆包数量',
+  `current_get_count` BIGINT(20) DEFAULT '0' COMMENT '领取数量',
+  `pre_start` DATETIME DEFAULT NULL COMMENT '优惠券预热开始时间',
+  `pre_end` DATETIME DEFAULT NULL COMMENT '优惠券预热结束时间',
+  `get_start` DATETIME DEFAULT NULL COMMENT '现金券开抢开始时间',
+  `get_end` DATETIME DEFAULT NULL COMMENT '现金券开抢结束时间',
+  `use_start` DATETIME DEFAULT NULL COMMENT '活动使用开始时间',
+  `use_end` DATETIME DEFAULT NULL COMMENT '活动使用结束时间',
+  `start_time` DATETIME DEFAULT NULL COMMENT '活动开始时间',
+  `end_time` DATETIME DEFAULT NULL COMMENT '活动结束时间',
+  `coupon_id` BIGINT(20) DEFAULT '0' COMMENT '关联优惠卷类型id',
+  `total_count` BIGINT(20) DEFAULT '0' COMMENT '发行量,0为不限制',
+  `total_money` DECIMAL(12,2) DEFAULT NULL COMMENT '总发行金额',
+  `get_count` BIGINT(20) DEFAULT '0' COMMENT '领取量',
+  `per_limit_count` BIGINT(20) DEFAULT '1' COMMENT '每人限领取量,0为不限制',
+  `priority` INT(11) DEFAULT NULL COMMENT '权重',
+  `description` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin COMMENT '描述',
+  `is_enabled` TINYINT(4) DEFAULT NULL COMMENT '是否启用',
+  `logo_path` VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '封面图片路径',
+  `user_type` TINYINT(4) DEFAULT '0' COMMENT '限领用户条件 0 无条件 1 新会员 2 老会员（无消费）3 老会员（有消费）',
+  `delete_status` TINYINT(4) DEFAULT '0' COMMENT '删除状态 0 正常数据(默认值),1 删除状态''',
+  `rate` BIGINT(20) DEFAULT '0' COMMENT '抢卷概率',
+  `create_by` BIGINT(20) DEFAULT NULL,
+  `create_time` DATETIME DEFAULT NULL,
+  `modify_by` BIGINT(20) DEFAULT NULL,
+  `modify_time` DATETIME DEFAULT NULL,
+  `coupon_num` DECIMAL(12,2) DEFAULT NULL COMMENT '每张优惠券面额',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4;
+
+#*********************************来源林补 ,促销活动优惠券2016-01-12*********END
+
+
+#*********************************来源任超 ,系统优惠券2016-01-13*********BEGIN
+
+-- 系统优惠券 加字段 春节活动id
+
+ ALTER TABLE `shop_coupon`  ADD COLUMN `new_year_id` bigint(20) DEFAULT NULL COMMENT '春节活动id' AFTER `store_id`;
+
+#*********************************来源任超 ,系统优惠券2016-01-13*********end
+
+
+#*********************************陈舟 ,消息中心 2016-01-15*********BEGIN
+
+
+DROP TABLE IF EXISTS msg_info;
+CREATE TABLE `msg_info` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `title` VARCHAR(200) DEFAULT NULL COMMENT '消息标题',
+  `notice_title` VARCHAR(200) DEFAULT NULL COMMENT '通知栏内容',
+  `receive_type` TINYINT(4) DEFAULT '1' COMMENT '接受类型 1-只读,2-链接,3-富文本',
+  `link_url` VARCHAR(200) DEFAULT NULL COMMENT '消息内容',
+  `content` TEXT DEFAULT NULL COMMENT '消息内容',
+  `receive_location` BIGINT(20) DEFAULT '1' COMMENT '接受位置 2^0:云尚APP;2^1:云e店APP;2^2:云e商APP;2^3:pc商家管理中心;2^4:pc商户管理中心;2^5:pc运营商;2^6:pc会员个人中心;',
+  `priority` INT(11) DEFAULT NULL COMMENT '权重',
+  `top_index` INT(11) DEFAULT 0 COMMENT '置顶',
+  `send_count` TINYINT(4) DEFAULT '0' COMMENT '发送消息数量',
+  `send_status` BIGINT(4) DEFAULT '0' COMMENT '发送状态 0-未发送,1-已发送',
+  `send_time` DATETIME DEFAULT NULL COMMENT '发送时间',
+  `delete_status` TINYINT(4) DEFAULT '0' COMMENT '删除状态 0 正常数据(默认值),1 删除状态''',
+  `create_by` BIGINT(20) DEFAULT NULL,
+  `create_time` DATETIME DEFAULT NULL,
+  `modify_by` BIGINT(20) DEFAULT NULL,
+  `modify_time` DATETIME DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='消息列表';
+
+#******************************************************************END
+
+#*********************************注册日志 陈舟 2016-01-20*********BEGIN
+DROP TABLE IF EXISTS register_log;
+CREATE TABLE `register_log` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `phone` VARCHAR(50) DEFAULT NULL COMMENT '注册的手机号',
+  `invitation_code` VARCHAR(50) DEFAULT NULL COMMENT '注册填写的邀请码',
+  `ip` VARCHAR(50)  DEFAULT NULL COMMENT '注册的ip',
+  `register_from`  TINYINT(4) DEFAULT '0' COMMENT '注册类型 1-pc注册，2-h5注册,3-app注册',
+  `content` TEXT DEFAULT NULL COMMENT '注册请求内容',
+  `delete_status` TINYINT(4) DEFAULT '0' COMMENT '删除状态 0 正常数据(默认值),1 删除状态',
+  `create_time` DATETIME DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4  COMMENT='注册日志' ;
+
+#****************************************************************END
+
+#*********************************来源秦袁方 2016-01-20 活动信息/提交申请*********BEGIN
+CREATE TABLE `sys_activity` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(255) DEFAULT NULL COMMENT '活动主题',
+  `add_Time` DATETIME DEFAULT NULL COMMENT '创建时间',
+  `img` VARCHAR(100) DEFAULT NULL COMMENT '图片',
+  `desc` LONGTEXT COMMENT '概述',
+  `content` LONGTEXT COMMENT '内容',
+  `enroll_bg` DATETIME DEFAULT NULL COMMENT '报名开始时间',
+  `enroll_end` DATETIME DEFAULT NULL COMMENT '报名结束时间',  
+  `act_bg` DATETIME DEFAULT NULL COMMENT '报名开始时间',
+  `act_end` DATETIME DEFAULT NULL COMMENT '报名结束时间',
+  `address` VARCHAR(255) DEFAULT NULL COMMENT '活动详细地址',
+  `area_id` BIGINT(20) DEFAULT NULL COMMENT '活动地区',
+  `keywords` VARCHAR(200) DEFAULT NULL COMMENT '关键字',
+  `priority` INT(11) DEFAULT NULL COMMENT '权重',
+  `delete_status` BIT(1) DEFAULT b'0',
+  `display` BIT(1) NULL,
+  `mark` VARCHAR(255) DEFAULT NULL COMMENT '文章标识，存在唯一性，通过标识可以查询对应的文章',
+  `sequence` INT(11) NOT NULL DEFAULT '0',
+  `type` VARCHAR(255) DEFAULT 'user' COMMENT '活动类型，默认为user',
+  `description` VARCHAR(500) DEFAULT NULL COMMENT '描述',
+  `url` VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='活动列表' ;
+
+CREATE TABLE `act_apply` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL COMMENT '名字',
+  `mobile` VARCHAR(50) NOT NULL COMMENT '电话',
+  `address` VARCHAR(255) DEFAULT NULL COMMENT '地址',
+  `message` VARCHAR(255) DEFAULT NULL COMMENT '留言(可选)',
+  `email` VARCHAR(200) DEFAULT NULL COMMENT '邮箱(可选)',
+  `status` INT(11) NOT NULL DEFAULT '0' COMMENT '状态(0未查看，1已查看)',
+  `update_time` DATETIME DEFAULT NULL COMMENT '修改时间',
+  `create_time` DATETIME DEFAULT NULL COMMENT '用户提交时间',
+  `delete_status` BIT(1) DEFAULT b'0',
+  `apply_type` INT(11) DEFAULT '1' COMMENT '0加盟1活动',
+  `apply_act_relation` BIGINT(20) DEFAULT NULL COMMENT '向哪个活动提交(act.id)',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='活动申请' ;
+
+#*********************************来源秦袁方 2016-01-20 活动信息/提交申请***********END
+
+#*********************************来源任超 ,退款信息表2016-01-20*********BEGIN
+
+--  退款信息表 加 审核时间   
+
+ ALTER TABLE `o2o_group_info`  ADD COLUMN `check_time` datetime DEFAULT NULL COMMENT '审核时间' AFTER `end_time`;
+
+#*********************************来源任超 ,退款信息表2016-01-20*********END
+
+#*********************************来源任超 ,云币日志 积分日志 2016-01-21*********BEGIN
+ 
+
+ALTER TABLE `shop_predeposit_log`  ADD COLUMN `balance` decimal(12,2) DEFAULT NULL COMMENT '余额' AFTER `pd_type`;
+
+ALTER TABLE `user_integral_log`  ADD COLUMN `balance` int(11) DEFAULT NULL COMMENT '余额' AFTER `type`;
+
+#*********************************来源任超 ,云币日志 积分日志 2016-01-21*********END
+
+
+
+#*********************************商家销售线下服务表 陈舟 2016-01-22*********BEGIN
+DROP TABLE IF EXISTS shop_qr_server_info;
+CREATE TABLE `shop_qr_server_info` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `phone` VARCHAR(50) DEFAULT NULL COMMENT '手机号',
+  `money` DECIMAL(12,2) DEFAULT 0 COMMENT '金额',
+  `server` VARCHAR(200)  DEFAULT NULL COMMENT '服务名称',
+  `code` VARCHAR(50) DEFAULT NULL COMMENT 'code，微信支付的code',
+  `delete_status` TINYINT(4) DEFAULT '0' COMMENT '删除状态 0 正常数据(默认值),1 删除状态',
+  `create_time` DATETIME DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4  COMMENT='商家销售服务表' ;
+
+#****************************************************************END
+
+
+#*********************************修改默认头像 陈舟 2016-01-22*********BEGIN
+UPDATE user_customer set head_img_path = null where head_img_path = 'http://f1.ysysgo.com/4,b9b55e0b4064' or head_img_path = 'http://ff1.ysysgo.com/upload/system/d68efa7f-ad78-4002-99eb-386f022d3ef1.png';
+
+
+#****************************************************************END
+
+#*********************************来源秦袁方 2016-01-20 活动信息表改名***********BEGIN
+ALTER TABLE sys_activity RENAME sns_activity;
+
+#*********************************来源秦袁方 2016-01-20 活动信息表改名***********END

@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.UserHealthtaskSetMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.sns.model.UserHealthtaskSet">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="user_healthTask_id" property="userHealthtaskId"
+			jdbcType="BIGINT" />
+		<result column="remind_time" property="remindTime" jdbcType="VARCHAR" />
+		<result column="remind_week" property="remindWeek" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="MON" property="mon" jdbcType="BIGINT" />
+		<result column="TUE" property="tue" jdbcType="BIGINT" />
+		<result column="WED" property="wed" jdbcType="BIGINT" />
+		<result column="THU" property="thu" jdbcType="BIGINT" />
+		<result column="FRI" property="fri" jdbcType="BIGINT" />
+		<result column="SAT" property="sat" jdbcType="BIGINT" />
+		<result column="SUN" property="sun" jdbcType="BIGINT" />
+	</resultMap>
+
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.sns.bo.UserHealthtaskSetBO" extends="BaseResultMap" />
+
+	<sql id="Base_Column_List">
+		id,
+		user_healthTask_id,
+		remind_time,
+		remind_week,
+		user_id,
+		is_deleted,
+		create_time,
+		update_time,
+		MON,
+		TUE,
+		WED,
+		THU,
+		FRI,
+		SAT,
+		SUN
+	</sql>
+
+	<insert id="insert_UserHealthtaskSet" parameterType="com.sinco.carnation.sns.model.UserHealthtaskSet"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_healthtask_setting
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			is_deleted
+			,create_time
+			<if test="id != null">
+				,id
+			</if>
+			<if test="userHealthtaskId != null">
+				,user_healthTask_id
+			</if>
+			<if test="remindTime != null">
+				,remind_time
+			</if>
+			<if test="remindWeek != null">
+				,remind_week
+			</if>
+			<if test="userId != null">
+				,user_id
+			</if>
+			<if test="createTime != null">
+				,create_time
+			</if>
+			<if test="updateTime != null">
+				,update_time
+			</if>
+			<if test="mon != null">
+				,MON
+			</if>
+			<if test="tue != null">
+				,TUE
+			</if>
+			<if test="wed != null">
+				,WED
+			</if>
+			<if test="thu != null">
+				,THU
+			</if>
+			<if test="fri != null">
+				,FRI
+			</if>
+			<if test="sat != null">
+				,SAT
+			</if>
+			<if test="sun != null">
+				,SUN
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			0
+			,now()
+			<if test="id != null">
+				,#{id,jdbcType=BIGINT}
+			</if>
+			<if test="userHealthtaskId != null">
+				,#{userHealthtaskId,jdbcType=BIGINT}
+			</if>
+			<if test="remindTime != null">
+				,#{remindTime,jdbcType=VARCHAR}
+			</if>
+			<if test="remindWeek != null">
+				,#{remindWeek,jdbcType=VARCHAR}
+			</if>
+			<if test="userId != null">
+				,#{userId,jdbcType=BIGINT}
+			</if>
+			<if test="updateTime != null">
+				,#{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="mon != null">
+				,#{mon,jdbcType=BIGINT}
+			</if>
+			<if test="tue != null">
+				,#{tue,jdbcType=BIGINT}
+			</if>
+			<if test="wed != null">
+				,#{wed,jdbcType=BIGINT}
+			</if>
+			<if test="thu != null">
+				,#{thu,jdbcType=BIGINT}
+			</if>
+			<if test="fri != null">
+				,#{fri,jdbcType=BIGINT}
+			</if>
+			<if test="sat != null">
+				,#{sat,jdbcType=BIGINT}
+			</if>
+			<if test="sun != null">
+				,#{sun,jdbcType=BIGINT}
+			</if>
+		</trim>
+	</insert>
+
+	<select id="select_userHealthTaskSet_today_taskID" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		user_healthtask_setting
+		where
+		1=1
+		and
+		is_deleted = 0
+		<if test="obj.userId !=null">
+			and
+			user_id = #{obj.userId,jdbcType=BIGINT}
+		</if>
+		<if test="obj.mon !=null and obj.mon != 0">
+			and
+			MON = 1
+		</if>
+		<if test="obj.tue !=null and obj.tue != 0">
+			and
+			TUE = 1
+		</if>
+		<if test="obj.wed !=null and obj.wed != 0">
+			and
+			WED = 1
+		</if>
+		<if test="obj.thu !=null and obj.thu != 0">
+			and
+			THU = 1
+		</if>
+		<if test="obj.fri !=null and obj.fri != 0">
+			and
+			FRI = 1
+		</if>
+		<if test="obj.sat !=null and obj.sat != 0">
+			and
+			SAT = 1
+		</if>
+		<if test="obj.sun !=null and obj.sun != 0">
+			and
+			SUN = 1
+		</if>
+		or
+		id IN
+		(
+		SELECT
+		id
+		FROM
+		user_healthtask_setting
+		WHERE
+		1=1
+		and
+		remind_week = 1
+		<if test="obj.userId !=null">
+			AND user_id = #{obj.userId,jdbcType=BIGINT}
+		</if>
+		)
+	</select>
+
+	<select id="findOne_UserHealthTaskSet_By_UID_TaskID" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		user_healthtask_setting
+		where
+		1=1
+		and
+		is_deleted = 0
+		and
+		user_id = ${uid}
+		and
+		user_healthTask_id = ${taskID}
+	</select>
+
+	<update id="updateUserHealthTaskSet" parameterType="com.sinco.carnation.sns.model.UserHealthtaskSet">
+		update user_healthtask_setting
+		<set>
+			update_time = now()
+			<if test="record.userHealthtaskId != null">
+				,user_healthTask_id = #{record.userHealthtaskId,jdbcType=BIGINT}
+			</if>
+			<if test="record.remindTime != null">
+				,remind_time = #{record.remindTime,jdbcType=VARCHAR}
+			</if>
+			<if test="record.remindWeek != null">
+				,remind_week = #{record.remindWeek,jdbcType=VARCHAR}
+			</if>
+			<if test="record.userId != null">
+				,user_id = #{record.userId,jdbcType=BIGINT}
+			</if>
+			<if test="record.isDeleted != null">
+				,is_deleted = #{record.isDeleted,jdbcType=BIGINT}
+			</if>
+			<if test="record.createTime != null">
+				,create_time = #{record.createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="record.updateTime != null">
+				,update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="record.mon != null">
+				, MON = 1
+			</if>
+			<if test="record.tue != null">
+				,TUE = 1
+			</if>
+			<if test="record.wed != null">
+				, WED = 1
+			</if>
+			<if test="record.thu != null">
+				, THU = 1
+			</if>
+			<if test="record.fri != null">
+				, FRI = 1
+			</if>
+			<if test="record.sat != null">
+				, SAT = 1
+			</if>
+			<if test="record.sun != null">
+				, SUN = 1
+			</if>
+			<if test="record.mon == null">
+				, MON = 0
+			</if>
+			<if test="record.tue == null">
+				,TUE = 0
+			</if>
+			<if test="record.wed == null">
+				, WED = 0
+			</if>
+			<if test="record.thu == null">
+				, THU = 0
+			</if>
+			<if test="record.fri == null">
+				, FRI = 0
+			</if>
+			<if test="record.sat == null">
+				, SAT = 0
+			</if>
+			<if test="record.sun == null">
+				, SUN = 0
+			</if>
+		</set>
+		where
+		id = #{record.id,jdbcType=BIGINT}
+		<!-- <if test="record.userHealthtaskId!=null"> and user_healthTask_id = 
+			#{record.userHealthtaskId,jdbcType=BIGINT} </if> <if test="record.userId!=null"> 
+			and user_id = #{record.userId,jdbcType=BIGINT} </if> -->
+	</update>
+
+	<delete id="deleteHealthtaskSet">
+		delete
+		from
+		user_healthtask_setting
+		where
+		user_id = #{uid,jdbcType=BIGINT}
+		and
+		user_healthTask_id = #{taskID,jdbcType=BIGINT}
+	</delete>
+
+	<!-- <sql id="Example_Where_Clause" > <where > <foreach collection="oredCriteria" 
+		item="criteria" separator="or" > <if test="criteria.valid" > <trim prefix="(" 
+		suffix=")" prefixOverrides="and" > <foreach collection="criteria.criteria" 
+		item="criterion" > <choose > <when test="criterion.noValue" > and ${criterion.condition} 
+		</when> <when test="criterion.singleValue" > and ${criterion.condition} #{criterion.value} 
+		</when> <when test="criterion.betweenValue" > and ${criterion.condition} 
+		#{criterion.value} and #{criterion.secondValue} </when> <when test="criterion.listValue" 
+		> and ${criterion.condition} <foreach collection="criterion.value" item="listItem" 
+		open="(" close=")" separator="," > #{listItem} </foreach> </when> </choose> 
+		</foreach> </trim> </if> </foreach> </where> </sql> <sql id="Update_By_Example_Where_Clause" 
+		> <where > <foreach collection="example.oredCriteria" item="criteria" separator="or" 
+		> <if test="criteria.valid" > <trim prefix="(" suffix=")" prefixOverrides="and" 
+		> <foreach collection="criteria.criteria" item="criterion" > <choose > <when 
+		test="criterion.noValue" > and ${criterion.condition} </when> <when test="criterion.singleValue" 
+		> and ${criterion.condition} #{criterion.value} </when> <when test="criterion.betweenValue" 
+		> and ${criterion.condition} #{criterion.value} and #{criterion.secondValue} 
+		</when> <when test="criterion.listValue" > and ${criterion.condition} <foreach 
+		collection="criterion.value" item="listItem" open="(" close=")" separator="," 
+		> #{listItem} </foreach> </when> </choose> </foreach> </trim> </if> </foreach> 
+		</where> </sql> <select id="selectByExample" parameterType="com.sinco.carnation.sns.model.UserHealthtaskSetExample" 
+		resultMap="BOResultMap" > select <if test="distinct" > distinct </if> <include 
+		refid="Base_Column_List" /> from user_healthtask_setting <if test="_parameter 
+		!= null" > <include refid="Example_Where_Clause" /> </if> <if test="orderByClause 
+		!= null" > order by ${orderByClause} </if> <if test="limit != null" > limit 
+		${limit} </if> </select> <select id="selectByPrimaryKey" parameterType="java.lang.Long" 
+		resultMap="BOResultMap" > select <include refid="Base_Column_List" /> from 
+		user_healthtask_setting where id = #{id,jdbcType=BIGINT} </select> <delete 
+		id="deleteByPrimaryKey" parameterType="java.lang.Long" > delete from user_healthtask_setting 
+		where id = #{id,jdbcType=BIGINT} </delete> <delete id="deleteByExample" parameterType="com.sinco.carnation.sns.model.UserHealthtaskSetExample" 
+		> delete from user_healthtask_setting <if test="_parameter != null" > <include 
+		refid="Example_Where_Clause" /> </if> </delete> <insert id="insert" parameterType="com.sinco.carnation.sns.model.UserHealthtaskSet" 
+		useGeneratedKeys="true" keyProperty="id" > insert into user_healthtask_setting 
+		(id, user_healthTask_id, remind_time, remind_week, user_id, is_deleted, create_time, 
+		update_time, MON, TUE, WED, THU, FRI, SAT, SUN) values (#{id,jdbcType=BIGINT}, 
+		#{userHealthtaskId,jdbcType=BIGINT}, #{remindTime,jdbcType=VARCHAR}, #{remindWeek,jdbcType=VARCHAR}, 
+		#{userId,jdbcType=BIGINT}, #{isDeleted,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+		#{updateTime,jdbcType=TIMESTAMP}, #{mon,jdbcType=BIGINT}, #{tue,jdbcType=BIGINT}, 
+		#{wed,jdbcType=BIGINT}, #{thu,jdbcType=BIGINT}, #{fri,jdbcType=BIGINT}, #{sat,jdbcType=BIGINT}, 
+		#{sun,jdbcType=BIGINT}) </insert> <insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.UserHealthtaskSet" 
+		useGeneratedKeys="true" keyProperty="id" > insert into user_healthtask_setting 
+		<trim prefix="(" suffix=")" suffixOverrides="," > <if test="id != null" > 
+		id, </if> <if test="userHealthtaskId != null" > user_healthTask_id, </if> 
+		<if test="remindTime != null" > remind_time, </if> <if test="remindWeek != 
+		null" > remind_week, </if> <if test="userId != null" > user_id, </if> <if 
+		test="isDeleted != null" > is_deleted, </if> <if test="createTime != null" 
+		> create_time, </if> <if test="updateTime != null" > update_time, </if> <if 
+		test="mon != null" > MON, </if> <if test="tue != null" > TUE, </if> <if test="wed 
+		!= null" > WED, </if> <if test="thu != null" > THU, </if> <if test="fri != 
+		null" > FRI, </if> <if test="sat != null" > SAT, </if> <if test="sun != null" 
+		> SUN, </if> </trim> <trim prefix="values (" suffix=")" suffixOverrides="," 
+		> <if test="id != null" > #{id,jdbcType=BIGINT}, </if> <if test="userHealthtaskId 
+		!= null" > #{userHealthtaskId,jdbcType=BIGINT}, </if> <if test="remindTime 
+		!= null" > #{remindTime,jdbcType=VARCHAR}, </if> <if test="remindWeek != 
+		null" > #{remindWeek,jdbcType=VARCHAR}, </if> <if test="userId != null" > 
+		#{userId,jdbcType=BIGINT}, </if> <if test="isDeleted != null" > #{isDeleted,jdbcType=BIGINT}, 
+		</if> <if test="createTime != null" > #{createTime,jdbcType=TIMESTAMP}, </if> 
+		<if test="updateTime != null" > #{updateTime,jdbcType=TIMESTAMP}, </if> <if 
+		test="mon != null" > #{mon,jdbcType=BIGINT}, </if> <if test="tue != null" 
+		> #{tue,jdbcType=BIGINT}, </if> <if test="wed != null" > #{wed,jdbcType=BIGINT}, 
+		</if> <if test="thu != null" > #{thu,jdbcType=BIGINT}, </if> <if test="fri 
+		!= null" > #{fri,jdbcType=BIGINT}, </if> <if test="sat != null" > #{sat,jdbcType=BIGINT}, 
+		</if> <if test="sun != null" > #{sun,jdbcType=BIGINT}, </if> </trim> </insert> 
+		<select id="countByExample" parameterType="com.sinco.carnation.sns.model.UserHealthtaskSetExample" 
+		resultType="java.lang.Integer" > select count(*) from user_healthtask_setting 
+		<if test="_parameter != null" > <include refid="Example_Where_Clause" /> 
+		</if> </select> <update id="updateByExampleSelective" parameterType="map" 
+		> update user_healthtask_setting <set > <if test="record.id != null" > id 
+		= #{record.id,jdbcType=BIGINT}, </if> <if test="record.userHealthtaskId != 
+		null" > user_healthTask_id = #{record.userHealthtaskId,jdbcType=BIGINT}, 
+		</if> <if test="record.remindTime != null" > remind_time = #{record.remindTime,jdbcType=VARCHAR}, 
+		</if> <if test="record.remindWeek != null" > remind_week = #{record.remindWeek,jdbcType=VARCHAR}, 
+		</if> <if test="record.userId != null" > user_id = #{record.userId,jdbcType=BIGINT}, 
+		</if> <if test="record.isDeleted != null" > is_deleted = #{record.isDeleted,jdbcType=BIGINT}, 
+		</if> <if test="record.createTime != null" > create_time = #{record.createTime,jdbcType=TIMESTAMP}, 
+		</if> <if test="record.updateTime != null" > update_time = #{record.updateTime,jdbcType=TIMESTAMP}, 
+		</if> <if test="record.mon != null" > MON = #{record.mon,jdbcType=BIGINT}, 
+		</if> <if test="record.tue != null" > TUE = #{record.tue,jdbcType=BIGINT}, 
+		</if> <if test="record.wed != null" > WED = #{record.wed,jdbcType=BIGINT}, 
+		</if> <if test="record.thu != null" > THU = #{record.thu,jdbcType=BIGINT}, 
+		</if> <if test="record.fri != null" > FRI = #{record.fri,jdbcType=BIGINT}, 
+		</if> <if test="record.sat != null" > SAT = #{record.sat,jdbcType=BIGINT}, 
+		</if> <if test="record.sun != null" > SUN = #{record.sun,jdbcType=BIGINT}, 
+		</if> </set> <if test="_parameter != null" > <include refid="Update_By_Example_Where_Clause" 
+		/> </if> </update> <update id="updateByExample" parameterType="map" > update 
+		user_healthtask_setting set id = #{record.id,jdbcType=BIGINT}, user_healthTask_id 
+		= #{record.userHealthtaskId,jdbcType=BIGINT}, remind_time = #{record.remindTime,jdbcType=VARCHAR}, 
+		remind_week = #{record.remindWeek,jdbcType=VARCHAR}, user_id = #{record.userId,jdbcType=BIGINT}, 
+		is_deleted = #{record.isDeleted,jdbcType=BIGINT}, create_time = #{record.createTime,jdbcType=TIMESTAMP}, 
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP}, MON = #{record.mon,jdbcType=BIGINT}, 
+		TUE = #{record.tue,jdbcType=BIGINT}, WED = #{record.wed,jdbcType=BIGINT}, 
+		THU = #{record.thu,jdbcType=BIGINT}, FRI = #{record.fri,jdbcType=BIGINT}, 
+		SAT = #{record.sat,jdbcType=BIGINT}, SUN = #{record.sun,jdbcType=BIGINT} 
+		<if test="_parameter != null" > <include refid="Update_By_Example_Where_Clause" 
+		/> </if> </update> <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.UserHealthtaskSet" 
+		> update user_healthtask_setting <set > <if test="userHealthtaskId != null" 
+		> user_healthTask_id = #{userHealthtaskId,jdbcType=BIGINT}, </if> <if test="remindTime 
+		!= null" > remind_time = #{remindTime,jdbcType=VARCHAR}, </if> <if test="remindWeek 
+		!= null" > remind_week = #{remindWeek,jdbcType=VARCHAR}, </if> <if test="userId 
+		!= null" > user_id = #{userId,jdbcType=BIGINT}, </if> <if test="isDeleted 
+		!= null" > is_deleted = #{isDeleted,jdbcType=BIGINT}, </if> <if test="createTime 
+		!= null" > create_time = #{createTime,jdbcType=TIMESTAMP}, </if> <if test="updateTime 
+		!= null" > update_time = #{updateTime,jdbcType=TIMESTAMP}, </if> <if test="mon 
+		!= null" > MON = #{mon,jdbcType=BIGINT}, </if> <if test="tue != null" > TUE 
+		= #{tue,jdbcType=BIGINT}, </if> <if test="wed != null" > WED = #{wed,jdbcType=BIGINT}, 
+		</if> <if test="thu != null" > THU = #{thu,jdbcType=BIGINT}, </if> <if test="fri 
+		!= null" > FRI = #{fri,jdbcType=BIGINT}, </if> <if test="sat != null" > SAT 
+		= #{sat,jdbcType=BIGINT}, </if> <if test="sun != null" > SUN = #{sun,jdbcType=BIGINT}, 
+		</if> </set> where id = #{id,jdbcType=BIGINT} </update> <update id="updateByPrimaryKey" 
+		parameterType="com.sinco.carnation.sns.model.UserHealthtaskSet" > update 
+		user_healthtask_setting set user_healthTask_id = #{userHealthtaskId,jdbcType=BIGINT}, 
+		remind_time = #{remindTime,jdbcType=VARCHAR}, remind_week = #{remindWeek,jdbcType=VARCHAR}, 
+		user_id = #{userId,jdbcType=BIGINT}, is_deleted = #{isDeleted,jdbcType=BIGINT}, 
+		create_time = #{createTime,jdbcType=TIMESTAMP}, update_time = #{updateTime,jdbcType=TIMESTAMP}, 
+		MON = #{mon,jdbcType=BIGINT}, TUE = #{tue,jdbcType=BIGINT}, WED = #{wed,jdbcType=BIGINT}, 
+		THU = #{thu,jdbcType=BIGINT}, FRI = #{fri,jdbcType=BIGINT}, SAT = #{sat,jdbcType=BIGINT}, 
+		SUN = #{sun,jdbcType=BIGINT} where id = #{id,jdbcType=BIGINT} </update> -->
+</mapper>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta name="format-detection" content="telephone=no">
+        <meta name="format-detection" content="email=no">
+        <title>调查问卷</title>
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/common.css"/>        
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/mui.min.css" />
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/mui.picker.min.css" />
+        <link rel="stylesheet" type="text/css" href="${apiPath}/resources/css/tijian.css" />
+        <style type="text/css">
+        	body{
+        		line-height: 12px;
+        	}
+        </style>
+	    <script>
+    		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+			document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+			
+			var getQueryPar=function(name) {
+				   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)","i");
+				   var r = window.location.search.substr(1).match(reg);
+				   if (r!=null) return (r[2]); return null;
+			}
+			if(getQueryPar('title')=="true"){
+				var style=document.createElement('style');
+				var str=".progressBar{top:0.93rem}.tjHolder{padding-top:0.9rem}.appbar{display:block !important}";
+				style.type="text/css";
+				style.appendChild(document.createTextNode(str));
+				document.getElementsByTagName('head')[0].appendChild(style);
+			}
+	    </script>
+	</head>
+	<body>
+		<div class="appbar fn-clear" style="display:none">
+			<a href="javascript:;" class="return"></a>
+			<span class="centerTitle">健康评估</span>
+		</div>
+		<div class="progressBar">
+			<span class="bar"></span>
+		</div>
+		<div class="tjHolder bgWhite">
+			<div class="questionContent" id="questionContent">
+				#foreach($!wenJuan in $!list)
+				<div class="quesTypeArea">
+					<span class="typeTit">
+						$!wenJuan.groupTitle
+					</span>
+					<input type="hidden" value="$!themeID" id="wjThemeID"/>
+					<input type="hidden" value="${apiPath}" id="webPath"/>
+				</div>
+				<div class="questionList">
+					#foreach($!obj in $!wenJuan.questionList)
+						#if($!obj.questionIndex==1)
+							<div class="timu curr">
+								<div class="subject">
+									<p>
+										$obj.questionIndex&nbsp;$obj.questionTitle
+									</p>
+								</div>
+								<div class="option">
+								#foreach($!option in $!obj.question_option_List)
+									<a href="javascript:;" data-score="$!option.score">
+										<span class="circle"></span>
+										$!option.optionDesc
+									</a>
+								#end
+								</div>
+							</div>
+						#else
+							<div class="timu">
+								<div class="subject"><p>$obj.questionIndex&nbsp;$obj.questionTitle</p></div>
+								<div class="option fn-hide">
+									#foreach($!option in $!obj.question_option_List)
+									<a href="javascript:;" data-score="$!option.score">
+										<span class="circle"></span>
+										$!option.optionDesc
+									</a>
+									#end
+								</div>
+							</div>
+						#end
+					#end
+				#end
+					<div class="fn-hide">
+						<a href="javascript:;" class="submitBtn" id="submitBtn">提&nbsp;&nbsp;交</a>
+						<input type="hidden" id="uid" value="$!uid"/>
+					</div>
+				</div>
+				
+			</div>
+			
+		</div>
+		<script src="${apiPath}/resources/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="${apiPath}/resources/js/mui.picker.min.js"></script>
+		<script src="${apiPath}/resources/js/jiankangpinggu/jiankangpinggu.js"></script>
+		<script>
+		$(function(){
+			$(".appbar .return").on("touchstart",function(){
+				fn.requestBack();
+			});
+		});
+		</script>
+	</body>
+</html>

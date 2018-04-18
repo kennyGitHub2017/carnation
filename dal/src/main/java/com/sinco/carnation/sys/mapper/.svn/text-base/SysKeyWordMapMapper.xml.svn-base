@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.SysKeyWordMapMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.SysKeyWordMap">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="type_code" property="typeCode" jdbcType="BIGINT" />
+		<result column="type_id" property="typeId" jdbcType="BIGINT" />
+		<result column="key_word_id" property="keyWordId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sys.bo.SysKeyWordMapBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, type_code, type_id, key_word_id
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.sys.model.SysKeyWordMapExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_key_word_map
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_key_word_map
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sys_key_word_map
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.SysKeyWordMapExample">
+		delete from sys_key_word_map
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.SysKeyWordMap"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_key_word_map (id, type_code, type_id,
+		key_word_id)
+		values (#{id,jdbcType=BIGINT}, #{typeCode,jdbcType=BIGINT},
+		#{typeId,jdbcType=BIGINT},
+		#{keyWordId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.SysKeyWordMap"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_key_word_map
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="typeCode != null">
+				type_code,
+			</if>
+			<if test="typeId != null">
+				type_id,
+			</if>
+			<if test="keyWordId != null">
+				key_word_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="typeCode != null">
+				#{typeCode,jdbcType=BIGINT},
+			</if>
+			<if test="typeId != null">
+				#{typeId,jdbcType=BIGINT},
+			</if>
+			<if test="keyWordId != null">
+				#{keyWordId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.SysKeyWordMapExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_key_word_map
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_key_word_map
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.typeCode != null">
+				type_code = #{record.typeCode,jdbcType=BIGINT},
+			</if>
+			<if test="record.typeId != null">
+				type_id = #{record.typeId,jdbcType=BIGINT},
+			</if>
+			<if test="record.keyWordId != null">
+				key_word_id = #{record.keyWordId,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sys_key_word_map
+		set id = #{record.id,jdbcType=BIGINT},
+		type_code = #{record.typeCode,jdbcType=BIGINT},
+		type_id = #{record.typeId,jdbcType=BIGINT},
+		key_word_id = #{record.keyWordId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.SysKeyWordMap">
+		update sys_key_word_map
+		<set>
+			<if test="typeCode != null">
+				type_code = #{typeCode,jdbcType=BIGINT},
+			</if>
+			<if test="typeId != null">
+				type_id = #{typeId,jdbcType=BIGINT},
+			</if>
+			<if test="keyWordId != null">
+				key_word_id = #{keyWordId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.SysKeyWordMap">
+		update sys_key_word_map
+		set type_code = #{typeCode,jdbcType=BIGINT},
+		type_id = #{typeId,jdbcType=BIGINT},
+		key_word_id = #{keyWordId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+
+	<select id="findListByCond4Recommed" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_key_word_map where type_code = #{typeCode,jdbcType=BIGINT}
+		and key_word_id in
+		(
+		select key_word_id from sys_key_word_map where type_code =
+		#{suggestTypeCode,jdbcType=BIGINT}
+		and type_id in
+		<foreach collection="idsList" item="typeId" index="index"
+			open="(" close=")" separator=",">
+			#{typeId}
+		</foreach>
+		)
+	</select>
+
+	<delete id="batchDeleteByTypeCodeAndIds">
+		DELETE FROM sys_key_word_map
+		WHERE type_code = #{typeCode,jdbcType=BIGINT}
+		AND type_id IN
+		<foreach collection="typeIds" item="item" open="(" close=")"
+			separator=",">
+			#{item}
+		</foreach>
+	</delete>
+
+	<insert id="insertKeyWordMap">
+		insert into sys_key_word_map (type_code, type_id, key_word_id)
+		values (#{typeCode,jdbcType=BIGINT}, #{typeId,jdbcType=BIGINT},
+		#{keyWordId,jdbcType=BIGINT})
+	</insert>
+
+	<select id="selectListByVo" resultMap="BOResultMap">
+		SELECT m.*, k.name kName,k.id kId FROM sys_key_word_map m
+		LEFT JOIN sys_key_word k ON m.key_word_id = k.id
+		<where>
+			<if test="vo.typeId != null ">
+				m.type_id = #{vo.typeId}
+			</if>
+		</where>
+	</select>
+
+	<delete id="deleteByTypeIdAdTypeCode">
+		delete from sys_key_word_map where type_id = #{typeId} AND
+		type_code=#{typeCode}
+	</delete>
+
+</mapper>

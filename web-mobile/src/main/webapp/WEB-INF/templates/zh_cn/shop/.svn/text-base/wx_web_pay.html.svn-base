@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/index2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/error.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath//resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+	  window.setInterval(go,3000);
+	  function go(){
+		  jQuery.post("$!webPath/payResult.htm",{"type":"$!type","orderNo":"$!{orderNo}"},function(data){
+			    if(data=="true"){
+			    	 #if($!type == "cash")
+			    		location.href="$!webPath/buyer/predeposit_finish.htm?orderNo=$!{orderNo}";
+			         #elseif($!type=="goods")
+			         	location.href="$!webPath/order_finish.htm?orderNo=$!{orderNo}";
+			         #elseif($!type=="integral")
+			        	location.href="$!webPath/integral/order_finish.htm?orderNo=$!{orderNo}";
+			        #elseif($!type=="group")
+			        	location.href="$!webPath/group/orderPaySuccessRedirect.htm?orderNo=$!{orderNo}";
+			         #end
+				}
+			  },"text");
+	  }
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<!--head-->
+<div class="head_width" id="head_h">
+  <div class="head"> #if($!config.websiteLogo)
+    #set($img="$!{config.websiteLogo.path}")
+    #else
+    #set($img="$!webPath/resources/style/system/front/default/images/logo.jpg")
+    #end
+    <h1 class="logo"><span>
+      <p><a href="$!webPath/index.htm"> <img src="$!img" border="0" /> </a></p>
+      </span></h1>
+      #if($!type == "cash")
+      	<h2 style="padding-right: 227px; padding-top: 40px; font-size: 28px; color: rgb(90, 196, 241);">云豆充值</h2>
+      #elseif($!type=="goods")
+      <div style=" width: 860px; margin-top: 30px;" class="shopping_step">
+	      <ul>
+	        <li class="shopping_step_athis" style="width: 280px"><span></span><i></i><strong style="width: 280px">1.我的购物车</strong></li>
+	        <li class="shopping_step_bthis" style="width: 280px"><span></span><i></i><strong style="width: 280px">2.填写核对订单信息</strong></li>
+	        <li class="shopping_step_cthis" style="width: 280px"><span></span><i></i><strong style="width: 280px">3.成功提交订单</strong></li>
+	      </ul>
+	    </div>
+      #end
+      
+  </div>
+</div>
+<!--head-->
+<div class="main">
+	   
+  
+  		<div class="wx-pay-info">
+	  		<div class="fl">
+	  			订单号：$!{orderNo}  &nbsp; &nbsp; &nbsp;  价格： <strong class="red">￥$!{totalFee}</strong>&nbsp; &nbsp; &nbsp;收款方：深圳市云尚抗衰老生物科技股份有限公司
+	  		</div>
+	  		<div>应付金额：<strong class="c_blue">￥$!{totalFee}</strong></div>
+  		</div>
+  		
+  		<div class="wx-pay-box">
+  			<div class="wx-pay-left">
+  				<h3>微信支付</h3>
+  				<div class="wx-pay-code">
+  					<div><img style="width: 100%;" src="data:image/png;base64,${qrcode}"/></div>
+  					<div class="title" style="marin-top: 0;">二维码有效时长为2小时，请尽快支付</div>
+  				</div>
+				<div class="wx-pay-tips">
+					<img class="fl" src="data:image/NGf;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpDREQ4MzM3NjMzODYxMUU1OTE1Nzk3QkM5NkJFRUYzRCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpDREQ4MzM3NzMzODYxMUU1OTE1Nzk3QkM5NkJFRUYzRCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkY3QTkzODdGMzM1NDExRTU5MTU3OTdCQzk2QkVFRjNEIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkY3QTkzODgwMzM1NDExRTU5MTU3OTdCQzk2QkVFRjNEIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+X8zf8QAAAAxQTFRF////WsTx/v/8/P//CKE/tAAAAItJREFUeNrkkwEOhDAIBNfh/39WOW3LHZQH3CYaoxPpLqBjCgn5bXkZnl38AJofQIuQrUCq/wFq3aGjLWDCVDN433odjXqAjYlxbWS13+gBR5Ma9/jhk2p1L1CRyBWjA/ZMbFLh7WbqhrbdDICSYB4yHvSTC+MPwSVrim8J7Fk8shzi8kKz3d/AKcAA5+0BlJlV5B4AAAAASUVORK5CYII=" alt="" />
+					<span>请使用微信扫一扫<br/>扫描二维码支付</span>
+				</div>
+  				
+  			</div>
+  			<div class="wx-pay-right"><img src="$!webPath/resources/style/system/front/default/images/wx-pic.jpg" /></div>
+  		</div>
+  		
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+		<meta http-equiv="description" content="This is my page">
+		<meta http-equiv="X-UA-Compatible"content="IE=10; IE=9; IE=8; IE=EDGE">
+		<link href="$!webPath/resources/style/brandStore/css/style.css" type="text/css" rel="stylesheet" />
+		<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+		<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+		<title>品牌馆</title>
+	</head>
+
+
+
+
+
+
+
+
+
+<body>
+	<div class="ppg-main">
+	     <div id="float01" class="ppg-float">
+	     	<!-- 热门搜索 -->
+	     	<div class="ppg-title">
+	     		<img src="$!webPath/resources/style/brandStore/images/ppg-title-ht.png" alt="" />
+	     			<span>热门搜索</span>
+	     		<img src="$!webPath/resources/style/brandStore/images/ppg-title-ht.png" alt="" />
+	     	</div>
+	     	<div class="ppg-title-ulsearch">
+	     		<ul>
+	     		#foreach($brand in $brandList)
+					#if($!brand.weixinRecommend == 1)
+	     			<li><a href="javascript:void(0)">$!brand.name</a></li>	
+	     			#end
+				#end
+	     		</ul>
+	     	</div>
+
+	     </div>
+	     
+	     
+	  #set ($i=1)
+	  #foreach($category in $categoryList)
+	  #set($i=$i+1)
+	     
+	     <div id="float0$i" class="ppg-float">
+	     	<!-- 营养滋补 -->
+	     	<div class="ppg-title">
+	     		<img src="$!webPath/resources/style/brandStore/images/ppg-title-ht.png" alt="" />
+	     			<span>$!category.name</span>
+	     		<img src="$!webPath/resources/style/brandStore/images/ppg-title-ht.png" alt="" />
+	     	</div>
+	     	
+	     	
+	     	<div class="ppg-goodslist-ul">
+	     		<ul>
+	     		#foreach($brand in $brandList)
+	     			<li>
+	     				<a href="javascript:void(0)">
+	     					<img src="$!brand.brandLogoId" alt="" />
+	     				</a>
+	     			</li>
+	     		#end
+	     		</ul>
+	     	</div>
+	     </div>
+	     
+	     #end
+
+    </div>
+    
+    
+     <div class="floatCtro" style="">
+          <p class="rmss">
+          		<a href="javascript:void(0)">热门搜索</a>
+          		<img src="images/ppg-ht.png" alt="" />
+          </p>
+         
+          #foreach($category in $categoryList)
+          <p class="rmss">
+          		<a href="javascript:void(0)">A-$!category.name</a>
+          		<img src="images/ppg-ht.png" alt="" />
+          </p>
+          #end
+     </div>
+     
+     
+     
+
+<script>
+
+   $(function(){
+   		$('.ppg-title-ulsearch ul li').click(function() {
+			$(this).addClass('ppg-crr').siblings().removeClass('ppg-crr');
+		});
+		$('.ppg-goodslist-ul ul li').hover(function() {
+			$(this).addClass('ppg-goods-crr').siblings().removeClass('ppg-goods-crr');
+		});
+
+	   var AllHet = $(window).height();
+	   var mainHet= $('.floatCtro').height();
+	   var fixedTop = (AllHet - mainHet)/2
+	   $('div.floatCtro p').click(function(){
+			var ind = $('div.floatCtro p').index(this)+1;
+			var topVal = $('#float0'+ind).offset().top;
+			$('body,html').animate({scrollTop:topVal},1000)
+		})
+
+	   $(window).scroll(scrolls)
+	   scrolls()
+	   
+	   function scrolls(){
+		   var f1,f2,f3,f4,f5,bck;
+		   var fixRight = $('div.floatCtro p');
+		   var sTop = $(window).scrollTop();
+		   fl = $('#float01').offset().top;
+		   f2 = $('#float02').offset().top;
+		   f3 = $('#float03').offset().top;
+		   f4 = $('#float04').offset().top;
+		   f5 = $('#float05').offset().top;
+			
+		   if(sTop<=f2-100){
+			   blackTop.fadeOut(300).css('display','none')
+			   }
+		   else{
+			   blackTop.fadeIn(300).css('display','block')
+			   }
+		   
+		   if(sTop>=fl){
+			   fixRight.eq(0).addClass('cur').siblings().removeClass('cur');
+			   }
+		   if(sTop>=f2-100){
+			   fixRight.eq(1).addClass('cur').siblings().removeClass('cur');
+			   }
+		   if(sTop>=f3-100){
+			   fixRight.eq(2).addClass('cur').siblings().removeClass('cur');
+			   }
+		   if(sTop>=f4-100){
+			   fixRight.eq(3).addClass('cur').siblings().removeClass('cur');
+			   }
+		   if(sTop>=f5-100){
+			   fixRight.eq(4).addClass('cur').siblings().removeClass('cur');
+			   }
+		   
+		
+	     }
+	   });
+
+</script>
+
+
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

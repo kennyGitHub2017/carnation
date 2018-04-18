@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery(":radio[id=cash_status][value=$!obj.cashStatus]").attr("checked",true);
+  jQuery(":radio[id=cash_pay_status][value=$!obj.cashPayStatus]").attr("checked",true);
+});
+
+function displyButton() {
+	$('#save_id').attr('disabled','disabled');
+	$('#theForm').submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">云豆管理</h1>
+  <div class="nav_list">
+  
+   <ul>
+   <li><a href="$!webPath/admin/predeposit_list.htm"><b>充值管理</b></a></li>
+   <li><a href="$!webPath/admin/predeposit_cash.htm"><b>提现管理</b></a></li>
+        <li><a href="$!webPath/admin/predeposit_recharge.htm"><b>用户充值</b></a></li>
+<!--    <li><a href="$!webPath/admin/predeposit_modify.htm"><b>人工操作</b></a></li> -->
+   <li><a href="javascript:void(0);" class="this"><b>提现审核</b></a></li>
+   </ul> 
+
+   </div>
+  <form action="$!webPath/admin/predeposit_cash_save.htm" method="post" id="theForm">
+  <div class="edit">
+   <div class="editul setcont">
+     <ul class="set1">
+       <li class="setcont_bg">提现编号</li>
+       <li><span class="webname">
+         $!obj.cashSn
+       </span></li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">会员名称</li>
+       <li>$!obj.nickName</li>
+     </ul>
+      <ul class="set1">
+       <li class="setcont_bg">手机</li>
+       <li>$!obj.mobile</li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">提交时间</li>
+       <li>$!CommUtil.formatShortDate($!obj.addTime)</li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">支付方式</li>
+        #if($!obj.cashPayment=="alipay")
+          #set($cash_payment="支付宝")
+        #elseif($!obj.cashPayment=="alipay_app")
+          #set($cash_payment="支付宝")
+        #elseif($!obj.cashPayment=="tenpay")
+          #set($cash_payment="财付通")
+        #elseif($!obj.cashPayment=="bill")
+          #set($cash_payment="快钱")
+        #elseif($!obj.cashPayment=="chinabank")
+          #set($cash_payment="网银在线")
+        #else
+        	#set($cash_payment=$!obj.cashPayment) 
+        #end
+       <li>$!cash_payment</li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">提现金额</li>
+       <li>$!obj.cashAmount</li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">收款账号</li>
+       <li>$!obj.cashAccount</li>
+     </ul> 
+     #if($!obj.cashPayment=="chinabank")
+     <ul class="set1">
+       <li class="setcont_bg">收款人姓名</li>
+       <li>$!obj.cashUserName</li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">收款银行</li>
+       <li>$!obj.cashBank</li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">收款支行</li>
+       <li>$!obj.cashSubbranch</li>
+     </ul>
+     #end
+     <ul class="set1">
+       <li class="setcont_bg">提现备注</li>
+       <li>$!obj.cashInfo</li>
+     </ul>
+          <ul class="set1">
+       <li class="setcont_bg">支付状态</li> 
+       <li>
+       <span class="webname">
+       <label>
+       #if( $!obj.cashPayStatus == 1)
+      		 完成支付
+       #else 
+       		 等待支付
+       #end
+      </label>
+      
+	   </span>
+       </li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">提现状态</li>
+       <li>
+       <span class="webname">
+                   <label> <span>
+              <input style="border:none; height:16px; width:16px;"  id="cash_status" name="cash_status" type="radio" value="-1" />
+              </span><span> 审核拒绝</span> </label>
+       <label>
+      <input style="border:none; height:16px; width:16px;" name="cash_status" id="cash_status"  type="radio" value="0" />
+      等待审核
+      </label>
+      <label>
+      <input style="border:none; height:16px; width:16px;"  id="cash_status" name="cash_status" type="radio" value="1" />
+	  完成审核
+      </label>
+	   </span>
+       </li>
+     </ul>
+     <ul class="set1">
+       <li class="setcont_bg">操作备注</li>
+       <li>
+         <textarea name="cash_admin_info" id="cash_admin_info" cols="45" rows="5"></textarea>
+       </li>
+     </ul>
+   </div>
+   </div>
+  <div class="submit">
+    <span class="pad120">
+    
+    <input name="save" type="button" value="完成审核"  id="save_id" onclick="displyButton()"/>
+    
+    
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/predeposit_cash.htm?currentPage=$!currentPage" /></span>
+  </div>
+  </form>
+</div>
+</body>
+</html>

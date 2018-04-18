@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.MessageMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.Message">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="msg_cat" property="msgCat" jdbcType="INTEGER" />
+		<result column="reply_status" property="replyStatus" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="from_user_id" property="fromUserId" jdbcType="BIGINT" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="to_user_id" property="toUserId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sys.bo.MessageBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.sys.model.Message"
+		extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, msg_cat, reply_status, status,
+		title, type,
+		from_user_id,
+		parent_id, to_user_id
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.sys.model.MessageExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sys_message
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="selectByUser" resultMap="BOResultMap">
+		select * from sys_message
+		left join user_customer uc on
+		uc.uid=sys_message.from_user_id
+		<choose>
+			<when test="type == 'sys1'">
+				where to_user_id=#{userId} and type=0 and parent_id
+				is null order by id desc
+			</when>
+			<when test="type == 'my1'">
+				where from_user_id=#{userId} and parent_id is null
+				order by id desc
+			</when>
+			<otherwise>
+				where to_user_id=#{userId} and parent_id is null order by
+				id desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<update id="markRead">
+		update sys_message set status=1, reply_status=0 where
+		to_user_id=#{toUserId} and (id=#{messageId} or parent_id=#{messageId})
+	</update>
+
+	<select id="selectByParent" resultMap="BOResultMap">
+		select * from sys_message
+		left join user_customer uc on uc.uid=sys_message.from_user_id
+		where
+		parent_id=#{parentId} order by id desc
+	</select>
+
+	<select id="forCountA" resultMap="BOResultMap">
+		select * from sys_message where
+		to_user_id=#{userId} and status=0 and type=1 and parent_id is null
+		order by id desc
+	</select>
+
+	<select id="forCountAll" resultMap="BOResultMap">
+		select * from sys_message
+		where to_user_id=#{userId} and status=0 and parent_id is null order by
+		id desc
+	</select>
+
+	<select id="forCountB" resultMap="BOResultMap">
+		select * from sys_message where
+		to_user_id=#{userId} and status=0 and type=0 and parent_id is null
+		order by id desc
+	</select>
+
+	<select id="forCountC" resultMap="BOResultMap">
+		select * from sys_message where
+		from_user_id=#{userId} and msg_cat=0 and reply_status=1
+	</select>
+
+	<select id="selectByExample" parameterType="com.sinco.carnation.sys.model.MessageExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_message
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sys_message
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		sys_message
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.MessageExample">
+		delete from sys_message
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.Message"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_message (id,
+		add_time, delete_status,
+		msg_cat, reply_status, status,
+		title, type,
+		from_user_id,
+		parent_id, to_user_id, content
+		)
+		values
+		(#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{msgCat,jdbcType=INTEGER},
+		#{replyStatus,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+		#{title,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+		#{fromUserId,jdbcType=BIGINT},
+		#{parentId,jdbcType=BIGINT},
+		#{toUserId,jdbcType=BIGINT}, #{content,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.Message"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_message
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="msgCat != null">
+				msg_cat,
+			</if>
+			<if test="replyStatus != null">
+				reply_status,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="fromUserId != null">
+				from_user_id,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="toUserId != null">
+				to_user_id,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="msgCat != null">
+				#{msgCat,jdbcType=INTEGER},
+			</if>
+			<if test="replyStatus != null">
+				#{replyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="fromUserId != null">
+				#{fromUserId,jdbcType=BIGINT},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="toUserId != null">
+				#{toUserId,jdbcType=BIGINT},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.MessageExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_message
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_message
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.msgCat != null">
+				msg_cat = #{record.msgCat,jdbcType=INTEGER},
+			</if>
+			<if test="record.replyStatus != null">
+				reply_status = #{record.replyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=INTEGER},
+			</if>
+			<if test="record.fromUserId != null">
+				from_user_id = #{record.fromUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=BIGINT},
+			</if>
+			<if test="record.toUserId != null">
+				to_user_id = #{record.toUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update sys_message
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=INTEGER},
+		msg_cat =
+		#{record.msgCat,jdbcType=INTEGER},
+		reply_status =
+		#{record.replyStatus,jdbcType=INTEGER},
+		status =
+		#{record.status,jdbcType=INTEGER},
+		title =
+		#{record.title,jdbcType=VARCHAR},
+		type =
+		#{record.type,jdbcType=INTEGER},
+		from_user_id =
+		#{record.fromUserId,jdbcType=BIGINT},
+		parent_id =
+		#{record.parentId,jdbcType=BIGINT},
+		to_user_id =
+		#{record.toUserId,jdbcType=BIGINT},
+		content =
+		#{record.content,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sys_message
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=INTEGER},
+		msg_cat =
+		#{record.msgCat,jdbcType=INTEGER},
+		reply_status =
+		#{record.replyStatus,jdbcType=INTEGER},
+		status =
+		#{record.status,jdbcType=INTEGER},
+		title =
+		#{record.title,jdbcType=VARCHAR},
+		type =
+		#{record.type,jdbcType=INTEGER},
+		from_user_id =
+		#{record.fromUserId,jdbcType=BIGINT},
+		parent_id =
+		#{record.parentId,jdbcType=BIGINT},
+		to_user_id =
+		#{record.toUserId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.Message">
+		update sys_message
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="msgCat != null">
+				msg_cat = #{msgCat,jdbcType=INTEGER},
+			</if>
+			<if test="replyStatus != null">
+				reply_status = #{replyStatus,jdbcType=INTEGER},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="fromUserId != null">
+				from_user_id = #{fromUserId,jdbcType=BIGINT},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="toUserId != null">
+				to_user_id = #{toUserId,jdbcType=BIGINT},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.sys.model.Message">
+		update
+		sys_message
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status
+		= #{deleteStatus,jdbcType=INTEGER},
+		msg_cat =
+		#{msgCat,jdbcType=INTEGER},
+		reply_status =
+		#{replyStatus,jdbcType=INTEGER},
+		status = #{status,jdbcType=INTEGER},
+		title = #{title,jdbcType=VARCHAR},
+		type = #{type,jdbcType=INTEGER},
+		from_user_id = #{fromUserId,jdbcType=BIGINT},
+		parent_id =
+		#{parentId,jdbcType=BIGINT},
+		to_user_id = #{toUserId,jdbcType=BIGINT},
+		content = #{content,jdbcType=LONGVARCHAR}
+		where id =
+		#{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.Message">
+		update sys_message
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{deleteStatus,jdbcType=INTEGER},
+		msg_cat = #{msgCat,jdbcType=INTEGER},
+		reply_status = #{replyStatus,jdbcType=INTEGER},
+		status =
+		#{status,jdbcType=INTEGER},
+		title = #{title,jdbcType=VARCHAR},
+		type =
+		#{type,jdbcType=INTEGER},
+		from_user_id = #{fromUserId,jdbcType=BIGINT},
+		parent_id = #{parentId,jdbcType=BIGINT},
+		to_user_id =
+		#{toUserId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateInvitationRand">
+		<!-- update sns_invitation set randIndex=FLOOR(RAND() * 10000); -->
+		UPDATE sns_invitation SET randIndex=UNIX_TIMESTAMP(update_time);
+	</update>
+	<update id="updateShopGoodsRand">
+		update shop_goods set randIndex=FLOOR(RAND() *
+		10000);
+	</update>
+	<update id="updateCheckGroupRand">
+		update check_group set randIndex=FLOOR(RAND() *
+		10000);
+	</update>
+
+</mapper>

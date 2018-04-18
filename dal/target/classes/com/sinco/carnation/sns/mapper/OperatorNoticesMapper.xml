@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.OperatorNoticesMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.OperatorNotices">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="nt_sort" property="ntSort" jdbcType="INTEGER" />
+		<result column="nt_status" property="ntStatus" jdbcType="INTEGER" />
+		<result column="nt_title" property="ntTitle" jdbcType="VARCHAR" />
+		<result column="operator_id" property="operatorId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sns.bo.OperatorNoticesBO"
+		extends="BaseResultMap">
+		<result column="operator_name" property="operatorName"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.sns.model.OperatorNotices"
+		extends="BaseResultMap">
+		<result column="nt_content" property="ntContent" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_status, nt_sort, nt_status, nt_title, operator_id
+	</sql>
+	<sql id="Blob_Column_List">
+		nt_content
+	</sql>
+
+	<select id="queryNoticesList" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List"></include>
+		,
+		<include refid="Blob_Column_List"></include>
+		FROM sns_operator_notices where operator_id=#{opertorId}
+		order by nt_sort desc
+	</select>
+
+	<select id="selectByExampleWithBLOBs"
+		parameterType="com.sinco.carnation.sns.model.OperatorNoticesExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_operator_notices
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.sns.model.OperatorNoticesExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_operator_notices
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Bo_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		,uo.operator_name
+		from sns_operator_notices son
+		left join user_operator uo
+		on uo.id = son.operator_id
+		where son.id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sns_operator_notices
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sns.model.OperatorNoticesExample">
+		delete from sns_operator_notices
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.OperatorNotices"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sns_operator_notices (id, add_Time, delete_status,
+		nt_sort, nt_status, nt_title,
+		operator_id, nt_content)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{ntSort,jdbcType=INTEGER}, #{ntStatus,jdbcType=INTEGER}, #{ntTitle,jdbcType=VARCHAR},
+		#{operatorId,jdbcType=BIGINT}, #{ntContent,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.OperatorNotices"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sns_operator_notices
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="ntSort != null">
+				nt_sort,
+			</if>
+			<if test="ntStatus != null">
+				nt_status,
+			</if>
+			<if test="ntTitle != null">
+				nt_title,
+			</if>
+			<if test="operatorId != null">
+				operator_id,
+			</if>
+			<if test="ntContent != null">
+				nt_content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="ntSort != null">
+				#{ntSort,jdbcType=INTEGER},
+			</if>
+			<if test="ntStatus != null">
+				#{ntStatus,jdbcType=INTEGER},
+			</if>
+			<if test="ntTitle != null">
+				#{ntTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorId != null">
+				#{operatorId,jdbcType=BIGINT},
+			</if>
+			<if test="ntContent != null">
+				#{ntContent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sns.model.OperatorNoticesExample"
+		resultType="java.lang.Integer">
+		select count(*) from sns_operator_notices
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sns_operator_notices
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.ntSort != null">
+				nt_sort = #{record.ntSort,jdbcType=INTEGER},
+			</if>
+			<if test="record.ntStatus != null">
+				nt_status = #{record.ntStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.ntTitle != null">
+				nt_title = #{record.ntTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="record.operatorId != null">
+				operator_id = #{record.operatorId,jdbcType=BIGINT},
+			</if>
+			<if test="record.ntContent != null">
+				nt_content = #{record.ntContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update sns_operator_notices
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		nt_sort = #{record.ntSort,jdbcType=INTEGER},
+		nt_status = #{record.ntStatus,jdbcType=INTEGER},
+		nt_title = #{record.ntTitle,jdbcType=VARCHAR},
+		operator_id = #{record.operatorId,jdbcType=BIGINT},
+		nt_content = #{record.ntContent,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sns_operator_notices
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		nt_sort = #{record.ntSort,jdbcType=INTEGER},
+		nt_status = #{record.ntStatus,jdbcType=INTEGER},
+		nt_title = #{record.ntTitle,jdbcType=VARCHAR},
+		operator_id = #{record.operatorId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.OperatorNotices">
+		update sns_operator_notices
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="ntSort != null">
+				nt_sort = #{ntSort,jdbcType=INTEGER},
+			</if>
+			<if test="ntStatus != null">
+				nt_status = #{ntStatus,jdbcType=INTEGER},
+			</if>
+			<if test="ntTitle != null">
+				nt_title = #{ntTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="operatorId != null">
+				operator_id = #{operatorId,jdbcType=BIGINT},
+			</if>
+			<if test="ntContent != null">
+				nt_content = #{ntContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.sns.model.OperatorNotices">
+		update sns_operator_notices
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		nt_sort = #{ntSort,jdbcType=INTEGER},
+		nt_status = #{ntStatus,jdbcType=INTEGER},
+		nt_title = #{ntTitle,jdbcType=VARCHAR},
+		operator_id = #{operatorId,jdbcType=BIGINT},
+		nt_content = #{ntContent,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.OperatorNotices">
+		update sns_operator_notices
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		nt_sort = #{ntSort,jdbcType=INTEGER},
+		nt_status = #{ntStatus,jdbcType=INTEGER},
+		nt_title = #{ntTitle,jdbcType=VARCHAR},
+		operator_id = #{operatorId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- added begin -->
+	<sql id="Bo_Column_List">
+		son.id, son.add_Time, son.delete_status, son.nt_sort, son.nt_status,
+		son.nt_title, son.operator_id
+	</sql>
+
+	<select id="selectListByVo" resultMap="BOResultMap">
+		SELECT
+		<include refid="Bo_Column_List" />
+		,up.`operator_name`
+		FROM sns_operator_notices son
+		LEFT JOIN `user_operator` AS up
+		ON son.`operator_id` = up.`id`
+		<include refid="selectListByVoWhere" />
+		ORDER BY son.add_Time DESC
+	</select>
+
+	<sql id="selectListByVoWhere">
+		<where>
+			son.delete_status = 0
+			<if test="vo.ntTitle != null and vo.ntTitle !=''">
+				AND son.nt_title like concat('%','${vo.ntTitle}','%' )
+			</if>
+			<if test="vo.operatorId != null and vo.operatorId > 0">
+				AND son.operator_id = #{vo.operatorId,jdbcType=BIGINT}
+			</if>
+			<if test="vo.ntStatus != null ">
+				AND son.nt_status = #{vo.ntStatus,jdbcType=BIGINT}
+			</if>
+		</where>
+	</sql>
+
+
+
+	<select id="selectBoByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		SELECT
+		<include refid="Bo_Column_List" />
+		,son.nt_content
+		,up.`operator_name`
+		from sns_operator_notices son
+		LEFT JOIN `user_operator` AS up
+		ON son.`operator_id` = up.`id`
+		where son.id = #{id,jdbcType=BIGINT}
+	</select>
+
+</mapper>

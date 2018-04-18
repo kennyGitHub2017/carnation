@@ -1,0 +1,79 @@
+<style>
+.left_menu_dl .index-right-img{float: right;margin-top: -15px;margin-right: 20px;width: 10px;height: 13px;background: url("$!webPath/resources/style/shop/images/index-right-kai.png")no-repeat center center;}
+.left_menu_dl_hover .index-right-img{float: right;margin-top: -15px;margin-right: 20px;width: 10px;height: 13px;background: url("$!webPath/resources/style/shop/images/index-right-yin.png")no-repeat center center;}
+.goodscar_sp span{width: 118px;}
+.nav .nav_center #navul li a{color: #666;font-weight: normal;}
+.nav .nav_center #navul li a:hover{text-decoration:none;color: #19bf96;}
+</style>
+
+<script>
+jQuery(document).ready(function(){
+    jQuery("#navul li a").each(function(i){
+        var original_url=jQuery(this).attr("href");
+        if("$!{op}"!=""){
+            if(original_url.indexOf("$!{op}")>=0){
+                jQuery(this).parent().addClass("this");
+            }
+        } else if (i == 0) {
+            jQuery(this).parent().addClass("this");
+        }
+    });
+});
+$(function(){
+	if(location.href.indexOf("brandStore")>-1){
+		$("#navul li").eq(1).addClass("this").siblings().removeClass("this");
+	}else if(location.href.indexOf("integral")>-1){
+		$("#navul li").eq(2).addClass("this").siblings().removeClass("this");
+
+	}else if(location.href.indexOf("group")>-1){
+		$("#navul li").eq(3).addClass("this").siblings().removeClass("this");
+
+	}else if(location.href.indexOf("yunGou")>-1){
+		$("#navul li").eq(4).addClass("this").siblings().removeClass("this");
+
+	}else if(location.href.indexOf("appDownLoad")>-1){
+		$("#navul li").eq(5).addClass("this").siblings().removeClass("this");
+
+	}
+	
+});
+
+</script>
+
+<div class="nav" style="border: none;">
+  <div class="nav_center">
+    <div class="nav_left" style="background: #fff;color: #fff">
+      <h2><a href="javascript:void(0)"><span></span></a> </h2>
+      
+    </div>
+    <ul id="navul">
+      #set($navs=$!navTools.queryNav(0,-1))
+      #foreach($nav in $navs)
+      #if($!CommUtil.indexOf("$!nav.url","http://")>=0)
+      #set($url="$!nav.url")
+      #else
+      #set($url="$!webPath/$!{nav.url}")
+      #end
+	     
+     #if($!nav.id == 7)
+
+       	 #if($!cnFlagFalse && $!cnFlagFalse == 1)
+
+       	 #else
+       	     <li><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a></li>
+       	 #end
+       
+     #else 
+     
+      		  #if($!nav.id == 7)
+			 <span style="display: inline-block;position:absolute;right:307px;top:6px; width: 35px;height: 19px;background: url('$!webPath/resources/style/shop/images/yg-cipimg.png') no-repeat center center #fff"></span>
+	      	#end   
+	      	
+	      	
+     	     <li><a href="$!url" id="$!nav.id" #if($!nav.new_win==1)target="_blank"#end original_url="$!nav.original_url"><span>$!{nav.title}</span></a></li>
+     	#end
+      
+      #end
+    </ul>
+  </div>
+</div>

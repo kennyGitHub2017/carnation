@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type=text/css rel=stylesheet />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/smallalert.js" charset="utf-8"></script>
+<style>
+.operation ul{
+	padding: 20px 0;
+}
+.amount-money{
+	overflow: hidden;
+}
+.amount-money li{
+	float:left;
+	width:30%;
+	text-align:center;
+	background:none;
+}
+.amount-money li p{
+	font-weight: bold;
+    background:none;
+}
+.amount-money li p:nth-child(1){
+	font-size: 22px;
+	line-height: 36px;
+	padding:0 10px;
+}
+.amount-money li p:nth-child(2){
+	font-size: 12px;
+	line-height: 16px;
+	padding:0 10px;
+	color: #9B9B9C;
+}
+.fontstyle1{
+	font-weight: bold;
+	color: red;
+	font-size: 17px;
+}
+.operation ul li{
+	background:none;
+}
+</style>
+<script>
+	jQuery(document).ready(function() {
+		jQuery('#beginTime_sx').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+		jQuery('#endTime_sx').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+		jQuery('#beginTime_xd').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+		jQuery('#endTime_xd').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+	});
+
+	// 导出报表
+	function export_excel(){
+
+		/*
+		if(!checkFilter()){
+			alert("璇烽�夋嫨瀵煎嚭鏉′欢!");
+			return;
+		}else{
+			#if($!objs.size()>0)
+				document.forms[1].action = "$!webPath/admin/total_order_export.htm";
+				document.forms[1].submit();
+			#else
+				alert("褰撳墠娌℃湁鍙鍑虹殑鏁版嵁!");
+			#end
+		}*/
+		
+	}
+	
+	function checkFilter(){
+	/*
+	
+		if($("#status").val()==""
+			  & $("#platId").val()==""
+				  &$("#orderno").val()==""
+					  &$("#beginTime_xd").val()==""
+					   &$("#endTime_xd").val()==""){
+			return false;
+		}else{
+			return true;
+		}
+		*/
+	
+	}
+	
+	function juanPiTotal(){
+		/*
+		$.ajax({
+					url:'$!webPath/admin/juanpi_total.htm',
+					data:"startTimeTotal="+$("#beginTime_sx").val()+"&endTimeTotal="+$("#endTime_sx").val(),
+					type:"POST",
+					dataType:"json",
+					success:function(orderTotals){
+						if(orderTotals!=null){
+							$("#total").text(orderTotals.goodsmoney.toFixed(2)+"鍏�");
+							$("#totalCom").text(orderTotals.commission.toFixed(2)+"鍏�");
+							$("#totalYunCom").text(orderTotals.yunCommission.toFixed(2)+"鍏�");
+							
+						}else{
+							$("#total").text("0.00鍏�");
+							$("#totalCom").text("0.00鍏�");
+							$("#totalYunCom").text("0.00鍏�");
+						}
+					}
+				});*/
+		
+	}
+</script>
+</head>
+<body>
+
+	<div class="cont">
+		<h3 class="seth">结算管理</h3>
+		<form action="" method="post" id="queryForm1">
+			<input name="userId" type="hidden" value="$!vo.userId" />
+			<div class="search">
+				<ul>
+					<li>
+						<span>时间筛选</span>
+						<span class="size100">
+							<input name="startTimeTotal" type="text" id="beginTime_sx" value="$!vo.startTimeTotal" readonly="readonly" />
+						</span>
+						<span>—</span>
+						<span class="size100"> <input name="endTimeTotal"
+								type="text" value="$!vo.endTimeTotal" id="endTime_sx" readonly="readonly" />
+						</span> 
+						</span> 
+						<input name="" type="button" value="确定" onclick="juanPiTotal();" style="cursor: pointer; margin-left:24px" class="search_btn" />
+					</span>
+					</li>
+				</ul>
+			</div>
+		</form>
+		
+		<div class="operation" style="background:#f0f9ff; border:1px solid #C2E8FF">
+		    <ul class="amount-money">
+				<li>
+					<p><span>7576765.00</span></p>
+					<p>总销售额 （元）</p>
+				</li>
+				<li>
+					
+					<p><span>543645634.00</span></p>
+					<p>总佣金额 （元）</p>
+				</li>
+				<li>
+					<p><span>456441.00</span></p>
+					<p>退款金额 （元）</p>
+				</li>
+			</ul>
+	  	</div>
+
+		<div class="nav_list">
+		  	<ul>
+		    	<li><a href="$!webPath/admin/jiuye_settlement.htm" class="this"><b>所有订单</b></a></li>
+		    </ul>
+		</div>
+		<form action="$webPath/admin/jiuye_settlement.htm" method="post" id="queryForm">
+			<div class="search">
+				<ul>
+					<li>
+						<span>结算状态</span>
+						<span>
+							<select name="status">
+								<option value="">全部</option>
+								<option value="1">未结算</option>
+								<option value="2">已结算</option>
+							</select>
+						</span>
+						<span>订单号</span> 
+						<span class="size150"> 
+							<input name="" type="text" value="" />
+						</span>
+						<span>下单时间</span>
+						<span class="size100"> 
+							<input name="" type="text" id="beginTime_xd" value="" readonly="readonly" />
+						</span>
+						<span>—</span>
+						<span class="size100"> <input name="" type="text" value="" id="endTime_xd" readonly="readonly" />
+						</span>
+						<span>
+							<input name="" type="submit" value="搜索" style="cursor: pointer;" class="search_btn" />
+						</span>
+						<span>
+							<input name="importExcel" onclick="export_excel()" type="button" value="导出Excel" style="cursor: pointer;" class="search_btn" />
+						</span>
+					</li>
+				</ul>
+			</div>
+		</form>
+
+		<form action="#" method="post" id="ListForm">
+			<div class="fshoptb">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					class="fshop_table">
+					<tr>
+						<th width="12%"><span class="form_btna">订单号</span></th>
+						<th width="12%"><span class="form_btna">下单时间</span></th>
+						<th width="8%"><span class="form_btna">商品数量</span></th>
+						<th width="8%"><span class="form_btna">订单总金额</span></th>
+						<th width="8%"><span class="form_btna">佣金金额</span></th>
+						<th width="8%"><span class="form_btna">结算状态</span></th>
+						<th width="8%"><span class="form_btna">订单状态</span></th>
+						<th width="8%"><span class="form_btna">支付类型</span></th>
+						<th width="8%"><span class="form_btna">云豆</span></th>
+						<th width="8%"><span class="form_btna">云豆（直销）</span></th>
+						<th width="8%"><span class="form_btna">微信</span></th>
+						<th width="8%"><span class="form_btna">支付宝</span></th>
+						<th width="8%"><span class="form_btna">操作</span></th>
+					</tr>
+					
+					<tr>
+						<td align="center">123665555</td>
+						<td align="center">2017-10-10 10:52:25</td>
+						<td align="center">20</td>
+						<td align="center">¥39.00</td>
+						<td align="center">¥39.00</td>
+						<td align="center">未处理</td>
+						<td align="center">待发货</td>
+						<td align="center">云豆</td>
+						<td align="center">128.00</td>
+						<td align="center">-</td>
+						<td align="center">-</td>
+						<td align="center">-</td>
+						<td align="center">
+							<a href="$!webPath/admin/jiuye_settlement_detail.htm?orderId=111" class="blue">查看</a>
+						</td>
+					</tr>
+					<tr>
+						<td align="center">123665555</td>
+						<td align="center">2017-10-10 10:52:25</td>
+						<td align="center">20</td>
+						<td align="center">¥39.00</td>
+						<td align="center">¥39.00</td>
+						<td align="center">未处理</td>
+						<td align="center">待发货</td>
+						<td align="center">云豆</td>
+						<td align="center">128.00</td>
+						<td align="center">-</td>
+						<td align="center">-</td>
+						<td align="center">-</td>
+						<td align="center">
+							<a href="$!webPath/admin/jiuye_settlement_detail.htm?orderId=111" class="blue">查看</a>
+						</td>
+					</tr>
+				
+				</table>
+			</div>
+			
+			
+			<div class="operate_bar">
+				<div class="fenye">
+					<input name="endPrice" type="hidden" id="endPrice"
+						value="$!vo.endPrice" /> <input name="userId" type="hidden"
+						id="userId" value="$!vo.userId" /> <input name="beginPrice"
+						type="hidden" id="beginPrice" value="$!vo.beginPrice" /> <input
+						name="endTime" type="hidden" id="endTime" value="$!vo.endTime" />
+					<input name="beginTime" type="hidden" id="beginTime"
+						value="$!vo.beginTime" /> <input name="typeData" type="hidden"
+						id="typeData" value="$!vo.typeData" /> <input name="type"
+						type="hidden" id="type" value="$!vo.type" /> <input
+						name="orderStatus" type="hidden" id="orderStatus"
+						value="$!vo.orderStatus" /> <input name="currentPage"
+						type="hidden" id="currentPage" value="$!currentPage" /> <input
+						name="payment" type="hidden" id="payment" value="$!vo.payment" />
+					$!gotoPageFormHTML
+				</div>
+			</div>
+			
+		</form>
+	</div>
+</body>
+</html>

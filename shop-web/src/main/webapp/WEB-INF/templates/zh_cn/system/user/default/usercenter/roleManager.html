@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>角色管理 - $!{config.title}-$!{config.poweredby}</title>
+  <meta name="keywords" content="$!config.keywords" />
+  <meta name="description" content="$!config.description" />
+  <meta name="generator" content="$!{config.meta_generator}" />
+  <meta name="author" content="$!{config.meta_author}">
+  <meta name="copyright" content="$!{config.copyRight}">
+  <link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+  <link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+  <link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+  <link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+  <link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet">
+  <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+  <script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+  <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+  <script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+  <script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+  <style>
+  .roles_mes{background:#fff;border-top:1px solid #e9e7e7; overflow: hidden;width: 100%}.roles_mes ul{overflow: hidden;}
+  .roles_mes ul li{height: 137px; border-bottom: 1px solid #e2e2e2;margin: 0px 21px;}
+  .roles_mes dl.allid{width: 33.3%;float:left;}.roles_mes dl{width: 50%;float:left;}
+  .roles_mes .tit{width:100%;display:inline-block;text-align:left; font-size:18px;color:#19bf96;margin-top: 31px;}
+  .roles_mes dl dd.phoneid{font-size:16px;color:#666666;margin-top: 22px;}
+  .roles_mes dl dd.phoneid.gray{font-size:14px;color:#afafaf;text-align: center;}
+  .roles_mes dl dd.wwid{font-size:14px;color:#afafaf;margin-top: 11px;text-indent: 21px;}
+  .roles_mes dl dd.wwid.ww{background:url('$!webPath/resources/img/ww-roles.png')no-repeat left center;}
+  .roles_mes dl dd.wwid.qq{background:url('$!webPath/resources/img/qq_roles.png')no-repeat left center;}
+  .roles_mes dl dd.wwid.wb{background:url('$!webPath/resources/img/wb_roles.png')no-repeat left center;margin-top: 51px;}
+  .roles_mes .alreadyApplied{display:inline-block;color:#fff; background:#d5d5d5;border-radius:3px;width:112px;height:32px;font-size:16px;color:#ffffff;letter-spacing:0px;line-height:32px;text-align:center;margin-left: 220px;}
+  .roles_mes .apply{display:inline-block;color:#fff; background:#19bf96;border-radius:3px;width:112px;height:32px;font-size:16px;color:#ffffff;letter-spacing:0px;line-height:32px;text-align:center;margin-left: 220px;}
+  </style>
+</head>
+<body>
+  $!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm")
+$!httpInclude.include("/nav1.htm")
+  <div class="main clearfix">
+    <div class="usercenter">
+      $!httpInclude.include("/buyer/nav.htm?op=account")
+      <div class="usercenter_right">
+        <div class="myorder">
+          <h4> <strong>账户信息</strong>
+          </h4>
+        </div>
+        <div class="user_list">
+          <div class="user_list_title">
+            <ul class="user_title_ul">
+              <li > <i></i>
+                <a href="$!webPath/buyer/account.htm">基本信息</a>
+              </li>
+              #if($!isCN == false)
+              <li><i></i><a href="$!webPath/buyer/account_password.htm">修改密码</a></li>
+              <li><i></i><a href="$!webPath/buyer/money_password.htm">修改云豆密码</a></li>
+              #end
+              <li>
+                <i></i>
+                <a href="$!webPath/buyer/account_mobile.htm">修改手机号码</a>
+              </li>
+              <li>
+                <i></i>
+                <a href="$!webPath/buyer/account_avatar.htm">修改头像</a>
+              </li>
+              <li> <i></i>
+                <a href="$!webPath/buyer/account_refereeuser.htm">我邀请的会员</a>
+              </li>
+              
+              <li class="this"> <i></i>
+                <a href="$!webPath/buyer/roleManage.htm">角色管理</a>
+              </li>
+            </ul>
+          </div>
+ 		
+ 		<div class="roles_mes">
+ 			<ul>
+ 				<li>
+ 					<div class="tit">会员账号</div>
+ 					<dl class="allid">
+					   <dd class="phoneid">手机账号：$!phoneAccount</dd>
+					   <dd class="wwid ww">绑定微信：$!wxAccount</dd>
+					</dl>
+					<dl class="allid">
+					   <dd class="phoneid">CN账号：$!cnAccount</dd>
+					   <dd class="wwid qq">绑定QQ：无</dd>
+					</dl>
+					<dl class="allid">
+					   <dd class="wwid wb">绑定微博：无</dd>
+					</dl>
+ 				</li>
+ 				#if($!isSupplier==false)
+ 				<li>
+ 					<div class="tit">商户账号</div>
+ 					#if($!isMerchant)
+ 						<dl>
+					   		<dd class="phoneid">手机账号：$!phoneAccount</dd>
+						</dl>
+						<dl>
+					   		<dd class="phoneid"> <a href="javascript:;" class="alreadyApplied">已申请 </a></dd>
+						</dl>
+ 					#else
+ 						<dl>
+					   		<dd class="phoneid">未设置商户账号，申请入驻后可使用该账号直接登录</dd>
+						</dl>
+						<dl>
+					   		<dd class="phoneid"> <a href="$!webPath/seller/ruzhu_pingtai.htm" class="apply">申请 </a></dd>
+						</dl>
+ 					#end
+ 					
+ 				</li>
+ 				#end
+ 				#if($!isMerchant==false)
+ 				<li>
+ 					<div class="tit">供应商账号</div>
+ 					#if($!isSupplier)
+ 						<dl>
+					   		<dd class="phoneid">手机账号：$!phoneAccount</dd>
+						</dl>
+						<dl>
+					   		<dd class="phoneid"> <a href="javascript:;" class="alreadyApplied">已申请 </a></dd>
+						</dl>
+ 					#else
+ 						<dl>
+					   		<dd class="phoneid">未设置供应商账号，申请入驻后可使用该账号直接登录</dd>
+						</dl>
+						<dl>
+					   		<dd class="phoneid"> <a href="$!webPath/seller/ruzhu_pingtai.htm" class="apply">申请 </a></dd>
+						</dl>
+ 					#end
+ 				</li>
+ 				#end
+ 				<li>
+ 					<div class="tit">经销商账号</div>
+ 					<dl>
+					   <dd class="phoneid">未开通经销商账号，开通后可使用该账号直接登录</dd>
+					</dl>
+					<dl>
+					   <dd class="phoneid gray">（请联系相关工作人员开通账号）</dd>
+					</dl>
+ 				</li>
+ 				<li>
+ 					<div class="tit">运营商账号</div>
+ 					<dl>
+					   <dd class="phoneid">未开通运营商账号，开通后可使用该账号直接登录</dd>
+					</dl>
+					<dl>
+					   <dd class="phoneid gray">（请联系相关工作人员开通账号）</dd>
+					</dl>
+ 				</li>
+ 			</ul>
+ 		</div>
+ 		
+    </div>
+  </div>
+</div>
+
+</div>
+  $!httpInclude.include("/footer.htm")
+</body>
+</html>

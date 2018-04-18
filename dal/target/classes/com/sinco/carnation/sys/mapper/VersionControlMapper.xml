@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.VersionControlMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.VersionControl">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="vc_type" property="vcType" jdbcType="INTEGER" />
+		<result column="vc_number" property="vcNumber" jdbcType="VARCHAR" />
+		<result column="vc_describe" property="vcDescribe" jdbcType="VARCHAR" />
+		<result column="if_open" property="ifOpen" jdbcType="BIT" />
+		<result column="if_mandatory" property="ifMandatory" jdbcType="BIT" />
+		<result column="downloads" property="downloads" jdbcType="INTEGER" />
+		<result column="download_url" property="downloadUrl" jdbcType="VARCHAR" />
+		<result column="vc_state" property="vcState" jdbcType="BIT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sys.bo.VersionControlBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, vc_type, vc_number, vc_describe, if_open, if_mandatory,
+		downloads,
+		download_url, vc_state
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.sys.model.VersionControlExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_version_control
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			limit ${limit}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_version_control
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_version_control
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.VersionControlExample">
+		delete from sys_version_control
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.VersionControl"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_version_control (id, add_time, vc_type,
+		vc_number, vc_describe, if_open,
+		if_mandatory, downloads, download_url,
+		vc_state)
+		values (#{id,jdbcType=INTEGER}, #{addTime,jdbcType=TIMESTAMP},
+		#{vcType,jdbcType=INTEGER},
+		#{vcNumber,jdbcType=VARCHAR}, #{vcDescribe,jdbcType=VARCHAR}, #{ifOpen,jdbcType=BIT},
+		#{ifMandatory,jdbcType=BIT}, #{downloads,jdbcType=INTEGER},
+		#{downloadUrl,jdbcType=VARCHAR},
+		#{vcState,jdbcType=BIT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.VersionControl"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_version_control
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="vcType != null">
+				vc_type,
+			</if>
+			<if test="vcNumber != null">
+				vc_number,
+			</if>
+			<if test="vcDescribe != null">
+				vc_describe,
+			</if>
+			<if test="ifOpen != null">
+				if_open,
+			</if>
+			<if test="ifMandatory != null">
+				if_mandatory,
+			</if>
+			<if test="downloads != null">
+				downloads,
+			</if>
+			<if test="downloadUrl != null">
+				download_url,
+			</if>
+			<if test="vcState != null">
+				vc_state,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="vcType != null">
+				#{vcType,jdbcType=INTEGER},
+			</if>
+			<if test="vcNumber != null">
+				#{vcNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="vcDescribe != null">
+				#{vcDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="ifOpen != null">
+				#{ifOpen,jdbcType=BIT},
+			</if>
+			<if test="ifMandatory != null">
+				#{ifMandatory,jdbcType=BIT},
+			</if>
+			<if test="downloads != null">
+				#{downloads,jdbcType=INTEGER},
+			</if>
+			<if test="downloadUrl != null">
+				#{downloadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="vcState != null">
+				#{vcState,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.VersionControlExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_version_control
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_version_control
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.vcType != null">
+				vc_type = #{record.vcType,jdbcType=INTEGER},
+			</if>
+			<if test="record.vcNumber != null">
+				vc_number = #{record.vcNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="record.vcDescribe != null">
+				vc_describe = #{record.vcDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ifOpen != null">
+				if_open = #{record.ifOpen,jdbcType=BIT},
+			</if>
+			<if test="record.ifMandatory != null">
+				if_mandatory = #{record.ifMandatory,jdbcType=BIT},
+			</if>
+			<if test="record.downloads != null">
+				downloads = #{record.downloads,jdbcType=INTEGER},
+			</if>
+			<if test="record.downloadUrl != null">
+				download_url = #{record.downloadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.vcState != null">
+				vc_state = #{record.vcState,jdbcType=BIT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sys_version_control
+		set id = #{record.id,jdbcType=INTEGER},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		vc_type = #{record.vcType,jdbcType=INTEGER},
+		vc_number = #{record.vcNumber,jdbcType=VARCHAR},
+		vc_describe = #{record.vcDescribe,jdbcType=VARCHAR},
+		if_open = #{record.ifOpen,jdbcType=BIT},
+		if_mandatory = #{record.ifMandatory,jdbcType=BIT},
+		downloads = #{record.downloads,jdbcType=INTEGER},
+		download_url = #{record.downloadUrl,jdbcType=VARCHAR},
+		vc_state = #{record.vcState,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.VersionControl">
+		update sys_version_control
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="vcType != null">
+				vc_type = #{vcType,jdbcType=INTEGER},
+			</if>
+			<if test="vcNumber != null">
+				vc_number = #{vcNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="vcDescribe != null">
+				vc_describe = #{vcDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="ifOpen != null">
+				if_open = #{ifOpen,jdbcType=BIT},
+			</if>
+			<if test="ifMandatory != null">
+				if_mandatory = #{ifMandatory,jdbcType=BIT},
+			</if>
+			<if test="downloads != null">
+				downloads = #{downloads,jdbcType=INTEGER},
+			</if>
+			<if test="downloadUrl != null">
+				download_url = #{downloadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="vcState != null">
+				vc_state = #{vcState,jdbcType=BIT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.VersionControl">
+		update sys_version_control
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		vc_type = #{vcType,jdbcType=INTEGER},
+		vc_number = #{vcNumber,jdbcType=VARCHAR},
+		vc_describe = #{vcDescribe,jdbcType=VARCHAR},
+		if_open = #{ifOpen,jdbcType=BIT},
+		if_mandatory = #{ifMandatory,jdbcType=BIT},
+		downloads = #{downloads,jdbcType=INTEGER},
+		download_url = #{downloadUrl,jdbcType=VARCHAR},
+		vc_state = #{vcState,jdbcType=BIT}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+	<select id="findOneByTypeNew" parameterType="java.lang.Integer"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_version_control
+		where vc_type = #{type,jdbcType=INTEGER}
+		order by add_time desc LIMIT 0,1
+	</select>
+
+	<select id="selectListByVO" parameterType="com.sinco.carnation.sys.model.VersionControlExample"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_version_control
+		where vc_state = TRUE
+		order by add_time desc
+	</select>
+</mapper>

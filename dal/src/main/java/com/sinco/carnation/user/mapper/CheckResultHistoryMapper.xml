@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.CheckResultHistoryMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.user.model.CheckResultHistory">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="group_id" property="groupId" jdbcType="BIGINT" />
+		<result column="group_title" property="groupTitle" jdbcType="VARCHAR" />
+		<result column="score" property="score" jdbcType="INTEGER" />
+		<result column="result_desc" property="resultDesc" jdbcType="VARCHAR" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+	</resultMap>
+	<resultMap id="ExtendResultMap"
+		type="com.sinco.carnation.user.bo.CheckResultHistoryBO" extends="BaseResultMap">
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, user_id, group_id, group_title, score, result_desc, update_by,
+		update_time, create_by,
+		create_time, is_deleted
+	</sql>
+	<select id="selectPageByUserId" resultMap="ExtendResultMap">
+		select
+		*
+		from user_check_result_history
+		where user_id = #{userId} and is_deleted=0
+		order by create_time desc
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.user.model.CheckResultHistoryExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_check_result_history
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from user_check_result_history
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_check_result_history
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.user.model.CheckResultHistoryExample">
+		delete from user_check_result_history
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.CheckResultHistory"
+		keyProperty="id" useGeneratedKeys="true">
+		<!-- <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" 
+			> SELECT LAST_INSERT_ID() </selectKey> -->
+		insert into user_check_result_history (id, user_id, group_id,
+		group_title, score, result_desc,
+		update_by, update_time, create_by,
+		create_time, is_deleted)
+		values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+		#{groupId,jdbcType=BIGINT},
+		#{groupTitle,jdbcType=VARCHAR}, #{score,jdbcType=INTEGER}, #{resultDesc,jdbcType=VARCHAR},
+		#{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},
+		#{createBy,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.CheckResultHistory"
+		keyProperty="id" useGeneratedKeys="true">
+		<!-- <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" 
+			> SELECT LAST_INSERT_ID() </selectKey> -->
+		insert into user_check_result_history
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="groupId != null">
+				group_id,
+			</if>
+			<if test="groupTitle != null">
+				group_title,
+			</if>
+			<if test="score != null">
+				score,
+			</if>
+			<if test="resultDesc != null">
+				result_desc,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{id,jdbcType=BIGINT},
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="groupId != null">
+				#{groupId,jdbcType=BIGINT},
+			</if>
+			<if test="groupTitle != null">
+				#{groupTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="score != null">
+				#{score,jdbcType=INTEGER},
+			</if>
+			<if test="resultDesc != null">
+				#{resultDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.user.model.CheckResultHistoryExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_check_result_history
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_check_result_history
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.groupId != null">
+				group_id = #{record.groupId,jdbcType=BIGINT},
+			</if>
+			<if test="record.groupTitle != null">
+				group_title = #{record.groupTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="record.score != null">
+				score = #{record.score,jdbcType=INTEGER},
+			</if>
+			<if test="record.resultDesc != null">
+				result_desc = #{record.resultDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updateBy != null">
+				update_by = #{record.updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_check_result_history
+		set id = #{record.id,jdbcType=BIGINT},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		group_id = #{record.groupId,jdbcType=BIGINT},
+		group_title = #{record.groupTitle,jdbcType=VARCHAR},
+		score = #{record.score,jdbcType=INTEGER},
+		result_desc = #{record.resultDesc,jdbcType=VARCHAR},
+		update_by = #{record.updateBy,jdbcType=VARCHAR},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		create_by = #{record.createBy,jdbcType=VARCHAR},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{record.isDeleted,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.CheckResultHistory">
+		update user_check_result_history
+		<set>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="groupId != null">
+				group_id = #{groupId,jdbcType=BIGINT},
+			</if>
+			<if test="groupTitle != null">
+				group_title = #{groupTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="score != null">
+				score = #{score,jdbcType=INTEGER},
+			</if>
+			<if test="resultDesc != null">
+				result_desc = #{resultDesc,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.CheckResultHistory">
+		update user_check_result_history
+		set user_id = #{userId,jdbcType=BIGINT},
+		group_id = #{groupId,jdbcType=BIGINT},
+		group_title = #{groupTitle,jdbcType=VARCHAR},
+		score = #{score,jdbcType=INTEGER},
+		result_desc = #{resultDesc,jdbcType=VARCHAR},
+		update_by = #{updateBy,jdbcType=VARCHAR},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_by = #{createBy,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{isDeleted,jdbcType=BIT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

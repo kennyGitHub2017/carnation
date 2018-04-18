@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>订单提交成功 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link
+	href="$!webPath/resources/style/system/front/default/css/public2.css"
+	type="text/css" rel="stylesheet" />
+<link
+	href="$!webPath/resources/style/system/front/default/css/public_auto.css"
+	type="text/css" rel="stylesheet" />
+<link
+	href="$!webPath/resources/style/system/front/default/css/goods.css"
+	type="text/css" rel="stylesheet" />
+<link
+	href="$!webPath/resources/style/system/front/default/css/goods2.css"
+	type="text/css" rel="stylesheet" />
+
+<link
+	href="$!webPath/resources/style/system/front/default/css/pay_list.css"
+	type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css"
+	type="text/css" rel="stylesheet" />
+<link
+	href="$!webPath/resources/style/system/front/default/css/yunGoPay.css"
+	type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.validate_1_14.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<style type="text/css">
+.nav_left h2 em{top:0px;}
+</style>
+</head>
+<body>
+	$!httpInclude.include("/top.htm") $!httpInclude.include("/head.htm")
+	$!httpInclude.include("/nav1.htm")
+
+	<script type="text/javascript">
+
+#set($availableBalance = $!customer.availableBalance)
+#set($resCnBonus = $!cnBonus)
+
+#set($myMoney = $availableBalance + $resCnBonus)
+#set($countAmount = $order.allCashPrice + $order.allygPrice)
+
+/*
+ 
+ if(($order.allCashPrice==null||$order.allCashPrice==0)&&"重消充足"){//全重消支付
+	 
+ }else{//半重消半现金
+	 if(云豆充足){
+		 if(重消为0){
+			 
+		 }else{
+			 重消+云豆   或者 重消+现金
+		 }
+		 
+	 }else{
+		 重消+现金
+		 
+	 }
+ }
+ 1.全部用重消支付 $order.allCashPrice==null||$order.allCashPrice==0  
+ 2.重消+云豆
+ 3.云豆
+ 4.现金(云豆不够只能用现金，云豆够)
+ 5.重消+现金
+        
+ 
+ */
+
+</script>
+
+
+
+	<form action="$!webPath/order_pay.htm" onsubmit="return check()"
+		method="post">
+		<div class="yungoBg">
+			<div class="yg_main">
+				<div class="shopping_step" style="float: none;">
+					<ul>
+						<li class="shopping_step_a"><span></span><i></i><strong>我的购物车</strong></li>
+						<li class="shopping_step_bthree"><span></span><i></i><strong>填写核对订单信息</strong></li>
+						<li class="shopping_step_cthis"><span></span><i></i><strong>成功提交订单</strong></li>
+					</ul>
+				</div>
+				<div class="order_info_yg">
+					<div class="info">
+
+						<div class="info_success">
+							订单提交成功，请您尽快付款！<span class="f14">订单号：$!{order.orderId}</span>
+						</div>
+						<div class="order_no">
+							请您在 <span class="time">48小时</span>
+							内完成支付，否则订单会被自动取消（商品支付时限以订单详情页为准）。
+						</div>
+						<div class="order_prize">
+							<span>应付金额:</span><span class="fn-rmb"><span class="prize">$number.format("￥0.00",$!{countAmount})</span></span>
+						</div>
+
+					</div>
+				</div>
+				<div class="payWay_text">支付方式</div>
+				<div class="pay_detail">
+					<div class="yun_pay">
+						<div class="name">重消账户支付</div>
+						<div class="right">
+							<div class="yun_remainder">您当前的重消账户余额为:&nbsp;$!{cnRepeat}</div>
+							<div class="yun_text">支付重消</div>
+							<div class="pay_num">#if($cnRepeat > $order.allygPrice)
+								$number.format("￥0.00", $order.allygPrice) #elseif($cnRepeat > 0
+								&& $cnRepeat< $order.allygPrice ) $cnRepeat #elseif($cnRepeat <=
+								0) ￥0.00 #end</div>
+							<div class="psw" id="yunPayPwd">
+								<span class="psw_text">支付密码</span><input id="ymPsw"
+									class="psw_input" type="password" /><span class="err_tips"></span>
+							</div>
+						</div>
+					</div>
+					<div class="crash_pay">
+						<div class="name">其他支付方式</div>
+						<div class="right">
+							<div class="crash_remainder">
+								请使用以下付款方式支付余额：<span class="fn-rmb">&yen;&nbsp; <span
+									id="paysy"> #if($cnRepeat <= 0) #set($myMoney1 =
+										$order.allCashPrice + $order.allygPrice)
+										$number.format("0.00", $myMoney1) #elseif($cnRepeat>0 &&
+										$cnRepeat< $order.allygPrice) #set($myMoney2 =
+										$order.allCashPrice + $order.allygPrice - $cnRepeat)
+										$number.format("0.00", $myMoney2) #else $number.format("0.00",
+										$order.allCashPrice) #end </span></span>
+
+							</div>
+							<div id="readonly" class="choose_pay">
+								<!--如果重消账户充足，添加样式readonly-->
+								<div id="notEnough" class="typeco yunMoney">
+									<!--如果云豆账户不足，添加样式notEnough-->
+									<span class="icon"></span> <span class="typeName type_yb">云豆支付</span>
+									<span class="typeco_tips">（您的云豆余额为 <span
+										class="yb_value">$number.format("￥0.00",$myMoney) </span>），还需支付：<span
+										class="fn-rmb">&yen;</span> #set($myMoney1 =
+										$order.allCashPrice) #if($cnRepeat <= 0) #set($myMoney1 =
+										$order.allCashPrice + $order.allygPrice)
+										$number.format("0.00", $myMoney1) #elseif($cnRepeat>0 &&
+										$cnRepeat< $order.allygPrice) #set($myMoney1 =
+										$order.allCashPrice + $order.allygPrice - $cnRepeat)
+										$number.format("0.00", $myMoney1) #else #set($myMoney1 =
+										$order.allCashPrice) $myMoney1 #end
+
+									</span>
+								</div>
+								<div class="typeco wx_ali">
+									<span class="icon"></span> <span class="typeName type_wxAli">微信/支付宝</span>
+									<span class="typeco_tips">（余额不足，使用微信或者支付宝在线支付）</span>
+									<div class="paytype">
+										<a href="javascript:;" class="wxPay curr"><span
+											class="icon_wxpay"></span><span class="choosed"></span></a> <a
+											href="javascript:;" class="aliPay"><span
+											class="icon_alipay"></span><span class="choosed"></span></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="psw" id="psw">
+						<div class="name">支付密码</div>
+						<div class="right">
+							<!--如果重消账户充足，这里的输入框加上样式 currzxPsw-->
+							<input name="yunGouPassword" placeholder="请输入支付密码"
+								type="password" class="zxPsw" />请输入您的直销二级密码
+						</div>
+					</div>
+					<input type="submit" class="submitPay" value="立即支付" />
+				</div>
+			</div>
+		</div>
+		<input name="order_id" value="${order.id}" type="hidden"> <input
+			name="payType" value="" type="hidden"> <input
+			name="paymentPassword" value="" type="hidden"> <input
+			name="isYunGouMoney" value="true" type="hidden"> <input
+			name="isAvailableBalance" value="false" type="hidden">
+		<div class="model" style="display: none;"></div>
+
+	</form>
+
+
+	<!-- 		
+			String payType, 微信/支付宝 alipay wxqrpay
+			boolean isAvailableBalance, /true
+			String paymentPassword,
+			boolean isYunGouMoney, 
+			String yunGouPassword,
+		 -->
+
+	<style>
+.pay_result_show {
+	background: #ffffff; border: 6px solid #c4c4c4; width: 584px; height: 481px; position: fixed; left: 50%; top: 50%; margin: -240px 0 0 -292px; z-index: 999999;
+}
+
+.pay_result_show .close {
+	position: absolute; right: 20px; top: 20px; width: 23px; height: 23px; background: url(img/icon_pay.png) no-repeat -11px -260px;
+}
+
+.pay_result_show .tit {
+	margin: 60px 0 0 92px; font-size: 20px; color: #535353; text-align: left;
+}
+
+#countDown {
+	color: #ff144b;
+}
+
+.pay_result_show .giveup {
+	margin: 36px 0 0 92px; font-size: 20px; color: #535353; height: 44px; line-height: 44px; background: url(img/icon_pay.png) no-repeat 0px 0px; text-indent: 50px;
+}
+
+.pay_result_show .completePay {
+	margin: 62px 0 0 92px; font-size: 20px; color: #535353; height: 44px; line-height: 44px; background: url(img/icon_pay.png) no-repeat 0px -87px; text-indent: 50px;
+}
+
+.pay_result_show .repay {
+	margin: 62px 0 0 92px; font-size: 20px; color: #535353; height: 44px; line-height: 44px; background: url(img/icon_pay.png) no-repeat 0px -179px; text-indent: 50px;
+}
+
+.pay_result_show .payResultBtn {
+	border-radius: 4px; width: 136px; height: 38px; line-height: 38px; display: inline-block; margin: 2px 0 0 4px; text-align: center; display: inline-block; text-indent: 0;
+}
+
+.pay_result_show .btn1 {
+	background: #f2f2f2; border: 1px solid #6b6b6b; color: #6B6B6B;
+}
+
+.pay_result_show .btn2 {
+	background: #19bf96; border: 1px solid #19BF96; color: #FFFFFF;
+}
+
+.pay_result_show .btn3 {
+	background: #FFFFFF; border: 1px solid #19BF96; color: #19bf96;
+}
+
+.pay_result_show .tel {
+	font-size: 16px; color: #535353; text-align: left; margin: 60px 0 0 92px;
+}
+</style>
+	<div class="pay_result_show" style="display: none;">
+		<a href="javascript:;" class="close"></a>
+		<div class="tit">
+			请于<span id="countDown"></span>内，在新开的页面完成支付
+		</div>
+		<div class="giveup">
+			对产品有疑问，可选择:<a href="javascript:;" class="pay payResultBtn btn1">放弃付款</a>
+		</div>
+		<div class="completePay">
+			如已支付成功，请点击:<a
+				href="$!webPath/order_finish.htm?order_id=$!actualBO.order.id"
+				class="payResultBtn btn2">已完成付款</a>
+		</div>
+		<div class="repay">
+			付款遇到问题，你可以:<a href="javascript:;" class="pay payResultBtn btn3">重新支付</a>
+		</div>
+		<div class="tel">
+			支付常见问题，请联系客服电话:4008-355-788</span>
+		</div>
+		<script src="js/jquery.min.js"></script>
+		<script type="text/javascript">
+			function check(){
+				var psw=$("input[name=yunGouPassword]").val();
+				$("input[name=paymentPassword]").val(psw);
+				if(psw==""&&$("#psw").css("display")!="none"){
+					alert("请输入支付密码");
+					return false;
+				}
+				if(!$(".typeco").hasClass("curr")&&Number($("#paysy").html())!=0){
+					alert('请选择支付方式');
+					return false;
+				}
+				//return false;
+			}
+			$(document).ready(function(){
+				if(Number($order.allCashPrice)==0){
+					$("#readonly").addClass("readonly");
+					$(".zxPsw").addClass("currzxPsw").focus();
+				}
+				
+				#if($!order.actualygPrice)
+					if(Number($order.actualygPrice)>0){//重消已支付
+						$("#notEnough").addClass("notEnough");
+					}
+				#end
+				
+				
+				if(Number($myMoney)<Number($myMoney1)){
+					$("#notEnough").addClass("notEnough");
+				}
+				
+				if(Number($!{cnRepeat})==0){
+					$("#psw").hide();
+				}
+				
+				$(".choose_pay>div").click(function(){
+					if($(".choose_pay").hasClass("readonly")||$(this).hasClass("notEnough")) return;
+					$(this).addClass("curr").siblings("div").removeClass("curr");
+					if($(this).hasClass("wx_ali")){
+						$(".typeco .paytype").show();
+						if(!$(".typeco .paytype a").eq(1).hasClass("curr")){
+							$(".typeco .paytype a").removeClass("curr").eq(0).addClass("curr");
+							$("input[name=payType]").val("wxqrpay");
+						}
+						$("input[name=isAvailableBalance]").val("false");
+						if(Number($!{cnRepeat})==0){//云购币为0时选择第三方支付，密码框隐藏
+							$("#psw").hide();
+						}
+					}else{
+						$(".typeco .paytype").hide();
+						$("input[name=payType]").val("");
+						$("input[name=isAvailableBalance]").val("true");
+						$("#psw").show();//云豆支付响应事件时，密码框显示	
+						$(".zxPsw").addClass("currzxPsw").focus();
+					}					
+				});
+				
+				$(".typeco .paytype a").click(function(e){
+					$(this).addClass("curr").siblings().removeClass("curr");
+					if($(".typeco .paytype a").index(this)==0){
+						$("input[name=payType]").val("wxqrpay");
+					}else{
+						$("input[name=payType]").val("alipay");
+					}
+					e.stopPropagation();
+					e.cancelBubble=true;
+				});
+				
+				
+				$(".pay_result_show .close,.pay_result_show .pay").click(function(){
+					jQuery('#pay_overlay').hide();
+					document.getElementById('theForm').reset();
+					jQuery('#ym_err_tips').hide();
+				});
+				
+				
+				
+				$("#countDown").html("30分");
+				var total=30*60;
+				function timeout(){
+					setTimeout(function(){
+						total--;
+						var minute=parseInt(total/60);
+						var second=total%60;
+						var html="";
+						html+=(minute==0)?"":minute+"分";
+						html+=(second==0)?"":second+"秒";
+						if(html==""){
+							html=="0秒";
+						}
+						$("#countDown").html(html);
+						if(total>=1){
+							timeout();
+						}
+					},1000)
+				}				
+				timeout();
+				
+			});
+		</script>
+</body>
+</html>

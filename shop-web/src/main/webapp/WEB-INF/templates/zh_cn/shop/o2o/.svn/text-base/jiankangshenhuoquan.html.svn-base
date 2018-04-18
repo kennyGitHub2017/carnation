@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>云尚周边服务,云尚健康调理中心,云尚健康生活圈,O2O健康生活圈,云尚商圈,保健服务商圈,到店体验,健康生活圈APP下载 - 云尚健康生活圈</title>
+		<meta http-equiv="keywords" content="云尚周边服务,云尚健康调理中心,云尚健康生活圈,O2O健康生活圈,云尚商圈,保健服务商圈,到店体验,健康生活圈APP下载,云尚健康生活圈">
+		<meta http-equiv="description" content="本地生活服务精全面覆盖，享受到店优惠，便捷支付等功能。精准推送商家位置，一键导航轻松便捷，为用户查找周边吃喝玩乐一站式服务。云尚服务热线：400-888-2933 。">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="X-UA-Compatible"content="IE=10; IE=9; IE=8; IE=EDGE">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge8,chrome=1" >
+		<link rel="stylesheet" href="$!webPath/resources/shop/ysysgo/css/style2.css" />
+	    <link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+	    <link href="$!webPath/resources/style/service/public2.css" type="text/css" rel="stylesheet" />
+	    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+		<style>
+		.nav_center .nav_left h2 em{top:20px;}
+		div.floatCtro{top:30%;}
+		div.floatCtro p .tiao{margin-top: 13px;}
+		.s-h-banner{height: 496px;}
+		#shop_advert .bd ul,#shop_advert .bd ul li,#shop_advert .bd ul li a,#shop_advert .bd ul li a img{text-align:center;margin:auto; height: 496px!important;}
+		</style>
+	</head>
+
+<body>
+	$!httpInclude.include("/top.htm")
+	$!httpInclude.include("/group/head.htm")
+	<div class="menu-show">$!httpInclude.include("/group/nav.htm")
+	<script type="">
+	$('div.slideBox .bd ul').find('li').eq(0).css('display','block');
+	</script>
+	</div>
+	
+	
+	<div class="ppg-main">
+		<div class="s-h-banner">
+        <script src="$!webPath/group/invoke_group.htm"></script>
+    	</div>
+		 <div class="jkshq-top">
+		 	<ul>
+		 		<li><a class="jkms" href="javascript:void(0)">健康美食</a></li>
+		 		<li><a class="ydjs" href="javascript:void(0)">运动健身</a></li>
+		 		<li><a class="nrg"  href="javascript:void(0)">女人馆</a></li>
+		 		<li><a class="ysxx" href="javascript:void(0)">养生休闲</a></li>
+		 	</ul>
+		 </div>
+		 #set($num = 0)
+	#foreach($floor in $floorList)
+		 #set($num = $num+1)
+	     <div id="float0$num" class="ppg-float">
+	     	<!-- 健康美食 -->
+	     	<div id="jkshq-tab">
+	     		<ul class="jkshq-tab_menu">
+			        <span class="shg-tit-jkms"><img src="$!webPath/resources/shop/ysysgo/images/shg-tit-jkms.png" alt="$!floor.gfName" />$!floor.gfName</span>
+			    </ul>
+			    <div class="jkshq-tab_box">
+			        <div class="fn">
+			        	<!-- 推荐的内容 -->
+			        	<ul>
+			        	#set($groupNum = 0)
+			        		#set($groupList = $groupViewTools.caseGroup($city,$num))
+       		            	#foreach($group in $groupList)
+			        			#set($groupNum = $groupNum+1)
+								<li>
+				        			<a href="$webPath/group/view_$!{group.id}.htm" target="blank">
+				        				<img class="gos-img" src="$!{group.groupAccPath}_269x180" alt="" />
+				        				<div class="shg-goods-tit">$!CommUtil.substring("$!group.ggName",12)  </div>
+				        				<div class="shg-goods-price">
+				        					<span class="yishou">已售$!group.selledCount</span>
+				        					<span class="price">¥ $!group.groupPrice</span>
+				        				</div>
+				        				#set($storeScore = $groupViewTools.storeScore($!group.storeId))
+				        				<div class="pingjia">
+				        					<span class="pj-right">
+				        						#if(!$!storeScore)
+				        							#set($rate = 100)
+									            	<div><div class="five_star"><b title="好评率：${rate}%" style="width:${rate}%;"></b></div></div>
+				        						#else
+					        						#set($rate = $groupViewTools.storeGoodScore($!storeScore)*100/5)
+										            <div><div class="five_star"><b title="好评率：${rate}%" style="width:${rate}%;"></b></div></div>
+									            #end
+				        						<!-- <img src="$!webPath/resources/shop/ysysgo/images/shg-pj-dj.png" alt="" /> -->
+				        						#if($!storeScore.num)$!storeScore.num #else 0 #end 评价
+				        					</span>
+				        						#set($store = $groupViewTools.storeInfo($!group.storeId))
+				        					<span class="diqu">$!store.areaInfo.split("市")[1]</span>
+				        				</div>
+				        			</a>
+				        		</li>
+			        			#if($groupNum>5)
+			        				#break
+			        			#end
+			        		#end
+			        	</ul>
+			        </div>
+			    </div>
+	     	</div>
+	     	
+	     	<div class="shq-tit-right">
+	     		<div class="right-title">商家推荐</div>
+	     		<div class="right-goods">
+	     			<ul>
+	     				#if($!floor.stores)
+		     				#foreach($store in $floor.stores)
+								#if($!store.storeInfoPath)
+									#set($img=$store.storeInfoPath + "")
+								#else
+									#set($img=$config.storeImage.path)
+								#end
+			     				<li>
+			     					<a href="$webPath/group/store.htm?id=$!store.id">
+			     						<img src="$!{img}_100x100" alt="" />
+			     						<div class="right-goods-r-mes">
+			     							<div class="r-tit">$!CommUtil.substring("$!store.storeName",8)</div>
+			     							<div class="zhegou">
+			     							#if($store.groupDiscount)
+									            #set($!store.groupDiscount = $store.groupDiscount*100)
+									            #if($math.mod($!store.groupDiscount,10) == 0)
+									            	<span class="zhe">折</span><span class="zheprice">$number.format("#0",$math.div($!store.groupDiscount,10))折</span>
+									            #else
+									            	<span class="zhe">折</span><span class="zheprice">$number.format("#0.0",$math.div($!store.groupDiscount,10))折</span>  
+									            #end
+								            #end
+			     							</div>
+			     						</div>
+			     					</a>
+			     				</li>
+		     				#end
+		     			#end
+	     			</ul>
+	     		</div>
+	     	</div>
+	     </div>
+	     #if($num>3)
+	     	#break
+	     #end
+	   #end
+    </div>
+     <div class="floatCtro" style="display: none;">
+     	  <p class="jkms">
+     	  	<span class="floatCtro-span" >
+          		<a href="javascript:void(0)">健康美食</a>
+     	  		<img class="tit-img" style="" src="$!webPath/resources/shop/ysysgo/images/ppg-ssbc.png" alt="" />
+          	</span>	
+          </p>
+          <p class="ydjs">
+          	<span class="floatCtro-span" >
+          		<a href="javascript:void(0)">运动健身</a>
+          		<img class="tit-img" style="" src="$!webPath/resources/shop/ysysgo/images/ppg-ydjs.png" alt="" />
+          	</span>	
+          </p>
+          <p class="nrg">
+          	<span class="floatCtro-span" >
+          		<a href="javascript:void(0)">女人馆</a>
+          		<img class="tit-img" style="" src="$!webPath/resources/shop/ysysgo/images/ppg-nrg.png" alt="" />
+          	</span>	
+          </p>
+          <p class="ysxx">
+          	<span class="floatCtro-span" style="border-bottom: none;" >
+          		<a href="javascript:void(0)">养生休闲</a>
+          		<img class="tit-img" style="" src="$!webPath/resources/shop/ysysgo/images/ppg-ysxx.png" alt="" />
+          	</span>	
+          </p>
+     </div>
+  $!httpInclude.include("/goTop.htm")   
+$!httpInclude.include("/footer.htm")
+	 <script src="$!webPath/resources/js/jquery.SuperSlide.2.1.1.js"></script>
+<script>
+
+   $(function(){
+
+	   $('#jkshq-tab ul li.uli').click(function() {
+			$(this).addClass('selected').siblings().removeClass('selected');
+			var index = $('#jkshq-tab ul li.uli').index(this);
+			$('div.jkshq-tab_box > div').eq(index).show().siblings().hide();
+		});	
+		$("#jkshq-tab ol li.genduo").click(function() {
+			$(this).removeClass('selected');
+		});
+   		
+		
+		$('.jkshq-top ul li').hover(function() {
+			$(this).addClass('jkshq-img-crr');
+		}, function() {
+			$(this).removeClass('jkshq-img-crr');
+		});
+		
+		var processor = {  
+			    timeoutId: null, 		 
+			    performProcessing: function(){
+			    	scrolls();
+			    },  		 
+			    process: function(){
+			        clearTimeout(this.timeoutId);  
+			        this.timeoutId  = setTimeout(function(){ 
+			            processor.performProcessing();  
+			        }, 100);  
+			    }  
+			};
+		
+		/*楼层*/
+	   var AllHet = $(window).height();
+	   var mainHet= $('.floatCtro').height();
+	   var fixedTop = (AllHet - mainHet)/2;
+	
+	    $('div.floatCtro p').click(function(){
+			var i = $('div.floatCtro p').index(this);
+		 	var topVal = $('#float0'+parseInt(i+1)).offset().top;
+		 	$(this).addClass('cur').siblings().removeClass('cur');
+			$('body,html').animate({scrollTop:topVal},1000);	 
+		});
+	   
+	    $(window).on("scroll",function(){
+			processor.process();
+		});
+
+	   function scrolls(){
+		  	var sTop = $(window).scrollTop();
+		   	var divs=$('[id^="float"]');
+		   	for(var i=0;i<divs.length;i++){
+
+				var f=$('#float0'+parseInt(i+1)).offset().top;
+			   	 if(sTop>=f-100){
+			   	 	$('div.floatCtro p').eq(i).addClass('cur').siblings().removeClass('cur');
+			   	 }
+		   	}
+		 	if((document.body.scrollTop||document.documentElement.scrollTop)>600){
+		   		$(".floatCtro").show();
+		   		$("#Fixed").show();
+		   	}else{
+		   		$(".floatCtro").hide();
+		   		$("#Fixed").hide();
+		   	}	
+	   }	   	
+			   	
+   });
+   
+
+</script>
+</body>
+</html>

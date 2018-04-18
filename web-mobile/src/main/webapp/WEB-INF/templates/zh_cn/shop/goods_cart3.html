@@ -1,0 +1,374 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>订单提交成功 - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/goods.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/pay_list.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+//返回当前页面高度
+function order_pay(){
+  var h= Math.max(jQuery(window).height(), jQuery("body").height());
+  var top= document.documentElement.scrollTop;
+  top=top+(h-top)/2;
+  jQuery('.black_overlay').css("height",h);
+  jQuery('#pay_overlay').show()
+  jQuery('#theForm').submit();
+}
+jQuery(document).ready(function(){
+   jQuery(":radio[value=$!of.payment.mark]").attr("checked",true);
+});
+
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+$!httpInclude.include("/head.htm")
+$!httpInclude.include("/nav1.htm")
+<div class="main clearfix">
+  <div class="shopping_cart">
+    <div class="shopping_step">
+      <ul>
+        <li class="shopping_step_a"><span></span><i></i><strong>1.我的购物车</strong></li>
+        <li class="shopping_step_bthree"><span></span><i></i><strong>2.填写核对订单信息</strong></li>
+        <li class="shopping_step_cthis"><span></span><i></i><strong>3.成功提交订单</strong></li>
+      </ul>
+    </div>
+     <form action="$!webPath/order_pay.htm" method="post" target="_blank" id="theForm">
+    <div class="shopping_payfor">
+      <div class="shopping_payfor_top"> <span class="shopping_payfor_topleft"></span>
+        <ul class="orderul">
+          <li class="shopping_payfor_title">订单提交成功</li>
+          <li class="order_hui">您的订单已成功生成，选择您想用的支付方式进行支付</li>
+          <li class="order_box"><span class="order_box_cont">
+            <p>应付金额：<b>$number.format("￥0.00",$!{all_of_price})</b></p>
+            </span></li>
+        </ul>
+      </div>
+      <div class="shopping_payfor_bottom">
+        <h3 class="shopping_payfor_h3">您可以选择的付款方式</h3>
+        <!--<div class="shopping_payfor_bmbox">-->
+        <!--#set($alipay_install=$!paymentTools.queryShopPayment("alipay").get("install"))-->
+        <!--#set($paypal_install=$!paymentTools.queryShopPayment("paypal").get("install"))-->
+        <!--#set($tenpay_install=$!paymentTools.queryShopPayment("tenpay").get("install"))-->
+        <!--#set($chinabank_install=$!paymentTools.queryShopPayment("chinabank").get("install"))-->
+        <!--#set($bill_install=$!paymentTools.queryShopPayment("bill").get("install"))-->
+        <!--#if($!alipay_install==true||$!paypal_install==true||$!tenpay_install==true||$!chinabank_install==true||$!bill_install==true)-->
+          <!--<h4>在线支付</h4>-->
+          <!--<ul>         -->
+            <!--#if($!alipay_install==true)-->
+            <!--<li>-->
+            <!--<label>-->
+              <!--<input name="payType" type="radio" value="alipay" checked="checked" />-->
+              <!--<span><img src="$!webPath/resources/style/common/images/payment/alipay.jpg" width="115" height="41" /></span>-->
+              <!--</label>-->
+              <!--<p></p>-->
+            <!--</li>-->
+            <!--#end-->
+            <!--#if($!paypal_install==true)-->
+            <!--<li>-->
+              <!--<label>-->
+              <!--<input name="payType" type="radio" value="paypal" checked="checked" />-->
+              <!--<span><img src="$!webPath/resources/style/common/images/payment/paypal.jpg" width="115" height="41" /></span>-->
+              <!--</label>-->
+              <!--<p></p>-->
+            <!--</li>-->
+            <!--#end-->
+            <!--#if($!tenpay_install==true)-->
+            <!--<li>-->
+             <!--<label>-->
+              <!--<input name="payType" type="radio" value="tenpay" checked="checked" />-->
+              <!--<span><img src="$!webPath/resources/style/common/images/payment/tenpay.jpg" width="115" height="41" /></span>-->
+              <!--</label>-->
+              <!--<p></p>-->
+            <!--</li>-->
+            <!--#end-->
+            <!--#if($!chinabank_install==true)-->
+            <!--<li>-->
+             <!--<label>-->
+              <!--<input name="payType" type="radio" value="chinabank" checked="checked" />-->
+              <!--<span><img src="$!webPath/resources/style/common/images/payment/chinabank.jpg" width="115" height="41" /></span>-->
+              <!--</label>-->
+              <!--<p></p>-->
+            <!--</li>-->
+            <!--#end-->
+            <!--#if($!bill_install==true)-->
+            <!--<li>-->
+             <!--<label>-->
+              <!--<input name="payType" type="radio" value="bill" checked="checked" />-->
+              <!--<span><img src="$!webPath/resources/style/common/images/payment/bill.jpg" width="115" height="41" /></span>-->
+              <!--</label>-->
+              <!--<p></p>-->
+            <!--</li>-->
+            <!--#end-->
+          <!--</ul>         -->
+          <!--#end-->
+          <!--#set($install=$!paymentTools.queryShopPayment("balance").get("install")) -->
+          <!--#if($!install==true)           -->
+          <!--<h4>云豆支付</h4>-->
+          <!--<ul>-->
+            <!--<li>-->
+             <!--<label>-->
+             <!--<input name="payType" type="radio" value="balance" />-->
+              <!--<span><img src="$!webPath/resources/style/common/images/payment/balance.jpg" width="115" height="41" /></span>-->
+              <!--</label>-->
+              <!--<p></p>-->
+            <!--</li>-->
+          <!--</ul>-->
+          <!--#end-->
+        <!--</div>-->
+		<div class="yun-money-pay">
+			<input type="radio" name="availableBalance" #if($!customer.availableBalance <= 0) disabled="disabled" #end />
+			 <span class="fz-14">云豆余额：</span>${customer.availableBalance}  &nbsp; &nbsp; &nbsp;
+            支付: <strong class="c_orange">#if($!customer.availableBalance >= $!all_of_price) $!all_of_price #end $!customer.availableBalance #end </strong>
+		</div>
+        <div class="component-payment-list mt-component--booted" style="clear: both; padding: 30px 0px 20px 30px;">
+            <div id="order-check-typelist" class="paytype-list">
+                <ul class="nav-tabs--large cf">
+                    <li class="payment-cat current" data-tabname="online-bank"><a data-mod-mtt="1.order/check.0.0.icsunhe2" id="yui_3_16_0_1_1438420878791_1049" href="javascript:void(0);">储蓄卡</a></li>
+                    <li class="payment-cat" data-tabname="credit-bank"><a data-mod-mtt="1.order/check.0.0.icsunhe2" id="yui_3_16_0_1_1438420878791_1046" href="javascript:void(0);">信用卡</a></li>
+                    <li class="payment-cat" data-tabname="xpay-bank"><a data-mod-mtt="1.order/check.0.0.icsunhe2" id="yui_3_16_0_1_1438420878791_1051" href="javascript:void(0);">支付宝/微信</a><i class="icon-new"></i></li>
+                </ul>
+                <ul class="J_tab_content">
+                    <li class="payment-content current" data-tabcontent="online-bank">
+                        <p>网上银行支付</p>
+                        <ul class="bank-list bank-list--bank">
+                            <li class="item ">
+                                <input type="radio" id="bank-type-ICBCB2C" class="radio ui-radio" name="payType" value="alipayB-ICBC-DEBIT">
+                                <label for="bank-type-ICBCB2C" class="bank-logo" title="中国工商银行"><span class="bank bank--icbc">中国工商银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-CMB" class="radio ui-radio" name="payType" value="alipayB-CMB-DEBIT">
+                                <label for="bank-type-CMB" class="bank-logo" title="招商银行"><span class="bank bank--cmb">招商银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-CCB" class="radio ui-radio" name="payType" value="alipayB-CCB-DEBIT">
+                                <label for="bank-type-CCB" class="bank-logo" title="建设银行"><span class="bank bank--ccb">建设银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-ABC" class="radio ui-radio" name="payType" value="alipayB-ABC-DEBIT">
+                                <label for="bank-type-ABC" class="bank-logo" title="中国农业银行"><span class="bank bank--abc">中国农业银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-1020" class="radio ui-radio" name="payType" value="alipayB-COMM-DEBIT">
+                                <label for="bank-type-1020" class="bank-logo" title="交通银行"><span class="bank bank--boc">交通银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-BOCB2C" class="radio ui-radio" name="payType" value="alipayB-BOCB2C">
+                                <label for="bank-type-BOCB2C" class="bank-logo" title="中国银行"><span class="bank bank--bofc">中国银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-CIB" class="radio ui-radio" name="payType" value="alipayB-CIB">
+                                <label for="bank-type-CIB" class="bank-logo" title="兴业银行"><span class="bank bank--cib">兴业银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-CEB-DEBIT" class="radio ui-radio" name="payType" value="alipayB-CEB-DEBIT">
+                                <label for="bank-type-CEB-DEBIT" class="bank-logo" title="中国光大银行"><span class="bank bank--cebb">中国光大银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-SPDB" class="radio ui-radio" name="payType" value="alipayB-SPDB-DEBIT">
+                                <label for="bank-type-SPDB" class="bank-logo" title="上海浦东发展银行"><span class="bank bank--spdb">上海浦东发展银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-GDB" class="radio ui-radio" name="payType" value="alipayB-GDB-DEBIT">
+                                <label for="bank-type-GDB" class="bank-logo" title="广东发展银行"><span class="bank bank--gdb">广东发展银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-1021" class="radio ui-radio" name="payType" value="alipayB-CITIC-DEBIT">
+                                <label for="bank-type-1021" class="bank-logo" title="中信银行"><span class="bank bank--zxyh">中信银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-CMBC" class="radio ui-radio" name="payType" value="alipayB-CMBC">
+                                <label for="bank-type-CMBC" class="bank-logo" title="中国民生银行"><span class="bank bank--cmbc">中国民生银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-SPABANK" class="radio ui-radio" name="payType" value="alipayB-SPA-DEBIT">
+                                <label for="bank-type-SPABANK" class="bank-logo" title="平安银行"><span class="bank bank--pingan">平安银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-BJBANK" class="radio ui-radio" name="payType" value="alipayB-BJBANK">
+                                <label for="bank-type-BJBANK" class="bank-logo" title="北京银行"><span class="bank bank--bob">北京银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-BJRCB" class="radio ui-radio" name="payType" value="alipayB-BJRCB">
+                                <label for="bank-type-BJRCB" class="bank-logo" title="北京农商银行"><span class="bank bank--bjrcb">北京农商银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-PSBC-DEBIT" class="radio ui-radio" name="payType" value="alipayB-PSBC-DEBIT">
+                                <label for="bank-type-PSBC-DEBIT" class="bank-logo" title="中国邮政储蓄"><span class="bank bank--pspc">中国邮政储蓄</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-SHRCB" class="radio ui-radio" name="payType" value="alipayB-SHRCB">
+                                <label for="bank-type-SHRCB" class="bank-logo" title="上海农商银行"><span class="bank bank--shrcb">上海农商银行</span></label>
+                            </li>
+                            <li class="item ">
+                                <input type="radio" id="bank-type-HZCBB2C" class="radio ui-radio" name="payType" value="alipayB-HZCBB2C">
+                                <label for="bank-type-HZCBB2C" class="bank-logo" title="杭州银行"><span class="bank bank--hzcb">杭州银行</span></label>
+                            </li>
+                        </ul>
+                        <!--<p>银联在线支付（支持快捷支付，无需开通网银）</p>
+                        <ul class="bank-list bank-list--upop">
+                            <li class="item item left">
+                                <input type="radio" id="check-upopdebit" class="radio ui-radio" name="payType" value="upopdebit">
+                                <label for="check-upopdebit" class="bank-logo" title="银联储蓄卡支付"><span class="bank bank--upopdebit">银联储蓄卡支付</span></label>
+                            </li>
+                        </ul>
+                        -->
+                    </li><li class="payment-content" data-tabcontent="credit-bank">
+                    <p>网上银行支付</p>
+                    <ul class="bank-list bank-list--bank">
+                        <li class="item ">
+                            <input type="radio" id="bank-type-ICBCB2C-CREDIT" class="radio ui-radio" name="payType" value="alipayC-ICBCBTB">
+                            <label for="bank-type-ICBCB2C-CREDIT" class="bank-logo" title="中国工商银行"><span class="bank bank--icbc">中国工商银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-CMB-CREDIT" class="radio ui-radio" name="payType" value="alipayC-CMBBTB">
+                            <label for="bank-type-CMB-CREDIT" class="bank-logo" title="招商银行"><span class="bank bank--cmb">招商银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-CCB-CREDIT" class="radio ui-radio" name="payType" value="alipayC-CCBBTB">
+                            <label for="bank-type-CCB-CREDIT" class="bank-logo" title="建设银行"><span class="bank bank--ccb">建设银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-ABC-CREDIT" class="radio ui-radio" name="payType" value="alipayC-ABCBTB">
+                            <label for="bank-type-ABC-CREDIT" class="bank-logo" title="中国农业银行"><span class="bank bank--abc">中国农业银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-1020-CREDIT" class="radio ui-radio" name="payType" value="alipayC-COMM-DEBIT">
+                            <label for="bank-type-1020-CREDIT" class="bank-logo" title="交通银行"><span class="bank bank--boc">交通银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-BOCB2C-CREDIT" class="radio ui-radio" name="payType" value="alipayC-BOCBTB">
+                            <label for="bank-type-BOCB2C-CREDIT" class="bank-logo" title="中国银行"><span class="bank bank--bofc">中国银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-CIB-CREDIT" class="radio ui-radio" name="payType" value="alipayC-CIB">
+                            <label for="bank-type-CIB-CREDIT" class="bank-logo" title="兴业银行"><span class="bank bank--cib">兴业银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-CEB-DEBIT-CREDIT" class="radio ui-radio" name="payType" value="alipayC-CEB-DEBIT">
+                            <label for="bank-type-CEB-DEBIT-CREDIT" class="bank-logo" title="中国光大银行"><span class="bank bank--cebb">中国光大银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-SPDB-CREDIT" class="radio ui-radio" name="payType" value="alipayC-SPDB">
+                            <label for="bank-type-SPDB-CREDIT" class="bank-logo" title="上海浦东发展银行"><span class="bank bank--spdb">上海浦东发展银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-GDB-CREDIT" class="radio ui-radio" name="payType" value="alipayC-GDB">
+                            <label for="bank-type-GDB-CREDIT" class="bank-logo" title="广东发展银行"><span class="bank bank--gdb">广东发展银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-1021-CREDIT" class="radio ui-radio" name="payType" value="alipayC-CITIC-DEBIT">
+                            <label for="bank-type-1021-CREDIT" class="bank-logo" title="中信银行"><span class="bank bank--zxyh">中信银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-CMBC-CREDIT" class="radio ui-radio" name="payType" value="alipayC-CMBC">
+                            <label for="bank-type-CMBC-CREDIT" class="bank-logo" title="中国民生银行"><span class="bank bank--cmbc">中国民生银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-SPABANK-CREDIT" class="radio ui-radio" name="payType" value="alipayC-SPABANK">
+                            <label for="bank-type-SPABANK-CREDIT" class="bank-logo" title="平安银行"><span class="bank bank--pingan">平安银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-BJBANK-CREDIT" class="radio ui-radio" name="payType" value="alipayC-BJBANK">
+                            <label for="bank-type-BJBANK-CREDIT" class="bank-logo" title="北京银行"><span class="bank bank--bob">北京银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-BJRCB-CREDIT" class="radio ui-radio" name="payType" value="alipayC-BJRCB">
+                            <label for="bank-type-BJRCB-CREDIT" class="bank-logo" title="北京农商银行"><span class="bank bank--bjrcb">北京农商银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-PSBC-DEBIT-CREDIT" class="radio ui-radio" name="payType" value="alipayC-POSTGC">
+                            <label for="bank-type-PSBC-DEBIT-CREDIT" class="bank-logo" title="中国邮政储蓄"><span class="bank bank--pspc">中国邮政储蓄</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-SHRCB-CREDIT" class="radio ui-radio" name="payType" value="alipayC-SHRCB">
+                            <label for="bank-type-SHRCB-CREDIT" class="bank-logo" title="上海农商银行"><span class="bank bank--shrcb">上海农商银行</span></label>
+                        </li>
+                        <li class="item ">
+                            <input type="radio" id="bank-type-HZCBB2C-CREDIT" class="radio ui-radio" name="payType" value="alipayC-HZCBB2C">
+                            <label for="bank-type-HZCBB2C-CREDIT" class="bank-logo" title="杭州银行"><span class="bank bank--hzcb">杭州银行</span></label>
+                        </li>
+                    </ul>
+                    <!--
+                    <p>银联在线支付（支持快捷支付，无需开通网银）</p>
+                    <ul class="bank-list bank-list--upop">
+                        <li class="item item left">
+                            <input type="radio" id="check-upopcredit" class="radio ui-radio" name="payType" value="upopcredit">
+                            <label for="check-upopcredit" class="bank-logo" title="银联信用卡支付"><span class="bank bank--upopcredit">银联信用卡支付</span></label>
+                        </li>
+                    </ul>
+                    -->
+                </li><li class="payment-content" data-tabcontent="xpay-bank">
+
+                    <ul class="bank-list bank-list--xpay">
+                        <li class="item item left">
+                            <input type="radio" id="check-alipay" class="radio ui-radio" name="payType" value="alipay">
+                            <label for="check-alipay" class="bank-logo" title="支付宝"><span class="bank bank--alipay">支付宝</span></label>
+                        </li><!--
+                        <li class="item item">
+                            <input type="radio" id="check-tenpay" class="radio ui-radio" name="payType" value="tenpay">
+                            <label for="check-tenpay" class="bank-logo" title="财付通"><span class="bank bank--tenpay">财付通</span></label>
+                        </li>
+                         -->
+                        <li class="item item">
+                            <input type="radio" id="check-wxqrpay" class="radio ui-radio" name="payType" value="wxqrpay">
+                            <label for="check-wxqrpay" class="bank-logo" title="微信支付"><span class="bank bank-wxqrpay">微信支付</span></label>
+                        </li>
+                    </ul>
+                </li></ul>
+            </div>
+        </div>
+
+
+
+
+
+      </div>
+      <div class="shopping_payfor_next">
+           <input name="" type="button"  value="确认支付" onclick="order_pay();" style="cursor:pointer;"/>
+            <input name="order_id" type="hidden" id="order_id" value="$!{order.id}" />
+      </div>
+    </div>
+  </form>
+  </div>
+
+</div>
+$!httpInclude.include("/footer.htm")
+<div style="display:none;" id="pay_overlay">
+  <div class="white_content"> <a href="javascript:void(0);" onclick="javascript:jQuery('#pay_overlay').hide();" class="white_close"><img src="$!webPath/resources/style/system/front/default/images/close.jpg" width="14" height="14" /></a>
+    <div class="white_box">
+      <h1>支付提醒</h1>
+      <dl class="white_dl">
+        <dt></dt>
+        <dd>
+          <div class="payf"><a href="$!webPath/order_finish.htm?order_id=$!{order.id}">已经完成支付！</a></div>
+          <div class="payf"><a href="javascript:void(0);"  onclick="javascript:jQuery('#pay_overlay').hide();" >支付出现问题！</a></div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="black_overlay"></div>
+</div>
+<script>
+    $("li[data-tabname]").click(function() {
+        var $cont = $("li[data-tabcontent="+ $(this).data("tabname") +"]");
+        if ($cont.length > 0) {
+            $(this).addClass("current").siblings().removeClass("current");
+            $cont.show().siblings().hide();
+        }
+    });
+</script>
+</body>
+</html>

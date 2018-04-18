@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.elong.mapper.ElongOrderMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.elong.bo.ElongOrderBO">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="order_id" property="orderId" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="hotel_id" property="hotelId" jdbcType="VARCHAR" />
+		<result column="hotel_name" property="hotelName" jdbcType="VARCHAR" />
+		<result column="room_type_id" property="roomTypeId" jdbcType="VARCHAR" />
+		<result column="room_type_name" property="roomTypeName"
+			jdbcType="VARCHAR" />
+		<result column="rate_plan_id" property="ratePlanId" jdbcType="INTEGER" />
+		<result column="rate_plan_name" property="ratePlanName"
+			jdbcType="VARCHAR" />
+		<result column="arrival_date" property="arrivalDate" jdbcType="TIMESTAMP" />
+		<result column="departure_date" property="departureDate"
+			jdbcType="TIMESTAMP" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="show_status" property="showStatus" jdbcType="LONGVARCHAR" />
+		<result column="confirm_point" property="confirmPoint"
+			jdbcType="TIMESTAMP" />
+		<result column="customer_type" property="customerType"
+			jdbcType="VARCHAR" />
+		<result column="payment_type" property="paymentType" jdbcType="VARCHAR" />
+		<result column="number_of_rooms" property="numberOfRooms"
+			jdbcType="INTEGER" />
+		<result column="number_of_customers" property="numberOfCustomers"
+			jdbcType="INTEGER" />
+		<result column="earliest_arrival_time" property="earliestArrivalTime"
+			jdbcType="TIMESTAMP" />
+		<result column="latest_arrival_time" property="latestArrivalTime"
+			jdbcType="TIMESTAMP" />
+		<result column="currency_code" property="currencyCode"
+			jdbcType="VARCHAR" />
+		<result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+		<result column="elong_card_no" property="elongCardNo" jdbcType="VARCHAR" />
+		<result column="confirmation_type" property="confirmationType"
+			jdbcType="VARCHAR" />
+		<result column="note_to_hotel" property="noteToHotel" jdbcType="LONGVARCHAR" />
+		<result column="note_to_elong" property="noteToElong" jdbcType="LONGVARCHAR" />
+		<result column="note_to_guest" property="noteToGuest" jdbcType="LONGVARCHAR" />
+		<result column="penalty_to_customer" property="penaltyToCustomer"
+			jdbcType="DECIMAL" />
+		<result column="penalty_currency_code" property="penaltyCurrencyCode"
+			jdbcType="VARCHAR" />
+		<result column="creation_date" property="creationDate"
+			jdbcType="TIMESTAMP" />
+		<result column="is_cancelable" property="isCancelable"
+			jdbcType="BIT" />
+		<result column="cancel_time" property="cancelTime" jdbcType="TIMESTAMP" />
+		<result column="has_invoice" property="hasInvoice" jdbcType="BIT" />
+		<result column="invoice" property="invoice" jdbcType="LONGVARCHAR" />
+		<result column="contact" property="contact" jdbcType="LONGVARCHAR" />
+		<result column="credit_card" property="creditCard" jdbcType="LONGVARCHAR" />
+		<result column="nightly_rates" property="nightlyRates"
+			jdbcType="LONGVARCHAR" />
+		<result column="extend_info" property="extendInfo" jdbcType="LONGVARCHAR" />
+		<result column="order_rooms" property="orderRooms" jdbcType="LONGVARCHAR" />
+		<result column="guarantee_rule" property="guaranteeRule"
+			jdbcType="LONGVARCHAR" />
+		<result column="prepay_rule" property="prepayRule" jdbcType="LONGVARCHAR" />
+		<result column="value_adds" property="valueAdds" jdbcType="LONGVARCHAR" />
+		<result column="invoice_mode" property="invoiceMode" jdbcType="VARCHAR" />
+		<result column="total_price_exchanged" property="totalPriceExchanged"
+			jdbcType="DECIMAL" />
+		<result column="total_cost_price_exchanged" property="totalCostPriceExchanged"
+			jdbcType="DECIMAL" />
+		<result column="is_instant_confirm" property="isInstantConfirm"
+			jdbcType="BIT" />
+		<result column="affiliate_confirmation_id" property="affiliateConfirmationId"
+			jdbcType="VARCHAR" />
+		<result column="order_hotel" property="orderHotel" jdbcType="LONGVARCHAR" />
+		<result column="refund_amount" property="refundAmount"
+			jdbcType="DECIMAL" />
+		<result column="remark" property="remark" jdbcType="LONGVARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="last_update_user" property="lastUpdateUser"
+			jdbcType="VARCHAR" />
+		<result column="last_update_time" property="lastUpdateTime"
+			jdbcType="TIMESTAMP" />
+		<result column="is_need_pay" property="isNeedPay"
+			jdbcType="BIT" />
+		<result column="payment_deadline_time" property="paymentDeadlineTime"
+			jdbcType="TIMESTAMP" />
+		<result column="guarantee_amount" property="guaranteeAmount" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<resultMap id="ResultMapWithElong" type="com.sinco.carnation.elong.bo.ElongOrderBO"
+		extends="BaseResultMap">
+			<result column="name" property="name" jdbcType="VARCHAR" />
+			<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		order_id,
+		user_id,
+		hotel_id,
+		hotel_name,
+		room_type_id,
+		room_type_name,
+		rate_plan_id,
+		rate_plan_name,
+		arrival_date,
+		departure_date,
+		status,
+		show_status,
+		confirm_point,
+		customer_type,
+		payment_type,
+		number_of_rooms,
+		number_of_customers,
+		earliest_arrival_time,
+		latest_arrival_time,
+		currency_code,
+		total_price,
+		elong_card_no,
+		confirmation_type,
+		note_to_hotel,
+		note_to_elong,
+		note_to_guest,
+		penalty_to_customer,
+		penalty_currency_code,
+		creation_date,
+		is_cancelable,
+		cancel_time,
+		has_invoice,
+		invoice,
+		contact,
+		credit_card,
+		nightly_rates,
+		extend_info,
+		order_rooms,
+		guarantee_rule,
+		prepay_rule,
+		value_adds,
+		invoice_mode,
+		total_price_exchanged,
+		total_cost_price_exchanged,
+		is_instant_confirm,
+		affiliate_confirmation_id,
+		order_hotel,
+		refund_amount,
+		remark,
+		create_user,
+		create_time,
+		last_update_user,
+		last_update_time,
+		is_need_pay,
+		payment_deadline_time,
+		guarantee_amount
+	</sql>
+
+   <select id="selectRebateByElongOrderStatus" resultMap="BaseResultMap">
+  		SELECT
+		<include refid="Base_Column_List" />
+		FROM elong_order
+		WHERE 
+		1=1
+		AND order_id NOT IN (select `rebate_code` from user_rebate_record where rebate_status=1 and rebate_type in
+		('303','304','305','306','307','308','309','310','311','312','313','314','315','316','317','318','319','320','321','322','323','324','325','326','327','328','329','330','331'))
+        AND status='C'
+   </select>
+
+	<select id="queryElongOrderlist" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM elong_order
+		where
+		is_delete = 0 and user_id = #{userId,jdbcType=BIGINT}
+		order by create_time desc
+	</select>
+
+	<select id="querySynOrderList" resultType="com.sinco.carnation.elong.model.ElongOrder">
+		SELECT
+		id,status,order_id,affiliate_confirmation_id,is_need_pay,payment_deadline_time
+		FROM elong_order
+		WHERE status != 'C' 
+		AND status != 'D' AND create_time &gt; DATE_SUB(NOW(), INTERVAL 3
+		MONTH) AND create_time &lt; DATE_SUB(NOW(), INTERVAL 3 MINUTE)
+		AND order_id IS NOT NULL
+		order by
+		create_time desc
+	</select>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.elong.model.ElongOrder">
+		update elong_order
+		<set>
+			<if test="orderId != null">
+				order_id = #{orderId,jdbcType=BIGINT},
+			</if>
+			<if test="hotelId != null">
+				hotel_id = #{hotelId,jdbcType=VARCHAR},
+			</if>
+			<if test="hotelName != null">
+				hotel_name = #{hotelName,jdbcType=VARCHAR},
+			</if>
+			<if test="roomTypeId != null">
+				room_type_id = #{roomTypeId,jdbcType=VARCHAR},
+			</if>
+			<if test="roomTypeName != null">
+				room_type_name = #{roomTypeName,jdbcType=VARCHAR},
+			</if>
+			<if test="ratePlanId != null">
+				rate_plan_id = #{ratePlanId,jdbcType=INTEGER},
+			</if>
+			<if test="ratePlanName != null">
+				rate_plan_name = #{ratePlanName,jdbcType=VARCHAR},
+			</if>
+			<if test="arrivalDate != null">
+				arrival_date = #{arrivalDate,jdbcType=DATE},
+			</if>
+			<if test="departureDate != null">
+				departure_date = #{departureDate,jdbcType=DATE},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="confirmPoint != null">
+				confirm_point = #{confirmPoint,jdbcType=TIMESTAMP},
+			</if>
+			<if test="customerType != null">
+				customer_type = #{customerType,jdbcType=VARCHAR},
+			</if>
+			<if test="paymentType != null">
+				payment_type = #{paymentType,jdbcType=VARCHAR},
+			</if>
+			<if test="numberOfRooms != null">
+				number_of_rooms = #{numberOfRooms,jdbcType=INTEGER},
+			</if>
+			<if test="numberOfCustomers != null">
+				number_of_customers =
+				#{numberOfCustomers,jdbcType=INTEGER},
+			</if>
+			<if test="earliestArrivalTime != null">
+				earliest_arrival_time =
+				#{earliestArrivalTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="latestArrivalTime != null">
+				latest_arrival_time =
+				#{latestArrivalTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="currencyCode != null">
+				currency_code = #{currencyCode,jdbcType=VARCHAR},
+			</if>
+			<if test="totalPrice != null">
+				total_price = #{totalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="elongCardNo != null">
+				elong_card_no = #{elongCardNo,jdbcType=VARCHAR},
+			</if>
+			<if test="confirmationType != null">
+				confirmation_type = #{confirmationType,jdbcType=VARCHAR},
+			</if>
+			<if test="penaltyToCustomer != null">
+				penalty_to_customer =
+				#{penaltyToCustomer,jdbcType=DECIMAL},
+			</if>
+			<if test="penaltyCurrencyCode != null">
+				penalty_currency_code =
+				#{penaltyCurrencyCode,jdbcType=VARCHAR},
+			</if>
+			<if test="creationDate != null">
+				creation_date = #{creationDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isCancelable != null">
+				is_cancelable = #{isCancelable,jdbcType=BIT},
+			</if>
+			<if test="cancelTime != null">
+				cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="hasInvoice != null">
+				has_invoice = #{hasInvoice,jdbcType=BIT},
+			</if>
+			<if test="invoiceMode != null">
+				invoice_mode = #{invoiceMode,jdbcType=VARCHAR},
+			</if>
+			<if test="totalPriceExchanged != null">
+				total_price_exchanged =
+				#{totalPriceExchanged,jdbcType=DECIMAL},
+			</if>
+			<if test="totalCostPriceExchanged != null">
+				total_cost_price_exchanged =
+				#{totalCostPriceExchanged,jdbcType=DECIMAL},
+			</if>
+			<if test="isInstantConfirm != null">
+				is_instant_confirm = #{isInstantConfirm,jdbcType=BIT},
+			</if>
+			<if test="affiliateConfirmationId != null">
+				affiliate_confirmation_id =
+				#{affiliateConfirmationId,jdbcType=VARCHAR},
+			</if>
+			<if test="refundAmount != null">
+				refund_amount = #{refundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="createUser != null">
+				create_user = #{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastUpdateUser != null">
+				last_update_user = #{lastUpdateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateTime != null">
+				last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="showStatus != null">
+				show_status = #{showStatus,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="noteToHotel != null">
+				note_to_hotel = #{noteToHotel,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="noteToElong != null">
+				note_to_elong = #{noteToElong,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="noteToGuest != null">
+				note_to_guest = #{noteToGuest,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="invoice != null">
+				invoice = #{invoice,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="contact != null">
+				contact = #{contact,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="creditCard != null">
+				credit_card = #{creditCard,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="nightlyRates != null">
+				nightly_rates = #{nightlyRates,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="extendInfo != null">
+				extend_info = #{extendInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="orderRooms != null">
+				order_rooms = #{orderRooms,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="guaranteeRule != null">
+				guarantee_rule = #{guaranteeRule,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="prepayRule != null">
+				prepay_rule = #{prepayRule,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="valueAdds != null">
+				value_adds = #{valueAdds,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="orderHotel != null">
+				order_hotel = #{orderHotel,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="isNeedPay != null">
+				is_need_pay = #{isNeedPay,jdbcType=BIT},
+			</if>
+			<if test="paymentDeadlineTime != null">
+				payment_deadline_time = #{paymentDeadlineTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="guaranteeAmount != null">
+				guarantee_amount = #{guaranteeAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<insert id="insertSelective" parameterType="com.sinco.carnation.elong.model.ElongOrder"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into elong_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="hotelId != null">
+				hotel_id,
+			</if>
+			<if test="hotelName != null">
+				hotel_name,
+			</if>
+			<if test="roomTypeId != null">
+				room_type_id,
+			</if>
+			<if test="roomTypeName != null">
+				room_type_name,
+			</if>
+			<if test="ratePlanId != null">
+				rate_plan_id,
+			</if>
+			<if test="ratePlanName != null">
+				rate_plan_name,
+			</if>
+			<if test="arrivalDate != null">
+				arrival_date,
+			</if>
+			<if test="departureDate != null">
+				departure_date,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="confirmPoint != null">
+				confirm_point,
+			</if>
+			<if test="customerType != null">
+				customer_type,
+			</if>
+			<if test="paymentType != null">
+				payment_type,
+			</if>
+			<if test="numberOfRooms != null">
+				number_of_rooms,
+			</if>
+			<if test="numberOfCustomers != null">
+				number_of_customers,
+			</if>
+			<if test="earliestArrivalTime != null">
+				earliest_arrival_time,
+			</if>
+			<if test="latestArrivalTime != null">
+				latest_arrival_time,
+			</if>
+			<if test="currencyCode != null">
+				currency_code,
+			</if>
+			<if test="totalPrice != null">
+				total_price,
+			</if>
+			<if test="elongCardNo != null">
+				elong_card_no,
+			</if>
+			<if test="confirmationType != null">
+				confirmation_type,
+			</if>
+			<if test="penaltyToCustomer != null">
+				penalty_to_customer,
+			</if>
+			<if test="penaltyCurrencyCode != null">
+				penalty_currency_code,
+			</if>
+			<if test="creationDate != null">
+				creation_date,
+			</if>
+			<if test="isCancelable != null">
+				is_cancelable,
+			</if>
+			<if test="cancelTime != null">
+				cancel_time,
+			</if>
+			<if test="hasInvoice != null">
+				has_invoice,
+			</if>
+			<if test="invoiceMode != null">
+				invoice_mode,
+			</if>
+			<if test="totalPriceExchanged != null">
+				total_price_exchanged,
+			</if>
+			<if test="totalCostPriceExchanged != null">
+				total_cost_price_exchanged,
+			</if>
+			<if test="isInstantConfirm != null">
+				is_instant_confirm,
+			</if>
+			<if test="affiliateConfirmationId != null">
+				affiliate_confirmation_id,
+			</if>
+			<if test="refundAmount != null">
+				refund_amount,
+			</if>
+			<if test="createUser != null">
+				create_user,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="lastUpdateUser != null">
+				last_update_user,
+			</if>
+			<if test="lastUpdateTime != null">
+				last_update_time,
+			</if>
+			<if test="showStatus != null">
+				show_status,
+			</if>
+			<if test="noteToHotel != null">
+				note_to_hotel,
+			</if>
+			<if test="noteToElong != null">
+				note_to_elong,
+			</if>
+			<if test="noteToGuest != null">
+				note_to_guest,
+			</if>
+			<if test="invoice != null">
+				invoice,
+			</if>
+			<if test="contact != null">
+				contact,
+			</if>
+			<if test="creditCard != null">
+				credit_card,
+			</if>
+			<if test="nightlyRates != null">
+				nightly_rates,
+			</if>
+			<if test="extendInfo != null">
+				extend_info,
+			</if>
+			<if test="orderRooms != null">
+				order_rooms,
+			</if>
+			<if test="guaranteeRule != null">
+				guarantee_rule,
+			</if>
+			<if test="prepayRule != null">
+				prepay_rule,
+			</if>
+			<if test="valueAdds != null">
+				value_adds,
+			</if>
+			<if test="orderHotel != null">
+				order_hotel,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="orderId != null">
+				#{orderId,jdbcType=BIGINT},
+			</if>
+			<if test="hotelId != null">
+				#{hotelId,jdbcType=VARCHAR},
+			</if>
+			<if test="hotelName != null">
+				#{hotelName,jdbcType=VARCHAR},
+			</if>
+			<if test="roomTypeId != null">
+				#{roomTypeId,jdbcType=VARCHAR},
+			</if>
+			<if test="roomTypeName != null">
+				#{roomTypeName,jdbcType=VARCHAR},
+			</if>
+			<if test="ratePlanId != null">
+				#{ratePlanId,jdbcType=INTEGER},
+			</if>
+			<if test="ratePlanName != null">
+				#{ratePlanName,jdbcType=VARCHAR},
+			</if>
+			<if test="arrivalDate != null">
+				#{arrivalDate,jdbcType=DATE},
+			</if>
+			<if test="departureDate != null">
+				#{departureDate,jdbcType=DATE},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="confirmPoint != null">
+				#{confirmPoint,jdbcType=TIMESTAMP},
+			</if>
+			<if test="customerType != null">
+				#{customerType,jdbcType=VARCHAR},
+			</if>
+			<if test="paymentType != null">
+				#{paymentType,jdbcType=VARCHAR},
+			</if>
+			<if test="numberOfRooms != null">
+				#{numberOfRooms,jdbcType=INTEGER},
+			</if>
+			<if test="numberOfCustomers != null">
+				#{numberOfCustomers,jdbcType=INTEGER},
+			</if>
+			<if test="earliestArrivalTime != null">
+				#{earliestArrivalTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="latestArrivalTime != null">
+				#{latestArrivalTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="currencyCode != null">
+				#{currencyCode,jdbcType=VARCHAR},
+			</if>
+			<if test="totalPrice != null">
+				#{totalPrice,jdbcType=DECIMAL},
+			</if>
+			<if test="elongCardNo != null">
+				#{elongCardNo,jdbcType=VARCHAR},
+			</if>
+			<if test="confirmationType != null">
+				#{confirmationType,jdbcType=VARCHAR},
+			</if>
+			<if test="penaltyToCustomer != null">
+				#{penaltyToCustomer,jdbcType=DECIMAL},
+			</if>
+			<if test="penaltyCurrencyCode != null">
+				#{penaltyCurrencyCode,jdbcType=VARCHAR},
+			</if>
+			<if test="creationDate != null">
+				#{creationDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isCancelable != null">
+				#{isCancelable,jdbcType=BIT},
+			</if>
+			<if test="cancelTime != null">
+				#{cancelTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="hasInvoice != null">
+				#{hasInvoice,jdbcType=BIT},
+			</if>
+			<if test="invoiceMode != null">
+				#{invoiceMode,jdbcType=VARCHAR},
+			</if>
+			<if test="totalPriceExchanged != null">
+				#{totalPriceExchanged,jdbcType=DECIMAL},
+			</if>
+			<if test="totalCostPriceExchanged != null">
+				#{totalCostPriceExchanged,jdbcType=DECIMAL},
+			</if>
+			<if test="isInstantConfirm != null">
+				#{isInstantConfirm,jdbcType=BIT},
+			</if>
+			<if test="affiliateConfirmationId != null">
+				#{affiliateConfirmationId,jdbcType=VARCHAR},
+			</if>
+			<if test="refundAmount != null">
+				#{refundAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="createUser != null">
+				#{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastUpdateUser != null">
+				#{lastUpdateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateTime != null">
+				#{lastUpdateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="showStatus != null">
+				#{showStatus,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="noteToHotel != null">
+				#{noteToHotel,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="noteToElong != null">
+				#{noteToElong,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="noteToGuest != null">
+				#{noteToGuest,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="invoice != null">
+				#{invoice,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="contact != null">
+				#{contact,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="creditCard != null">
+				#{creditCard,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="nightlyRates != null">
+				#{nightlyRates,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="extendInfo != null">
+				#{extendInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="orderRooms != null">
+				#{orderRooms,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="guaranteeRule != null">
+				#{guaranteeRule,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="prepayRule != null">
+				#{prepayRule,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="valueAdds != null">
+				#{valueAdds,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="orderHotel != null">
+				#{orderHotel,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from elong_order
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="selectByOrderId" parameterType="java.lang.Long"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from elong_order
+		where status != 'D' and order_id = #{orderId,jdbcType=BIGINT}
+	</select>
+	
+	<select id="findElongOrderVOs" parameterType="com.sinco.carnation.elong.vo.ElongOrderVO" resultMap="ResultMapWithElong">
+			SELECT e.*,u.name,u.mobile
+				FROM `elong_order` e 
+				LEFT JOIN `user_customer` u
+				ON e.user_id = u.uid
+				WHERE 1 = 1
+				<if test="vo.showStatus != null and vo.showStatus !=''">
+				AND	e.show_status = #{vo.showStatus}
+				</if>
+				<if test="vo.orderId != null and vo.orderId !=''">
+				AND	e.order_Id = #{vo.orderId}
+				</if>
+				<if test="vo.hotelName != null and vo.hotelName !=''">
+				AND	e.hotel_name LIKE concat('%',#{vo.hotelName},'%')
+				</if>
+				<if test="vo.mobile != null and vo.mobile !=''">
+				AND	u.mobile = #{vo.mobile}
+				</if>
+				<if test="vo.name != null and vo.name !=''">
+				AND	u.name LIKE concat('%',#{vo.name},'%')
+				</if>
+				<if test="vo.arrDate != null and vo.arrDate !=''">
+				AND	e.arrival_date = #{vo.arrDate}
+				</if>
+				<if test="vo.depaDate != null and vo.depaDate !=''">
+				AND	e.departure_date = #{vo.depaDate}
+				</if>	
+				<if test="vo.beginTime!=null and vo.beginTime != ''">
+					AND e.create_time <![CDATA[ >= ]]>
+					#{vo.beginTime}
+				</if>
+				<if test="vo.endTime!=null and vo.endTime != ''">
+					AND e.create_time <![CDATA[ < ]]>
+					#{vo.endTime}
+				</if>
+					order by e.id desc
+	</select>
+</mapper>

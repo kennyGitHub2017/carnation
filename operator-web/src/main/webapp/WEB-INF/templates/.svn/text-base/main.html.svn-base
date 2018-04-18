@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+</head>
+<body>
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 基本信息
+</div>
+
+<div class="main">
+    <ul class="m-menu">
+        <li><a href="/operator/main.htm" target="mainFrame" class="active">运营商信息</a> </li>
+        <li><a href="/operator/statistics_relation.htm" target="mainFrame">关系统计</a> </li>
+        <li><a href="/operator/statistics_rebate.htm" target="mainFrame">收益统计</a> </li>
+        #if(!$isCN)
+        <li><a href="/operator/change_password.htm" target="mainFrame">密码管理</a> </li>
+        <li><a href="/operator/currency_password.htm" target="mainFrame">云豆密码管理</a> </li>
+        #end
+        <li><a href="/operator/change_mobile.html" target="mainFrame" >联系号码</a> </li>
+        <li><a href="/operator/operator_article_list.htm" target="mainFrame" >云尚平台公告</a> </li>
+        <li><a href="/operator/my_invitationInfo.htm" target="mainFrame" >我的二维码</a> </li>
+        <li><a href="/operator/my_invitation_list.htm" target="mainFrame" >邀请明细</a> </li>
+        <li><a href="/operator/merchant_bind.htm" target="mainFrame" >为商户注册会员</a> </li>
+    </ul>
+
+    <div class="view-box">
+        <div class="view-title">运营商信息</div>
+        <div class="col-md-3">
+            姓名：$!op.userName
+        </div>
+        <div class="col-md-3">
+            性别：#if($!op.sex == 1) 男 #else 女 #end
+        </div>
+        <div class="col-md-3">
+            联系电话：$!op.phone
+        </div>
+        <div class="col-md-6">
+            联系地址：$!op.address
+        </div>
+        <div class="col-md-3">
+            身份证号：$!op.idCard
+        </div>
+        <div class="col-md-3">
+            民族：$!op.nation
+        </div>
+
+        <div class="col-md-3">
+            运营商级别：$!op.getLevelName()
+        </div>
+        <div class="col-md-3">
+            运营地：$!op.areaName
+        </div>
+        <div class="col-md-3">
+            开户行：$!op.bankName
+        </div>
+        <div class="col-md-3">
+            开户支行：$!op.subBankName
+        </div>
+        <div class="col-md-3">
+            银行账号：$!op.bankNo
+        </div>
+		<div class="col-md-3">
+          <span> 编码：$!op.operatorCode</span> 
+        </div>
+		<div class="col-md-3">
+            邀请码：$!operatorUserInvitationCode
+        </div>
+		<div class="col-md-3">
+<!--             推荐人昵称：$!refereeName -->&nbsp;
+        </div>
+        <div class="col-md-3 cl">
+            组织机构代码：$!op.organizationNo
+            #if($!op.organizationPath)
+            	<a href="$!{op.organizationPath}" target="_blank" class="license-pic"> <img src="$!{op.organizationPath}" height="204" width="204"/></a>
+            #end
+        </div>
+        <div class="col-md-3">
+            营业执照：$!op.registrationNo
+            #if($!op.registrationPath)
+            	<a href="$!{op.registrationPath}" target="_blank" class="license-pic"> <img src="$!{op.registrationPath}" height="204" width="204"/></a>
+            #end
+        </div>
+        <div class="col-md-3">
+            税务登记证号：$!op.taxNo
+            #if($!op.taxPath)
+            	<a href="$!{op.taxPath}" target="_blank" class="license-pic"> <img src="$!{op.taxPath}" height="204" width="204"/></a>
+            #end
+        </div>
+
+<!--         <div class="cl view-box-btns"> <a href="#" class="btn btn-blue">编辑</a> </div> -->
+
+    </div>
+
+</div>
+</body>
+</html>

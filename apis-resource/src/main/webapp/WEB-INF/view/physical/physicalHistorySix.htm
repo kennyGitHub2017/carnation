@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <script>
+        var jgGlobal={
+            screenWidth:window.innerWidth||document.documentElement.clientWidth,
+            screenHeight:window.innerHeight||document.documentElement.clientHeight,
+            isALlowTouchMove:true,
+            setFontSize:function(){
+                var sw=window.innerWidth||document.documentElement.clientWidth;
+                if (sw < 640) {
+                    document.documentElement.style.fontSize = parseInt(sw / 640 * 100) + "px";
+                }else{
+                    document.documentElement.style.fontSize="100px";
+                }
+            },
+            setTranslate:function(node, positionY,containCss, useAnimate) {
+                var cssText = [
+                    containCss,
+                    'display: block',
+                    'transform: translate3d(0, ' + positionY + 'px, 0)',
+                    '-webkit-transform: translate3d(0, ' + positionY + 'px, 0)',
+                ].join(';');
+                if (useAnimate) {
+                    cssText = [
+                        cssText,
+                        'transition: .5s transform ease',
+                        '-webkit-transition: .5s -webkit-transform ease'
+                    ].join(';');
+                }
+                node.style.cssText = cssText;
+            },
+            isTouchMove:function(){
+                var _this=this;
+                document.addEventListener("touchmove",function(e){
+                    if(!_this.isALlowTouchMove){
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                },false);
+                if (navigator.userAgent.toLowerCase().indexOf('firefox')>=0)
+                {
+
+                    addEventListener('DOMMouseScroll',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }else{
+                    addEventListener('mousewheel',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }
+            },
+            init:function(){
+                this.isTouchMove();
+                this.setFontSize();
+            }
+        }
+    </script>
+    <link type="text/css" href="css/tijian.css" rel="stylesheet">
+</head>
+<body>
+    <div class="historys xueya">
+        <a href="#" class="tit">血压</a>
+        <p class="tits">最近7次血压变化记录</p>
+        <canvas id="history">不支持canvas</canvas>
+        <div class="ico"><span class="ico1"></span><span class="text">收缩压</span><span class="ico2"></span><span class="text">舒张压</span></div>
+    </div>
+    <div class="historys xinlv">
+        <a href="#" class="tit">心率</a>
+        <p class="tits">最近7次心率变化记录</p>
+        <canvas id="xinlv">不支持canvas</canvas>
+    </div>
+    <div class="historys shili">
+        <a href="#" class="tit">视力</a>
+        <p class="tits">最近7次视力变化记录</p>
+        <canvas id="shili">不支持canvas</canvas>
+    </div>
+    <div class="historys tingli">
+        <a href="#" class="tit">听力</a>
+        <p class="tits">最近7次听力变化记录</p>
+        <canvas id="tingli">不支持canvas</canvas>
+    </div>
+    <div class="historys feihuoliang">
+        <a href="#" class="tit">肺活量</a>
+        <p class="tits">最近7次肺活量变化记录</p>
+        <canvas id="feihuoliang">不支持canvas</canvas>
+    </div>
+    <div class="historys xueyang">
+        <a href="#" class="tit">血氧</a>
+        <p class="tits">最近7次血氧变化记录</p>
+        <canvas id="xueyang">不支持canvas</canvas>
+    </div>
+    <script type="text/javascript" src="js/jquery-1.9.1.js" ></script>
+    <script type="text/javascript" src="js/draw.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("em").each(function(){
+                $(this).width(12*$(this).attr("data-width"));
+            });
+            draw("xinlv",[80,90,80,60,50,70,60],40,80,120,"#fb6e94",80,"","次/分钟");
+            draw("shili",[1.3,1.4,1.3,1.2,1.0,1.4,1.2],0,"",1.5,"#85cc85",1.7,"");
+            draw("tingli",[150,160,800,1000,2000,3000,3500],0,2250,4500,"#47cff6",4500,"","HZ");
+            draw("feihuoliang",[3600,4600,3800,3850,3400,3700,3800],0,5000,10000,"#f36c60",10000,"","");
+            draw("xueyang",[80,60,50,80,70,30,20],0,50,100,"#698aff",100,"%")
+            var tScale  = window.devicePixelRatio,
+                    tWidth=	jgGlobal.screenWidth,
+                    tHeight=jgGlobal.screenHeight;
+
+
+
+            var dataH = [143,135,145,130,140,135,130];
+            var dataL=[70,75,70,78,50,66,69];
+            var highNum=140,lowNum=60;
+            var minScale=getMaxOrMin(dataL,"min"),maxScale=getMaxOrMin(dataH,"max");
+
+
+
+            var history=document.getElementById("history"),
+                    ctx2=history.getContext("2d");
+            history.style.width = tWidth + "px";
+            history.style.height =  "150px";
+            history.width = tWidth * tScale;
+            history.height = 150 * tScale;
+            ctx2.translate(0,150*tScale);
+
+            drawlinegrid();
+            drawNum();
+            drawHline();
+            drawLline();
+            function drawlinegrid() {
+                ctx2.beginPath();
+                for (var i = 0; i <= 6; i++) {
+                    var y = i * tWidth * 0.7 / 6 + 0.3 * tWidth / 2;
+                    ctx2.moveTo(y * tScale, 0);
+                    ctx2.lineTo(y * tScale, -150 * tScale);
+                }
+                ctx2.moveTo(0, 0);
+                ctx2.lineTo(tWidth * tScale, 0);
+                ctx2.lineWidth = 1 * tScale;
+                ctx2.strokeStyle = "#d4d3d3";
+                ctx2.stroke();
+            }
+            function drawNum(){
+                ctx2.beginPath();
+                ctx2.fillStyle="#999";
+                ctx2.font=12*tScale + "px Arial";
+                ctx2.textAlign="center";
+                ctx2.textBaseline="bottom";
+                ctx2.fillText(minScale-10,0.3 * tWidth / 4*tScale,0);
+                ctx2.fillText(maxScale-minScale,0.3 * tWidth / 4*tScale,-70*tScale);
+                ctx2.fillText("mmHg",0.3 * tWidth / 4*tScale,-125*tScale);
+                ctx2.fillText(maxScale+10,0.3 * tWidth /4*tScale,-135*tScale);
+            }
+
+            function drawHline(){
+                var pointsH = [];
+                for( var i=0; i < dataH.length; i++){
+                    var v= dataH[i];
+                    var px = i * tWidth * 0.7 / 6 + 0.3 * tWidth / 2;
+                    var py = (v-minScale+10)/(maxScale-minScale+20)*150;
+                    pointsH.push({"x":px*tScale,"y":-py*tScale});
+                }
+                ctx2.beginPath();
+                ctx2.moveTo(pointsH[0].x, pointsH[0].y);
+                for(var i= 1; i< pointsH.length; i++){
+                    ctx2.lineTo(pointsH[i].x,pointsH[i].y);
+                }
+                ctx2.lineWidth = 2*tScale;
+                ctx2.strokeStyle = "#6e51b6";
+                ctx2.stroke();
+
+                ctx2.font=11*tScale + "px Arial";
+                ctx2.textAlign="center";
+                ctx2.textBaseline="bottom";
+                for(var i=0;i<pointsH.length;i++){
+                    ctx2.beginPath();
+                    if(dataH[i]>highNum){
+                        ctx2.fillStyle="#fe1010";
+                    }else{
+                        ctx2.fillStyle="#6e51b6";
+                    }
+                    ctx2.fillText(dataH[i],pointsH[i].x, pointsH[i].y-3);
+                    ctx2.arc(pointsH[i].x,pointsH[i].y,3*tScale,0,2*Math.PI,false);
+                    ctx2.fill();
+                }
+
+            }
+            function drawLline(){
+                var pointsL = [];
+                for( var i=0; i < dataL.length; i++){
+                    var v= dataL[i];
+                    var px = i * tWidth * 0.7 / 6 + 0.3 * tWidth / 2;
+                    var py = (v-minScale+10)/(maxScale-minScale+20)*150;
+                    pointsL.push({"x":px*tScale,"y":-py*tScale});
+                }
+                ctx2.beginPath();
+                ctx2.moveTo(pointsL[0].x, pointsL[0].y);
+                for(var i= 1; i< pointsL.length; i++){
+                    ctx2.lineTo(pointsL[i].x,pointsL[i].y);
+                }
+                ctx2.lineWidth = 2*tScale;
+                ctx2.strokeStyle = "#d974ff";
+                ctx2.stroke();
+
+                ctx2.font=11*tScale + "px Arial";
+                ctx2.textAlign="center";
+                ctx2.textBaseline="top";
+                for(var i=0;i<pointsL.length;i++){
+                    ctx2.beginPath();
+                    if(dataL[i]<lowNum){
+                        ctx2.fillStyle="#fe1010";
+                    }else{
+                        ctx2.fillStyle="#d974ff";
+                    }
+                    ctx2.fillText(dataL[i],pointsL[i].x, pointsL[i].y+3);
+                    ctx2.arc(pointsL[i].x,pointsL[i].y,3*tScale,0,2*Math.PI,false);
+                    ctx2.fill();
+                }
+            }
+
+
+
+
+
+        });
+
+
+        function getMaxOrMin (arr,type) {
+            if (type == "max") {
+                return Math.max.apply(Math, arr);
+            }else if (type == "min") {
+                return Math.min.apply(Math, arr);
+            }
+        }
+    </script>
+</body>
+</html>

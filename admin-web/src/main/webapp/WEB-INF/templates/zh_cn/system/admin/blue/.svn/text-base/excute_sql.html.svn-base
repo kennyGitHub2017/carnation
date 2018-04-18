@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head> 
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js" ></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+	 
+</head>
+<body>
+	 <div id='opButtonsList' style="padding:5px 5px;">
+	 <span style="color:red;">$!errStr</span>
+	 <form id="searchForm" method="post" action="$!webPath/q_sql.htm" >
+	    	<div style="padding:5px 5px;" >
+					<strong>SQL：</strong>
+	    			<input id="sql" name="sql" value="$!sql" class="easyui-textbox" type="text" data-options="multiline:true,width:700,height:100,"/>
+					<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="formSubmit()">执行</a>
+	    			
+	    	</div>
+	</form>
+	
+	</div>
+	
+	#if($list.size()>0)
+	<table id="listData" class="easyui-datagrid" 	
+			data-options="collapsible:true,rownumbers:true,remoteSort:false" toolbar="#opButtonsList">
+		<thead>
+			<tr>
+				#set($map = $!list.get(0))
+
+				#foreach($sKey in ${map.keySet()})
+				 <th data-options="halign:'center',field:'$!sKey',width:120,align:'left',sortable:true">$!sKey</th>
+				 #end
+			</tr>
+		</thead>
+	    <tbody>  
+	    
+	      #foreach($mObj in $list)	      
+	        <tr>  
+	      	#foreach($sKey in ${mObj.keySet()})
+	        	<td>${mObj.get($sKey)}</td>
+			#end  
+	        </tr>
+	      #end
+	      </tbody>
+	</table>
+	#else 
+		暂无数据
+	#end
+</body>
+	
+<script type="text/javascript">	
+        function formSubmit(){
+        	jQuery("#searchForm").submit();
+        }
+</script>
+  
+</html>

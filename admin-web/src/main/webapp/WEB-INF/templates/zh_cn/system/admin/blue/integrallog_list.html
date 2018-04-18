@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/overlay.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type=text/css rel=stylesheet>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script>
+	$(function(){
+		jQuery('#beginTime').datepicker({
+			  dateFormat:"yy-mm-dd",
+			  changeMonth: true,
+			  changeYear: true
+		  });
+		  jQuery('#endTime').datepicker({
+			  dateFormat:"yy-mm-dd",
+			  changeMonth: true,
+			  changeYear: true
+		  });
+	});
+	//积分明细请求导出报表
+	function export_excel(){
+		var userName = $("#userName").val();
+		var type = $("#type").val();
+		var beginTime = $("#beginTime").val();
+		var endTime = $("#endTime").val();
+		if(userName==""&type==""&beginTime == ""&endTime == ""){
+			alert("请选择导出条件!");
+			return;
+		}
+		#if($!objs.size()<=0)
+			alert("当前没有可导出的数据!");
+			return;
+		#end
+		location.href="$!webPath/admin/integrallog_list_excel.htm?userName="+userName+"&type="+type+"&beginTime="+beginTime+"&endTime="+endTime ;
+	}
+	
+</script>
+
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">积分明细</h1>
+  <FORM name="ListForm" id="ListForm"  action="$!webPath/admin/integrallog_list.htm" method="post">
+  <div class="search">
+    <ul>
+      <li> 
+        <span>会员名</span>
+        <span class="size150">
+      			<input name="userName" type="text"  id="userName" value="$!vo.userName" />
+      		</span> 
+      	<span>类型</span> <span> <select name="type" id="type">
+				<option value="">全部</option>
+				#foreach($type in $types)
+					<option value="$type.type" #if($type.type==$vo.type) selected="selected" #end>$type.name</option>
+				#end
+		</select>
+		</span>
+		 <span>下单时间</span> <span class="size100">
+     	 	<input name="beginTime" type="text" id="beginTime" value="$!vo.beginTime" readonly="re adonly" />
+      		</span> <span class="size100">
+     	 <input name="endTime" type="text" id="endTime" value="$!vo.endTime" readonly="readonly" />
+     	 </span>
+     	 &nbsp;&nbsp;
+        <input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn"/>
+        <span>
+	<input name="importExcel" onclick="export_excel()" type="button" value="导出Excel" style="cursor: pointer;"
+							class="search_btn" />
+							</span>
+      </li>
+    </ul>
+  </div>
+  <div id="list">
+  <div class="fshoptb">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+      <tr>
+        <th width="18%"><span class="form_btna">会员名</span></th>
+        <th width="18%" ><span class="form_btna">操作管理员</span></th>
+        <th width="5%" ><span class="form_btna">积分值</span></th>
+        <th width="5%" ><span class="form_btna">积分余额</span></th>
+        <th width="10%" ><span class="form_btna">连续签到天数</span></th>
+        <th  width="15%"><span class="form_btna">操作时间</span></th>
+        <th width="15%"><span class="form_btna">获取途径</span></th>
+        <th ><span class="form_btna">描述</span></th>
+      </tr>
+	  #foreach($obj in $objs)
+      <tr>
+        <td align="center">$!obj.loginName</td>
+        <td align="center">$!obj.operateName</td>
+        <td align="center">$!obj.integral</td>
+        <td align="center">$!obj.balance</td>
+        
+        #if($!obj.type=="integral_sign_day")
+        <td align="center">$!obj.signDay</td>
+        #else
+        <td align="center">-</td>
+        #end
+        
+        <td align="center">$!CommUtil.formatLongDate($!obj.addtime)</td>
+         
+        #set($type=$!integralConstants.getNameByType($!obj.type))
+         #if($!obj.type=="integral_swap_mark")
+		  #set($type="积分转换")
+		#end
+		 #if($!obj.type=="integral_mark_and_cash")
+		  #set($type="积分+现金购物")
+		#end
+		<td align="center">$!type</td>
+        <td align="center">$!obj.content</td>
+      </tr>
+      #end
+    </table>
+  </div>
+  
+      <div class="operate_bar">
+     	<div class="fenye"> <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      $!gotoPageFormHTML</div> 
+    
+    
+             </div>
+ </div>
+ </FORM>
+</div>
+</body>
+</html>

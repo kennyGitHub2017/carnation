@@ -1,0 +1,91 @@
+#if($!obj.apType=="img")  
+  document.write("<div style='float:left;overflow:hidden;'>");
+  document.write("<a href='$!webPath/advert_redirect.htm?url=$!obj.apAccUrl&id=$!obj.advId' target='_blank'>");
+  document.write("<img width='$!obj.apWidth' height='$!obj.apHeight' src='$!obj.apImgPath' style='border:none;' />");
+  document.write("</a>");
+  document.write("</div>"); 
+#end
+#if($!obj.apType=="slide")
+ #if($!obj.ap_location=="Mobile")
+  document.write("<div id='focus' class='focus'><div class='hd'><ul></ul></div><div class='bd'><ul>");
+  #foreach($adv in $obj.advs)
+    document.write("<li><a href='$!webPath/advert_redirect.htm?url=$!adv.adUrl&id=$!adv.id'><img src='$!adv.adImgPath' width='100%' height='$!obj.apHeight' /></a></li>");
+  #end
+  document.write("</ul></div></div>");
+  document.write("<script\/>");
+  document.write("TouchSlide({slideCell:'#focus',titCell:'.hd ul',mainCell:'.bd ul',effect:'leftLoop',autoPlay:true,autoPage:true});");
+  document.write("</script>");
+ #else
+  document.write("<script type='text/javascript'>jQuery(function(){jQuery('.slideBox').slide({mainCell:'.bd ul',effect:'fold',autoPlay:true});});</script>");  
+  document.write("<div class='slideBox' id='shop_advert'>");  
+  document.write("<div class='hd'>");
+  document.write("<ul style='z-index:0;'>");
+  #foreach($adv in $obj.advs)
+    document.write("<li>$!{velocityCount}");
+    document.write("</li>");
+  #end
+  document.write("</ul>");
+  document.write("</div>");
+  document.write("<div class='bd'>");
+  document.write("<ul style='z-index:0;'>");
+  #foreach($adv in $obj.advs)
+    document.write("<li>");
+    document.write("<a href='$!webPath/advert_redirect.htm?url=$!adv.adUrl&id=$!adv.id' target='_blank'><img src='$!adv.adImgPath' width='$!obj.apWidth' height='$!obj.apHeight' /></a>");
+  document.write("</li>");
+  #end
+  document.write("</ul>");
+  document.write("</div>");
+  document.write("</div>");
+ #end
+#end
+#if($!obj.apType=="scroll")
+ #if($obj.advs.size()>0)
+  document.write("<script\/>");
+ 
+  document.write("jQuery('.picScroll').slide({ mainCell:'ul',autoPlay:true,effect:'left', vis:3, scroll:3, autoPage:true });");
+  document.write("jQuery('.picScroll').mouseover(function(){jQuery('.picScroll .next').show();jQuery('.picScroll .prev').show();}).mouseleave(function(){jQuery('.picScroll .next').hide();jQuery('.picScroll .prev').hide();});");
+
+  document.write("</script>");
+  document.write("<div class='picScroll'>"); 
+  document.write("<ul>");
+  #foreach($adv_list in $CommUtil.toRowChildList($obj.advs,3))
+  #foreach($adv in $adv_list)
+  document.write("<li>");
+  document.write("<a href='$!webPath/advert_redirect.htm?url=$!adv.adUrl&id=$!adv.id' target='_blank'><span class='img_cspan'><p><img src='$!adv.adImgPath' width='$!obj.apWidth' height='$!obj.apHeight' /></p></span></a>");
+  document.write("</li>");
+  #end
+  #end
+  document.write("</ul>");
+  document.write("<a href='javascript:void(0);' class='next' style='display:none;'></a>");
+  document.write("<a href='javascript:void(0);' class='prev' style='display:none;'i></a>");
+  document.write("</div>");
+  #end
+#end
+#if($!obj.apType=="text")  
+  document.write("<div style='width='$!obj.apWidth';height='$!obj.apHeight';float:left;overflow:hidden;'>");
+  document.write("<a href='$!webPath/advert_redirect.htm?url=$!obj.apAccUrl&id=$!obj.advId' target='_blank'>");
+  document.write("$!obj.ap_text");
+  document.write("</a>");
+  document.write("</div>"); 
+#end
+#if($!obj.apType=="bg_slide")
+  document.write("<script\/>");
+  document.write("jQuery('document').ready(function(){");  
+  document.write("jQuery('.top_mid_slide').slide({mainCell:'.top_mid_slider_ul',titCell:'.banner_top li',titOnClassName:'this',trigger:'mouseover', interTime:5000, autoPlay:true});");
+  document.write("});");
+  document.write("</script>");
+   document.write("<div class='top_mid_slide'>");
+   document.write("<ul class='top_mid_slider_ul'>");
+   #foreach($adv in $obj.advs)
+   document.write(" <li class='top_mid_slider_ul_li'  style='background:$!{adv.bgColor} url($!adv.adImgPath) no-repeat; background-position: 50% 0%;width:100%; height:$!{obj.apHeight}px;'><a style='display:block; margin-left:20%;' href='$!webPath/advert_redirect.htm?url=$!adv.adUrl&id=$!adv.id'></a></li>");
+   #end
+   document.write("</ul>");
+   document.write("<div class='banner_top'>");
+   document.write("<ul>");
+	#foreach($adv in $obj.advs)
+   document.write("<li #if($!velocityCount==1) class='this' #end style='cursor:pointer;'></li>");
+    #end
+   document.write("</ul>");
+   document.write("</div>");
+   document.write("</div>");
+#end

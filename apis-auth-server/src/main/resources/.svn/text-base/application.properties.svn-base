@@ -1,0 +1,100 @@
+#
+# Copyright 2012 SURFnet bv, The Netherlands
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# The database settings 
+jdbc.type=mysql
+jdbc.driver=com.mysql.jdbc.Driver
+#jdbc.url=jdbc:mysql://112.124.46.129:3306/carnation_dev?autoReconnect=true&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+jdbc.url=jdbc:mysql://192.168.1.209:3306/carnation?autoReconnect=true&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+jdbc.username=root
+jdbc.password=123456
+#jdbc.password=123456
+#jdbc.password=123456
+
+#pool settings
+jdbc.pool.minIdle=3
+jdbc.pool.maxActive=20
+
+#file server
+fs.server.ip=192.168.1.209
+fs.server.port=9333
+fs.filerserver.ip=192.168.1.209
+fs.filerserver.port=8888
+fs.filerserver.puburl=ff1.ysysgo.com
+
+# Either db/migration/mysql or db/migration/hsqldb or your custom implementation (e.g. postgres)
+flyway.migrations.location=db/migration/mysql, db/migration/mysql_content
+
+#CAS config:
+#serverName - the server name of the server this application is hosted on.
+# Service URL will be dynamically constructed using this,
+# i.e. https://localhost:8443 (you must include the protocol, but port is optional if it's a standard port).
+cas.serverName=http://localhost:8080
+#casServerUrlPrefix - the start of the CAS server URL, i.e. https://localhost:8443/cas.
+cas.serverUrlPrefix=https://sso.univ.fr
+#adminList - comma separated list of admin uid, i.e. user1,user2.
+cas.adminList=
+
+
+# The authentication module
+#authenticatorClass=org.surfnet.oaaas.authentication.FormLoginAuthenticator
+authenticatorClass=org.surfnet.oaaas.noop.NoopAdminAuthenticator
+#authenticatorClass=org.surfnet.oaaas.authentication.NotAuthenticator
+#authenticatorClass=org.surfnet.oaaas.noop.NoopAuthenticator
+#authenticatorClass=org.surfnet.oaaas.conext.SAMLAuthenticator
+#authenticatorClass=org.surfnet.oaaas.cas.CasAuthenticator
+
+# The user consent module
+userConsentHandlerClass=org.surfnet.oaaas.consent.FormUserConsentHandler
+#userConsentHandlerClass=org.surfnet.oaaas.noop.NoopUserConsentHandler
+
+# The resource owner authentication module
+resourceOwnerAuthenticatorClass=org.surfnet.oaaas.authentication.UserPasswordAuthenticator
+#resourceOwnerAuthenticatorClass=org.surfnet.oaaas.noop.NoopResourceOwnerAuthenticator
+
+# The url and key/secret that is used by the Client/Resource Server endpoints to validate the oauth access tokens
+adminService.tokenVerificationUrl=http://127.0.0.1:8080/v1/tokeninfo
+adminService.resourceServerKey=authorization-server-admin
+adminService.resourceServerSecret=cafebabe-cafe-babe-cafe-babecafebabe
+adminService.jsonTypeInfoIncluded=false
+
+#jpush use shizj 
+jpush.masterSecret=b40fc060d4f04c08f8e5cedd
+jpush.appKey=7ec4ab7da26c9db5e464dc9b
+jpush.alias.flag=t_
+
+#sms
+sms.handler2.username=cf_ysysgo888
+sms.handler2.pwd=ysysgo0755
+
+#orcl.code=YUNSHANG
+#orcl.key=123456
+#orcl.url=http://112.175.238.37:8090/DataInterface.aspx
+orcl.code=YUNSHANG
+orcl.key=123456
+orcl.url=http://222.122.195.61:8090/DataInterface.aspx
+
+redis.host=192.168.1.209
+redis.port=6379
+redis.db=0
+multiple.session=true
+
+#porn
+porn.regionId=cn-hangzhou
+porn.accessKeyId=LTAIBrLB1TKXxIb2
+porn.secret=Ss8BuI2wseQ2m4utQTjbSzJvls3sh0
+porn.sms.mobile=15989324705
+porn.rate=50

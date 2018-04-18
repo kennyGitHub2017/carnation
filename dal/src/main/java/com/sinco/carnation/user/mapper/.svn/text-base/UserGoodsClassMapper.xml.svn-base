@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.UserGoodsClassMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.UserGoodsClass">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="addTime" property="addtime" jdbcType="TIMESTAMP" />
+		<result column="deleteStatus" property="deletestatus" jdbcType="INTEGER" />
+		<result column="className" property="classname" jdbcType="VARCHAR" />
+		<result column="display" property="display" jdbcType="BIT" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="isyg" property="isyg" jdbcType="BIT" />
+		<result column="icon_sys" property="iconSys" jdbcType="VARCHAR" />
+		<result column="icon_acc_id" property="iconAccId" jdbcType="VARCHAR" />
+		<result column="icon_type" property="iconType" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BoResultMap" type="com.sinco.carnation.user.bo.UserGoodsClassBO">
+	</resultMap>
+	<resultMap id="YgBoResultMap" type="com.sinco.carnation.goods.bo.GoodsYgClassBO"
+		extends="BaseResultMap">
+		<result column="parent_parent_id" property="parentParentId" />
+	</resultMap>
+	<select id="selectParentPageByVO" resultMap="BoResultMap">
+		select * from user_goods_class where ISNULL(parent_id) AND user_id =
+		#{vo.userId} AND deleteStatus = 0
+		<if test="vo.isyg!= null">
+			and isyg=#{vo.isyg,jdbcType=BIT}
+		</if>
+		ORDER BY sequence asc
+	</select>
+	<select id="selectByGoodsId" resultMap="BoResultMap">
+		select c.* from user_goods_class c, shop_goods_ugc ugc where c.id =
+		ugc.class_id AND c.deleteStatus = 0 and ugc.goods_id= #{goodsId} ORDER
+		BY c.sequence asc
+	</select>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, addTime, deleteStatus, className, display, level, sequence, user_id,
+		parent_id
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.user.model.UserGoodsClassExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_goods_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from user_goods_class
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_goods_class
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.user.model.UserGoodsClassExample">
+		delete from user_goods_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.UserGoodsClass">
+		insert into user_goods_class (id, addTime, deleteStatus,
+		className, display, level,
+		sequence, user_id, parent_id
+		)
+		values (#{id,jdbcType=BIGINT}, #{addtime,jdbcType=TIMESTAMP},
+		#{deletestatus,jdbcType=INTEGER},
+		#{classname,jdbcType=VARCHAR}, #{display,jdbcType=BIT}, #{level,jdbcType=INTEGER},
+		#{sequence,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT},
+		#{parentId,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.UserGoodsClass">
+		insert into user_goods_class
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addtime != null">
+				addTime,
+			</if>
+			<if test="deletestatus != null">
+				deleteStatus,
+			</if>
+			<if test="classname != null">
+				className,
+			</if>
+			<if test="display != null">
+				display,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="isyg != null">
+				isyg,
+			</if>
+			<if test="iconAccId != null">
+				icon_acc_id,
+			</if>
+			<if test="iconType != null">
+				icon_type,
+			</if>
+			<if test="iconSys!= null">
+				icon_sys,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addtime != null">
+				#{addtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deletestatus != null">
+				#{deletestatus,jdbcType=INTEGER},
+			</if>
+			<if test="classname != null">
+				#{classname,jdbcType=VARCHAR},
+			</if>
+			<if test="display != null">
+				#{display,jdbcType=BIT},
+			</if>
+			<if test="level != null">
+				#{level,jdbcType=INTEGER},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="isyg != null">
+				#{isyg,jdbcType=BIT},
+			</if>
+			<if test="iconAccId != null">
+				#{iconAccId,jdbcType=VARCHAR},
+			</if>
+			<if test="iconType != null">
+				#{iconType,jdbcType=BIGINT},
+			</if>
+			<if test="iconSys!= null">
+				#{iconSys,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.user.model.UserGoodsClassExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_goods_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_goods_class
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addtime != null">
+				addTime = #{record.addtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deletestatus != null">
+				deleteStatus = #{record.deletestatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.classname != null">
+				className = #{record.classname,jdbcType=VARCHAR},
+			</if>
+			<if test="record.display != null">
+				display = #{record.display,jdbcType=BIT},
+			</if>
+			<if test="record.level != null">
+				level = #{record.level,jdbcType=INTEGER},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_goods_class
+		set id = #{record.id,jdbcType=BIGINT},
+		addTime = #{record.addtime,jdbcType=TIMESTAMP},
+		deleteStatus = #{record.deletestatus,jdbcType=INTEGER},
+		className = #{record.classname,jdbcType=VARCHAR},
+		display = #{record.display,jdbcType=BIT},
+		level = #{record.level,jdbcType=INTEGER},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		user_id = #{record.userId,jdbcType=BIGINT},
+		parent_id = #{record.parentId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.UserGoodsClass">
+		update user_goods_class
+		<set>
+			<if test="addtime != null">
+				addTime = #{addtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deletestatus != null">
+				deleteStatus = #{deletestatus,jdbcType=INTEGER},
+			</if>
+			<if test="classname != null">
+				className = #{classname,jdbcType=VARCHAR},
+			</if>
+			<if test="display != null">
+				display = #{display,jdbcType=BIT},
+			</if>
+			<if test="level != null">
+				level = #{level,jdbcType=INTEGER},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+			<if test="isyg != null">
+				isyg=#{isyg,jdbcType=BIT},
+			</if>
+			<if test="iconAccId != null">
+				icon_acc_id=#{iconAccId,jdbcType=VARCHAR},
+			</if>
+			<if test="iconType != null">
+				icon_type=#{iconType,jdbcType=BIGINT},
+			</if>
+			<if test="iconSys!= null">
+				icon_sys=#{iconSys,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.UserGoodsClass">
+		update user_goods_class
+		set addTime = #{addtime,jdbcType=TIMESTAMP},
+		deleteStatus = #{deletestatus,jdbcType=INTEGER},
+		className = #{classname,jdbcType=VARCHAR},
+		display = #{display,jdbcType=BIT},
+		level = #{level,jdbcType=INTEGER},
+		sequence = #{sequence,jdbcType=INTEGER},
+		user_id = #{userId,jdbcType=BIGINT},
+		parent_id = #{parentId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="findYgNormalAll" parameterType="map" resultMap="YgBoResultMap">
+		select * from user_goods_class where deleteStatus=0
+		<if test="vo.isyg!= null">
+			and isyg=#{vo.isyg,jdbcType=BIT}
+		</if>
+	</select>
+	<select id="findByParent" parameterType="map" resultMap="YgBoResultMap">
+		select
+		gc.*,parent.parent_id as parent_parent_id
+		from user_goods_class gc
+		left join user_goods_class parent on gc.parent_id =parent.id
+		where gc.deleteStatus=0 and gc.parent_id =#{parentId}
+		order by gc.sequence asc
+	</select>
+</mapper>

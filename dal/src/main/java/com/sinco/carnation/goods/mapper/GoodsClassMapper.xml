@@ -1,0 +1,820 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.goods.mapper.GoodsClassMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.goods.model.GoodsClass">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus" />
+		<result column="app_icon" property="appIcon" jdbcType="VARCHAR" />
+		<result column="class_name" property="className" jdbcType="VARCHAR" />
+		<result column="commission_rate" property="commissionRate"
+			jdbcType="DECIMAL" />
+		<result column="description_evaluate" property="descriptionEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="display" property="display" jdbcType="BIT" />
+		<result column="gc_color" property="gcColor" jdbcType="VARCHAR" />
+		<result column="guarantee" property="guarantee" jdbcType="DECIMAL" />
+		<result column="icon_sys" property="iconSys" jdbcType="VARCHAR" />
+		<result column="icon_type" property="iconType" jdbcType="INTEGER" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="recommend" property="recommend" jdbcType="BIT" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="service_evaluate" property="serviceEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="ship_evaluate" property="shipEvaluate"
+			jdbcType="DECIMAL" />
+		<result column="goods_type_id" property="goodsTypeId" jdbcType="BIGINT" />
+		<result column="icon_acc_id" property="iconAccId" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+		<result column="wx_icon" property="wxIcon" jdbcType="VARCHAR" />
+		<result column="mobile_icon" property="mobileIcon" jdbcType="VARCHAR" />
+	    <result column="click_icon" property="clickIcon" jdbcType="VARCHAR" />
+	    <result column="unClick_icon" property="unclickIcon" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.goods.model.GoodsClass"
+		extends="BaseResultMap">
+		<result column="gb_info" property="gbInfo" jdbcType="LONGVARCHAR" />
+		<result column="gc_advert" property="gcAdvert" jdbcType="LONGVARCHAR" />
+		<result column="seo_description" property="seoDescription"
+			jdbcType="LONGVARCHAR" />
+		<result column="seo_keywords" property="seoKeywords" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<resultMap id="BOResultMap" type="com.sinco.carnation.goods.bo.GoodsClassBO"
+		extends="ResultMapWithBLOBs">
+		<result column="goods_type_name" property="goodsTypeName" />
+		<result column="parent_parent_id" property="parentParentId" />
+		<result column="parent_class_name" property="parentClassName" />
+	</resultMap>
+
+	<select id="selectBoWithParentByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		gc.*,
+		pgc.class_name as parent_class_name
+		from shop_goods_class gc
+		left join shop_goods_class pgc on gc.parent_id = pgc.id
+		where gc.id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="findRelatedGoodsClass" resultMap="BOResultMap">
+		select gc.*
+		from shop_goods_class gc
+		where gc.level <![CDATA[ < ]]>
+		#{level} and gc.delete_status = 0 and gc.class_name like
+		concat(#{className}, '%')
+	</select>
+	<select id="findBySpec" resultMap="BOResultMap" parameterType="long">
+		select gc.*
+		from shop_goods_class gc
+		INNER join shop_goods_spec_gc_detail gsgd on gc.id=gsgd.spec_gc_id
+		where gc.delete_status=0 and gsgd.spec_id=#{specId}
+	</select>
+	<select id="findBySpecAndClassId" resultMap="BOResultMap">
+		select gc.*
+		from shop_goods_class gc
+		INNER join shop_goods_spec_gc_detail gsgd on gc.id=gsgd.spec_gc_id
+		where gc.delete_status=0 and gsgd.spec_id=#{specId} and
+		gsgd.spec_gc_id=#{classId}
+	</select>
+
+	<select id="findParentIsNullPage" parameterType="map" resultMap="BOResultMap">
+		select
+		gc.*,gt.name as goods_type_name
+		from shop_goods_class gc left join shop_goods_type gt on gc.goods_type_id
+		=gt.id
+		where gc.delete_status=0 and gc.parent_id is null
+		order by gc.sequence asc
+	</select>
+
+	<select id="findByParent" parameterType="map" resultMap="BOResultMap">
+		select
+		gc.*,gt.name as goods_type_name,parent.parent_id as parent_parent_id
+		from shop_goods_class gc
+		left join shop_goods_type gt on gc.goods_type_id =gt.id
+		left join shop_goods_class parent on gc.parent_id =parent.id
+		where gc.delete_status=0 and gc.parent_id =#{parentId}
+		order by gc.sequence asc
+	</select>
+
+
+
+
+	<select id="findByCount" parameterType="com.sinco.carnation.goods.vo.GoodsClassCountVO"
+		resultMap="BOResultMap">
+		select
+		gc.*,gt.name as goods_type_name
+		from shop_goods_class gc
+		left join shop_goods_type gt on gc.goods_type_id =gt.id
+		where gc.delete_status=0
+		<if test="parentId != null">
+			and gc.parent_id =#{parentId}
+		</if>
+		<if test="parentId == null">
+			and gc.parent_id is null
+		</if>
+		<if test="display != null">
+			and gc.display=#{display}
+		</if>
+		<if test="recommend != null">
+			and gc.recommend=#{recommend}
+		</if>
+		<if test="level != null">
+			and gc.level=#{level}
+		</if>
+		order by gc.sequence asc
+		<if test="count != null">
+			limit 0,#{count}
+		</if>
+	</select>
+	
+	
+	<select id="findByCountVO" parameterType="com.sinco.carnation.goods.vo.GoodsClassCountVO"
+		resultMap="BOResultMap">
+		select
+		gc.*,gt.name as goods_type_name
+		from shop_goods_class gc
+		left join shop_goods_type gt on gc.goods_type_id =gt.id
+		where gc.delete_status=0 and display = 1
+		<if test="parentId != null">
+			and gc.parent_id =#{parentId}
+		</if>
+		<if test="display != null">
+			and gc.display=#{display}
+		</if>
+		<if test="recommend != null">
+			and gc.recommend=#{recommend}
+		</if>
+		<if test="level != null">
+			and gc.level=#{level}
+		</if>
+		order by gc.sequence asc
+		<if test="count != null">
+			limit 0,#{count}
+		</if>
+	</select>
+
+	<select id="selectBOByExample" resultMap="BOResultMap"
+		parameterType="com.sinco.carnation.goods.model.GoodsClassExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_goods_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectBOByPrimaryKey" resultMap="BOResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_goods_class
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+  <sql id="Base_Column_List" >
+    id, add_time, delete_status, app_icon, class_name, commission_rate, description_evaluate, 
+    display, gc_color, guarantee, icon_sys, icon_type, level, recommend, sequence, service_evaluate, 
+    ship_evaluate, goods_type_id, icon_acc_id, parent_id, wx_icon, mobile_icon, click_icon, 
+    unClick_icon
+  </sql>
+  <sql id="Blob_Column_List" >
+    gb_info, gc_advert, seo_description, seo_keywords
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.goods.model.GoodsClassExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from shop_goods_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.sinco.carnation.goods.model.GoodsClassExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from shop_goods_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      limit ${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from shop_goods_class
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from shop_goods_class
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.goods.model.GoodsClassExample" >
+    delete from shop_goods_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinco.carnation.goods.model.GoodsClass" useGeneratedKeys="true" keyProperty="id" >
+    insert into shop_goods_class (id, add_time, delete_status, 
+      app_icon, class_name, commission_rate, 
+      description_evaluate, display, gc_color, 
+      guarantee, icon_sys, icon_type, 
+      level, recommend, sequence, 
+      service_evaluate, ship_evaluate, goods_type_id, 
+      icon_acc_id, parent_id, wx_icon, 
+      mobile_icon, click_icon, unClick_icon, 
+      gb_info, gc_advert, seo_description, 
+      seo_keywords)
+    values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP}, #{deleteStatus,jdbcType=BIT}, 
+      #{appIcon,jdbcType=VARCHAR}, #{className,jdbcType=VARCHAR}, #{commissionRate,jdbcType=DECIMAL}, 
+      #{descriptionEvaluate,jdbcType=DECIMAL}, #{display,jdbcType=BIT}, #{gcColor,jdbcType=VARCHAR}, 
+      #{guarantee,jdbcType=DECIMAL}, #{iconSys,jdbcType=VARCHAR}, #{iconType,jdbcType=INTEGER}, 
+      #{level,jdbcType=INTEGER}, #{recommend,jdbcType=BIT}, #{sequence,jdbcType=INTEGER}, 
+      #{serviceEvaluate,jdbcType=DECIMAL}, #{shipEvaluate,jdbcType=DECIMAL}, #{goodsTypeId,jdbcType=BIGINT}, 
+      #{iconAccId,jdbcType=VARCHAR}, #{parentId,jdbcType=BIGINT}, #{wxIcon,jdbcType=VARCHAR}, 
+      #{mobileIcon,jdbcType=VARCHAR}, #{clickIcon,jdbcType=VARCHAR}, #{unclickIcon,jdbcType=VARCHAR}, 
+      #{gbInfo,jdbcType=LONGVARCHAR}, #{gcAdvert,jdbcType=LONGVARCHAR}, #{seoDescription,jdbcType=LONGVARCHAR}, 
+      #{seoKeywords,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinco.carnation.goods.model.GoodsClass" useGeneratedKeys="true" keyProperty="id" >
+    insert into shop_goods_class
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status,
+      </if>
+      <if test="appIcon != null" >
+        app_icon,
+      </if>
+      <if test="className != null" >
+        class_name,
+      </if>
+      <if test="commissionRate != null" >
+        commission_rate,
+      </if>
+      <if test="descriptionEvaluate != null" >
+        description_evaluate,
+      </if>
+      <if test="display != null" >
+        display,
+      </if>
+      <if test="gcColor != null" >
+        gc_color,
+      </if>
+      <if test="guarantee != null" >
+        guarantee,
+      </if>
+      <if test="iconSys != null" >
+        icon_sys,
+      </if>
+      <if test="iconType != null" >
+        icon_type,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="recommend != null" >
+        recommend,
+      </if>
+      <if test="sequence != null" >
+        sequence,
+      </if>
+      <if test="serviceEvaluate != null" >
+        service_evaluate,
+      </if>
+      <if test="shipEvaluate != null" >
+        ship_evaluate,
+      </if>
+      <if test="goodsTypeId != null" >
+        goods_type_id,
+      </if>
+      <if test="iconAccId != null" >
+        icon_acc_id,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="wxIcon != null" >
+        wx_icon,
+      </if>
+      <if test="mobileIcon != null" >
+        mobile_icon,
+      </if>
+      <if test="clickIcon != null" >
+        click_icon,
+      </if>
+      <if test="unclickIcon != null" >
+        unClick_icon,
+      </if>
+      <if test="gbInfo != null" >
+        gb_info,
+      </if>
+      <if test="gcAdvert != null" >
+        gc_advert,
+      </if>
+      <if test="seoDescription != null" >
+        seo_description,
+      </if>
+      <if test="seoKeywords != null" >
+        seo_keywords,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        #{deleteStatus,jdbcType=BIT},
+      </if>
+      <if test="appIcon != null" >
+        #{appIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null" >
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionRate != null" >
+        #{commissionRate,jdbcType=DECIMAL},
+      </if>
+      <if test="descriptionEvaluate != null" >
+        #{descriptionEvaluate,jdbcType=DECIMAL},
+      </if>
+      <if test="display != null" >
+        #{display,jdbcType=BIT},
+      </if>
+      <if test="gcColor != null" >
+        #{gcColor,jdbcType=VARCHAR},
+      </if>
+      <if test="guarantee != null" >
+        #{guarantee,jdbcType=DECIMAL},
+      </if>
+      <if test="iconSys != null" >
+        #{iconSys,jdbcType=VARCHAR},
+      </if>
+      <if test="iconType != null" >
+        #{iconType,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="recommend != null" >
+        #{recommend,jdbcType=BIT},
+      </if>
+      <if test="sequence != null" >
+        #{sequence,jdbcType=INTEGER},
+      </if>
+      <if test="serviceEvaluate != null" >
+        #{serviceEvaluate,jdbcType=DECIMAL},
+      </if>
+      <if test="shipEvaluate != null" >
+        #{shipEvaluate,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsTypeId != null" >
+        #{goodsTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="iconAccId != null" >
+        #{iconAccId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="wxIcon != null" >
+        #{wxIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileIcon != null" >
+        #{mobileIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="clickIcon != null" >
+        #{clickIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="unclickIcon != null" >
+        #{unclickIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="gbInfo != null" >
+        #{gbInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="gcAdvert != null" >
+        #{gcAdvert,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="seoDescription != null" >
+        #{seoDescription,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="seoKeywords != null" >
+        #{seoKeywords,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinco.carnation.goods.model.GoodsClassExample" resultType="java.lang.Integer" >
+    select count(*) from shop_goods_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update shop_goods_class
+	<trim prefix="set" suffixOverrides=",">
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteStatus != null" >
+        delete_status = #{record.deleteStatus,jdbcType=BIT},
+      </if>
+      <if test="record.appIcon != null" >
+        app_icon = #{record.appIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.className != null" >
+        class_name = #{record.className,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commissionRate != null" >
+        commission_rate = #{record.commissionRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.descriptionEvaluate != null" >
+        description_evaluate = #{record.descriptionEvaluate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.display != null" >
+        display = #{record.display,jdbcType=BIT},
+      </if>
+      <if test="record.gcColor != null" >
+        gc_color = #{record.gcColor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.guarantee != null" >
+        guarantee = #{record.guarantee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.iconSys != null" >
+        icon_sys = #{record.iconSys,jdbcType=VARCHAR},
+      </if>
+      <if test="record.iconType != null" >
+        icon_type = #{record.iconType,jdbcType=INTEGER},
+      </if>
+      <if test="record.level != null" >
+        level = #{record.level,jdbcType=INTEGER},
+      </if>
+      <if test="record.recommend != null" >
+        recommend = #{record.recommend,jdbcType=BIT},
+      </if>
+      <if test="record.sequence != null" >
+        sequence = #{record.sequence,jdbcType=INTEGER},
+      </if>
+      <if test="record.serviceEvaluate != null" >
+        service_evaluate = #{record.serviceEvaluate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shipEvaluate != null" >
+        ship_evaluate = #{record.shipEvaluate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.goodsTypeId != null" >
+        goods_type_id = #{record.goodsTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.iconAccId != null" >
+        icon_acc_id = #{record.iconAccId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentId != null" >
+        parent_id = #{record.parentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.wxIcon != null" >
+        wx_icon = #{record.wxIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobileIcon != null" >
+        mobile_icon = #{record.mobileIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clickIcon != null" >
+        click_icon = #{record.clickIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unclickIcon != null" >
+        unClick_icon = #{record.unclickIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gbInfo != null" >
+        gb_info = #{record.gbInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.gcAdvert != null" >
+        gc_advert = #{record.gcAdvert,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.seoDescription != null" >
+        seo_description = #{record.seoDescription,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.seoKeywords != null" >
+        seo_keywords = #{record.seoKeywords,jdbcType=LONGVARCHAR},
+      </if>
+	</trim>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update shop_goods_class
+    set id = #{record.id,jdbcType=BIGINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=BIT},
+      app_icon = #{record.appIcon,jdbcType=VARCHAR},
+      class_name = #{record.className,jdbcType=VARCHAR},
+      commission_rate = #{record.commissionRate,jdbcType=DECIMAL},
+      description_evaluate = #{record.descriptionEvaluate,jdbcType=DECIMAL},
+      display = #{record.display,jdbcType=BIT},
+      gc_color = #{record.gcColor,jdbcType=VARCHAR},
+      guarantee = #{record.guarantee,jdbcType=DECIMAL},
+      icon_sys = #{record.iconSys,jdbcType=VARCHAR},
+      icon_type = #{record.iconType,jdbcType=INTEGER},
+      level = #{record.level,jdbcType=INTEGER},
+      recommend = #{record.recommend,jdbcType=BIT},
+      sequence = #{record.sequence,jdbcType=INTEGER},
+      service_evaluate = #{record.serviceEvaluate,jdbcType=DECIMAL},
+      ship_evaluate = #{record.shipEvaluate,jdbcType=DECIMAL},
+      goods_type_id = #{record.goodsTypeId,jdbcType=BIGINT},
+      icon_acc_id = #{record.iconAccId,jdbcType=VARCHAR},
+      parent_id = #{record.parentId,jdbcType=BIGINT},
+      wx_icon = #{record.wxIcon,jdbcType=VARCHAR},
+      mobile_icon = #{record.mobileIcon,jdbcType=VARCHAR},
+      click_icon = #{record.clickIcon,jdbcType=VARCHAR},
+      unClick_icon = #{record.unclickIcon,jdbcType=VARCHAR},
+      gb_info = #{record.gbInfo,jdbcType=LONGVARCHAR},
+      gc_advert = #{record.gcAdvert,jdbcType=LONGVARCHAR},
+      seo_description = #{record.seoDescription,jdbcType=LONGVARCHAR},
+      seo_keywords = #{record.seoKeywords,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update shop_goods_class
+    set id = #{record.id,jdbcType=BIGINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=BIT},
+      app_icon = #{record.appIcon,jdbcType=VARCHAR},
+      class_name = #{record.className,jdbcType=VARCHAR},
+      commission_rate = #{record.commissionRate,jdbcType=DECIMAL},
+      description_evaluate = #{record.descriptionEvaluate,jdbcType=DECIMAL},
+      display = #{record.display,jdbcType=BIT},
+      gc_color = #{record.gcColor,jdbcType=VARCHAR},
+      guarantee = #{record.guarantee,jdbcType=DECIMAL},
+      icon_sys = #{record.iconSys,jdbcType=VARCHAR},
+      icon_type = #{record.iconType,jdbcType=INTEGER},
+      level = #{record.level,jdbcType=INTEGER},
+      recommend = #{record.recommend,jdbcType=BIT},
+      sequence = #{record.sequence,jdbcType=INTEGER},
+      service_evaluate = #{record.serviceEvaluate,jdbcType=DECIMAL},
+      ship_evaluate = #{record.shipEvaluate,jdbcType=DECIMAL},
+      goods_type_id = #{record.goodsTypeId,jdbcType=BIGINT},
+      icon_acc_id = #{record.iconAccId,jdbcType=VARCHAR},
+      parent_id = #{record.parentId,jdbcType=BIGINT},
+      wx_icon = #{record.wxIcon,jdbcType=VARCHAR},
+      mobile_icon = #{record.mobileIcon,jdbcType=VARCHAR},
+      click_icon = #{record.clickIcon,jdbcType=VARCHAR},
+      unClick_icon = #{record.unclickIcon,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.goods.model.GoodsClass" >
+    update shop_goods_class
+		<trim prefix="set" suffixOverrides=",">
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status = #{deleteStatus,jdbcType=BIT},
+      </if>
+      <if test="appIcon != null" >
+        app_icon = #{appIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null" >
+        class_name = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="commissionRate != null" >
+        commission_rate = #{commissionRate,jdbcType=DECIMAL},
+      </if>
+      <if test="descriptionEvaluate != null" >
+        description_evaluate = #{descriptionEvaluate,jdbcType=DECIMAL},
+      </if>
+      <if test="display != null" >
+        display = #{display,jdbcType=BIT},
+      </if>
+      <if test="gcColor != null" >
+        gc_color = #{gcColor,jdbcType=VARCHAR},
+      </if>
+      <if test="guarantee != null" >
+        guarantee = #{guarantee,jdbcType=DECIMAL},
+      </if>
+      <if test="iconSys != null" >
+        icon_sys = #{iconSys,jdbcType=VARCHAR},
+      </if>
+      <if test="iconType != null" >
+        icon_type = #{iconType,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="recommend != null" >
+        recommend = #{recommend,jdbcType=BIT},
+      </if>
+      <if test="sequence != null" >
+        sequence = #{sequence,jdbcType=INTEGER},
+      </if>
+      <if test="serviceEvaluate != null" >
+        service_evaluate = #{serviceEvaluate,jdbcType=DECIMAL},
+      </if>
+      <if test="shipEvaluate != null" >
+        ship_evaluate = #{shipEvaluate,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsTypeId != null" >
+        goods_type_id = #{goodsTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="iconAccId != null" >
+        icon_acc_id = #{iconAccId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="wxIcon != null" >
+        wx_icon = #{wxIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileIcon != null" >
+        mobile_icon = #{mobileIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="clickIcon != null" >
+        click_icon = #{clickIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="unclickIcon != null" >
+        unClick_icon = #{unclickIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="gbInfo != null" >
+        gb_info = #{gbInfo,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="gcAdvert != null" >
+        gc_advert = #{gcAdvert,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="seoDescription != null" >
+        seo_description = #{seoDescription,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="seoKeywords != null" >
+        seo_keywords = #{seoKeywords,jdbcType=LONGVARCHAR},
+      </if>
+		</trim>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.goods.model.GoodsClass" >
+    update shop_goods_class
+    set add_time = #{addTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=BIT},
+      app_icon = #{appIcon,jdbcType=VARCHAR},
+      class_name = #{className,jdbcType=VARCHAR},
+      commission_rate = #{commissionRate,jdbcType=DECIMAL},
+      description_evaluate = #{descriptionEvaluate,jdbcType=DECIMAL},
+      display = #{display,jdbcType=BIT},
+      gc_color = #{gcColor,jdbcType=VARCHAR},
+      guarantee = #{guarantee,jdbcType=DECIMAL},
+      icon_sys = #{iconSys,jdbcType=VARCHAR},
+      icon_type = #{iconType,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER},
+      recommend = #{recommend,jdbcType=BIT},
+      sequence = #{sequence,jdbcType=INTEGER},
+      service_evaluate = #{serviceEvaluate,jdbcType=DECIMAL},
+      ship_evaluate = #{shipEvaluate,jdbcType=DECIMAL},
+      goods_type_id = #{goodsTypeId,jdbcType=BIGINT},
+      icon_acc_id = #{iconAccId,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      wx_icon = #{wxIcon,jdbcType=VARCHAR},
+      mobile_icon = #{mobileIcon,jdbcType=VARCHAR},
+      click_icon = #{clickIcon,jdbcType=VARCHAR},
+      unClick_icon = #{unclickIcon,jdbcType=VARCHAR},
+      gb_info = #{gbInfo,jdbcType=LONGVARCHAR},
+      gc_advert = #{gcAdvert,jdbcType=LONGVARCHAR},
+      seo_description = #{seoDescription,jdbcType=LONGVARCHAR},
+      seo_keywords = #{seoKeywords,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.goods.model.GoodsClass" >
+    update shop_goods_class
+    set add_time = #{addTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=BIT},
+      app_icon = #{appIcon,jdbcType=VARCHAR},
+      class_name = #{className,jdbcType=VARCHAR},
+      commission_rate = #{commissionRate,jdbcType=DECIMAL},
+      description_evaluate = #{descriptionEvaluate,jdbcType=DECIMAL},
+      display = #{display,jdbcType=BIT},
+      gc_color = #{gcColor,jdbcType=VARCHAR},
+      guarantee = #{guarantee,jdbcType=DECIMAL},
+      icon_sys = #{iconSys,jdbcType=VARCHAR},
+      icon_type = #{iconType,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER},
+      recommend = #{recommend,jdbcType=BIT},
+      sequence = #{sequence,jdbcType=INTEGER},
+      service_evaluate = #{serviceEvaluate,jdbcType=DECIMAL},
+      ship_evaluate = #{shipEvaluate,jdbcType=DECIMAL},
+      goods_type_id = #{goodsTypeId,jdbcType=BIGINT},
+      icon_acc_id = #{iconAccId,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      wx_icon = #{wxIcon,jdbcType=VARCHAR},
+      mobile_icon = #{mobileIcon,jdbcType=VARCHAR},
+      click_icon = #{clickIcon,jdbcType=VARCHAR},
+      unClick_icon = #{unclickIcon,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+	<select id="findGoodsClassByLevel" resultMap="BOResultMap">
+		select gc.* from shop_goods_class gc where gc.level = #{level} ORDER BY ID
+		ASC
+	</select>
+	
+	<select id="findBnameById" resultType="java.lang.String">
+		select name from shop_goods_brand  where id = #{id} 
+	</select>
+
+</mapper>

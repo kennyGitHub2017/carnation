@@ -1,0 +1,184 @@
+<html class="ios iphone"><head>
+<meta charset="UTF-8">
+<title>订单列表</title>
+	<!-- UC默认竖屏 ，UC制全屏 -->
+	<meta name="full-screen" content="yes">
+	<meta name="browsermode" content="application">
+	
+	<!-- QQ强制竖屏 QQ强制全屏 -->
+	<meta name="x5-orientation" content="portrait">
+	<meta name="x5-fullscreen" content="true">
+	<meta name="x5-page-mode" content="app">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="$!webPath/resources/elong/css/main.css">
+    <link rel="stylesheet" href="$!webPath/resources/elong/css/myelong/main.css">
+    <link rel="stylesheet" href="$!webPath/resources/elong/css/myelong/mobiscroll.css">
+    <link rel="stylesheet" href="$!webPath/resources/elong/css/myelong/idangerous.swiper.css">
+	
+	<script type="text/javascript">
+		var $ROOT = "http://m.elong.com/";
+		var $LOGIN = "https://msecure.elong.com/login/?RedirectUrl=https%3A%2F%2Fm.elong.com%2Fmy%2Faccount%2Findex";
+		var $MYELONG = "https://msecure.elong.com/myelong/";
+		var $HOME = "https://m.elong.com/";
+		var $CHANNEL = "mnoreferseo";
+		var $isApp = "";
+		var $WEIXINCH = "1";
+		var $QQCH = "1";
+		var hotelIndexUrl="https://m.elong.com/hotel/index";
+		var ihotelIndexUrl="https://m.elong.com/ihotel";
+	</script>
+</head>
+<body>
+<div class="pages">
+    <div class="page page-on-left" data-blend="layer" data-blend-id="index" data-url="/my/account/index/" id="uniq22" data-title="个人中心">
+        <header class="bar bar-nav train-order-head none_backg">
+            <a class="icon icon-left-nav pull-left" data-rel="" href="https://m.elong.com/"></a>
+            <h1 class="title">个人中心</h1>
+        </header>
+        <div class="page-content myelong">
+            <div id="focus_wx" class="turnid toptext tjclick" data-tj="{'cspot':'followingwechat'}" style="display: none;"><span>关注"艺龙旅行"服务号,获得最新订单动态。</span><a href="https://d.elong.cn/a/0906redirect"><i>点此关注</i></a></div>
+            <!--会员等级-->
+            <div class="level">
+                        <div class="info tjclick" data-tj="{&quot;cspot&quot;:&quot;modifyinformation&quot;}">
+                            <span class="img vip_boys"></span>
+                            <p><i class="v1"></i>普通会员</p>
+                        </div>
+                        <div class="name">15197197940</div>
+            </div>
+            <div style="display:none;" class="turnid tjclick" data-tj="{&quot;cspot&quot;:&quot;combiningaccount&quot;}" id="mergeinfo" mergeresult=""></div>
+            <!--全部订单-->
+            <div class="all-order">
+                <h2><i class="order"></i>全部订单<i class="cor icon-left" style="right: 12px; position: absolute; color: rgb(170, 170, 170); margin-top: 4px;"></i></h2>
+            </div>
+            <!--我的钱包-->
+            <div class="my-wallet">
+                <h2><i class="wallet tjclick" data-tj="{&quot;cspot&quot;:&quot;wallet&quot;}"></i>我的钱包<i class="cor icon-left"></i></h2>
+                    <div class="price">
+                        <dl class="mycash tjclick" data-tj="{&quot;cspot&quot;:&quot;cash&quot;}">
+                            <dd><span>0</span>元</dd>
+                            <dt>现金</dt>
+                        </dl>
+                        <dl class="hongbao tjclick" data-tj="{&quot;cspot&quot;:&quot;redpacket&quot;}">
+                            <dd><span>8</span>个</dd>
+                            <dt>红包</dt>
+                        </dl>
+                        <dl class="giftcard tjclick" data-tj="{&quot;cspot&quot;:&quot;giftcard&quot;}">
+                            <dd><span>0</span>元</dd>
+                            <dt>礼品卡</dt>
+                        </dl>
+                        <dl class="jifen tjclick" data-tj="{&quot;cspot&quot;:&quot;point&quot;}">
+                            <dd><span>0</span>分</dd>
+                            <dt>积分</dt>
+                        </dl>
+                    </div>
+            </div>
+            <!--信息list-->
+            <ul class="sub-list">
+                    <li id="member" class="tjclick" data-tj="{&quot;cspot&quot;:&quot;memberclub&quot;}"><i class="member"></i>会员俱乐部<span>想升级点这里</span><i class="cor icon-left"></i></li>
+                <li id="wxactivity" class="tjclick" data-tj="{&quot;cspot&quot;:&quot;elongactivty_entry_wxqb&quot;}" style="display: none;">
+                  <a><i class="licash"></i>{{title}}<em></em><span></span><i class="cor icon-left"></i></a>
+                </li>
+                <li id="comment" class="tjclick" data-tj="{&quot;cspot&quot;:&quot;comment&quot;}"><i class="comment1s"></i>我的点评<em></em><span></span><i class="cor icon-left"></i></li>
+                <li id="collect" class="tjclick" data-tj="{&quot;cspot&quot;:&quot;collection&quot;}"><i class="collect"></i>我的收藏<i class="cor icon-left"></i></li>
+                <li id="refund" class="tjclick" data-tj="{&quot;cspot&quot;:&quot;refund&quot;}"><i class="recash"></i>我的退款<i class="cor icon-left"></i></li>
+                <li id="info" class="tjclick" data-tj="{&quot;cspot&quot;:&quot;commoninformation&quot;}"><i class="info"></i>常用信息<span>旅客/地址</span><i class="cor icon-left"></i></li>
+            </ul>
+            <!--意见反馈-->
+            <ul class="sub-list">
+                <li class="my-more tjclick" data-tj="{&quot;cspot&quot;:&quot;feedback&quot;}"><i class="i-more"></i>意见反馈<i class="cor icon-left"></i></li>
+            </ul>
+        </div>
+        <input style="display:none;" class="bindMobile" value="">
+        <input style="display:none;" class="isWeixin" value="1">
+        <input style="display:none;" class="isQQ" value="1">
+        <input style="display:none;" class="date" value="2017-06">
+        <input style="display:none;" class="errorCode" value="">
+        <input style="display:none;" class="errorMessage" value="">
+        <input style="display:none;" class="loginUrl" value="https://msecure.elong.com/login/?RedirectUrl=https%3A%2F%2Fm.elong.com%2Fmy%2Faccount%2Findex">
+        <input style="display:none;" class="showAllOrder" value="">
+        <!-- layout after -->
+    </div>
+<div data-blend="layer" data-blend-id="orderlist" data-url="/my/account/orderlist/" id="uniq23" class="page page-on-center" data-title="订单列表" style="top: 0px; left: 0px; right: 0px; bottom: 0px;"><header class="bar bar-nav">
+            <a class="icon pull-left icon-left-nav" data-rel="back" data-href="/my/account/index/"></a>
+			<div class="title">订单列表</div>
+	</header><div class="page-content orderlist">
+                <section>
+                        <a href="https://m.elong.com/hotel/orderlist">
+                         <div id="hotelorderlist" class="nearneam top1">
+                            <p class="jianame"><span><i class="hotel"></i>国内酒店订单</span><i></i></p>
+                         </div>
+                        </a>
+                        <a href="https://m.elong.com/ihotel/OrderList">
+                         <div id="ihotelorderlist" class="nearneam">
+                            <p class="jianame"><span><i class="ihotel"></i>国际酒店订单</span><i></i></p>
+                         </div>
+                        </a>
+                        <a href="https://m.elong.com/train/orderlist?stateCodeDesc=all">
+                            <div id="train" class="nearneam">
+                                <p class="jianame"><span><i class="train cpimg"></i>火车票订单</span><i></i></p>
+                            </div>
+                        </a>
+                        <a href="https://m.elong.com/bus/orderlist?stateCodeDesc=all">
+                            <div id="bus" class="nearneam">
+                                <p class="jianame"><span><i class="bus cpimg"></i>汽车票订单</span><i></i></p>
+                            </div>
+                        </a>
+                        <a href="https://m.elong.com/flight/orderlist/">
+                          <div id="flight" class="nearneam">
+                            <p class="jianame"><span><i class="flight cpimg"></i>国内机票订单</span><i></i></p>
+                          </div>
+                        </a>
+                    <a href="https://m.elong.com/minsu/#/orderList">
+                     <div id="minsu" class="nearneam">
+                        <p class="jianame"><span><i class="country cpimg"></i>民宿订单</span><i></i></p>
+                     </div>
+                    </a>
+                    <a href="https://m.elong.com/scenery/#/orderList">
+                        <div id="minsu" class="nearneam">
+                            <p class="jianame"><span><i class="ticket cpimg"></i>门票订单</span><i></i></p>
+                        </div>
+                    </a>
+                </section>
+            </div></div></div>
+    <script type="text/javascript">
+		window["TJObject"] = {"mvt":"[{\"eid\":\"35\",\"val\":\"0\",\"vid\":\"29\"},{\"eid\":\"36\",\"val\":\"1\",\"vid\":\"30\"},{\"eid\":\"203\",\"val\":\"1\",\"vid\":\"192\"},{\"eid\":\"204\",\"val\":\"1\",\"vid\":\"193\"},{\"eid\":\"205\",\"val\":\"1\",\"vid\":\"194\"},{\"eid\":\"161\",\"val\":\"0\",\"vid\":\"149\"},{\"eid\":\"212\",\"val\":\"0\",\"vid\":\"200\"},{\"eid\":\"213\",\"val\":\"0\",\"vid\":\"201\"},{\"eid\":\"214\",\"val\":\"0\",\"vid\":\"202\"},{\"eid\":\"219\",\"val\":\"0\",\"vid\":\"207\"},{\"eid\":\"179\",\"val\":\"1\",\"vid\":\"167\"},{\"eid\":\"217\",\"val\":\"0\",\"vid\":\"205\"},{\"eid\":\"218\",\"val\":\"1\",\"vid\":\"206\"},{\"eid\":\"170\",\"val\":\"1\",\"vid\":\"158\"},{\"eid\":\"174\",\"val\":\"1\",\"vid\":\"162\"},{\"eid\":\"175\",\"val\":\"0\",\"vid\":\"163\"},{\"eid\":\"220\",\"val\":\"1\",\"vid\":\"208\"},{\"eid\":\"221\",\"val\":\"1\",\"vid\":\"209\"},{\"eid\":\"227\",\"val\":\"1\",\"vid\":\"214\"},{\"eid\":\"228\",\"val\":\"1\",\"vid\":\"215\"},{\"eid\":\"188\",\"val\":\"0\",\"vid\":\"176\"},{\"eid\":\"189\",\"val\":\"1\",\"vid\":\"177\"},{\"eid\":\"180\",\"val\":\"5\",\"vid\":\"168\"},{\"eid\":\"116\",\"val\":\"0\",\"vid\":\"103\"},{\"eid\":\"119\",\"val\":\"1\",\"vid\":\"106\"},{\"eid\":\"127\",\"val\":\"1\",\"vid\":\"115\"},{\"eid\":\"128\",\"val\":\"1\",\"vid\":\"116\"},{\"eid\":\"129\",\"val\":\"1\",\"vid\":\"117\"},{\"eid\":\"71\",\"val\":\"0\",\"vid\":\"64\"},{\"eid\":\"72\",\"val\":\"1\",\"vid\":\"63\"},{\"eid\":\"139\",\"val\":\"0\",\"vid\":\"128\"},{\"eid\":\"52\",\"val\":\"1\",\"vid\":\"45\"},{\"eid\":\"109\",\"val\":\"1\",\"vid\":\"96\"},{\"eid\":\"97\",\"val\":\"0\",\"vid\":\"84\"},{\"eid\":\"195\",\"val\":\"2\",\"vid\":\"184\"},{\"eid\":\"194\",\"val\":\"2\",\"vid\":\"183\"},{\"eid\":\"193\",\"val\":\"0\",\"vid\":\"182\"},{\"eid\":\"198\",\"val\":\"0\",\"vid\":\"187\"}]","orderfrom":"58800","bns":2,"id":"98dae04f-2dd4-49b3-a4ef-68c2af395876","of":"1000000","if":"110009","st":1496743092053,"cin":0,"cip":"113.87.16.77","sid":"818863F4E2A22D5ADAB12CEC004A8A90","elev":3,"chid":"mnoreferseo","ecrd":"240000000198280593","cid":"bf04150c-e584-41f9-b5d4-cb5b572bd908","ct":0,"v":"1.0","pturl":"http://m.elong.com/my/account/index/","lg":"zh-CN","idc":"2","pt":"AccountController$$EnhancerBySpringCGLIB$$2a8af406.index","ch":"h5order"};
+    </script>
+
+    <!-- APP bridge框架 -->
+	 	<script src="https://m.elongstatic.com/static/webapp/myelong/V32/js/main.js" type="text/javascript"></script>
+<script type="text/javascript" src="https://m.elongstatic.com/frontend/fireeyeh5/netextend.js"></script>
+<script type="text/javascript" src="https://m.elongstatic.com/static/webapp/tj/tjmvt.js"></script>
+<script type="text/javascript">
+    TJObject.et = "show";
+    TJObject.biz="h5_myelong";
+    TJObject.ch="";
+    if(undefined==TJObject.ch||TJObject.ch==null||TJObject==""){
+        TJObject.ch="h5_myelong";
+    }
+    TJObject.innerFrom="58800";
+    TJObject.pt="index";
+    TJObject.pid=3;
+    delete TJObject.innerFrom;
+    tjMVT.setData(TJObject);
+
+    function tjClickEvent() {
+        TJObject.et = "click";
+        var dataTj = $(this).data("tj");
+        if(typeof dataTj == "string")
+            dataTj = JSON.parse(dataTj);
+        dataTj = dataTj || {};
+
+        for(var i in dataTj)
+            TJObject[i] = dataTj[i];
+        TJObject.st = new Date().getTime();
+        tjMVT.setData(TJObject);
+    }
+    $('.pages').off("click",".tjclick",tjClickEvent).on("click",".tjclick",tjClickEvent);
+</script>
+<!-- tj end -->
+
+
+</body></html>

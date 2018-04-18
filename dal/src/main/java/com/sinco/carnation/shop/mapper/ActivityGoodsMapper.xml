@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.ActivityGoodsMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.ActivityGoods">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="ac_begin_time" property="acBeginTime" jdbcType="DATE" />
+		<result column="ac_end_time" property="acEndTime" jdbcType="DATE" />
+		<result column="ac_rebate" property="acRebate" jdbcType="DECIMAL" />
+		<result column="ac_rebate1" property="acRebate1" jdbcType="DECIMAL" />
+		<result column="ac_rebate2" property="acRebate2" jdbcType="DECIMAL" />
+		<result column="ac_rebate3" property="acRebate3" jdbcType="DECIMAL" />
+		<result column="ac_sequence" property="acSequence" jdbcType="INTEGER" />
+		<result column="ac_status" property="acStatus" jdbcType="INTEGER" />
+		<result column="ac_title" property="acTitle" jdbcType="VARCHAR" />
+		<result column="ac_acc" property="acAcc" jdbcType="VARCHAR" />
+		<result column="ac_acc2" property="acAcc2" jdbcType="VARCHAR" />
+		<result column="ac_acc3" property="acAcc3" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.ActivityGoodsBO"
+		extends="BaseResultMap" />
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.ActivityGoods"
+		extends="BaseResultMap">
+		<result column="ac_content" property="acContent" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, ac_begin_time, ac_end_time, ac_rebate,
+		ac_rebate1, ac_rebate2,
+		ac_rebate3, ac_sequence, ac_status, ac_title, ac_acc, ac_acc2, ac_acc3
+	</sql>
+	<sql id="Blob_Column_List">
+		ac_content
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.shop.model.ActivityGoodsExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_activity
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.shop.model.ActivityGoodsExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_activity
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_activity
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_activity
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.ActivityGoodsExample">
+		delete from shop_activity
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.ActivityGoods"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_activity (id, add_time, delete_status,
+		ac_begin_time, ac_end_time, ac_rebate,
+		ac_rebate1, ac_rebate2, ac_rebate3,
+		ac_sequence, ac_status, ac_title,
+		ac_acc, ac_acc2, ac_acc3,
+		ac_content)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{acBeginTime,jdbcType=DATE}, #{acEndTime,jdbcType=DATE}, #{acRebate,jdbcType=DECIMAL},
+		#{acRebate1,jdbcType=DECIMAL}, #{acRebate2,jdbcType=DECIMAL},
+		#{acRebate3,jdbcType=DECIMAL},
+		#{acSequence,jdbcType=INTEGER}, #{acStatus,jdbcType=INTEGER}, #{acTitle,jdbcType=VARCHAR},
+		#{acAcc,jdbcType=VARCHAR}, #{acAcc2,jdbcType=VARCHAR},
+		#{acAcc3,jdbcType=VARCHAR},
+		#{acContent,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.ActivityGoods"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_activity
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="acBeginTime != null">
+				ac_begin_time,
+			</if>
+			<if test="acEndTime != null">
+				ac_end_time,
+			</if>
+			<if test="acRebate != null">
+				ac_rebate,
+			</if>
+			<if test="acRebate1 != null">
+				ac_rebate1,
+			</if>
+			<if test="acRebate2 != null">
+				ac_rebate2,
+			</if>
+			<if test="acRebate3 != null">
+				ac_rebate3,
+			</if>
+			<if test="acSequence != null">
+				ac_sequence,
+			</if>
+			<if test="acStatus != null">
+				ac_status,
+			</if>
+			<if test="acTitle != null">
+				ac_title,
+			</if>
+			<if test="acAcc != null">
+				ac_acc,
+			</if>
+			<if test="acAcc2 != null">
+				ac_acc2,
+			</if>
+			<if test="acAcc3 != null">
+				ac_acc3,
+			</if>
+			<if test="acContent != null">
+				ac_content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="acBeginTime != null">
+				#{acBeginTime,jdbcType=DATE},
+			</if>
+			<if test="acEndTime != null">
+				#{acEndTime,jdbcType=DATE},
+			</if>
+			<if test="acRebate != null">
+				#{acRebate,jdbcType=DECIMAL},
+			</if>
+			<if test="acRebate1 != null">
+				#{acRebate1,jdbcType=DECIMAL},
+			</if>
+			<if test="acRebate2 != null">
+				#{acRebate2,jdbcType=DECIMAL},
+			</if>
+			<if test="acRebate3 != null">
+				#{acRebate3,jdbcType=DECIMAL},
+			</if>
+			<if test="acSequence != null">
+				#{acSequence,jdbcType=INTEGER},
+			</if>
+			<if test="acStatus != null">
+				#{acStatus,jdbcType=INTEGER},
+			</if>
+			<if test="acTitle != null">
+				#{acTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="acAcc != null">
+				#{acAcc,jdbcType=VARCHAR},
+			</if>
+			<if test="acAcc2 != null">
+				#{acAcc2,jdbcType=VARCHAR},
+			</if>
+			<if test="acAcc3 != null">
+				#{acAcc3,jdbcType=VARCHAR},
+			</if>
+			<if test="acContent != null">
+				#{acContent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.ActivityGoodsExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_activity
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_activity
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.acBeginTime != null">
+				ac_begin_time = #{record.acBeginTime,jdbcType=DATE},
+			</if>
+			<if test="record.acEndTime != null">
+				ac_end_time = #{record.acEndTime,jdbcType=DATE},
+			</if>
+			<if test="record.acRebate != null">
+				ac_rebate = #{record.acRebate,jdbcType=DECIMAL},
+			</if>
+			<if test="record.acRebate1 != null">
+				ac_rebate1 = #{record.acRebate1,jdbcType=DECIMAL},
+			</if>
+			<if test="record.acRebate2 != null">
+				ac_rebate2 = #{record.acRebate2,jdbcType=DECIMAL},
+			</if>
+			<if test="record.acRebate3 != null">
+				ac_rebate3 = #{record.acRebate3,jdbcType=DECIMAL},
+			</if>
+			<if test="record.acSequence != null">
+				ac_sequence = #{record.acSequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.acStatus != null">
+				ac_status = #{record.acStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.acTitle != null">
+				ac_title = #{record.acTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="record.acAcc != null">
+				ac_acc = #{record.acAcc,jdbcType=VARCHAR},
+			</if>
+			<if test="record.acAcc2 != null">
+				ac_acc2 = #{record.acAcc2,jdbcType=VARCHAR},
+			</if>
+			<if test="record.acAcc3 != null">
+				ac_acc3 = #{record.acAcc3,jdbcType=VARCHAR},
+			</if>
+			<if test="record.acContent != null">
+				ac_content = #{record.acContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_activity
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		ac_begin_time = #{record.acBeginTime,jdbcType=DATE},
+		ac_end_time = #{record.acEndTime,jdbcType=DATE},
+		ac_rebate = #{record.acRebate,jdbcType=DECIMAL},
+		ac_rebate1 = #{record.acRebate1,jdbcType=DECIMAL},
+		ac_rebate2 = #{record.acRebate2,jdbcType=DECIMAL},
+		ac_rebate3 = #{record.acRebate3,jdbcType=DECIMAL},
+		ac_sequence = #{record.acSequence,jdbcType=INTEGER},
+		ac_status = #{record.acStatus,jdbcType=INTEGER},
+		ac_title = #{record.acTitle,jdbcType=VARCHAR},
+		ac_acc = #{record.acAcc,jdbcType=VARCHAR},
+		ac_acc2 = #{record.acAcc2,jdbcType=VARCHAR},
+		ac_acc3 = #{record.acAcc3,jdbcType=VARCHAR},
+		ac_content = #{record.acContent,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_activity
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		ac_begin_time = #{record.acBeginTime,jdbcType=DATE},
+		ac_end_time = #{record.acEndTime,jdbcType=DATE},
+		ac_rebate = #{record.acRebate,jdbcType=DECIMAL},
+		ac_rebate1 = #{record.acRebate1,jdbcType=DECIMAL},
+		ac_rebate2 = #{record.acRebate2,jdbcType=DECIMAL},
+		ac_rebate3 = #{record.acRebate3,jdbcType=DECIMAL},
+		ac_sequence = #{record.acSequence,jdbcType=INTEGER},
+		ac_status = #{record.acStatus,jdbcType=INTEGER},
+		ac_title = #{record.acTitle,jdbcType=VARCHAR},
+		ac_acc = #{record.acAcc,jdbcType=VARCHAR},
+		ac_acc2 = #{record.acAcc2,jdbcType=VARCHAR},
+		ac_acc3 = #{record.acAcc3,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.ActivityGoods">
+		update shop_activity
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="acBeginTime != null">
+				ac_begin_time = #{acBeginTime,jdbcType=DATE},
+			</if>
+			<if test="acEndTime != null">
+				ac_end_time = #{acEndTime,jdbcType=DATE},
+			</if>
+			<if test="acRebate != null">
+				ac_rebate = #{acRebate,jdbcType=DECIMAL},
+			</if>
+			<if test="acRebate1 != null">
+				ac_rebate1 = #{acRebate1,jdbcType=DECIMAL},
+			</if>
+			<if test="acRebate2 != null">
+				ac_rebate2 = #{acRebate2,jdbcType=DECIMAL},
+			</if>
+			<if test="acRebate3 != null">
+				ac_rebate3 = #{acRebate3,jdbcType=DECIMAL},
+			</if>
+			<if test="acSequence != null">
+				ac_sequence = #{acSequence,jdbcType=INTEGER},
+			</if>
+			<if test="acStatus != null">
+				ac_status = #{acStatus,jdbcType=INTEGER},
+			</if>
+			<if test="acTitle != null">
+				ac_title = #{acTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="acAcc != null">
+				ac_acc = #{acAcc,jdbcType=VARCHAR},
+			</if>
+			<if test="acAcc2 != null">
+				ac_acc2 = #{acAcc2,jdbcType=VARCHAR},
+			</if>
+			<if test="acAcc3 != null">
+				ac_acc3 = #{acAcc3,jdbcType=VARCHAR},
+			</if>
+			<if test="acContent != null">
+				ac_content = #{acContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.ActivityGoods">
+		update shop_activity
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		ac_begin_time = #{acBeginTime,jdbcType=DATE},
+		ac_end_time = #{acEndTime,jdbcType=DATE},
+		ac_rebate = #{acRebate,jdbcType=DECIMAL},
+		ac_rebate1 = #{acRebate1,jdbcType=DECIMAL},
+		ac_rebate2 = #{acRebate2,jdbcType=DECIMAL},
+		ac_rebate3 = #{acRebate3,jdbcType=DECIMAL},
+		ac_sequence = #{acSequence,jdbcType=INTEGER},
+		ac_status = #{acStatus,jdbcType=INTEGER},
+		ac_title = #{acTitle,jdbcType=VARCHAR},
+		ac_acc = #{acAcc,jdbcType=VARCHAR},
+		ac_acc2 = #{acAcc2,jdbcType=VARCHAR},
+		ac_acc3 = #{acAcc3,jdbcType=VARCHAR},
+		ac_content = #{acContent,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.ActivityGoods">
+		update shop_activity
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		ac_begin_time = #{acBeginTime,jdbcType=DATE},
+		ac_end_time = #{acEndTime,jdbcType=DATE},
+		ac_rebate = #{acRebate,jdbcType=DECIMAL},
+		ac_rebate1 = #{acRebate1,jdbcType=DECIMAL},
+		ac_rebate2 = #{acRebate2,jdbcType=DECIMAL},
+		ac_rebate3 = #{acRebate3,jdbcType=DECIMAL},
+		ac_sequence = #{acSequence,jdbcType=INTEGER},
+		ac_status = #{acStatus,jdbcType=INTEGER},
+		ac_title = #{acTitle,jdbcType=VARCHAR},
+		ac_acc = #{acAcc,jdbcType=VARCHAR},
+		ac_acc2 = #{acAcc2,jdbcType=VARCHAR},
+		ac_acc3 = #{acAcc3,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

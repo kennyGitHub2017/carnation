@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>我的在线服务订单</title>
+    <link href="$!webPath/resources/style/system/front/default/css/public.css?v=2" type="text/css" rel="stylesheet"/>
+    <link href="http://localhost:8080/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet"/>
+    <link href="http://localhost:8080/resources/style/system/front/default/css/user.css" type="text/css"
+          rel="stylesheet"/>
+    <link rel="stylesheet" href="$!webPath/resources/style/system/front/default/css/seller_apply.css">
+    <link href="$!webPath/resources/style/service/public.css?v=3" type="text/css" rel="stylesheet"/>
+
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+
+</head>
+<body>
+
+<div class="head">
+    <h1 title="" class="logo">  <a href="http://112.124.46.129:8080/index.htm"><img border="0" src="http://ff1.ysysgo.com/upload/system/e5b7b50d-bef2-4eab-b2aa-c25fded101ac.png"> </a>  </h1>
+    <span class="head_into">商家入驻</span>
+</div>
+
+<div class="nav_into">
+    <ul>
+        <li><a class="this" href="javascript:void(0)">入驻须知</a></li>
+        <li><a href="javascript:void(0)">提交入驻申请</a></li>
+        <li><a href="javascript:void(0)">查看审批进度</a></li>
+    </ul>
+</div>
+
+<div class="main clearfix">
+
+    <div class="shopping_step mt-20 clearfix">
+        <ul>
+            <li class="shopping_step_athis"><span></span><i></i><strong>1.入驻须知</strong></li>
+
+            <li class="shopping_step_bthis"><span></span><i></i><strong>2.提交入驻申请</strong></li>
+            <li class="shopping_step_cthis"><span></span><i></i><strong>3.查看审批进度</strong></li>
+        </ul>
+    </div>
+
+    <div class="order_pay_note mt-20 lh-25 c_orange">
+        1、	审核时效：资质初审7个工作日，复审1-15个工作日，店铺授1-3个工作日。<br>
+        2、	您可登录查看审核状，也可通过商务联系人邮箱了解入驻进度。<br>
+        3、	店铺开通后，登录商家管理后台的用户和密码会发送到您入驻时填写的联系人邮箱中。
+
+    </div>
+    <style>
+
+    </style>
+
+    <div class="cl">
+        <div class="mt-20">
+            <ul class="join_step">
+                <li class="action">
+                   <div class="title "><span>1</span> 提交入驻申请</div>
+                    <div class="join_text">
+                        1、	审核时效：资质初审7个工作日，复审1-15个工作日，店铺授1-3个工作日。<br>
+                        2、	您可登录查看审核状，也可通过商务联系人邮箱了解入驻进度。<br>
+                        3、	店铺开通后，登录商家管理后台的用户和密码会发送到您入驻时填写的联系人邮箱中。
+                    </div>
+                </li>
+                <li class="action">
+                    <div class="title"><span>2</span> 运营商审核</div>
+                    <div class="join_text">
+                        运营商审核成功!
+                    </div>
+                </li>
+                <li class="failure">
+                    <div class="title"><span>3</span> 运营商平台审核</div>
+                    <div class="join_text">
+                        <h4>运营商审核失败! </h4>
+                        您的营业证书已过期
+
+                    </div>
+                </li>
+                <li>
+                    <div class="title"><span>4</span> 第三方支付公司审核</div>
+                </li>
+                <li>
+                    <div class="title"><span>5</span> 入驻成功</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+$!httpInclude.include("/footer.htm")
+
+<script>
+
+    function refund(wid) {
+        showDialog("warning","","确定此商品退货吗！",1,"warning",3,function() {
+            alert(wid);
+        });
+    }
+</script>
+</body>
+</html>

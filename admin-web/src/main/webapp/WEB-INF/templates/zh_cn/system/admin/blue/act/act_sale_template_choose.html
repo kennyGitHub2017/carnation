@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>模板管理</title>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+	
+	<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+	<style type="text/css">
+		.nav_list ul li a.addtemplate{ color:#fff; background:url("$!webPath/resources/style/im/images/btn.png")no-repeat center center; background-image:linear-gradient(-180deg, #47e4ff 0%, #13b9e5 100%);border:1px solid #30cafb;box-shadow:inset 0px 4px 3px 0px rgba(240,240,240,0.78);border-radius:5px;width:84px;height:24px;}
+		.nav_list ul li a.addtemplate b {height:25px;line-height:25px; background: none;padding-left: 15px;}.nav_list ul li a.addtemplate:hover{color: #fff}
+		.template_list{width: 100%;overflow: hidden;height: 500px;overflow-y: scroll;}
+		.template_list ul li{float: left;margin: 16px 20px 7px 29px;position:relative}
+		.template_list ul li .models{position:absolute;left:0;top:0;width:222px;height:355px;background:none}
+		.template_list ul li.curr .models{background:rgba(0,0,0,0.4)}
+		.template_list ul li img{width:222px;height:355px;}
+		.template_list ul li .tit{text-align:center}
+		.template_list_footer{padding-top: 8px;}
+		.template_list_footer a{float: right; display:inline-block; width:42px; margin-left:4px; height:24px;line-height:23px;text-align:center; background:url("$!webPath/resources/style/im/images/btn2.png")no-repeat center center; font-size:12px;color:#333333;}
+		.model{width:100%;height:100%;position:fixed;left:0;top:0;background:#000;opacity:0.4;filter:alpha(opacity=40);z-index:999;display:none}
+		.comfire{background:#f7f7f7;border:solid rgba(60,60,60,0.36) 6px;background-clip: content-box;border-radius:5px;width:400px;height:191px;position:fixed;z-index:1000;left:50%;top:50%;margin:-95px 0 0 -200px;display:none}
+		.comfire .tit{height:43px;line-height:43px;border-bottom:solid 1px #e9e9e9;font-size:16px;color:#333;text-align:center}
+		.comfire .ask{line-height:93px;text-align:center;font-size:18px;color:#333}
+		.comfire .ask img{vertical-align:middle}
+		.comfire .btns{font-size:0;text-align:center}
+		.comfire .btns a{display:inline-block;font-size:14px;line-height:30px}
+		.comfire .btns .ok{
+			background-image:linear-gradient(-180deg, #47e4ff 0%, #13b9e5 100%);
+			border:1px solid #30cafb;
+			box-shadow:inset 0px 4px 3px 0px rgba(240,240,240,0.78);
+			border-radius:5px;
+			width:84px;
+			height:30px;
+			color:#fff
+		}
+		.comfire .btns .cancel{
+			background-image:linear-gradient(-180deg, #ffffff 0%, #eeeeee 100%);
+			border:1px solid #d0d0d0;
+			border-radius:5px;
+			width:84px;
+			height:30px;
+			color:#797979;
+			margin-left:10px
+		}
+		.btn_sure{background-image:linear-gradient(-180deg, #47e4ff 0%, #13b9e5 100%);
+			border:1px solid #30cafb;
+			box-shadow:inset 0px 4px 3px 0px rgba(240,240,240,0.78);
+			border-radius:5px;
+			width:96px;
+			height:29px;
+			display:block;
+			margin:10px auto;
+			color:#fff;
+			font-size:14px;
+			line-height:29px
+		}
+	</style>
+</head>
+<body>
+
+	<div class="template_list">
+		<ul>
+			#foreach($obj in $objs)
+				<li id="$obj.id">
+					<div class="models"></div>					
+					<img alt="" src="$obj.picture">
+					<div class="tit">$obj.title</div>
+				</li>
+			#end
+		</ul>
+	</div>		
+  	<a href="javascript:;" class="btn_sure">确定</a>
+	<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+	<script>
+	jQuery(function(){
+		var tempid="";
+		jQuery(".template_list ul li").click(function(){
+			jQuery(this).addClass("curr").siblings().removeClass("curr");
+			tempid=jQuery(this).attr("id");
+		});
+		jQuery(".btn_sure").click(function(){
+			if(tempid!=""){
+				jQuery("#templateId").val(tempid);
+				jQuery("#div_tmpl_thumbnail").show();
+				var src=jQuery('li[id='+tempid+'] img').attr("src");
+				jQuery('.tmpl_thumbnail').attr("src",src);
+				jQuery("#templateChoose").remove();
+			}else{
+				alert('请选择模板');	
+			}			
+		});
+	});
+	</script>
+	
+</body>
+</html>

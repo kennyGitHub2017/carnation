@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [0..$!some.level])&nbsp;&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+
+<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css"/>
+<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css"/>
+<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script src="$!webPath/resources/js/jquery.viewpic.js"></script>
+<script>
+//options为编辑配置属性
+var options = {
+        cssPath : '$!webPath/resources/editor/themes/default/default.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '700px',
+		height:'400px',
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+};
+jQuery(document).ready(function(){
+//设置默认状态以及判断初始显示状态
+	var state = jQuery("#display").val();
+	if(state==""){
+		jQuery("#display").val("true");
+		jQuery("#displayOff").hide();
+	}else{
+		 if(state=="true"){
+			jQuery("#displayOff").hide();
+		}else{
+			jQuery("#displayOn").hide();
+		}
+	}	
+//
+  jQuery("#theForm").validate({
+	ignore: "",						  
+    rules:{
+	  title:{
+	    required :true
+	  },
+	/*   class_id:{required:true}, */
+	  type:{required:true},
+	  sequence:{number:true},
+	  content:{required:true},
+	  mark:{
+		    remote:{
+				   url: "$!webPath/admin/article_mark.htm",     //后台处理程序
+                   type: "post",               //数据发送方式
+                   dataType: "json",           //接受数据格式   
+                   data: {                     //要传递的数据
+                     "mark": function(){return jQuery("#mark").val();},
+					 "id":"$!obj.id"
+		           }
+				}
+		  }
+	 },
+	messages:{
+	  title:{required:"活动标题不能为空"},
+	 /*  class_id:{required:"活动分类不能为空"}, */
+	  type:{required:"活动类型不能为空"},
+	  sequence:{number:"序号只能为数字"},
+	  content:{required:"活动内容不能为空"},
+	  mark:{remote:"活动标识已经存在"}
+	}
+  });
+  //
+  editor = KindEditor.create('#content',options); 
+  jQuery("#class_id").val("$!obj.articleClassId");
+  jQuery("#type").val("$!obj.type");
+  //
+  jQuery("#display_img").click(function(){
+    var display=jQuery("#display").val();
+	if(display=="true"){
+	  jQuery("#display_img").attr("src","$!webPath/resources/style/system/manage/blue/images/no.jpg");
+	  jQuery("#display").val("false");
+	}else{
+	  jQuery("#display_img").attr("src","$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg");
+	  jQuery("#display").val("true");
+	}
+  }); 	
+});
+
+jQuery(document).ready(function(){
+	jQuery("select").change(function(){
+	    var level=jQuery(this).attr("level");
+	  var id=jQuery(this).val();
+	  jQuery("#area_id").val("");
+	  for(var i=3;i>level;i--){
+	   jQuery("#area"+i).empty();	
+	   jQuery("#area"+i).append("<option value=''>请选择</option>");
+	  }
+	  if(id!=""){
+	   jQuery.post("$!webPath/load_area.htm",{"pid":id},function(data){
+	      jQuery("#area"+level).empty();
+	     jQuery("#area"+level).append("<option value=''>请选择</option>");
+	       jQuery.each(data, function(index,item){
+	       jQuery("#area"+level).append("<option value='"+item.id+"'>"+item.areaName+"</option>");
+	     });
+	   },"json");
+	  }else{
+	    for(var i=level;i<=4;i++){
+	     jQuery("#area"+i).empty();
+	    }
+	  }
+	 });
+   #if($!area.id)
+   jQuery("#area_id").val("$!address.areaId"); 
+   jQuery("#area1").val("$!area.parent.parent.id");
+   jQuery("#area2").html("<option>$!area.parent.areaName</option>");
+   jQuery("#area3").html("<option value='$!area.id'>$!area.areaName</option>");
+   #end
+   #if($!user.month_income)
+     jQuery("#month_income").val("$!user.month_income"); 
+   #end 
+//
+});
+
+function saveForm(method){
+   editor.sync();
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">活动管理</h1>
+  <div class="nav_list">
+ <ul>
+  <li><a href="$!webPath/admin/snsactivity_list.htm"><b>管理</b></a> </li>
+ <li> <a href="$!webPath/admin/snsactivity_add.htm" #if(!$!edit) class="this" #end><b>新增</b></a> </li>
+  #if($!edit)<li> <a href="javascript:void(0);" class="this"><b>编辑</b></a></li> #end 
+  </span> 
+  </ul>
+  </div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/snsactivity_save.htm" method="post"  enctype="multipart/form-data">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="/admin/snsactivity_list.htm" />
+    <input name="add_url" type="hidden" id="add_url" value="/admin/snsactivity_add.htm" />
+   <div class="edit">
+    <div class="editul setcont">
+      <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>活动标题</li>
+        <li><span class="webname">
+          <input name="title" type="text" id="title" value="$!obj.title" size="40" />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">活动概述</li>
+        <li><span class="webname">
+          <textarea rows="5" cols="80" name="actDesc" id = "actDesc">$!{obj.actDesc}</textarea>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">活动概述</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+	   <ul class="set1">
+        <li class="setcont_bg">缩略图</li>
+        <li>
+        	<span class="webname"> 
+			  <!-- <span class="eidt_li_a" style="position:relative; width:50px; height:22px; line-height:22px;margin-top: 3px; color:#333; border:1px solid #ccc; padding:2px 5px; border-radius:3px;">选择图片
+			    <input type="file" id="thumImg" onchange="changePic('thumImg')" style="opacity: 0;top:0;left:1px;position:absolute; z-index:100;width:60px; " name="thumImg" />
+			  </span>  -->
+			  
+			<input class="easyui-filebox" type="text" name="thumImg"  value="$!obj.img" data-options="buttonText:'图片',buttonAlign:'right'"></input>
+			</span>
+			<span class="preview"> 
+				#if($!edit) <a id="imgPriview" href="$!obj.img" target="_blank"> #end
+				<img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> 
+				#if($!edit) </a> #end
+			</span>
+			#if($!obj.img)
+			<div class="bigimgpre" id="logoImg" style="display:none; left:270px;"><img src="$!obj.img"  width="200" height="200" id="thumbnailimg"/> </div>
+			#end
+			<div class="pic-view"><img id="preview" alt="" name="pic" /></div>
+			</li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">详细地址</li>
+        <li><span class="webname">
+          <textarea rows="5" cols="80" name="address" id = "address">$!{obj.address}</textarea>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">详细地址</strong><strong class="c"></strong></span></li>
+		  
+      </ul>
+      <ul class="set1">
+      <li class="setcont_bg">活动地址</li>
+				<select id="area1" name="area1" level="2" class="base_select_check">
+						<option value="">请选择...</option>
+						#foreach($area in $areas)
+							#if($area.id.equals($pid))
+								<option value="$!area.id" selected="selected">$!area.areaName</option>
+							#else
+								<option value="$!area.id">$!area.areaName</option> 
+							#end 
+						#end
+				</select> 
+				<select id="area2" name="area2" level="3" class="base_select_check">
+						<option value="">请选择...</option>
+				</select> 
+				<select id="area3" name="area3" level="4" class="base_select_check">
+						<option value="">请选择...</option>
+				</select> 
+				<input id="area_id" name="area_id" type="hidden" value="$!address.areaId" />
+	  </ul>
+      
+      <ul class="set1">
+        <li class="setcont_bg">报名开始时间</li>
+        <li>
+        	<input id ="strenrollBg" name=" strenrollBg" value="$!CommUtil.formatLongDate($!obj.enrollBg)" class="easyui-datetimebox" data-options="required:true"style="width:150px"/>
+     	</li>
+      </ul>
+       <ul class="set1">
+        <li class="setcont_bg">报名结束时间</li>
+        <li>
+        	<input id ="strenrollEnd" name=" strenrollEnd" value="$!CommUtil.formatLongDate($!obj.enrollEnd)" class="easyui-datetimebox" data-options="required:true"style="width:150px"/>
+     	</li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">活动开始时间</li>
+        <li>
+        	<input id ="stractBg" name=" stractBg" value="$!CommUtil.formatLongDate($!obj.actBg)" class="easyui-datetimebox" data-options="required:true"style="width:150px"/>
+     	</li>
+      </ul>
+            <ul class="set1">
+        <li class="setcont_bg">活动结束时间</li>
+        <li>
+        	<input id ="stractEnd" name=" stractEnd" value="$!CommUtil.formatLongDate($!obj.actEnd)" class="easyui-datetimebox" data-options="required:true"style="width:150px"/>
+     	</li>
+      </ul>
+     <!--  <ul class="set1">
+        <li class="setcont_bg">显示</li>
+		<li>
+        <input name="display" id="display" type="hidden" value="$!obj.display" >
+        <img #if($!obj.display)src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/yes.jpg"#else src="$!webPath/resources/style/system/manage/blue/images/no.jpg"#end width="61" height="23" id="display_img" style="cursor:pointer"/>
+		</li>
+      </ul> -->
+     <!--  <ul class="set1">
+        <li class="setcont_bg">标识</li>
+        <li><span class="webname">
+          <input name="mark" type="text" id="mark" value="$!obj.mark" size="40" />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">序号</li>
+        <li><span class="webname">
+          <input name="sequence" type="text" id="sequence" value="$!obj.sequence" size="40" />
+          </span></li>
+      </ul> -->
+      
+      <ul class="set1">
+        <li class="setcont_bg">权重</li>
+        <li><span class="webname">
+          <input name="priority" type="text" id="priority" value="$!obj.priority" size="40" />
+          </span></li>
+      </ul>
+      
+	  <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>内容</li>
+        <li><span class="webname">
+          <textarea name="actContent" cols="40" id="content">$!obj.actContent</textarea>
+          </span></li>
+      </ul>
+      
+<!--       <ul class="set1">
+        <li class="setcont_bg">SEO关键字</li>
+        <li><span class="webname">
+          <input name="keywords" type="text" id="keywords" value="$!obj.keywords" size="100" />
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">100字以内</strong><strong class="c"></strong></span></li>
+      </ul>
+      
+	   <ul class="set1">
+        <li class="setcont_bg">SEO描述</li>
+        <li><span class="webname">
+          <textarea rows="5" cols="80" name="description" id = "description">$!obj.description</textarea>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">200字以内</strong><strong class="c"></strong></span></li>
+      </ul> -->
+      
+    </div>
+    </div>
+  </form>
+  <div class="submit">
+   <span class="pad120"><input name="save" type="button" value="提交" onclick="saveForm()" /></span>
+  </div>
+</div>
+</body>
+</html>

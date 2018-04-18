@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" style="font-size:50px">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=1.0">
+    <meta name="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <link href="$!{webPath}/resources/css/base.min.css" rel="stylesheet" type="text/css">
+    <link href="$!{webPath}/resources/css/css.css?v=$!{version}" rel="stylesheet" type="text/css">
+    <link href="$!{webPath}/resources/mch_wx_qr_pay/other.css" rel="stylesheet" type="text/css">
+    <script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+    <script src="$!{webPath}/resources/mch_wx_qr_pay/common.js?v=$!{version}"></script>
+    </head>
+    <iframe id="__WeixinJSBridgeIframe_SetResult" style="display: none;"></iframe>
+    <iframe id="__WeixinJSBridgeIframe" style="display: none;"></iframe>
+    <title>收钱</title>
+    <script type="text/javascript">
+    var jgGlobal={
+            screenWidth:window.innerWidth||document.documentElement.clientWidth,
+            screenHeight:window.innerHeight||document.documentElement.clientHeight,
+            isALlowTouchMove:true,
+            setFontSize:function(){
+                var sw=window.innerWidth||document.documentElement.clientWidth;
+                if (sw < 640) {
+                    document.documentElement.style.fontSize = parseInt(sw / 640 * 100) + "px";
+                }else{
+                    document.documentElement.style.fontSize="100px";
+                }
+            },
+            setTranslate:function(node, positionY,containCss, useAnimate) {
+                var cssText = [
+                    containCss,
+                    'display: block',
+                    'transform: translate3d(0, ' + positionY + 'px, 0)',
+                    '-webkit-transform: translate3d(0, ' + positionY + 'px, 0)',
+                ].join(';');
+                if (useAnimate) {
+                    cssText = [
+                        cssText,
+                        'transition: .5s transform ease',
+                        '-webkit-transition: .5s -webkit-transform ease'
+                    ].join(';');
+                }
+                node.style.cssText = cssText;
+            },
+            isTouchMove:function(){
+                var _this=this;
+                document.addEventListener("touchmove",function(e){
+                    if(!_this.isALlowTouchMove){
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                },false);
+                if (navigator.userAgent.toLowerCase().indexOf('firefox')>=0)
+                {
+
+                    addEventListener('DOMMouseScroll',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }else{
+                    addEventListener('mousewheel',function(e)
+                    {
+                        if(!_this.isALlowTouchMove){
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
+                    },false);
+                }
+            },
+            init:function(){
+                this.isTouchMove();
+                this.setFontSize();
+            }
+        }
+        jgGlobal.init();
+        jgGlobal.isALlowTouchMove=false;
+        window.onresize = function () {
+            jgGlobal.setFontSize();
+        }
+    </script>
+    <style>
+    html,body{
+        width: 100%;
+        height:100%;
+	    max-width: 640px;
+	    margin: 0 auto;
+    }
+    </style>
+</head>
+<body>
+
+     <input id='sellerId' type="hidden" value ="$!{sellerId}" />
+     
+    <div class="QrcodePayContainer">
+        <div class="Qrcode">
+            <div class="content">
+                <div class="title">扫描二维码向我付钱</div>
+                <div class="money"><span class="fn-rmb">￥</span><span id="resetMoeny">0.00</span></div>
+                <div class="QrcodeTab">
+                    <div class="yes">
+                    	<img src="$!webPath/seller/qr_code.htm?url=$!{jgQrPath}" />
+                    	<img class="qrcode_icon" src="$!{webPath}/resources/mch_wx_qr_pay/pay_yes_icon.png" /> 
+                   	</div>
+                    <div class="wx">
+                    	<img src="$!webPath/seller/qr_code.htm?url=$!{wxQrPath}" />
+                    	<img class="qrcode_icon" src="$!{webPath}/resources/mch_wx_qr_pay/pay_wx_icon.png" /></div>
+                    <div class="alipay">
+                    	<img src="$!webPath/seller/qr_code.htm?url=$!{aliQrPath}" />
+                    	<img class="qrcode_icon" src="$!{webPath}/resources/mch_wx_qr_pay/pay_ali_icon.png" />
+                   	</div>
+                    
+     <input id='jgQrPath' type="hidden" value ="$!webPath/seller/qr_code.htm?url=$!{jgQrPath}" />
+     <input id='wxQrPath' type="hidden" value ="$!webPath/seller/qr_code.htm?url=$!{wxQrPath}" />
+     <input id='aliQrPath' type="hidden" value ="$!webPath/seller/qr_code.htm?url=$!{aliQrPath}" />
+     
+                </div>
+            </div>
+        </div>
+        <div class="payType">
+            <div class="payIcon">
+                <ul>
+                    <li>
+                        <a href="javascript:void(0)" class="curr"><img src="$!{webPath}/resources/mch_wx_qr_pay/pay_yes_icon.png" /> </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><img src="$!{webPath}/resources/mch_wx_qr_pay/pay_wx_icon.png" /> </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><img src="$!{webPath}/resources/mch_wx_qr_pay/pay_ali_icon.png" /> </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="setMoney">
+                <span>
+                    <a href="javascript:void(0)" class="btn_setMoney">设置金额</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="setMoneyContainer">
+        <div>
+            <input id="moneyValue" placeholder="请输入收钱金额" class="setMoney_input" >
+            <span class="error">请输入正确的金额</span>
+        </div>
+        <div>
+            <input id="serverName" placeholder="请输入服务名称" class="setMoney_input" >
+            <span class="error">请输入服务名称</span>
+        </div>
+        <div>
+            <input id="mobilephone" placeholder="请输入手机号" class="setMoney_input" >
+            <span class="error">请输入正确的手机号</span>
+        </div>
+        <a href="javascript:void(0)" id="btn_setMoney_ok" class="btn_setMoney_ok">确定</a>
+        <a href="javascript:void(0)" id="btn_setMoney_cancel" class="btn_setMoney_ok">取消</a>
+    </div>
+
+    <script type="text/javascript">
+     
+        jQuery(document).ready(function(){
+            jQuery(".QrcodePayContainer,.setMoneyContainer").height(jgGlobal.screenHeight);
+            jgGlobal.setTranslate(jQuery(".setMoneyContainer")[0],jgGlobal.screenHeight,"height:"+jgGlobal.screenHeight+"px");
+            jQuery(".QrcodePayContainer .Qrcode").height(0.75*jgGlobal.screenHeight);
+            jQuery(".QrcodePayContainer .payType").height(0.25*jgGlobal.screenHeight);
+            jQuery(".QrcodeTab div").height(jQuery(".QrcodeTab div").width());
+            jQuery(".payIcon ul li").height(jQuery(".payIcon ul li").width());
+            jQuery(".setMoney").height(0.25*jgGlobal.screenHeight-jQuery(".payIcon").outerHeight());
+            //切换支付方式
+            jQuery(".payIcon ul li a").click(function(){
+                var index=jQuery(".payIcon ul li a").index($(this));
+                jQuery(".QrcodeTab div").eq(index).show().siblings("div").hide();
+                jQuery(this).addClass("curr").parent().siblings("li").find("a").removeClass("curr");
+            });
+            //设置金额
+            jQuery(".btn_setMoney").click(function(){
+                jQuery(".setMoneyContainer .error").hide();
+                jgGlobal.setTranslate($(".setMoneyContainer")[0],0,"height:"+jgGlobal.screenHeight+"px",true);
+                
+            });
+            
+            //金额弹出层取消按钮
+			jQuery("#btn_setMoney_cancel").click(function(){
+				jgGlobal.setTranslate($(".setMoneyContainer")[0],jgGlobal.screenHeight,"height:"+jgGlobal.screenHeight+"px",true);//设置完成关闭弹出框
+			});
+            //设置金额弹出层确定按钮
+            jQuery("#btn_setMoney_ok").click(function(){
+            	jQuery(".setMoneyContainer .error").hide();
+                //输入金额验证
+                var re=/^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/
+                if(!re.test(jQuery("#moneyValue").val())){
+                    jQuery(".setMoneyContainer .error").eq(0).show();
+                    return;
+                }               
+                
+                if(jQuery("#serverName").val()==""){
+                	jQuery(".setMoneyContainer .error").eq(1).show();
+                }
+                if(!testMobilephone(jQuery("#mobilephone").val())){
+                    jQuery(".setMoneyContainer .error").eq(2).show();
+                    return;
+                }
+				var money = jQuery("#moneyValue").val();
+				var ser = jQuery("#serverName").val();
+				var phone = jQuery("#mobilephone").val();
+				
+			    
+		        // 保存设置信息
+		        $.ajax({
+		            type: 'POST',
+		            url: '$!{path}',
+		            async: false,
+		            data: {
+		                money: money,
+		                phone: phone,
+		                server: ser
+		            },
+		            dataType: 'json',
+		            success: function (data) {
+		                if (data.code == 0) {
+		                    // 其他错误
+		                    alert(data.errMsg);
+		                } else if (data.code == 1) {
+		                    var id = data.data;		
+		                    var path_jg =jQuery("#jgQrPath").val().replace("&","-*-")+ "-*-id=" + id,
+		                    path_wx =jQuery("#wxQrPath").val().replace("&","-*-")+  "-*-id=" + id,
+		                    path_ali =jQuery("#aliQrPath").val().replace("&","-*-")+  "-*-id=" + id;
+		                    
+		                  //下面写全部设置好的代码                
+		                    jQuery("#resetMoeny").html(money);
+		                    jQuery(".QrcodeTab .qrcode_icon").hide();
+		                    jQuery(".QrcodeTab>div").html("<img src='$!{webPath}/resources/mch_wx_qr_pay/loading.gif' style='width:32px;height:32px;position: absolute;left:50%;top:50%;margin:-16px 0 0 -16px' />");
+		                    var img_jg=new Image();
+		                    var img_wx=new Image();
+		                    var img_ali=new Image();
+		                    
+	                    	var jgicon="<img class=\"qrcode_icon\" src=\"$!{webPath}/resources/mch_wx_qr_pay/pay_yes_icon.png\" />";
+	                   	
+	                    	var wxicon="<img class=\"qrcode_icon\" src=\"$!{webPath}/resources/mch_wx_qr_pay/pay_wx_icon.png\" />";
+	                    
+	                    	var aliicon="<img class=\"qrcode_icon\" src=\"$!{webPath}/resources/mch_wx_qr_pay/pay_ali_icon.png\" />";
+	                   	
+		                    
+		                    img_jg.onload=function(){
+		                    	jQuery(".QrcodeTab div").eq(0).html("<img src="+img_jg.src+" />"+jgicon);
+		                    }
+		                    img_jg.src=path_jg;
+		                    
+		                    img_wx.onload=function(){
+		                    	jQuery(".QrcodeTab div").eq(1).html("<img src="+img_wx.src+" />"+wxicon);
+		                    }
+		                    img_wx.src=path_wx;
+		                    
+		                    img_ali.onload=function(){
+		                    	jQuery(".QrcodeTab div").eq(2).html("<img src="+img_ali.src+" />"+aliicon);
+		                    }
+		                    img_ali.src=path_ali; 		   
+		                    
+		                    jgGlobal.setTranslate($(".setMoneyContainer")[0],jgGlobal.screenHeight,"height:"+jgGlobal.screenHeight+"px",true);//设置完成关闭弹出框
+		
+		                } else {
+		                    alert(data.msg);
+		                }
+		            },
+		            error: function () {
+		                alertFriendly('呀，付款的人太多了。没挤进去。请重新扫码付款吧。');
+		            }
+		        });			     
+                
+            });
+
+        });
+
+    </script>
+</body>
+</html>

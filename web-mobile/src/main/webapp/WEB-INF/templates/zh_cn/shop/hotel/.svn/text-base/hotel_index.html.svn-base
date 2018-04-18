@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>酒店搜索</title>
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="$!webPath/resources/elong/css/main.css" />
+	<style type="text/css">
+		.pageBg{background: #F7F7F7;height: 100%;overflow: hidden;}
+		.pageBg .searchMain{padding: 0 12px;background: #FFFFFF;margin-top: 12px;}
+		.pageBg .searchMain .cityArea{position: relative;border-bottom: solid 1px #F0F0F0;height: 52px;}
+		.arrow-right{background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAhCAMAAADj/gtmAAAAhFBMVEUAAADS0tLS0tLS0tLX19fY2NjS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLU1NTV1dXb29vf39/q6urS0tLR0dHS0tLS0tLS0tLS0tLS0tLS0tLT09PT09PR0dHT09PT09PV1dXW1tbS0tLR0dHS0tLR0dHR0dHR0dHS0tLT09PT09PR0dFW/j8LAAAAK3RSTlMA5dniHxXu593PyqKcZCslDgoG8tTElY+IgXlzbE46NDAaEevpva2nWldFnypAuwAAAJ1JREFUKM990lcSgzAMBFCXJIbgFEgvhJAefP/7wfLlRTPo841HI62sSmduikuHsBmYDZ1VRGXoanYn+8GeS7IFzK2kabYrzE7ILrCE7QwzNdmptynZEbZlO8DSB9keNl+TedguJ8tgGVHusEYsxQevfCxfyLuIO4nunmagqeTsckOZA6eV1DJTmfzoff6QF11W4/4kyoofoRqTViwtRRAaPz2gqK0AAAAASUVORK5CYII=) no-repeat left center;background-size: 6px 11px;width: 6px;height: 11px;}
+		.cityArea .arrow-right{position: absolute;right: 20%;top:20px;}
+		.searchMain .cityArea .cityName{line-height: 52px;text-indent: 24px;font-size:18px;width: 80%;color:#4a4a4a;background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAMAAAC7m5rvAAAAilBMVEUAAAC/v7/b29u/v7/FxcW+vr6/v7+/v7+/v7+/v7+/v7+/v7/AwMDGxsa/v7+/v7+/v7+/v7+/v7+/v7/AwMC/v7/IyMi/v7+/v7+/v7+/v7/AwMDAwMDBwcHCwsLDw8O/v7+/v7/ExMS+vr6/v7/AwMC/v7/AwMDAwMDBwcHAwMDAwMDDw8O+vr7bvcjoAAAALXRSTlMA+wP0F/ns1e/ZvqpQC+Cfi3a4cVY9B+bIsZGEMioUEM+YG6RpSn5jYDddRCJgHVy7AAACIElEQVRIx+2W23LiMBBELRtfwSYQwGAwvgAJhJz//70NLksqKhKGh33Yqu0neUxPo5meAec//ipWk2YeRlE4byarp0m7g4eCN949RRpN6eBnmU+H6WiYNYmAaHoadSlO0+CmuBhivQPB0dUB93gjzh6z3oCmuo9VDVA8Yn0C77/DRwHHByX0ERPjhQX+xdqtDGbWK2epvRwbx4KxNWOa41k7tPcIUpvYm677tdhsipPuxNYmt8bby/MypEO4VG3wqI2mgrE8fwl6iLO+Ha2BdoZPqSVgfS7L8xrEUqaS7+8xhb4gbgyF253eIHb7osDUQJsTyeZCIqMJSB8HzA20mrg/HaCU0VLfOCQ00HIlEXa6SiNWXycw0CJFy1nrcEKkaJ6Blqm0MZkO64eQ3NhtX6WlUo7T5fGoLQ3QLvvtqQoOZksupG1Vky9C2XtiNmWpx2YGYvbj93Tmw4c2l3H1ZYi9/giirgWw6U1S+eSOCR96j7gFPRo5OkfYmveqT6TGdHdbkMHhol4GiNaxyW0cjTS9Xwpb2woKtW8ltLtj64/IEnzjwjv5sHy4lIVBbyGkAaw8wwx/Cfsy12Zi8YqWLuf9Qj8JWcQhPf+qH6++1BpAAZ4q28WDZoCgRyja9WaJ5LgMwx1DUHZTEcDYdZ7lbSD/dpzvHOarF/6XJJC1bQyJgWVHuoY4hHXqvISq5gfh3nkR+xDikfMy2iRpnX8afwDEpEHEX/Yr0gAAAABJRU5ErkJggg==) no-repeat left center;background-size: 18px 18px;}
+		.searchMain .cityArea .myPos{position: absolute;right: 0px;top: 10px;padding: 21px 0 0 0;font-size:11px;color:#4a4a4a;letter-spacing:-0.27px;line-height: 1;}
+		.posIcon{background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAMAAAC7m5rvAAAAkFBMVEUAAAA8zP83tP8zsv8zsf8zsv81tv85vv8zsv8zsv8zsv8zsv80sv8zsf8zsv8zsv80sv81tP84tv8zsv80sv80sv80tP88u/8zsv8zsv80s/80s/80tP8zsv8zsv80sv80sv80tP81tf86tv9Guv8zsv80s/80s/8zsf8zsv80sv8zs/8zsv80sv89vv8zsf/6Fx8XAAAAL3RSTlMABSn658gYDfXseZZg8c2kWi8f4rGGOwrbulNANd/SrG5PIxUHdGdJ2KidioGAD+/saFIAAAJDSURBVEjH1ZXXspswFEWFhei9GIxx73X//9+FjJUzXIFt5S1ZL5zRaA2qW+z/pfVicTbNOro85oaeYpx8Ez3cuKm+W0EOgEeXMgC8Ryyc3+Zh/1k6LQE+C55daQCT7lM1q87Mkw+SXQD8tusqqclmLwSE9c7KlsBqy1hPk+x8DrMdt+Yuwg1jiiZpTTjJqMWxSJmqEVYEBEMrcyF2bKgRVQE+HazGEgtpKRqxFzAzRSsQpkrTdaYcECtH9LPpBGzYV1KONeuzxIppcINr908U+FZHs12UvdnnuDEtjnCs3sz4Tk8zzN7sfMw0lEFXE4GuNgV/yrKlsk+2OVlsSI5EVh4ipmIV6JhlTGWFq6xiXAaWzIVwwhRKCFkJlEyhgEQYamjAldUZgfGC5gWCLqfsMgdoISU07A2IIy0AUSka7UkDYk0bRshjWcObvPgzygkIupnbV5eEBhnhwRQEJLWakAlCWV0Qq9okfFnDGHjQJt8hhjfyjI56YLGY/jGHU40k2WE9HcnwM62t4aJhmqSART/WiwQ6W5IGjq2pLeBRXbnw9KzmR+gcEGqlglHD7wduDl9HO1ACUeK1360sxF09TaYaAZ4/8k7Yg+scVerTsVXvrpMyhdZBsf/44vij70QCCOu9ZhcY36WAI0/fadlSWkOmJvjNHtOMQwhn83aBI8A9GgOtqSHf9XGMtQuY/rSvpeUCcO6fD61dOgDyVRnMgSS5xzUA7lvsG9Z6xtFHeFumxTO5ChcdYRQfLfZ3VDb7R/gFmLFPvDEKwbYAAAAASUVORK5CYII=) no-repeat center top;background-size: 18px 18px;}
+		.searchMain .time{position: relative;height: 58px;border-bottom: solid 1px #F0F0F0;overflow: hidden;padding-left: 24px;background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAMAAAC7m5rvAAAAb1BMVEUAAAC/v7+/v7+/v7+/v7/AwMDBwcHOzs7Ly8u+vr6/v7/BwcHAwMC/v7++vr6/v7/BwcG/v7+/v7+/v7/BwcHV1dXAwMC/v7++vr6/v7+/v7+/v7/CwsK/v7+/v7+/v7+/v7/AwMDBwcHBwcG+vr6WnA+7AAAAJHRSTlMAZ/f6b3QcBwvx21KVN62lLOGSehQFQOzZ08i4I5iXh4NlWkq5Dnv2AAAA3klEQVRIx+3U247CIBSF4V1woFRbaGs9z4yH9f7PqCFiGord10b+K/bFl3BIoNy3Z00/Htf7dkN8GtiN5yXQzYtBKUUlUFGpQvrBVn6mdLeDADB4tkCo9qwHYI4uoc4AZhkgrhO1geyV1po8Ix0izwaty/oAc4pZEw7u2SjPfGuD35i1CNe8xx+NckYun8sj2pgJ1K+Xil7kNTeQKcaUZlJwIcX4kqwpuJKb/CGuRWaZZfaBrELHstX0n7TYKkadDCxFOYHtfzFXZyBrirsIcMmCpjm7E/J9orKOct/YHZeuI40VHdV1AAAAAElFTkSuQmCC) no-repeat left center;background-size: 18px 18px;}
+		.searchMain .time .in,.searchMain .time .out{float: left;overflow: hidden;}
+		.searchMain .time .out{margin-left: 25px;}
+		.searchMain .time .tit{font-size:11px;color:#9b9b9b;letter-spacing:-0.27px;line-height: 16px;margin-top: 10px;}
+		.searchMain .time .tit span{margin-left: 5px;}
+		.searchMain .time .indate,.searchMain .time .outdate{font-size:18px;color:#4a4a4a;line-height: 25px;}
+		.searchMain .time .count{float: right;margin-right: 20px;margin-top: 21px;font-size:12px;color:#4a4a4a;letter-spacing:-0.29px;line-height: 17px;}
+		.searchMain .time .arrow-right{position:absolute;right: 0;top: 24px;}
+		.clearTxt{background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAATlBMVEUAAADg4ODl5eXh4eHg4ODf39/g4ODi4uL////g4ODf39/h4eHg4ODg4ODh4eHl5eXq6urf39/g4ODg4ODf39/f39/g4ODg4ODh4eHf39+utgszAAAAGXRSTlMA3BxH7PG4VgWc+hGojG4nDOBNecnChGsqhLdYKQAAAU1JREFUSMeVltmShCAMRRNZ3Pfe7v//6NRMTxnRgHLeuj23BAkBOlGZ3rNtGsu+NxVdMJWdww7XlVNCrwaLE3aIvqZkqHCp6q1HFN+e/ZGRgMejbxySOHPwcUmQGB0uceNuvowbsMzc4xZ++/64Sfm/vpxwmsfuKX/XfICwFmYOxv0hWuXn8Fdvu/qpiajgnV/8GvKHnQ4zeNOWEJ8e4Sw6CE/aEuJ/GhE6oipYs1oSXz8cIlwlRXFMiB8WSA89ofvoyUNP6D48MfSE7oPJ4pyI+7DU4Mwr6qPRAlykAlbxk0Pis5+etNf94hX7rL3uM+rIwpmIDz1hwuKbxZfEHBRfWN6L+JIwELrDBmrFl0QBoTxs0UV8SawItmjQBOzSLjP2PN81hCFoM9dwldvIcltldjPObfe5B0r+kZV/KOYfu/kHe/7VIf9ykn39+QHFrY/2I4AxaQAAAABJRU5ErkJggg==) no-repeat center;width: 16px;height: 16px;display: block;background-size: 16px 16px;}
+		.clearTxt{position: absolute;top: 18px;right: 22px;display:none}
+		.searchMain .searchWords{height: 52px;position: relative;border-bottom: solid 1px #F0F0F0;padding-left: 24px;background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAMAAAC7m5rvAAAAgVBMVEUAAAD09PS/v7+/v7+/v7/Gxsa/v7+/v7+/v7+/v7/AwMDCwsK/v7/AwMC/v7/Dw8PDw8O+vr6/v7+/v7+/v7+/v7+/v7/AwMDAwMC/v7+/v7+/v7/AwMC/v7/IyMjKysq/v7+/v7+/v7/AwMDBwcHBwcHLy8u/v7/CwsLBwcG+vr7Q658wAAAAKnRSTlMAAvelnBHk3M6hMx2/dmskF/Xv6dbIr1w9tXxhT0cNBtGVjYIuJwtWKULg364MAAABXklEQVRIx+2V2XKCQBBFh0EWZUc2RYh7zPn/D0wsHtRIA5U86nmi5nKYqe6eQr15dazSzB1tu0XoTZcWK264m2lSbPKIf5yylQ2QB1VkeVW40kDyOWptNFCcbnvvNBCM7aUhbR6WLg5QDlqxDU70u6w+6MWQZkIaPa22GWwN2ToCTc96lEAtaysoeoM12OJ2FnDpTc5LqCSthFyIdrAXCyI3qIFM0nL5JGfQkuZAJGUpWEKk4TzwyZMQLcFTchYLkQvSDBmAIXe7lufHVgIBFEK0BlPSTpC04vnlu5rBof/ygm5FrYSkr5YfGeyViOFC/vG8PofUUjIVYBo99SBUQ4SAbz2ecAZkhhpkB9jl3UtfLlfmI94aYBt0Mx3XPoADzEa8zZIr6dZ3uycdGPMJXntIuGP205JJnrLqQneO3/1ynjwJI140C6/roejJ/N8zEUZ23HPUH7y9Hao3L8k3n1It/hrIAAgAAAAASUVORK5CYII=) no-repeat left center;background-size: 18px 18px;}
+		.searchMain .searchWords input{outline: none;border: none;margin: 0;padding: 0;background: none;line-height: 52px;height: 52px;width: 100%;}
+		.searchMain .searchWords .arrow-right{position:absolute;right: 0;top: 20px;}
+		.searchMain .priceStar{height: 52px;position: relative;padding-left: 24px;background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAMAAAC7m5rvAAAAllBMVEUAAAC/v7/FxcXBwcG+vr7Q0NC/v7+/v7/AwMDIyMjCwsK/v7++vr6/v7/IyMi/v7+/v7+/v7/AwMDExMS/v7+/v7+/v7/CwsK/v7+/v7/CwsK/v7+/v7+/v7+/v7/AwMC/v7+/v7+/v7+/v7/AwMC/v7+/v7/AwMDAwMC/v7+/v7+/v7/AwMC+vr7AwMDAwMC+vr6+vr4YFWt3AAAAMXRSTlMA1w4u8QTL+B0IE/Tn3AvTwalDF+DPUCm8tiL8xa6bSD4165JgsaVWOYZ473CgZrm9yarJeAAAAiBJREFUSMft1dmSqjAUheEdFHEAmRFlcBZnz3r/lzv2TkBUtO17/xu3VL4qSVIlfftWNWkbQSd2l7vjKtqOfP1DFeC+5PKZEp4Xnfe7PHNs0wBg0Ku67lENAawu1ep5aL9UscjlYFWqq8nPlmTNatxXKmCl7xeAmL5l/lX5PFzVhB+5wMEAVm+YfxGxVKJUEYyIeksM/JesPxZxVylTKsqxo2shCmbNyunyYMMckSzGSv7U4wvWXzcoWmJNRJoJj1mjmvAQYlEqneYJNtMihNVrZNpapJVqkSyPifb4qb2lJqZlIh3x0MFBqiGRYxGRNzatU5eamOaKTqXm/GiW7CkVVNbEhjXVZsXjrmNTvTOSR9XipSkGW3nKbv/nixGYbUsj2dSAU1cbpYbXhTPiVrB9zcTAGWdLvVKZflO9jQjnPDisZEdYawTYVAs9A+uaoqNStIPh1V/kalxkeqXGPaoVi0gOAVZUpWdIzJGeJxO5r4MHRamYysFEUVd5ZFzPXSvV5V7RXm0ILfkuyCLkRN7AolL9e1A0zERnLk/qtiU6Dy35rtsBnOEN3K5IuC2dR0/N26zeOmPaoFLtyagDD2fs0ic3P6DDqtnZHg8OjOju+irVXO8k7GnpippaIOwTfeBiJMUnSrlc2BEPYyTquowWsFn9yY1MCJ9+S18KUbBbA+fPlHL2RN1I7FYm/3d85Ao1uABY/S19HyxOffr2jeg/xF48ru68pKcAAAAASUVORK5CYII=) no-repeat left center;background-size: 18px 18px;}
+		.searchMain .priceStar input{outline: none;border: none;margin: 0;padding: 0;background: none;line-height: 52px;height: 52px;width: 100%;}
+		.searchMain .priceStar .arrow-right{position:absolute;right: 0;top: 20px;}
+		.pageBg .searchBtn{background:#33b1ff;border-radius:6px;width:96%;height:44px;line-height: 44px;text-align: center;font-size:16px;color:#ffffff;display: block;margin: 15px auto;position: relative;text-indent: 18px;}
+		.pageBg .searchBtn:before{content: '';position: absolute;left: 35%;top: 13px;background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAMAAAC7m5rvAAAAllBMVEUAAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AJcWoAAAAMXRSTlMA8vBePIY4Dvv29ODOrjQa5MesCu3csCLX1KmKgEYcBr0y+Oq0oJ2RpHFkWVRKQBSU/2FMEwAAAclJREFUSMftlWlzgjAQhkFuueUQpALetzb//891E8dawyY4TL90pu8nfXefJLs7Icqf1bXyY3fsxn51fZsxNyl5Kt2Y70DTCeE1mfZShk3usiMv+v5tyCFrzdLGvhay/7WWO8xZW7IDFgwyfuZYBgPLWrwXoyYhZ4c+44T7sRN+IIEPGshF3aBBDQ1pbEG8MJsL8fvZ6BxmtC5FJFrfDPED2sNQiIW0n4uuvwWbTVVS+bZrr2Az2Uwt2G7VcXVYzFdkyiFD582Kaz4+BAPrVCjFaqzTMcxFkQvmGvOeS4jbg0VICvTJ68E86DWyVMZZyIEiZCmnB1tCbdhUblLqhk12B+ZZip0hY8ebFzD3UmwPGXPebFRC0kZCNSNCRg163Q4S7IBfuDnYqSWkrBQ7I6hlJYv0CdEWCwTcF6j7DVqgoQ1Eljoa0pfsbqNKPIg5JyRyciBSJKIbFRGQ0fDLGYRKFT5YwYrGXe21LJfcNRJy05IlZNUjw6yyu6NKueTxKKpFO2sL9fEwJibjAkWkuUd4eXTMcg6kxS9QTEvlOFzhMS9HNKnMj+FzeByHK6m5QWEcLpRbDOPSAdyYdlYZxGXKAC6LLsq/fk9fGLNPPN1kMWQAAAAASUVORK5CYII=) no-repeat left center;background-size: 18px 18px;width: 18px;height: 18px;}
+		.filter-sp .sp-content .star .star-list li.on {border: 1px solid #33b1ff;}
+		.filter-sp .sp-title .right.right {background: #33b1ff;}
+		.filter-sp .sp-content .price .price-list li.on {border: 1px solid #33b1ff;}
+	</style>
+</head>
+<body>
+	<div class="pages">
+		<div class="pageBg">
+			<div class="searchMain">
+				<div class="cityArea">
+					<div class="cityName" id="cityName">北京</div>
+					<span class="arrow-right"></span>
+					<div class="myPos posIcon">我的位置</div>
+				</div>
+				<div class="time">
+					<div class="in">
+						<div class="tit">入住<span id="des1">今天</span></div>
+						<div class="indate"></div>
+					</div>
+					<div class="out">
+						<div class="tit">离店<span id="des2">明天</span></div>
+						<div class="outdate"></div>
+					</div>
+					<div class="count">共<span id="dayCount">1</span>晚</div>
+					<span class="arrow-right"></span>
+				</div>
+				<div class="searchWords">
+					<input type="text" placeholder="酒店关键字" autocomplete="off" />
+					<span class="clearTxt"></span>
+					<span class="arrow-right"></span>
+				</div>
+				<div class="priceStar">
+					<input type="text" id="priceAndStar" placeholder="价格/星级" readonly="readonly" autocomplete="off" />
+					<span class="clearTxt" data-fn="price"></span>
+					<span class="arrow-right"></span>
+				</div>
+			</div>
+			<a href="javascript:;" class="searchBtn">查找酒店</a>
+		</div>
+	
+			<div id="filterPriceStar" class="filter-sp filter-price-star plugin-inited" style="">
+				<span class="arrow"></span>
+				<div class="sp-content">
+					<div class="allhotel">
+						<p></p>
+					</div>
+					<div class="star">
+						<div class="sp-tit">星级（可多选）</div>
+						<ul class="star-list">
+							<li sn="-1" class="on"><span class="tptt">不限</span><span
+								class="moreh"></span></li>
+							<li sn="A" class=""><span class="tptt">公寓</span><span
+								class="moreh"></span></li>
+							<li sn="3" class=""><span class="tptt">三星/舒适</span><span
+								class="moreh"></span></li>
+							<li sn="4" class=""><span class="tptt">四星/高档</span><span
+								class="moreh"></span></li>
+							<li sn="5" class=""><span class="tptt">五星/豪华</span><span
+								class="moreh"></span></li>
+						</ul>
+					</div>
+					<div class="price">
+						<div class="sp-tit">价格</div>
+						<ul class="price-list">
+							<li class="on" price-value="0"><span class="tptt">不限</span></li>
+							<li price-value="0-150" class=""><span class="tptt">0-150</span><span
+								class="moreh"></span></li>
+							<li price-value="151-300" class=""><span class="tptt">151-300</span><span
+								class="moreh"></span></li>
+							<li price-value="301-450" class=""><span class="tptt">301-450</span><span
+								class="moreh"></span></li>
+							<li price-value="451-700" class=""><span class="tptt">451-700</span><span
+								class="moreh"></span></li>
+							<li price-value="701" class=""><span class="tptt">700以上</span><span
+								class="moreh"></span></li>
+						</ul>
+					</div>
+				</div>
+				<div class="sp-title">
+					<span class="left tjclick"
+						data-tj="{&quot;cspot&quot;:&quot;emptyPriceAndStar&quot;}">取消</span><span
+						class="right tjclick"
+						data-tj="{&quot;cspot&quot;:&quot;submitPriceAndStar&quot;}">确定</span>
+				</div>
+			</div>
+			<div class="cld page-plugin plugin-inited">
+				<header class="bar bar-nav">
+					<h1 class="title">选择日期</h1>
+					<a class="icon icon-back pull-left hide-cln"></a><a
+						class="cld-title-year pull-right icon"></a>
+				</header>
+				<div class="page-content">
+					
+				</div>
+				<ul class="cld-title bar">
+					<li>日</li>
+					<li>一</li>
+					<li>二</li>
+					<li>三</li>
+					<li>四</li>
+					<li>五</li>
+					<li>六</li>
+				</ul>
+			</div>
+			<div class="advance-city plugin-inited page-plugin">
+				<header class="bar bar-nav flight-order-head">
+					<a class="icon pull-left icon-back"></a>
+					<div class="search-input">
+						<i class="icon-search"></i><input type="input" id="search_city" value=""
+							placeholder="请输入城市名、行政区或景区">
+					</div>
+				</header>
+				<div class="page-content page-select">
+					<div class="current-city">
+						<div class="page-title"></div>
+						<div class="get-city">
+							<i class="icon-position"></i>点击获取当前城市
+						</div>
+					</div>
+					<div class="search-history" style="display: none;">
+						<div class="page-title">搜索历史</div>
+						<div class="city-list">
+							<ul></ul>
+						</div>
+					</div>
+					<div class="hot-city">
+						<div class="page-title">热门城市</div>
+						<div class="city-list">
+							<ul>
+								<li city-id="101" area-type="" area-id="" sug-origin=""
+									class=""><span>北京</span></li>
+								<li city-id="201" area-type="" area-id="" sug-origin=""
+									class=""><span>上海</span></li>
+								<li city-id="2001" area-type="" area-id="" sug-origin=""
+									class=""><span>广州</span></li>
+								<li city-id="1201" area-type="" area-id="" sug-origin=""
+									class=""><span>杭州</span></li>
+								<li city-id="2003" area-type="" area-id="" sug-origin=""
+									class=""><span>深圳</span></li>
+								<li city-id="1801" area-type="" area-id="" sug-origin=""
+									class=""><span>武汉</span></li>
+								<li city-id="2301" area-type="" area-id="" sug-origin=""
+									class=""><span>成都</span></li>
+								<li city-id="2701" area-type="" area-id="" sug-origin=""
+									class=""><span>西安</span></li>
+								<li city-id="1101" area-type="" area-id="" sug-origin=""
+									class=""><span>南京</span></li>
+								<li city-id="401" area-type="" area-id="" sug-origin=""
+									class=""><span>重庆</span></li>
+								<li city-id="1901" area-type="" area-id="" sug-origin=""
+									class=""><span>长沙</span></li>
+								<li city-id="1401" area-type="" area-id="" sug-origin=""
+									class=""><span>厦门</span></li>
+								<li city-id="301" area-type="" area-id="" sug-origin=""
+									class=""><span>天津</span></li>
+								<li city-id="3201" area-type="" area-id="" sug-origin=""
+									class=""><span>香港</span></li>
+								<li city-id="1001" area-type="" area-id="" sug-origin=""
+									class=""><span>哈尔滨</span></li>
+								<li city-id="1701" area-type="" area-id="" sug-origin=""
+									class=""><span>郑州</span></li>
+								<li city-id="1102" area-type="" area-id="" sug-origin=""
+									class=""><span>苏州</span></li>
+								<li city-id="1301" area-type="" area-id="" sug-origin=""
+									class=""><span>合肥</span></li>
+								<li city-id="1602" area-type="" area-id="" sug-origin=""
+									class=""><span>济南</span></li>
+								<li city-id="2201" area-type="" area-id="" sug-origin=""
+									class=""><span>三亚</span></li>
+							</ul>
+						</div>
+					</div>					
+				</div>
+				<div class="page-content page-search">
+					<ul></ul>
+				</div>
+				<div class="inner-mask"></div>
+			</div>
+			<div class="list-pop-city list-pop-search plugin-inited page-plugin">
+				<header class="bar bar-nav flight-order-head bdb">
+					<a class="icon pull-left icon-back"></a>
+					<div class="search-input">
+						<form class="submitSearchForm">
+							<i></i><input type="search" value="" id="query" name="queryText"
+								placeholder="输入酒店名、地址等">
+						</form>
+					</div><!-- 
+					<div class="search-btn">搜索</div> -->
+				</header>
+				<div class="page-select page-content">
+					<div class="current-city"></div>
+					<div class="search-history" >
+						<div class="page-title">
+							搜索历史<span class="sea-clear">清除历史</span>
+						</div>
+						<div class="keyword-list">
+							<ul></ul>
+						</div>
+					</div>
+				</div>
+				<div class="page-content page-search">
+					<ul>
+					</ul>
+				</div>
+				<div class="inner-mask"></div>
+			</div>
+	</div>
+	<!-- 隐藏域 -->
+	<input type="hidden" id="cityId" value="${cityId}" /> <!-- 当前页面的城市ID -->
+	<input type="hidden" id="webpath" value="$!webPath" />
+	<input type="hidden" id="starval" value="" />
+	<input type="hidden" id="LowRate" value="" />
+	<input type="hidden" id="HighRate" value="" />
+	<input type="hidden" id="Sort" value="" />
+	<input type="hidden" id="longitude" value="" />
+	<input type="hidden" id="latitude" value="" />
+	<!-- 隐藏域以上 -->
+	
+		<!-- 百度API -->
+	<!-- <script src="http://api.map.baidu.com/api?v=1.2" type="text/javascript"></script> 
+	<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script> -->
+	<script type="text/javascript" src="https://apis.map.qq.com/tools/geolocation/min?key=ZEQBZ-F6TRU-LKUVI-44CQI-URDUJ-VNBD7&referer=myapp"></script>
+	
+	<script type="text/javascript"
+		src="$!webPath/resources/elong/js/jquery-2.0.0.min.js"></script>
+	<script type="text/javascript"
+		src="$!webPath/resources/elong/js/jquery.plug.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/elong/js/function.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/elong/js/cld_index.js"></script>	
+	<script type="text/javascript"
+		src="$!webPath/resources/elong/js/hotel_index.js"></script>
+	<script type="text/javascript"
+		src="$!webPath/resources/elong/js/loading.js"></script>
+	<script src="$!webPath/resources/elong/js/jquery.cookie.js"
+		type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

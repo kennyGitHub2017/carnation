@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css" rel="stylesheet" type="text/css" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" rel="stylesheet" type="text/css" />
+<link href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/smallalert.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/alertBox.js" charset="utf-8"></script>
+<style>
+.select-left, .select-right{width:45%;float:left;background: #fff; height: 100%;}
+.select-center{width:10%;float: left;height:100%;line-height: 300px;text-align: center;color:#80CEFA;font-weight: bold;font-size:20px;}
+.select-title{line-height: 36px;background: #E2F6FF;padding: 2px 10px;font-weight: bold;}
+.select-cont{width: 100%;height: 260px;box-sizing: border-box;padding:10px;overflow-x: hidden;}
+.tree{display:none;}
+.disp{display: block;}
+.tree-li{height: 20px;line-height: 20px;overflow: hidden;margin-bottom:6px;}
+.tree-checkbox{float: left;width: 6%;margin-top:4px;cursor: pointer; }
+.tree-text{float: left;width: 93%;box-sizing: border-box;}
+.tree .tree .tree-text{padding-left:12px;}
+.tree .tree .tree .tree-text{padding-left:26px;}
+.tree-text-end{float: left;width: 93%;box-sizing: border-box; padding-left:46px;}
+</style>
+</head>
+<body>
+
+	<div class="cont">
+		<h3 class="seth">绑定类目</h3>
+		<div class="nav_list">
+		  	<ul>
+		    	<li><a href="$!webPath/admin/juanpi_leimu.htm"><b>类目管理</b></a></li>
+		        <li><a href="javascript:void(0)" class="this"><b>绑定类目</b></a></li>
+		    </ul>
+		</div>
+		
+		<div class="selectclass" style="position: relative;margin:auto; padding:16px" >
+			<div id="load_dialog"
+				style="display: none; width: 120px; height: 50px; border: #CCCCCC 1px solid; background: #FFFFCC; position: absolute; top: 100px; left: 450px; text-align: center; vertical-align: middle; padding-top: 10px;">
+				<img src="$!webPath/resources/style/common/images/loading.gif" />加载分类..
+			</div>
+			<div id="tip_dialog"
+				style="display: none; width: 150px; height: 50px; border: #CCCCCC 1px solid; background: #FFFFCC; position: absolute; top: 100px; left: 450px; text-align: center; vertical-align: middle; padding-top: 10px;">
+				<img src="$!webPath/resources/style/common/images/ok.gif" />添加到常用分类成功
+			</div>
+			
+			<div class="select-left">
+				<div class="select-title">卷皮类目</div>
+				<div class="select-cont" id="juanpi_tree">
+					<ul class="tree disp">
+						#foreach($!obj in $!jpClass)
+						<li>
+							<div class="tree-li">
+								<input value="$!obj.jpGcId" jp_id="$!obj.id" level="1" class="tree-checkbox chencbox_level_1" onchange="check_dis(1)" type="checkbox" />
+								<span class="tree-text arrow"><i></i><a href="javascript:void(0)">$!obj.jpGcName</a></span>
+							</div>
+						</li>
+						#end
+					</ul>
+				</div>
+			</div>
+
+			<div class="select-center"> >>>> </div>
+			<div class="select-right">
+				<div class="select-title">云尚类目</div>
+				<div class="select-cont" id="yunshang_tree">
+					<ul class="tree disp">
+						#foreach($!obj in $!ysClass)
+						<li>
+							#if($!obj.deleteStatus=='false' && $!obj.display=='true')
+							<div class="tree-li">
+								<input value="$!obj.id" level="1" disabled class="tree-checkbox" type="checkbox" />
+								<span class="tree-text arrow"><i></i><a href="javascript:void(0)">$!obj.className</a></span>
+							</div>
+							#end
+						</li>
+						#end
+					</ul>
+				</div>
+			</div>
+			
+		</div>
+
+		<div class="nextbtn">
+			<input name="goods_second" onclick="subTree()" type="button" id="goods_second" style="cursor: pointer;" value="更改" />
+		</div>
+			
+<script>
+
+	var _level = 0; 
+	jQuery(document).ready(function() {
+		
+		//点击分类加载子类 ajax
+		$('.tree-text').live("click",function() {
+			var flag = $(this).hasClass('down');
+			if(flag){
+				//隐藏子类列表信息
+				$(this).parent().next().css("display","none");
+				$(this).removeClass('down');
+			}
+			else{
+				//加载子类列表信息  显示子类  ajax
+				$(this).addClass('down');
+				ishaveTree = $(this).parent().next().hasClass('tree');
+				if(!ishaveTree){ //判断是否加载过子类   
+					var pid = $(this).prev().val();
+					var level = $(this).prev().attr("level");
+					if($(this).parents(".select-cont").attr("id") == "juanpi_tree"){
+						getTypeJuanPi(parseInt(level)+1,pid,this);
+					}
+					else{
+						getTypeYunShang(parseInt(level)+1,pid,this);
+					}
+				}
+				else{
+					$(this).parent().next().css("display","block");
+				}
+				
+			}
+		});
+		
+		//云尚分类单选
+		$('#yunshang_tree input[type=checkbox]').live("click",function() {
+			$('#yunshang_tree input[type=checkbox]').not(this).attr("checked",false);
+		});
+		
+		//全选/反选
+		$('#juanpi_tree .chencbox_level_1').live("click",function() {
+			if($(this).is(':checked') == true){
+				$(this).parent().parent().find('.tree-checkbox').attr("checked",true);
+			}
+			else{
+				$(this).parent().parent().find('.tree-checkbox').attr("checked",false);
+			}
+		});
+		$('#juanpi_tree .chencbox_level_2').live("click",function() {
+			if($(this).is(':checked') == true){
+				$(this).parent().parent().find('.tree-checkbox').attr("checked",true);
+			}
+			else{
+				$(this).parent().parent().find('.tree-checkbox').attr("checked",false);
+			}
+		});
+	});
+	
+	function check_dis(level){
+		_level = level;
+		var len = $('#juanpi_tree input[type=checkbox]:checked').length;
+		if(len > 0){
+			$('#juanpi_tree input[type=checkbox]').not('#juanpi_tree input[type=checkbox][level='+_level+']').attr("disabled",true);
+		}
+		else{
+			_level = 0;
+			$('#juanpi_tree input[type=checkbox]').attr("disabled",false);
+		}
+	}
+	
+	//获取卷皮子类信息
+	function getTypeJuanPi(level,pid,ele){
+		$.ajax({
+			url:'/admin/load_juanpi_class.htm',
+			data:{
+				"level":level,
+				"pid":pid
+			},
+			type:"get",
+			dataType: "json",
+			success:function(data){
+				//console.log(data);
+				var html  = '<ul class="tree">';
+				for(var i = 0; i < data.length; i ++){
+					html += '<li>';
+					html += '<div class="tree-li">';   
+					if(level == "3"){//判断是否最后一层    tree-text-end 替换  tree-text  去掉 <i></i>
+						html += '<input value="'+data[i].jpGcId+'" jp_id="'+data[i].id+'" level="'+level+'" onchange="check_dis(3)" class="tree-checkbox pids_id" type="checkbox" ';
+
+						if($(ele).prev().is(':checked') == true){
+							html += 'checked ';
+						}
+						if(_level != "0"){
+							if(_level != "3"){
+								html += 'disabled ';
+							}
+						}
+						html += '/>';
+						html += '<span class="tree-text-end arrow"><a href="javascript:void(0)">'+data[i].className+'</a></span>';
+					}
+					else{
+						html += '<input value="'+data[i].jpGcId+'" jp_id="'+data[i].id+'" level="'+level+'" onchange="check_dis(2)" class="tree-checkbox chencbox_level_2" type="checkbox" ';
+						if($(ele).prev().is(':checked') == true){
+							html += 'checked  ';
+						}
+						if(_level != "0"){
+							if(_level != "2"){
+								html += 'disabled ';
+							}
+						}
+						html += '/>';
+						html += '<span class="tree-text arrow"><i></i><a href="javascript:void(0)">'+data[i].className+'</a></span>';
+					}
+					html += '</div>';
+					html += '</li>';
+				}
+				html += '</ul>';
+				$(ele).parent().parent().append(html);
+				$(ele).parent().next().css("display","block");
+			}
+		});
+		
+	}
+	//获取云尚子类信息
+	function getTypeYunShang(level,pid,ele){
+		$.ajax({
+			url:'/admin/load_goods_class.htm',
+			data:{
+				"pid":pid
+			},
+			type:"get",
+			dataType: "json",
+			success:function(data){
+				//console.log(data);
+				var html  = '<ul class="tree">';
+				for(var i = 0; i < data.length; i ++){
+					html += '<li>';
+					html += '<div class="tree-li">';   
+					if(level == "3"){//判断是否最后一层    tree-text-end 替换  tree-text  去掉 <i></i>
+						html += '<input value="'+data[i].id+'" level="'+level+'" class="tree-checkbox" type="checkbox" />';
+						html += '<span class="tree-text-end arrow"><a href="javascript:void(0)">'+data[i].className+'</a></span>';
+					}
+					else{
+						html += '<input value="'+data[i].id+'" level="'+level+'" disabled class="tree-checkbox" type="checkbox" />';
+						html += '<span class="tree-text arrow"><i></i><a href="javascript:void(0)">'+data[i].className+'</a></span>';
+					}
+					html += '</div>';
+					html += '</li>';
+				}
+				html += '</ul>';
+				$(ele).parent().parent().append(html);
+				$(ele).parent().next().css("display","block");
+			}
+		});
+	}
+	
+	//提交
+	function subTree(){
+		var juanpi_checkbox = $('#juanpi_tree [type=checkbox][level='+ _level +']:checked');
+		var yunshang_checkbox = $('#yunshang_tree input[type=checkbox]:checked');
+		//alert(juanpi_checkbox.length);
+		if(yunshang_checkbox.length == 0 || juanpi_checkbox.length == 0){
+			alert("请最少选择一个分类");
+			return ;
+		}
+		if(yunshang_checkbox.length > 1){
+			alert("只能绑定到一个云尚分类");
+			return ;
+		}
+		var mulitId='';
+		var level ='';
+		var gcId='';
+		if(_level =="1" || _level == "2"){
+			juanpi_checkbox.each(function(i){
+				mulitId += $(this).val() + ",";
+			});
+		}
+		else{
+			juanpi_checkbox.each(function(i){
+				mulitId += $(this).attr("jp_id") + ",";
+			});
+		}
+		yunshang_checkbox.each(function(i){
+			gcId = $(this).val();
+		});
+		mulitId = mulitId.substring(0,mulitId.length-1);
+		if(juanpi_checkbox.length > 0 && yunshang_checkbox.length == 1){
+			alertBoxFn('提示','确定要绑定该商品分类吗？',2,function(){
+				$.ajax({
+					url:'/admin/juanpi_class_move_class.htm',
+					data:{
+						"mulitId":mulitId,
+						"level":_level,
+						"gcId":gcId
+					},
+					type:"get",
+					success:function(data){
+						//console.log(data);
+						if(data == "更改成功"){
+							juanpi_checkbox.each(function(i){
+								$(this).parent().parent().remove();
+							});
+							showDialog("msg_info","",data,2,"succeed",300,function(){
+							   window.location.href="$!webPath/admin/juanpi_leimu_add.htm";
+							});
+						}
+						else{
+							alert(data);
+						}
+					}
+				});
+			});
+		}
+	}
+</script>
+		
+	</div>
+</body>
+</html>

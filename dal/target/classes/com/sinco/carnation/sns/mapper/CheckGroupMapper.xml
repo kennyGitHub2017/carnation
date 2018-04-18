@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.CheckGroupMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.CheckGroup">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="thumbnail" property="thumbnail" jdbcType="VARCHAR" />
+		<result column="group_title" property="groupTitle" jdbcType="VARCHAR" />
+		<result column="summary" property="summary" jdbcType="VARCHAR" />
+		<result column="update_by" property="updateBy" jdbcType="BIGINT" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+		<result column="is_closed" property="isClosed" jdbcType="TINYINT" />
+		<result column="checkGroupSequence" property="checkGroupSequence"
+			jdbcType="BIGINT" />
+
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.sns.model.CheckGroup"
+		extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" extends="BaseResultMap"
+		type="com.sinco.carnation.sns.bo.CheckGroupBO">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+		<result column="class_id" property="classId" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Ex_Column_List">
+		cg.id, cg.thumbnail, cg.group_title, cg.summary,cg.content, cg.update_by,
+		cg.update_time, cg.create_by, cg.create_time,
+		cg.is_deleted, cg.is_closed, cg.checkGroupSequence
+	</sql>
+	<sql id="selectByListWhere">
+		where cg.is_deleted = 0
+		<if test="vo.classIds != null">
+			and ccg.class_id in
+			<foreach collection="vo.classIds" item="listItem" open="("
+				close=")" separator=",">
+				#{listItem}
+			</foreach>
+		</if>
+		<if test="vo.groupTitle != null">
+			and cg.group_title like concat('%', #{vo.groupTitle}, '%')
+		</if>
+		<!-- <if test="vo.isClosed != null"> and cg.is_closed = #{vo.isClosed,jdbcType=TINYINT} 
+			</if> -->
+		<!-- <if test="isEnabled != null" > is_enabled = #{isEnabled,jdbcType=TINYINT}, 
+			</if> -->
+
+	</sql>
+	<select id="selectByList" resultMap="BOResultMap">
+		select
+		<include refid="Ex_Column_List" />
+		from check_group cg
+		left join check_class_group ccg on ccg.group_id = cg.id
+		<include refid="selectByListWhere" />
+		order by cg.randIndex asc
+	</select>
+	<select id="selectCountByList" resultType="int">
+		select
+		count(1)
+		from check_group cg
+		left join check_class_group ccg on ccg.group_id = cg.id
+		<include refid="selectByListWhere" />
+	</select>
+	<select id="selectById" resultMap="BOResultMap">
+		select
+		<include refid="Ex_Column_List" />
+		, ccg.class_id
+		from check_group cg
+		left join check_class_group ccg on ccg.group_id = cg.id
+		where cg.id = #{id}
+	</select>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, thumbnail, group_title, summary, update_by, update_time, create_by,
+		create_time,
+		is_deleted,is_closed,checkGroupSequence
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.sinco.carnation.sns.model.CheckGroupExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from check_group
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sns.model.CheckGroupExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from check_group
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="Long">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from check_group
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="Long">
+		delete from check_group
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sns.model.CheckGroupExample">
+		delete from check_group
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.CheckGroup">
+		insert into check_group (id, thumbnail, group_title,
+		summary, update_by, update_time,
+		create_by, create_time, is_deleted,
+		content,is_closed,checkGroupSequence)
+		values (#{id,jdbcType=BIGINT}, #{thumbnail,jdbcType=VARCHAR},
+		#{groupTitle,jdbcType=VARCHAR},
+		#{summary,jdbcType=VARCHAR}, #{updateBy,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP},
+		#{createBy,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+		#{isDeleted,jdbcType=BIT},
+		#{content,jdbcType=LONGVARCHAR},#{isClosed,jdbcType=TINYINT},#{checkGroupSequence,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.CheckGroup"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into check_group
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="thumbnail != null">
+				thumbnail,
+			</if>
+			<if test="groupTitle != null">
+				group_title,
+			</if>
+			<if test="summary != null">
+				summary,
+			</if>
+			<if test="updateBy != null">
+				update_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="isDeleted != null">
+				is_deleted,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="isClosed != null">
+				is_closed,
+			</if>
+			<if test="checkGroupSequence != null">
+				checkGroupSequence
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="thumbnail != null">
+				#{thumbnail,jdbcType=VARCHAR},
+			</if>
+			<if test="groupTitle != null">
+				#{groupTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="summary != null">
+				#{summary,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				#{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				#{isDeleted,jdbcType=BIT},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="isClosed != null">
+				#{isClosed,jdbcType=BIT},
+			</if>
+			<if test="checkGroupSequence != null">
+				#{checkGroupSequence,jdbcType=BIGINT}
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sns.model.CheckGroupExample"
+		resultType="java.lang.Integer">
+		select count(*) from check_group
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update check_group
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.thumbnail != null">
+				thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+			</if>
+			<if test="record.groupTitle != null">
+				group_title = #{record.groupTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="record.summary != null">
+				summary = #{record.summary,jdbcType=VARCHAR},
+			</if>
+			<if test="record.updateBy != null">
+				update_by = #{record.updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.isDeleted != null">
+				is_deleted = #{record.isDeleted,jdbcType=BIT},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.isClosed != null">
+				is_closed = #{record.isClosed,jdbcType=TINYINT},
+			</if>
+			<if test="record.checkGroupSequence != null">
+				#{checkGroupSequence,jdbcType=BIGINT}
+			</if>
+
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update check_group
+		set id = #{record.id,jdbcType=BIGINT},
+		thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+		group_title = #{record.groupTitle,jdbcType=VARCHAR},
+		summary = #{record.summary,jdbcType=VARCHAR},
+		update_by = #{record.updateBy,jdbcType=BIGINT},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{record.isDeleted,jdbcType=BIT},
+		content = #{record.content,jdbcType=LONGVARCHAR},
+		is_closed = #{record.isClosed,jdbcType=TINYINT},
+		checkGroupSequence = #{record.checkGroupSequence,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update check_group
+		set id = #{record.id,jdbcType=BIGINT},
+		thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
+		group_title = #{record.groupTitle,jdbcType=VARCHAR},
+		summary = #{record.summary,jdbcType=VARCHAR},
+		update_by = #{record.updateBy,jdbcType=BIGINT},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{record.isDeleted,jdbcType=BIT},
+		is_closed = #{record.isClosed,jdbcType=TINYINT},
+		checkGroupSequence = #{record.checkGroupSequence,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.CheckGroup">
+		update check_group
+		<set>
+			<if test="thumbnail != null">
+				thumbnail = #{thumbnail,jdbcType=VARCHAR},
+			</if>
+			<if test="groupTitle != null">
+				group_title = #{groupTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="summary != null">
+				summary = #{summary,jdbcType=VARCHAR},
+			</if>
+			<if test="updateBy != null">
+				update_by = #{updateBy,jdbcType=BIGINT},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIT},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="isClosed != null">
+				is_closed = #{isClosed,jdbcType=TINYINT},
+			</if>
+			<if test="checkGroupSequence != null">
+				checkGroupSequence = #{checkGroupSequence,jdbcType=BIGINT}
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.sns.model.CheckGroup">
+		update check_group
+		set thumbnail = #{thumbnail,jdbcType=VARCHAR},
+		group_title = #{groupTitle,jdbcType=VARCHAR},
+		summary = #{summary,jdbcType=VARCHAR},
+		update_by = #{updateBy,jdbcType=BIGINT},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{isDeleted,jdbcType=BIT},
+		content = #{content,jdbcType=LONGVARCHAR},
+		is_closed = #{isClosed,jdbcType=TINYINT},
+		checkGroupSequence = #{checkGroupSequence,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.CheckGroup">
+		update check_group
+		set thumbnail = #{thumbnail,jdbcType=VARCHAR},
+		group_title = #{groupTitle,jdbcType=VARCHAR},
+		summary = #{summary,jdbcType=VARCHAR},
+		update_by = #{updateBy,jdbcType=BIGINT},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		is_deleted = #{isDeleted,jdbcType=BIT},
+		is_closed = #{isClosed,jdbcType=TINYINT},
+		checkGroupSequence = #{checkGroupSequence,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

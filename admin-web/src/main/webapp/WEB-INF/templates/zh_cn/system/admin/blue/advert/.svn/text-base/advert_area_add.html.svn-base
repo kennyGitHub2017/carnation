@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script src="$!webPath/resources/js/jquery.viewpic.js"></script>
+<script>
+//options为编辑配置属性
+var options = {
+        cssPath : '$!webPath/resources/editor/themes/default/default.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '700px',
+		height:'400px',
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+};
+jQuery(document).ready(function(){
+//
+  jQuery("#theForm").validate({
+	ignore: "",						  
+    rules:{
+      name:{required :true},
+      link:{required:true},
+      needLogin:{required:true}
+	 },
+	messages:{
+	  name:{required:"名称不能为空"},
+	  link:{required:"链接不能为空"},
+	  needLogin:{required:"请选择是否需要登录"},
+	}
+  });
+  //
+  jQuery("#class_id").val("$!obj.class_id");
+  jQuery("#serviceType").val("$!obj.serviceType");
+  jQuery(":radio[id=ispush][value=$!obj.ispush]").attr("checked",true);
+  jQuery(":radio[id=state][value=$!obj.state]").attr("checked",true);
+  jQuery(":radio[id=type][value=$!obj.type]").attr("checked",true);
+  
+	
+	jQuery("#logoShow").mouseover(function() {
+        jQuery("#logoImg").css('display', 'block');
+    }).mouseout(function() {
+        jQuery("#logoImg").css('display', 'none');
+	});
+	$("#type").change(function(){
+		if(this.value=="7"){
+			$("#txt_link").html("代码");
+		}else{
+			$("#txt_link").html("链接");
+		}
+	}).trigger("change");
+  	
+});
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">区域管理</h1>
+  <div class="nav_list">
+ 		<ul>
+  				<li><a href="$!webPath/admin/advert_area_list.htm" ><b>管理</b></a></li>
+                <li><a href="$!webPath/admin/advert_area_edit.htm"  class="this"><b>新增</b></a></li> 
+  		</ul>
+  </div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/advert_area_save.htm" method="POST"  enctype="multipart/form-data">
+	    <input name="id" type="hidden" id="id" value="$!obj.id" />
+	    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+	    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/advert_area_list.htm" />
+	    <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/advert_area_add.htm" />
+	    <input name="pic" type="hidden" id="pic" value="$!obj.pic" />
+   <div class="edit">
+    <div class="editul setcont ">
+      <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong>名称</li>
+      <li><span class="webname"><input name="name" type="text" id="name" value="$!obj.name" size="40"></span></li>
+      </ul>
+      <ul class="set1">
+		<li class="setcont_bg"><strong class="sred">*</strong>专区</li>
+		<li class="setcont_bg">
+      	<span class="size200">
+			<select name="areaAdId" id="areaAdId">
+            	#foreach($areaad in $areaads)
+            		#if($!vo.areaAdId)
+						<option value="$areaad.id" #if($vo.areaAdId==$areaad.id) selected="selected" #end>$areaad.name</option>
+            		#else
+						<option value="$areaad.id" #if($!obj.areaAdId==$areaad.id) selected="selected" #end>$areaad.name</option>
+					#end
+                #end       
+            </select>
+		</span>
+		</li>    
+      </ul>
+      <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>图片</li>
+          <li>
+          	<span class="webname"> 
+	          	<span class="eidt_li_a" style="position:relative; width:50px; height:22px; line-height:22px;margin-top: 3px; color:#333; border:1px solid #ccc; padding:2px 5px; border-radius:3px;">选择图片
+	            	<input type="file" id="cover" onchange="changePic('advertImg')" style="opacity: 0;top:0;left:1px;position:absolute; z-index:100;width:60px; " name="advertImg">
+	            </span> 
+            </span>
+            
+
+            <span class="preview">
+      	<img src="$!webPath/resources/style/system/manage/blue/images/preview.jpg" width="25" height="25"  id="logoShow" style="cursor:help"/> 
+            </span>
+			#if($!obj.pic)
+				<div class="bigimgpre" id="logoImg" style="display:none; left:270px;"><img src="$!obj.pic"  width="200" height="200" id="thumbnailimg"/> </div>
+			#end
+            <span id="nothis"><strong class="q"> </strong><strong class="w">图片尺寸是(630*292)</strong><strong class="c"> </strong></span>
+            <div class="pic-view"><img src="$!obj.pic" width="100"></div>
+          </li>
+      </ul>
+      <ul class="set1">
+		<li class="setcont_bg"><strong class="sred">*</strong>类型</li>
+		<li class="setcont_bg">
+		<span class="size200">
+       		<select name="type" id="type">
+				<option value="1" #if($!obj.type=="1") selected="selected" #end>帖子(链接)</option>
+				<option value="2" #if($!obj.type=="2") selected="selected" #end>商品</option> 
+				<option value="3" #if($!obj.type=="3") selected="selected" #end>商户</option>
+				<option value="4" #if($!obj.type=="4") selected="selected" #end>咨询(链接)</option>  
+				<option value="5" #if($!obj.type=="5") selected="selected" #end>服务商户</option>
+				<option value="6" #if($!obj.type=="6") selected="selected" #end>服务</option>         
+				<option value="7" #if($!obj.type=="7") selected="selected" #end>原生</option>           
+             </select>
+        </span>
+        </li>    
+      </ul>
+      <ul class="set1">
+      <li class="setcont_bg"><strong class="sred">*</strong><i id="txt_link">链接</i></li>
+      <li><span class="webname"><input name="link" type="text" id="link" value="$!obj.link" size="40"></span></li>
+      
+      </ul>
+      
+      <ul class="set1">
+      <li class="setcont_bg">排序</li>
+      <li><span class="webname"><input name="orders" type="number" id="orders" value="$!obj.orders" size="40"></span></li></ul>
+      <ul class="set1">
+		<li class="setcont_bg"><strong class="sred">*</strong>状态</li>
+		<li>
+			<input type="radio" name="disabled" value="0" checked="checked"  #if($!obj.disabled == 0) checked="checked" #end >显示&nbsp;&nbsp; 
+			<input type="radio" name="disabled" value="1"  #if($!obj.disabled == 1) checked="checked" #end>隐藏
+		</li>
+	  </ul>
+      <ul class="set1">
+		<li class="setcont_bg"><strong class="sred">*</strong>是否需要登录</li>
+			<li>
+			<input type="radio" name="needLogin"  value="true" checked="checked" #if($!obj.needLogin == true) checked="checked" #end >是&nbsp;&nbsp; 
+			<input type="radio" name="needLogin" value="false"  #if($!obj.needLogin == false) checked="checked" #end >否
+			</li>	
+	  </ul>
+    </div>
+  </form>
+  <div class="submit">
+   		<span class="pad120"><input name="save" type="button" 
+   			value="提交" onclick="saveForm()" /></span>
+  </div>
+</div>
+</body>
+</html>

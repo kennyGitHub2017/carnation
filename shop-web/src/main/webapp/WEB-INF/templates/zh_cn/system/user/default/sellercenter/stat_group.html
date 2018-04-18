@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商家后台-服务统计-$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+
+jQuery(document).ready(function(){
+	  jQuery('#beginTime').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+	  jQuery('#endTime').datepicker({
+		  dateFormat:"yy-mm-dd",
+		  changeMonth: true,
+		  changeYear: true
+	  });
+	});
+</script>
+</head><body>
+$!httpInclude.include("/seller/top.htm")
+<div class="main">
+  <div class="seller_center">
+    <div class="seller_center_left"> $!httpInclude.include("/seller/nav.htm?op=stats_group") </div>
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/seller/index.htm">商家中心</a></b>><b>商家统计</b>><b>服务统计</b></span></div>
+      <div class="user_sp_right"> 
+       <form action="$!webPath/seller/stat_group.htm" method="post"  >
+      		<div  class="seller_title_sp">
+      		<span>
+            <input name="startDate" type="text" class="user_title_txt" id="beginTime" placeholder="查询开始时间" value="$!startDate" readonly="readonly"/>
+            <input name="endDate" type="text" class="user_title_txt" id="endTime" placeholder="查询结束时间" value="$!endDate" readonly="readonly"/>
+            <input name="" type="submit" class="seller_sear_btn" value="查询"/>
+            </span>
+            </div>
+          </div>
+         </form>
+      <div class="cont">
+        <div class="operation_store">
+         <div class="stat_store">
+          	<span>服务订单成交金额:<i>￥$!{of_totalPrice}</i></span>
+          </div>
+          <div class="stat_store">
+            <span>服务订单成交总数:<i>$!{of_totalCount}</i></span>
+          </div>
+          <div class="stat_store">
+            <span>总的反润金额:<i>￥$!{of_totalRebate}</i></span>
+          </div>
+          <div class="stat_store">
+            <span>总的推荐会员数:<i>$!reUser</i></span>
+          </div>
+          <div class="stat_store">
+            <span>总的推荐商户数:<i>$!reSeller</i></span>
+          </div>
+        </div>      
+     
+
+      </div>
+    </div>
+  </div>
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

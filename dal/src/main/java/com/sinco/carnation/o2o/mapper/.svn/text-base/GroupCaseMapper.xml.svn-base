@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.o2o.mapper.GroupCaseMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.o2o.model.GroupCase">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="case_id" property="caseId" jdbcType="VARCHAR" />
+		<result column="case_name" property="caseName" jdbcType="VARCHAR" />
+		<result column="display" property="display" jdbcType="INTEGER" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.o2o.bo.GroupCaseBO"
+		extends="BaseResultMap" />
+
+	<select id="findShow" parameterType="com.sinco.carnation.o2o.vo.GroupCaseShowVO"
+		resultMap="BOResultMap">
+		select t.* from o2o_group_case t
+		<where>
+			<if test="display != null">
+				and t.display=#{display}
+			</if>
+		</where>
+		order by t.sequence
+		<if test="count != null">
+			limit 0,#{count}
+		</if>
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, case_id, case_name, display,
+		sequence
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.o2o.model.GroupCaseExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from o2o_group_case
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from o2o_group_case
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		o2o_group_case
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.o2o.model.GroupCaseExample">
+		delete from o2o_group_case
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.o2o.model.GroupCase"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into o2o_group_case (id,
+		add_time, delete_status,
+		case_id, case_name, display,
+		sequence)
+		values
+		(#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{caseId,jdbcType=VARCHAR},
+		#{caseName,jdbcType=VARCHAR}, #{display,jdbcType=INTEGER},
+		#{sequence,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.o2o.model.GroupCase"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into o2o_group_case
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="caseId != null">
+				case_id,
+			</if>
+			<if test="caseName != null">
+				case_name,
+			</if>
+			<if test="display != null">
+				display,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="caseId != null">
+				#{caseId,jdbcType=VARCHAR},
+			</if>
+			<if test="caseName != null">
+				#{caseName,jdbcType=VARCHAR},
+			</if>
+			<if test="display != null">
+				#{display,jdbcType=INTEGER},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.o2o.model.GroupCaseExample"
+		resultType="java.lang.Integer">
+		select count(*) from o2o_group_case
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update o2o_group_case
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.caseId != null">
+				case_id = #{record.caseId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.caseName != null">
+				case_name = #{record.caseName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.display != null">
+				display = #{record.display,jdbcType=INTEGER},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update o2o_group_case
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=BIT},
+		case_id =
+		#{record.caseId,jdbcType=VARCHAR},
+		case_name =
+		#{record.caseName,jdbcType=VARCHAR},
+		display =
+		#{record.display,jdbcType=INTEGER},
+		sequence =
+		#{record.sequence,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.o2o.model.GroupCase">
+		update o2o_group_case
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="caseId != null">
+				case_id = #{caseId,jdbcType=VARCHAR},
+			</if>
+			<if test="caseName != null">
+				case_name = #{caseName,jdbcType=VARCHAR},
+			</if>
+			<if test="display != null">
+				display = #{display,jdbcType=INTEGER},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.o2o.model.GroupCase">
+		update
+		o2o_group_case
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		case_id =
+		#{caseId,jdbcType=VARCHAR},
+		case_name = #{caseName,jdbcType=VARCHAR},
+		display = #{display,jdbcType=INTEGER},
+		sequence =
+		#{sequence,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="findPageByVO" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from o2o_group_case order by sequence desc
+	</select>
+</mapper>

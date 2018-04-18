@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>提现申请列表-$!{config.title}-$!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/public_auto.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/user.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+</head>
+<body>
+$!httpInclude.include("/seller/top.htm")
+<div class="main">
+  <div class="seller_center">
+  $!httpInclude.include("/seller/nav.htm?op=seller_cash")
+    <div class="seller_right">
+      <div class="seller_position"><span><b><a href="$!webPath/seller/index.htm">商家中心</a></b>><b>提现管理</b></span></div>
+      <div class="seller_list_title">
+          <ul class="seller_title_ul">
+            <li><a href="$!webPath/seller/seller_cash.htm">提现申请</a></li>
+            <li class="this"><a href="$!webPath/seller/seller_cash_list.htm">提现列表</a></li>
+          </ul>
+      </div>
+      <div class="user_list">
+        #if($!objs.size()>0)
+        <form method="post" id="ListForm">
+          <div class="show_smallimg">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="user_order_table" >
+              <tr>
+                <th width="180">编号</th>
+                <th width="180">申请时间</th>
+                <th width="100">提现金额</th>
+                <th width="100">提现方式</th>
+                <th width="100">提现状态</th>
+                <th width="100">支付状态</th>
+              </tr>
+              #foreach($obj in $objs)
+              <tr>
+                <td  align="center">$!obj.cashSn</td>
+                <td  align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+                <td  align="center">¥$!obj.cashAmount</td>
+                	#if($!obj.cashPayment=="alipay")
+                    #set($cash_payment="支付宝")
+                    #end
+                    #if($!obj.cashPayment=="alipay_wap")
+                    #set($cash_payment="手机网页支付宝")
+                    #end
+                    #if($!obj.cashPayment=="alipay_app")
+                    #set($cash_payment="手机支付宝APP")
+                    #end
+                    #if($!obj.cashPayment=="bill")
+                      #set($cash_payment="快钱")
+                    #end
+                    #if($!obj.cashPayment=="chinabank")
+                      #set($cash_payment="网银在线")
+                    #end
+                    #if($!obj.cashPayment=="tenpay")
+                      #set($cash_payment="财付通")
+                    #end
+                <td  align="center">$!cash_payment</td>
+                	#if($!obj.cashStatus==0)
+                      #set($cash_status="等待审核")
+                    #end
+                    #if($!obj.cashStatus==1)
+                      #set($cash_status="审核完成")
+                    #end
+                    #if($!obj.cashStatus==-1)
+                      #set($cash_status="审核拒绝")
+                    #end
+                <td  align="center">$!cash_status</td>
+                	#if($!obj.cashPayStatus==0)
+                      #set($cash_pay_status="等待支付")
+                    #end
+                   
+                    #if($!obj.cashPayStatus==1)
+                      #set($cash_pay_status="支付完成")
+                    #end
+                <td  align="center">$!cash_pay_status</td>
+                <!-- <td  align="center" class="user_order_table_yes"><a href="$!webPath/seller/seller_cash_view.htm?id=$!obj.id">查看</a></td> -->
+              </tr>
+              #end
+            </table>
+          </div>
+          <div class="userlist_allop">
+            <div class="user_list_page"><span class="user_page_sp">
+              <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+              $!gotoPageFormHTML</span> </div>
+          </div>
+        </form>
+        #else
+          <div class="nothing">
+            <div class="nothing_left"><img src="$!webPath/resources/style/system/front/default/images/nothing.png" /></div>
+            <div class="nothing_right">您目前还没有提现申请记录！</div>
+          </div>
+          #end
+      </div>
+    </div>
+  </div>
+
+</div>
+$!httpInclude.include("/footer.htm")
+</body>
+</html>

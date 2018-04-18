@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.operation.mapper.CouponInfoMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.operation.model.CouponInfo">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="coupon_sn" property="couponSn" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="coupon_id" property="couponId" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.operation.bo.CouponInfoBO"
+		extends="BaseResultMap">
+		<association property="coupon"
+			javaType="com.sinco.carnation.operation.bo.CouponBO"
+			resultMap="com.sinco.carnation.operation.mapper.CouponMapper.BOResultMap"
+			columnPrefix="c_"></association>
+	</resultMap>
+
+	<resultMap id="BOCouponInfoPageList" type="com.sinco.carnation.operation.bo.CouponInfoBO"
+		extends="BaseResultMap">
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="coupon_amount" property="couponAmount"
+			jdbcType="DECIMAL" />
+	</resultMap>
+
+	<select id="findHasIsOver" resultMap="BOCouponInfoPageList">
+		SELECT info.* from shop_coupon_info info INNER JOIN shop_coupon co ON
+		info.coupon_id=co.id
+		where info.delete_status=0 and
+		DATE_FORMAT(co.coupon_end_time, '%Y-%m-%d') <![CDATA[ <= ]]>
+		DATE_FORMAT(#{endTime} , '%Y-%m-%d') and info.status = #{status}
+	</select>
+	<select id="queryCouponInfoPageList" resultMap="BOCouponInfoPageList">
+		SELECT
+		u.login_name,co.coupon_amount,info.* from shop_coupon_info info LEFT
+		JOIN shop_coupon co ON info.coupon_id=co.id
+		LEFT JOIN sys_user_account
+		u ON (u.uid=info.user_id and u.account_type=2)
+		where
+		info.delete_status=0 and coupon_id=#{couponId,jdbcType=BIGINT}
+		ORDER BY
+		info.add_time DESC
+	</select>
+
+	<select id="findMyCoupon" parameterType="com.sinco.carnation.operation.vo.CouponInfoMyVO"
+		resultMap="BOResultMap">
+		SELECT
+		ci.*, c.id as c_id, c.coupon_amount as c_coupon_amount,
+		c.coupon_count as c_coupon_count
+		,c.coupon_name as
+		c_coupon_name,c.coupon_type as c_coupon_type, c.coupon_acc as
+		c_coupon_acc
+		, c.store_id as c_store_id,c.coupon_begin_time as
+		c_coupon_begin_time,c.coupon_end_time as
+		c_coupon_end_time,c.coupon_order_amount as c_coupon_order_amount,
+		store.store_name as c_store_name,ci.status as c_coupon_status
+		FROM
+		shop_coupon_info ci
+		INNER JOIN shop_coupon c ON ci.coupon_id = c.id
+		LEFT JOIN shop_store store
+		on store.id=c.store_id
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="vo.status != null">
+				and ci.`status` = #{vo.status}
+			</if>
+			<if test="vo.couponOrderAmount != null">
+				and c.coupon_order_amount &lt;= #{vo.couponOrderAmount}
+			</if>
+			<if test="vo.couponType != null">
+				AND c.coupon_type = #{vo.couponType}
+			</if>
+			<if test="vo.storeId != null">
+				AND c.store_id = #{vo.storeId}
+			</if>
+			<if test="vo.couponEndTime != null">
+				AND c.coupon_end_time &gt;=
+				DATE_FORMAT(#{vo.couponEndTime},'%Y%m%d')
+			</if>
+			<if test="vo.couponBeginTime != null">
+				AND c.coupon_begin_time &lt;=
+				DATE_FORMAT(#{vo.couponBeginTime},'%Y%m%d')
+			</if>
+			<if test="vo.id != null">
+				AND ci.id=#{vo.id}
+			</if>
+			and ci.user_id = #{vo.uid}
+		</trim>
+	</select>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, coupon_sn, status, coupon_id,
+		user_id
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.operation.model.CouponInfoExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_coupon_info
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_coupon_info
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		shop_coupon_info
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.operation.model.CouponInfoExample">
+		delete from shop_coupon_info
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.operation.model.CouponInfo"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_coupon_info (id,
+		add_time, delete_status,
+		coupon_sn, status, coupon_id,
+		user_id)
+		values
+		(#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{couponSn,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER}, #{couponId,jdbcType=BIGINT},
+		#{userId,jdbcType=BIGINT})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.operation.model.CouponInfo"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_coupon_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="couponSn != null">
+				coupon_sn,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="couponId != null">
+				coupon_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="couponSn != null">
+				#{couponSn,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="couponId != null">
+				#{couponId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.operation.model.CouponInfoExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_coupon_info
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_coupon_info
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.couponSn != null">
+				coupon_sn = #{record.couponSn,jdbcType=VARCHAR},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.couponId != null">
+				coupon_id = #{record.couponId,jdbcType=BIGINT},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_coupon_info
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time
+		= #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=BIT},
+		coupon_sn =
+		#{record.couponSn,jdbcType=VARCHAR},
+		status =
+		#{record.status,jdbcType=INTEGER},
+		coupon_id =
+		#{record.couponId,jdbcType=BIGINT},
+		user_id =
+		#{record.userId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.operation.model.CouponInfo">
+		update shop_coupon_info
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="couponSn != null">
+				coupon_sn = #{couponSn,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="couponId != null">
+				coupon_id = #{couponId,jdbcType=BIGINT},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.operation.model.CouponInfo">
+		update
+		shop_coupon_info
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		coupon_sn =
+		#{couponSn,jdbcType=VARCHAR},
+		status = #{status,jdbcType=INTEGER},
+		coupon_id = #{couponId,jdbcType=BIGINT},
+		user_id =
+		#{userId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>商品分类</title>
+<meta name="viewport"
+	content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<link rel="stylesheet" type="text/css"
+	href="$!webPath/resources/shop/css/common.css" />
+<link rel="stylesheet" type="text/css"
+	href="$!webPath/resources/shop/css/style.css" />
+<style>
+html {
+	background: #fff;
+}
+
+html,body {
+	height: 100%;
+}
+
+.p_filter {
+	width: 100%;
+	z-index: 999;
+	position: fixed;
+	height: 0.82rem;
+	line-height: 0.82rem;
+	background: #fff;
+	top: 0rem;
+}
+
+.p_filter .dd {
+	font-size: 0.32rem;
+	width: 49.99%;
+	color: #999;
+	position: relative;
+	text-align: center;
+	float: left;
+}
+
+.p_filter .dd a {
+	display: block;
+	color: #4a4a4a;
+	text-decoration: none;
+	width: 1.54rem;
+	margin: 0 auto;
+	font-size: 0.36rem;
+}
+
+.p_filter a.selected i {
+	width: 2.04rem;
+	background: #19BF96;
+	height: 1px;
+	position: absolute;
+	left: 0.84rem;
+	bottom: 0px;
+}
+
+.fenleiHoler {
+	border-top: 0.2rem solid #f7f7f7;
+	position: relative;
+	top: 0.82rem;
+}
+</style>
+<script>
+	var _hmt = _hmt || [];
+	(function() {
+		var hm = document.createElement("script");
+		hm.src = "//hm.baidu.com/hm.js?5ec07b377284cf8ef95ebaa33fa298f5";
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(hm, s);
+	})();
+</script>
+
+<script>
+	var screenWidth = window.innerWidth || document.documentElement.clientWidth;
+	document.documentElement.style.fontSize = parseInt(screenWidth / 7.5)
+			+ "px";
+</script>
+</head>
+<body>
+	<div class="p_filter fc_title">
+		<div class="dd">
+			<a href="$!webPath/brand-index.htm"><i></i>品牌馆</a>
+		</div>
+		<div class="dd">
+			<a href="$!webPath/web_goods_class.htm" class="selected"><i></i>商品分类</a>
+		</div>
+
+	</div>
+
+	<div class="fenleiHoler">
+		<div class="fenlei_title">
+			<ul>
+				<!-- <li class="curr"><a href="javascript:;" class="t1">健康食品<i><s></s></i></a></li>
+					<li><a href="javascript:;" class="t4">丽芙专区</a></li> -->
+				#set($numb=1) #foreach($gc in $gcs) #if($gc.display) #if($numb==1)
+				<li class="curr" data-id="$!{gc.id}"><a href="javascript:;"
+					class="t$numb">$!{gc.className}</a></li> #else
+				<li data-id="$!{gc.id}"><a href="javascript:;" class="t$numb">$!{gc.className}</a></li>
+				#end #set($numb=$numb+1) #end #end
+			</ul>
+		</div>
+		<div class="hidediv">
+			<span class="hideimg1"></span> <span class="hideimg2"></span> <span
+				class="hideimg3"></span> <span class="hideimg4"></span> <span
+				class="hideimg5"></span> <span class="hideimg6"></span> <span
+				class="hideimg7"></span> <span class="hideimg8"></span>
+		</div>
+		<div class="typeContainer" id="typeContainer">
+
+			<div class="type" id="type">
+				<ul>
+					#foreach($gc in $gcs) #if($gc.display) #foreach($c_gc in
+					$gc.childs)
+					<li><a href="$!webPath/store_goods_list_$!{c_gc.id}.htm"
+						target="_blank"><span>$!CommUtil.substring("$!{$c_gc.className}",4)
+						</span>
+					</a></li> #break #end #end #end
+					<ul>
+			</div>
+		</div>
+	</div>
+
+		
+		<script src="$!webPath/resources/js/jquery.min.js"
+		type="text/javascript"></script>
+		
+	<script src="$!webPath/resources/js/common.js"></script>
+	
+		
+	<script type="text/javascript"
+		src="$!webPath/resources/js/TouchSlide.js"></script>
+		
+	<script src="$!webPath/resources/js/srcolltop.js"
+		type="text/javascript"></script>
+		
+	<script src="$!webPath/resources/js/jquery.lazyload2.js"
+		type="text/javascript"></script>
+		
+	<script src="$!webPath/resources/js/goToHtml.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$('img').lazyload();
+		$(document).ready(function(){
+			$(".fenlei_title ul li").eq(0).trigger("touchstart");
+		});
+		$(".fenlei_title ul li")
+				.on(
+						"touchstart",
+						function() {
+							$(this).addClass("curr").siblings().removeClass(
+									"curr");
+							$(".typeContainer .type").hide();
+							if ($(".typeContainer").find(
+									"#type" + $(this).attr("data-id")).length == 0) {
+								var typeid = $(this).attr("data-id");
+								console.log(typeid);
+								$
+										.ajax({
+											type : "Post",
+											url : "load_goods_class",
+											async : true,
+											//方法传参的写法一定要对，与后台一致，区分大小写，不能为数组等，str1为形参的名字,str2为第二个形参的名字 
+											data : {
+												"pid" : typeid
+											},
+											dataType : "json",
+											success : function(data) {
+												var arr = data.data.gc;
+												//请求类型id 拼接html
+												var html = "";
+												html += "<div class=\"type\" id=\"type"+typeid+"\">";
+												html += "<ul>";
+												for (var i = 0, len = arr.length; i < len; i++) {
+													html += "<li><a href=\"$!webPath/store_goods_list_"
+															+ arr[i].id
+															+ ".htm\" target=\"_blank\">";
+													html += "<img data-original=\"$!webPath/resources/shop/img/fenlei_goods.png\" alt=\"\" />";
+													html += "<span>"
+															+ arr[i].className
+															+ "</span>"
+													html += "</a>";
+													html += "</li>";
+												}
+												html += "</ul>";
+												html += "</div>";
+
+												$("#typeContainer")
+														.append(html);
+
+											},
+											error : function(err) {
+												alert(err);
+											}
+										});
+
+							} else {
+								$("#type" + $(this).attr("data-id")).show();
+							}
+						});
+	</script>
+	<div class="actGotop">
+		<a href="javascript:;" title="返回顶部">
+			<img src="$!webPath/resources/shop/images/dinzhi.png" alt="">
+		</a> 
+	</div>
+	$!httpInclude.include("/wx_foot2.htm")
+</body>
+</html>

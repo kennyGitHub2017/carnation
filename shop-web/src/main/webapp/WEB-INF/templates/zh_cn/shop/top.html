@@ -1,0 +1,168 @@
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?5ec07b377284cf8ef95ebaa33fa298f5";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<script type="text/javascript">
+
+jQuery(document).ready(function(){
+  jQuery(".top_pull").mouseover(function(){
+	jQuery(this).find("div").show();
+	jQuery(this).find("em").addClass("em_this");
+	jQuery(this).find("s").addClass("this");
+  	}).mouseleave(function(){
+    jQuery(this).find("div").hide();
+	jQuery(this).find("em").removeClass("em_this");
+	jQuery(this).find("s").removeClass("this");
+  });
+  
+  jQuery("#register").click(function(){
+	  var r=confirm("请下载云尚官方APP进行注册");
+	  if (r==true){
+	    window.open('$!webPath/appDownLoad.htm')
+	  }
+  });
+  
+  
+});
+var browserEvent = function (obj, url, title) {
+    var e = window.event || arguments.callee.caller.arguments[0];
+    var B = {
+        IE : /MSIE/.test(window.navigator.userAgent) && !window.opera
+        , FF : /Firefox/.test(window.navigator.userAgent)
+        , OP : !!window.opera
+    };
+    obj.onmousedown = null;
+    if (B.IE) {
+        obj.attachEvent("onmouseup", function () {
+            try {
+                window.external.AddFavorite(url, title);
+                window.event.returnValue = false;
+            } catch (exp) {}
+        });
+    } else {
+        if (B.FF || obj.nodeName.toLowerCase() == "a") {
+            obj.setAttribute("rel", "sidebar"), obj.title = title, obj.href = url;
+        } else if (B.OP) {
+            var a = document.createElement("a");
+            a.rel = "sidebar", a.title = title, a.href = url;
+            obj.parentNode.insertBefore(a, obj);
+            a.appendChild(obj);
+            a = null;
+        }
+    }
+};
+
+$(function(){
+	$(window).scroll(scrolls);
+
+	   function scrolls(){
+		   	if((document.body.scrollTop||document.documentElement.scrollTop)>673){
+		   	$("#Fixed").show(); 
+		   	}else{
+		   		$("#Fixed").hide(); 
+		   	}	
+		   	
+	   }
+});
+</script>
+<div class="topnew" id="top">
+	<div class="main">
+	<div class="right">
+			<ul>
+			
+			#if($!user)
+				<li>
+					<a href="$!webPath/buyer/index.htm">$!top_nickName</a>		
+					<b>|</b>
+				</li>
+				<li>
+					<a href="$!webPath/b2b2c_logout.htm">退出登录</a>
+					<b>|</b>
+				</li>
+			#else
+				<li>
+					<a href="$!webPath/user/login.htm">登录</a>
+					<b>|</b>
+				</li>
+				
+				<li>
+					<a href="$!webPath/register.htm" class="red">免费注册</a>
+					<b>|</b>
+				</li>
+			#end
+				<li>
+					<a href="$!webPath/buyer/order.htm">我的订单</a>		
+					<b>|</b>
+				</li>
+				<li>
+					<a href="$!webPath/buyer/index.htm">用户中心</a>
+					<b>|</b>
+					<s></s>
+					<ul>
+						<li><a href="$!webPath/buyer/foot_point.htm">最近浏览</a></li>
+						<li><a href="$!webPath/buyer/favorite_goods.htm">我的收藏</a></li>
+						<li><a href="$!webPath/goods_cart1.htm">我的购物车</a></li>
+						<li><a href="$!webPath/buyer/predeposit.htm">我的云豆</a></li>
+						<li><a href="$!webPath/buyer/coupon.htm">我的优惠券</a></li>
+						<!-- <li><a href="#">免费抽大奖</a></li>
+						<li><a href="#">立即分享 </a></li> -->
+					</ul>
+				</li>
+				
+				<li>
+					<a href="$!webPath/buyer/index.htm">登录后台</a>
+					<b>|</b>
+					<s></s>
+					<ul>
+						<li><a href="http://yys.ysysgo.com/login.htm" >运营商登录</a></li>
+						<li><a href="$!webPath/user/supplierLogin.htm" >供应商登录</a></li>
+	                    <li><a href="$!webPath/user/merchantLogin.htm">商户登录</a></li>
+	                    <li><a href="$!webPath/seller/ruzhu_pingtai.htm">入驻申请</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="$!webPath/seller/ruzhu_pingtai.htm">我要入驻</a> 	
+					<b>|</b>
+					<!-- <s></s>
+					<ul>
+	        			#if($!user)
+							#if($!store)
+	                        <li><a href="$!webPath/seller/index.htm">卖家登录</a></li>
+	                        #else
+	                        <li><a href="$!webPath/seller/ruzhu_pingtai.htm" op="account">卖家登录</a></li>
+		        			#end
+						#else
+	                        <li><a href="$!webPath/user/login.htm">卖家登录</a></li>
+						#end
+					</ul> -->
+				</li>				
+				<li>
+					<a href="$!webPath/doc_online.htm">客户服务</a> 	
+					<b>|</b>
+					<s></s>
+					<ul>
+						<!-- <li><a href="$!webPath/doc_service.htm">申请售后</a></li> -->
+                        <li><a href="$!webPath/article_9.htm">联系客服</a></li>
+                        <li><a href="$!webPath/article_4.htm">常见问题</a></li>
+                       <!--  <li><a href="$!webPath/articlelist_help_4.htm">会员反馈</a></li> -->
+                       <!-- <li><a href="$!webPath/articlelist_help_4.htm"> 关于云尚</a></li> -->
+					</ul>
+				</li>
+			</ul>							
+		</div>
+		<div class="left">
+			<a href="http://www.ysysgo.com" target="_blank" class="">云尚首页</a>
+			<a href="$!webPath" class="index">云尚商城</a>
+			<a href="http://www.yunshangworld.com" target="_blank" class="index">云尚官网</a>		
+		</div>		
+	</div>			
+</div>
+
+
+  $!httpInclude.include("/goTop.htm")

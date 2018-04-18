@@ -1,0 +1,16 @@
+<div id="wiew_map" style="width: 650px; height: 400px;"></div>
+
+<script>
+    // 百度地图API功能
+    var map = new BMap.Map("wiew_map");
+    var opts = {type:BMAP_NAVIGATION_CONTROL_LARGE}    
+    map.addControl(new BMap.NavigationControl(opts));
+    var point = new BMap.Point(#if($!store.storeLon) $!store.storeLon #else 0 #end,#if($!store.storeLat) $!store.storeLat #else 0 #end);
+    map.centerAndZoom(point,14);
+
+    var marker = new BMap.Marker(point);
+    map.addOverlay(marker);
+    map.openInfoWindow(new BMap.InfoWindow("$!store.storeAddress<br>$!store.storeTelephone",{width:250,height:100,title:"$!store.storeName"}),map.getCenter());
+
+
+</script>

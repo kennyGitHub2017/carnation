@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script>
+jQuery(document).ready(function(){
+});
+</script>
+</head>
+<body>
+<div class="cont">
+  <h3 class="seth">专家咨询知识库</h3>
+  <div class="nav_list">
+    <ul>
+      <li><a href="$!webPath/admin/information_list.htm" class="this"><b>知识库列表</b></a></li>
+      <li><a href="$!webPath/admin/expert_knowledge_add.htm"><b>新增</b></a></li>
+    </ul>
+  </div>
+  <form method="post" id="ListForm" action="$!webPath/admin/expert_knowledge.htm">
+    <div class="search">
+      <ul>
+        <li><span>标题名称</span> <span class="size150">
+          <input name="title" type="text" id="title" value="$!title" />
+          </span>
+          <!-- <span>分类</span> <span>
+          <select name="classid" id="classid" >
+            <option value="">资讯分类</option>
+               
+           #foreach($infoclass in $infoclassList)          
+            <option value="$!infoclass.id" #if($!infoclass.id==$!vo.classid) selected="selected" #end>$!infoclass.icName</option>
+           #end          
+            
+          </select>
+          </span>
+          <span>状态</span> <span>
+           <select name="status" id="status">
+           	  <option value="" >全部状态</option>
+           	   <option value="10" #if($!vo.status == 10) selected=selected #end>待审核</option>
+              <option value="20" #if($!vo.status == 20) selected=selected #end>审核通过</option>
+              <option value="-10" #if($!vo.status == -10) selected=selected #end>审核未通过</option>
+            </select>
+          </span> -->
+          <span>
+          <input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn"/>
+          </span> </li>
+      </ul>
+    </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="5%"></th>
+          <th width="30%"><span class="form_btna">标题</span></th>
+          <th width="25%" ><span class="form_btna">分类</span></th>
+          <th width="15%" ><span class="form_btna">创建人</span></th>
+          <th width="15%" align="center"><span class="form_btna">创建时间</span></th>
+          <th align="center"><span class="form_btna">操作</span></th>
+        </tr>
+        #foreach($obj in $objs)
+        <tr id="column_$!{obj.id}">
+          <td class="check_position"><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td align="center">$!obj.title</td>
+          <td align="center">$!obj.className</td>
+          <td align="center">$!obj.name</td>
+          <td align="center">$!CommUtil.formatLongDate($!obj.createTime)</td>
+          <td  align="center" class="hui oprate_con"><a href="$!webPath/admin/expert_knowledge_details.htm?id=$!obj.id" class="blue">查看</a>|<a href="javascript:void(0);" onclick="if(confirm('删除后不可恢复，是否继续？'))window.location.href='$!webPath/admin/expert_knowledge_delete.htm?ids=$!obj.id&currentPage=$!currentPage'"  class="blue">删除</a></td>
+        </tr>
+        #end
+      </table>
+    </div>
+    <div class="operate_bar">
+      <div class="fenye">
+        <input type="hidden" name="mulitId" id="mulitId" />
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML </div>
+      <div class="shopbtn shopfx"><span class="oper_check" >
+        <label onclick="selectAll(jQuery('#all'))">
+          <input type="checkbox" name="all" id="all" value="" />
+          全部</label>
+        </span></div>
+      <div class="shop_btn_del shopbtn"><span class="oper_del">
+        <input name="" type="button" value="删除" onclick="cmd('$!webPath/admin/expert_knowledge_delete.htm');"/>
+        </span></div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

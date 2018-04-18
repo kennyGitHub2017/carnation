@@ -1,0 +1,43 @@
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate({
+	   rules:{
+		   shipCode:{required:true}
+		   },
+	   messages:{
+	       shipCode:{required:"不能为空"}
+	   }
+	});
+});
+</script>
+<form action="$!webPath/admin/zero_act/goods_zero_act_save.htm" method="post" id="theForm">
+  <table style="float:left;" width="100%" border="0" cellspacing="0" cellpadding="0" class="box_table">
+
+    <tr>
+      <td align="right" valign="top">商品名称：</td>
+      <td align="left">
+      	<input name="goodsName" type="text" id="goodsName" value="$!zeroGoods.goodsName" size="30" />
+      	<input name="id" type="hidden" id="id" value="$!zeroGoods.id"/>
+      </td>
+    </tr>
+    <tr>
+      <td align="right" valign="top">邮费：</td>
+      <td align="left">
+      	<input name="shipFee" type="text" id="shipFee" value="$!zeroGoods.shipFee" size="30" />
+      </td>
+    </tr>
+     <tr>
+      <td align="right" valign="top">库存：</td>
+      <td align="left">
+      	<input name="goodsInventory" type="text" id="goodsInventory" value="$!zeroGoods.goodsInventory" size="30" />
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><span class="inputbtn">
+        <input name="" type="submit" value="提交" style="cursor:pointer;"/>
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        <input name="goodsId" type="hidden" id="goodsId" value="$!zeroGoods.goodsId" />
+      </span></td>
+    </tr>
+  </table>
+</form>

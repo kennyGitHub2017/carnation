@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="$!webPath/resources/elong/css/mainForFinish.css" />
+		<style type="text/css">.validate-code-by-intercept{position:absolute;top:50%;left:50%;margin-top:-120px;margin-left:-153px;padding-top:10px;height:220px;width:306px;z-index:15000;background-color:#fff;text-align:center;font-size:16px;font-weight:700;color:#353535}.validate-code-by-intercept .form-li{clear:both;height:44px;line-height:44px;margin:3px 12px}.validate-code-by-intercept .form-li2{overflow:hidden;border-radius:5px;border:1px solid #ddd;background-clip:padding-box;margin-bottom:10px}.validate-code-by-intercept input.txt{width:100%;padding:11px 10px 11px 13px;display:block;margin:0;border:0;background:0;font:16px/1.4 Helvetica Neue,HelveticaNeue,Helvetica,Arial,sans-serif}.validate-code-by-intercept .submit{font-size:1.1rem;width:100%;height:40px;line-height:40px;text-align:center;color:#fff;border-radius:5px;border-width:0;background-color:#e65749;margin:0 0 10px}</style>
+	</head>
+	<body>
+		<div class="pages">
+		
+	<div data-blend="layer" data-blend-id="h5_finishorder" data-url="/hotel/finishorder/?cachekey=0606a5ef-23f7-4710-ace3-6d69a2075b7e&amp;orderno=229697760" id="uniq23" class="page page-on-center" data-title="
+            订单完成
+    " style="top: 0px; left: 0px; right: 0px; bottom: 0px;"><header class="bar bar-nav flight-order-head">
+	                <h1 class="title">订单完成</h1>
+	            </header><div class="page-content new_finishorder">
+					<section class="comp-wrap">
+						<span class="t-shaft"></span>
+						<div class="sucess">
+							<span class="correct"></span>订单提交成功！
+						</div>
+						<div class="division">**********************************************************************************************************************************</div>
+						<div class="progress">
+							<h2>订单进度：</h2>
+							<ul><li class="on"><i></i>
+								#if (${orderDetail.showStatus} == "1")
+								担保失败
+									#if (${orderDetail.status} == "N")
+									- 新单
+									#elseif (${orderDetail.status} == "U")
+									- 特殊满房
+									#end
+								#elseif (${orderDetail.showStatus} == "2")
+								等待担保
+									#if (${orderDetail.status} == "N")
+									- 新单
+									#end
+								#elseif (${orderDetail.showStatus} == "4")
+								等待确认
+									<!-- #if (${orderDetail.status} == "V")
+									- 已审
+									#end -->
+								#elseif (${orderDetail.showStatus} == "8")
+								等待支付
+									#if (${orderDetail.status} == "V")
+									- 信用卡正在验证，等待扣款
+									#end
+								#elseif (${orderDetail.showStatus} == "16")
+								等待核实入住
+									#if (${orderDetail.status} == "A")
+									- 已确认
+									#elseif (${orderDetail.status} == "B3")
+									- 暂不确定
+									#elseif (${orderDetail.status} == "B1")
+									- 有预定未查到
+									#end
+								#elseif (${orderDetail.showStatus} == "32")
+								酒店拒绝订单
+									#if (${orderDetail.status} == "G")
+									- 变价
+									#elseif (${orderDetail.status} == "U")
+									- 特殊满房
+									#elseif (${orderDetail.status} == "O")
+									- 满房
+									#end
+								#elseif (${orderDetail.showStatus} == "64")
+								未入住
+								#elseif (${orderDetail.showStatus} == "128")
+								已经离店 
+								#elseif (${orderDetail.showStatus} == "256")
+								已经取消
+								#elseif (${orderDetail.showStatus} == "512")
+								已经确认
+								#elseif (${orderDetail.showStatus} == "1024")
+								已经入住
+								#elseif (${orderDetail.showStatus} == "2048")
+								正在担保 - 处理中
+								#elseif (${orderDetail.showStatus} == "4096")
+								正在支付 - 处理中
+								#elseif (${orderDetail.showStatus} == "8192")
+								支付失败
+								#end
+							</li></ul>
+						</div>
+						<div class="info">
+							<dl>
+								<dt>订&nbsp;单&nbsp;号&nbsp;：</dt>
+								<dd>$!{orderDetail.orderId}</dd>							
+							</dl>
+							<dl>
+								<dt>酒店名称：</dt>
+								<dd>$!{orderDetail.hotelName}</dd>
+							</dl>
+							<dl>
+								<dt>房&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型：
+								</dt>
+								<dd>
+								$!{orderDetail.roomTypeName}
+								</dd>
+							</dl>
+							<dl>
+								<dt>入离日期：</dt>
+								<dd>
+									${arrivalDate} 到  ${departureDate}
+									<span>共${intervalDay}晚</span>
+								</dd>
+							</dl>
+						</div>
+						<div class="consume">
+							<p class="price">消费金额：<span>￥${totalPrice}</span>
+							</p>
+							<!-- 高铁管家定制 -->
+						</div>
+						<span class="b-curve"></span>
+					</section>
+					<section class="comp-link">
+							<a href="javascript:void(0);" class="share" style="display:none;"><i class="share_bg"></i>分享订单</a>
+							<a href="javascript:void(0);" class="return" style="display:none;"><i class="return_bg"></i>申请返现</a>
+							<a href="$!webPath/v1/elong_hotel_list.htm" class="book tjclick" data-tj="{&quot;cspot&quot;:&quot;bookingagain&quot;}"><i class="book_bg"></i>再订一间</a>
+					</section>
+                	<input type="hidden" id="orderDetailUrl" value="https://m.elong.com/hotel/orderdetail/229697760/">
+					<input type="hidden" id="hotelDetailUrl" value="https://m.elong.com/hotel/90923349/">
+			</div></div></div>
+	</body>
+</html>

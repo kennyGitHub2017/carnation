@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+	<title>我的订单</title>
+	<link href="$!webPath/resources/shop/css/style.css" rel="stylesheet" type="text/css"/>
+	<script src="$!webPath/resources/js/jquery.min.js" type="text/javascript"></script>
+	<script src="$!webPath/resources/js/jquery.lazyload2.js" type="text/javascript"></script>
+	
+	<style>
+		html,body{
+			background-color:#fff;
+		}
+		.allorder-search{
+			position:fixed;
+			top:0rem;
+			z-index:999;
+		}
+	#tab2 {
+		position: static;
+	    margin-top: 2rem;
+	   width: 100%;
+	   font-size: 0.32rem;
+	   color: #4a4a4a;
+	   position:relative;
+	   top: 0px;
+	   background-color: #fff;
+	   z-index: 999;
+	}
+	#tab2 .tab_menu {
+	    margin-left: 0rem;
+	}
+	#tab2 .tab_menu {
+	    width: 100%;
+	    float: left;
+	    z-index: 1;
+	    margin-left: 0.13rem;
+	    position: fixed;margin-top: -0.8rem;
+	    background:#fff;
+	}
+	#tab2 .tab_menu li {
+	    width: 1.18rem;
+	    margin-left: 0.1rem;
+	}
+	#tab2 .tab_menu li {
+	   height: 0.8rem;
+	    display: inline-block;
+	    overflow: hidden;
+	    white-space: nowrap;
+	    margin-left: 0.15rem;
+	    line-height: 0.8rem;
+	    text-align: center;
+	}
+	#tab2 .tab_menu li.selected {
+	   border-bottom:1px solid #30c5a0;
+	   color:#30c5a0;
+	}
+	.tab_box {
+	    margin-top: -0.08rem;
+	    background-color: #fff;
+	    width: 100%;
+	    z-index:0;
+	}
+	.allorder-search input.testsearch{
+		background:url("$!webPath/resources/shop/images/searchOrder.png") no-repeat right center #fff;
+		background-size:0.4rem 0.4rem;
+	}
+	
+	#tab2 .tab_menu{margin-left: 0rem;margin-top: -1rem}
+	.order-goodsimg  ul li em{left: 0rem;}
+	</style>
+	<script>
+		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+		document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+		
+		function onClickStatus(val){
+			$('#statusName').val(val);
+			$("#form_id").submit()
+		}
+		
+		function orderInfo(orderId){
+			var url = '$!webPath/order-detail?orderId='+orderId;
+			//window.location.href = url;
+			window.open(url);
+		}
+
+		
+		function cancelOrder(id){
+			   $.ajax({
+			        type: "POST",
+			        url: "$!webPath/cancel-order",
+			        data: { id:id},
+			        dataType: "json",
+			        success: function (data) {
+			        	if(data){
+			        		location.reload();
+			        	}else{
+			        		alert("订单取消失败");
+			        	}
+			        },
+			    });
+		}
+		
+		
+		jQuery(document).ready(function(){
+			$("#$!order_status").addClass("selected").siblings("li").removeClass("selected");
+		});
+		
+		function searchorder(){
+			/* $(".allorder-search input").css("background","$!webPath/resources/shop/images/searchOrder.png");
+			$(".allorder-search input").css("background-repeat","no-repeat");
+			$(".allorder-search input").css("background-position","right"); */
+			$(".allorder-search input").addClass("testsearch");
+		}
+		if(document.getElementById(searchorder).value.length){
+			
+		}
+    </script>
+</head>
+<body>
+	
+	<div id="tab2" style="">
+	<div class="allorder-search">
+		<input type="text" placeholder="商品名称或订单号" oninput="searchorder()" id="searchorder" >
+	</div>
+	<form action="$!webPath/order-list" id="form_id" method="post">
+		<input type="hidden" name="orderStatus" id="statusName">
+	</form>
+
+		<ul class="tab_menu" id="tab_menu_id">
+	    	<li class="selected"  onclick="onClickStatus(null)" id="all">全部</li>
+	        <li onclick="onClickStatus('order_submit')" id="order_submit">待付款</li>
+	        <li onclick="onClickStatus('order_pay')" id="order_pay">待发货</li>
+	        <li onclick="onClickStatus('order_shipping')" id="order_shipping">待收货</li>
+	        <li onclick="onClickStatus('order_receive')" id="order_receive">待评价</li>
+	    </ul>
+
+	    <div class="tab_box">
+	    	<div>
+	    	
+	    		<!-- 全部的内容 -->
+	    		<!-- 等待付款 -->
+	    		#foreach($obj in $objs)
+	    		<div>
+					<div class="order-id">
+						<span class="right">
+						     	  #if($!obj.orderStatus==0)
+                                  #set($status="已取消")
+                                  #end
+                                  
+                                  #if($!obj.orderStatus==10)
+                                  #set($status="待付款")
+                                  #end
+                                                                    
+                                  #if($!obj.orderStatus==16)
+                                  #set($status="货到付款待发货")
+                                  #end
+                                  
+                                  #if($!obj.orderStatus==20)
+                                  #set($status="已付款")
+                                  #end
+                                  
+                                  #if($!obj.orderStatus==30)
+                                  #set($status="已发货")        
+                                  #end 
+                                                 
+                                  #if($!obj.orderStatus==40)
+                                  #set($status="已收货")
+                                  #end
+                                  
+                                  #if($!obj.orderStatus==50)
+                                  #set($status="已完成,已评价")                                              
+                                  #end
+                                  
+                                  #if($!obj.orderStatus==60)
+                                  #set($status="已结束")                                              
+                                  #end 
+                                  
+                                  #if($!obj.orderStatus ==65)
+                                  #set($status="已结束，不可评价")                                              
+                                  #end
+                                  
+                                 $!{status}
+						</span>
+						<span class="left" onclick="orderInfo($!{obj.id})">订单编号：$!{obj.orderId}</span>
+					</div>
+					<div class="order-goodsimg">
+					
+						<ul>
+						#set ($i=0)
+				      	#foreach($map in $!orderFormTools.queryGoodsInfo("$!obj.goodsInfo"))
+                            #set($goods_mainphoto_path = "$!{map.get('goods_mainphoto_path')}")
+                            #set($goods_count = "$!{map.get('goods_count')}")
+                          		<li><img data-original="$!goods_mainphoto_path" alt=""><em>$goods_count</em></li>
+                          		 #set($i=$goods_count)
+                          #end	
+
+						<span class="order-span"></span>
+					</div>
+					<div class="order-number">
+						<span>实付：¥ $!{obj.totalPrice}</span><span>共$i件商品</span>
+					</div>
+					<div class="quzhifu-btn">
+						#if($!obj.orderStatus==10)
+						<span class="zf"><a href="$!webPath/cach-desk?orderId=$!{obj.orderId}">去支付</a></span>
+						#end
+						
+						#if($!obj.orderStatus < 17 )
+						<span class="qxorder" onclick="cancelOrder($!{obj.id})">取消订单</span>
+						#end
+					</div>
+				</div>
+				#end
+
+	    	</div>
+	
+
+	    </div>
+	</div>
+
+
+</body>
+</html>

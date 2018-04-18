@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.o2o.mapper.GroupClassMapper" >
+  <resultMap id="BaseResultMap" type="com.sinco.carnation.o2o.model.GroupClass" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="delete_status" property="deleteStatus" jdbcType="BIT" />
+    <result column="gc_level" property="gcLevel" jdbcType="INTEGER" />
+    <result column="gc_name" property="gcName" jdbcType="VARCHAR" />
+    <result column="gc_sequence" property="gcSequence" jdbcType="INTEGER" />
+    <result column="gc_type" property="gcType" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="BIGINT" />
+    <result column="display" property="display" jdbcType="BIT" />
+    <result column="mobile_icon" property="mobileIcon" jdbcType="VARCHAR" />
+    <result column="web_icon" property="webIcon" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BOResultMap" type="com.sinco.carnation.o2o.bo.GroupClassBO" extends="BaseResultMap" />
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, add_time, delete_status, gc_level, gc_name, gc_sequence, gc_type, parent_id, 
+    display, mobile_icon, web_icon, url
+  </sql>
+  <select id="selectByExample" parameterType="com.sinco.carnation.o2o.model.GroupClassExample" resultMap="BOResultMap" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from o2o_group_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      limit ${limit}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BOResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from o2o_group_class
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from o2o_group_class
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinco.carnation.o2o.model.GroupClassExample" >
+    delete from o2o_group_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinco.carnation.o2o.model.GroupClass" useGeneratedKeys="true" keyProperty="id" >
+    insert into o2o_group_class (id, add_time, delete_status, 
+      gc_level, gc_name, gc_sequence, 
+      gc_type, parent_id, display, 
+      mobile_icon, web_icon, url
+      )
+    values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP}, #{deleteStatus,jdbcType=BIT}, 
+      #{gcLevel,jdbcType=INTEGER}, #{gcName,jdbcType=VARCHAR}, #{gcSequence,jdbcType=INTEGER}, 
+      #{gcType,jdbcType=INTEGER}, #{parentId,jdbcType=BIGINT}, #{display,jdbcType=BIT}, 
+      #{mobileIcon,jdbcType=VARCHAR}, #{webIcon,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinco.carnation.o2o.model.GroupClass" useGeneratedKeys="true" keyProperty="id" >
+    insert into o2o_group_class
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status,
+      </if>
+      <if test="gcLevel != null" >
+        gc_level,
+      </if>
+      <if test="gcName != null" >
+        gc_name,
+      </if>
+      <if test="gcSequence != null" >
+        gc_sequence,
+      </if>
+      <if test="gcType != null" >
+        gc_type,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="display != null" >
+        display,
+      </if>
+      <if test="mobileIcon != null" >
+        mobile_icon,
+      </if>
+      <if test="webIcon != null" >
+        web_icon,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        #{deleteStatus,jdbcType=BIT},
+      </if>
+      <if test="gcLevel != null" >
+        #{gcLevel,jdbcType=INTEGER},
+      </if>
+      <if test="gcName != null" >
+        #{gcName,jdbcType=VARCHAR},
+      </if>
+      <if test="gcSequence != null" >
+        #{gcSequence,jdbcType=INTEGER},
+      </if>
+      <if test="gcType != null" >
+        #{gcType,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="display != null" >
+        #{display,jdbcType=BIT},
+      </if>
+      <if test="mobileIcon != null" >
+        #{mobileIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="webIcon != null" >
+        #{webIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinco.carnation.o2o.model.GroupClassExample" resultType="java.lang.Integer" >
+    select count(*) from o2o_group_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update o2o_group_class
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.addTime != null" >
+        add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.deleteStatus != null" >
+        delete_status = #{record.deleteStatus,jdbcType=BIT},
+      </if>
+      <if test="record.gcLevel != null" >
+        gc_level = #{record.gcLevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.gcName != null" >
+        gc_name = #{record.gcName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gcSequence != null" >
+        gc_sequence = #{record.gcSequence,jdbcType=INTEGER},
+      </if>
+      <if test="record.gcType != null" >
+        gc_type = #{record.gcType,jdbcType=INTEGER},
+      </if>
+      <if test="record.parentId != null" >
+        parent_id = #{record.parentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.display != null" >
+        display = #{record.display,jdbcType=BIT},
+      </if>
+      <if test="record.mobileIcon != null" >
+        mobile_icon = #{record.mobileIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.webIcon != null" >
+        web_icon = #{record.webIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.url != null" >
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update o2o_group_class
+    set id = #{record.id,jdbcType=BIGINT},
+      add_time = #{record.addTime,jdbcType=TIMESTAMP},
+      delete_status = #{record.deleteStatus,jdbcType=BIT},
+      gc_level = #{record.gcLevel,jdbcType=INTEGER},
+      gc_name = #{record.gcName,jdbcType=VARCHAR},
+      gc_sequence = #{record.gcSequence,jdbcType=INTEGER},
+      gc_type = #{record.gcType,jdbcType=INTEGER},
+      parent_id = #{record.parentId,jdbcType=BIGINT},
+      display = #{record.display,jdbcType=BIT},
+      mobile_icon = #{record.mobileIcon,jdbcType=VARCHAR},
+      web_icon = #{record.webIcon,jdbcType=VARCHAR},
+      url = #{record.url,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.o2o.model.GroupClass" >
+    update o2o_group_class
+    <set >
+      <if test="addTime != null" >
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteStatus != null" >
+        delete_status = #{deleteStatus,jdbcType=BIT},
+      </if>
+      <if test="gcLevel != null" >
+        gc_level = #{gcLevel,jdbcType=INTEGER},
+      </if>
+      <if test="gcName != null" >
+        gc_name = #{gcName,jdbcType=VARCHAR},
+      </if>
+      <if test="gcSequence != null" >
+        gc_sequence = #{gcSequence,jdbcType=INTEGER},
+      </if>
+      <if test="gcType != null" >
+        gc_type = #{gcType,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="display != null" >
+        display = #{display,jdbcType=BIT},
+      </if>
+      <if test="mobileIcon != null" >
+        mobile_icon = #{mobileIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="webIcon != null" >
+        web_icon = #{webIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.o2o.model.GroupClass" >
+    update o2o_group_class
+    set add_time = #{addTime,jdbcType=TIMESTAMP},
+      delete_status = #{deleteStatus,jdbcType=BIT},
+      gc_level = #{gcLevel,jdbcType=INTEGER},
+      gc_name = #{gcName,jdbcType=VARCHAR},
+      gc_sequence = #{gcSequence,jdbcType=INTEGER},
+      gc_type = #{gcType,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      display = #{display,jdbcType=BIT},
+      mobile_icon = #{mobileIcon,jdbcType=VARCHAR},
+      web_icon = #{webIcon,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  	<select id="findParentIsNullPage" parameterType="map" resultMap="BOResultMap">
+		select gc.*
+		from o2o_group_class gc
+		where gc.delete_status=0
+		and
+		gc.parent_id is null
+		order by gc.gc_sequence asc
+	</select>
+	<select id="findByParent" parameterType="map" resultMap="BOResultMap">
+		select
+		gc.*
+		from o2o_group_class gc
+		left join o2o_group_class parent on
+		gc.parent_id =parent.id
+		where gc.delete_status=0 and gc.parent_id
+		=#{parentId}
+		order by gc.gc_sequence asc
+	</select>
+	
+  	<select id="queryGroupClassList" resultMap="BOResultMap">
+		SELECT * FROM
+		o2o_group_class WHERE parent_id is NULL ORDER BY add_time DESC
+	</select>
+</mapper>

@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/kindeditor.js"></script>
+<script charset="utf-8" src="$!webPath/resources/editor/lang/zh_CN.js"></script>
+<script src="$!webPath/resources/js/jquery.viewpic.js"></script>
+<script>
+//options为编辑配置属性
+var options = {
+        cssPath : '$!webPath/resources/editor/themes/default/default.css',
+        filterMode : true,
+		uploadJson:'$!webPath/upload.htm',
+		width : '700px',
+		height:'400px',
+		syncType:"form",
+		afterCreate : function() {
+							var self = this;
+							self.sync();
+						},
+		afterChange : function() {
+							var self = this;
+							self.sync();
+						},
+		afterBlur : function() {
+							var self = this;
+							self.sync();
+						},
+		items:['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+			'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+			'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+			'superscript', '|', 'selectall', 'clearhtml','quickformat','|',
+			'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+			'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'table', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+};
+jQuery(document).ready(function(){
+//
+  jQuery("#theForm").validate({
+	ignore: "",						  
+    rules:{
+      label_name:{required :true},
+	  class_id:{required:true},
+	  serviceType:{required:true},
+	  ordering:{number:true}
+	 },
+	messages:{
+	  label_name:{required:"标签名称不能为空"},
+	  class_id:{required:"标签分类不能为空"},
+	  serviceType:{required:"标签类型不能为空"},
+	  ordering:{number:"序号只能为数字"}
+	}
+  });
+  //
+  jQuery("#class_id").val("$!obj.class_id");
+  jQuery("#serviceType").val("$!obj.serviceType");
+  jQuery(":radio[id=ispush][value=$!obj.ispush]").attr("checked",true);
+  jQuery(":radio[id=state][value=$!obj.state]").attr("checked",true);
+  jQuery(":radio[id=type][value=$!obj.type]").attr("checked",true);
+});
+
+function saveForm(method){
+   jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">新增标签</h1>
+  <div class="nav_list">
+ <ul>
+  <li><a href="$!webPath/admin/label_manage_list.htm"><b>管理</b></a> </li>
+ <li> <a href="$!webPath/admin/label_manage_add.htm" #if(!$!edit) class="this" #end><b>新增</b></a> </li>
+  #if($!edit)<li> <a href="javascript:void(0);" class="this"><b>编辑</b></a></li> #end 
+  </span> 
+  </ul>
+  </div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/label_save.htm" method="POST"  enctype="multipart/form-data">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/label_manage_list.htm" />
+    <input name="add_url" type="hidden" id="add_url" value="$!webPath/admin/label_manage_add.htm" />
+   <div class="edit">
+    <div class="editul setcont">
+      <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>名称</li>
+        <li><span class="webname">
+          <input name="labelName" type="text" id="labelName" value="$!obj.labelName" size="40" />
+          </span></li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>分类</li>
+        <li><span class="webnamesec sizese">
+          <select name="class_id" id="class_id">
+            <option value="">请选择...</option>
+         #foreach($ac in $acs)
+           #if($!ac.level==1)
+		   <option value="$!ac.id">$!ac.className</option>
+		   #foreach($ac1 in $ac.childs)
+		   <option value="$!ac1.id">&nbsp;&nbsp;$!ac1.className</option>
+		   #end
+		   #end
+		 #end
+          </select>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">分类请选择二级分类。</strong><strong class="c"></strong></span></li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>类型</li>
+        <li><span class="webnamesec sizese">
+          <select name="serviceType" id="serviceType">
+            <option value="">请选择...</option>
+            <option value="0">帖子</option>
+            <option value="5">圈子</option>
+            <option value="10">商品</option>
+            <option value="15">用户</option>
+            <option value="20">体检</option>
+          </select>
+      </ul>
+	  <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>是否推荐</li>
+        <li><span class="webnamesec sizese">
+             <input name="ispush" type="radio" id="ispush" value="0" checked="checked" />否  
+             <input name="ispush" type="radio" id="ispush" value="1" />是  
+       </ul>
+      <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>是否系统标签</li>
+        <li><span class="webnamesec sizese">
+             <input name="type" type="radio" id="type" value="1" checked="checked" />否  
+             <input name="type" type="radio" id="type" value="2" />是  
+       </ul>
+       <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>状态</li>
+        <li><span class="webnamesec sizese">
+             <input name="state" type="radio" id="state" value="1" checked="checked" />开启
+             <input name="state" type="radio" id="state" value="2" />关闭
+       </ul>
+       <ul class="set1">
+        <li class="setcont_bg"><strong class="sred">*</strong>权重</li>
+        <li><span class="webname">
+          <input name="ordering" type="text" id="ordering" value="$!obj.ordering" size="40" />
+          </span></li>
+      </ul>
+	   <ul class="set1">
+        <li class="setcont_bg">描述</li>
+        <li><span class="webname">
+          <textarea rows="5" cols="80" name="memo" id = "memo">$!obj.memo</textarea>
+          </span><span id="nothis"><strong class="q"></strong><strong class="w">200字以内</strong><strong class="c"></strong></span></li>		  
+      </ul>
+    </div>
+    </div>
+  </form>
+  <div class="submit">
+   <span class="pad120"><input name="save" type="button" value="提交" onclick="saveForm()" /></span>
+  </div>
+</div>
+</body>
+</html>

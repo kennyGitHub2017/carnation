@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html style="font-size: 50px;">
+	<head>
+		<meta charset="UTF-8">
+		<title>话题详情</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="$!webPath/resources/style/viewApp/mui.min.css">		
+		<!--App自定义的css-->
+    	<link rel="stylesheet" type="text/css" href="$!webPath/resources/style/viewApp/common.css"/>
+	    <script>
+    		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+			document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+	    </script>
+		<link rel="stylesheet" href="$!webPath/resources/style/viewApp/topic.css">
+		<style type="text/css">
+			.mui-preview-image.mui-fullscreen {
+				position: fixed;
+				z-index: 20;
+				background-color: #000;
+			}
+			.mui-preview-header,
+			.mui-preview-footer {
+				position: absolute;
+				width: 100%;
+				left: 0;
+				z-index: 10;
+			}
+			.mui-preview-header {
+				height: 44px;
+				top: 0;
+			}
+			.mui-preview-footer {
+				height: 50px;
+				bottom: 0px;
+			}
+			.mui-preview-header .mui-preview-indicator {
+				display: block;
+				line-height: 25px;
+				color: #fff;
+				text-align: center;
+				margin: 15px auto 4;
+				width: 70px;
+				background-color: rgba(0, 0, 0, 0.4);
+				border-radius: 12px;
+				font-size: 16px;
+			}
+			.mui-preview-image {
+				display: none;
+				-webkit-animation-duration: 0.5s;
+				animation-duration: 0.5s;
+				-webkit-animation-fill-mode: both;
+				animation-fill-mode: both;
+			}
+			.mui-preview-image.mui-preview-in {
+				-webkit-animation-name: fadeIn;
+				animation-name: fadeIn;
+			}
+			.mui-preview-image.mui-preview-out {
+				background: none;
+				-webkit-animation-name: fadeOut;
+				animation-name: fadeOut;
+			}
+			.mui-preview-image.mui-preview-out .mui-preview-header,
+			.mui-preview-image.mui-preview-out .mui-preview-footer {
+				display: none;
+			}
+			.mui-zoom-scroller {
+				position: absolute;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				justify-content: center;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				-webkit-backface-visibility: hidden;
+			}
+			.mui-zoom {
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+			}
+			.mui-slider .mui-slider-group .mui-slider-item img {
+				width: auto;
+				height: auto;
+				max-width: 100%;
+				max-height: 100%;
+			}
+			.mui-android-4-1 .mui-slider .mui-slider-group .mui-slider-item img {
+				width: 100%;
+			}
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-slider-group .mui-slider-item {
+				display: inline-table;
+			}
+			.mui-android-4-1 .mui-slider.mui-preview-image .mui-zoom-scroller img {
+				display: table-cell;
+				vertical-align: middle;
+			}
+			.mui-preview-loading {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				display: none;
+			}
+			.mui-preview-loading.mui-active {
+				display: block;
+			}
+			.mui-preview-loading .mui-spinner-white {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				margin-left: -25px;
+				margin-top: -25px;
+				height: 50px;
+				width: 50px;
+			}
+			.mui-preview-image img.mui-transitioning {
+				-webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
+				transition: transform 0.5s ease, opacity 0.5s ease;
+			}
+			@-webkit-keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@keyframes fadeIn {
+				0% {
+					opacity: 0;
+				}
+				100% {
+					opacity: 1;
+				}
+			}
+			@-webkit-keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			@keyframes fadeOut {
+				0% {
+					opacity: 1;
+				}
+				100% {
+					opacity: 0;
+				}
+			}
+			p img {
+				max-width: 100%;
+				height: auto;
+			}
+		</style>		
+	</head>
+	<body>
+		<div class="topicHolder">
+			<div class="topicCon">
+				<div class="userInfo">
+					<img src="$!postBO.headImgPath" alt="" />
+					<div class="uinfo">
+						<div class="nameInfo">
+							<span class="name">$!postBO.nickname</span>
+							#if($!postBO.sex==2)
+							<span class="sexIcon woman"></span>
+							#end
+							#if($!postBO.sex==1)
+							<span class="sexIcon man"></span>
+							#end
+							<!-- <span class="level">$!postBO.level</span>
+							<span class="yddr">阅读达人</span> -->
+						</div>
+						<div class="topicInfo">
+							<span class="publish">发表于</span>
+							<span class="date">$!postBO.addtiemFormat</span>
+							<!-- <span class="time">$!date.format('yyyy-MM-dd HH:mm:ss',$!postBO.addTime)</span> -->
+						</div>
+					</div>
+				</div>
+				<div class="topic">
+					<!-- <span class="title">#<span>读书</span>#</span>享受一个人的寂寞时光享受一个人的寂寞时光享受一个人的寂寞时光享受一个人的寂寞时光享受一个人的寂寞时光 -->
+				$!postBO.content
+				</div>
+				#if ($!postBO.imagesList.size()>0)
+				<div class="topicImg">
+					<ul>	
+					#if ($!postBO.imagesList.size()==1)	
+					    <li class="one"><img  data-src="$!postBO.imagesList.get(0)" alt="" data-preview-src="" data-preview-group="1"/></li>			
+					#elseif($!postBO.imagesList.size()==4 )
+						<li><img  data-src="$!postBO.imagesList.get(0)" alt="" data-preview-src="" data-preview-group="1"/></li>
+						<li><img  data-src="$!postBO.imagesList.get(1)" alt="" data-preview-src="" data-preview-group="1"/></li>
+						<li class="none"></li>
+						<li><img  data-src="$!postBO.imagesList.get(2)" alt="" data-preview-src="" data-preview-group="1"/></li>
+						<li><img  data-src="$!postBO.imagesList.get(3)" alt="" data-preview-src="" data-preview-group="1"/></li>	
+					#else
+					  #foreach($!obj in $!postBO.imagesList)
+					    <li><img  data-src="$obj" alt="" data-preview-src="" data-preview-group="1"/></li>
+					  #end
+					#end
+					</ul>
+				</div>
+				#end
+				#if($!postBO.location!="")<div class="location">$!postBO.location</div>
+				 
+				 #else
+				#end
+			</div>
+			<!-- <div class="topicReply">
+			 #if ($!postBO.praiseList.size()>0 )
+				<div class="zan">
+					<span class="text">点赞</span>
+					<span class="num">(<span id="totalZanNum">$!postBO.praiseNum</span>)</span>
+					<ul>
+					    #foreach($!obj in $!postBO.praiseList)
+						<li><img src="$!obj" alt="" /></li>
+						#end
+					</ul>
+				</div>
+			 #end
+				<div class="reply" id="reply">
+					<div class="title">全部回复</div>
+					<div id="replyListCon">
+					    #foreach($!obj in $!evaluateList)
+						<div class="list" data-listID="$!obj.id">
+							<img src="$!obj.headImgPath" alt="" />
+							<div class="content">							    
+								<div class="replydiv reply1"  data-uid="$!obj.fromUserid">
+									<span class="name">$!obj.fromUserName</span>
+									<span class="time">$!obj.addtiemFormat</span>
+									<div class="text">$!obj.content</div>
+								</div>				
+								 #foreach($!obj2 in $!obj.replyList)
+								<div class="replydiv reply2"  data-uid="$!obj2.fromUserid">
+									<span class="name">$!obj2.fromUserName</span>
+									<span class="time">$!obj.addtiemFormat</span>
+									<div class="text">$!obj2.content</div>
+								</div>
+							     #end
+							</div>
+						</div>
+						#end						
+					</div>
+					<a href="javascript:;" id="more">打开更多回复</a>
+				</div>
+				
+			</div> -->
+		</div>
+		<!-- <div class="bottomReply">
+			<input id="userInput" type="text" placeholder="评论" data-listID="" /><a id="submit_btn" href="javascript:;">发送</a>
+		</div> -->
+		
+		<script src="$!webPath/resources/js/appView/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="$!webPath/resources/js/appView/tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="$!webPath/resources/js/appView/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="$!webPath/resources/js/appView/mui.min.js"></script>
+		<script src="$!webPath/resources/js/appView/mui.zoom.js"></script>
+		<script src="$!webPath/resources/js/appView/mui.previewimage.js"></script>
+		<script src="$!webPath/resources/js/appView/tipsbox.js"></script>
+		<script src="$!webPath/resources/js/appView/jquery.easing.min.js"></script>
+		<script src="$!webPath/resources/js/appView/tips.js"></script>
+		
+		<script>
+/* 			mui.previewImage(); */
+		</script>
+		<script type="text/javascript">
+			
+			var uid=fn.getQueryPar("uid");//null
+			var cssText1={
+				"width":"100%",
+				"transform":"translate3d(0,-50%,0)",
+				"-webkit-transform":"translate3d(0,-50%,0)",
+				"top":"50%"
+			};
+			var cssText2={
+				"height":"100%",
+				"transform":"translate3d(-50%,0,0)",
+				"-webkit-transform":"translate3d(-50%,0,0)",
+				"left":"50%"
+			};		
+		
+			jQuery(document).ready(function(){				
+			/*	jQuery(".topicImg ul li img").each(function(){
+					var img=document.createElement("img");
+					var dataSrc=jQuery(this).attr("data-src")
+					img.src=dataSrc;
+					var that=this;
+					if(img.complete){
+						if(img.width<img.height){
+							jQuery(that).attr("src",dataSrc).css(cssText1).fadeIn();								
+						}else{
+							jQuery(that).attr("src",dataSrc).css(cssText2).fadeIn();	
+						}
+					}else{
+						img.onload=function(){
+							if(img.width<img.height){
+								jQuery(that).attr("src",dataSrc).css(cssText1).fadeIn();								
+							}else{
+								jQuery(that).attr("src",dataSrc).css(cssText2).fadeIn();	
+							}
+						}
+					}
+				});		*/
+								
+				
+				var imgArr=jQuery(".topicImg ul li img");
+				var imgCount=imgArr.length;
+				var index=0;
+				function loadOneByOne(){
+					if(imgCount==0) return;
+					var img=document.createElement("img");
+					var dataSrc=imgArr.eq(index).attr("data-src")
+					img.src=dataSrc;
+					if(img.complete){
+						if(img.width<img.height){
+							imgArr.eq(index).attr("src",dataSrc).css(cssText1).fadeIn().parent().css("background","#FFFFFF");								
+						}else{
+							imgArr.eq(index).attr("src",dataSrc).css(cssText2).fadeIn().parent().css("background","#FFFFFF");	
+						}
+						if(index<imgCount){
+							index++;
+							loadOneByOne();
+						}
+					}else{						
+						img.onload=function(){
+							if(img.width<img.height){
+								imgArr.eq(index).attr("src",dataSrc).css(cssText1).fadeIn().parent().css("background","#FFFFFF");								
+							}else{
+								imgArr.eq(index).attr("src",dataSrc).css(cssText2).fadeIn().parent().css("background","#FFFFFF");	
+							}
+							if(index<imgCount){
+								index++;
+								loadOneByOne();
+							}
+						}					
+						
+					}
+				}
+				loadOneByOne();				
+			});
+		</script>
+	</body>
+</html>

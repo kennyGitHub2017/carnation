@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	// 连续签到积分值校验       
+	jQuery.validator.addMethod("check", function(value, element, param) {         
+	    var reg=/^([1-9]([0-9]*),){6}[1-9]([0-9]*)$/;
+	    return this.optional(element) || (reg.test(value));         
+	}, "请正确填写连续签到积分值，必须为七个数字，并以英文,逗号隔开"); 
+	//设置默认状态以及判断初始显示状态
+	var state = jQuery("#display").val();
+	if(state==""){
+		jQuery("#display").val("true");
+		jQuery("#displayOff").hide();
+	}else{
+		 if(state=="true"){
+			jQuery("#displayOff").hide();
+		}else{
+			jQuery("#displayOn").hide();
+		}
+	}
+	jQuery("span .w").mousemove(function(){
+		var id=jQuery(this.parentNode).attr("id");
+		if(id="nothis"){
+		   jQuery(this.parentNode).attr("id","this")
+		}
+	  }).mouseout(function(){
+	     var id=jQuery(this.parentNode).attr("id");
+		 if(id="this"){
+		   jQuery(this.parentNode).attr("id","nothis")
+		 }
+	  });
+	
+	jQuery(":radio").click(function(){
+		var val = jQuery(this).val();
+   		if(val == '2' || val == '3'){
+   			jQuery("#ulintegral").show();
+   			jQuery("#ullimittimes").show();
+   			jQuery("#ulsignintegral").hide();
+   			jQuery("#integral").val("0");
+   			jQuery("#signIntegral").val("0");
+   		}else if(val == '4'){
+   			jQuery("#times").val("0");
+   			jQuery("#integral").val("0");
+   			jQuery("#ullimittimes").hide();
+   			jQuery("#ulintegral").hide();
+   			jQuery("#ulsignintegral").show();
+   		}else{
+   			jQuery("#ulintegral").show();
+   			jQuery("#integral").val("0");
+   			jQuery("#times").val("0");
+   			jQuery("#signIntegral").val("0");
+   			jQuery("#ullimittimes").hide();
+   			jQuery("#ulsignintegral").hide();
+   		}
+    });
+	#if($!obj && ($!obj.timesLimitType == 2 || $!obj.timesLimitType == 3))
+		jQuery("#ullimittimes").show();
+		jQuery("#ulsignintegral").hide();
+	#end
+	#if($!obj && $!obj.timesLimitType == 4)
+		jQuery("#ulsignintegral").show();
+		jQuery("#ulintegral").hide();
+	#end
+  jQuery("#theForm").validate({
+    rules:{
+	  name:{
+		  required :true,
+		  maxlength:50,
+		  remote:{
+			    url: "$!webPath/admin/integral_reg_verify.htm",     //后台处理程序
+	            type: "post",               //数据发送方式
+	            dataType: "json",           //接受数据格式   
+	            data: {                     //要传递的数据
+	                  "name": function(){return jQuery("#name").val();},
+					  "id":function(){return jQuery("#id").val()}
+			     }
+		}
+	  },
+	  type:{
+		  required :true,
+		  maxlength:50,
+		  remote:{
+			    url: "$!webPath/admin/integral_reg_verify.htm",     //后台处理程序
+	            type: "post",               //数据发送方式
+	            dataType: "json",           //接受数据格式   
+	            data: {                     //要传递的数据
+	                  "type": function(){return jQuery("#type").val();},
+					  "id":function(){return jQuery("#id").val();}
+			     }
+		}
+	  },
+	  integral:{
+		  required :true,
+		  digits:true,
+		  min:1
+	  },
+	  signIntegral:{
+		  required :true,
+		  check:true
+	  },
+	  times:{
+		  required :true,
+		  digits:true,
+		  min:1
+	  } 
+	 },
+	messages:{
+	  name:{
+		  required :"必填项",
+		  maxlength:"最大长度50个字符",
+		  remote:"名称已存在"
+	  },
+	  type:{
+		  required :"必填项",
+		  maxlength:"最大长度50个字符",
+		  remote:"名称已存在"
+	  },
+	  integral:{
+		  required :"必填项",
+		  digits:"必须为数字",
+		  min:"积分必须大于0"
+	  },
+	  signIntegral:{
+		  required :"必填项",
+		  check:"请正确填写连续签到积分值，必须为七个数字，并以英文,逗号隔开"
+	  },
+	  times:{
+		  required :"必填项",
+		  digits:"必须为数字",
+		  min:"必须大于1"
+	  }
+	}
+  });	
+});
+
+//设置显示开关
+function displayState(){
+	var state = jQuery("#display").val();
+	if(state=="true"){
+		jQuery("#display").val("false");
+		jQuery("#displayOff").show();
+		jQuery("#displayOn").hide();
+	}else{
+		jQuery("#display").val("true");
+		jQuery("#displayOff").hide();
+		jQuery("#displayOn").show();
+	}
+}
+
+function saveForm(method){
+	jQuery("#theForm").submit();
+}
+</script>
+</head>
+<body>
+	<form action="$!webPath/admin/integral_reg_save.htm" method="post" name="theForm" id="theForm">
+	  <div class="cont">
+			<h1 class="seth">积分规则</h1>
+			<div class="nav_list">
+				<ul>
+					<li><a href="$!webPath/admin/integral_reg_list.htm"><b>管理</b></a> </li>
+     				<li><a href="$!webPath/admin/integral_reg_add.htm" #if(!$!edit) class="this" #end><b>新增</b></a></li>
+     				#if($!edit)
+				    <li><a href="javascript:void(0);" class="this"><b>编辑</b></a> </li>
+				    #end
+				</ul>
+				</span> 
+				<input name="id" type="hidden" id="id" value="$!obj.id" />
+				<input type="hidden" name="currentPage" id="currentPage" value="$!currentPage" />
+			</div>
+			<div class="edit">
+			  <div class="editul setcont">
+			    <ul class="set1">
+			      <li class="setcont_bg"><strong class="sred">*</strong>积分名称</li>
+			      <li>
+				      <span class="webname">
+				        <input name="name" type="text" id="name" value="$!obj.name" size="40" />
+				      </span>
+				      <span id="nothis"><strong class="q"></strong><strong class="w">积分规则名称，不能重复</strong><strong class="c"></strong></span>
+			      </li>
+			    </ul>
+			    <ul class="set1">
+			      <li class="setcont_bg"><strong class="sred">*</strong>积分标识</li>
+			      <li>
+				      <span class="webname">
+				        <input name="type" type="text" id="type" value="$!obj.type" size="40" />
+				      </span>
+				      <span id="nothis"><strong class="q"></strong><strong class="w">积分规则标识，不能重复</strong><strong class="c"></strong></span>
+			      </li>
+			    </ul>
+			    <ul class="set1">
+			      <li class="setcont_bg"><strong class="sred">*</strong>赠送次数限制类型</li>
+			      <li>
+			      #if($!edit)
+			      	<input type="radio" name="timesLimitType" value="1" #if($!obj.timesLimitType==1) checked="checked" #end/> 无限制&nbsp;&nbsp;
+			      #else
+			      	<input type="radio" name="timesLimitType" value="1" checked="checked"/> 无限制&nbsp;&nbsp;
+			      #end
+			        <input type="radio" name="timesLimitType" value="2" #if($!obj.timesLimitType==2) checked="checked" #end/> 总次数限制&nbsp;&nbsp;
+			        <input type="radio" name="timesLimitType" value="3" #if($!obj.timesLimitType==3) checked="checked" #end/> 日次数限制
+			        <input type="radio" name="timesLimitType" value="4" #if($!obj.timesLimitType==4) checked="checked" #end/> 连续签到
+			      </li>
+			    </ul>
+			    <ul class="set1" id="ullimittimes" style="display: none;">
+			      <li class="setcont_bg"><strong class="sred">*</strong>限制次数</li>
+			      <li>
+				      <span class="webname">
+				        <input name="times" type="text" id="times" value="$!obj.times" size="40" />
+				      </span>
+			      </li>
+			    </ul>
+			    <ul class="set1" id="ulintegral">
+			      <li class="setcont_bg"><strong class="sred">*</strong>积分</li>
+			      <li>
+				      <span class="webname">
+				        <input name="integral" type="text" id="integral" value="$!obj.integral" size="40" />
+				      </span>
+			      </li>
+			    </ul>
+			    <ul class="set1" id="ulsignintegral" style="display: none;">
+			      <li class="setcont_bg"><strong class="sred">*</strong>积分</li>
+			      <li>
+				      <span class="webname">
+				        <input name="signIntegral" type="text" id="signIntegral" value="$!obj.signIntegral" size="40" />
+				      </span>
+				      <span id="nothis"><strong class="q"></strong><strong class="w">连续签到请填写七个积分值，以英文","隔开</strong><strong class="c"></strong></span>
+			      </li>
+			    </ul>
+			    <ul class="set1">
+			       <li class="setcont_bg">是否使用</li>
+			       <li class="webSwitch">
+			       	 <span class="webname">
+				         <input name="display" id="display" type="hidden" value="$!obj.display" />
+				         <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/on.jpg" width="61" height="23" id="displayOn" onclick="displayState();" style="cursor:pointer"/> <img src="$!webPath/resources/style/system/manage/$!{config.websiteCss}/images/off.jpg" width="61" height="23" id="displayOff" onclick="displayState();" style="cursor:pointer"/>
+			       	 </span>
+			       	 <span id="nothis"><strong class="q"></strong><strong class="w">控制积分规则是否使用</strong><strong class="c"></strong></span>
+			       </li>
+			    </ul>
+			  </div>
+  		</div>
+	  </div>
+	  <div class="submit">
+	   	<span class="pad120"> <input name="save" type="button" value="提交" onclick="saveForm()" /></span>
+	  </div>
+	</form>
+</body>
+</html>

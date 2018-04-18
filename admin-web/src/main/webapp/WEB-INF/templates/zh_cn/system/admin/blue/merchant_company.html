@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link  href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet"/>
+<link  href="$!webPath/resources/style/common/css/overlay_blue.css" type="text/css" rel="stylesheet"/>
+<link  href="$!webPath/resources/style/common/css/jquery.imageview.css" type="text/css" rel="stylesheet"/>
+<script src="$!webPath/resources/js/jquery.min.js"></script>
+<script src="$!webPath/resources/js/jquery.imageview.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=700b132845ef5b0b135066dfa0222a37"></script>
+<script>
+function store_info(){
+   window.location.href="$!webPath/admin/store_edit.htm?id=$!store.id";
+}
+</script>
+</head>
+<body>
+<div class="cont">
+    <h1 class="seth">商户管理</h1>
+    <div class="nav_list">
+	  <ul>
+	    <li><a href="$!webPath/admin/merchant_list.htm" ><b>管理</b></a></li>
+	    <li><a href="javascript:void(0)" class="this"><b>商户信息</b></a></li>
+      </ul>
+    </div>
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+    <input name="list_url" type="hidden" id="list_url" value="$!webPath/admin/merchant_list.htm" />
+   <div class="edit">
+    <div class="editul setcont">
+      <div class="reputh">商户入驻信息</div>
+      <ul class="set1">
+        <li class="setcont_bg">商户名称：</li>
+        <li>
+        	<span class="webname">#if($!store.storeName != "")$!store.storeName #else 暂未填写 #end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">所属行业：</li>
+        <li>
+        	<span class="webname">#if($!storeInfo.industry!="")$!storeInfo.industry#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li class="setcont_bg">公司简介：</li>
+        <li>
+        	<span class="webname">#if($!storeInfo.licenseCDesc!="")$!storeInfo.licenseCDesc#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">经营范围：</li>
+        <li>
+        	<span class="webname">#if($!store.licenseBusinessScope!="")$!store.licenseBusinessScope#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">主营类目：</li>
+        <li>
+        	<span class="webname">#if($!groupClass_main.gcName!="")$!groupClass_main.gcName#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">详细类目：</li>
+        <li>
+        	<span class="webname">
+        		#if($groupClassDetail.isEmpty() || $groupClassDetail.size() == 0)
+					暂未填写
+                #else
+                    #foreach($gc in $groupClassDetail)
+                       $!gc.gcName&nbsp;&nbsp;&nbsp;&nbsp;    
+                    #end
+                #end    
+        	</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">商户所在地：</li>
+        <li>
+       		<span class="webname">#if($!store.areaInfo!="")$!store.areaInfo#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">详细地址：</li>
+        <li>
+        	<span class="webname">#if($!store.storeAddress!="")$!store.storeAddress#else暂未填写#end</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        	<span><a class="blue" href="javascript:void(0)" dialog_uri="$!webPath/admin/load_store_map.htm?storeId=$!store.id" dialog_title="查看地图" dialog_width="640" dialog_height="350"><i class="icon-zoom icon"></i> 查看地图</a></span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">固定电话：</li>
+        <li>
+        	<span class="webname">#if($!store.storeTelephone!="")$!store.storeTelephone#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">手机号码：</li>
+        <li>
+        	<span class="webname">#if($!store.licenseCMobile!="")$!store.licenseCMobile#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">身份证号：</li>
+        <li>
+        	<span class="webname">#if($!store.storeOwerCard!="")$!store.storeOwerCard#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">所属身份会员昵称：</li>
+        <li>
+        	<span class="webname">#if($!store.nickname!="")$!store.nickname#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">返佣比例：</li>
+        <li>
+        	<span class="webname">#if($!store.commissionRebate!="")$!store.commissionRebate#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">折扣：</li>
+        <li>
+        	<span class="webname">#if($!store.groupDiscount!="")$!store.groupDiscount#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">开户省：</li>
+        <li>
+        	<span class="webname">#if($!province!="")$!province#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">开户市：</li>
+        <li>
+        	<span class="webname">#if($!city!="")$!city#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">结算账户名：</li>
+        <li>
+        	<span class="webname">#if($!store.bankAccountName!="")$!store.bankAccountName#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">结算账户：</li>
+        <li>
+        	<span class="webname">#if($!store.bankCAccount!="")$!store.bankCAccount#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">账户开户行：</li>
+        <li>
+        	<span class="webname">#if($!store.bankName!="")$!store.bankName#else暂未填写#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">安装POS机：</li>
+        <li>
+        	<span class="webname">#if($!store.isEepay)是#else否#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">隶属运营商：</li>
+        <li>
+        	<span class="webname">#if($!operatorName!="")$!operatorName#else暂无#end</span>
+        </li>
+      </ul>
+       <ul class="set1">
+        <li  class="setcont_bg">审核结果描述：</li>
+        <li>
+        	<span class="webname">#if($!store.failReseaon!="")$!store.failReseaon#else暂无#end</span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">法人身份证正面照：</li>
+        <li>
+        	<span class="webname"><img src="$!storeInfo.licenseLegalIdCardFrontPath" width="800"/></span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">法人身份证反面照：</li>
+        <li>
+        	<span class="webname"><img src="$!storeInfo.licenseLegalIdCardBackPath" width="800"/></span>
+        </li>
+      </ul>
+      #if($!store.isEepay)
+      <ul class="set1">
+        <li  class="setcont_bg">法人身份证手拿照：</li>
+        <li>
+        	<span class="webname"><img src="$!storeInfo.licenseLegalIdCardReachPath" width="800"/></span>
+        </li>
+      </ul>
+      #end
+      <ul class="set1">
+        <li  class="setcont_bg">银行卡正面照：</li>
+        <li>
+        	<span class="webname"><img src="$!storeInfo.bankCardFrontPath" width="800"/></span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">银行卡反面照：</li>
+        <li>
+        	<span class="webname"><img src="$!storeInfo.bankCardBackPath" width="800"/></span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">#if($!store.isEepay)经营场所证明(租赁合同或营业执照)：#else经营场所证明(营业执照)： #end</li>
+        <li>
+        	<span class="webname"><img src="$!storeInfo.licenseImagePath" width="800"/></span>
+        </li>
+      </ul>
+      #if($!store.isEepay)
+      <ul class="set1">
+        <li  class="setcont_bg">申请人手持信用卡正面照:</li>
+        <li>
+        	<span class="webname"><img src="$!storeInfo.businessPlacePhotoPath" width="800"/></span>
+        </li>
+      </ul>
+      #end
+      <ul class="set1">
+        <li  class="setcont_bg">店铺封面:</li>
+        <li>
+        	<span class="webname"><img src="$!storeInfo.businessPlacePhotoPath" width="800"/></span>
+        </li>
+      </ul>
+      <ul class="set1">
+        <li  class="setcont_bg">#if($!store.isEepay)其他(申请人信用卡正面等)：#else其他(门店照片或实景图等)： #end</li>
+        <li>
+        #foreach($oh in $otherPhotos)
+        <table width="50%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        	<tr>
+        		<td>
+        			<span class="webname"><img src="$!oh" width="800"/></span>
+        		</td>
+        	</tr>
+        	<tr>
+	        	<td height="1px">
+	        	</td>
+        	</tr>
+        </table>
+        #end
+        </li>
+      </ul>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+jQuery("img").imageview();
+</script>
+</body>
+</html>

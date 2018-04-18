@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	 
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/plugins/jquery.validatebox.js"></script>
+</head>
+<body>  
+		<div style="padding:10px 20px 20px 20px">
+	    <form id="theForm" name="theForm" method="post" action="$!webPath/admin/hot_sale_save.htm" 
+	     data-options="validate:true" enctype="multipart/form-data">
+	    
+            <input name="id" id="id" type="hidden" value="$!obj.id" />
+            
+	    	<table cellpadding="4">
+	    		<tr>
+	    			<td width=170><strong style="color:red;">*</strong>活动名称:</td>
+	    			<td width=360>
+	    			<input class="easyui-textbox" type="text" name="hotName" data-options="required:true" value="$!obj.hotName">
+	    			</input>
+	    			</td>
+	    			<td width=170><strong style="color:red;">*</strong>首页图片:</td>
+	    			<td width=200 title="$!obj.firstImage">
+                    <input class="easyui-filebox" type="text" name="firstImage1" value="$!obj.firstImage"  data-options="buttonText:'首页图片',buttonAlign:'right'"></input>
+	    			  #if($!obj.firstImage)
+	    				<image src="$!obj.firstImage" width="30" height="30"></image>
+	    			 #end
+	    			</td>
+	    		
+	    		</tr>
+	    		<tr>
+	    			<td width=170><strong style="color:red;">*</strong>活动头部图片url:</td>
+	    			<td width=360 title="$!obj.headImage">
+                     <input class="easyui-filebox" type="text" name="headImage1"  value="$!obj.headImage" data-options="buttonText:'头部图片',buttonAlign:'right'"></input>
+	    			  #if($!obj.headImage)
+	    				<image src="$!obj.headImage" width="30" height="30"></image>
+	    			 #end
+	    			</td>
+	    			<td width=170><strong style="color:red;">*</strong>活动脚部图片url:</td>
+	    			<td width=200 title="$!obj.footImage">
+                     <input class="easyui-filebox" type="text" name="footImage1" value="$!obj.footImage"   data-options="buttonText:'脚部图片',buttonAlign:'right'"></input>
+	    			  #if($!obj.footImage)
+	    				<image src="$!obj.footImage" width="30" height="30"></image>
+	    			 #end
+	    			</td>
+	    		
+	    		</tr>
+	    		<tr>
+	    			<td width=170><strong style="color:red;">*</strong>code编码:</td>
+	    			<td width=360>
+		    			<select name="vcode" data-options="required:true" id ="vcodeId">
+				          	 <option value="">请选择显示位置类型</option>
+				             <option value="APP_HOT_SALE" #if($!obj.vcode== "APP_HOT_SALE") selected="true" #end>App服务首页促销活动</option>
+				             <option value="APP_INTEGER_GOODS" #if($!obj.vcode== "APP_INTEGER_GOODS") selected="true" #end>App幻灯片广告积分活动</option>
+				             <option value="APP_NEW_YEAR" #if($!obj.vcode== "APP_NEW_YEAR") selected="true" #end>App元旦活动</option>
+				             <option value="APP_SPRING_FESTIVAL" #if($!obj.vcode== "APP_SPRING_FESTIVAL") selected="true" #end>App春节活动</option>
+				             <option value="ZERO_SHOP" #if($!obj.vcode== "ZERO_SHOP") selected="true" #end>0元购活动</option>
+				             <option value="GOLD_EGG" #if($!obj.vcode== "GOLD_EGG") selected="true" #end>拆金蛋</option>
+				         </select>
+	    			</td>
+	    			<td width=170>状态：</td>
+	    			<td width=200>
+	    			   <input name="isEnabled" type="checkbox" value = '1' #if($!obj.isEnabled==1) checked="true" #end>是否启用</input>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td width=170><strong style="color:red;">*</strong>开始时间:</td>
+	    			<td width=360>
+					<input id ="strStartTime" name="strStartTime" value="$!CommUtil.formatLongDate($!obj.startTime)" class="easyui-datetimebox" data-options="required:true"style="width:150px"/>
+					</td>
+					<td  width=170><strong style="color:red;">*</strong>结束时间:</td>
+	    			<td width=360>
+					<input id ="strEndTime" name="strEndTime" value="$!CommUtil.formatLongDate($!obj.endTime)"  class="easyui-datetimebox" data-options="required:true" style="width:150px"/>
+					</td>
+	    		</tr>
+	    		<tr>
+	    			<td width=170>背景颜色：</td>
+	    			<td width=200>
+	    			   <input type="text" name="backgroundcolor" value="$!obj.backgroundcolor" />
+	    			</td>
+	    			<td width=170>
+	    				<strong style="color:red;">*</strong>广告链接地址:</td>
+	    			<td width=360>
+	    				<input class="easyui-textbox" type="text" name="adsUrl" data-options="required:true" value="$!obj.adsUrl"/>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td width=170>图片大小：</td>
+	    			<td width=200>
+	    			   <input type="text" name="imageSize" value="$!obj.imageSize" />
+	    			</td>
+	    			<td width=170> </td>
+	    			<td width=360> 
+	    			</td>
+	    		</tr>
+	    	</table>
+      		<input name="updateMark" type="hidden" id="updateMark" value="$!obj.updateMark" />
+	    </form>
+	    </div >
+	    
+</body>
+<script>
+	jQuery(function(){  
+		jQuery('#uiform input').each(function () {  
+		            if (jQuery(this).attr('required') || jQuery(this).attr('validType'))  
+		            	jQuery(this).validatebox();  
+		        });
+		jQuery("#vcodeId").val("$!obj.vcode");
+	 });
+</script>
+  
+</html>

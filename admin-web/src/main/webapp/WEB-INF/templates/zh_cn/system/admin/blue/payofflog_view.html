@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="cont">
+  <div class="orderdetail">
+    <div class="orderhh">账单信息</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">账单流水号:</span><span>$!obj.plSn</span></li>
+        <li><span class="ordertitle"></span><span></span></li>
+        #if($!obj.status==0)
+          #set($status="未结算")
+          #end
+          #if($!obj.status==1)
+          #set($status="可结算")
+          #end
+          #if($!obj.status==3)
+          #set($status="待结算")
+          #end
+          #if($!obj.status==6)
+          #set($status="结算完成")
+          #end
+        <li><span class="ordertitle">账单商家:</span><span>$!obj.seller.userName</span></li>
+        <li><span class="ordertitle"></span><span></span></li>  
+        <li><span class="ordertitle">账单状态:</span><span style=" color:#F00">$!status #if($!obj.payoffType==-1)、退款账单 #end</span></li>
+        <li><span class="ordertitle"></span><span></span></li>
+        <li><span class="ordertitle">入账时间:</span><span>$!CommUtil.formatLongDate($!obj.addTime)</span></li>
+        <li><span class="ordertitle"></span><span></span></li>
+        <li><span class="ordertitle">申请时间:</span><span>$!CommUtil.formatLongDate($!obj.applyTime)</span></li>
+        <li><span class="ordertitle"></span><span></span></li>
+        <li><span class="ordertitle">结算时间:</span><span>$!CommUtil.formatLongDate($!obj.completeTime)</span></li>
+        <li><span class="ordertitle"></span><span></span></li>
+        <li><span class="ordertitle">销售金额:</span><span>$!obj.orderTotalPrice（元）</span></li>
+        #set($order=$!payofflogTools.queryOrderInfo($!obj.orderId))
+        #if($!order.couponInfo)
+	        <li><span class="ordertitle"></span><span></span></li>
+	        #set($coupon_map = $!orderFormTools.queryCouponInfo("$!order.couponInfo"))
+      		#set($coupon_total_amount=$coupon_map.get("coupon_amount"))
+	        <li><span class="ordertitle">优惠金额:</span><span>$!coupon_total_amount（元）</span></li>
+        #end
+        <li><span class="ordertitle"></span><span></span></li>
+        <li><span class="ordertitle">邮费金额:</span><span>$!obj.shipAmount（元）</span></li>
+        #if($!obj.returnAmount)
+	        <li><span class="ordertitle"></span><span></span></li>
+	        <li><span class="ordertitle">退款金额:</span><span>$!obj.returnAmount（元）</span></li>
+          #end
+        <li><span class="ordertitle"></span><span></span></li>
+        <li><span class="ordertitle">销售佣金:</span><span>$!obj.commissionAmount（元）</span></li>
+        <li><span class="ordertitle"></span><span></span></li>
+        <li><span class="ordertitle">结算金额:</span><span>$!obj.totalAmount（元）</span></li>
+        #if($!obj.status==6)
+        <li><span class="ordertitle"></span><span></span></li>
+        <li><span class="ordertitle">实际结算:</span><span style="color:#F00">$!obj.realityAmount（元）</span></li>
+        <li><span class="ordertitle"></span><span></span></li>
+        <li><span class="ordertitle">操作财务:</span><span>$!obj.financeUserName</span></li>
+        <li><span class="ordertitle"></span><span></span></li>
+        <li><span class="ordertitle">操作管理员:</span><span>$!obj.managerName</span></li>
+        <li><span class="ordertitle"></span><span></span></li>
+        <li><span class="ordertitle">结算备注:</span><span>$!obj.payoffRemark</span></li>
+        #end
+      </ul>
+    </div>
+    
+    
+     #set($order=$!payofflogTools.adminqueryOrderInfo($!obj.orderId))
+      #if($!order.orderStatus==0)
+          #set($orderStatus="已取消")
+          #end
+          #if($!order.orderStatus==10)
+          #set($orderStatus="待付款")
+          #end
+          #if($!order.orderStatus==16)
+          #set($orderStatus="货到付款待发货")
+          #end
+          #if($!order.orderStatus==20)
+          #set($orderStatus="已付款")
+          #end
+          #if($!order.orderStatus==30)
+          #set($orderStatus="已发货")        
+          #end                
+          #if($!order.orderStatus==40)
+          #set($orderStatus="已收货")
+          #end
+          #if($!order.orderStatus==45)
+          #set($orderStatus="买家申请退货")
+          #end
+          #if($!order.orderStatus==46)
+          #set($orderStatus="买家退货中")
+          #end
+          #if($!order.orderStatus==47)
+          #set($orderStatus="退货完成，已结束")
+          #end
+          #if($!order.orderStatus==48)
+          #set($orderStatus="商家拒绝退货")
+          #end
+          #if($!order.orderStatus==49)
+          #set($orderStatus="退货失败")
+          #end
+          #if($!order.orderStatus==50)
+          #set($orderStatus="已完成,已评价")                                              
+          #end
+          #if($!order.orderStatus==60)
+          #set($orderStatus="已结束")                                              
+          #end 
+          #if($!order.orderStatus==65)
+          #set($orderStatus="已结束，不可评价")                                              
+          #end
+    <div class="orderhhh">订单信息</div>
+    <div class="orderul">
+      <ul>
+        <li><span class="ordertitle">订单号:</span><span>$!obj.orderId</span></li>
+        <li><span class="ordertitle">订单状态:</span><span>$!{orderStatus} </span></li>
+        <li><span class="ordertitle">下单时间:</span><span>$!CommUtil.formatLongDate($!order.addTime)</span></li>
+        <li><span class="ordertitle">商品价格:</span><span>$!order.goodsAmount</span></li>
+           #if($!order.orderCat==2)
+         <li><span class="ordertitle">商品类型:</span><span>团购消费码</span></li>  
+           #else
+        <li><span class="ordertitle">物流运费:</span><span>$!{order.shipPrice}</span></li>
+        #end
+        <li><span class="ordertitle">订单总价:</span><span>$!{order.totalPrice}</span></li>
+      </ul>
+    </div>
+    <div class="orderhhh">商品信息</div>
+    <div class="ordetable">
+      <table width="90%" border="0" cellspacing="0" cellpadding="0" class="orde_table">
+        <tr style="border-bottom:1px dotted #CCEAF4">
+          <td width="5%">&nbsp;</td>
+          <td width="20%"><strong>商品信息</strong></td>
+          <td width="10%"><strong>商品规格</strong></td>
+          <td width="10%"><strong>单价</strong></td>
+          <td width="10%"><strong>数量</strong></td>
+          <td width="12%"><strong>商品佣金</strong></th>
+          <td width="12%"><strong>商品总价</strong></th>
+        </tr>
+          #set($goodsInfo="$!obj.goodsInfo") 
+           #if($!obj.payoffType==-1)
+            #set($goodsInfo="$!obj.returnGoodsInfo") 
+           #end
+          #foreach($map in $!payofflogTools.queryGoodsInfo($!goodsInfo))
+          #set($goodsId = "$!{map.get('goods_id')}")	
+          #set($goodsName = "$!{map.get('goods_name')}")
+          #set($goodsCount = "$!{map.get('goods_count')}")
+          #set($goodsPrice = "$!{map.get('goods_price')}")
+          #set($goodsType = "$!{map.get('goods_type')}")
+          #set($goodsAllPrice = "$!{map.get('goods_all_price')}")
+          #set($goodsGspVal = "$!{map.get('goods_gsp_val')}")
+          #set($goodsMainphotoPath = "$!{map.get('goods_mainphoto_path')}")
+          #set($goodsPayoffPrice = "$!{map.get('goods_payoff_price')}")
+          #set($img="$!{goodsMainphotoPath}")
+          #set($goodsCommissionPrice = "$!{map.get('goods_commission_price')}")
+        <tr style="border-bottom:1px dotted #CCEAF4"> 
+          <td><img src="$!img" width="45" height="45" /></td>
+          <td><a href="$!shopPath/goods_$!{goodsId}.htm" target="_blank" class="blue">$!{goodsName}</a></td>
+          <td>$!goodsGspVal</td>
+          <td>¥$!goodsPrice</td>
+          <td>$!goodsCount</td>
+          <td>¥${goodsCommissionPrice}</td>
+          <td> #if($!order.orderCat==2)¥$!obj.totalAmount #else ¥$!goodsAllPrice #end</td>
+	        </tr>
+        #end
+      </table>
+    </div>
+  	#if($!obj.returnGoodsInfo)
+    <div class="orderhhh">退款商品信息</div>
+    <div class="ordetable">
+      <table width="90%" border="0" cellspacing="0" cellpadding="0" class="orde_table">
+        <tr style="border-bottom:1px dotted #CCEAF4">
+          <td width="5%">&nbsp;</td>
+          <td width="20%"><strong>商品信息</strong></td>
+          <td width="10%"><strong>商品规格</strong></td>
+          <td width="10%"><strong>单价</strong></td>
+          <td width="10%"><strong>数量</strong></td>
+          <td width="12%"><strong>商品佣金</strong></th>
+          <td width="12%"><strong>商品总价</strong></th>
+		  <th width="12%">退款金额</th>
+        </tr>
+            #set($goodsInfo="$!obj.returnGoodsInfo") 
+          #foreach($map in $!payofflogTools.queryGoodsInfo($!goodsInfo))
+          #set($goodsId = "$!{map.get('goods_id')}")	
+          #set($goodsName = "$!{map.get('goods_name')}")
+          #set($goodsCount = "$!{map.get('goods_count')}")
+          #set($goodsPrice = "$!{map.get('goods_price')}")
+          #set($goodsType = "$!{map.get('goods_type')}")
+          #set($goodsAllPrice = "$!{map.get('goods_all_price')}")
+          #set($goodsGspVal = "$!{map.get('goods_gsp_val')}")
+          #set($goodsMainphotoPath = "$!{map.get('goods_mainphoto_path')}")
+          #set($goodsPayoffPrice = $!{map.get('goods_payoff_price')})
+          #set($img="$!{goodsMainphotoPath}")
+          #set($goodsCommissionPrice = $!{map.get('goods_commission_price')})
+                    #set($returnAmoutPrice = $goodsCommissionPrice - $goodsPayoffPrice )
+        <tr style="border-bottom:1px dotted #CCEAF4"> 
+          <td><img src="$!img" width="45" height="45" /></td>
+          <td><a href="$!shopPath/goods_$!{goodsId}.htm" target="_blank" class="blue">$!{goodsName}</a></td>
+          <td>$!goodsGspVal</td>
+          <td>¥$!goodsPrice</td>
+          <td>$!goodsCount</td>
+          <td>¥${goodsCommissionPrice}</td>
+          <td> #if($!order.orderCat==2)¥$!obj.totalAmount #else ¥$!goodsAllPrice #end</td>
+			<td align="center">$!returnAmoutPrice</td>
+	        </tr>
+        #end
+      </table>
+    </div>
+    #end
+
+
+  </div>
+  <div class="submit">
+     #if($!obj.status==3)
+    <input name="go" type="button" value="立即结算" onclick="window.location.href='$!webPath/admin/payofflog_edit.htm?id=$!{obj.id}&currentPage=$!currentPage'" />
+          #end
+  
+    <input name="go" type="button" value="返回列表" onclick="window.location.href='$!webPath/admin/payofflog_list.htm?currentPage=$!{currentPage}&status=$!{obj.status}'" />
+  </div>
+</div>
+</body>
+</html>

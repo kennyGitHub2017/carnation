@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>绑定手机号</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+	<script>
+		var screenWidth=window.innerWidth||document.documentElement.clientWidth;
+		document.documentElement.style.fontSize = parseInt(screenWidth /7.5 ) + "px";
+	</script>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/css/boundPhone/common.css"/>
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/css/boundPhone/style.css"/>
+	<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+	<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+	<style>
+		html,body{background:#f7f7f7;}
+		.band-phone ul li{position: relative;}
+		.band-phone .tit {
+		    font-size: 0.32rem;
+		    color: #4a4a4a;
+		    display: inline-block;
+		    float: left;
+		    height: 1rem;
+		    line-height: 1rem;
+		    margin-left: 0.42rem;
+		}
+		.band-phone label{position: absolute;right: 5px;top: 0;width: auto;height: 1rem;line-height: 1rem;font-size: 12px;color: red;}
+		#code_get_text{position: absolute;right: 5px;top: 0;width: auto;height: 1rem;line-height: 1rem;font-size: 12px;}
+		.ver_code label{height: auto;line-height: 12px;bottom:0;left:1.5rem;right: auto;top: auto;}		
+	</style>
+	<script type="text/javascript">
+		jQuery(document).ready(function(){
+			//验证手机号码函数
+			jQuery.validator.addMethod("isMobile", function(value, element) {
+				var length = value.length;
+				var mobile = /^((13[0-9])|(14[0-9])|(15([0-9]))|(17([0-9]))|(18[0-9]))\d{8}$/;
+				return this.optional(element) || (length == 11 && mobile.test(value));
+			}, "请正确填写您的手机号码");
+			//验证表单
+			var validateObj=jQuery("#theForm").validate({
+				errorPlacement:function(error, element) {
+				       error.appendTo(element.parent().parent());  
+				},
+				rules:{
+					mobileCode:{
+						required:true
+					},
+				    password:{
+						required:true,
+						minlength:6,
+						maxlength:20  
+					},
+					mobile:{
+						required:true,
+						isMobile:true,
+						 remote:{
+						    url: "$!webPath/verify_mobile2.htm",     //后台处理程序
+				            type: "post",               //数据发送方式
+				            dataType: "json",           //接受数据格式   
+				            data: {                     //要传递的数据
+				                  "mobile": function(){return jQuery("#mobile").val();}
+						     }
+						} /**/
+					}
+				},
+				messages:{
+					mobileCode:{
+						required:"手机验证码不能为空"
+					},
+					password:{
+						required:"密码不能为空",
+						minlength:"密码不能小于{0}个字符",
+						maxlength:"密码不能大于{0}个字符" 
+					},
+					mobile:{
+						required:"手机号不能为空",
+						isMobile:"请正确填写您的手机号码",
+						remote:"该手机号已经存在"
+					}
+				}
+			});
+			
+			var time = 120;
+			var time_id;
+			var code_get_text=jQuery('#code_get_text');
+			function countDown(){
+				--time;				
+				code_get_text.html(time+"秒后可重新获取");
+				
+				if(time<=0){
+				   window.clearInterval(time_id);
+				   /* jQuery("#code_get_result").val("").hide();*/
+				   jQuery("#code_get").show();	
+				   code_get_text.html('');
+			     }
+			}
+			
+			//获取短信验证码
+			$("#code_get").click(function(){
+				jQuery("#code_get").hide();	
+				var mobile=$("#mobile").val();
+				if(mobile==""){
+					alert('请输入手机号');
+					return;
+				}
+		        //jQuery("#code_get_result").val("......").show();
+		        //jQuery("#code_get").hide();
+				jQuery.ajax({type:'POST',dataType:'text',url:'$!webPath/boundMoblie_reg_code_get.htm',data:{"mobile":mobile},
+					success:function(ret){
+				     if(ret=="1"){
+						time=120;
+						time_id=setInterval(countDown,1000);
+					 }else if(ret=="2"){
+				    	 alert("当前手机号已绑定微信号");
+					 }else{
+					 	alert("系统繁忙，发送失败!");
+					   //jQuery("#code_get_result").hide();
+					   //jQuery("#code_get").show();
+					 }
+				   },
+				   error:function(XMLHttpRequest, textStatus, errorThrown){
+					   alert(textStatus);
+					   alert(errorThrown);
+				   }
+				});
+			});
+			
+			function saveForm(){
+				jQuery("#theForm").submit();
+			}
+			
+			var referrerURL = document.referrer;
+			jQuery("#ref").val(referrerURL);
+			
+			jQuery(".tijiao").click(function(){
+				saveForm();
+			});
+		});
+	</script>
+</head>
+<body>
+	<!-- 绑定成功显示 -->
+	<div class="band-susses" style="display:none">
+		<span>请绑定手机号码</span>
+	</div>
+	<form action="$!webPath/binding_mobile.htm" method="post" name="theForm" id="theForm">
+		<div class="band-phone">
+			<ul>
+				<li>
+					<span class="tit">手机号</span>
+					<span>
+						<input type="text" placeholder="请输入手机号" id="mobile" name="mobile">
+						<input type="hidden" id="ref" value="$!ref" name="ref"/>
+					</span>
+				</li>
+				<li class="ver_code">
+					<span class="tit">验证码</span>
+					<span>
+						<input type="text" placeholder="请输入手机验证码" id="mobileCode" name="mobileCode">
+					</span>
+					<span class="yzm" id="code_get">
+						发送验证码
+					</span>
+					<span id="code_get_text" style="font-size:12px"></span>
+				</li>
+				<li>
+					<span class="tit">新密码</span>
+					<span>
+						<input type="password" placeholder="请输入新密码" id="password" name="password">
+					</span>
+					<span class="pwd-xs-yc" id="pwd-xs-yc"></span>
+				</li>
+	
+			</ul>
+			<a href="javascript:void(0)" class="tijiao">提交</a>
+		</div>
+	</form>
+ 	<!-- <script src="$!webPath/resources/js/jquery-2.1.1.min.js" type="text/javascript" charset="utf-8"></script> -->
+ 	<script>
+	 	jQuery("#pwd-xs-yc").click(function() {
+	
+	 		var pwdInput=jQuery(this).parent("li").find("input");
+	 			var type=pwdInput.attr("type");
+				if('password'==type){
+					pwdInput.attr("type","text");
+					jQuery(this).css("background-image","url('$!webPath/resources/img/xs-pwd.png')");
+				}
+				else{
+					pwdInput.attr("type","password");
+					jQuery(this).addClass('pwd-xs-yc');
+					jQuery(this).css("background-image","url('$!webPath/resources/img/yc-pwd.png')");
+				}
+	 	});
+	 	/*发送验证码
+	 	jQuery(".yzm").click(function(){
+	 		var mobile_ = jQuery("#mobile").val();
+	 		var uid_ = jQuery("#uid").val();
+	 		if(/^1[34578]{1}\d{9}$/.test(mobile_)){
+	 		    jQuery.post("$!webPath/wx/codeSend",{mobile:mobile_,uid:uid_},function(data){
+	 		    	console.log(data);
+	 		    });
+	 		} else {
+	 		    alert("请输入11位数的手机号码");
+	 		}
+	 	});*/
+	 	
+	 	
+	 	/*   提交       
+	 	jQuery(".tijiao").click(function(){
+	 		var mobile_ = jQuery("#mobile").val();
+	 		var code_ = jQuery("#code").val();
+	 		var password_ = jQuery("#password").val();
+	 		var uid_ = jQuery("#uid").val();
+	 		var ref_ = jQuery("#ref").val();
+	 		
+	 		var boo1 = /^1[34578]{1}\d{9}$/.test(mobile_);
+	 		if(boo1){
+	 			jQuery.post("$!webPath/wx/boundMobile",{mobile:mobile_,uid:uid_,code:code_,password:password_,ref:ref_},function(data){
+	 				var obj = eval('(' + data + ')');
+	 				var result_ = obj.result;
+	 				if(result_=="fail"){
+	 					alert(obj.content);
+	 				}
+	 				if(result_=="succ"){
+	 					jQuery(".band-susses").hide();
+	 					jQuery(".band-phone").show();
+	 					setTimeout(function(){
+	 						window.location.href=ref_;
+	 					},"3000");//三秒后执行
+	 				}
+	 			});
+	 		}
+	 	});*/
+	 	
+ 	</script>
+</body>
+</html>                                    

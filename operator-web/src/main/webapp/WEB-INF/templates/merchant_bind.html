@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/jquery-ui.min.css">
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+	<style type="text/css">
+		.merchantBindMain{overflow: hidden;width: 1010px;}
+		.merchantBindMain .currentBind{margin-top: 31px;overflow: hidden;font-size: 14px;}
+		.merchantBindMain .currentBind .tit{float: left;color: #666666;height: 28px;line-height: 28px;text-indent: 10px;}
+		.merchantBindMain .currentBind .merchantName{font-size: 16px;float: left;height: 28px;line-height: 28px;font-weight: bold;margin-left: 8px;}
+		.merchantBindMain .currentBind .notAvailable{float: left;color: #999999;font-size: 12px;line-height: 28px;}
+		.merchantBindMain .currentBind .btns{float: left;border-radius:3px;width:69px;height:28px;line-height: 28px;text-align: center;font-size: 12px;margin-left: 18px;}
+		.merchantBindMain .currentBind .btnBind{background:#7ac30c;color: #FFFFFF;}
+		.merchantBindMain .currentBind .btnSwitch{background: #F5F5F5;color: #666666;}
+		.merchantBindMain .merchantInfo{border: solid 1px #efefef;margin-top: 21px;font-size: 14px;color: #7a7a7a;overflow: hidden;padding-bottom: 28px;}
+		.merchantBindMain .merchantInfo .tit{background:#f8f8f8;border-radius:3px 3px 0px 0px;height:45px;text-indent: 24px;font-size: 14px;color: #666666;line-height: 45px;font-weight: bold;width: 100%;}
+		.merchantBindMain .merchantInfo>div{height: 40px;line-height: 40px;float: left;width: 463px;}
+		.merchantBindMain .merchantInfo>div span{margin-left: 6px;}
+		.merchantBindMain .merchantInfo .name{margin: 25px 0 0 37px;}
+		.merchantBindMain .merchantInfo .memberNum{margin: 25px 0 0 0;}
+		.merchantBindMain .merchantInfo .addr{margin-left: 37px;width: 100%;}
+		.merchantBindMain .merchantInfo .tel{margin-left: 37px;}
+		.merchantBindMain .merchantInfo .registerTime{margin-left: 37px;}
+		.model{width: 100%;height: 100%;position: absolute;left: 0;top: 0;background: #000000;opacity: 0.6;filter: Alpha(opacity=60);z-index: 99999;display: none;}
+		.merchantBindBox{background:#ffffff;border-radius:3px;width:528px;height:588px;position: fixed;z-index: 100000;left: 50%;top: 50%;margin: -294px 0 0 -264px;overflow: hidden;display: none;}
+		.merchantBindBox .title{font-size:20px;color:#666666;text-align:center;margin-top: 42px;}
+		.merchantBindBox ._main{border-radius:3px;width:434px;height:382px;margin: 0 auto;margin-top: 30px;overflow: hidden;}
+		.merchantBindBox ._main .tit{background: #e1e1e1;overflow: hidden;}
+		.merchantBindBox ._main .tit .name,.merchantBindBox ._main .tit .num{height: 38px;line-height: 38px;font-size: 14px;color: #818181;}
+		.merchantBindBox ._main .tit .name{text-indent: 20px;}
+		.merchantBindBox ._main .name{width: 260px;height: 41px;line-height: 41px;float: left;font-size:14px;color:#3a3a3a;text-indent: 15px;}
+		.merchantBindBox ._main .num{text-align: center;height: 41px;line-height: 41px;font-size:14px;color:#3a3a3a;}
+		.merchantBindBox ._main .merchantList{border:solid 1px #efefef;border-top: none;height: 328px;overflow-y: auto}
+		.merchantBindBox ._main div.merchantList::-webkit-scrollbar-track {			   
+		    -webkit-border-radius: 10px;
+		    border-radius: 10px;
+		    background: rgba(244, 244, 244, 0.77);
+		}
+		.merchantBindBox ._main .merchantList::-webkit-scrollbar {width: 8px;}
+		.merchantBindBox ._main .merchantList::-webkit-scrollbar-thumb {
+		    -webkit-border-radius: 100px;
+		    border-radius: 100px;
+		    background: rgba(132,132,132, 0.34);
+		}
+		.merchantBindBox ._main .merchantList .list{height: 40px;border-bottom: solid 1px #EFEFEF;}
+		.merchantBindBox ._main .merchantList .list:hover{background-color: #f4f4f4;cursor: pointer;}
+		.merchantBindBox ._main .merchantList .curr{background-image: url(/resources/images/icon_choosed.png);background-position:393px center;background-repeat:no-repeat;}
+		.merchantBindBox ._main .merchantList .list:last-child{border-bottom: none;}
+		.merchantBindBox .btns{margin: 0 auto;margin-top: 24px;overflow: hidden;width: 440px;}
+		.merchantBindBox .btns a{border-radius:3px;width:200px;height:45px;line-height: 45px;text-align: center;font-size: 18px;display: block;float: left;letter-spacing: 13px;}
+		#comfirm_merchantSwitch{background:#7ac30c;border:solid 1px #7ac30c;color: #FFFFFF;}
+		#cancle_merchantSwitch{border:solid 1px #EFEFEF;color: #525252;margin-left: 32px;}
+		#cancle_merchantSwitch:hover{background: #EFEFEF;}
+	</style>
+</head>
+<body>
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 收益统计
+</div>
+
+<div class="main">
+    <ul class="m-menu">
+        <!-- <li><a href="/operator/main.htm" target="mainFrame">运营商信息</a> </li>
+        <li><a href="/operator/statistics_relation.htm" target="mainFrame">关系统计</a> </li>
+        <li><a href="/operator/statistics_rebate.htm"  class="active" target="mainFrame">收益统计</a> </li>
+        <li><a href="/operator/change_password.htm" target="mainFrame">密码管理</a> </li>
+        <li><a href="/operator/currency_password.htm" target="mainFrame">云豆密码管理</a> </li>
+        <li><a href="/operator/change_mobile.html" target="mainFrame" >联系号码</a> </li>
+        <li><a href="/operator/operator_article_list.htm" target="mainFrame" >云尚平台公告</a> </li>
+        <li><a href="/operator/my_invitationInfo.htm"  target="mainFrame">我的二维码</a> </li>
+        <li><a href="/operator/my_invitation_list.htm" target="mainFrame" >邀请明细</a> </li> -->
+        <li><a href="/operator/main.htm"  target="mainFrame" >运营商信息</a> </li>
+        <li><a href="/operator/statistics_relation.htm" target="mainFrame">关系统计</a> </li>
+        <li><a href="/operator/statistics_rebate.htm" target="mainFrame">收益统计</a> </li>
+        #if(!$isCN)
+        <li><a href="/operator/change_password.htm" target="mainFrame">密码管理</a> </li>
+        <li><a href="/operator/currency_password.htm" target="mainFrame">云豆密码管理</a> </li>
+        #end
+        <li><a href="/operator/change_mobile.html" target="mainFrame" >联系号码</a> </li>
+        <li><a href="/operator/operator_article_list.htm" target="mainFrame" >云尚平台公告</a> </li>
+        <li><a href="/operator/my_invitationInfo.htm" target="mainFrame" >我的二维码</a> </li>
+        <li><a href="/operator/my_invitation_list.htm" target="mainFrame" >邀请明细</a> </li>
+        <li><a href="/operator/merchant_bind.htm" target="mainFrame" class="active">为商户注册会员</a> </li>
+    </ul>
+
+    <div class="view-box">
+		<div class="merchantBindMain">
+			<div class="currentBind">
+				<span class="tit">当前绑定商户:</span>
+				#if($!store)
+				<span class="merchantName">$!storeName</span>
+				<a href="javascript:;" class="btns btnBind">切换商户</a>
+				#end
+				#if($!sellerOwnMemberCount=='false')
+				<span class="notAvailable">(暂无商户，请先签约商户)</span>
+				#end
+				#if($!sellerOwnMemberCount=='true')
+				<span class="merchantName">未绑定用户</span>
+				<a href="javascript:;" class="btns btnBind">绑定商户</a>
+				#end
+			</div>
+			<div class="merchantInfo">
+			#if($!store)
+				<div class="tit">商户信息</div>
+				<div class="name">商户名称:<span>$!storeName</span></div>
+				<div class="memberNum">隶属会员:<span>$!sellerMemberCount</span></div>
+				<div class="addr">经营地址:<span>$!store.storeAddress</span></div>
+				<div class="tel">联系电话:<span>$!store.storeTelephone</span></div>
+				<div class="cashbackTotal">返润总额:<span>$!sellerRebateOrderAmount</span></div>
+				<div class="registerTime">注册时间:<span>$!addTime</span></div>
+			#else
+				<div class="tit">商户信息</div>
+				<div class="name">商户名称:<span>未添加</span></div>
+				<div class="memberNum">隶属会员:<span>0</span></div>
+				<div class="addr">经营地址:<span>未添加</span></div>
+				<div class="tel">联系电话:<span>未添加</span></div>
+				<div class="cashbackTotal">返润总额:<span>0</span></div>
+				<div class="registerTime">注册时间:<span>未添加</span></div>
+			#end
+			</div>
+		</div>		
+    </div>
+</div>
+<div class="model"></div>
+<div class="merchantBindBox">
+	<div class="title">请选择当前绑定的商户</div>
+	<div class="_main">
+		<div class="tit">
+			<div class="name">商户名称</div>
+			<div class="num">隶属会员(人数)</div>
+		</div>
+		<div class="merchantList">
+			<!--<div class="list" data-id="111">
+				<div class="name">吉林云尚大健康专卖店</div>
+				<div class="num">68</div>
+			</div>
+			<div class="list" data-id="111">
+				<div class="name">吉林云尚大健康专卖店</div>
+				<div class="num">68</div>
+			</div>
+			<div class="list" data-id="111">
+				<div class="name">吉林云尚大健康专卖店</div>
+				<div class="num">68</div>
+			</div>
+			<div class="list" data-id="111">
+				<div class="name">吉林云尚大健康专卖店</div>
+				<div class="num">68</div>
+			</div>
+			<div class="list" data-id="111">
+				<div class="name">吉林云尚大健康专卖店</div>
+				<div class="num">68</div>
+			</div>
+			<div class="list" data-id="111">
+				<div class="name">吉林云尚大健康专卖店</div>
+				<div class="num">68</div>
+			</div>
+			 -->						
+		</div>
+	</div>
+	<div class="btns">
+		<a href="javascript:;" id="comfirm_merchantSwitch">确定</a>
+		<a href="javascript:;" id="cancle_merchantSwitch">取消</a>
+	</div>
+</div>
+
+<script src="/resources/js/jquery-1.8.2.js"></script>
+<script src="/resources/js/jquery-ui.min.js"></script>
+<script src="/resources/js/jquery.blockUI.dialog.js"></script>
+<script src="/resources/js/common.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+		var merchant_id="$!sellerUID";      //页面加载时已绑定的商户id 
+		jQuery(".merchantList").on("click",".list",function(){
+			if(jQuery(this).hasClass("curr")) return;					
+			jQuery(this).addClass("curr").siblings().removeClass("curr");					
+		});
+		
+		jQuery("#cancle_merchantSwitch").click(function(){
+			jQuery(".model,.merchantBindBox").hide();
+		});
+		jQuery(".btnBind,.btnSwitch").click(function(){
+			getOperatorRebateList();
+			
+		});
+		jQuery("#comfirm_merchantSwitch").click(function(){
+			 var bind_id=jQuery(".merchantList .curr").attr("data-id");
+			 console.log(">>>>>>> "+bind_id);
+			 if(bind_id==merchant_id) return;
+			 //切换绑定商户
+			 jQuery.ajax({
+	             type: "POST",
+	             url: "/operator/operatorRegMemberOther.htm",
+	             data: {sellerUID:bind_id},
+	             dataType: "json",
+	             success: function(data){
+	            	 merchant_id=bind_id;
+	            	 jQuery(".model,.merchantBindBox").hide();
+	            	 var result = data.result;
+	            	 if(result=="succ"){
+	            		 window.location.href="/operator/merchant_bind.htm";
+	            	 }
+	            	 else{
+	            		 alert(json.content);
+	            	 }
+                 }
+	         });
+		});
+		//绑定或切换会员
+		function getOperatorRebateList(){
+			jQuery.ajax({
+				type:"POST",
+				url:"/operator/getOperatorRebateList.htm",
+				date:{},
+				dateType:"json",
+				success:function(data){
+					var obj = eval('(' + data + ')');
+					var arr = obj.list;
+					var html = "";
+					for(var i = 0;i<arr.length;i++)
+					{
+						if(arr[i].sellerUID==merchant_id){
+						 	html += "<div class='list curr' data-id='"+arr[i].sellerUID+"'>";
+						}else{
+							html += "<div class='list' data-id='"+arr[i].sellerUID+"'>";
+						}					    
+						html += "<div class='name'>"+arr[i].shopName+"</div>";
+						html += "<div class='num'>"+arr[i].memCount+"</div>";
+						html += "</div>";
+						
+					}
+					jQuery(".merchantList").html(html); 
+					jQuery(".model,.merchantBindBox").show();
+				}
+			});
+		}
+	});
+</script>
+</body>
+</html>

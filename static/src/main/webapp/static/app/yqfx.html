@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="assets/js/qcode.js"></script>
+<style type="text/css">
+    html,body { margin: 0; padding: 0; }
+    #qrcode img { display: block; width: 100%; max-width: 100%;}
+</style>
+</head>
+<body>
+<div id="qrcode"></div>
+<script>
+    window.onload =function(){
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width : 300,//设置宽高
+            height : 300
+        });
+        qrcode.makeCode('http://shop.ysysgo.com/mobile_register.htm?invitationCode=' + location.hash.replace("#", ""));
+    }
+
+</script>
+</body>
+</html>

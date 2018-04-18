@@ -1,0 +1,242 @@
+
+
+<div id="head_h" class="head_width">
+
+	#if($config.websiteLogo)
+    #set($img="$!{config.websiteLogo.path}")
+    #else
+    #set($img="$!webPath/resources/style/system/front/default/images/logo.png")
+    #end
+    <div class="head">
+        <h1 class="logo"><span>
+      <p><a href="javascript:hrefUrl();"> <img src="$!webPath/resources/style/system/front/default/images/logo.jpg" border="0" /> </a></p>
+      </span></h1>
+        <div class="h-local">
+            <div class="name">$!{o2oCity.areaName}</div>
+            <a href="$webPath/group/city_select.htm" class="btn-line">切换城市</a>
+        </div>
+       <form action="$!webPath/group/keyword/search.htm" method="get" id="searchForm">
+      <div class="head_search" id="head_search" style="width:705px; margin-left:0px;"> <span class="head_seartxt">
+        <input name="keyword" type="text" id="keyword" placeholder="请输入你感兴趣的服务" value="$!keyword" x-webkit-speech lang="zh-CN" onwebkitspeechchange="jQuery('#searchForm').submit()" class="h_sear_txt" style="padding-left:5px;width:618px;" autocomplete="off"/>
+        <input name="classId" type="hidden" value="$!classId">
+        <input name="" type="submit"  class="h_sear_btn" value="搜索"/>
+        </span><span class="head_searstr">#if($!config.o2oHotSearch!="")热门搜索：#foreach($info in $CommUtil.splitByChar("$!config.o2oHotSearch",",")) <a href="javascript:void(0);" onclick="search_form('$info','goods');">$!info</a> #end #end</span>
+      	<!--搜索历史 -->
+    	<div class="head_search_history" id="head_search_history" style="display:none">
+    	<dl>
+        	<dt>
+            	<ul>
+                	<li class="head_search_history_top"><span>搜索历史</span><i ><a href="javascript:void(0)" onclick="search_data_del_all()">清除全部</a></i></li>
+                </ul>
+            </dt>
+            <dd><span  class="head_search_history_hot">热门搜索...</span>
+            	<ul>
+                	
+                    #if($!config.o2oHotSearch!="")
+                    #foreach($info in $CommUtil.splitByChar("$!config.o2oHotSearch",","))
+                	<li><a href="javascript:void(0);" onclick="search_form('$info','goods');">$!info</a></li>
+                    #end
+                    #end
+                </ul>
+            </dd>
+        </dl>
+    </div>  
+        <!--搜索历史 -->
+        <div class="head_search_history_up" id="head_search_history_up" style="display:none">
+    	<dl>
+        	<dt>
+            	<ul>
+                	<li class="head_search_history_top"><span>搜索历史</span><i ><a href="">清除全部</a></i></li>
+                </ul>
+            </dt>
+            <dd><span  class="head_search_history_hot">热门搜索...</span>
+            	<ul>
+                	
+                    #if($!config.o2oHotSearch!="")
+                    #foreach($info in $CommUtil.splitByChar("$!config.o2oHotSearch",","))
+                	<li><a href="javascript:void(0);" onclick="search_form('$info','goods');">$!info</a></li>
+                    #end
+                    #end
+                </ul>
+            </dd>
+        </dl>
+    </div>    	
+      </div>
+    </form>
+    <!--用户中心开始-->
+    <div class="top_user" id="top_user">
+      <span class="top_user_sp" id="top_user_sp"><a href="$!webPath/buyer/index.htm">用户中心</a><s></s></span>
+      <div class="top_user_hid" id="top_user_hid" style="display:none"> </div>
+    </div>
+#if(!$!userDetails.seller)
+    <div class="goodscar">
+        <a class="goodscar_sp text-center" href="$webPath/seller_apply/group.htm">商家入驻</a>
+    </div>
+#end
+    </div>
+</div>
+
+
+<script src="$!webPath/resources/js/jquery.cookie.js"></script>
+<script>
+jQuery(document).ready(function(){
+	//alert($!classId);
+    search_history_data();
+    var head_h=jQuery("#head_h").height();
+    //搜索框获取焦点
+    jQuery("#keyword").click(function(){
+        var top = jQuery(document).scrollTop();
+        jQuery("div[id^='head_search_goodslist']").hide();
+        if(top>head_h){
+            jQuery("#head_search_history_up").fadeIn();
+        }else{
+            jQuery("#head_search_history").fadeIn();
+        }
+    }).keyup(function(){
+        if(jQuery(this).val()!=''){
+            jQuery("div[id^='head_search_history']").hide();
+        };
+    });
+    jQuery("div[id^='head_search_history']").mouseover(function(){
+        jQuery(this).show();
+    });
+    jQuery("div[id^='head_search_history']").mouseout(function(){
+        jQuery(this).hide();
+    });
+    jQuery(window).scroll(function(){
+        var top = jQuery(document).scrollTop();
+        if(top>head_h){
+            if(jQuery("#head_search_history").is(":visible")){
+                jQuery("#head_search_history").hide();
+                jQuery("#head_search_history_up").show();
+            };
+            if(jQuery("#head_search_goodslist").is(":visible")){
+                jQuery("#head_search_goodslist").hide();
+                jQuery("#head_search_goodslist_up").show();
+            };
+        }else{
+            if(jQuery("#head_search_history_up").is(":visible")){
+                jQuery("#head_search_history_up").hide();
+                jQuery("#head_search_history").show();
+            };
+            if(jQuery("#head_search_goodslist_up").is(":visible")){
+                jQuery("#head_search_goodslist_up").hide();
+                jQuery("#head_search_goodslist").show();
+            };
+        }
+
+    });
+    //选定某一搜索历史
+    jQuery("#head_search_history").find("dl>dt>ul>li>span").click(function(){
+        jQuery("#keyword").val(jQuery(this).attr("data"));
+        jQuery("#searchForm").submit();
+    });
+    //鼠标经过用户中心
+    jQuery("#top_user_sp").mouseover(function(){
+        if(jQuery("#top_user_hb").size()==0){
+            jQuery.ajax({type:'POST',url:'$!current_webPath/head_ajax_user_group.htm',data:'',
+                beforeSend:function(){
+                    jQuery("#top_user_hid").html('<div class="top_user_hb" id="top_user_hb"><span class="top_user_loading"><img src="$!webPath/resources/style/system/front/default/images/loading.gif" /></span><b class="top_user_warning">加载中，请稍后...</b></div>');
+                    jQuery("#top_user_hid").show();
+                },
+                success:function(data){
+                    jQuery("#top_user_hid").empty();
+                    jQuery("#top_user_hid").html(data);
+                }
+            });
+        }else{
+            jQuery("#top_user_hid").show();
+        }
+        jQuery("#top_user_sp").addClass("top_user_sp_this");
+    });
+    jQuery("#top_user").mouseleave(function(){
+        jQuery("#top_user_hid").hide();
+        jQuery("#top_user_sp").removeClass("top_user_sp_this");
+    });
+});
+//初始化分类搜索提示模块
+function search_goodsclass_initialize(){
+    jQuery("div[class^='head_search_goodslist']").each(function(index,obj) {
+        jQuery(obj).remove();
+    });
+    var str = "<div class='head_search_goodslist' id='head_search_goodslist' style='display:none'><dl><dt><ul></ul></dt></dl></div>";
+    jQuery("#head_search").append(str);
+    str = "<div class='head_search_goodslist_up' id='head_search_goodslist_up' style='display:none'><dl><dt><ul></ul></dt></dl></div>";
+    jQuery("#head_search").append(str);
+}
+function search_gc_close(){
+    jQuery("div[id^='head_search_goodslist']").hide();
+}
+//加载搜索历史记录
+function search_history_data(){
+    var data = jQuery.cookie("search_o2o_history");
+    if(data==null){
+        jQuery("div[id^='head_search_history']").remove();
+    }else{
+        jQuery.each(data.split(","),function(index,item){
+            if(index<10){
+                item= item.replace(/\"/g,"");
+                jQuery("#head_search_history_up").find("dl>dt>ul").append("<li><span data='"+item+"'><a href='javascript:void(0)'>"+item+"</a></span><i onclick='search_data_del(this)'><a href='javascript:void(0)'>删除</a></i></li>");
+                jQuery("#head_search_history").find("dl>dt>ul").append("<li><span data='"+item+"'><a href='javascript:void(0)'>"+item+"</a></span><i onclick='search_data_del(this)'><a href='javascript:void(0)'>删除</a></i></li>");
+            }
+        });
+    }
+}
+//删除某一历史记录
+function search_data_del(obj){
+    var item = jQuery(obj).parent().find("span").attr("data");
+    var data = '';
+    var temp = jQuery.cookie("search_o2o_history");
+    jQuery.each(temp.split(","),function(index,value){
+        if(item!=value.replace(/\"/g,"")){
+            if(data!=''){
+                data =data +","+value;
+            }else{
+                data = value;
+            }
+        }
+    });
+
+    if(data!=''){
+        jQuery.cookie("search_o2o_history",data);
+    }else{
+        jQuery.cookie("search_o2o_history",null);
+    }
+    search_html_restore();
+    search_history_data();
+}
+//删除全部历史记录
+function search_data_del_all(){
+    jQuery.cookie("search_o2o_history",null);
+    search_html_restore();
+    search_history_data();
+}
+//清空搜索历史下拉数据
+function search_html_restore(){
+    jQuery("#head_search_history_up").find("dl>dt>ul>li").each(function(index, element) {
+        if(index!=0){
+            jQuery(this).remove();
+        }
+    });
+    jQuery("#head_search_history").find("dl>dt>ul>li").each(function(index, element) {
+        if(index!=0){
+            jQuery(this).remove();
+        }
+    });
+}
+function search_form(){
+    var keyword=arguments[0];
+    var type=arguments[1];
+    if(keyword!=""&&keyword!=undefined){
+        jQuery("#keyword").val(keyword);
+    }
+    if(type!=""&&type!=undefined){
+        jQuery("#type").val(type);
+    }
+    jQuery("#searchForm").submit();
+    jQuery("#keyword").val("");
+}
+</script>
+<!--[if lt IE 9]>
+<script src="$!webPath/resources/js/css3-mediaqueries.js"></script>
+<![endif]-->

@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery("#theForm").validate(
+  {
+    rules:{
+  	  phone:{
+        required :true
+      }, 
+      op:{
+        required :true
+      },
+  	  amount:{
+  	    required :true,number:true,min:0,maxlength:9
+  	  }
+	  },
+  	 messages:{
+      phone:{required:"手机号不能为空"},
+      op:{required:"请选择操作类型"},
+  	  amount:{required:"金额不能为空",number:"只能为数字",min:"金额只能正数",maxlength:"金额不能超过9位数"}
+  	 }
+  }
+  );
+  //
+  jQuery("#phone").blur(function(){
+	   var phone=jQuery(this).val();
+
+     jQuery.post("$!webPath/admin/check_user_phone.htm",{"phone":phone},
+      function(obj){
+		  if(obj.code== 1){
+	        jQuery("#phone_info").text("可用余额："+ obj.data.balance);
+    			jQuery("#user_id").val(obj.data.id);
+    			jQuery("#phone_info_parent").show();
+		  }else{
+		     jQuery("#phone").val(""); 
+  			 jQuery("#phone_info").text(obj.errMsg);
+  			 jQuery("#phone_info_parent").show();
+  			 jQuery("#phone_info_parent").fadeOut(3000);
+		  }
+	 },"json");
+  });
+  //
+});
+
+function saveForm(){
+   jQuery("#theForm").submit();
+}
+
+
+</script>
+<body>
+<div class="cont">
+  <h1 class="seth">云豆管理</h1>
+  <div class="nav_list">
+
+  <input name="user_id" id="user_id" type="hidden"/>
+     <ul>
+      <li> <a href="$!webPath/admin/predeposit_list.htm"><b>充值管理</b></a></li>
+       <li><a href="$!webPath/admin/predeposit_cash.htm"><b>提现管理</b></a></li>
+        <li><a href="javascript:void();" class="this"><b>用户充值</b></a></li>
+
+     </ul>
+    
+      </div>
+ <form name="theForm" id="theForm" action="$!webPath/admin/predeposit_recharge_save.htm" method="post">
+
+   <div class="edit">
+      <div class="editul setcont">
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>会员手机号</li>
+          <li>
+            <span class="webname"><input name="phone" type="text" id="phone" size="40" autocomplete="off" />
+            </span>
+          </li>
+          <li style="width:100%; float:left; padding-left:140px;display:none;" id="phone_info_parent">
+            <span class="webname" id="phone_info" style="color:#F00;">
+          </span></li>
+        </ul>
+
+        <ul class="set1">
+          <li  class="setcont_bg">操作类型</li>
+          <li><span class="webname">
+              <select name="op" id="op">
+                <option value="add">充值</option>
+                <option value="mine">减值</option>
+              </select>
+          </span></li>
+        </ul>
+        
+        <ul class="set1">
+          <li  class="setcont_bg"><strong class="sred">*</strong>金额</li>
+          <li>
+            <span class="webname">
+            <input name="amount" type="text" id="amount" size="40" value="" />
+            </span>
+          </li>
+        </ul>
+      	
+        <ul class="set1">
+            <li  class="setcont_bg">备注</li>
+            <li>
+              <span class="webname">
+              <textarea name="info" cols="40" rows="6" id="info"></textarea>
+              </span>
+            </li>
+      	</ul>
+      </div>
+  </div>
+  </form>
+  <div class="submit">
+    <span class="pad120">  <input name="save" type="button" value="提交" onclick="saveForm()" /></span>
+  </div>
+</div>
+</body>
+</html>

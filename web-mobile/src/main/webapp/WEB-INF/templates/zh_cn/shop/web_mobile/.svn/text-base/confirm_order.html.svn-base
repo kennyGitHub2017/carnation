@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="email=no">
+<title>确认订单</title>
+<link href="$!webPath/resources/shop/css/style.css" rel="stylesheet"
+	type="text/css" />
+<script src="$!webPath/resources/js/jquery.min.js"
+	type="text/javascript"></script>
+<script src="$!webPath/resources/js/jquery.lazyload2.js"></script>
+
+<style>
+html {
+	background-color: #fff;
+}
+</style>
+<script>
+	var _hmt = _hmt || [];
+	(function() {
+		var hm = document.createElement("script");
+		hm.src = "//hm.baidu.com/hm.js?5ec07b377284cf8ef95ebaa33fa298f5";
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(hm, s);
+	})();
+</script>
+
+<script>
+	var screenWidth = window.innerWidth || document.documentElement.clientWidth;
+	document.documentElement.style.fontSize = parseInt(screenWidth / 7.5)
+			+ "px";
+	function subForm() {
+		$('#form_id').submit()
+	}
+</script>
+</head>
+<body>
+
+	<form action="$!webPath/q/confirm-order-second" method="get"
+		id="form_id">
+
+		<input type="hidden" name="gcs_id" value="$!gcs_id"> 
+		<input type="hidden" name="store_id" value="$!{store_id}"> 
+		<input type="hidden" name="store_ids" value="$!{store_id}">
+
+		<div class="main addcar-ul">
+		<a href="$!webPath/buyer/address.htm" class="order_a">
+			<ul>
+				#foreach($addre in $addressList) #if($addre.defaultVal)
+
+				<li><span>$!addre.trueName</span> <span>$!addre.mobile</span> </li>
+				<li>$!{addre.areaName} $!addre.areaInfo</li>
+				<input type="hidden" name="addrId" value="$!{addre.id}">
+				#end #end
+			</ul>
+		</a>	
+		</div>
+
+		<div class="order-goodsimg" style="display: none;">
+			<ul>
+				#set ($i=0) #foreach($goodsitem in $goodsOfCart) #set($i=$i+1)
+
+				#if($i < 5)
+
+				<li><img data-original="$!{goodsitem.goodsMainPhotoPath}"
+					alt=""> #foreach($cartItem in $carts)
+					#if($cartItem.goodsId==$goodsitem.id) <em>$!cartItem.count</em>
+					#end #end</li> #end #end
+
+			</ul>
+			<span><a href="$!webPath/goods_order_confirm.htm?gcs_id=$!gcs_id">共$!totleNo件</a></span>
+		</div>
+		
+		
+		<div class="order_goods_list">
+			#if($!carts.get(0).exPriceFlag==1)
+			<div class="order_goods_list_tit">云购币</div>
+			#elseif($!carts.get(0).isYgb==1)
+			<div class="order_goods_list_tit">云购币专区</div>
+			#elseif($!carts.get(0).isYgb==0)
+			<div class="order_goods_list_tit">平台商家</div>
+			#else
+			<div class="order_goods_list_tit"></div>
+			#end
+			<ul>
+				#foreach($!good in $!goodsOfCart)
+				
+				<li class="list">
+					<a href="javascript:;">
+						<img alt="" data-original="$!good.goodsMainPhotoPath">
+						<div class="order_goods_list_mes">
+							<ol>
+								<li class="tit">$!good.goodsName</li>
+								<li class="guige">
+									 规格：
+									<!-- <span>精品包装</span>    
+									<span>尺寸</span>：<span>L</span> -->
+									#if($!specInfoMap.get($!good.id))
+										<span>$!specInfoMap.get($!good.id)</span>
+									#else
+										<span>无</span>
+									#end
+									&nbsp;
+								</li> 
+								<li >
+								#if($!{isCN})
+								<span class="goubi">
+									#if($!good.needMoney >0 && $!good.needYgb > 0)
+										$number.format("0.00",$!good.needYgb)+ $number.format("0.00",$!good.needMoney)元
+									#elseif($!good.needYgb >0)
+										$number.format("0.00",$!good.needYgb)
+									#elseif($!good.needMoney > 0)
+										$number.format("0.00",$!good.needMoney)元
+									#end
+								</span>
+								#end
+								#if($!{isCN} && $!{good.cnSelfAddPrice} > 0)
+								<span class="bvzhi">$!{good.cnSelfAddPrice}</span>
+								#end
+								</li>
+								<li class="priceandnum">
+									#if($!zeroFlag && $!zeroFlag == 1)
+									<span class="price">¥ 0)</span>
+									#else
+									<span class="price">¥ $!cartPriceMap.get($!good.id)</span>
+									#end
+									<span class="num">$!cartGoodsNumMap.get($!good.id)</span>
+								</li>
+							</ol>
+						</div>
+					</a>
+				</li>
+				#end
+			</ul>
+		</div>
+
+
+		<div class="fsandyhj">
+			<span class="un">未使用优惠劵</span> <span class="fsandyhj_a">优惠劵 <span class="fsandyhj_number">0</span> </span>
+		</div>
+		
+		<div class="fsandyhj spjine zero_fsandyhj">
+		 #if($!zeroFlag && $!zeroFlag == 1)
+		 <span>＋¥$!zeroShipFee</span>
+		 #else
+		 <span>＋¥ $!shipFee</span>
+		 #end
+			<span>运费</span>
+		</div>
+		#if($!{isCN} && $!bvCount > 0)
+		<div class="fsandyhj spjine">
+			#if($!bvCount > 0)
+			<span>$!bvCount</span>
+			#else
+			<span>0</span>
+			#end
+			 <span>BV值合计</span>
+		</div>
+		#end
+	
+		<div class="liuyan">
+			<textarea name="" id="" cols="30" rows="10" placeholder="给卖家留言："></textarea>
+		</div>
+		
+		<div class="order_goods_number">
+			<span>共 $!{totleNo} 件商品  </span>
+			#if($!zeroFlag && $!zeroFlag == 1)
+			<span> 合计:  <span class="price">¥ <span>$!zeroShipFee</span> </span></span>
+			#else
+			<span> 合计:  <span class="price">¥ <span>$!{countPrice}</span> </span></span>
+			#end
+		</div>
+		
+		
+		
+		
+		
+		
+		
+		<!-- <div class="fsandyhj yhuij">
+		<span>＋¥ 10.00</span>
+		<span>运费</span>
+	</div> -->
+<!-- 		<div class="fsandyhj yhuij">
+		
+			<span>¥ $!{order_er_price}</span> <span>优惠券</span>
+		</div> -->
+		<!-- <div class="fsandyhj yhuij">
+		<span>－500积分</span>
+		<span>积分</span>
+	</div> -->
+
+
+
+
+		<footer class="addcar-jies">
+
+			<div class="jies-btn tij-order" onclick="subForm()">提交订单</div>
+			<div class="jies-heji">
+				合计：
+				
+			#if($!zeroFlag && $!zeroFlag == 1)
+			<span>¥$!zeroShipFee</span>
+			#else
+			#set($thisPrice=$!{order_goods_price}+$!{shipFee})
+			<span class="price">¥ $!{thisPrice}</span>
+			#end
+				
+			</div>
+		</footer>
+
+	</form>
+	<!-- $!httpInclude.include("/wx_foot.htm") -->
+
+</body>
+<script src="$!webPath/resources/js/jquery.lazyload2.js"
+	type="text/javascript"></script>
+<script type="text/javascript">
+	$('img').lazyload();
+</script>
+</html>

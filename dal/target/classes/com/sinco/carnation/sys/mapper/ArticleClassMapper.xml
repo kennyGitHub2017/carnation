@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.ArticleClassMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.ArticleClass">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="class_Name" property="className" jdbcType="VARCHAR" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="mark" property="mark" jdbcType="VARCHAR" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="sys_Class" property="sysClass" jdbcType="BIT" />
+		<result column="parent_id" property="parentId" jdbcType="BIGINT" />
+	</resultMap>
+
+	<resultMap id="ExtendResultMap" extends="BaseResultMap"
+		type="com.sinco.carnation.sys.bo.ArticleClassBO">
+	</resultMap>
+
+	<select id="findByPage" resultMap="ExtendResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_articleclass
+		where parent_id is null
+		order by sequence asc
+	</select>
+
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, class_Name, level, mark, sequence,
+		sys_Class, parent_id
+	</sql>
+
+	<select id="queryArticleList" resultMap="ExtendResultMap">
+		select
+		<include refid="Base_Column_List"></include>
+		FROM sys_articleclass WHERE parent_id=(SELECT id FROM sys_articleclass
+		WHERE mark=#{mark}) order by add_Time desc
+	</select>
+
+	<select id="topClass" resultMap="ExtendResultMap">
+		select * from sys_articleclass
+		where parent_id is null order by sequence asc
+	</select>
+
+	<select id="selectBOByExample" resultMap="ExtendResultMap"
+		parameterType="com.sinco.carnation.sys.model.ArticleClassExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_articleclass
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="count != null">
+			limit 0,#{count}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sys.model.ArticleClassExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sys_articleclass
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sys_articleclass
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sys_articleclass
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.ArticleClassExample">
+		delete from sys_articleclass
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.ArticleClass">
+		insert into sys_articleclass (id, add_Time, delete_Status,
+		class_Name, level, mark,
+		sequence, sys_Class, parent_id
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{className,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, #{mark,jdbcType=VARCHAR},
+		#{sequence,jdbcType=INTEGER}, #{sysClass,jdbcType=BIT},
+		#{parentId,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.ArticleClass">
+		insert into sys_articleclass
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="className != null">
+				class_Name,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			<if test="mark != null">
+				mark,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="sysClass != null">
+				sys_Class,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="className != null">
+				#{className,jdbcType=VARCHAR},
+			</if>
+			<if test="level != null">
+				#{level,jdbcType=INTEGER},
+			</if>
+			<if test="mark != null">
+				#{mark,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="sysClass != null">
+				#{sysClass,jdbcType=BIT},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.ArticleClassExample"
+		resultType="java.lang.Integer">
+		select count(*) from sys_articleclass
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sys_articleclass
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.className != null">
+				class_Name = #{record.className,jdbcType=VARCHAR},
+			</if>
+			<if test="record.level != null">
+				level = #{record.level,jdbcType=INTEGER},
+			</if>
+			<if test="record.mark != null">
+				mark = #{record.mark,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.sysClass != null">
+				sys_Class = #{record.sysClass,jdbcType=BIT},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sys_articleclass
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		class_Name = #{record.className,jdbcType=VARCHAR},
+		level = #{record.level,jdbcType=INTEGER},
+		mark = #{record.mark,jdbcType=VARCHAR},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		sys_Class = #{record.sysClass,jdbcType=BIT},
+		parent_id = #{record.parentId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.ArticleClass">
+		update sys_articleclass
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="className != null">
+				class_Name = #{className,jdbcType=VARCHAR},
+			</if>
+			<if test="level != null">
+				level = #{level,jdbcType=INTEGER},
+			</if>
+			<if test="mark != null">
+				mark = #{mark,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="sysClass != null">
+				sys_Class = #{sysClass,jdbcType=BIT},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.ArticleClass">
+		update sys_articleclass
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		class_Name = #{className,jdbcType=VARCHAR},
+		level = #{level,jdbcType=INTEGER},
+		mark = #{mark,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=INTEGER},
+		sys_Class = #{sysClass,jdbcType=BIT},
+		parent_id = #{parentId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

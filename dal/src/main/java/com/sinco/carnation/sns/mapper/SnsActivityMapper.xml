@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.SnsActivityMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sns.model.SnsActivity">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="img" property="img" jdbcType="VARCHAR" />
+		<result column="enroll_bg" property="enrollBg" jdbcType="TIMESTAMP" />
+		<result column="enroll_end" property="enrollEnd" jdbcType="TIMESTAMP" />
+		<result column="act_bg" property="actBg" jdbcType="TIMESTAMP" />
+		<result column="act_end" property="actEnd" jdbcType="TIMESTAMP" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="area_id" property="areaId" jdbcType="BIGINT" />
+		<result column="keywords" property="keywords" jdbcType="VARCHAR" />
+		<result column="priority" property="priority" jdbcType="INTEGER" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="display" property="display" jdbcType="BIT" />
+		<result column="mark" property="mark" jdbcType="VARCHAR" />
+		<result column="sequence" property="sequence" jdbcType="INTEGER" />
+		<result column="act_type" property="actType" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="url" property="url" jdbcType="VARCHAR" />
+		<result column="act_desc" property="actDesc" jdbcType="LONGVARCHAR" />
+		<result column="act_content" property="actContent" jdbcType="LONGVARCHAR" />
+
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sns.bo.SnsActivityBO"
+		extends="BaseResultMap">
+		<result column="area_Name" property="name" jdbcType="VARCHAR" />
+		<result column="cid" property="cid" jdbcType="LONGVARCHAR" />
+		<result column="parent_id" property="pid" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, title, add_Time, img, enroll_bg, enroll_end, act_bg, act_end,
+		address, area_id,
+		keywords, priority, delete_status, display, mark, sequence, act_type,
+		description,
+		url
+	</sql>
+	<sql id="Blob_Column_List">
+		act_desc, act_content
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.sns.model.SnsActivityExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_activity
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.sns.model.SnsActivityExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_activity
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from sns_activity
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sns_activity
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sns.model.SnsActivityExample">
+		delete from sns_activity
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.SnsActivity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sns_activity (id, title, add_Time,
+		img, enroll_bg, enroll_end,
+		act_bg, act_end, address,
+		area_id, keywords, priority,
+		delete_status, display, mark,
+		sequence, act_type, description,
+		url, act_desc, act_content
+		)
+		values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR},
+		#{addTime,jdbcType=TIMESTAMP},
+		#{img,jdbcType=VARCHAR}, #{enrollBg,jdbcType=TIMESTAMP}, #{enrollEnd,jdbcType=TIMESTAMP},
+		#{actBg,jdbcType=TIMESTAMP}, #{actEnd,jdbcType=TIMESTAMP},
+		#{address,jdbcType=VARCHAR},
+		#{areaId,jdbcType=BIGINT}, #{keywords,jdbcType=VARCHAR}, #{priority,jdbcType=INTEGER},
+		#{deleteStatus,jdbcType=BIT}, #{display,jdbcType=BIT},
+		#{mark,jdbcType=VARCHAR},
+		#{sequence,jdbcType=INTEGER}, #{actType,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR}, #{actDesc,jdbcType=LONGVARCHAR},
+		#{actContent,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.SnsActivity"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sns_activity
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="img != null">
+				img,
+			</if>
+			<if test="enrollBg != null">
+				enroll_bg,
+			</if>
+			<if test="enrollEnd != null">
+				enroll_end,
+			</if>
+			<if test="actBg != null">
+				act_bg,
+			</if>
+			<if test="actEnd != null">
+				act_end,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="areaId != null">
+				area_id,
+			</if>
+			<if test="keywords != null">
+				keywords,
+			</if>
+			<if test="priority != null">
+				priority,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="display != null">
+				display,
+			</if>
+			<if test="mark != null">
+				mark,
+			</if>
+			<if test="sequence != null">
+				sequence,
+			</if>
+			<if test="actType != null">
+				act_type,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="actDesc != null">
+				act_desc,
+			</if>
+			<if test="actContent != null">
+				act_content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="img != null">
+				#{img,jdbcType=VARCHAR},
+			</if>
+			<if test="enrollBg != null">
+				#{enrollBg,jdbcType=TIMESTAMP},
+			</if>
+			<if test="enrollEnd != null">
+				#{enrollEnd,jdbcType=TIMESTAMP},
+			</if>
+			<if test="actBg != null">
+				#{actBg,jdbcType=TIMESTAMP},
+			</if>
+			<if test="actEnd != null">
+				#{actEnd,jdbcType=TIMESTAMP},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="areaId != null">
+				#{areaId,jdbcType=BIGINT},
+			</if>
+			<if test="keywords != null">
+				#{keywords,jdbcType=VARCHAR},
+			</if>
+			<if test="priority != null">
+				#{priority,jdbcType=INTEGER},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="display != null">
+				#{display,jdbcType=BIT},
+			</if>
+			<if test="mark != null">
+				#{mark,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				#{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="actType != null">
+				#{actType,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="actDesc != null">
+				#{actDesc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="actContent != null">
+				#{actContent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sns.model.SnsActivityExample"
+		resultType="java.lang.Integer">
+		select count(*) from sns_activity
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sns_activity
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.img != null">
+				img = #{record.img,jdbcType=VARCHAR},
+			</if>
+			<if test="record.enrollBg != null">
+				enroll_bg = #{record.enrollBg,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.enrollEnd != null">
+				enroll_end = #{record.enrollEnd,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.actBg != null">
+				act_bg = #{record.actBg,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.actEnd != null">
+				act_end = #{record.actEnd,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.address != null">
+				address = #{record.address,jdbcType=VARCHAR},
+			</if>
+			<if test="record.areaId != null">
+				area_id = #{record.areaId,jdbcType=BIGINT},
+			</if>
+			<if test="record.keywords != null">
+				keywords = #{record.keywords,jdbcType=VARCHAR},
+			</if>
+			<if test="record.priority != null">
+				priority = #{record.priority,jdbcType=INTEGER},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.display != null">
+				display = #{record.display,jdbcType=BIT},
+			</if>
+			<if test="record.mark != null">
+				mark = #{record.mark,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sequence != null">
+				sequence = #{record.sequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.actType != null">
+				act_type = #{record.actType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.description != null">
+				description = #{record.description,jdbcType=VARCHAR},
+			</if>
+			<if test="record.url != null">
+				url = #{record.url,jdbcType=VARCHAR},
+			</if>
+			<if test="record.actDesc != null">
+				act_desc = #{record.actDesc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.actContent != null">
+				act_content = #{record.actContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update sns_activity
+		set id = #{record.id,jdbcType=BIGINT},
+		title = #{record.title,jdbcType=VARCHAR},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		img = #{record.img,jdbcType=VARCHAR},
+		enroll_bg = #{record.enrollBg,jdbcType=TIMESTAMP},
+		enroll_end = #{record.enrollEnd,jdbcType=TIMESTAMP},
+		act_bg = #{record.actBg,jdbcType=TIMESTAMP},
+		act_end = #{record.actEnd,jdbcType=TIMESTAMP},
+		address = #{record.address,jdbcType=VARCHAR},
+		area_id = #{record.areaId,jdbcType=BIGINT},
+		keywords = #{record.keywords,jdbcType=VARCHAR},
+		priority = #{record.priority,jdbcType=INTEGER},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		display = #{record.display,jdbcType=BIT},
+		mark = #{record.mark,jdbcType=VARCHAR},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		act_type = #{record.actType,jdbcType=VARCHAR},
+		description = #{record.description,jdbcType=VARCHAR},
+		url = #{record.url,jdbcType=VARCHAR},
+		act_desc = #{record.actDesc,jdbcType=LONGVARCHAR},
+		act_content = #{record.actContent,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sns_activity
+		set id = #{record.id,jdbcType=BIGINT},
+		title = #{record.title,jdbcType=VARCHAR},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		img = #{record.img,jdbcType=VARCHAR},
+		enroll_bg = #{record.enrollBg,jdbcType=TIMESTAMP},
+		enroll_end = #{record.enrollEnd,jdbcType=TIMESTAMP},
+		act_bg = #{record.actBg,jdbcType=TIMESTAMP},
+		act_end = #{record.actEnd,jdbcType=TIMESTAMP},
+		address = #{record.address,jdbcType=VARCHAR},
+		area_id = #{record.areaId,jdbcType=BIGINT},
+		keywords = #{record.keywords,jdbcType=VARCHAR},
+		priority = #{record.priority,jdbcType=INTEGER},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		display = #{record.display,jdbcType=BIT},
+		mark = #{record.mark,jdbcType=VARCHAR},
+		sequence = #{record.sequence,jdbcType=INTEGER},
+		act_type = #{record.actType,jdbcType=VARCHAR},
+		description = #{record.description,jdbcType=VARCHAR},
+		url = #{record.url,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.SnsActivity">
+		update sns_activity
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="img != null">
+				img = #{img,jdbcType=VARCHAR},
+			</if>
+			<if test="enrollBg != null">
+				enroll_bg = #{enrollBg,jdbcType=TIMESTAMP},
+			</if>
+			<if test="enrollEnd != null">
+				enroll_end = #{enrollEnd,jdbcType=TIMESTAMP},
+			</if>
+			<if test="actBg != null">
+				act_bg = #{actBg,jdbcType=TIMESTAMP},
+			</if>
+			<if test="actEnd != null">
+				act_end = #{actEnd,jdbcType=TIMESTAMP},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="areaId != null">
+				area_id = #{areaId,jdbcType=BIGINT},
+			</if>
+			<if test="keywords != null">
+				keywords = #{keywords,jdbcType=VARCHAR},
+			</if>
+			<if test="priority != null">
+				priority = #{priority,jdbcType=INTEGER},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="display != null">
+				display = #{display,jdbcType=BIT},
+			</if>
+			<if test="mark != null">
+				mark = #{mark,jdbcType=VARCHAR},
+			</if>
+			<if test="sequence != null">
+				sequence = #{sequence,jdbcType=INTEGER},
+			</if>
+			<if test="actType != null">
+				act_type = #{actType,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="actDesc != null">
+				act_desc = #{actDesc,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="actContent != null">
+				act_content = #{actContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.sns.model.SnsActivity">
+		update sns_activity
+		set title = #{title,jdbcType=VARCHAR},
+		add_Time = #{addTime,jdbcType=TIMESTAMP},
+		img = #{img,jdbcType=VARCHAR},
+		enroll_bg = #{enrollBg,jdbcType=TIMESTAMP},
+		enroll_end = #{enrollEnd,jdbcType=TIMESTAMP},
+		act_bg = #{actBg,jdbcType=TIMESTAMP},
+		act_end = #{actEnd,jdbcType=TIMESTAMP},
+		address = #{address,jdbcType=VARCHAR},
+		area_id = #{areaId,jdbcType=BIGINT},
+		keywords = #{keywords,jdbcType=VARCHAR},
+		priority = #{priority,jdbcType=INTEGER},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		display = #{display,jdbcType=BIT},
+		mark = #{mark,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=INTEGER},
+		act_type = #{actType,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR},
+		url = #{url,jdbcType=VARCHAR},
+		act_desc = #{actDesc,jdbcType=LONGVARCHAR},
+		act_content = #{actContent,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.SnsActivity">
+		update sns_activity
+		set title = #{title,jdbcType=VARCHAR},
+		add_Time = #{addTime,jdbcType=TIMESTAMP},
+		img = #{img,jdbcType=VARCHAR},
+		enroll_bg = #{enrollBg,jdbcType=TIMESTAMP},
+		enroll_end = #{enrollEnd,jdbcType=TIMESTAMP},
+		act_bg = #{actBg,jdbcType=TIMESTAMP},
+		act_end = #{actEnd,jdbcType=TIMESTAMP},
+		address = #{address,jdbcType=VARCHAR},
+		area_id = #{areaId,jdbcType=BIGINT},
+		keywords = #{keywords,jdbcType=VARCHAR},
+		priority = #{priority,jdbcType=INTEGER},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		display = #{display,jdbcType=BIT},
+		mark = #{mark,jdbcType=VARCHAR},
+		sequence = #{sequence,jdbcType=INTEGER},
+		act_type = #{actType,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR},
+		url = #{url,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<sql id="selectListByVoWhere">
+		<if test="vo.id != null">
+			and id = #{vo.id}
+		</if>
+		<if test="vo.title != null and vo.title != '' ">
+			and title LIKE CONCAT(CONCAT('%', #{vo.title}), '%')
+		</if>
+		<if test="vo.addTime != null and vo.addTime != '' ">
+			and add_Time = #{vo.addTime}
+		</if>
+		<if test="vo.img != null and vo.img != '' ">
+			and img = #{vo.img }
+		</if>
+		<if test="vo.enrollBg != null and vo.enrollBg != '' ">
+			and enroll_bg = #{vo.enrollBg}
+		</if>
+		<if test="vo.enrollEnd != null and vo.enrollEnd != '' ">
+			and enroll_end = #{vo.enrollEnd}
+		</if>
+		<if test="vo.actBg != null and vo.actBg != '' ">
+			and act_bg = #{vo.actBg}
+		</if>
+		<if test="vo.actEnd != null and vo.actEnd != '' ">
+			and act_end = #{vo.actEnd}
+		</if>
+		<if test="vo.address != null and vo.address != '' ">
+			and address = #{vo.address}
+		</if>
+		<if test="vo.areaId != null and vo.areaId != '' ">
+			and area_id = #{vo.areaId}
+		</if>
+		<if test="vo.keywords != null and vo.keywords != '' ">
+			and keywords = #{vo.keywords}
+		</if>
+		<if test="vo.priority != null and vo.priority != '' ">
+			and priority = #{vo.priority}
+		</if>
+		<if test="vo.deleteStatus != null">
+			and delete_status = #{vo.deleteStatus}
+		</if>
+		<if test="vo.display != null">
+			and display = #{vo.display}
+		</if>
+		<if test="vo.mark != null">
+			and mark = #{vo.mark}
+		</if>
+		<if test="vo.sequence != null">
+			and sequence = #{vo.sequence}
+		</if>
+		<if test="vo.actType != null">
+			and act_type = #{vo.actType}
+		</if>
+		<if test="vo.description != null">
+			and description = #{vo.description}
+		</if>
+		<if test="vo.url != null">
+			and url = #{vo.url},
+		</if>
+		<if test="vo.actDesc != null">
+			and act_desc = #{vo.actDesc}
+		</if>
+		<if test="vo.actContent != null">
+			and act_content = #{vo.actContent}
+		</if>
+	</sql>
+
+	<select id="selectListByVo" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM sns_activity
+		where 1 = 1
+		<include refid="selectListByVoWhere" />
+		ORDER BY add_Time DESC
+	</select>
+
+	<select id="findTopAc" resultMap="BOResultMap" parameterType="map">
+		SELECT sa.* FROM sns_activity AS sa
+		WHERE 1 = 1
+		<if test="isdel != null">
+			and sa.`delete_status` = 0
+		</if>
+		<if test="count != null">
+			AND limit 0,#{count}
+		</if>
+		<if test="ord == null">
+			Order By sa.add_Time DESC
+		</if>
+		<if test="ord == 1">
+			Order By sa.id
+		</if>
+		<if test="ord == 2">
+			Order By sa.id DESC
+		</if>
+		<if test="ord == 3">
+			Order By sa.priority DESC
+		</if>
+	</select>
+
+	<select id="findbyVO" resultMap="BOResultMap" parameterType="map">
+		SELECT sa.*,da.area_Name,da.id as cid,da.parent_id FROM dic_area da
+		RIGHT JOIN dic_area dr ON da.id = dr.parent_id
+		RIGHT JOIN sns_activity
+		sa ON sa.area_id = dr.id
+		WHERE 1=1
+		<include refid="selectListByVoWhere" />
+		<if test="isdel != null">
+			AND sa.delete_status = 0
+		</if>
+		<if test="vo.selareaId != null">
+			AND da.parent_id = #{vo.selareaId}
+		</if>
+		<if test="count != null">
+			AND limit 0,#{count}
+		</if>
+
+	</select>
+</mapper>

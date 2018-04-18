@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link
+	href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="$!webPath/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type=text/css rel=stylesheet />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script src="$!webPath/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="$!webPath/resources/js/jquery.zh.cn.js" charset="utf-8"></script>
+<script src="$!webPath/resources/js/smallalert.js" charset="utf-8"></script>
+<script>
+	jQuery(document).ready(function() {
+		jQuery(" select #payment").val("$!vo.payment");
+		jQuery("#orderStatus").val("$!vo.orderStatus");
+		jQuery("#type").val("$!vo.type");
+		jQuery("#payment").val("$!vo.payment");
+		jQuery('#beginTime').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+		jQuery('#endTime').datepicker({
+			dateFormat : "yy-mm-dd",
+			changeMonth : true,
+			changeYear : true
+		});
+		//
+	});
+
+// 导出报表
+	function export_excel(){
+		
+			var orderStatus = $("#orderStatus").val();
+			var type = $("#type").val();
+			var typeData = $("#typeData").val();
+			var payment = $("#payment").val();
+			var tradeNo = $("#tradeNo").val();
+			var beginTime = $("#beginTime").val();
+			var endTime = $("#endTime").val();
+			var beginPrice = $("#beginPrice").val();
+			var endPrice = $("#endPrice").val();
+			var receiverMobile = $("#receiverMobile").val();
+			var ids="";
+			if(!checkFilter()){
+				alert("请选择导出条件！");
+				return;
+			}else{
+				#if($!objs.size()>0)
+				$("input[name='checkbox']:checkbox").each(function(){
+					if($(this).attr("checked")){
+						ids += $(this).val()+","
+					}
+				});
+					document.forms[0].action= '$!webPath/admin/order_excel_next.htm';
+					document.forms[0].submit();
+				#else
+					alert("当前没有可以导出的数据！");
+				#end
+			}
+	}
+	
+function checkFilter(){
+		if($("#orderStatus").val()==""
+			  & $("#typeData").val()==""
+			 	 &$("#payment").val()==""
+			  		&$("#tradeNo").val()==""
+			 		  &$("#beginTime").val()==""
+			  			&$("#endTime").val()==""
+			 			  &$("#beginPrice").val()==""
+						    &$("#endPrice").val()==""
+							  &$("#receiverMobile").val()==""){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
+</script>
+</head>
+<body>
+
+	<div class="cont">
+		<h3 class="seth">订单管理</h3>
+		<div class="nav_list">
+			<ul>
+				<li><a href="javascript:void(0);" class="this"><b>所有订单</b></a></li>
+			</ul>
+		</div>
+		<form action="$!webPath/admin/order_list.htm" method="post"
+			id="queryForm">
+			<input name="userId" type="hidden" id="userId" value="$!vo.userId" />
+			<div class="search">
+				<ul>
+					<li><span>订单状态</span><span> <select name="orderStatus"
+							id="orderStatus">
+								<option value="">所有订单</option>
+								<option value="10">待付款</option>
+								<option value="20">待发货</option>
+								<option value="30">已发货</option>
+								<option value="40">已收货</option>
+								<option value="50">已完成</option>
+								<option value="0">已取消</option>
+						</select>
+					</span><span>类型</span><span> <select name="type" id="type">
+								<option value="store">店铺名称</option>
+								<option value="buyer">买家名称</option>
+								<option value="order">订单号</option>
+						</select>
+					</span> <span class="size200"> <input name="typeData" type="text"
+							value="$!vo.typeData" id="typeData" />
+					</span> <span>支付方式</span><span> <select name="payment" id="payment">
+								<option value="">所有支付方式</option>
+								<option value="balance">云豆</option>
+								<option value="yg_wxqrpay">重消+微信</option>
+								<option value="yg_alipay">重消+支付宝</option>
+								<option value="alipay">支付宝</option>
+								<option value="chinabank">网银在线</option>
+								<option value="bill">快钱</option>
+								<option value="tenpay">财付通</option>
+								<option value="apyafter">货到付款</option>
+								<option value="wx_app">微信支付</option>
+								<option value="wxqrpay">微信扫码支付</option>
+								<option value="ptjf_balance">积分+云豆</option>
+								<option value="ptjf_wxqrpay">积分+微信</option>
+								<option value="ptjf_alipay">积分+支付宝</option>
+								<option value="jf_wxqrpay">购物积分+微信</option>
+								<option value="jf_alipay">购物积分+支付宝</option>
+								<option value="jf_jj">购物积分+工资账户</option>
+								<option value="jf_cz">购物积分+充值账户</option>
+						</select>
+					</span> <span>流水号</span> <span class="size150"> <input
+							name="tradeNo" type="text" id="tradeNo" value="$!vo.tradeNo" />
+					</span></li>
+
+					<li><span>下单时间</span><span class="size100"> <input
+							name="beginTime" type="text" id="beginTime"
+							value="$!vo.beginTime" readonly="readonly" />
+					</span><span>—</span><span class="size100"> <input name="endTime"
+							type="text" value="$!vo.endTime" id="endTime" readonly="readonly" />
+					</span> <span>订单金额</span><span class="size100"> <input
+							name="beginPrice" type="text" value="$!vo.beginPrice"
+							id="beginPrice" />
+					</span><span>—</span><span class="size100"> <input name="endPrice"
+							type="text" value="$!vo.endPrice" id="endPrice" />
+					</span> <span> <span>手机号</span> <span class="size150"> <input
+								name="receiverMobile" type="text" id="receiverMobile"
+								value="$!vo.receiverMobile" />
+						</span> <input name="" type="submit" value="搜索" style="cursor: pointer;"
+							class="search_btn" />
+					</span>
+					<span>
+						<input name="importExcel" onclick="export_excel()" type="button" value="导出Excel" style="cursor: pointer;"
+							class="search_btn" />
+							</span>
+					</li>
+				</ul>
+			</div>
+		</form>
+
+		<form action="$!webPath/admin/order_list.htm" method="post"
+			id="ListForm">
+			<div class="fshoptb">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					class="fshop_table">
+					<tr>
+						#if($!isShowReminderl)
+						<th width="3%">&nbsp;</th> #end
+						<th width="10%"><span class="form_btna">店铺名称</span></th>
+						<th width="12%"><span class="form_btna">订单号</span></th>
+						<th width="15%"><span class="form_btna">流水号</span></th>
+						<th width="8%"><span class="form_btna">买家名称</span></th>
+						<th width="12%"><span class="form_btna">下单时间</span></th>
+						<th width="5%"><span class="form_btna">订单总额</span></th>
+						<th width="10%"><span class="form_btna">支付方式</span></th>
+						<th width="6%"><span class="form_btna">积分 / 重消</span></th>
+						<th width="6%"><span class="form_btna">金额</span></th>
+						<th width="10%"><span class="form_btna">订单状态</span></th>
+						<th align="center" width="18%"><b class="form_btnb">操作</b></th>
+					</tr>
+					#foreach($obj in $objs)
+					<tr>
+						#if($!isShowReminderl)
+						<td class="check_position"><input name="checkbox"
+							type="checkbox" id="checkbox" value="$!obj.storeId" /></td> #end
+						<td align="center">#if($!obj.orderForm==0)$!obj.storeName
+							#else<!-- 【自营商品】 -->#end
+						</td>
+						<td align="center">$!obj.orderId</td>
+						<td align="center">$!obj.tradeNo</td>
+						<td align="center">$!obj.userName</td>
+						<td align="center">$!CommUtil.formatLongDate($!obj.addTime)</td>
+						<td align="center">$!obj.totalPrice</td>
+						#set($payment=$PaymentConstants.getPaymentName($!obj.mark))
+						<td align="center">$!payment</td>
+						<td align="center">		
+							#if($!obj.payTypeFlag==1)
+								$number.format("0",$!obj.allygPrice)重消
+							#elseif($!obj.payTypeFlag==2)
+								$number.format("0",$!obj.allIntegral)购物积分
+							#elseif($!obj.payTypeFlag==3)
+								$number.format("0",$!obj.allIntegral)积分
+							#elseif($!obj.payTypeFlag==0)
+								--
+							#end
+						</td>
+						<td align="center"> 	
+								
+							#if($!obj.payTypeFlag==1)
+								#set($order_ship_price=$!{obj.totalPrice}-$!{obj.allygPrice})
+								$!order_ship_price
+							#elseif($!obj.payTypeFlag==2)
+								$!obj.allCashPrice
+							#elseif($!obj.payTypeFlag==3)
+								$!obj.allCashPrice
+							#elseif($!obj.payTypeFlag==0)
+								$!obj.totalPrice
+							#end
+						</td>
+						#if($!obj.orderStatus==0)
+						#set($status="已取消") #end #if($!obj.orderStatus==10||$!obj.orderStatus==18)
+						#set($status="待付款") #end #if($!obj.orderStatus==16)
+						#set($status="货到付款待发货") #end #if($!obj.orderStatus==20)
+						#set($status="已付款") #end #if($!obj.orderStatus==30)
+						#set($status="已发货") #end #if($!obj.orderStatus==35)
+						#set($status="自提点已代收") #end #if($!obj.orderStatus==40)
+						#set($status="已收货") #end #if($!obj.orderStatus==50)
+						#set($status="已完成,已评价") #end #if($!obj.orderStatus==60)
+						#set($status="已结束") #end
+						<td align="center">$!status</td>
+						<td align="center" class="hui oprate_con">
+							#if($!isShowReminderl) <a
+							href="$!webPath/admin/order_reminder.htm?mulitId=$!obj.storeId"
+							class="blue">提醒</a>&nbsp;&nbsp; #end <a
+							href="$!webPath/admin/order_view.htm?id=$!obj.id"
+							class="blue">查看</a>
+						</td>
+					</tr>
+					#end
+				</table>
+			</div>
+			<div class="operate_bar">
+				<div class="fenye">
+					<input name="endPrice" type="hidden" id="endPrice"
+						value="$!vo.endPrice" /> <input name="userId" type="hidden"
+						id="userId" value="$!vo.userId" /> <input name="beginPrice"
+						type="hidden" id="beginPrice" value="$!vo.beginPrice" /> <input
+						name="endTime" type="hidden" id="endTime" value="$!vo.endTime" />
+					<input name="beginTime" type="hidden" id="beginTime"
+						value="$!vo.beginTime" /> <input name="typeData" type="hidden"
+						id="typeData" value="$!vo.typeData" /> <input name="type"
+						type="hidden" id="type" value="$!vo.type" /> <input
+						name="orderStatus" type="hidden" id="orderStatus"
+						value="$!vo.orderStatus" /> <input name="currentPage"
+						type="hidden" id="currentPage" value="$!currentPage" /> <input
+						name="payment" type="hidden" id="payment" value="$!vo.payment" />
+					$!gotoPageFormHTML
+				</div>
+
+				#if($!isShowReminderl)
+				<div class="oper_sp">
+					<input name="mulitId" type="hidden" id="mulitId" /> <span
+						class="check_all"> <label> <input type="checkbox"
+							name="all" id="all" value="" onclick="selectAll(this)" />
+					</label>
+					</span> <span class="reminder_all"
+						onclick="cmd('$!webPath/admin/order_reminder.htm');"> 批量提醒
+					</span>
+				</div>
+				#end
+			</div>
+			<div class="fenye"></div>
+		</form>
+	</div>
+</body>
+</html>

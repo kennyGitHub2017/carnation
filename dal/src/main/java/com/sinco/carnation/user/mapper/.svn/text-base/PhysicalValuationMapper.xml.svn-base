@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.PhysicalValuationMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.user.model.PhysicalValuation">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="sex" property="sex" jdbcType="INTEGER" />
+		<result column="min_age" property="minAge" jdbcType="INTEGER" />
+		<result column="max_age" property="maxAge" jdbcType="INTEGER" />
+		<result column="range_min" property="rangeMin" jdbcType="REAL" />
+		<result column="range_max" property="rangeMax" jdbcType="REAL" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="TINYINT" />
+		<result column="create_by" property="createBy" jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="BIGINT" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="memo" property="memo" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.user.bo.PhysicalValuationBO" extends="BaseResultMap">
+		<result column="type_name" property="physicalTypeName"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.sinco.carnation.user.model.PhysicalValuation" extends="BaseResultMap">
+		<result column="memo" property="memo" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, sex, min_age, max_age, physical_type_id, range_min,
+		range_max,delete_status, create_by, create_time, modify_by,
+		modify_time,memo,result_type,
+		range_min2, range_max2,range_min3, range_max3
+	</sql>
+	<sql id="Blob_Column_List">
+		memo
+	</sql>
+	<select id="selectByExampleWithBLOBs"
+		parameterType="com.sinco.carnation.user.model.PhysicalValuationExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from check_physical_valuation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalValuationExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from check_physical_valuation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from check_physical_valuation
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from check_physical_valuation
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalValuationExample">
+		delete from check_physical_valuation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.PhysicalValuation"
+		useGeneratedKeys="true" keyProperty="id">
+
+		insert into check_physical_valuation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="minAge != null">
+				min_age,
+			</if>
+			<if test="maxAge != null">
+				max_age,
+			</if>
+			<if test="physicalType != null">
+				physical_type,
+			</if>
+			<if test="rangeMin != null">
+				range_min,
+			</if>
+			<if test="rangeMax != null">
+				range_max,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="modifyBy != null">
+				modify_by,
+			</if>
+			<if test="modifyTime != null">
+				modify_time,
+			</if>
+			<if test="memo != null">
+				memo,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=INTEGER},
+			</if>
+			<if test="minAge != null">
+				#{minAge,jdbcType=INTEGER},
+			</if>
+			<if test="maxAge != null">
+				#{maxAge,jdbcType=INTEGER},
+			</if>
+			<if test="physicalType != null">
+				#{physicalType,jdbcType=BIGINT},
+			</if>
+			<if test="rangeMin != null">
+				#{rangeMin,jdbcType=REAL},
+			</if>
+			<if test="rangeMax != null">
+				#{rangeMax,jdbcType=REAL},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createBy != null">
+				#{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				#{modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="modifyTime != null">
+				#{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="memo != null">
+				#{memo,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalValuationExample"
+		resultType="java.lang.Integer">
+		select count(*) from check_physical_valuation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update check_physical_valuation
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.sex != null">
+				sex = #{record.sex,jdbcType=INTEGER},
+			</if>
+			<if test="record.minAge != null">
+				min_age = #{record.minAge,jdbcType=INTEGER},
+			</if>
+			<if test="record.maxAge != null">
+				max_age = #{record.maxAge,jdbcType=INTEGER},
+			</if>
+			<if test="record.physicalType != null">
+				physical_type = #{record.physicalType,jdbcType=BIGINT},
+			</if>
+			<if test="record.rangeMin != null">
+				range_min = #{record.rangeMin,jdbcType=REAL},
+			</if>
+			<if test="record.rangeMax != null">
+				range_max = #{record.rangeMax,jdbcType=REAL},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="record.createBy != null">
+				create_by = #{record.createBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.modifyBy != null">
+				modify_by = #{record.modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="record.modifyTime != null">
+				modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.memo != null">
+				memo = #{record.memo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update check_physical_valuation
+		set id = #{record.id,jdbcType=BIGINT},
+		sex = #{record.sex,jdbcType=INTEGER},
+		min_age = #{record.minAge,jdbcType=INTEGER},
+		max_age = #{record.maxAge,jdbcType=INTEGER},
+		physical_type = #{record.physicalType,jdbcType=BIGINT},
+		range_min = #{record.rangeMin,jdbcType=REAL},
+		range_max = #{record.rangeMax,jdbcType=REAL},
+		delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		modify_by = #{record.modifyBy,jdbcType=BIGINT},
+		modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+		memo = #{record.memo,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update check_physical_valuation
+		set id = #{record.id,jdbcType=BIGINT},
+		sex = #{record.sex,jdbcType=INTEGER},
+		min_age = #{record.minAge,jdbcType=INTEGER},
+		max_age = #{record.maxAge,jdbcType=INTEGER},
+		physical_type = #{record.physicalType,jdbcType=BIGINT},
+		range_min = #{record.rangeMin,jdbcType=REAL},
+		range_max = #{record.rangeMax,jdbcType=REAL},
+		delete_status = #{record.deleteStatus,jdbcType=TINYINT},
+		create_by = #{record.createBy,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		modify_by = #{record.modifyBy,jdbcType=BIGINT},
+		modify_time = #{record.modifyTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.PhysicalValuation">
+		update check_physical_valuation
+		<set>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=INTEGER},
+			</if>
+			<if test="minAge != null">
+				min_age = #{minAge,jdbcType=INTEGER},
+			</if>
+			<if test="maxAge != null">
+				max_age = #{maxAge,jdbcType=INTEGER},
+			</if>
+			<if test="physicalType != null">
+				physical_type = #{physicalType,jdbcType=BIGINT},
+			</if>
+			<if test="rangeMin != null">
+				range_min = #{rangeMin,jdbcType=REAL},
+			</if>
+			<if test="rangeMax != null">
+				range_max = #{rangeMax,jdbcType=REAL},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=TINYINT},
+			</if>
+			<if test="createBy != null">
+				create_by = #{createBy,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{modifyBy,jdbcType=BIGINT},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="memo != null">
+				memo = #{memo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.user.model.PhysicalValuation">
+		update check_physical_valuation
+		set sex = #{sex,jdbcType=INTEGER},
+		min_age = #{minAge,jdbcType=INTEGER},
+		max_age = #{maxAge,jdbcType=INTEGER},
+		physical_type = #{physicalType,jdbcType=BIGINT},
+		range_min = #{rangeMin,jdbcType=REAL},
+		range_max = #{rangeMax,jdbcType=REAL},
+		delete_status = #{deleteStatus,jdbcType=TINYINT},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		modify_by = #{modifyBy,jdbcType=BIGINT},
+		modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+		memo = #{memo,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.PhysicalValuation">
+		update check_physical_valuation
+		set sex = #{sex,jdbcType=INTEGER},
+		min_age = #{minAge,jdbcType=INTEGER},
+		max_age = #{maxAge,jdbcType=INTEGER},
+		physical_type = #{physicalType,jdbcType=BIGINT},
+		range_min = #{rangeMin,jdbcType=REAL},
+		range_max = #{rangeMax,jdbcType=REAL},
+		delete_status = #{deleteStatus,jdbcType=TINYINT},
+		create_by = #{createBy,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		modify_by = #{modifyBy,jdbcType=BIGINT},
+		modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+
+	<sql id="Base_Column_List_join">
+		check_physical_valuation.id,
+		check_physical_valuation.sex,
+		check_physical_valuation.min_age,
+		check_physical_valuation.max_age,
+		check_physical_valuation.physical_type_id,
+		check_physical_valuation.range_min,
+		check_physical_valuation.range_max,
+		check_physical_valuation.range_min2,
+		check_physical_valuation.range_max2,
+		check_physical_valuation.range_min3,
+		check_physical_valuation.range_max3,
+		check_physical_valuation.delete_status,
+		check_physical_valuation.create_by,
+		check_physical_valuation.create_time,
+		check_physical_valuation.modify_by,
+		check_physical_valuation.modify_time,
+		check_physical_valuation.memo,
+		check_physical_type.type_name physicalTypeName,
+		check_physical_valuation.result_type
+
+	</sql>
+
+	<sql id="Base_Column_Select">
+		<if test="vo.sex != null ">
+			and check_physical_valuation.sex=#{vo.sex}
+		</if>
+		<if test="vo.minAge != null ">
+			and check_physical_valuation.min_age <![CDATA[<= ]]>
+			#{vo.minAge}
+		</if>
+		<if test="vo.maxAge != null ">
+			and check_physical_valuation.max_age <![CDATA[>= ]]>
+			#{vo.maxAge}
+		</if>
+		<if test="vo.rangeMin != null ">
+			and check_physical_valuation.range_min <![CDATA[<= ]]>
+			#{vo.rangeMin}
+		</if>
+		<if test="vo.rangeMax != null ">
+			and check_physical_valuation.range_max <![CDATA[>= ]]>
+			#{vo.rangeMax}
+		</if>
+	</sql>
+
+
+	<!-- 体检参数条件查询 -->
+	<select id="selectListByVo" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List_join" />
+		FROM check_physical_valuation
+		LEFT JOIN check_physical_type
+		ON check_physical_valuation.physical_type_id = check_physical_type.id
+		<where>
+			<include refid="Base_Column_Select" />
+		</where>
+
+	</select>
+
+	<!-- 体检参数查询 -->
+	<select id="selectList" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List_join" />
+		FROM check_physical_valuation
+		LEFT JOIN check_physical_type
+		ON check_physical_valuation.physical_type_id = check_physical_type.id
+	</select>
+
+	<!-- 添加 -->
+	<insert id="insert">
+		INSERT INTO check_physical_valuation (
+		sex,
+		min_age,
+		max_age,
+		physical_type_id,
+		range_min,
+		range_max,
+		delete_status,
+		create_by,
+		modify_by,
+		memo,
+		range_min2,
+		range_max2,
+		range_min3,
+		range_max3,
+		result_type,
+		create_time,modify_time)VALUES
+		(#{vo.sex,jdbcType=INTEGER}, #{vo.minAge,jdbcType=INTEGER},
+		#{vo.maxAge,jdbcType=INTEGER}, #{vo.physicalTypeId,jdbcType=BIGINT}, #{vo.rangeMin,jdbcType=REAL},
+		#{vo.rangeMax,jdbcType=REAL}, #{vo.deleteStatus,jdbcType=TINYINT},
+		#{vo.createBy,jdbcType=BIGINT}, #{vo.modifyBy,jdbcType=BIGINT},
+		#{vo.memo},#{vo.rangeMin2,jdbcType=REAL},#{vo.rangeMax2,jdbcType=REAL},
+		#{vo.rangeMin3,jdbcType=REAL},#{vo.rangeMax3,jdbcType=REAL},#{vo.resultType,jdbcType=INTEGER},now(),now())
+	</insert>
+
+	<!-- 体检参数条件查询 -->
+	<select id="selectCheckResultByVo" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List_join" />
+		,check_physical_type.type_name
+		FROM check_physical_valuation
+		LEFT JOIN check_physical_type
+		ON check_physical_valuation.physical_type_id = check_physical_type.id
+		<where>
+			<if test="vo.sex != null ">
+				and check_physical_valuation.sex=#{vo.sex}
+			</if>
+			<if test="vo.physicalTypeId != null">
+				and check_physical_valuation.physical_type_id = #{vo.physicalTypeId}
+			</if>
+			<if test="vo.minAge != null ">
+				and check_physical_valuation.min_age <![CDATA[<= ]]>
+				#{vo.minAge}
+			</if>
+			<if test="vo.maxAge != null ">
+				and check_physical_valuation.max_age <![CDATA[>= ]]>
+				#{vo.maxAge}
+			</if>
+			<if test="vo.rangeMin != null ">
+				<!-- rangeMax是体检值 -->
+				and check_physical_valuation.range_min <![CDATA[<= ]]>
+				#{vo.rangeMax}
+			</if>
+			<if test="vo.rangeMax != null ">
+				and check_physical_valuation.range_max <![CDATA[>= ]]>
+				#{vo.rangeMax}
+			</if>
+		</where>
+	</select>
+
+
+
+
+</mapper>

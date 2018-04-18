@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>	 
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/gray/easyui.css">
+	<link rel="stylesheet" type="text/css" href="$!webPath/resources/js/easyui/themes/icon.css">
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="$!webPath/resources/js/easyui/locale/easyui-lang-zh_CN.js"></script>
+	
+	 <script type="text/javascript" src="$!webPath/resources/js/easyui/plugins/jquery.validatebox.js"></script>
+	 
+</head>
+<body>  
+
+ <div class="cont">
+  <h1 class="seth">双倍积分</h1>
+  
+  <div class="nav_list"> 
+ 
+<ul>
+<li>
+  <a href="javascript:void(0);" class="this" id="site_base"><b>基本设置</b></a>
+  </li>
+</ul>
+
+  </div>
+  
+		<div style="padding:10px 20px 20px 20px">
+	    <form id="theForm" name="theForm" method="post" action="$!webPath/admin/double_score_save.htm" 
+	     data-options="validate:true," >
+            
+	    	<table cellpadding="4">
+	    	    #foreach($obj in $objs)
+	    	    
+	    		   #if($!obj.nameKey==$!dictionkey.getScoreNumber())
+	    		     <tr>
+	    			<td width=100><strong style="color:red;">*</strong>$!obj.description:</td>
+	    			<td width=360>
+	    			 <span style='float:left;'>
+	    			<input class="easyui-numberbox" type="text" name="$!obj.nameKey" data-options="min:1,max:100,precision:0,required:true" value="$!obj.nameValue"> 
+	    			</span>
+	    			<span id="nothis"><strong class="q"></strong><strong class="w">$!obj.description*积分</strong><strong class="c"></strong></span>
+	    			<input name="$!obj.nameKey+"  type="hidden" value="$!obj.id" />
+	    			</input>
+	    			</td>
+	    			</tr>
+	    		   #end
+	    		
+	    		
+	    		
+	    		    #if($!obj.nameKey==$!dictionkey.getScoreStatus())
+	    		     <tr>
+	    			<td width=100><strong style="color:red;">*</strong>$!obj.description:</td>
+	    			<td width=360>
+	    			 <input type="radio" value="0" name="$!obj.nameKey" #if($!obj.nameValue==0) checked="true" #end/>否
+                     <input type="radio" value="1" name="$!obj.nameKey"  #if($!obj.nameValue==1) checked="true" #end/>是
+	    			 <input name="$!obj.nameKey+"  type="hidden" value="$!obj.id" />
+	    			</input>
+	    			</td>
+	    			</tr>
+	    		   #end
+	    		
+	    		 #if($!obj.nameKey==$!dictionkey.getScoreStartDate())
+	    		     <tr>
+	    			<td width=100><strong style="color:red;">*</strong>$!obj.description:</td>
+	    			<td width=360>
+	    			<input id ="strStartTime" name="$!obj.nameKey" value="$!obj.nameValue" class="easyui-datetimebox" data-options="required:true"style="width:150px"/>
+	    			<input name="$!obj.nameKey+"  type="hidden" value="$!obj.id" />
+	    			</td>
+	    			</tr>
+	    		   #end
+	    		  
+	    		  #if($!obj.nameKey==$!dictionkey.getScoreEndDate())
+	    		     <tr>
+	    			<td width=100><strong style="color:red;">*</strong>$!obj.description:</td>
+	    			<td width=360>
+	    			<input id ="strStartTime" name="$!obj.nameKey" value="$!obj.nameValue" class="easyui-datetimebox" data-options="required:true"style="width:150px"/>
+	    			<input name="$!obj.nameKey+"  type="hidden" value="$!obj.id" />
+	    			</td>
+	    			</tr>
+	    		   #end 
+	    		   
+	    		#end
+	    		  <tr>
+	    		  <td width=100   rowspan='2' align="center">
+	    		  <input type="button" onclick="theFormSumbit()" value="保存">
+	    		  </td>
+	    		  </tr>
+	    	</table>
+	    </form>
+	</div >
+</div>	    
+</body>
+
+
+<script>
+	
+	function theFormSumbit(){
+		 
+		var flag =  jQuery('#theForm').form('validate');
+		if (flag){
+			jQuery("#theForm").submit();
+		}
+	}
+	
+
+</script>
+
+ 
+   
+</html>

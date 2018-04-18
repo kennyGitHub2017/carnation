@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.user.mapper.RebateTrackMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.RebateTrack">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="order_id" property="orderId" jdbcType="BIGINT" />
+		<result column="rebate_code" property="rebateCode" jdbcType="VARCHAR" />
+		<result column="rebate_type" property="rebateType" jdbcType="VARCHAR" />
+		<result column="seller_user_id" property="sellerUserId"
+			jdbcType="BIGINT" />
+		<result column="own_operator_user_id" property="ownOperatorUserId"
+			jdbcType="BIGINT" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.user.bo.RebateTrackBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, order_id, rebate_code, rebate_type, seller_user_id,
+		own_operator_user_id, create_time
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.user.model.RebateTrackExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from user_rebate_track
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_rebate_track
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from user_rebate_track
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.user.model.RebateTrackExample">
+		delete from user_rebate_track
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.user.model.RebateTrack"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_rebate_track (id, order_id, rebate_code,
+		rebate_type, seller_user_id, own_operator_user_id,
+		create_time)
+		values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT},
+		#{rebateCode,jdbcType=VARCHAR},
+		#{rebateType,jdbcType=VARCHAR}, #{sellerUserId,jdbcType=BIGINT},
+		#{ownOperatorUserId,jdbcType=BIGINT},
+		#{createTime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.user.model.RebateTrack"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_rebate_track
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="orderId != null">
+				order_id,
+			</if>
+			<if test="rebateCode != null">
+				rebate_code,
+			</if>
+			<if test="rebateType != null">
+				rebate_type,
+			</if>
+			<if test="sellerUserId != null">
+				seller_user_id,
+			</if>
+			<if test="ownOperatorUserId != null">
+				own_operator_user_id,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="orderId != null">
+				#{orderId,jdbcType=BIGINT},
+			</if>
+			<if test="rebateCode != null">
+				#{rebateCode,jdbcType=VARCHAR},
+			</if>
+			<if test="rebateType != null">
+				#{rebateType,jdbcType=VARCHAR},
+			</if>
+			<if test="sellerUserId != null">
+				#{sellerUserId,jdbcType=BIGINT},
+			</if>
+			<if test="ownOperatorUserId != null">
+				#{ownOperatorUserId,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.user.model.RebateTrackExample"
+		resultType="java.lang.Integer">
+		select count(*) from user_rebate_track
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update user_rebate_track
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.orderId != null">
+				order_id = #{record.orderId,jdbcType=BIGINT},
+			</if>
+			<if test="record.rebateCode != null">
+				rebate_code = #{record.rebateCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.rebateType != null">
+				rebate_type = #{record.rebateType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.sellerUserId != null">
+				seller_user_id = #{record.sellerUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.ownOperatorUserId != null">
+				own_operator_user_id = #{record.ownOperatorUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update user_rebate_track
+		set id = #{record.id,jdbcType=BIGINT},
+		order_id = #{record.orderId,jdbcType=BIGINT},
+		rebate_code = #{record.rebateCode,jdbcType=VARCHAR},
+		rebate_type = #{record.rebateType,jdbcType=VARCHAR},
+		seller_user_id = #{record.sellerUserId,jdbcType=BIGINT},
+		own_operator_user_id = #{record.ownOperatorUserId,jdbcType=BIGINT},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.RebateTrack">
+		update user_rebate_track
+		<set>
+			<if test="orderId != null">
+				order_id = #{orderId,jdbcType=BIGINT},
+			</if>
+			<if test="rebateCode != null">
+				rebate_code = #{rebateCode,jdbcType=VARCHAR},
+			</if>
+			<if test="rebateType != null">
+				rebate_type = #{rebateType,jdbcType=VARCHAR},
+			</if>
+			<if test="sellerUserId != null">
+				seller_user_id = #{sellerUserId,jdbcType=BIGINT},
+			</if>
+			<if test="ownOperatorUserId != null">
+				own_operator_user_id = #{ownOperatorUserId,jdbcType=BIGINT},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.RebateTrack">
+		update user_rebate_track
+		set order_id = #{orderId,jdbcType=BIGINT},
+		rebate_code = #{rebateCode,jdbcType=VARCHAR},
+		rebate_type = #{rebateType,jdbcType=VARCHAR},
+		seller_user_id = #{sellerUserId,jdbcType=BIGINT},
+		own_operator_user_id = #{ownOperatorUserId,jdbcType=BIGINT},
+		create_time = #{createTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

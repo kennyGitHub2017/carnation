@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.InformationClassMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.sns.model.InformationClass">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_Time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_Status" property="deleteStatus"
+			jdbcType="INTEGER" />
+		<result column="ic_name" property="icName" jdbcType="VARCHAR" />
+		<result column="ic_pid" property="icPid" jdbcType="BIGINT" />
+		<result column="ic_sequence" property="icSequence" jdbcType="INTEGER" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="BoResultMap" type="com.sinco.carnation.sns.bo.InformationClassBO"
+		extends="BaseResultMap">
+	</resultMap>
+
+	<update id="updateDeleteStatusByIds">
+		update sns_information_class set delete_Status = 1 where id in
+		<foreach collection="ids" item="listItem" open="(" close=")"
+			separator=",">
+			#{listItem}
+		</foreach>
+	</update>
+	<select id="selectAll" resultMap="BoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sns_information_class
+		order by ic_sequence
+	</select>
+	<select id="findPageByVO" resultMap="BoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sns_information_class
+		where delete_status = 0
+		<if test="vo.icPid!=null and vo.icPid>=0">
+			and ic_pid = #{vo.icPid}
+		</if>
+		order by ic_sequence
+	</select>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_Time, delete_Status, ic_name, ic_pid, ic_sequence, level
+	</sql>
+
+	<select id="selectInfomationClassList" resultMap="BoResultMap">
+		SELECT * FROM sns_information_class WHERE ic_pid=#{parentId} AND
+		delete_status=0 AND `level`=1
+	</select>
+
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.sinco.carnation.sns.model.InformationClassExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_information_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectBOByExample" resultMap="BoResultMap"
+		parameterType="com.sinco.carnation.sns.model.InformationClassExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from sns_information_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Long">
+		select
+		<include refid="Base_Column_List" />
+		from sns_information_class
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from sns_information_class
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.sns.model.InformationClassExample">
+		delete from sns_information_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sns.model.InformationClass">
+		insert into sns_information_class (id, add_Time, delete_Status,
+		ic_name, ic_pid, ic_sequence, level
+		)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=INTEGER},
+		#{icName,jdbcType=VARCHAR}, #{icPid,jdbcType=BIGINT}, #{icSequence,jdbcType=INTEGER},
+		#{level,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.InformationClass">
+		insert into sns_information_class
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_Time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status,
+			</if>
+			<if test="icName != null">
+				ic_name,
+			</if>
+			<if test="icPid != null">
+				ic_pid,
+			</if>
+			<if test="icSequence != null">
+				ic_sequence,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="icName != null">
+				#{icName,jdbcType=VARCHAR},
+			</if>
+			<if test="icPid != null">
+				#{icPid,jdbcType=BIGINT},
+			</if>
+			<if test="icSequence != null">
+				#{icSequence,jdbcType=INTEGER},
+			</if>
+			<if test="level != null">
+				#{level,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.sns.model.InformationClassExample"
+		resultType="java.lang.Integer">
+		select count(*) from sns_information_class
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update sns_information_class
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.icName != null">
+				ic_name = #{record.icName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.icPid != null">
+				ic_pid = #{record.icPid,jdbcType=BIGINT},
+			</if>
+			<if test="record.icSequence != null">
+				ic_sequence = #{record.icSequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.level != null">
+				level = #{record.level,jdbcType=INTEGER},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update sns_information_class
+		set id = #{record.id,jdbcType=BIGINT},
+		add_Time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{record.deleteStatus,jdbcType=INTEGER},
+		ic_name = #{record.icName,jdbcType=VARCHAR},
+		ic_pid = #{record.icPid,jdbcType=BIGINT},
+		ic_sequence = #{record.icSequence,jdbcType=INTEGER},
+		level = #{record.level,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.InformationClass">
+		update sns_information_class
+		<set>
+			<if test="addTime != null">
+				add_Time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_Status = #{deleteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="icName != null">
+				ic_name = #{icName,jdbcType=VARCHAR},
+			</if>
+			<if test="icPid != null">
+				ic_pid = #{icPid,jdbcType=BIGINT},
+			</if>
+			<if test="icSequence != null">
+				ic_sequence = #{icSequence,jdbcType=INTEGER},
+			</if>
+			<if test="level != null">
+				level = #{level,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.InformationClass">
+		update sns_information_class
+		set add_Time = #{addTime,jdbcType=TIMESTAMP},
+		delete_Status = #{deleteStatus,jdbcType=INTEGER},
+		ic_name = #{icName,jdbcType=VARCHAR},
+		ic_pid = #{icPid,jdbcType=BIGINT},
+		ic_sequence = #{icSequence,jdbcType=INTEGER},
+		level = #{level,jdbcType=INTEGER}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

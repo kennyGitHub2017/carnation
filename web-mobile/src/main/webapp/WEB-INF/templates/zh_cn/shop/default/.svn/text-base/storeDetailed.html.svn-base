@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="email=no">
+<title>店铺</title>
+
+<link rel="stylesheet" type="text/css"
+	href="$!webPath/resources/style/store/css/reset.css" />
+<link rel="stylesheet"
+	href="$!webPath/resources/style/store/css/mui.min.css">
+<style>
+.filtrate_div {display:none; margin-top:0.2rem; background: #ffffff;width: 100%; z-index: 100001; position: absolute;top: 0.82rem;padding-bottom: 0.36rem;}
+.filtrate_div ul li {text-align:left; background: url("$!webPath/resources/shop/img/filtrate_btn_false.png")no-repeat 6.48rem center;background-size: 0.32rem 0.32rem;width: 100%;height: 0.96rem;line-height: 0.96rem;position: relative;border-bottom: 1px solid #f0f0f0;font-size: 0.32rem;color: #4a4a4a;text-indent: 0.38rem;}
+.filtrate_div ul li.curr{background:url("$!webPath/resources/shop/img/filtrate_btn_true.png")no-repeat 6.48rem center;background-size:0.32rem 0.32rem;}
+
+.filtrate_div a {font-size: 0.28rem;color: #fff;display: inline-block;background: #5bba52;border-radius: 0.06rem;width: 1.64rem;height: 0.6rem;line-height: 0.6rem;text-align: center;float: right;margin-right: 0.36rem;margin-top: 0.24rem;}
+.div_gray{display:none; opacity:0.44;background:#000000;width:100%;height:100%;position: fixed;z-index: 10;}
+.mui-table-view-chevron .mui-table-view-cell {
+	padding: 0rem 0.24rem;
+}
+
+.mui-table-view-cell>a:not (.mui-btn ){
+	margin: 0rem;
+	padding: initial;
+}
+
+.mui-navigate-right:after,.mui-push-right:after {
+	content: no-open-quote;
+}
+
+.mui-table-view-cell:after {
+	height: 0rem;
+}
+
+.mui-scroll-wrapper {
+	position: absolute;
+	top: 3.46rem;
+	background-color: #fff;
+}
+
+.mui-pull-top-pocket {
+	position: relative;
+	background-color: #fff;
+}
+
+.mui-pull-bottom-pocket {
+	background-color: #fff;
+}
+
+.mui-table-view-cell>a:not (.mui-btn ){
+	white-space: normal;
+}
+
+.mui-table-view:before,.mui-table-view:after {
+	height: 0rem;
+}
+
+.collect_goods_list {
+	top: 0rem;
+}
+</style>
+<script>
+	var screenWidth = window.innerWidth || document.documentElement.clientWidth;
+	document.documentElement.style.fontSize = parseInt(screenWidth / 7.5)
+			+ "px";
+</script>
+</head>
+<body>
+	<div class="div_gray"></div>
+	<div class="collect_top">
+		<div class="collect_shop_mes">
+			<img data-original="./img/" alt="" src="$!store.storeLogoPath"> 
+			<span class="collect_shop_tit">$!store.storeName</span>
+			<span class="enshrine"></span>
+		</div>
+		<div class="collect_shop_describe"></div>
+		<ul class="collect_shop_describeul">
+			<li>描述<span>#if(!$!{store.point.descriptionEvaluate})0 #else $!{store.point.descriptionEvaluate} #end</span></li>
+			<li>服务<span>#if(!$!{store.point.serviceEvaluate})0 #else $!{store.point.serviceEvaluate} #end</span></li>
+			<li>物流<span>#if(!$!{store.point.shipEvaluate})0 #else $!{store.point.shipEvaluate} #end</span></li>
+		</ul>
+	</div>
+	<div class="collect_top_sort">
+		<ul>
+			<li  orderBy="add_time" orderType="asc" #if($!orderBy=='add_time') class="curr" #end name="paixu">
+				<span>综合排序</span>
+			</li>
+			<li orderBy="goods_salenum" orderType="desc" #if($!orderBy=='goods_salenum') class="curr" #end name="paixu">
+				<span>销量</span>
+			</li>
+			<li orderBy="goods_current_price" orderType="asc" #if($!orderBy=='goods_current_price') class="curr" #end name="paixu">
+				<span class="price">价格</span>
+			</li>
+			<li >
+				<span  class="filtrate">筛选</span>
+			</li>
+			<div class="filtrate_div">
+					<ul>
+						<li name="stock">
+							有库存
+						</li>
+						<li name = "freeShip">
+							包邮
+						</li>
+						#if($!isCN==true)
+						<li name="bv">
+							只看BV值
+						</li>
+						#end
+					</ul>
+					<a class="filtrate_btn" href="javascript:screen();" >确定</a>
+				</div>
+		</ul>
+	</div>
+	<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+	    #if($!objs.size() >0 )
+		    
+		    <div class="collect_goods_list mui-scroll">
+		    	#foreach($obj in $objs)
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell">
+					#set($goods_url="$!webPath/goods_$!{obj.id}.htm")
+                  	#if($!config.secondDomainOpen && $!obj.goods_type==1 && $!obj.goodsStore.storeSecondDomain!="")
+                  		#set($goods_url="http://$!{obj.goodsStore.storeSecondDomain}.$!{domainPath}/goods_$!{obj.id}.htm")
+                  	#end
+					<a href="$goods_url" class="mui-navigate-right"> 
+						<img src="$obj.goodsMainPhotoPath" alt="">
+							<div class="collect_goods_list_mes">
+								<span class="tit">
+									$!{obj.goodsName}
+								</span>
+								<span class="price_bv"> 
+									<span class="current_price">
+										¥<span class="pri">$!{obj.goodsShowPrice}</span>
+									</span> 
+									#if($!obj.inventoryType=="spec" && $!obj.goodsType==1)
+										 #set($thisPrice=$!{obj.goodsPrice}+$!{obj.selfAddPrice})
+									#else
+										 #set($thisPrice=$!{obj.goodsPrice})
+									#end
+									<span class="old_price">¥${thisPrice} </span>
+									#if($!isCN==true && $!obj.exPriceFlag==1 && $!obj.cnSelfAddPrice>0)
+										<span class="bv">$!obj.cnSelfAddPrice</span>
+									#end
+								</span>
+							</div>
+					</a></li>
+				</ul>
+				#end
+			</div>
+			
+	    #end
+	</div>
+	#set($store_url="$!webPath/store_$!{store.id}.htm")
+    #if($!config.secondDomainOpen && $!store.storeSecondDomain!="")
+    #set($store_url="http://$!{store.storeSecondDomain}.$!{domainPath}")
+    #end
+	<form action="$!store_url"  method="post" id="ListForm">
+      <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+      <input name="orderBy" type="hidden" id="orderBy" value="$!orderBy" />
+      <input name="orderType" type="hidden" id="orderType" value="$!orderType" />
+      <input name="ugcId" type="hidden" id="ugcId" value="$!ugcId" />
+      <input name="ex_price_flag" type="hidden" id="ex_price_flag" />
+      <input name="stock" type="hidden" id="stock" />
+      <input name="freeShip" type="hidden" id="freeShip" />
+    </form>
+
+	<script type="text/javascript"
+		src="$!webPath/resources/js/jquery-2.1.1.min.js"></script>
+	<script src="$!webPath/resources/js/jquery.lazyload.js"
+		type="text/javascript"></script>
+	<script src="$!webPath/resources/js/mui.min.js"></script>
+
+	<script>
+		mui('body').on('tap', 'a', function() {
+			document.location.href = this.href;
+		});
+
+		jQuery(function() {
+			jQuery('img').lazyload();
+			jQuery(".collect_top_sort ul li").on("click", function() {
+				jQuery(this).addClass("curr").siblings().removeClass("curr");
+
+			});
+			jQuery(".current_price .pri").each(
+					function() {
+						var html = jQuery(this).html().split('.').join(
+								".</span><span class=\"small\">");
+						jQuery(this).html(html);
+					});
+
+			jQuery(".collect_top_sort .price").on("click", function() {
+				if (!jQuery(this).hasClass("price_current")) {
+					jQuery(this).addClass("price_current");
+				} else {
+					jQuery(this).removeClass("price_current");
+				}
+
+			});
+
+			jQuery(".collect_shop_mes .enshrine").click(function(event) {
+				if (!jQuery(this).hasClass("current")) {
+					jQuery(this).addClass("current");
+					mui.toast("收藏该店铺成功");
+				} else {
+					jQuery(this).removeClass("current");
+					mui.toast("取消收藏该店铺成功");
+				}
+			});
+			
+			//排序
+			jQuery("li[name='paixu']").click(function(){
+				jQuery("#currentPage").val("1");
+				var orderBy = jQuery(this).attr("orderBy");
+				var orderType = jQuery(this).attr("orderType");
+				jQuery("#orderBy").val(orderBy);
+				jQuery("#orderType").val(orderType);
+				/*  var is_checkend = jQuery("#justBV").is(":checked");
+			     var ex_price_flag = jQuery("#ex_price_flag");
+			     if(is_checkend){
+			    	ex_price_flag.val("cn");
+			     }
+			     else{
+			    	ex_price_flag.val("");
+			     } */
+				 jQuery("#ListForm").submit();
+			});
+			
+			//筛选
+			jQuery(".filtrate_div li").click(function(){
+				var name = jQuery(this).attr("name")
+				if(name=="stock")
+				{
+					console.log("<<<<<<<<<<"+name);
+					jQuery("#stock").val("1");
+				}
+				else if(name=="freeShip")
+				{
+					console.log("<<<<<<<<<<"+name);
+					jQuery("#freeShip").val("1");
+				}
+				else if(name=="bv")
+				{
+					console.log("<<<<<<<<<<"+name);
+					jQuery("#ex_price_flag").val("cn");
+				}
+			});
+			
+			
+			
+			$(".filtrate").on("click",function() {
+				$(".filtrate_div").show();
+				$(".div_gray").show();
+		          
+		      });
+			
+			$(".div_gray").click(function(){
+				$(".filtrate_div").hide();
+				$(this).hide();
+			});
+		
+		$(".filtrate_div ul li").on("touchstart",function(){
+			$(this).addClass("curr").siblings().removeClass("curr");
+		});
+			
+		});
+
+		 mui.init({
+			swipeBack : false,
+			pullRefresh : {
+				container : '#pullrefresh',
+				down : {
+					callback : pulldownRefresh
+				},
+				up : {
+					contentrefresh : '正在加载...',
+					callback : pullupRefresh
+				}
+			}
+		}); /**/
+		/**
+		 * 下拉刷新具体业务实现
+		 */
+		function pulldownRefresh() {
+			jQuery("#currentPage").val("1");
+			count = 1;
+			getStoreGoodsAjax(function(data){
+				console.log("<<<<<<<<<<<<< data:"+data);
+				var obj = eval("(" + data + ")");
+				var size = obj.length;
+				var arrSize = size-1;
+				jQuery(".mui-table-view-cell").html("");
+				setTimeout(
+						function() {
+							var table = document.body.querySelector('.mui-table-view');
+							var cells = document.body
+									.querySelectorAll('.mui-table-view-cell');
+							for (var i = cells.length, len = i + size; i < len; i++) {
+								var li = document.createElement('li');
+								li.className = 'mui-table-view-cell';
+								/* li.innerHTML = '<a href="javascript:;" class="mui-navigate-right"><img src="$!webPath/resources/style/store/img/serverdetail.png" alt=""><div class="collect_goods_list_mes"><span class="tit">水星家纺  全棉四件套正品粉色床单韩式卡通儿童床上用品四件套爱神冬</span><span class="price_bv"><span class="current_price">¥<span class="pri">348.00</span> </span><span class="old_price">¥919.00</span><span class="bv">105</span></span></div></a>'; */
+								var good = obj[arrSize];
+								var bvHtml = '';
+								if(good.cnSelfAddPrice > 0){
+									bvHtml = '<span class="bv">'+good.cnSelfAddPrice+'</span></span>';
+								}
+								li.innerHTML = '<a href="'+good.goods_url+'" class="mui-navigate-right"><img src="'+good.goodsMainPhotoPath+'" alt=""><div class="collect_goods_list_mes"><span class="tit">'+good.goodName+'</span><span class="price_bv"><span class="current_price">¥<span class="pri">'+good.goodsShowPrice+'</span> </span><span class="old_price">'+good.thisPrice+'</span>'+bvHtml+'</div></a>';
+								if(arrSize > 0)
+								{
+									arrSize = arrSize-1;
+								}
+								//下拉刷新，新纪录插到最前面；
+								table.insertBefore(li, table.firstChild);
+							}
+							mui('#pullrefresh').pullRefresh()
+									.endPulldownToRefresh(); //refresh completed
+				}, 1000);
+			});
+		}
+		var count = 1;
+		/**
+		 * 上拉加载具体业务实现
+		 */
+		function pullupRefresh() {
+			var count_ = ++count;
+			jQuery("#currentPage").val(count_);
+			/* alert(jQuery("#currentPage").val()); */
+			getStoreGoodsAjax(function(data){
+				console.log("<<<<<<<<<<<<< data:"+data);
+				var obj = eval("(" + data + ")");
+				var size = obj.length;
+				var arrSize = 0;
+				setTimeout(
+						function() {
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh(
+									(count_ > $!totalPage)); //参数为true代表没有更多数据了。
+							var table = document.body
+									.querySelector('.mui-table-view');
+							var cells = document.body
+									.querySelectorAll('.mui-table-view-cell');
+							for (var i = cells.length, len = i + size; i < len; i++) {
+								var li = document.createElement('li');
+								li.className = 'mui-table-view-cell';
+								var good = obj[arrSize];
+								var bvHtml = '';
+								if(good.cnSelfAddPrice > 0){
+									bvHtml = '<span class="bv">'+good.cnSelfAddPrice+'</span></span>';
+								}
+								
+								li.innerHTML = '<a href="'+good.goods_url+'" class="mui-navigate-right"><img src="'+good.goodsMainPhotoPath+'" alt=""><div class="collect_goods_list_mes"><span class="tit">'+good.goodName+'</span><span class="price_bv"><span class="current_price">¥<span class="pri">'+good.goodsShowPrice+'</span> </span><span class="old_price">'+good.thisPrice+'</span>'+bvHtml+'</div></a>';
+								table.appendChild(li);
+								if(arrSize < size)
+								{
+									arrSize = arrSize+1;
+								}
+							}
+						}, 1000);
+			});
+		}
+		
+		function getStoreGoodsAjax(fun){
+			var result = "-";
+			var ex_price_flag = jQuery("#ex_price_flag").val();
+			var currentPage = jQuery("#currentPage").val();
+			console.log();
+			jQuery.ajax({type:'POST',
+		              url:'$!webPath/get_store_goods.htm',data:{"storeID":$!{store.id},"orderBy":"$!orderBy","orderType":"$!orderType","ex_price_flag":ex_price_flag,"currentPage":currentPage},
+					beforeSend:function(){
+					  
+					},
+				   success:function(data){
+					/*  console.log(">>>>>>>>>>>>"+data); */
+					 fun(data);
+		            /*  var obj = eval("(" + data + ")"); */
+	               }
+		    });
+		}
+		
+		function screen(){
+			jQuery("#ListForm").submit();
+		}
+		
+		
+	</script>
+
+	</script>
+
+
+</body>
+</html>

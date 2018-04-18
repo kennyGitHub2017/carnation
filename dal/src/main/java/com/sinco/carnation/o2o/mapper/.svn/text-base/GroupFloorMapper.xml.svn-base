@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.o2o.mapper.GroupFloorMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.o2o.model.GroupFloor">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="display" property="display" jdbcType="BIT" />
+		<result column="goods_count" property="goodsCount" jdbcType="INTEGER" />
+		<result column="gf_name" property="gfName" jdbcType="VARCHAR" />
+		<result column="gf_sequence" property="gfSequence" jdbcType="INTEGER" />
+		<result column="icon_path" property="iconPath" jdbcType="VARCHAR" />
+		<result column="class_id" property="classId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.o2o.bo.GroupFloorBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, display, goods_count, gf_name,
+		gf_sequence,
+		icon_path,
+		class_id
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.o2o.model.GroupFloorExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from o2o_group_floor
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from o2o_group_floor
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from
+		o2o_group_floor
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.o2o.model.GroupFloorExample">
+		delete from o2o_group_floor
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.o2o.model.GroupFloor"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into o2o_group_floor (id,
+		add_time, delete_status,
+		display, goods_count, gf_name,
+		gf_sequence,
+		icon_path, class_id
+		)
+		values (#{id,jdbcType=BIGINT},
+		#{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{display,jdbcType=BIT}, #{goodsCount,jdbcType=INTEGER},
+		#{gfName,jdbcType=VARCHAR},
+		#{gfSequence,jdbcType=INTEGER},
+		#{iconPath,jdbcType=VARCHAR},
+		#{classId,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.o2o.model.GroupFloor"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into o2o_group_floor
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="display != null">
+				display,
+			</if>
+			<if test="goodsCount != null">
+				goods_count,
+			</if>
+			<if test="gfName != null">
+				gf_name,
+			</if>
+			<if test="gfSequence != null">
+				gf_sequence,
+			</if>
+			<if test="iconPath != null">
+				icon_path,
+			</if>
+			<if test="classId != null">
+				class_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="display != null">
+				#{display,jdbcType=BIT},
+			</if>
+			<if test="goodsCount != null">
+				#{goodsCount,jdbcType=INTEGER},
+			</if>
+			<if test="gfName != null">
+				#{gfName,jdbcType=VARCHAR},
+			</if>
+			<if test="gfSequence != null">
+				#{gfSequence,jdbcType=INTEGER},
+			</if>
+			<if test="iconPath != null">
+				#{iconPath,jdbcType=VARCHAR},
+			</if>
+			<if test="classId != null">
+				#{classId,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.o2o.model.GroupFloorExample"
+		resultType="java.lang.Integer">
+		select count(*) from o2o_group_floor
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update o2o_group_floor
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.display != null">
+				display = #{record.display,jdbcType=BIT},
+			</if>
+			<if test="record.goodsCount != null">
+				goods_count = #{record.goodsCount,jdbcType=INTEGER},
+			</if>
+			<if test="record.gfName != null">
+				gf_name = #{record.gfName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.gfSequence != null">
+				gf_sequence = #{record.gfSequence,jdbcType=INTEGER},
+			</if>
+			<if test="record.iconPath != null">
+				icon_path = #{record.iconPath,jdbcType=VARCHAR},
+			</if>
+			<if test="record.classId != null">
+				class_id = #{record.classId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update o2o_group_floor
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time =
+		#{record.addTime,jdbcType=TIMESTAMP},
+		delete_status =
+		#{record.deleteStatus,jdbcType=BIT},
+		display =
+		#{record.display,jdbcType=BIT},
+		goods_count =
+		#{record.goodsCount,jdbcType=INTEGER},
+		gf_name =
+		#{record.gfName,jdbcType=VARCHAR},
+		gf_sequence =
+		#{record.gfSequence,jdbcType=INTEGER},
+		icon_path =
+		#{record.iconPath,jdbcType=VARCHAR},
+		class_id =
+		#{record.classId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.o2o.model.GroupFloor">
+		update o2o_group_floor
+		<trim prefix="set" suffixOverrides=",">
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="display != null">
+				display = #{display,jdbcType=BIT},
+			</if>
+			<if test="goodsCount != null">
+				goods_count = #{goodsCount,jdbcType=INTEGER},
+			</if>
+			<if test="gfName != null">
+				gf_name = #{gfName,jdbcType=VARCHAR},
+			</if>
+			<if test="gfSequence != null">
+				gf_sequence = #{gfSequence,jdbcType=INTEGER},
+			</if>
+			<if test="iconPath != null">
+				icon_path = #{iconPath,jdbcType=VARCHAR},
+			</if>
+			<if test="classId != null">
+				class_id = #{classId,jdbcType=BIGINT},
+			</if>
+		</trim>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.o2o.model.GroupFloor">
+		update
+		o2o_group_floor
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		display =
+		#{display,jdbcType=BIT},
+		goods_count = #{goodsCount,jdbcType=INTEGER},
+		gf_name = #{gfName,jdbcType=VARCHAR},
+		gf_sequence =
+		#{gfSequence,jdbcType=INTEGER},
+		icon_path =
+		#{iconPath,jdbcType=VARCHAR},
+		class_id = #{classId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<select id="findPageByVO" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from o2o_group_floor
+	</select>
+
+</mapper>

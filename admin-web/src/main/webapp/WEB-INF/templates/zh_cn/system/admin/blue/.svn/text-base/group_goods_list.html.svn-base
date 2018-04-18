@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+#macro ( genericTree $somelist ) 
+#foreach ( $some in $somelist )
+<option value="$!some.id">#if($!some.level>0)
+#foreach($count in [-1..$!some.level])&nbsp;#end #end $!some.className</option>
+#genericTree($some.childs) 
+#end 
+#end
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/common/css/overlay.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.shop.common.js"></script>
+<script src="$!webPath/resources/js/jquery.poshytip.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+	#if($!gc_id)
+		jQuery("#gc_id").val("$!gc_id");
+	#end
+	#if($!goods_type)
+		jQuery("#goods_type").val("$!goods_type");
+	#end
+	#if($!store_recommend)
+		jQuery("#store_recommend").val("$!store_recommend");
+	#end
+	var options="<option value=''>请选择...</option>";
+	#foreach($c in $citys)
+   	options+='<option value="$!c.id" #if($!city == $!c.id) selected="selected"#end>$!c.areaName</option>';
+   	#end
+   	jQuery("#city").html(options);
+});
+
+function ajax_update(id,fieldName,obj,value){
+   var val;
+   if(value==undefined){
+	 val=jQuery(obj).val();
+   }else{
+	 val=value; 
+   }
+   if ('ggStatus' == fieldName)
+   {
+	   var offCause;
+	   offCause = prompt('请输入下架的原因');
+	   if (offCause == null || offCause == '')
+	   return;
+   }
+   jQuery.ajax({type:'POST',
+	              url:'$!webPath/admin/group_goods_ajax.htm',
+				  data:{"id":id,"fieldName":fieldName,"value":val, "offCause": offCause},
+				beforeSend:function(){
+				  
+				},
+			   success:function(data){
+	             if(val==""){
+				   jQuery(obj).attr("src","$!webPath/resources/style/system/manage/blue/images/"+data+".png");
+				 }else{
+				   jQuery(obj).val(val);
+				 }    
+				 if(value!=undefined){
+				   //jQuery(obj.parentNode.parentNode).remove();
+				   window.location.href='$!webPath/admin/group_goods_list.htm';
+				 }
+              }
+	    });
+}
+
+function provinceOnchange(){
+	var options='<option value="">请选择...</option>';
+	jQuery.ajax({type:'POST',
+				url:'$!webPath/admin/get_city_by_province.htm',
+				data:{"parentId":jQuery("#province").val()},
+				success:function(data){
+					var list = jQuery.parseJSON(data);
+					jQuery.each(list,function(index,obj){
+						options+='<option value="'+obj.id+'">'+obj.areaName+'</option>';
+					}); 
+					jQuery("#city").html(options);
+				}
+	});	
+}
+
+function no_audit_export_excel(){
+	var groupStatus = 0;
+	export_excel(true);
+}
+
+function export_excel(groupStatus){
+	var ggName = $('#ggName').val();
+	var storeName = $('#storeName').val();
+	var goodsType = $('#goodsType').val();
+	var province = $('#province').val();
+	var city = $('#city').val();
+	var ggGcId = $('#ggGcId').val();
+	
+	var url = "$!webPath/admin/group_goods_list_export.htm?ggName="
+		+ggName+"&storeName="+storeName+"&goodsType="+goodsType+"&province="+province+"&city="+city+"&ggGcId="+ggGcId;
+	
+	if(groupStatus){
+		url = url + "&groupStatus=0";
+	}
+	
+	window.location.href=url;
+}
+
+function not_audit(msgInfo){
+	 var message = "当前服务未经平台审核通过！"
+	 var result = msgInfo != undefined || msgInfo != null || msgInfo != "";
+	 if(result){
+		 message =  msgInfo;
+	 }
+	 showDialog("msg_info","",message,2,"warning",3,'');
+}
+</script>
+</head><body scroll="yes">
+<div class="cont">
+  <h3 class="seth">服务管理</h3>
+  <div class="nav_list">
+    <ul>
+		<li><a href="$!webPath/admin/group_goods_list.htm" #if(!$!vo.groupStatus)class="this"#end><b>所有服务</b></a></li>
+		<li><a href="$!webPath/admin/group_goods_outline.htm?ggStatus=0" #if($!vo.ggStatus==0)class="this"#end><b>上架服务</b></a></li>
+		<li><a href="$!webPath/admin/group_goods_list.htm?groupStatus=0" #if($!vo.groupStatus==0)class="this"#end><b>未审核服务</b></a></li>
+		<li><a href="$!webPath/admin/group_goods_outline.htm?ggStatus=-2"><b>违规下架服务</b></a></li>
+    </ul>
+  </div>
+  <form name="ListForm" id="ListForm" action="$!webPath/admin/group_goods_list.htm" method="post">
+    <div class="search"> 
+      <li>
+	    <span>服务名称</span> 
+	    <span class="size200">
+	      	<input name="ggName" type="text" id="ggName" value="$!vo.ggName" />
+	    </span> 
+	    <span>商户名称</span> 
+	    <span class="size200">
+	      	<input name="storeName" type="text" id="storeName" value="$!vo.storeName" />
+	    </span> 
+	    <span>服务类型</span> 
+	    <span>
+		      <select name="goodsType" id="goodsType" style="width: 200px">
+		        <option value="">所有类型</option>
+		        <option value="1" #if($!vo.goodsType == 1) selected="selected" #end>套餐券</option>
+		        <option value="2" #if($!vo.goodsType == 2) selected="selected" #end>现金券</option>
+		      </select>
+	    </span>
+      </li><br />
+      <li>
+	    <span>地区</span>
+        <span>
+	        <select name="province" id="province" onchange="provinceOnchange();" style="width: 200px">
+	        	<option value="">请选择...</option>
+	        	#foreach($p in $provinces)
+	        	<option value="$!p.id" #if($!province == $!p.id) selected="selected"#end>$!p.areaName</option>
+	        	#end
+	        </select>
+	    </span>
+	    <span>
+	    	<select name="city" id="city" style="width: 200px">
+	    		<option value="">请选择...</option>
+	        </select>
+	    </span> 
+	    <span>分类</span> 
+	    <span>
+	      <select name="ggGcId" id="ggGcId" style="width: 200px">
+	        <option value="">所有分类</option>
+	          #foreach($gc in $gcs)
+	        <option value="$!gc.id" #if($!ggcId == $!gc.id) selected="selected" #end>$!gc.gcName</option>
+	          #end
+	      </select>
+	    </span> 
+	    <span>
+	      <input name="" type="submit"  value="搜索" style="cursor:pointer;" class="search_btn"/>
+	      #if($vo.groupStatus && $vo.groupStatus==0)
+	      <input name="" type="button" value="导出Excel" style="cursor:pointer;" title="导出Excel" class="search_btn" onclick="no_audit_export_excel()"/>
+	      #else
+	      <input name="" type="button" value="导出Excel" style="cursor:pointer;" title="导出Excel" class="search_btn" onclick="export_excel()"/>
+	      #end
+	    </span> 
+      </li>
+    </div>
+    <div class="operation">
+      <h3>友情提示</h3>
+      <ul>
+        <li>所有服务，在商城前台所有访客均可查看，管理员和商家都可以设置服务上架状态</li>
+        <li>未审核服务，商家无论新发布服务还是编辑服务，都需要通过管理员审核通过后才能上架</li>
+        <li>违规服务，管理员根据商城访客举报结合实际情况设定违规，违规服务前台不可显示，只能管理员能取消违规</li>
+      </ul>
+    </div>
+    <div class="fshoptb">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" class="fshop_table">
+        <tr>
+          <th width="3%">&nbsp;</th>
+          <th width="22%"><span class="form_btna">服务名称</span></th>
+          <th width="15%"><span class="form_btna">分类名</span></th>
+          <th width="10%"><span class="form_btna">服务类型</span></th>
+          <th width="10%"><span class="form_btna">商户名称</span></th>
+          <th width="6%"><span class="form_btna">状态</span></th>
+          <th width="6%" align="center"><span class="form_btna">违规下架</span></th>
+          <th width="6%" align="center"><span class="form_btna">查看次数</span></th>
+          <th width="6%"><span class="form_btna">运营商名称</span></th>
+          <th width="6%"><span class="form_btna">运营商编码</span></th>
+          <th align="center"><b class="form_btnb">操作</b></th>
+        </tr>
+        #foreach($obj in $objs)
+	        #set($goods_url="$!{shopPath}/group/view_$!{obj.id}.htm")
+	        #if($!config.secondDomainOpen && $!obj.goodsStore.storeSecondDomain!="")
+	        	#set($goods_url="http://$!{obj.goodsStore.storeSecondDomain}.$!{domainPath}/group/view_$!{obj.id}.htm")
+	        #end
+	        <!-- 链接直接链接到PC商城 -->
+	        #set($goods_url="http://shop.ysysgo.com/group/view_$!{obj.id}.htm")
+        <tr>
+          <td  class="check_position"><input name="checkbox" type="checkbox" id="checkbox" value="$!obj.id" /></td>
+          <td>
+	          <label>
+	              <textarea name="textarea" cols="40" rows="3"  title="可编辑" onblur="ajax_update('$!obj.id','ggName',this)">$!obj.ggName</textarea>
+	          </label>
+          </td>
+          <td align="center">$!obj.groupClassName</td>
+          <td align="center">#if($!obj.goodsType==1)套餐券#elseif($!obj.goodsType==2)现金券#else无#end</td>
+          <td align="center">$!obj.store.storeName</td>
+          #if($!obj.ggStatus==0)
+          #set($goods_status="上架")
+          #end
+          #if($!obj.ggStatus==1)
+          	#if($!obj.groupStatus==0)
+          	#set($goods_status="待审核")
+          	#end
+          	#if($!obj.groupStatus==-1)
+          	#set($goods_status="审核未通过")
+          	#end
+          #end
+          #if($!obj.ggStatus==-1)
+          #set($goods_status="手动下架")
+          #end
+          #if($!obj.ggStatus==2)
+          #set($goods_status="定时自动上架")
+          #end
+          #if($!obj.ggStatus==3)
+          #set($goods_status="店铺过期自动下架")
+          #end
+          #if($!obj.ggStatus==-2)
+          #set($goods_status="违规下架")
+          #end
+          #if($!obj.ggStatus==-3)
+          #set($goods_status="被举报禁售")
+          #end
+          <td align="center">
+          	$!goods_status
+       		#if($!obj.groupStatus==-1)
+       				<!-- <a href="javascript:void(0);" class="del_a" onclick="not_audit('$!{obj.refusedReasonDesc}');">查看</a> -->
+					<a href="javascript:void(0);"  dialog_width="300" dialog_height="100"  class="blue" onclick="not_audit('$!{obj.refusedReasonDesc}');">查看</a>
+			#end
+          </td>
+          <td align="center">
+          	#if($!obj.ggStatus!=-2)
+          	<img onclick="ajax_update('$!obj.id','ggStatus',this,'-2')"  src="$!webPath/resources/style/system/manage/blue/images/weig.jpg"  border="0" style="cursor:pointer;" title="可编辑"/>
+          	#end
+          </td>
+          <td align="center">$!obj.ggClick</td>
+          <td align="center">$!obj.operatorName</td>
+          <td align="center">$!obj.operatorCode</td>
+		  <td class="hui oprate_con" align="center">
+		  		<a href="$!{goods_url}" target="_blank" class="blue">查看</a> 
+				#if($!obj.ggStatus==0) 
+					<a href="$!webPath/admin/group_goods_recommend.htm?id=$!obj.id" class="blue">推荐</a> 
+				#end
+				#if($!obj.groupStatus==0 && ${sec.anyGranted("ROLE_ADMIN_GROUP_GOODS_AUDIT_PAGE")})
+					<a href="javascript:void(0);" dialog_uri="$!webPath/admin/group_goods_audit_page.htm?id=$!obj.id&currentPage=$!currentPage" dialog_title="服务审核" dialog_width="300" dialog_height="100" dialog_id="group_audit" class="blue">审核</a>
+				#end
+			</td>
+		</tr>
+        #end
+      </table>
+    </div>
+    <div class="operate_bar">
+      <div class="fenye"> <span id="queryCondition" style="display:none"> </span>
+        <input name="mulitId" type="hidden" id="mulitId" />
+        <input name="currentPage" type="hidden" id="currentPage" value="$!currentPage" />
+        $!gotoPageFormHTML
+         </div>
+      <div class="oper_sp"> 
+        <span class="oper_check">
+	        <label>
+	          <input type="checkbox" name="all" id="all" value="" onclick="selectAll(this)"/>全部
+	        </label>
+        </span> 
+        #if(!$!status) 
+        <span class="oper_del">
+        	<input name="" type="button" value="删除" onclick="cmd('$!webPath/admin/group_goods_del.htm');" style="cursor:pointer;" />
+        </span> 
+        #end 
+      </div>
+    </div>
+  </form>
+</div>
+</body>
+</html>

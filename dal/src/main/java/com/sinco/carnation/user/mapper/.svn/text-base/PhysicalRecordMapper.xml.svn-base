@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sinco.carnation.user.mapper.PhysicalRecordMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.user.model.PhysicalRecord">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="uid" jdbcType="BIGINT" property="uid" />
+		<result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+		<result column="result_id" jdbcType="BIGINT" property="resultId" />
+		<result column="value_max" jdbcType="REAL" property="valueMax" />
+		<result column="value_min" jdbcType="REAL" property="valueMin" />
+		<result column="check_date" jdbcType="DATE" property="checkDate" />
+	</resultMap>
+	<resultMap extends="BaseResultMap" id="BOResultMap"
+		type="com.sinco.carnation.user.bo.PhysicalRecordBO" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, uid, item_code, result_id, value_max, value_min, check_date
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalRecordExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from check_physical_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from check_physical_record
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from check_physical_record
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalRecordExample">
+		delete from check_physical_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" keyProperty="id"
+		parameterType="com.sinco.carnation.user.model.PhysicalRecord"
+		useGeneratedKeys="true">
+		insert into check_physical_record (id, uid, item_code,
+		result_id, value_max, value_min,
+		check_date)
+		values (#{id,jdbcType=BIGINT}, #{uid,jdbcType=BIGINT},
+		#{itemCode,jdbcType=VARCHAR},
+		#{resultId,jdbcType=BIGINT}, #{valueMax,jdbcType=REAL}, #{valueMin,jdbcType=REAL},
+		#{checkDate,jdbcType=DATE})
+	</insert>
+	<insert id="insertSelective" keyProperty="id"
+		parameterType="com.sinco.carnation.user.model.PhysicalRecord"
+		useGeneratedKeys="true">
+		insert into check_physical_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="itemCode != null">
+				item_code,
+			</if>
+			<if test="resultId != null">
+				result_id,
+			</if>
+			<if test="valueMax != null">
+				value_max,
+			</if>
+			<if test="valueMin != null">
+				value_min,
+			</if>
+			<if test="checkDate != null">
+				check_date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=BIGINT},
+			</if>
+			<if test="itemCode != null">
+				#{itemCode,jdbcType=VARCHAR},
+			</if>
+			<if test="resultId != null">
+				#{resultId,jdbcType=BIGINT},
+			</if>
+			<if test="valueMax != null">
+				#{valueMax,jdbcType=REAL},
+			</if>
+			<if test="valueMin != null">
+				#{valueMin,jdbcType=REAL},
+			</if>
+			<if test="checkDate != null">
+				#{checkDate,jdbcType=DATE},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.user.model.PhysicalRecordExample"
+		resultType="java.lang.Integer">
+		select count(*) from check_physical_record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update check_physical_record
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.uid != null">
+				uid = #{record.uid,jdbcType=BIGINT},
+			</if>
+			<if test="record.itemCode != null">
+				item_code = #{record.itemCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.resultId != null">
+				result_id = #{record.resultId,jdbcType=BIGINT},
+			</if>
+			<if test="record.valueMax != null">
+				value_max = #{record.valueMax,jdbcType=REAL},
+			</if>
+			<if test="record.valueMin != null">
+				value_min = #{record.valueMin,jdbcType=REAL},
+			</if>
+			<if test="record.checkDate != null">
+				check_date = #{record.checkDate,jdbcType=DATE},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update check_physical_record
+		set id = #{record.id,jdbcType=BIGINT},
+		uid = #{record.uid,jdbcType=BIGINT},
+		item_code = #{record.itemCode,jdbcType=VARCHAR},
+		result_id = #{record.resultId,jdbcType=BIGINT},
+		value_max = #{record.valueMax,jdbcType=REAL},
+		value_min = #{record.valueMin,jdbcType=REAL},
+		check_date = #{record.checkDate,jdbcType=DATE}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.user.model.PhysicalRecord">
+		update check_physical_record
+		<set>
+			<if test="uid != null">
+				uid = #{uid,jdbcType=BIGINT},
+			</if>
+			<if test="itemCode != null">
+				item_code = #{itemCode,jdbcType=VARCHAR},
+			</if>
+			<if test="resultId != null">
+				result_id = #{resultId,jdbcType=BIGINT},
+			</if>
+			<if test="valueMax != null">
+				value_max = #{valueMax,jdbcType=REAL},
+			</if>
+			<if test="valueMin != null">
+				value_min = #{valueMin,jdbcType=REAL},
+			</if>
+			<if test="checkDate != null">
+				check_date = #{checkDate,jdbcType=DATE},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.user.model.PhysicalRecord">
+		update check_physical_record
+		set uid = #{uid,jdbcType=BIGINT},
+		item_code = #{itemCode,jdbcType=VARCHAR},
+		result_id = #{resultId,jdbcType=BIGINT},
+		value_max = #{valueMax,jdbcType=REAL},
+		value_min = #{valueMin,jdbcType=REAL},
+		check_date = #{checkDate,jdbcType=DATE}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

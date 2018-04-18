@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sns.mapper.UserHealthtaskRelationMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.sns.model.UserHealthtaskRelation">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="BIGINT" />
+		<result column="user_healthTask_id" property="userHealthtaskId"
+			jdbcType="BIGINT" />
+		<result column="join_time" property="joinTime" jdbcType="TIMESTAMP" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BIGINT" />
+		<result column="do_days" property="doDays" jdbcType="BIGINT" />
+		<result column="finish_time" property="finishTime" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.sns.bo.UserHealthtaskRelationBO" extends="BaseResultMap" />
+
+	<sql id="Base_Column_List">
+		id,
+		user_id,
+		user_healthTask_id,
+		join_time,
+		is_deleted,
+		do_days,
+		finish_time
+	</sql>
+
+	<select id="select_UserHealthtaskRelation_By_UserId" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		user_healthtask_relation
+		where
+		1=1
+		<!-- and is_deleted = 0 -->
+		and
+		user_id = #{userID,jdbcType=BIGINT}
+	</select>
+
+	<insert id="insert_UserHealthtaskRelation"
+		parameterType="com.sinco.carnation.sns.model.UserHealthtaskRelation"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_healthtask_relation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			join_time
+			<if test="id != null">
+				,id
+			</if>
+			<if test="userId != null">
+				,user_id
+			</if>
+			<if test="userHealthtaskId != null">
+				,user_healthTask_id
+			</if>
+			<if test="doDays != null">
+				,do_days
+			</if>
+			<if test="finishTime != null">
+				,finish_time
+			</if>
+			<if test="isDeleted != null">
+				,is_deleted
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			now()
+			<if test="id != null">
+				,#{id,jdbcType=BIGINT}
+			</if>
+			<if test="userId != null">
+				,#{userId,jdbcType=BIGINT}
+			</if>
+			<if test="userHealthtaskId != null">
+				,#{userHealthtaskId,jdbcType=BIGINT}
+			</if>
+			<if test="doDays != null">
+				,#{doDays,jdbcType=BIGINT}
+			</if>
+			<if test="finishTime != null">
+				,#{finishTime,jdbcType=VARCHAR}
+			</if>
+			<if test="isDeleted != null">
+				,#{isDeleted,jdbcType=BIGINT}
+			</if>
+		</trim>
+	</insert>
+
+	<select id="select_today_HealthTaskRelation" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		user_healthtask_relation
+		where
+		1=1
+		and
+		is_deleted = 0
+		<if test="userID!=null">
+			and
+			user_id = #{userID,jdbcType=BIGINT}
+		</if>
+		and
+		user_healthTask_id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="getOne_HealthTaskRelation_By_uid_taskID" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		user_healthtask_relation
+		where
+		1=1
+		<!-- and is_deleted = 0 -->
+		and
+		user_id = #{uid,jdbcType=BIGINT}
+		and
+		user_healthTask_id = #{taskID,jdbcType=BIGINT}
+	</select>
+	<!-- 用户健康任务签到 -->
+	<update id="update_HealthTask_Sing">
+		update
+		user_healthtask_relation
+		set
+		do_days = do_days+1,
+		finish_time = #{finishTime,jdbcType=VARCHAR}
+		where
+		1=1
+		and
+		id = #{id,jdbcType=BIGINT}
+		and
+		user_id = #{uid,jdbcType=BIGINT}
+		and
+		user_healthTask_id = #{taskID,jdbcType=BIGINT}
+		and
+		is_deleted = 0
+	</update>
+
+	<delete id="deleteHealthtaskRelation">
+		delete
+		from user_healthtask_relation
+		where
+		user_id = #{uid,jdbcType=BIGINT}
+		and
+		user_healthTask_id = #{taskID,jdbcType=BIGINT}
+	</delete>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_healthtask_relation
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.sinco.carnation.sns.model.UserHealthtaskRelation">
+		update user_healthtask_relation
+		<set>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=BIGINT},
+			</if>
+			<if test="userHealthtaskId != null">
+				user_healthTask_id = #{userHealthtaskId,jdbcType=BIGINT},
+			</if>
+			<if test="joinTime != null">
+				join_time = #{joinTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isDeleted != null">
+				is_deleted = #{isDeleted,jdbcType=BIGINT},
+			</if>
+			<if test="doDays != null">
+				do_days = #{doDays,jdbcType=BIGINT},
+			</if>
+			<if test="finishTime != null">
+				finish_time = #{finishTime,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<!-- <sql id="Example_Where_Clause" > <where > <foreach collection="oredCriteria" 
+		item="criteria" separator="or" > <if test="criteria.valid" > <trim prefix="(" 
+		suffix=")" prefixOverrides="and" > <foreach collection="criteria.criteria" 
+		item="criterion" > <choose > <when test="criterion.noValue" > and ${criterion.condition} 
+		</when> <when test="criterion.singleValue" > and ${criterion.condition} #{criterion.value} 
+		</when> <when test="criterion.betweenValue" > and ${criterion.condition} 
+		#{criterion.value} and #{criterion.secondValue} </when> <when test="criterion.listValue" 
+		> and ${criterion.condition} <foreach collection="criterion.value" item="listItem" 
+		open="(" close=")" separator="," > #{listItem} </foreach> </when> </choose> 
+		</foreach> </trim> </if> </foreach> </where> </sql> <sql id="Update_By_Example_Where_Clause" 
+		> <where > <foreach collection="example.oredCriteria" item="criteria" separator="or" 
+		> <if test="criteria.valid" > <trim prefix="(" suffix=")" prefixOverrides="and" 
+		> <foreach collection="criteria.criteria" item="criterion" > <choose > <when 
+		test="criterion.noValue" > and ${criterion.condition} </when> <when test="criterion.singleValue" 
+		> and ${criterion.condition} #{criterion.value} </when> <when test="criterion.betweenValue" 
+		> and ${criterion.condition} #{criterion.value} and #{criterion.secondValue} 
+		</when> <when test="criterion.listValue" > and ${criterion.condition} <foreach 
+		collection="criterion.value" item="listItem" open="(" close=")" separator="," 
+		> #{listItem} </foreach> </when> </choose> </foreach> </trim> </if> </foreach> 
+		</where> </sql> <select id="selectByExample" parameterType="com.sinco.carnation.sns.model.UserHealthtaskRelationExample" 
+		resultMap="BOResultMap" > select <if test="distinct" > distinct </if> <include 
+		refid="Base_Column_List" /> from user_healthtask_relation <if test="_parameter 
+		!= null" > <include refid="Example_Where_Clause" /> </if> <if test="orderByClause 
+		!= null" > order by ${orderByClause} </if> <if test="limit != null" > limit 
+		${limit} </if> </select> <select id="selectByPrimaryKey" parameterType="java.lang.Long" 
+		resultMap="BOResultMap" > select <include refid="Base_Column_List" /> from 
+		user_healthtask_relation where id = #{id,jdbcType=BIGINT} </select> <delete 
+		id="deleteByPrimaryKey" parameterType="java.lang.Long" > delete from user_healthtask_relation 
+		where id = #{id,jdbcType=BIGINT} </delete> <delete id="deleteByExample" parameterType="com.sinco.carnation.sns.model.UserHealthtaskRelationExample" 
+		> delete from user_healthtask_relation <if test="_parameter != null" > <include 
+		refid="Example_Where_Clause" /> </if> </delete> <insert id="insert" parameterType="com.sinco.carnation.sns.model.UserHealthtaskRelation" 
+		useGeneratedKeys="true" keyProperty="id" > insert into user_healthtask_relation 
+		(id, user_id, user_healthTask_id, join_time, is_deleted, do_days, finish_time) 
+		values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{userHealthtaskId,jdbcType=BIGINT}, 
+		#{joinTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIGINT}, #{doDays,jdbcType=BIGINT}, 
+		#{finishTime,jdbcType=VARCHAR}) </insert> <insert id="insertSelective" parameterType="com.sinco.carnation.sns.model.UserHealthtaskRelation" 
+		useGeneratedKeys="true" keyProperty="id" > insert into user_healthtask_relation 
+		<trim prefix="(" suffix=")" suffixOverrides="," > <if test="id != null" > 
+		id, </if> <if test="userId != null" > user_id, </if> <if test="userHealthtaskId 
+		!= null" > user_healthTask_id, </if> <if test="joinTime != null" > join_time, 
+		</if> <if test="isDeleted != null" > is_deleted, </if> <if test="doDays != 
+		null" > do_days, </if> <if test="finishTime != null" > finish_time, </if> 
+		</trim> <trim prefix="values (" suffix=")" suffixOverrides="," > <if test="id 
+		!= null" > #{id,jdbcType=BIGINT}, </if> <if test="userId != null" > #{userId,jdbcType=BIGINT}, 
+		</if> <if test="userHealthtaskId != null" > #{userHealthtaskId,jdbcType=BIGINT}, 
+		</if> <if test="joinTime != null" > #{joinTime,jdbcType=TIMESTAMP}, </if> 
+		<if test="isDeleted != null" > #{isDeleted,jdbcType=BIGINT}, </if> <if test="doDays 
+		!= null" > #{doDays,jdbcType=BIGINT}, </if> <if test="finishTime != null" 
+		> #{finishTime,jdbcType=VARCHAR}, </if> </trim> </insert> <select id="countByExample" 
+		parameterType="com.sinco.carnation.sns.model.UserHealthtaskRelationExample" 
+		resultType="java.lang.Integer" > select count(*) from user_healthtask_relation 
+		<if test="_parameter != null" > <include refid="Example_Where_Clause" /> 
+		</if> </select> <update id="updateByExampleSelective" parameterType="map" 
+		> update user_healthtask_relation <set > <if test="record.id != null" > id 
+		= #{record.id,jdbcType=BIGINT}, </if> <if test="record.userId != null" > 
+		user_id = #{record.userId,jdbcType=BIGINT}, </if> <if test="record.userHealthtaskId 
+		!= null" > user_healthTask_id = #{record.userHealthtaskId,jdbcType=BIGINT}, 
+		</if> <if test="record.joinTime != null" > join_time = #{record.joinTime,jdbcType=TIMESTAMP}, 
+		</if> <if test="record.isDeleted != null" > is_deleted = #{record.isDeleted,jdbcType=BIGINT}, 
+		</if> <if test="record.doDays != null" > do_days = #{record.doDays,jdbcType=BIGINT}, 
+		</if> <if test="record.finishTime != null" > finish_time = #{record.finishTime,jdbcType=VARCHAR}, 
+		</if> </set> <if test="_parameter != null" > <include refid="Update_By_Example_Where_Clause" 
+		/> </if> </update> <update id="updateByExample" parameterType="map" > update 
+		user_healthtask_relation set id = #{record.id,jdbcType=BIGINT}, user_id = 
+		#{record.userId,jdbcType=BIGINT}, user_healthTask_id = #{record.userHealthtaskId,jdbcType=BIGINT}, 
+		join_time = #{record.joinTime,jdbcType=TIMESTAMP}, is_deleted = #{record.isDeleted,jdbcType=BIGINT}, 
+		do_days = #{record.doDays,jdbcType=BIGINT}, finish_time = #{record.finishTime,jdbcType=VARCHAR} 
+		<if test="_parameter != null" > <include refid="Update_By_Example_Where_Clause" 
+		/> </if> </update> <update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sns.model.UserHealthtaskRelation" 
+		> update user_healthtask_relation <set > <if test="userId != null" > user_id 
+		= #{userId,jdbcType=BIGINT}, </if> <if test="userHealthtaskId != null" > 
+		user_healthTask_id = #{userHealthtaskId,jdbcType=BIGINT}, </if> <if test="joinTime 
+		!= null" > join_time = #{joinTime,jdbcType=TIMESTAMP}, </if> <if test="isDeleted 
+		!= null" > is_deleted = #{isDeleted,jdbcType=BIGINT}, </if> <if test="doDays 
+		!= null" > do_days = #{doDays,jdbcType=BIGINT}, </if> <if test="finishTime 
+		!= null" > finish_time = #{finishTime,jdbcType=VARCHAR}, </if> </set> where 
+		id = #{id,jdbcType=BIGINT} </update> <update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sns.model.UserHealthtaskRelation" 
+		> update user_healthtask_relation set user_id = #{userId,jdbcType=BIGINT}, 
+		user_healthTask_id = #{userHealthtaskId,jdbcType=BIGINT}, join_time = #{joinTime,jdbcType=TIMESTAMP}, 
+		is_deleted = #{isDeleted,jdbcType=BIGINT}, do_days = #{doDays,jdbcType=BIGINT}, 
+		finish_time = #{finishTime,jdbcType=VARCHAR} where id = #{id,jdbcType=BIGINT} 
+		</update> -->
+</mapper>

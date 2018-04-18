@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.sys.mapper.ActApplyMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.sys.model.ActApply">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="mobile" property="mobile" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="message" property="message" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="apply_type" property="applyType" jdbcType="INTEGER" />
+		<result column="apply_act_relation" property="applyActRelation"
+			jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.sys.bo.ActApplyBO"
+		extends="BaseResultMap" />
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, name, mobile, address, message, email, status, update_time,
+		create_time, delete_status,
+		apply_type, apply_act_relation
+	</sql>
+	<select id="selectByExample" parameterType="com.sinco.carnation.sys.model.ActApplyExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from act_apply
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from act_apply
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from act_apply
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.sys.model.ActApplyExample">
+		delete from act_apply
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.sys.model.ActApply"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into act_apply (id, name, mobile,
+		address, message, email,
+		status, update_time, create_time,
+		delete_status, apply_type, apply_act_relation
+		)
+		values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
+		#{mobile,jdbcType=VARCHAR},
+		#{address,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT}, #{applyType,jdbcType=INTEGER}, #{applyActRelation,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.sys.model.ActApply"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into act_apply
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="mobile != null">
+				mobile,
+			</if>
+			<if test="address != null">
+				address,
+			</if>
+			<if test="message != null">
+				message,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="applyType != null">
+				apply_type,
+			</if>
+			<if test="applyActRelation != null">
+				apply_act_relation,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="message != null">
+				#{message,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="applyType != null">
+				#{applyType,jdbcType=INTEGER},
+			</if>
+			<if test="applyActRelation != null">
+				#{applyActRelation,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.sys.model.ActApplyExample"
+		resultType="java.lang.Integer">
+		select count(*) from act_apply
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update act_apply
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.mobile != null">
+				mobile = #{record.mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.address != null">
+				address = #{record.address,jdbcType=VARCHAR},
+			</if>
+			<if test="record.message != null">
+				message = #{record.message,jdbcType=VARCHAR},
+			</if>
+			<if test="record.email != null">
+				email = #{record.email,jdbcType=VARCHAR},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.applyType != null">
+				apply_type = #{record.applyType,jdbcType=INTEGER},
+			</if>
+			<if test="record.applyActRelation != null">
+				apply_act_relation = #{record.applyActRelation,jdbcType=BIGINT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update act_apply
+		set id = #{record.id,jdbcType=BIGINT},
+		name = #{record.name,jdbcType=VARCHAR},
+		mobile = #{record.mobile,jdbcType=VARCHAR},
+		address = #{record.address,jdbcType=VARCHAR},
+		message = #{record.message,jdbcType=VARCHAR},
+		email = #{record.email,jdbcType=VARCHAR},
+		status = #{record.status,jdbcType=INTEGER},
+		update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+		create_time = #{record.createTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		apply_type = #{record.applyType,jdbcType=INTEGER},
+		apply_act_relation = #{record.applyActRelation,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.sys.model.ActApply">
+		update act_apply
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="address != null">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="message != null">
+				message = #{message,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="applyType != null">
+				apply_type = #{applyType,jdbcType=INTEGER},
+			</if>
+			<if test="applyActRelation != null">
+				apply_act_relation = #{applyActRelation,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.sys.model.ActApply">
+		update act_apply
+		set name = #{name,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		address = #{address,jdbcType=VARCHAR},
+		message = #{message,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		status = #{status,jdbcType=INTEGER},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		apply_type = #{applyType,jdbcType=INTEGER},
+		apply_act_relation = #{applyActRelation,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+	<sql id="selectListByVoWhere">
+		<if test="vo.id != null">
+			id = #{vo.id}
+		</if>
+		<if test="vo.name != null">
+			name = #{vo.name}
+		</if>
+		<if test="vo.mobile != null">
+			mobile = #{vo.mobile}
+		</if>
+		<if test="vo.address != null">
+			address = #{vo.address}
+		</if>
+		<if test="vo.message != null">
+			message = #{vo.message}
+		</if>
+		<if test="vo.email != null">
+			email = #{vo.email}
+		</if>
+		<if test="vo.status != null">
+			status = #{vo.status}
+		</if>
+		<if test="vo.updateTime != null">
+			update_time = #{vo.updateTime}
+		</if>
+		<if test="vo.createTime != null">
+			create_time = #{vo.createTime}
+		</if>
+		<if test="vo.deleteStatus != null">
+			delete_status = #{vo.deleteStatus}
+		</if>
+		<if test="vo.applyType != null">
+			apply_type = #{vo.applyType}
+		</if>
+		<if test="vo.applyActRelation != null">
+			apply_act_relation = #{vo.applyActRelation}
+		</if>
+	</sql>
+
+	<select id="selectListByVo" resultMap="BaseResultMap"
+		parameterType="map">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM act_apply
+		where delete_status = false
+		<include refid="selectListByVoWhere" />
+		ORDER BY create_time DESC
+	</select>
+</mapper>

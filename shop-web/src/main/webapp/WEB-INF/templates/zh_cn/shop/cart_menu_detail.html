@@ -1,0 +1,33 @@
+#if($!carts.size()>0)
+<div class="new_goods">最新加入的商品</div>
+<div id="sibox">
+<ul class="goodscar_list" #if($!carts.size()>2) style=" overflow-y:auto;height:200px" #end>
+#foreach($gc in $carts)
+#if($!gc.goods.goodsMainPhotoPath)
+ #set($img="$!{gc.goods.goodsMainPhotoPath}")
+#else
+ #set($img="$!{config.goodsImage.path}")
+#end
+#set($goods_url="$!webPath/goods_$!{gc.goodsId}.htm")
+#if($!config.secondDomainOpen && $!gc.goods.goodsType==1 && $!gc.storeSecondDomain!="")
+#set($goods_url="http://$!{gc.storeSecondDomain}.$!{domainPath}/goods_$!{gc.goodsId}.htm")
+#end  
+<li id="$!gc.id" >
+	<i><a href="$!goods_url" target="_blank"><img src="${img}" width="50" height="50" /></a></i> 
+	<span class="goodscar_listr">
+		<h4><a href="$!goods_url" target="_blank" class="goodscar_n"><span style="color:#D60000">
+		#if($!gc.goods.orderEnoughGiveStatus==1) [满送] #end #if($!gc.goods.groupBuy==2) [团购] #end #if($!gc.goods.enoughReduce==1) [满减] #end #if($!gc.goods.cartType=="combin") [套装] #end
+		#if($!{gc.goodsIntegralPrice} > 0) [积分兑购] #end #if($!{gc.goodsMobilePrice} > 0)[手机专享] #end
+		</span>$!gc.goods.goodsName</a>
+		</h4>
+		<b class="goodscar_botm"><em>¥$!{gc.price}</em><a href="javascript:void(0);" class="hover"  #if($!gc.goods.cartType=="combin") onclick="menu_cart_remove('$!gc.combinMark');" #else onclick="menu_cart_remove('$!gc.id');" #end>删除</a></b>
+    </span> 
+</li>
+#end        
+</ul>
+<div>
+<span class="goodscar_total">购物车总价：<i>¥</i><b id="cart_goods_price_top">$!{total_price}元</b></span>
+<span class="car_bottom"><span class="fl">共选择<strong id="st_count">$!carts.size()</strong>件商品</span><a href="$!webPath/goods_cart1.htm" class="see_car">查看我的购物车</a></span> 
+#else
+<b class="goodscar_none">购物车还没有商品!</b>
+#end

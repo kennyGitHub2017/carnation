@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+
+	<!-- 加载分润配置文件 -->
+	<context:property-placeholder
+		ignore-unresolvable="true" location="classpath:/rebate-proportion.properties" />
+
+	<!-- 预分润 -->
+	<bean id="preRebateMoneyService"
+		class="com.yun.shang.carnation.rebate.money.PreRebateMoneyService">
+		<property name="userMoneyService" ref="userMoneyService"></property>
+		<property name="rebateRecordService" ref="rebateRecordService"></property>
+	</bean>
+	<!-- 分润 -->
+	<bean id="rebateMoneyService" class="com.yun.shang.carnation.rebate.money.RebateMoneyService">
+		<property name="userMoneyService" ref="userMoneyService"></property>
+		<property name="rebateRecordService" ref="rebateRecordService"></property>
+	</bean>
+
+	<bean id="o2oProportion" class="com.yun.shang.carnation.rebate.porprotion.O2OProportion">
+		<property name="memberRecommendCNoperatorFirst"
+			value="${o2o.proportion.member.cnoperator.level.first}"></property>
+		<property name="memberRecommendCNoperatorSecond"
+			value="${o2o.proportion.member.cnoperator.level.second}"></property>
+		<property name="memberRecommendCNoperatorThird"
+			value="${o2o.proportion.member.cnoperator.level.third}"></property>
+		<property name="memberLevelFirst" value="${o2o.proportion.member.level.first}"></property>
+		<property name="memberLevelSecond" value="${o2o.proportion.member.level.second}"></property>
+		<property name="memberLevelThird" value="${o2o.proportion.member.level.third}"></property>
+		<property name="memberBindingSeller" value="${o2o.proportion.member.binding.seller}"></property>
+		<property name="memberBindingSellerLevelFirst"
+			value="${o2o.proportion.member.binding.seller.level.first}"></property>
+		<property name="memberBindingSellerLevelSecond"
+			value="${o2o.proportion.member.binding.seller.level.second}"></property>
+		<property name="memberBindingSellerLevelThird"
+			value="${o2o.proportion.member.binding.seller.level.third}"></property>
+		<property name="memberBindingSellerDistrictOpertor"
+			value="${o2o.proportion.member.binding.seller.district.opertor}"></property>
+		<property name="memberBindingSellerDistrictOpertorLevelFirst"
+			value="${o2o.proportion.member.binding.seller.district.opertor.first}"></property>
+		<property name="memberBindingSellerCityOpertor"
+			value="${o2o.proportion.member.binding.seller.city.opertor}"></property>
+		<property name="memberBindingSellerCityOpertorLevelFirst"
+			value="${o2o.proportion.member.binding.seller.city.opertor.first}"></property>
+
+
+		<property name="memberSpendingSeller" value="${o2o.proportion.member.spending.seller}"></property>
+		<property name="memberSpendingSellerLevelFirst"
+			value="${o2o.proportion.member.spending.seller.level.first}"></property>
+		<property name="memberSpendingSellerLevelSecond"
+			value="${o2o.proportion.member.spending.seller.level.second}"></property>
+		<property name="memberSpendingSellerLevelThird"
+			value="${o2o.proportion.member.spending.seller.level.third}"></property>
+		<property name="memberSpendingSellerDistrictOpertor"
+			value="${o2o.proportion.member.spending.seller.districtOpertor}"></property>
+		<property name="memberSpendingSellerDistrictOpertorFirst"
+			value="${o2o.proportion.member.spending.seller.district.opertor.first}"></property>
+		<property name="memberSpendingSellerCityOpertor"
+			value="${o2o.proportion.member.spending.seller.city.opertor}"></property>
+		<property name="memberSpendingSellerCityOpertorFirst"
+			value="${o2o.proportion.member.spending.seller.city.opertor.first}"></property>
+	</bean>
+
+	<bean id="taobaoProportion"
+		class="com.yun.shang.carnation.rebate.porprotion.TaobaoProportion">
+		<property name="memberLevelFirst" value="${taobao.proportion.member.level.first}"></property>
+		<property name="memberLevelSecond" value="${taobao.proportion.member.level.second}"></property>
+		<property name="memberLevelThird" value="${taobao.proportion.member.level.third}"></property>
+		<property name="memberBindingSeller" value="${taobao.proportion.member.binding.seller}"></property>
+		<property name="memberBindingSellerLevelFirst"
+			value="${taobao.proportion.member.binding.seller.level.first}"></property>
+		<property name="memberBindingSellerLevelSecond"
+			value="${taobao.proportion.member.binding.seller.level.second}"></property>
+		<property name="memberBindingSellerLevelThird"
+			value="${taobao.proportion.member.binding.seller.level.third}"></property>
+		<property name="memberBindingSellerDistrictOpertor"
+			value="${taobao.proportion.member.binding.seller.district.opertor}"></property>
+		<property name="memberBindingSellerDistrictOpertorLevelFirst"
+			value="${taobao.proportion.member.binding.seller.district.opertor.first}"></property>
+		<property name="memberBindingSellerCityOpertor"
+			value="${taobao.proportion.member.binding.seller.city.opertor}"></property>
+		<property name="memberBindingSellerCityOpertorLevelFirst"
+			value="${taobao.proportion.member.binding.seller.city.opertor.first}"></property>
+	</bean>
+
+	<bean id="elongRebateProportion"
+		class="com.yun.shang.carnation.rebate.porprotion.ElongOrderRebateProportion">
+		<property name="memberRecommendCNoperatorFirst"
+			value="${elong.proportion.member.cnoperator.level.first}"></property>
+		<property name="memberRecommendCNoperatorSecond"
+			value="${elong.proportion.member.cnoperator.level.second}"></property>
+		<property name="memberRecommendCNoperatorThird"
+			value="${elong.proportion.member.cnoperator.level.third}"></property>
+		<property name="memberLevelFirst" value="${elong.proportion.member.level.first}"></property>
+		<property name="memberLevelSecond" value="${elong.proportion.member.level.second}"></property>
+		<property name="memberLevelThird" value="${elong.proportion.member.level.third}"></property>
+		<property name="memberBindingSeller" value="${elong.proportion.member.binding.seller}"></property>
+		<property name="memberBindingSellerLevelFirst"
+			value="${elong.proportion.member.binding.seller.level.first}"></property>
+		<property name="memberBindingSellerLevelSecond"
+			value="${elong.proportion.member.binding.seller.level.second}"></property>
+		<property name="memberBindingSellerLevelThird"
+			value="${elong.proportion.member.binding.seller.level.third}"></property>
+		<property name="memberBindingSellerDistrictOpertor"
+			value="${elong.proportion.member.binding.seller.district.opertor}"></property>
+		<property name="memberBindingSellerDistrictOpertorLevelFirst"
+			value="${elong.proportion.member.binding.seller.district.opertor.first}"></property>
+		<property name="memberBindingSellerCityOpertor"
+			value="${elong.proportion.member.binding.seller.city.opertor}"></property>
+		<property name="memberBindingSellerCityOpertorLevelFirst"
+			value="${elong.proportion.member.binding.seller.city.opertor.first}"></property>
+
+
+		<property name="memberSpendingSeller" value="${elong.proportion.member.spending.seller}"></property>
+		<property name="memberSpendingSellerLevelFirst"
+			value="${elong.proportion.member.spending.seller.level.first}"></property>
+		<property name="memberSpendingSellerLevelSecond"
+			value="${elong.proportion.member.spending.seller.level.second}"></property>
+		<property name="memberSpendingSellerLevelThird"
+			value="${elong.proportion.member.spending.seller.level.third}"></property>
+		<property name="memberSpendingSellerDistrictOpertor"
+			value="${elong.proportion.member.spending.seller.districtOpertor}"></property>
+		<property name="memberSpendingSellerDistrictOpertorFirst"
+			value="${elong.proportion.member.spending.seller.district.opertor.first}"></property>
+		<property name="memberSpendingSellerCityOpertor"
+			value="${elong.proportion.member.spending.seller.city.opertor}"></property>
+		<property name="memberSpendingSellerCityOpertorFirst"
+			value="${elong.proportion.member.spending.seller.city.opertor.first}"></property>
+	</bean>
+
+	<bean id="selfGoodRebateProportion"
+		class="com.yun.shang.carnation.rebate.porprotion.SelfGoodRebateProportion">
+		<property name="memberRecommendCNoperatorFirst"
+			value="${self.proportion.member.cnoperator.level.first}"></property>
+		<property name="memberRecommendCNoperatorSecond"
+			value="${self.proportion.member.cnoperator.level.second}"></property>
+		<property name="memberRecommendCNoperatorThird"
+			value="${self.proportion.member.cnoperator.level.third}"></property>
+		<property name="memberLevelFirst" value="${self.good.proportion.member.level.first}"></property>
+		<property name="memberLevelSecond" value="${self.good.proportion.member.level.second}"></property>
+		<property name="memberLevelThird" value="${self.good.proportion.member.level.third}"></property>
+		<property name="memberBindingSeller"
+			value="${self.good.proportion.member.binding.seller}"></property>
+		<property name="memberBindingSellerLevelFirst"
+			value="${self.good.proportion.member.binding.seller.level.first}"></property>
+		<property name="memberBindingSellerLevelSecond"
+			value="${self.good.proportion.member.binding.seller.level.second}"></property>
+		<property name="memberBindingSellerLevelThird"
+			value="${self.good.proportion.member.binding.seller.level.third}"></property>
+		<property name="memberBindingSellerDistrictOpertor"
+			value="${self.good.proportion.member.binding.seller.district.opertor}"></property>
+		<property name="memberBindingSellerDistrictOpertorLevelFirst"
+			value="${self.good.proportion.member.binding.seller.district.opertor.first}"></property>
+		<property name="memberBindingSellerCityOpertor"
+			value="${self.good.proportion.member.binding.seller.city.opertor}"></property>
+		<property name="memberBindingSellerCityOpertorLevelFirst"
+			value="${self.good.proportion.member.binding.seller.city.opertor.first}"></property>
+	</bean>
+
+
+	<bean id="juanPiOrderRebateProportion"
+		class="com.yun.shang.carnation.rebate.porprotion.JuanPiOrderRebateProportion">
+		<property name="memberRecommendCNoperatorFirst"
+			value="${juanpi.proportion.member.cnoperator.level.first}"></property>
+		<property name="memberRecommendCNoperatorSecond"
+			value="${juanpi.proportion.member.cnoperator.level.second}"></property>
+		<property name="memberRecommendCNoperatorThird"
+			value="${juanpi.proportion.member.cnoperator.level.third}"></property>
+		<property name="memberLevelFirst" value="${juanpi.good.proportion.member.level.first}"></property>
+		<property name="memberLevelSecond"
+			value="${juanpi.good.proportion.member.level.second}"></property>
+		<property name="memberLevelThird" value="${juanpi.good.proportion.member.level.third}"></property>
+		<property name="memberBindingSeller"
+			value="${juanpi.good.proportion.member.binding.seller}"></property>
+		<property name="memberBindingSellerLevelFirst"
+			value="${juanpi.good.proportion.member.binding.seller.level.first}"></property>
+		<property name="memberBindingSellerLevelSecond"
+			value="${juanpi.good.proportion.member.binding.seller.level.second}"></property>
+		<property name="memberBindingSellerLevelThird"
+			value="${juanpi.good.proportion.member.binding.seller.level.third}"></property>
+		<property name="memberBindingSellerDistrictOpertor"
+			value="${juanpi.good.proportion.member.binding.seller.district.opertor}"></property>
+		<property name="memberBindingSellerDistrictOpertorLevelFirst"
+			value="${juanpi.good.proportion.member.binding.seller.district.opertor.first}"></property>
+		<property name="memberBindingSellerCityOpertor"
+			value="${juanpi.good.proportion.member.binding.seller.city.opertor}"></property>
+		<property name="memberBindingSellerCityOpertorLevelFirst"
+			value="${juanpi.good.proportion.member.binding.seller.city.opertor.first}"></property>
+	</bean>
+
+
+	<bean id="yunGouGoodRebateProportion"
+		class="com.yun.shang.carnation.rebate.porprotion.YunGouGoodRebateProportion">
+		<property name="memberRecommendCNoperatorFirst"
+			value="${yun.gou.proportion.member.cnoperator.level.first}"></property>
+		<property name="memberRecommendCNoperatorSecond"
+			value="${yun.gou.proportion.member.cnoperator.level.second}"></property>
+		<property name="memberRecommendCNoperatorThird"
+			value="${yun.gou.proportion.member.cnoperator.level.third}"></property>
+		<property name="memberLevelFirst"
+			value="${yun.gou.good.proportion.member.level.first}"></property>
+		<property name="memberLevelSecond"
+			value="${yun.gou.good.proportion.member.level.second}"></property>
+		<property name="memberLevelThird"
+			value="${yun.gou.good.proportion.member.level.third}"></property>
+		<property name="memberBindingSeller"
+			value="${yun.gou.good.proportion.member.binding.seller}"></property>
+		<property name="memberBindingSellerLevelFirst"
+			value="${yun.gou.good.proportion.member.binding.seller.level.first}"></property>
+		<property name="memberBindingSellerLevelSecond"
+			value="${yun.gou.good.proportion.member.binding.seller.level.second}"></property>
+		<property name="memberBindingSellerLevelThird"
+			value="${yun.gou.good.proportion.member.binding.seller.level.third}"></property>
+		<property name="memberBindingSellerDistrictOpertor"
+			value="${yun.gou.good.proportion.member.binding.seller.district.opertor}"></property>
+		<property name="memberBindingSellerDistrictOpertorLevelFirst"
+			value="${yun.gou.good.proportion.member.binding.seller.district.opertor.first}"></property>
+		<property name="memberBindingSellerCityOpertor"
+			value="${yun.gou.good.proportion.member.binding.seller.city.opertor}"></property>
+		<property name="memberBindingSellerCityOpertorLevelFirst"
+			value="${yun.gou.good.proportion.member.binding.seller.city.opertor.first}"></property>
+	</bean>
+
+	<bean id="supplierRebateProportion"
+		class="com.yun.shang.carnation.rebate.porprotion.SupplierRebateProportion">
+		<property name="memberRecommendCNoperatorFirst"
+			value="${supplier.proportion.member.cnoperator.level.first}"></property>
+		<property name="memberRecommendCNoperatorSecond"
+			value="${supplier.proportion.member.cnoperator.level.second}"></property>
+		<property name="memberRecommendCNoperatorThird"
+			value="${supplier.proportion.member.cnoperator.level.third}"></property>
+		<property name="memberLevelFirst" value="${supplier.proportion.member.level.first}"></property>
+		<property name="memberLevelSecond" value="${supplier.proportion.member.level.second}"></property>
+		<property name="memberLevelThird" value="${supplier.proportion.member.level.third}"></property>
+		<property name="memberBindingSeller" value="${supplier.proportion.member.binding.seller}"></property>
+		<property name="memberBindingSellerLevelFirst"
+			value="${supplier.proportion.member.binding.seller.level.first}"></property>
+		<property name="memberBindingSellerLevelSecond"
+			value="${supplier.proportion.member.binding.seller.level.second}"></property>
+		<property name="memberBindingSellerLevelThird"
+			value="${supplier.proportion.member.binding.seller.level.third}"></property>
+		<property name="memberBindingSellerDistrictOpertor"
+			value="${supplier.proportion.member.binding.seller.district.opertor}"></property>
+		<property name="memberBindingSellerDistrictOpertorLevelFirst"
+			value="${supplier.proportion.member.binding.seller.district.opertor.first}"></property>
+		<property name="memberBindingSellerCityOpertor"
+			value="${supplier.proportion.member.binding.seller.city.opertor}"></property>
+		<property name="memberBindingSellerCityOpertorLevelFirst"
+			value="${supplier.proportion.member.binding.seller.city.opertor.first}"></property>
+
+		<property name="memberSpendingSupplier"
+			value="${supplier.proportion.member.spending.supplier}"></property>
+		<property name="memberSpendingSupplierFirst"
+			value="${supplier.proportion.member.spending.supplier.first}"></property>
+		<property name="memberSpendingSupplierSecond"
+			value="${supplier.proportion.member.spending.supplier.second}"></property>
+		<property name="memberSpendingSupplierThird"
+			value="${supplier.proportion.member.spending.supplier.third}"></property>
+	</bean>
+	<bean id="platformProportion"
+		class="com.yun.shang.carnation.rebate.porprotion.PlatformProportion">
+		<property name="counterFee" value="${platform.counter.fee}"></property>
+		<property name="supplierRisk" value="${platform.supplier.risk}"></property>
+		<property name="elongOrderFee" value="${elong.order.fee}"></property>
+	</bean>
+
+	<bean id="uplineRebateService" class="com.yun.shang.carnation.rebate.UplineRebateService">
+		<property name="orderFormService" ref="orderFormService"></property>
+		<property name="proportion" ref="o2oProportion"></property>
+		<property name="goodsReturnService" ref="goodsReturnService"></property>
+		<property name="userRelationService" ref="userRelationService"></property>
+		<property name="operatorService" ref="operatorService"></property>
+		<property name="moneyService" ref="rebateMoneyService"></property>
+		<property name="rebateRecordService" ref="rebateRecordService"></property>
+		<property name="sellerService" ref="sellerService"></property>
+		<property name="storeService" ref="storeService"></property>
+		<property name="operatorRemoteService" ref="operatorRemoteService"></property>
+		<property name="orclUserBaseService" ref="orclUserBaseService"></property>
+		<property name="userAccountService" ref="userAccountService"></property>
+		<property name="areaServiceImpl" ref="areaServiceImpl"></property>
+		<property name="orclService" ref="orclService"></property>
+		<property name="rebateMoneyService" ref="rebateMoneyService"></property>
+	</bean>
+
+	<!-- 套餐券 -->
+	<bean id="couponRebateService" class="com.yun.shang.carnation.rebate.CouponRebateService">
+		<property name="orderFormService" ref="orderFormService"></property>
+		<property name="proportion" ref="o2oProportion"></property>
+		<property name="goodsReturnService" ref="goodsReturnService"></property>
+		<property name="userRelationService" ref="userRelationService"></property>
+		<property name="operatorService" ref="operatorService"></property>
+		<property name="moneyService" ref="rebateMoneyService"></property>
+		<property name="rebateRecordService" ref="rebateRecordService"></property>
+		<property name="sellerService" ref="sellerService"></property>
+		<property name="storeService" ref="storeService"></property>
+		<property name="operatorRemoteService" ref="operatorRemoteService"></property>
+		<property name="orclUserBaseService" ref="orclUserBaseService"></property>
+		<property name="userAccountService" ref="userAccountService"></property>
+		<property name="areaServiceImpl" ref="areaServiceImpl"></property>
+		<property name="orclService" ref="orclService"></property>
+		<property name="rebateMoneyService" ref="rebateMoneyService"></property>
+	</bean>
+
+	<!--代金券 -->
+	<bean id="cashCouponRebateService" class="com.yun.shang.carnation.rebate.CashCouponRebateService">
+		<property name="orderFormService" ref="orderFormService"></property>
+		<property name="proportion" ref="o2oProportion"></property>
+		<property name="goodsReturnService" ref="goodsReturnService"></property>
+		<property name="userRelationService" ref="userRelationService"></property>
+		<property name="operatorService" ref="operatorService"></property>
+		<property name="moneyService" ref="rebateMoneyService"></property>
+		<property name="rebateRecordService" ref="rebateRecordService"></property>
+		<property name="sellerService" ref="sellerService"></property>
+		<property name="storeService" ref="storeService"></property>
+		<property name="operatorRemoteService" ref="operatorRemoteService"></property>
+		<property name="orclUserBaseService" ref="orclUserBaseService"></property>
+		<property name="userAccountService" ref="userAccountService"></property>
+		<property name="areaServiceImpl" ref="areaServiceImpl"></property>
+		<property name="orclService" ref="orclService"></property>
+		<property name="rebateMoneyService" ref="rebateMoneyService"></property>
+	</bean>
+
+
+
+	<bean id="o2ORebateService" class="com.yun.shang.carnation.rebate.O2ORebateService">
+		<property name="orderFormService" ref="orderFormService"></property>
+		<property name="proportion" ref="o2oProportion"></property>
+		<property name="goodsReturnService" ref="goodsReturnService"></property>
+		<property name="userRelationService" ref="userRelationService"></property>
+		<property name="operatorService" ref="operatorService"></property>
+		<property name="moneyService" ref="rebateMoneyService"></property>
+		<property name="rebateRecordService" ref="rebateRecordService"></property>
+		<property name="sellerService" ref="sellerService"></property>
+		<property name="storeService" ref="storeService"></property>
+		<property name="operatorRemoteService" ref="operatorRemoteService"></property>
+		<property name="orclUserBaseService" ref="orclUserBaseService"></property>
+		<property name="userAccountService" ref="userAccountService"></property>
+		<property name="areaServiceImpl" ref="areaServiceImpl"></property>
+		<property name="orclService" ref="orclService"></property>
+		<property name="rebateMoneyService" ref="rebateMoneyService"></property>
+	</bean>
+
+	<bean id="selfgoodRebateService" class="com.yun.shang.carnation.rebate.SelfGoodRebateService">
+		<property name="orderFormService" ref="orderFormService"></property>
+		<property name="proportion" ref="selfGoodRebateProportion"></property>
+		<property name="goodsReturnService" ref="goodsReturnService"></property>
+		<property name="userRelationService" ref="userRelationService"></property>
+		<property name="operatorService" ref="operatorService"></property>
+		<property name="moneyService" ref="rebateMoneyService"></property>
+		<property name="rebateRecordService" ref="rebateRecordService"></property>
+		<property name="sellerService" ref="sellerService"></property>
+		<property name="storeService" ref="storeService"></property>
+		<property name="operatorRemoteService" ref="operatorRemoteService"></property>
+		<property name="orclUserBaseService" ref="orclUserBaseService"></property>
+		<property name="userAccountService" ref="userAccountService"></property>
+		<property name="areaServiceImpl" ref="areaServiceImpl"></property>
+		<property name="orclService" ref="orclService"></property>
+		<property name="rebateMoneyService" ref="rebateMoneyService"></property>
+	</bean>
+
+	<bean id="juanPiGoodRebateService" class="com.yun.shang.carnation.rebate.JuanPiGoodRebateService">
+		<property name="status" value="3"></property>
+		<property name="proportion" ref="juanPiOrderRebateProportion"></property>
+		<property name="userRelationService" ref="userRelationService"></property>
+		<property name="operatorService" ref="operatorService"></property>
+		<property name="moneyService" ref="rebateMoneyService"></property>
+		<property name="rebateRecordService" ref="rebateRecordService"></property>
+		<property name="sellerService" ref="sellerService"></property>
+		<property name="storeService" ref="storeService"></property>
+		<property name="operatorRemoteService" ref="operatorRemoteService"></property>
+		<property name="orclUserBaseService" ref="orclUserBaseService"></property>
+		<property name="userAccountService" ref="userAccountService"></property>
+		<property name="areaServiceImpl" ref="areaServiceImpl"></property>
+		<property name="orclService" ref="orclService"></property>
+		<property name="rebateMoneyService" ref="rebateMoneyService"></property>
+	</bean>
+
+
+	<bean id="yunGouYSRebateService" class="com.yun.shang.carnation.rebate.YunGouYSRebateService">
+		<property name="orderFormService" ref="orderFormService"></property>
+		<property name="proportion" ref="yunGouGoodRebateProportion"></property>
+		<property name="goodsReturnService" ref="goodsReturnService"></property>
+		<property name="userRelationService" ref="userRelationService"></property>
+		<property name="operatorService" ref="operatorService"></property>
+		<property name="moneyService" ref="rebateMoneyService"></property>
+		<property name="rebateRecordService" ref="rebateRecordService"></property>
+		<property name="sellerService" ref="sellerService"></property>
+		<property name="storeService" ref="storeService"></property>
+		<property name="operatorRemoteService" ref="operatorRemoteService"></property>
+		<property name="orclUserBaseService" ref="orclUserBaseService"></property>
+		<property name="userAccountService" ref="userAccountService"></property>
+		<property name="areaServiceImpl" ref="areaServiceImpl"></property>
+		<property name="orclService" ref="orclService"></property>
+		<property name="rebateMoneyService" ref="rebateMoneyService"></property>
+	</bean>
+
+	<bean id="supplierRebateService" class="com.yun.shang.carnation.rebate.SupplierRebateService">
+		<property name="proportion" ref="supplierRebateProportion"></property>
+		<property name="sellerService" ref="sellerService"></property>
+		<property name="storeService" ref="storeService"></property>
+		<property name="operatorRemoteService" ref="operatorRemoteService"></property>
+		<property name="userAccountService" ref="userAccountService"></property>
+		<property name="orclService" ref="orclService"></property>
+		<property name="moneyService" ref="rebateMoneyService"></property>
+		<property name="rebateMoneyService" ref="rebateMoneyService"></property>
+	</bean>
+
+	<bean id="yunGouCNRebateService" class="com.yun.shang.carnation.rebate.YunGouCNRebateService">
+		<property name="cnPayBaseService" ref="cnPayBaseService"></property>
+		<property name="accountService" ref="userAccountService"></property>
+		<property name="moneyService" ref="rebateMoneyService"></property>
+		<property name="orderFormService" ref="orderFormService"></property>
+		<property name="rebateMoneyService" ref="rebateMoneyService"></property>
+	</bean>
+
+	<bean id="elongOrderRebateService" class="com.yun.shang.carnation.rebate.ElongOrderRebateService">
+		<property name="proportion" ref="elongRebateProportion"></property>
+		<property name="moneyService" ref="rebateMoneyService"></property>
+		<property name="operatorRemoteService" ref="operatorRemoteService"></property>
+		<property name="userAccountService" ref="userAccountService"></property>
+		<property name="rebateMoneyService" ref="rebateMoneyService"></property>
+	</bean>
+
+
+	<bean id="preSelfgoodRebateService"
+		class="com.yun.shang.carnation.rebate.pre.PreSelfGoodRebateService">
+		<property name="orderFormService" ref="orderFormService"></property>
+		<property name="proportion" ref="selfGoodRebateProportion"></property>
+		<property name="goodsReturnService" ref="goodsReturnService"></property>
+		<property name="userRelationService" ref="userRelationService"></property>
+		<property name="operatorService" ref="operatorService"></property>
+		<property name="moneyService" ref="preRebateMoneyService"></property>
+		<property name="rebateRecordService" ref="rebateRecordService"></property>
+		<property name="sellerService" ref="sellerService"></property>
+		<property name="storeService" ref="storeService"></property>
+		<property name="operatorRemoteService" ref="operatorRemoteService"></property>
+		<property name="orclUserBaseService" ref="orclUserBaseService"></property>
+		<property name="userAccountService" ref="userAccountService"></property>
+		<property name="areaServiceImpl" ref="areaServiceImpl"></property>
+		<property name="orclService" ref="orclService"></property>
+		<property name="rebateMoneyService" ref="preRebateMoneyService"></property>
+	</bean>
+
+	<bean id="preJuanPiGoodRebateService" class="com.yun.shang.carnation.rebate.JuanPiGoodRebateService">
+		<property name="status" value="2"></property>
+		<property name="proportion" ref="juanPiOrderRebateProportion"></property>
+		<property name="userRelationService" ref="userRelationService"></property>
+		<property name="operatorService" ref="operatorService"></property>
+		<property name="moneyService" ref="preRebateMoneyService"></property>
+		<property name="rebateRecordService" ref="rebateRecordService"></property>
+		<property name="sellerService" ref="sellerService"></property>
+		<property name="storeService" ref="storeService"></property>
+		<property name="operatorRemoteService" ref="operatorRemoteService"></property>
+		<property name="orclUserBaseService" ref="orclUserBaseService"></property>
+		<property name="userAccountService" ref="userAccountService"></property>
+		<property name="areaServiceImpl" ref="areaServiceImpl"></property>
+		<property name="orclService" ref="orclService"></property>
+		<property name="rebateMoneyService" ref="preRebateMoneyService"></property>
+	</bean>
+
+	<bean id="preSupplierRebateService"
+		class="com.yun.shang.carnation.rebate.pre.PreSupplierRebateService">
+		<property name="proportion" ref="supplierRebateProportion"></property>
+		<property name="sellerService" ref="sellerService"></property>
+		<property name="storeService" ref="storeService"></property>
+		<property name="operatorRemoteService" ref="operatorRemoteService"></property>
+		<property name="userAccountService" ref="userAccountService"></property>
+		<property name="orclService" ref="orclService"></property>
+		<property name="moneyService" ref="preRebateMoneyService"></property>
+		<property name="rebateMoneyService" ref="preRebateMoneyService"></property>
+	</bean>
+
+	<bean id="preOrderRebateJob" class="com.yun.shang.carnation.job.PreOrderRebateJob"
+		scope="singleton">
+		<property name="selfgoodRebateService" ref="preSelfgoodRebateService"></property>
+		<property name="orderFormService" ref="orderFormService"></property>
+		<property name="groupOrderService" ref="groupOrderService"></property>
+		<property name="supplierRebateService" ref="preSupplierRebateService"></property>
+		<property name="juanpiOrderService" ref="juanpiOrderService"></property>
+		<property name="juanPiGoodRebateService" ref="preJuanPiGoodRebateService"></property>
+	</bean>
+
+	<bean id="buyGoodsRebateJob" class="com.yun.shang.carnation.job.OrderRebateJob"
+		scope="singleton">
+		<property name="o2ORebateService" ref="o2ORebateService"></property>
+		<property name="selfgoodRebateService" ref="selfgoodRebateService"></property>
+		<property name="orderFormService" ref="orderFormService"></property>
+		<property name="groupOrderService" ref="groupOrderService"></property>
+		<property name="supplierRebateService" ref="supplierRebateService"></property>
+		<property name="yunGouCnRebateService" ref="yunGouCNRebateService"></property>
+		<property name="yunGouYSRebateService" ref="yunGouYSRebateService"></property>
+		<property name="uplineRebateService" ref="uplineRebateService"></property>
+		<property name="couponRebateService" ref="couponRebateService"></property>
+		<property name="cashCouponRebateService" ref="cashCouponRebateService"></property>
+		<property name="elongOrderRebateService" ref="elongOrderRebateService"></property>
+		<property name="elongOrderService" ref="elongOrderService"></property>
+		<property name="juanPiGoodRebateService" ref="juanPiGoodRebateService"></property>
+		<property name="juanpiOrderService" ref="juanpiOrderService"></property>
+	</bean>
+
+	<task:scheduled-tasks scheduler="rebate-job">
+		<task:scheduled ref="buyGoodsRebateJob" method="executeJob"
+			cron="0/30 * * * * ?" />
+		<task:scheduled ref="preOrderRebateJob" method="executeJob"
+			cron="0 0/10 * * * ?" />
+	</task:scheduled-tasks>
+	<task:scheduler id="rebate-job" />
+
+</beans>

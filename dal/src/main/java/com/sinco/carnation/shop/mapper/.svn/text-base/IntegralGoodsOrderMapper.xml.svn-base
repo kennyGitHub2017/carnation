@@ -1,0 +1,810 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.IntegralGoodsOrderMapper">
+	<resultMap id="BaseResultMap"
+		type="com.sinco.carnation.shop.model.IntegralGoodsOrder">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="igo_order_sn" property="igoOrderSn" jdbcType="VARCHAR" />
+		<result column="igo_pay_time" property="igoPayTime" jdbcType="TIMESTAMP" />
+		<result column="igo_payment" property="igoPayment" jdbcType="VARCHAR" />
+		<result column="igo_ship_code" property="igoShipCode" jdbcType="VARCHAR" />
+		<result column="igo_ship_time" property="igoShipTime" jdbcType="TIMESTAMP" />
+		<result column="igo_status" property="igoStatus" jdbcType="INTEGER" />
+		<result column="igo_total_integral" property="igoTotalIntegral"
+			jdbcType="INTEGER" />
+		<result column="igo_trans_fee" property="igoTransFee" jdbcType="DECIMAL" />
+		<result column="receiver_Name" property="receiverName"
+			jdbcType="VARCHAR" />
+		<result column="receiver_area" property="receiverArea"
+			jdbcType="VARCHAR" />
+		<result column="receiver_area_info" property="receiverAreaInfo"
+			jdbcType="VARCHAR" />
+		<result column="receiver_mobile" property="receiverMobile"
+			jdbcType="VARCHAR" />
+		<result column="receiver_telephone" property="receiverTelephone"
+			jdbcType="VARCHAR" />
+		<result column="receiver_zip" property="receiverZip" jdbcType="VARCHAR" />
+		<result column="igo_user_id" property="igoUserId" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs"
+		type="com.sinco.carnation.shop.model.IntegralGoodsOrder" extends="BaseResultMap">
+		<result column="goods_info" property="goodsInfo" jdbcType="LONGVARCHAR" />
+		<result column="igo_express_info" property="igoExpressInfo"
+			jdbcType="LONGVARCHAR" />
+		<result column="igo_msg" property="igoMsg" jdbcType="LONGVARCHAR" />
+		<result column="igo_pay_msg" property="igoPayMsg" jdbcType="LONGVARCHAR" />
+		<result column="igo_ship_content" property="igoShipContent"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap"
+		type="com.sinco.carnation.shop.bo.IntegralGoodsOrderBO" extends="ResultMapWithBLOBs">
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, igo_order_sn, igo_pay_time, igo_payment,
+		igo_ship_code,
+		igo_ship_time, igo_status, igo_total_integral, igo_trans_fee, receiver_Name,
+		receiver_area,
+		receiver_area_info, receiver_mobile, receiver_telephone, receiver_zip, igo_user_id
+	</sql>
+	<sql id="Blob_Column_List">
+		goods_info, igo_express_info, igo_msg, igo_pay_msg, igo_ship_content
+	</sql>
+	<sql id="BO_Column_List">
+		sigo.id, sigo.add_time, sigo.delete_status, sigo.igo_order_sn,
+		sigo.igo_pay_time, sigo.igo_payment, sigo.igo_ship_code,
+		sigo.igo_ship_time, sigo.igo_status, sigo.igo_total_integral,
+		sigo.igo_trans_fee, sigo.receiver_Name, sigo.receiver_area,
+		sigo.receiver_area_info, sigo.receiver_mobile,
+		sigo.receiver_telephone, sigo.receiver_zip, sigo.igo_user_id, uc.uid,
+		uc.login_name
+	</sql>
+	<sql id="BO_Blob_Column_List">
+		sigo.goods_info, sigo.igo_express_info, sigo.igo_msg, sigo.igo_pay_msg,
+		sigo.igo_ship_content
+	</sql>
+	<select id="selectByExampleWithBLOBs"
+		parameterType="com.sinco.carnation.shop.model.IntegralGoodsOrderExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_integral_goods_order
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample"
+		parameterType="com.sinco.carnation.shop.model.IntegralGoodsOrderExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_integral_goods_order
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="selectByUser" resultMap="BOResultMap">
+		select * from
+		shop_integral_goods_order where igo_user_id=#{userId} order by id desc
+	</select>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_integral_goods_order
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_integral_goods_order
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.sinco.carnation.shop.model.IntegralGoodsOrderExample">
+		delete from shop_integral_goods_order
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.IntegralGoodsOrder"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_integral_goods_order (id, add_time, delete_status,
+		igo_order_sn, igo_pay_time, igo_payment,
+		igo_ship_code, igo_ship_time, igo_status,
+		igo_total_integral, igo_trans_fee, receiver_Name,
+		receiver_area, receiver_area_info, receiver_mobile,
+		receiver_telephone, receiver_zip, igo_user_id,
+		goods_info, igo_express_info, igo_msg,
+		igo_pay_msg, igo_ship_content)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{igoOrderSn,jdbcType=VARCHAR}, #{igoPayTime,jdbcType=TIMESTAMP}, #{igoPayment,jdbcType=VARCHAR},
+		#{igoShipCode,jdbcType=VARCHAR}, #{igoShipTime,jdbcType=DATE},
+		#{igoStatus,jdbcType=INTEGER},
+		#{igoTotalIntegral,jdbcType=INTEGER}, #{igoTransFee,jdbcType=DECIMAL}, #{receiverName,jdbcType=VARCHAR},
+		#{receiverArea,jdbcType=VARCHAR},
+		#{receiverAreaInfo,jdbcType=VARCHAR},
+		#{receiverMobile,jdbcType=VARCHAR},
+		#{receiverTelephone,jdbcType=VARCHAR},
+		#{receiverZip,jdbcType=VARCHAR}, #{igoUserId,jdbcType=BIGINT},
+		#{goodsInfo,jdbcType=LONGVARCHAR},
+		#{igoExpressInfo,jdbcType=LONGVARCHAR},
+		#{igoMsg,jdbcType=LONGVARCHAR},
+		#{igoPayMsg,jdbcType=LONGVARCHAR}, #{igoShipContent,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.IntegralGoodsOrder"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_integral_goods_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="igoOrderSn != null">
+				igo_order_sn,
+			</if>
+			<if test="igoPayTime != null">
+				igo_pay_time,
+			</if>
+			<if test="igoPayment != null">
+				igo_payment,
+			</if>
+			<if test="igoShipCode != null">
+				igo_ship_code,
+			</if>
+			<if test="igoShipTime != null">
+				igo_ship_time,
+			</if>
+			<if test="igoStatus != null">
+				igo_status,
+			</if>
+			<if test="igoTotalIntegral != null">
+				igo_total_integral,
+			</if>
+			<if test="igoTransFee != null">
+				igo_trans_fee,
+			</if>
+			<if test="receiverName != null">
+				receiver_Name,
+			</if>
+			<if test="receiverArea != null">
+				receiver_area,
+			</if>
+			<if test="receiverAreaInfo != null">
+				receiver_area_info,
+			</if>
+			<if test="receiverMobile != null">
+				receiver_mobile,
+			</if>
+			<if test="receiverTelephone != null">
+				receiver_telephone,
+			</if>
+			<if test="receiverZip != null">
+				receiver_zip,
+			</if>
+			<if test="igoUserId != null">
+				igo_user_id,
+			</if>
+			<if test="goodsInfo != null">
+				goods_info,
+			</if>
+			<if test="igoExpressInfo != null">
+				igo_express_info,
+			</if>
+			<if test="igoMsg != null">
+				igo_msg,
+			</if>
+			<if test="igoPayMsg != null">
+				igo_pay_msg,
+			</if>
+			<if test="igoShipContent != null">
+				igo_ship_content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="igoOrderSn != null">
+				#{igoOrderSn,jdbcType=VARCHAR},
+			</if>
+			<if test="igoPayTime != null">
+				#{igoPayTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="igoPayment != null">
+				#{igoPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="igoShipCode != null">
+				#{igoShipCode,jdbcType=VARCHAR},
+			</if>
+			<if test="igoShipTime != null">
+				#{igoShipTime,jdbcType=DATE},
+			</if>
+			<if test="igoStatus != null">
+				#{igoStatus,jdbcType=INTEGER},
+			</if>
+			<if test="igoTotalIntegral != null">
+				#{igoTotalIntegral,jdbcType=INTEGER},
+			</if>
+			<if test="igoTransFee != null">
+				#{igoTransFee,jdbcType=DECIMAL},
+			</if>
+			<if test="receiverName != null">
+				#{receiverName,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverArea != null">
+				#{receiverArea,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverAreaInfo != null">
+				#{receiverAreaInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverMobile != null">
+				#{receiverMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverTelephone != null">
+				#{receiverTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverZip != null">
+				#{receiverZip,jdbcType=VARCHAR},
+			</if>
+			<if test="igoUserId != null">
+				#{igoUserId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsInfo != null">
+				#{goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="igoExpressInfo != null">
+				#{igoExpressInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="igoMsg != null">
+				#{igoMsg,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="igoPayMsg != null">
+				#{igoPayMsg,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="igoShipContent != null">
+				#{igoShipContent,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.sinco.carnation.shop.model.IntegralGoodsOrderExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_integral_goods_order
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_integral_goods_order
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.igoOrderSn != null">
+				igo_order_sn = #{record.igoOrderSn,jdbcType=VARCHAR},
+			</if>
+			<if test="record.igoPayTime != null">
+				igo_pay_time = #{record.igoPayTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.igoPayment != null">
+				igo_payment = #{record.igoPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="record.igoShipCode != null">
+				igo_ship_code = #{record.igoShipCode,jdbcType=VARCHAR},
+			</if>
+			<if test="record.igoShipTime != null">
+				igo_ship_time = #{record.igoShipTime,jdbcType=DATE},
+			</if>
+			<if test="record.igoStatus != null">
+				igo_status = #{record.igoStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.igoTotalIntegral != null">
+				igo_total_integral = #{record.igoTotalIntegral,jdbcType=INTEGER},
+			</if>
+			<if test="record.igoTransFee != null">
+				igo_trans_fee = #{record.igoTransFee,jdbcType=DECIMAL},
+			</if>
+			<if test="record.receiverName != null">
+				receiver_Name = #{record.receiverName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverArea != null">
+				receiver_area = #{record.receiverArea,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverAreaInfo != null">
+				receiver_area_info = #{record.receiverAreaInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverMobile != null">
+				receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverTelephone != null">
+				receiver_telephone = #{record.receiverTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="record.receiverZip != null">
+				receiver_zip = #{record.receiverZip,jdbcType=VARCHAR},
+			</if>
+			<if test="record.igoUserId != null">
+				igo_user_id = #{record.igoUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.goodsInfo != null">
+				goods_info = #{record.goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.igoExpressInfo != null">
+				igo_express_info = #{record.igoExpressInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.igoMsg != null">
+				igo_msg = #{record.igoMsg,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.igoPayMsg != null">
+				igo_pay_msg = #{record.igoPayMsg,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.igoShipContent != null">
+				igo_ship_content = #{record.igoShipContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_integral_goods_order
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		igo_order_sn = #{record.igoOrderSn,jdbcType=VARCHAR},
+		igo_pay_time = #{record.igoPayTime,jdbcType=TIMESTAMP},
+		igo_payment = #{record.igoPayment,jdbcType=VARCHAR},
+		igo_ship_code = #{record.igoShipCode,jdbcType=VARCHAR},
+		igo_ship_time = #{record.igoShipTime,jdbcType=DATE},
+		igo_status = #{record.igoStatus,jdbcType=INTEGER},
+		igo_total_integral = #{record.igoTotalIntegral,jdbcType=INTEGER},
+		igo_trans_fee = #{record.igoTransFee,jdbcType=DECIMAL},
+		receiver_Name = #{record.receiverName,jdbcType=VARCHAR},
+		receiver_area = #{record.receiverArea,jdbcType=VARCHAR},
+		receiver_area_info = #{record.receiverAreaInfo,jdbcType=VARCHAR},
+		receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
+		receiver_telephone = #{record.receiverTelephone,jdbcType=VARCHAR},
+		receiver_zip = #{record.receiverZip,jdbcType=VARCHAR},
+		igo_user_id = #{record.igoUserId,jdbcType=BIGINT},
+		goods_info = #{record.goodsInfo,jdbcType=LONGVARCHAR},
+		igo_express_info = #{record.igoExpressInfo,jdbcType=LONGVARCHAR},
+		igo_msg = #{record.igoMsg,jdbcType=LONGVARCHAR},
+		igo_pay_msg = #{record.igoPayMsg,jdbcType=LONGVARCHAR},
+		igo_ship_content = #{record.igoShipContent,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_integral_goods_order
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		igo_order_sn = #{record.igoOrderSn,jdbcType=VARCHAR},
+		igo_pay_time = #{record.igoPayTime,jdbcType=TIMESTAMP},
+		igo_payment = #{record.igoPayment,jdbcType=VARCHAR},
+		igo_ship_code = #{record.igoShipCode,jdbcType=VARCHAR},
+		igo_ship_time = #{record.igoShipTime,jdbcType=DATE},
+		igo_status = #{record.igoStatus,jdbcType=INTEGER},
+		igo_total_integral = #{record.igoTotalIntegral,jdbcType=INTEGER},
+		igo_trans_fee = #{record.igoTransFee,jdbcType=DECIMAL},
+		receiver_Name = #{record.receiverName,jdbcType=VARCHAR},
+		receiver_area = #{record.receiverArea,jdbcType=VARCHAR},
+		receiver_area_info = #{record.receiverAreaInfo,jdbcType=VARCHAR},
+		receiver_mobile = #{record.receiverMobile,jdbcType=VARCHAR},
+		receiver_telephone = #{record.receiverTelephone,jdbcType=VARCHAR},
+		receiver_zip = #{record.receiverZip,jdbcType=VARCHAR},
+		igo_user_id = #{record.igoUserId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.IntegralGoodsOrder">
+		update shop_integral_goods_order
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="igoOrderSn != null">
+				igo_order_sn = #{igoOrderSn,jdbcType=VARCHAR},
+			</if>
+			<if test="igoPayTime != null">
+				igo_pay_time = #{igoPayTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="igoPayment != null">
+				igo_payment = #{igoPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="igoShipCode != null">
+				igo_ship_code = #{igoShipCode,jdbcType=VARCHAR},
+			</if>
+			<if test="igoShipTime != null">
+				igo_ship_time = #{igoShipTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="igoStatus != null">
+				igo_status = #{igoStatus,jdbcType=INTEGER},
+			</if>
+			<if test="igoTotalIntegral != null">
+				igo_total_integral = #{igoTotalIntegral,jdbcType=INTEGER},
+			</if>
+			<if test="igoTransFee != null">
+				igo_trans_fee = #{igoTransFee,jdbcType=DECIMAL},
+			</if>
+			<if test="receiverName != null">
+				receiver_Name = #{receiverName,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverArea != null">
+				receiver_area = #{receiverArea,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverAreaInfo != null">
+				receiver_area_info = #{receiverAreaInfo,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverMobile != null">
+				receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverTelephone != null">
+				receiver_telephone = #{receiverTelephone,jdbcType=VARCHAR},
+			</if>
+			<if test="receiverZip != null">
+				receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+			</if>
+			<if test="igoUserId != null">
+				igo_user_id = #{igoUserId,jdbcType=BIGINT},
+			</if>
+			<if test="goodsInfo != null">
+				goods_info = #{goodsInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="igoExpressInfo != null">
+				igo_express_info = #{igoExpressInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="igoMsg != null">
+				igo_msg = #{igoMsg,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="igoPayMsg != null">
+				igo_pay_msg = #{igoPayMsg,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="igoShipContent != null">
+				igo_ship_content = #{igoShipContent,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.IntegralGoodsOrder">
+		update shop_integral_goods_order
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		igo_order_sn = #{igoOrderSn,jdbcType=VARCHAR},
+		igo_pay_time = #{igoPayTime,jdbcType=TIMESTAMP},
+		igo_payment = #{igoPayment,jdbcType=VARCHAR},
+		igo_ship_code = #{igoShipCode,jdbcType=VARCHAR},
+		igo_ship_time = #{igoShipTime,jdbcType=DATE},
+		igo_status = #{igoStatus,jdbcType=INTEGER},
+		igo_total_integral = #{igoTotalIntegral,jdbcType=INTEGER},
+		igo_trans_fee = #{igoTransFee,jdbcType=DECIMAL},
+		receiver_Name = #{receiverName,jdbcType=VARCHAR},
+		receiver_area = #{receiverArea,jdbcType=VARCHAR},
+		receiver_area_info = #{receiverAreaInfo,jdbcType=VARCHAR},
+		receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
+		receiver_telephone = #{receiverTelephone,jdbcType=VARCHAR},
+		receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+		igo_user_id = #{igoUserId,jdbcType=BIGINT},
+		goods_info = #{goodsInfo,jdbcType=LONGVARCHAR},
+		igo_express_info = #{igoExpressInfo,jdbcType=LONGVARCHAR},
+		igo_msg = #{igoMsg,jdbcType=LONGVARCHAR},
+		igo_pay_msg = #{igoPayMsg,jdbcType=LONGVARCHAR},
+		igo_ship_content = #{igoShipContent,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.IntegralGoodsOrder">
+		update shop_integral_goods_order
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		igo_order_sn = #{igoOrderSn,jdbcType=VARCHAR},
+		igo_pay_time = #{igoPayTime,jdbcType=TIMESTAMP},
+		igo_payment = #{igoPayment,jdbcType=VARCHAR},
+		igo_ship_code = #{igoShipCode,jdbcType=VARCHAR},
+		igo_ship_time = #{igoShipTime,jdbcType=DATE},
+		igo_status = #{igoStatus,jdbcType=INTEGER},
+		igo_total_integral = #{igoTotalIntegral,jdbcType=INTEGER},
+		igo_trans_fee = #{igoTransFee,jdbcType=DECIMAL},
+		receiver_Name = #{receiverName,jdbcType=VARCHAR},
+		receiver_area = #{receiverArea,jdbcType=VARCHAR},
+		receiver_area_info = #{receiverAreaInfo,jdbcType=VARCHAR},
+		receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
+		receiver_telephone = #{receiverTelephone,jdbcType=VARCHAR},
+		receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+		igo_user_id = #{igoUserId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="findListByVo" resultMap="BOResultMap">
+		SELECT
+		<include refid="BO_Column_List" />
+		,
+		<include refid="BO_Blob_Column_List" />
+		FROM shop_integral_goods_order sigo
+		LEFT JOIN sys_user_account uc ON (uc.uid = sigo.igo_user_id and
+		uc.account_type=2)
+		<where>
+			<if test="vo.igoOrderSn != null and vo.igoOrderSn != ''">
+				sigo.igo_order_sn like concat('%',#{vo.igoOrderSn},'%')
+			</if>
+			<if test="vo.userName != null and vo.userName != ''">
+				AND uc.login_name like concat('%',#{vo.userName},'%')
+			</if>
+			<if test="vo.uid != null and vo.uid != 0">
+				AND sigo.igo_user_id=#{vo.uid}
+			</if>
+
+			<if test="vo.beginTime != null and vo.beginTime != ''">
+		<![CDATA[AND DATE_FORMAT(add_time,'%Y-%m-%d') >= #{vo.beginTime}]]>
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+		<![CDATA[AND DATE_FORMAT(add_time,'%Y-%m-%d') <= #{vo.endTime}]]>
+			</if>
+
+			<if test="vo.igoPayment != null and vo.igoPayment != ''">
+				<choose>
+					<when test="vo.igoPayment == 'alipay'">
+						AND (igo_payment = 'alipay' or igo_payment = 'alipay_wap' or
+						igo_payment = 'alipay_app')
+					</when>
+					<when test="vo.igoPayment == 'wx'">
+						AND (igo_payment = 'wx_app' or igo_payment = 'wx_pay' or igo_payment='wxqrpay')
+					</when>
+					<otherwise>
+						AND igo_payment = #{vo.igoPayment}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="vo.igoStatus != null and vo.igoStatus != ''">
+				AND sigo.igo_status = #{vo.igoStatus}
+			</if>
+			<if test="vo.igoStatus == 0">
+				AND sigo.igo_status = 0
+			</if>
+
+		</where>
+
+		ORDER BY sigo.add_time desc
+	</select>
+	<select id="selectById" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		SELECT
+		<include refid="BO_Column_List" />
+		,
+		<include refid="BO_Blob_Column_List" />
+		, c.email
+		FROM shop_integral_goods_order sigo
+		LEFT JOIN sys_user_account uc ON (uc.uid = sigo.igo_user_id and
+		uc.account_type=2)
+		LEFT JOIN user_customer c ON sigo.igo_user_id = c.uid
+		WHERE sigo.id = #{id}
+	</select>
+
+	<select id="findForExcel" resultMap="BOResultMap">
+		SELECT
+		igo_order_sn,
+		receiver_Name,
+		receiver_mobile,
+		receiver_area,
+		receiver_area_info,
+		igo_total_integral,
+		igo_trans_fee,
+		add_time,
+		goods_info,
+		<![CDATA[ IFNULL(igo_msg,'未填写')]]>
+		igo_msg
+		FROM `shop_integral_goods_order`
+		WHERE `delete_status` =0 AND `igo_status` =20
+		<if test="startTime != null and startTime != ''">
+			AND DATE_FORMAT(add_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{startTime},'%Y-%m-%d')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND DATE_FORMAT(add_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{endTime},'%Y-%m-%d')
+		</if>
+		<if test="status != null and status != ''">
+			and `igo_status` =#{status}
+		</if>
+		ORDER BY `add_time` desc
+	</select>
+
+	<select id="findNoPayThirdDay" resultMap="BOResultMap">
+		SELECT * FROM shop_integral_goods_order
+		WHERE igo_status = 0 AND TIMESTAMPDIFF(SECOND, add_time, NOW()) >= 259200
+	</select>
+
+	<select id="countTransFeeByVO" resultType="java.math.BigDecimal">
+		SELECT sum(sigo.igo_trans_fee)
+		FROM shop_integral_goods_order sigo
+		LEFT JOIN sys_user_account uc ON (uc.uid = sigo.igo_user_id and
+		uc.account_type=2)
+		<where>
+			<if test="vo.igoOrderSn != null and vo.igoOrderSn != ''">
+				sigo.igo_order_sn like concat('%',#{vo.igoOrderSn},'%')
+			</if>
+			<if test="vo.userName != null and vo.userName != ''">
+				AND uc.login_name like concat('%',#{vo.userName},'%')
+			</if>
+			<if test="vo.uid != null and vo.uid != 0">
+				AND sigo.igo_user_id=#{vo.uid}
+			</if>
+
+			<if test="vo.beginTime != null and vo.beginTime != ''">
+		<![CDATA[AND DATE_FORMAT(add_time,'%Y-%m-%d') >= #{vo.beginTime}]]>
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+		<![CDATA[AND DATE_FORMAT(add_time,'%Y-%m-%d') <= #{vo.endTime}]]>
+			</if>
+
+			<if test="vo.igoPayment != null and vo.igoPayment != ''">
+				<choose>
+					<when test="vo.igoPayment == 'alipay'">
+						AND (igo_payment = 'alipay' or igo_payment = 'alipay_wap' or
+						igo_payment = 'alipay_app')
+					</when>
+					<when test="vo.igoPayment == 'wx'">
+						AND (igo_payment = 'wx_app' or igo_payment = 'wx_pay')
+					</when>
+					<otherwise>
+						AND igo_payment = #{vo.igoPayment}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="vo.igoStatus != null and vo.igoStatus != ''">
+				AND sigo.igo_status = #{vo.igoStatus}
+			</if>
+
+		</where>
+		ORDER BY sigo.add_time desc
+	</select>
+	
+	<select id="countIntegralByVO" resultType="java.lang.Long">
+		SELECT sum(sigo.igo_total_integral)
+		FROM shop_integral_goods_order sigo
+		LEFT JOIN sys_user_account uc ON (uc.uid = sigo.igo_user_id and
+		uc.account_type=2)
+		<where>
+			<if test="vo.igoOrderSn != null and vo.igoOrderSn != ''">
+				sigo.igo_order_sn like concat('%',#{vo.igoOrderSn},'%')
+			</if>
+			<if test="vo.userName != null and vo.userName != ''">
+				AND uc.login_name like concat('%',#{vo.userName},'%')
+			</if>
+			<if test="vo.uid != null and vo.uid != 0">
+				AND sigo.igo_user_id=#{vo.uid}
+			</if>
+
+			<if test="vo.beginTime != null and vo.beginTime != ''">
+		<![CDATA[AND DATE_FORMAT(add_time,'%Y-%m-%d') >= #{vo.beginTime}]]>
+			</if>
+			<if test="vo.endTime != null and vo.endTime != ''">
+		<![CDATA[AND DATE_FORMAT(add_time,'%Y-%m-%d') <= #{vo.endTime}]]>
+			</if>
+
+			<if test="vo.igoPayment != null and vo.igoPayment != ''">
+				<choose>
+					<when test="vo.igoPayment == 'alipay'">
+						AND (igo_payment = 'alipay' or igo_payment = 'alipay_wap' or
+						igo_payment = 'alipay_app')
+					</when>
+					<when test="vo.igoPayment == 'wx'">
+						AND (igo_payment = 'wx_app' or igo_payment = 'wx_pay')
+					</when>
+					<otherwise>
+						AND igo_payment = #{vo.igoPayment}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="vo.igoStatus != null and vo.igoStatus != ''">
+				AND sigo.igo_status = #{vo.igoStatus}
+			</if>
+
+		</where>
+		ORDER BY sigo.add_time desc
+	</select>
+</mapper>

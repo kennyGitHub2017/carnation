@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户注册 -$!config.title - $!{config.poweredby}</title>
+<meta name="keywords" content="$!config.keywords" />
+<meta name="description" content="$!config.description" />
+<meta name="generator" content="$!{config.meta_generator}" />
+<meta name="author" content="$!{config.meta_author}">
+<meta name="copyright" content="$!{config.copyRight}">
+<link href="$!webPath/resources/style/system/front/default/css/public2.css" type="text/css" rel="stylesheet" />
+<link href="$!webPath/resources/style/system/front/default/css/login.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+ //
+
+jQuery.validator.addMethod("isMobile", function(value, element) {
+var length = value.length;
+var mobile = /^((13[0-9])|(14[0-9])|(15([0-9]))|(17([0-9]))|(18[0-9]))\d{8}$/;
+return this.optional(element) || (length == 11 && mobile.test(value));
+}, "请正确填写您的手机号码");
+
+ var validateObj=jQuery("#theForm").validate({				 
+	errorPlacement:function(error, element) {
+       error.appendTo(element.parent().parent());  
+      },
+	  rules:{
+		mobile:{
+		  required:true,
+		  isMobile:true,
+		  remote:{
+		    url: "$!webPath/verify_mobile.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "mobile": function(){return jQuery("#mobile").val();}
+		     }
+		  }
+		}#if($!config.securityCodeRegister),
+		code:{
+		  required:true,
+		  remote:{
+		    url: "$!webPath/verify_code.htm",     //后台处理程序
+            type: "post",               //数据发送方式
+            dataType: "json",           //接受数据格式   
+            data: {                     //要传递的数据
+                  "code": function(){return jQuery("#code").val();}
+		     }
+		  }
+		}
+		#end
+	  },
+	  messages:{
+		mobile:{
+		  required:"手机号不能为空",
+		  isMobile:"请正确填写您的手机号码",
+		  remote:"该手机号已经存在"
+		}#if($!config.securityCodeRegister),
+		code:{
+		  required:"验证码不能为空",
+		  remote:"验证码不正确"
+		}
+		#end
+	  }
+	});
+	
+	
+
+ //
+});
+
+</script>
+</head>
+<body>
+$!httpInclude.include("/top.htm")
+<div class="login_head">
+  <div class="reg-head-right" style="float: right; padding-top: 44px;">已有帐号 <a href="$!webPath/user/login.htm" class="c_blue">立即登录</a></div>
+  <h1><span>#if($!config.websiteLogo) <a href="$!webPath/index.htm"> <img src="$!config.websiteLogo.path" border="0" /> </a> #else <a href="$!webPath/index.htm"><img src="$!webPath/resources/style/system/front/default/images/logo.jpg"  /> </a> #end</span> <strong>&nbsp; | &nbsp;注册</strong></h1>
+</div>
+<div class="login_box">
+    <div class="regist_common">
+        #if($message)
+        <h3>${message}</h3>
+        #end
+        <form action="$!webPath/register2.htm" method="post" name="theForm" id="theForm">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="regist_common_table">
+                <tr>
+                    <td align="right">手机号：</td>
+                    <td><div class="regist_form_txt">
+                        <input name="mobile" type="text" id="mobile" class="regist_txt" placeholder="请输入手机号" /></div>
+                        </td>
+    </td>
+    </tr>
+    
+   
+    #if($!config.securityCodeRegister)
+    <script>
+        function refreshCode(){
+            jQuery("#code_img").attr("src","$!webPath/verify.htm?d"+new Date().getTime());
+        }
+    </script>
+    <tr>
+        <td  align="right">验证码：</td>
+        <td>
+            <div class="regist_form_txt"><input name="code" type="text" class="regist_code m-code-text" id="code" />
+                <b class="regist_code_img"><img id="code_img" src="$!webPath/verify.htm" width="62" height="30" /></b><a href="javascript:void(0);" onclick="refreshCode();" class="code_refresh"></a>
+            </div>
+        </td>
+    </tr>
+    #end
+  
+    <tr>
+        <td>&nbsp;</td>
+        <td><input name="" type="submit"  class="regist_btn btn btn-blue" value="下一步"/></td>
+    </tr>
+    </table>
+    </form>
+</div>
+</div>
+
+$!httpInclude.include("/footer.htm")
+</body>
+</body>
+</html>

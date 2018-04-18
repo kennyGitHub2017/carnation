@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="/resources/css/main.css">
+</head>
+<body>
+<div class="nav">
+    <i class="icon icon-home"></i>您的位置：首页 > 关系统计
+</div>
+
+<div class="main">
+    <ul class="m-menu">
+        <li><a href="/operator/main.htm" target="mainFrame">运营商信息</a> </li>
+        <li><a href="/operator/statistics_relation.htm"  class="active" target="mainFrame">关系统计</a> </li>
+        <li><a href="/operator/statistics_rebate.htm"  target="mainFrame">收益统计</a> </li>
+        #if(!$isCN)
+        <li><a href="/operator/change_password.htm" target="mainFrame">密码管理</a> </li>
+        <li><a href="/operator/currency_password.htm" target="mainFrame">云豆密码管理</a> </li>
+        #end
+        <li><a href="/operator/change_mobile.html" target="mainFrame" >联系号码</a> </li>
+        <li><a href="/operator/operator_article_list.htm" target="mainFrame" >云尚平台公告</a> </li>
+        <li><a href="/operator/my_invitationInfo.htm" target="mainFrame" >我的二维码</a> </li>
+        <li><a href="/operator/my_invitation_list.htm" target="mainFrame" >邀请明细</a> </li>
+        <li><a href="/operator/merchant_bind.htm" target="mainFrame" >为商户注册会员</a> </li>
+    </ul>
+
+  <!--   <div class="view-box">
+        <div class="view-title">统计信息</div>
+        <div class="col-md-3">
+            注册运营商：${resultMap['roCount']} 个
+        </div>
+        <div class="col-md-6">
+            辖区运营商：${resultMap['ooCount']} 个
+        </div>
+        <div class="col-md-3">
+            注册的商户：${resultMap['rsCount']} 个
+        </div>
+        <div class="col-md-3">
+            隶属的商户：${resultMap['osCount']} 个
+        </div>
+        <div class="col-md-3">
+            辖区的商户：${resultMap['asCount']} 个
+        </div>
+        <div class="col-md-3">
+            注册的会员：${resultMap['rcCount']} 个
+        </div>
+        <div class="col-md-3">
+            隶属商户的会员：${resultMap['ocCount']} 个
+        </div>
+        <div class="col-md-3">
+            辖区商户的会员：${resultMap['acCount']} 个
+        </div>
+    </div> -->
+    
+    <div class="view-box">
+        <div class="view-title">统计信息</div>
+        <div class="col-md-3">
+            注册会员：${resultMap['rcCount']} 个
+        </div>
+        <div class="col-md-6">
+           注册商户：${resultMap['rsCount']} 个
+        </div>
+        <div class="col-md-3">
+          商户注册会员：${resultMap['sruCount']} 个
+        </div>
+        <div class="col-md-6">
+            注册供应商：${resultMap['rgsCount']} 个
+        </div>
+        <div class="col-md-3" >
+            团队注册会员：${resultMap['cnRegistCount']} 个
+            <span class="tj-mes-zs">＊网体直销三代以内注册会员的总数</span>
+        </div>
+        <div class="col-md-6">
+            注册运营商：${resultMap['roCount']} 个
+        </div>
+        <div class="col-md-3">
+           团队商户注册会员：${resultMap['cnRegistShopRegistCount']} 个
+           <span class="tj-mes-zs">＊网体直销三代以内签约商户注册会员的总数</span>
+        </div>
+       
+    </div>
+</div>
+</body>
+</html>

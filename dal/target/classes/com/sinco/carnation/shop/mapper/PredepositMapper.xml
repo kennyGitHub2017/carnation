@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinco.carnation.shop.mapper.PredepositMapper">
+	<resultMap id="BaseResultMap" type="com.sinco.carnation.shop.model.Predeposit">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+		<result column="delete_status" property="deleteStatus"
+			jdbcType="BIT" />
+		<result column="pd_amount" property="pdAmount" jdbcType="DECIMAL" />
+		<result column="pd_no" property="pdNo" jdbcType="VARCHAR" />
+		<result column="pd_pay_status" property="pdPayStatus" jdbcType="INTEGER" />
+		<result column="pd_payment" property="pdPayment" jdbcType="VARCHAR" />
+		<result column="pd_remittance_bank" property="pdRemittanceBank"
+			jdbcType="VARCHAR" />
+		<result column="pd_remittance_time" property="pdRemittanceTime"
+			jdbcType="DATE" />
+		<result column="pd_remittance_user" property="pdRemittanceUser"
+			jdbcType="VARCHAR" />
+		<result column="pd_sn" property="pdSn" jdbcType="VARCHAR" />
+		<result column="pd_status" property="pdStatus" jdbcType="INTEGER" />
+		<result column="pd_admin_id" property="pdAdminId" jdbcType="BIGINT" />
+		<result column="pd_user_id" property="pdUserId" jdbcType="BIGINT" />
+		<result column="pd_order_id" property="pdOrderId" jdbcType="BIGINT" />
+		<result column="pd_order_type" property="pdOrderType" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.sinco.carnation.shop.model.Predeposit"
+		extends="BaseResultMap">
+		<result column="pd_admin_info" property="pdAdminInfo" jdbcType="LONGVARCHAR" />
+		<result column="pd_remittance_info" property="pdRemittanceInfo"
+			jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<resultMap id="BOResultMap" type="com.sinco.carnation.shop.bo.PredepositBO"
+		extends="ResultMapWithBLOBs">
+		<result column="payment_id" property="paymentId" />
+	</resultMap>
+
+
+	<select id="findBOById" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		SELECT
+		a.*, b.id AS payment_id,
+		(
+		SELECT
+		c.nickname
+		FROM
+		user_customer c
+		WHERE
+		a.pd_user_id=c.uid
+		) AS nickname
+		FROM
+		shop_predeposit a
+		LEFT JOIN shop_payment b ON a.pd_payment = b.mark
+		where a.id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="findPageByUid" parameterType="map" resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from shop_predeposit
+		where delete_status=0
+		and pd_user_id=#{uid}
+		order by add_time desc
+	</select>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, add_time, delete_status, pd_amount, pd_no, pd_pay_status, pd_payment,
+		pd_remittance_bank,
+		pd_remittance_time, pd_remittance_user, pd_sn, pd_status, pd_admin_id,
+		pd_user_id,pd_order_id,pd_order_type
+	</sql>
+	<sql id="Blob_Column_List">
+		pd_admin_info, pd_remittance_info
+	</sql>
+
+	<select id="queryPredepositPageList" resultMap="BOResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		,
+		user_customer.nickname as nickname
+		<!-- (SELECT nickname FROM user_customer WHERE user_customer.uid = shop_predeposit.pd_user_id) 
+			AS nickname -->
+		<!-- (SELECT name FROM user_manager WHERE user_manager.uid = shop_predeposit.pd_admin_id) 
+			AS adminname, -->
+		from shop_predeposit
+		left join user_customer
+		on user_customer.uid = shop_predeposit.pd_user_id
+		where delete_status=0
+		<if test="pdPayment != null and pdPayment != ''">
+			and pd_payment like concat('%',#{pdPayment,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="pdPayStatus != null and pdPayStatus != ''">
+			and pd_pay_status like concat('%',#{pdPayStatus,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="pdStatus != null and pdStatus != ''">
+			and pd_status like concat('%',#{pdStatus,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="pdRemittanceUser != null and pdRemittanceUser != ''">
+			and pd_remittance_user like
+			concat('%',#{pdRemittanceUser,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="pdRemittanceBank != null and pdRemittanceBank != ''">
+			and pd_remittance_bank like
+			concat('%',#{pdRemittanceBank,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="pdUserName != null and pdUserName != ''">
+			and nickname like concat('%',#{pdUserName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="beginTime != null and beginTime != ''">
+			AND DATE_FORMAT(add_time,'%Y-%m-%d') <![CDATA[ >= ]]>
+			DATE_FORMAT(#{beginTime},'%Y-%m-%d')
+		</if>
+		<if test="endTime != null and endTime != ''">
+			AND DATE_FORMAT(add_time,'%Y-%m-%d') <![CDATA[ <= ]]>
+			DATE_FORMAT(#{endTime},'%Y-%m-%d')
+		</if>
+		<if test="pdSn != null and pdSn != ''">
+			AND shop_predeposit.pd_sn = #{pdSn,jdbcType=VARCHAR}
+		</if>
+		order by add_time desc
+	</select>
+
+	<select id="selectByExampleWithBLOBs" parameterType="com.sinco.carnation.shop.model.PredepositExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_predeposit
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.sinco.carnation.shop.model.PredepositExample"
+		resultMap="BOResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from shop_predeposit
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="BOResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from shop_predeposit
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from shop_predeposit
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.sinco.carnation.shop.model.PredepositExample">
+		delete from shop_predeposit
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.sinco.carnation.shop.model.Predeposit"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_predeposit (id, add_time, delete_status,
+		pd_amount, pd_no, pd_pay_status,
+		pd_payment, pd_remittance_bank, pd_remittance_time,
+		pd_remittance_user, pd_sn, pd_status,
+		pd_admin_id, pd_user_id, pd_admin_info,
+		pd_remittance_info,pd_Order_Id,pd_order_type)
+		values (#{id,jdbcType=BIGINT}, #{addTime,jdbcType=TIMESTAMP},
+		#{deleteStatus,jdbcType=BIT},
+		#{pdAmount,jdbcType=DECIMAL}, #{pdNo,jdbcType=VARCHAR}, #{pdPayStatus,jdbcType=INTEGER},
+		#{pdPayment,jdbcType=VARCHAR}, #{pdRemittanceBank,jdbcType=VARCHAR},
+		#{pdRemittanceTime,jdbcType=DATE},
+		#{pdRemittanceUser,jdbcType=VARCHAR}, #{pdSn,jdbcType=VARCHAR},
+		#{pdStatus,jdbcType=INTEGER},
+		#{pdAdminId,jdbcType=BIGINT}, #{pdUserId,jdbcType=BIGINT}, #{pdAdminInfo,jdbcType=LONGVARCHAR},
+		#{pdRemittanceInfo,jdbcType=LONGVARCHAR},#{pdOrderId},#{pdOrderType})
+	</insert>
+	<insert id="insertSelective" parameterType="com.sinco.carnation.shop.model.Predeposit"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into shop_predeposit
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="deleteStatus != null">
+				delete_status,
+			</if>
+			<if test="pdAmount != null">
+				pd_amount,
+			</if>
+			<if test="pdNo != null">
+				pd_no,
+			</if>
+			<if test="pdPayStatus != null">
+				pd_pay_status,
+			</if>
+			<if test="pdPayment != null">
+				pd_payment,
+			</if>
+			<if test="pdRemittanceBank != null">
+				pd_remittance_bank,
+			</if>
+			<if test="pdRemittanceTime != null">
+				pd_remittance_time,
+			</if>
+			<if test="pdRemittanceUser != null">
+				pd_remittance_user,
+			</if>
+			<if test="pdSn != null">
+				pd_sn,
+			</if>
+			<if test="pdStatus != null">
+				pd_status,
+			</if>
+			<if test="pdAdminId != null">
+				pd_admin_id,
+			</if>
+			<if test="pdUserId != null">
+				pd_user_id,
+			</if>
+			<if test="pdAdminInfo != null">
+				pd_admin_info,
+			</if>
+			<if test="pdRemittanceInfo != null">
+				pd_remittance_info,
+			</if>
+			<if test="pdOrderId != null">
+				pd_Order_Id,
+			</if>
+			<if test="pdOrderType != null">
+				pd_order_type,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				#{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="pdAmount != null">
+				#{pdAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="pdNo != null">
+				#{pdNo,jdbcType=VARCHAR},
+			</if>
+			<if test="pdPayStatus != null">
+				#{pdPayStatus,jdbcType=INTEGER},
+			</if>
+			<if test="pdPayment != null">
+				#{pdPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="pdRemittanceBank != null">
+				#{pdRemittanceBank,jdbcType=VARCHAR},
+			</if>
+			<if test="pdRemittanceTime != null">
+				#{pdRemittanceTime,jdbcType=DATE},
+			</if>
+			<if test="pdRemittanceUser != null">
+				#{pdRemittanceUser,jdbcType=VARCHAR},
+			</if>
+			<if test="pdSn != null">
+				#{pdSn,jdbcType=VARCHAR},
+			</if>
+			<if test="pdStatus != null">
+				#{pdStatus,jdbcType=INTEGER},
+			</if>
+			<if test="pdAdminId != null">
+				#{pdAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="pdUserId != null">
+				#{pdUserId,jdbcType=BIGINT},
+			</if>
+			<if test="pdAdminInfo != null">
+				#{pdAdminInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="pdRemittanceInfo != null">
+				#{pdRemittanceInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="pdOrderId != null">
+				#{pdOrderId},
+			</if>
+			<if test="pdOrderType != null">
+				#{pdOrderType},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.sinco.carnation.shop.model.PredepositExample"
+		resultType="java.lang.Integer">
+		select count(*) from shop_predeposit
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update shop_predeposit
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=BIGINT},
+			</if>
+			<if test="record.addTime != null">
+				add_time = #{record.addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.deleteStatus != null">
+				delete_status = #{record.deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="record.pdAmount != null">
+				pd_amount = #{record.pdAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="record.pdNo != null">
+				pd_no = #{record.pdNo,jdbcType=VARCHAR},
+			</if>
+			<if test="record.pdPayStatus != null">
+				pd_pay_status = #{record.pdPayStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.pdPayment != null">
+				pd_payment = #{record.pdPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="record.pdRemittanceBank != null">
+				pd_remittance_bank = #{record.pdRemittanceBank,jdbcType=VARCHAR},
+			</if>
+			<if test="record.pdRemittanceTime != null">
+				pd_remittance_time = #{record.pdRemittanceTime,jdbcType=DATE},
+			</if>
+			<if test="record.pdRemittanceUser != null">
+				pd_remittance_user = #{record.pdRemittanceUser,jdbcType=VARCHAR},
+			</if>
+			<if test="record.pdSn != null">
+				pd_sn = #{record.pdSn,jdbcType=VARCHAR},
+			</if>
+			<if test="record.pdStatus != null">
+				pd_status = #{record.pdStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.pdAdminId != null">
+				pd_admin_id = #{record.pdAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="record.pdUserId != null">
+				pd_user_id = #{record.pdUserId,jdbcType=BIGINT},
+			</if>
+			<if test="record.pdAdminInfo != null">
+				pd_admin_info = #{record.pdAdminInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="record.pdRemittanceInfo != null">
+				pd_remittance_info = #{record.pdRemittanceInfo,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update shop_predeposit
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		pd_amount = #{record.pdAmount,jdbcType=DECIMAL},
+		pd_no = #{record.pdNo,jdbcType=VARCHAR},
+		pd_pay_status = #{record.pdPayStatus,jdbcType=INTEGER},
+		pd_payment = #{record.pdPayment,jdbcType=VARCHAR},
+		pd_remittance_bank = #{record.pdRemittanceBank,jdbcType=VARCHAR},
+		pd_remittance_time = #{record.pdRemittanceTime,jdbcType=DATE},
+		pd_remittance_user = #{record.pdRemittanceUser,jdbcType=VARCHAR},
+		pd_sn = #{record.pdSn,jdbcType=VARCHAR},
+		pd_status = #{record.pdStatus,jdbcType=INTEGER},
+		pd_admin_id = #{record.pdAdminId,jdbcType=BIGINT},
+		pd_user_id = #{record.pdUserId,jdbcType=BIGINT},
+		pd_admin_info = #{record.pdAdminInfo,jdbcType=LONGVARCHAR},
+		pd_remittance_info = #{record.pdRemittanceInfo,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update shop_predeposit
+		set id = #{record.id,jdbcType=BIGINT},
+		add_time = #{record.addTime,jdbcType=TIMESTAMP},
+		delete_status = #{record.deleteStatus,jdbcType=BIT},
+		pd_amount = #{record.pdAmount,jdbcType=DECIMAL},
+		pd_no = #{record.pdNo,jdbcType=VARCHAR},
+		pd_pay_status = #{record.pdPayStatus,jdbcType=INTEGER},
+		pd_payment = #{record.pdPayment,jdbcType=VARCHAR},
+		pd_remittance_bank = #{record.pdRemittanceBank,jdbcType=VARCHAR},
+		pd_remittance_time = #{record.pdRemittanceTime,jdbcType=DATE},
+		pd_remittance_user = #{record.pdRemittanceUser,jdbcType=VARCHAR},
+		pd_sn = #{record.pdSn,jdbcType=VARCHAR},
+		pd_status = #{record.pdStatus,jdbcType=INTEGER},
+		pd_admin_id = #{record.pdAdminId,jdbcType=BIGINT},
+		pd_user_id = #{record.pdUserId,jdbcType=BIGINT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.sinco.carnation.shop.model.Predeposit">
+		update shop_predeposit
+		<set>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="deleteStatus != null">
+				delete_status = #{deleteStatus,jdbcType=BIT},
+			</if>
+			<if test="pdAmount != null">
+				pd_amount = #{pdAmount,jdbcType=DECIMAL},
+			</if>
+			<if test="pdNo != null">
+				pd_no = #{pdNo,jdbcType=VARCHAR},
+			</if>
+			<if test="pdPayStatus != null">
+				pd_pay_status = #{pdPayStatus,jdbcType=INTEGER},
+			</if>
+			<if test="pdPayment != null">
+				pd_payment = #{pdPayment,jdbcType=VARCHAR},
+			</if>
+			<if test="pdRemittanceBank != null">
+				pd_remittance_bank = #{pdRemittanceBank,jdbcType=VARCHAR},
+			</if>
+			<if test="pdRemittanceTime != null">
+				pd_remittance_time = #{pdRemittanceTime,jdbcType=DATE},
+			</if>
+			<if test="pdRemittanceUser != null">
+				pd_remittance_user = #{pdRemittanceUser,jdbcType=VARCHAR},
+			</if>
+			<if test="pdSn != null">
+				pd_sn = #{pdSn,jdbcType=VARCHAR},
+			</if>
+			<if test="pdStatus != null">
+				pd_status = #{pdStatus,jdbcType=INTEGER},
+			</if>
+			<if test="pdAdminId != null">
+				pd_admin_id = #{pdAdminId,jdbcType=BIGINT},
+			</if>
+			<if test="pdUserId != null">
+				pd_user_id = #{pdUserId,jdbcType=BIGINT},
+			</if>
+			<if test="pdAdminInfo != null">
+				pd_admin_info = #{pdAdminInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="pdRemittanceInfo != null">
+				pd_remittance_info = #{pdRemittanceInfo,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="pdOrderId != null">
+				pd_Order_Id = #{pdOrderId},
+			</if>
+			<if test="pdOrderType != null">
+				pd_Order_type = #{pdOrderType},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sinco.carnation.shop.model.Predeposit">
+		update shop_predeposit
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		pd_amount = #{pdAmount,jdbcType=DECIMAL},
+		pd_no = #{pdNo,jdbcType=VARCHAR},
+		pd_pay_status = #{pdPayStatus,jdbcType=INTEGER},
+		pd_payment = #{pdPayment,jdbcType=VARCHAR},
+		pd_remittance_bank = #{pdRemittanceBank,jdbcType=VARCHAR},
+		pd_remittance_time = #{pdRemittanceTime,jdbcType=DATE},
+		pd_remittance_user = #{pdRemittanceUser,jdbcType=VARCHAR},
+		pd_sn = #{pdSn,jdbcType=VARCHAR},
+		pd_status = #{pdStatus,jdbcType=INTEGER},
+		pd_admin_id = #{pdAdminId,jdbcType=BIGINT},
+		pd_user_id = #{pdUserId,jdbcType=BIGINT},
+		pd_admin_info = #{pdAdminInfo,jdbcType=LONGVARCHAR},
+		pd_remittance_info = #{pdRemittanceInfo,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.sinco.carnation.shop.model.Predeposit">
+		update shop_predeposit
+		set add_time = #{addTime,jdbcType=TIMESTAMP},
+		delete_status = #{deleteStatus,jdbcType=BIT},
+		pd_amount = #{pdAmount,jdbcType=DECIMAL},
+		pd_no = #{pdNo,jdbcType=VARCHAR},
+		pd_pay_status = #{pdPayStatus,jdbcType=INTEGER},
+		pd_payment = #{pdPayment,jdbcType=VARCHAR},
+		pd_remittance_bank = #{pdRemittanceBank,jdbcType=VARCHAR},
+		pd_remittance_time = #{pdRemittanceTime,jdbcType=DATE},
+		pd_remittance_user = #{pdRemittanceUser,jdbcType=VARCHAR},
+		pd_sn = #{pdSn,jdbcType=VARCHAR},
+		pd_status = #{pdStatus,jdbcType=INTEGER},
+		pd_admin_id = #{pdAdminId,jdbcType=BIGINT},
+		pd_user_id = #{pdUserId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+</mapper>

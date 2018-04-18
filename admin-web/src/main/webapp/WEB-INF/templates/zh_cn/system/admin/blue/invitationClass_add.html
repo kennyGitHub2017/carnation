@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link href="$!webPath/resources/style/system/manage/$!{config.websiteCss}/template.css"  rel="stylesheet" type="text/css"/>
+<link href="$!webPath/resources/style/common/css/jquery.bigcolorpicker.css" type="text/css" rel="stylesheet" />
+<script src="$!webPath/resources/js/jquery-1.6.2.js"></script>
+<script src="$!webPath/resources/js/jquery.validate.min.js"></script>
+<script src="$!webPath/resources/js/jquery.bigcolorpicker.js"></script>
+<!-- <script src="$!webPath/resources/js/linkagesel/comm.js"></script> -->
+<!-- <script src="$!webPath/resources/js/linkagesel/linkagesel-main.js"></script> -->
+<script>
+jQuery(document).ready(function(){
+
+  jQuery("#theForm").validate({
+    rules:{
+	  name:{
+	    required :true
+	  }
+	 },
+	messages:{
+	  className:{required:"名称不能为空"}
+	}
+  });
+  
+
+});////
+
+function saveForm(){
+
+   jQuery("#theForm").submit();
+}
+
+var lastId = 0;
+
+function queryNextClass (id) {
+	var parentId = $("#" + id).val();
+	
+	if(parentId <= 0) {
+		return;
+	}
+	
+	$.post("$!webPath/admin/getInvitationClassBoByParentId.htm?parentId=" + parentId, function(data){
+		console.log(data);
+		
+		var html = "";
+		html += '<select name="parentId" onchange="queryNextClass('parentId');" id="parentId">';
+		for(var i = 0; i < data.length; i ++) {
+			
+		}
+	});
+}
+
+</script>
+</head>
+<body>
+<div class="cont">
+  <h1 class="seth">帖子分类</h1>
+  <div class="nav_list">
+    <ul>
+      <li> <a href="$!webPath/admin/invitationClass_list.htm"><b>管理列表</b></a> </li>
+      <li> <a href="$!webPath/admin/invitationClass_add.htm" class="this"><b>新增分类</b></a></li>
+    </ul>
+  </div>
+  <form name="theForm" id="theForm" action="$!webPath/admin/invitationClass_save.htm" method="post" enctype="multipart/form-data">
+    <input name="id" type="hidden" id="id" value="$!obj.id" />
+    <div class="edit">
+      <div class="setcont editul">
+      <ul class="set1">
+          <li class="setcont_bg">分类父级</li>
+          <li><span class="webname">
+            <select name="parentId" onchange="queryNextClass('parentId');" id="parentId">
+      			 <option value="0">请选择</option>
+	      		 #foreach($obj in $list)
+	      		 	<option value="$!{obj.id}">$!obj.name</option>
+		         #end
+      		</select>
+            </span>
+          </li>
+      </ul>
+        <ul class="set1">
+          <li class="setcont_bg"><strong class="sred">*</strong>分类名称</li>
+          <li><span class="webname">
+            <input name="name" type="text" id="className" value="$!obj.className" size="40" />
+            </span></li>
+        </ul>
+
+       
+      </div>
+    </div>
+  </form>
+  <div class="submit"> <span class="pad120">
+    <input name="save" type="button" value="提交" onclick="saveForm()" />
+    </span> </div>
+</div>
+</body>
+</html>

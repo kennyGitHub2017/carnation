@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+
+<body>
+  <div class="cont">
+  			<table>
+  				<tr>
+  					<td align="left"><strong>反馈用户：</strong>$!obj.nickName</td>
+  					<td align="left"><strong>反馈用户来源手机号：</strong>$!obj.mobile</td>
+  				</tr>
+  				<tr>
+  					<td align="left"><strong>来源APP：</strong>#if($!obj.source=='1')
+												IOS个人端APP 
+        					#elseif($!obj.source=='2')
+        								IOS商户端APP
+        					#elseif($!obj.source=='3')
+        							IOS运营商APP
+        					#elseif($!obj.source=='4')
+        										安卓个人端APP
+        					#elseif($!obj.source=='5')
+        										安卓商户端APP
+        					#elseif($!obj.source=='6')
+        										安卓运营商APP
+        					#end</td>
+  					<td align="left"><strong>反馈时间：</strong>$!CommUtil.formatShortDate($!obj.createTime)</td>
+  				</tr>
+  				<tr><td colspan="2" align="left"><strong>内容：</strong><br>$!obj.content</td></tr>
+  			</table>
+  			
+  </div>
+</body>
+</html>

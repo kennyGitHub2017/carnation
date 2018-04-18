@@ -1,0 +1,14 @@
+#foreach($!ob in $pages)
+<div class="circle_main_left_top">
+	<div class="circle_main_left_top_left">
+		#if($!ob.createBy == $!userid)<img src="$!ob.expHeadPath" />#else<img src="$!ob.userHeadPath" />#end
+	</div>
+	<div class="circle_main_left_top_center">
+		<div style="padding-bottom: 6px;">$!ob.content</div>
+		<span> #if($!ob.createBy == $!userid) <strong>$!ob.expName
+				回复了 $!ob.userName</strong> #else <strong>$!ob.userName
+				回复了$!ob.expName </strong> #end <i>$!CommUtil.formatLongDate($!ob.createTime)</i></span>
+	</div>
+	<input id="owner_id" name="owner_id" type="hidden" value="">
+</div>
+#end
